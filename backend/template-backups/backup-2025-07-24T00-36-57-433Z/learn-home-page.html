@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft Learn Home Page</title>
+    <style>
+        /* Microsoft Atlas Display Atomics */
+        .display-block {
+            display: block;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .display-none {
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .display-block-tablet {
+                display: block;
+            }
+
+            .display-flex-tablet {
+                display: flex;
+            }
+
+            .display-none-tablet {
+                display: none;
+            }
+        }
+
+        /* Atlas Button System */
+        .button {
+            border-radius: 2px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+            min-width: 80px;
+        }
+
+        .button-lg {
+            padding: 10px 20px;
+            font-size: 16px;
+            line-height: 24px;
+            min-height: 44px;
+        }
+
+        .button-primary {
+            color: #ffffff;
+            background-color: #0078d4;
+            border-color: #0078d4;
+        }
+
+        .button-primary:hover:not(:disabled) {
+            background-color: #106ebe;
+            border-color: #106ebe;
+        }
+
+        /* Base layout system */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .content-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 0 24px;
+        }
+
+        .hero-section {
+            width: 100%;
+            min-height: 350px;
+            background: #E8E6DF;
+            padding: 20px;
+            gap: 24px;
+        }
+
+        .hero-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .hero-container {
+                flex-direction: row;
+                align-items: flex-start;
+                gap: 40px;
+            }
+        }
+
+        .hero-content-wrapper {
+            flex: 1;
+            min-width: 300px;
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        .hero-image-wrapper {
+            flex: 0 0 40%;
+            max-width: 400px;
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 767px) {
+            .hero-section {
+                padding: 15px;
+                gap: 20px;
+            }
+
+            .hero-content-wrapper {
+                padding: 0;
+                max-width: none;
+            }
+
+            .hero-image-wrapper {
+                flex: none;
+                width: 100%;
+                max-width: 100%;
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- TopNav Header -->
+    <header
+        style="background: white; border-bottom: 1px solid #e5e5e5; position: relative; width: 100%; font-family: 'Segoe UI', sans-serif;">
+        <div class="content-container"
+            style="display: flex; align-items: center; height: 54px; box-sizing: border-box;">
+            <div style="display: flex; align-items: center; gap: 13px;">
+                <!-- Microsoft Logo -->
+                <div style="position: relative; width: 26px; height: 26px;">
+                    <div style="position: absolute; top: 0; left: 0; width: 12px; height: 12px; background: #F26522;">
+                    </div>
+                    <div style="position: absolute; top: 0; right: 0; width: 12px; height: 12px; background: #8DC63F;">
+                    </div>
+                    <div
+                        style="position: absolute; bottom: 0; left: 0; width: 12px; height: 12px; background: #00AEEF;">
+                    </div>
+                    <div
+                        style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: #FFC20E;">
+                    </div>
+                </div>
+                <div style="width: 2px; height: 24px; background: #2F2F2F;"></div>
+                <span
+                    style="font-family: 'Segoe UI', sans-serif; font-weight: 600; font-size: 20px; color: #171717; line-height: 1;">Learn</span>
+            </div>
+
+            <!-- Navigation -->
+            <nav style="display: flex; align-items: center; gap: 8px; margin-left: 24px;">
+                <div style="display: flex; align-items: center; padding: 6px 8px; gap: 4px; cursor: pointer;">
+                    <span
+                        style="font-family: 'Segoe UI', sans-serif; font-weight: 400; font-size: 14px; color: #171717;">Browse</span>
+                </div>
+                <div style="display: flex; align-items: center; padding: 6px 8px; gap: 4px; cursor: pointer;">
+                    <span
+                        style="font-family: 'Segoe UI', sans-serif; font-weight: 400; font-size: 14px; color: #171717;">Learn</span>
+                </div>
+            </nav>
+
+            <!-- Profile -->
+            <div style="display: flex; align-items: center; gap: 8px; margin-left: auto;">
+                <div
+                    style="width: 36px; height: 36px; border-radius: 50%; background: url('public/mina.png') center/cover; border: 2px solid #0078d4;">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section display-block display-flex-tablet">
+        <div class="content-container hero-container">
+            <div class="hero-content-wrapper display-block">
+                <div class="display-flex" style="flex-direction: column; gap: 24px; width: 100%;">
+                    <h1
+                        style="font-family: 'Segoe UI'; font-weight: 600; font-size: 36px; line-height: 44px; background: linear-gradient(91.54deg, #0078D4 2.94%, #C73ECC 78.45%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 0 0 16px 0;">
+                        Learning for everyone, everywhere</h1>
+
+                    <p
+                        style="font-family: 'Segoe UI'; font-weight: 400; font-size: 16px; line-height: 22px; color: #161616; margin: 0 0 24px 0;">
+                        Explore Microsoft product documentation, training, credentials, Q&A, code references, and shows.
+                    </p>
+
+                    <div class="display-block display-flex-tablet" style="gap: 8px; max-width: 500px;">
+                        <input type="text" placeholder="Search Microsoft Learn"
+                            style="box-sizing: border-box; flex: 1; padding: 12px; background: #FFFFFF; border: 1px solid #505050; border-radius: 2px; font-family: 'Segoe UI'; font-weight: 400; font-size: 16px; color: #505050; width: 100%; margin-bottom: 8px;">
+
+                        <button class="button button-primary button-lg"
+                            style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <svg width="16" height="16" viewBox="0 0 20 20" style="fill: currentColor;">
+                                <path
+                                    d="M14 7C14 10.866 10.866 14 7 14C3.13401 14 0 10.866 0 7C0 3.13401 3.13401 0 7 0C10.866 0 14 3.13401 14 7Z" />
+                            </svg>
+                            <span>Search</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-image-wrapper display-none display-block-tablet">
+                <img src="public/hero300.png" alt="Microsoft Learn Hero"
+                    style="position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; object-fit: cover; object-position: center;">
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular technical resources and training Section -->
+    <section style="background: #FFFFFF; padding: 48px 0;">
+        <div class="content-container">
+            <!-- Title -->
+            <h2
+                style="font-family: 'Segoe UI'; font-weight: 600; font-size: 34px; line-height: 44px; text-align: center; color: #161616; margin: 0 0 36px 0;">
+                Popular technical resources and training</h2>
+
+            <!-- Cards Container -->
+            <div
+                style="display: flex; flex-direction: row; align-items: flex-start; padding: 24px 0; gap: 24px; max-width: 1264px; margin: 0 auto;">
+
+                <!-- Card 1: Discover AI, Azure, and security essentials -->
+                <div
+                    style="display: flex; flex-direction: column; align-items: flex-start; padding: 24px; gap: 32px; width: 403px; background: #FFFFFF; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.12), 0px 2px 4px rgba(0, 0, 0, 0.12); border-radius: 6px;">
+                    <h3
+                        style="font-family: 'Segoe UI'; font-weight: 600; font-size: 20px; line-height: 23px; color: #000000; margin: 0;">
+                        Discover AI, Azure, and security essentials</h3>
+                    <p
+                        style="font-family: 'Segoe UI'; font-weight: 400; font-size: 16px; line-height: 26px; color: #505050; margin: 0;">
+                        Get started with fundamentals in artificial intelligence, cloud computing, and cybersecurity.
+                    </p>
+
+                    <!-- Learning Hub Items -->
+                    <div style="display: flex; flex-direction: row; align-items: center; gap: 24px;">
+                        <div style="width: 50px; height: 50px; background: url('public/ai-icon.png') center/cover;">
+                        </div>
+                        <div>
+                            <div
+                                style="font-family: 'Segoe UI'; font-size: 12px; line-height: 12px; letter-spacing: 2px; text-transform: uppercase; color: #171717; margin-bottom: 6px;">
+                                LEARNING HUB</div>
+                            <div
+                                style="font-family: 'Segoe UI'; font-weight: 600; font-size: 16px; line-height: 20px; color: #0065B3;">
+                                Artificial Intelligence</div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: row; align-items: center; gap: 24px;">
+                        <div style="width: 50px; height: 50px; background: url('public/azure-icon.png') center/cover;">
+                        </div>
+                        <div>
+                            <div
+                                style="font-family: 'Segoe UI'; font-size: 12px; line-height: 12px; letter-spacing: 2px; text-transform: uppercase; color: #171717; margin-bottom: 6px;">
+                                LEARNING HUB</div>
+                            <div
+                                style="font-family: 'Segoe UI'; font-weight: 600; font-size: 16px; line-height: 20px; color: #0065B3;">
+                                Azure</div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: row; align-items: center; gap: 24px;">
+                        <div
+                            style="width: 50px; height: 50px; background: url('public/copilot-icon.png') center/cover;">
+                        </div>
+                        <div>
+                            <div
+                                style="font-family: 'Segoe UI'; font-size: 12px; line-height: 12px; letter-spacing: 2px; text-transform: uppercase; color: #171717; margin-bottom: 6px;">
+                                LEARNING HUB</div>
+                            <div
+                                style="font-family: 'Segoe UI'; font-weight: 600; font-size: 16px; line-height: 20px; color: #0065B3;">
+                                Microsoft Copilot</div>
+                        </div>
+                    </div>
+
+                    <a href="#" style="display: flex; align-items: center; gap: 4px; text-decoration: none;">
+                        <span
+                            style="font-family: 'Segoe UI'; font-weight: 600; font-size: 14px; line-height: 20px; color: #0071C7;">Explore
+                            learning resources</span>
+                        <span style="color: #0071C7;">→</span>
+                    </a>
+                </div>
+
+                <!-- Card 2: Take in-demand training -->
+                <div
+                    style="display: flex; flex-direction: column; align-items: flex-start; padding: 24px; gap: 30px; width: 403px; background: #FFFFFF; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.12), 0px 2px 4px rgba(0, 0, 0, 0.12); border-radius: 6px;">
+                    <h3
+                        style="font-family: 'Segoe UI'; font-weight: 600; font-size: 20px; line-height: 23px; color: #000000; margin: 0;">
+                        Take in-demand training</h3>
+                    <p
+                        style="font-family: 'Segoe UI'; font-weight: 400; font-size: 16px; line-height: 26px; color: #505050; margin: 0;">
+                        Build skills with hands-on training and earn industry-recognized credentials.</p>
+
+                    <div style="display: flex; flex-direction: row; align-items: center; gap: 24px;">
+                        <div
+                            style="width: 50px; height: 50px; background: url('public/instructor-led-badge.png') center/cover;">
+                        </div>
+                        <div>
+                            <div
+                                style="font-family: 'Segoe UI'; font-size: 12px; line-height: 12px; letter-spacing: 2px; text-transform: uppercase; color: #171717; margin-bottom: 6px;">
+                                COURSE</div>
+                            <div
+                                style="font-family: 'Segoe UI'; font-weight: 600; font-size: 16px; line-height: 20px; color: #0065B3;">
+                                Microsoft Azure Fundamentals</div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: row; align-items: center; gap: 24px;">
+                        <div
+                            style="width: 50px; height: 50px; background: url('public/generic-badge.png') center/cover;">
+                        </div>
+                        <div>
+                            <div
+                                style="font-family: 'Segoe UI'; font-size: 12px; line-height: 12px; letter-spacing: 2px; text-transform: uppercase; color: #171717; margin-bottom: 6px;">
+                                MODULE</div>
+                            <div
+                                style="font-family: 'Segoe UI'; font-weight: 600; font-size: 16px; line-height: 20px; color: #0065B3;">
+                                Fundamentals of Generative AI</div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: row; align-items: center; gap: 24px;">
+                        <div
+                            style="width: 50px; height: 50px; background: url('public/learning-path-icon.png') center/cover;">
+                        </div>
+                        <div>
+                            <div
+                                style="font-family: 'Segoe UI'; font-size: 12px; line-height: 12px; letter-spacing: 2px; text-transform: uppercase; color: #171717; margin-bottom: 6px;">
+                                LEARNING PATH</div>
+                            <div
+                                style="font-family: 'Segoe UI'; font-weight: 600; font-size: 16px; line-height: 20px; color: #0065B3;">
+                                Microsoft Azure Fundamentals: Describe cloud concepts</div>
+                        </div>
+                    </div>
+
+                    <a href="#" style="display: flex; align-items: center; gap: 4px; text-decoration: none;">
+                        <span
+                            style="font-family: 'Segoe UI'; font-weight: 600; font-size: 14px; line-height: 20px; color: #0071C7;">Browse
+                            training</span>
+                        <span style="color: #0071C7;">→</span>
+                    </a>
+                </div>
+
+                <!-- Card 3: Ask questions & earn credentials -->
+                <div
+                    style="display: flex; flex-direction: column; align-items: flex-start; padding: 24px; gap: 19px; width: 403px; background: #FFFFFF; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.12), 0px 2px 4px rgba(0, 0, 0, 0.12); border-radius: 6px;">
+                    <h3
+                        style="font-family: 'Segoe UI'; font-weight: 600; font-size: 20px; line-height: 23px; color: #000000; margin: 0;">
+                        Ask questions & earn credentials</h3>
+                    <p
+                        style="font-family: 'Segoe UI'; font-weight: 400; font-size: 16px; line-height: 26px; color: #505050; margin: 0;">
+                        Get help from the community and validate your expertise with certifications.</p>
+
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <h4
+                            style="font-family: 'Segoe UI'; font-weight: 600; font-size: 16px; line-height: 20px; color: #0065B3; margin: 0;">
+                            Ask a question</h4>
+                        <p
+                            style="font-family: 'Segoe UI'; font-weight: 400; font-size: 14px; line-height: 19px; color: #505050; margin: 0;">
+                            Get expert help and community support for your technical questions.</p>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <h4
+                            style="font-family: 'Segoe UI'; font-weight: 600; font-size: 16px; line-height: 20px; color: #0065B3; margin: 0;">
+                            Earn skills and certifications</h4>
+                        <p
+                            style="font-family: 'Segoe UI'; font-weight: 400; font-size: 14px; line-height: 19px; color: #505050; margin: 0;">
+                            Validate your expertise with industry-recognized Microsoft certifications.</p>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <h4
+                            style="font-family: 'Segoe UI'; font-weight: 600; font-size: 16px; line-height: 20px; color: #0065B3; margin: 0;">
+                            Get student certifications</h4>
+                        <p
+                            style="font-family: 'Segoe UI'; font-weight: 400; font-size: 14px; line-height: 19px; color: #505050; margin: 0;">
+                            Access special certification programs designed for students and educators.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer style="background: #f3f2f1; color: #605e5c; text-align: center; padding: 20px;">
+        <div class="content-container">
+            <p style="margin: 0; font-size: 14px;">© 2025 Microsoft Learn - Designetica</p>
+        </div>
+    </footer>
+</body>
+
+</html>

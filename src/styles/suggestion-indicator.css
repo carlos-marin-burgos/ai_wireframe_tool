@@ -1,0 +1,67 @@
+/* Suggestion Source Indicator Styles */
+.suggestion-source-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  font-weight: bold;
+  padding: 1px 3px;
+  border-radius: 2px;
+  margin-right: 4px;
+  margin-left: 0;
+  opacity: 0.85;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  min-width: 20px;
+  position: relative;
+  z-index: 10;
+}
+
+.suggestion-source-indicator.ai {
+  background: linear-gradient(135deg, #0078d4, #2b88d8);
+  color: white;
+}
+
+.suggestion-source-indicator.local {
+  background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+  color: #505050;
+}
+
+.suggestion-source-indicator.loading {
+  background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+  color: #505050;
+}
+
+.suggestion-source-indicator .loading-dots {
+  animation: loading-dots 1.5s infinite;
+  display: inline-block;
+  width: 14px;
+}
+
+@keyframes loading-dots {
+  0% {
+    content: ".";
+  }
+  33% {
+    content: "..";
+  }
+  66% {
+    content: "...";
+  }
+  100% {
+    content: ".";
+  }
+}
+
+/* Add indicator to suggestion buttons */
+.ai-suggestion-button {
+  position: relative;
+}
+
+.ai-suggestion-button .suggestion-source-indicator {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 8px;
+  padding: 1px 4px;
+}

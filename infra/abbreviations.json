@@ -1,0 +1,11 @@
+{
+  "applicationInsights": "appi",
+  "appServicePlan": "plan",
+  "cognitiveServices": "cog",
+  "functionApp": "func",
+  "logAnalyticsWorkspace": "log",
+  "resourceGroup": "rg",
+  "staticWebApp": "swa",
+  "storageAccount": "st",
+  "userAssignedIdentity": "id"
+}

@@ -1,0 +1,449 @@
+/* Microsoft Learn Hero Section - Official Colors and Styling */
+
+.ms-learn-hero {
+  background: #E8E6DF !important; /* Always use the specified background color */
+  color: #161616 !important; /* Black text color */
+  padding: 80px 0 64px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ms-learn-hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
+    repeat;
+  pointer-events: none;
+}
+
+.ms-learn-hero-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.ms-learn-hero-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+  margin-bottom: 80px;
+}
+
+.ms-learn-hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.ms-learn-hero-title {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+  color: #161616 !important; /* Black text */
+  text-shadow: none; /* Remove text shadow for better readability on light background */
+}
+
+.ms-learn-hero-subtitle {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0;
+  color: #161616 !important; /* Black text */
+  opacity: 0.9;
+  max-width: 600px;
+}
+
+.ms-learn-hero-description {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  margin: 0;
+  color: #161616 !important; /* Black text */
+  opacity: 0.8;
+  max-width: 600px;
+}
+
+.ms-learn-hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.ms-learn-hero-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s ease-in-out;
+  min-height: 48px;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.ms-learn-hero-btn-primary {
+  background-color: #0078d4;
+  color: #ffffff;
+  border-color: #0078d4;
+}
+
+.ms-learn-hero-btn-primary:hover {
+  background-color: #f8f9fa;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.ms-learn-hero-btn-secondary {
+  background-color: transparent;
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.ms-learn-hero-btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* Hero Visual */
+.ms-learn-hero-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.ms-learn-hero-illustration {
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+}
+
+.ms-learn-visual-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  transform: perspective(600px) rotateX(15deg) rotateY(-15deg);
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: perspective(600px) rotateX(15deg) rotateY(-15deg) translateY(0px);
+  }
+  50% {
+    transform: perspective(600px) rotateX(15deg) rotateY(-15deg)
+      translateY(-10px);
+  }
+}
+
+.ms-learn-visual-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-height: 80px;
+  animation-delay: var(--animation-delay, 0s);
+}
+
+.ms-learn-visual-card:hover {
+  transform: translateY(-4px) scale(1.05);
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.ms-learn-visual-icon {
+  font-size: 24px;
+  margin-bottom: 4px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* Visual Card Specific Styling */
+.ms-learn-visual-azure {
+  --animation-delay: 0.1s;
+}
+.ms-learn-visual-microsoft365 {
+  --animation-delay: 0.2s;
+}
+.ms-learn-visual-power {
+  --animation-delay: 0.3s;
+}
+.ms-learn-visual-dev {
+  --animation-delay: 0.4s;
+}
+.ms-learn-visual-ai {
+  --animation-delay: 0.5s;
+}
+.ms-learn-visual-security {
+  --animation-delay: 0.6s;
+}
+
+/* Hero Stats */
+.ms-learn-hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
+  padding: 48px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ms-learn-hero-stat {
+  text-align: center;
+  padding: 0 16px;
+}
+
+.ms-learn-hero-stat-number {
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1;
+  color: #ffffff;
+  margin-bottom: 16px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(45deg, #ffffff, rgba(255, 255, 255, 0.8));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ms-learn-hero-stat-text {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .ms-learn-hero {
+    padding: 64px 0 48px;
+  }
+
+  .ms-learn-hero-content {
+    gap: 48px;
+    margin-bottom: 64px;
+  }
+
+  .ms-learn-hero-title {
+    font-size: 40px;
+  }
+
+  .ms-learn-hero-subtitle {
+    font-size: 18px;
+  }
+
+  .ms-learn-hero-stats {
+    gap: 32px;
+  }
+
+  .ms-learn-hero-stat-number {
+    font-size: 48px;
+  }
+}
+
+@media (max-width: 768px) {
+  .ms-learn-hero {
+    padding: 48px 0 32px;
+  }
+
+  .ms-learn-hero-container {
+    padding: 0 16px;
+  }
+
+  .ms-learn-hero-content {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    margin-bottom: 48px;
+    text-align: center;
+  }
+
+  .ms-learn-hero-title {
+    font-size: 32px;
+  }
+
+  .ms-learn-hero-subtitle {
+    font-size: 16px;
+  }
+
+  .ms-learn-hero-actions {
+    justify-content: center;
+  }
+
+  .ms-learn-hero-btn {
+    flex: 1;
+    min-width: 140px;
+    max-width: 200px;
+  }
+
+  .ms-learn-visual-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .ms-learn-hero-stats {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    text-align: center;
+  }
+
+  .ms-learn-hero-stat-number {
+    font-size: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ms-learn-hero {
+    padding: 32px 0 24px;
+  }
+
+  .ms-learn-hero-container {
+    padding: 0 12px;
+  }
+
+  .ms-learn-hero-content {
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+
+  .ms-learn-hero-title {
+    font-size: 28px;
+  }
+
+  .ms-learn-hero-subtitle {
+    font-size: 15px;
+  }
+
+  .ms-learn-hero-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .ms-learn-hero-btn {
+    width: 100%;
+    max-width: none;
+  }
+
+  .ms-learn-visual-grid {
+    grid-template-columns: 1fr;
+    max-width: 200px;
+  }
+
+  .ms-learn-visual-card {
+    padding: 16px;
+    min-height: 70px;
+  }
+
+  .ms-learn-hero-stats {
+    gap: 24px;
+    padding-top: 32px;
+  }
+
+  .ms-learn-hero-stat {
+    padding: 0;
+  }
+
+  .ms-learn-hero-stat-number {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
+  .ms-learn-hero-stat-text {
+    font-size: 13px;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .ms-learn-hero {
+    background: #000000;
+    color: #ffffff;
+  }
+
+  .ms-learn-hero-btn-primary {
+    background-color: #ffffff;
+    color: #000000;
+    border: 2px solid #ffffff;
+  }
+
+  .ms-learn-hero-btn-secondary {
+    background-color: transparent;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+  }
+
+  .ms-learn-visual-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #ffffff;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .ms-learn-visual-grid {
+    animation: none;
+    transform: none;
+  }
+
+  .ms-learn-visual-card {
+    transition: none;
+  }
+
+  .ms-learn-hero-btn {
+    transition: none;
+  }
+
+  .ms-learn-hero-btn:hover {
+    transform: none;
+  }
+
+  .ms-learn-visual-card:hover {
+    transform: none;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .ms-learn-hero {
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 24px 0 !important;
+  }
+
+  .ms-learn-hero-visual {
+    display: none;
+  }
+
+  .ms-learn-hero-content {
+    grid-template-columns: 1fr;
+  }
+
+  .ms-learn-hero-actions {
+    display: none;
+  }
+}

@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Learning Path with Course Cards</title>
+    <style>
+        /* Microsoft Learn TopNav Styles */
+        :root {
+            --ms-color-primary: #0078d4;
+            --ms-color-primary-hover: #106ebe;
+            --ms-color-white: #ffffff;
+            --ms-color-gray-100: #f1f1f1;
+            --ms-color-gray-600: #5c5c5c;
+            --ms-font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+            --ms-shadow-nav: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--ms-font-family);
+            line-height: 1.6;
+            color: #323130;
+            background: #faf9f8;
+        }
+
+        .ms-learn-topnav {
+            background-color: var(--ms-color-white);
+            box-shadow: var(--ms-shadow-nav);
+            z-index: 1000;
+        }
+
+        .ms-learn-nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 56px;
+        }
+
+        .ms-learn-nav-left {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .ms-learn-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #1a1a1a;
+        }
+
+        .ms-learn-logo-text {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .ms-learn-primary-nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .ms-learn-nav-link {
+            color: #1a1a1a;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 0;
+            transition: color 0.15s ease;
+        }
+
+        .ms-learn-nav-link:hover {
+            color: var(--ms-color-primary);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #0078d4 0%, #005a9b 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .breadcrumb {
+            background: #f8f6f4;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e1dfdd;
+        }
+
+        .breadcrumb-content {
+            font-size: 0.875rem;
+            color: #605e5c;
+        }
+
+        .breadcrumb a {
+            color: var(--ms-color-primary);
+            text-decoration: none;
+        }
+
+        /* Learning Path Content */
+        .learning-path-content {
+            padding: 3rem 0;
+        }
+
+        .path-header {
+            margin-bottom: 3rem;
+        }
+
+        .path-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #323130;
+            margin-bottom: 1rem;
+        }
+
+        .path-description {
+            font-size: 1.125rem;
+            color: #605e5c;
+            line-height: 1.5;
+        }
+
+        .path-metadata {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: #f8f6f4;
+            border-radius: 4px;
+            border-left: 4px solid var(--ms-color-primary);
+        }
+
+        .metadata-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .metadata-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: #605e5c;
+            letter-spacing: 0.5px;
+        }
+
+        .metadata-value {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #323130;
+        }
+
+        /* Course Cards Grid */
+        .courses-section {
+            margin-top: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #323130;
+            margin-bottom: 1.5rem;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 300px));
+            gap: 1rem;
+            margin: 1.5rem 0;
+            justify-content: start;
+        }
+
+        .course-card {
+            background: white;
+            border: 1px solid #e1dfdd;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            max-width: 300px;
+            width: 100%;
+        }
+
+        .course-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .card-content {
+            padding: 1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-type {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #605e5c;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #323130;
+            line-height: 1.4;
+            margin-bottom: 0.75rem;
+            flex: 1;
+        }
+
+        .card-description {
+            font-size: 0.875rem;
+            color: #605e5c;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 0.75rem;
+            border-top: 1px solid #f3f2f1;
+        }
+
+        .card-duration {
+            font-size: 0.75rem;
+            color: #605e5c;
+        }
+
+        .card-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--ms-color-primary);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #e1dfdd;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #323130;
+        }
+
+        .progress-stats {
+            font-size: 0.875rem;
+            color: #605e5c;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #f3f2f1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #107c10, #50e6ff);
+            width: 25%;
+            transition: width 0.3s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .path-title {
+                font-size: 1.75rem;
+            }
+
+            .path-metadata {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .progress-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Microsoft Learn TopNav -->
+    <header class="ms-learn-topnav">
+        <nav class="ms-learn-nav-container">
+            <div class="ms-learn-nav-left">
+                <a href="#" class="ms-learn-logo">
+                    <img src="windowsLogo.png" alt="Microsoft" style="width: 24px; height: 24px;">
+                    <span class="ms-learn-logo-text">Microsoft Learn</span>
+                </a>
+                <div class="ms-learn-primary-nav">
+                    <a href="#" class="ms-learn-nav-link">Documentation</a>
+                    <a href="#" class="ms-learn-nav-link">Training</a>
+                    <a href="#" class="ms-learn-nav-link">Certifications</a>
+                    <a href="#" class="ms-learn-nav-link">Q&A</a>
+                    <a href="#" class="ms-learn-nav-link">Code Samples</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Breadcrumb -->
+    <section class="breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <a href="#">Microsoft Learn</a> > <a href="#">Learning Paths</a> > <strong>Azure Fundamentals</strong>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">Azure Fundamentals Learning Path</h1>
+            <p class="hero-subtitle">Master the core concepts of Microsoft Azure cloud computing</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="learning-path-content">
+        <div class="container">
+            <!-- Path Header -->
+            <section class="path-header">
+                <h2 class="path-title">Azure Fundamentals</h2>
+                <p class="path-description">
+                    Start your cloud journey with this comprehensive learning path. Learn Azure basics, explore core
+                    services,
+                    and understand how to architect solutions on Microsoft Azure. Perfect for beginners and those
+                    preparing
+                    for the AZ-900 certification.
+                </p>
+
+                <div class="path-metadata">
+                    <div class="metadata-item">
+                        <span class="metadata-label">Skill Level</span>
+                        <span class="metadata-value">Beginner</span>
+                    </div>
+                    <div class="metadata-item">
+                        <span class="metadata-label">Duration</span>
+                        <span class="metadata-value">8-12 hours</span>
+                    </div>
+                    <div class="metadata-item">
+                        <span class="metadata-label">Modules</span>
+                        <span class="metadata-value">6 modules</span>
+                    </div>
+                    <div class="metadata-item">
+                        <span class="metadata-label">Certification</span>
+                        <span class="metadata-value">AZ-900</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Progress Section -->
+            <section class="progress-section">
+                <div class="progress-header">
+                    <h3 class="progress-title">Your Progress</h3>
+                    <span class="progress-stats">1 of 6 modules completed</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </section>
+
+            <!-- Course Cards -->
+            <section class="courses-section">
+                <h3 class="section-title">Learning Modules</h3>
+                <div class="cards-grid">
+                    <!-- Module 1 -->
+                    <div class="course-card">
+                        <div class="card-content">
+                            <div class="card-type">MODULE</div>
+                            <h4 class="card-title">Azure Cloud Concepts</h4>
+                            <p class="card-description">
+                                Understand cloud computing principles, deployment models, and Azure's global
+                                infrastructure.
+                            </p>
+                            <div class="card-footer">
+                                <span class="card-duration">45 min</span>
+                                <div class="card-icon">✓</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module 2 -->
+                    <div class="course-card">
+                        <div class="card-content">
+                            <div class="card-type">MODULE</div>
+                            <h4 class="card-title">Azure Core Services</h4>
+                            <p class="card-description">
+                                Explore compute, networking, storage, and database services available in Azure.
+                            </p>
+                            <div class="card-footer">
+                                <span class="card-duration">60 min</span>
+                                <div class="card-icon">2</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module 3 -->
+                    <div class="course-card">
+                        <div class="card-content">
+                            <div class="card-type">MODULE</div>
+                            <h4 class="card-title">Azure Security & Identity</h4>
+                            <p class="card-description">
+                                Learn about Azure security tools, identity management, and compliance features.
+                            </p>
+                            <div class="card-footer">
+                                <span class="card-duration">50 min</span>
+                                <div class="card-icon">3</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module 4 -->
+                    <div class="course-card">
+                        <div class="card-content">
+                            <div class="card-type">MODULE</div>
+                            <h4 class="card-title">Azure Pricing & Support</h4>
+                            <p class="card-description">
+                                Understand Azure pricing models, cost management, and available support options.
+                            </p>
+                            <div class="card-footer">
+                                <span class="card-duration">40 min</span>
+                                <div class="card-icon">4</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module 5 -->
+                    <div class="course-card">
+                        <div class="card-content">
+                            <div class="card-type">MODULE</div>
+                            <h4 class="card-title">Azure Management Tools</h4>
+                            <p class="card-description">
+                                Discover Azure Portal, CLI, PowerShell, and other tools for managing Azure resources.
+                            </p>
+                            <div class="card-footer">
+                                <span class="card-duration">55 min</span>
+                                <div class="card-icon">5</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module 6 -->
+                    <div class="course-card">
+                        <div class="card-content">
+                            <div class="card-type">ASSESSMENT</div>
+                            <h4 class="card-title">Knowledge Check & Practice Test</h4>
+                            <p class="card-description">
+                                Test your knowledge with practice questions and prepare for the AZ-900 certification
+                                exam.
+                            </p>
+                            <div class="card-footer">
+                                <span class="card-duration">30 min</span>
+                                <div class="card-icon">🎯</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer style="background: #323130; color: white; text-align: center; padding: 2rem 0; margin-top: 3rem;">
+        <div class="container">
+            <p>&copy; 2025 Microsoft Learn - Azure Learning Path | AI-Generated by DesignEtica</p>
+        </div>
+    </footer>
+</body>
+
+</html>

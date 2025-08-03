@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft Learning Plan</title>
+    <style>
+        /* Microsoft Learn TopNav Styles */
+        :root {
+            --ms-color-primary: #0078d4;
+            --ms-color-primary-hover: #106ebe;
+            --ms-color-white: #ffffff;
+            --ms-color-gray-100: #f1f1f1;
+            --ms-color-gray-600: #5c5c5c;
+            --ms-font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+            --ms-shadow-nav: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--ms-font-family);
+            line-height: 1.6;
+            color: #323130;
+            background: #faf9f8;
+        }
+
+        .ms-learn-topnav {
+            background-color: var(--ms-color-white);
+            box-shadow: var(--ms-shadow-nav);
+            z-index: 1000;
+        }
+
+        .ms-learn-nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 56px;
+        }
+
+        .ms-learn-nav-left {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .ms-learn-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #1a1a1a;
+        }
+
+        .ms-learn-logo-text {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .ms-learn-primary-nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .ms-learn-nav-link {
+            color: #1a1a1a;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 0;
+            transition: color 0.15s ease;
+        }
+
+        .ms-learn-nav-link:hover {
+            color: var(--ms-color-primary);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Plan Header */
+        .plan-header {
+            background: white;
+            padding: 2rem 0;
+            border-bottom: 1px solid #e1dfdd;
+        }
+
+        .plan-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #323130;
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-description {
+            font-size: 1.125rem;
+            color: #605e5c;
+            margin-bottom: 1.5rem;
+        }
+
+        .plan-metadata {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .metadata-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .metadata-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: #605e5c;
+            letter-spacing: 0.5px;
+        }
+
+        .metadata-value {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #323130;
+        }
+
+        /* Plan Progress */
+        .plan-progress {
+            background: white;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+            border: 1px solid #e1dfdd;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .progress-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #323130;
+        }
+
+        .progress-stats {
+            font-size: 0.875rem;
+            color: #605e5c;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: #f3f2f1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #107c10, #50e6ff);
+            width: 30%;
+            transition: width 0.3s ease;
+        }
+
+        /* Learning Modules */
+        .modules-section {
+            margin: 2rem 0;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #323130;
+            margin-bottom: 1.5rem;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .module-card {
+            background: white;
+            border: 1px solid #e1dfdd;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .module-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .module-header {
+            background: #f8f6f4;
+            padding: 1rem;
+            border-bottom: 1px solid #e1dfdd;
+        }
+
+        .module-type {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--ms-color-primary);
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .module-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #323130;
+            line-height: 1.4;
+        }
+
+        .module-content {
+            padding: 1rem;
+        }
+
+        .module-description {
+            font-size: 0.875rem;
+            color: #605e5c;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .module-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .module-progress-text {
+            font-size: 0.75rem;
+            color: #605e5c;
+        }
+
+        .module-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-completed {
+            background: #dff6dd;
+            color: #107c10;
+        }
+
+        .status-in-progress {
+            background: #fff4ce;
+            color: #8a8886;
+        }
+
+        .status-not-started {
+            background: #f3f2f1;
+            color: #605e5c;
+        }
+
+        .module-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--ms-color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--ms-color-primary-hover);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--ms-color-primary);
+            border: 1px solid #e1dfdd;
+        }
+
+        .btn-secondary:hover {
+            background: #f8f6f4;
+        }
+
+        /* Plan Stats */
+        .plan-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #e1dfdd;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--ms-color-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #605e5c;
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .plan-title {
+                font-size: 1.75rem;
+            }
+
+            .plan-metadata {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .plan-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .progress-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Microsoft Learn TopNav -->
+    <header class="ms-learn-topnav">
+        <nav class="ms-learn-nav-container">
+            <div class="ms-learn-nav-left">
+                <a href="#" class="ms-learn-logo">
+                    <img src="windowsLogo.png" alt="Microsoft" style="width: 24px; height: 24px;">
+                    <span class="ms-learn-logo-text">Microsoft Learn</span>
+                </a>
+                <div class="ms-learn-primary-nav">
+                    <a href="#" class="ms-learn-nav-link">Documentation</a>
+                    <a href="#" class="ms-learn-nav-link">Training</a>
+                    <a href="#" class="ms-learn-nav-link">Certifications</a>
+                    <a href="#" class="ms-learn-nav-link">Q&A</a>
+                    <a href="#" class="ms-learn-nav-link">Code Samples</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Plan Header -->
+    <section class="plan-header">
+        <div class="container">
+            <h1 class="plan-title">Cloud Development Fundamentals</h1>
+            <p class="plan-description">
+                Master the essential skills for modern cloud development with Azure. This comprehensive learning plan
+                covers cloud concepts, development tools, and best practices for building scalable applications.
+            </p>
+
+            <div class="plan-metadata">
+                <div class="metadata-item">
+                    <span class="metadata-label">Duration</span>
+                    <span class="metadata-value">15-20 hours</span>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Level</span>
+                    <span class="metadata-value">Beginner to Intermediate</span>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Modules</span>
+                    <span class="metadata-value">8 modules</span>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Skills</span>
+                    <span class="metadata-value">Cloud Development, Azure, DevOps</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Plan Progress -->
+        <section class="plan-progress">
+            <div class="progress-header">
+                <h2 class="progress-title">Your Progress</h2>
+                <span class="progress-stats">3 of 8 modules completed (37%)</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar"></div>
+            </div>
+        </section>
+
+        <!-- Plan Statistics -->
+        <section class="plan-stats">
+            <div class="stat-card">
+                <div class="stat-number">3</div>
+                <div class="stat-label">Completed Modules</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Remaining Modules</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">12h</div>
+                <div class="stat-label">Time Invested</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">8h</div>
+                <div class="stat-label">Time Remaining</div>
+            </div>
+        </section>
+
+        <!-- Learning Modules -->
+        <section class="modules-section">
+            <h2 class="section-title">Learning Modules</h2>
+            <div class="modules-grid">
+                <!-- Module 1 -->
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-type">Module 1</div>
+                        <h3 class="module-title">Introduction to Cloud Computing</h3>
+                    </div>
+                    <div class="module-content">
+                        <p class="module-description">
+                            Learn the fundamental concepts of cloud computing, deployment models, and service types.
+                            Understand the benefits and challenges of cloud adoption.
+                        </p>
+                        <div class="module-progress">
+                            <span class="module-progress-text">Completed</span>
+                            <span class="module-status status-completed">Completed</span>
+                        </div>
+                        <div class="module-actions">
+                            <a href="#" class="btn btn-secondary">Review</a>
+                            <a href="#" class="btn btn-primary">Certificate</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module 2 -->
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-type">Module 2</div>
+                        <h3 class="module-title">Azure Core Services</h3>
+                    </div>
+                    <div class="module-content">
+                        <p class="module-description">
+                            Explore Azure's core services including compute, storage, networking, and databases.
+                            Hands-on experience with Azure Portal and CLI.
+                        </p>
+                        <div class="module-progress">
+                            <span class="module-progress-text">Completed</span>
+                            <span class="module-status status-completed">Completed</span>
+                        </div>
+                        <div class="module-actions">
+                            <a href="#" class="btn btn-secondary">Review</a>
+                            <a href="#" class="btn btn-primary">Certificate</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module 3 -->
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-type">Module 3</div>
+                        <h3 class="module-title">Development Tools & Environment</h3>
+                    </div>
+                    <div class="module-content">
+                        <p class="module-description">
+                            Set up your development environment with Visual Studio Code, Azure CLI, and development
+                            SDKs. Learn about Azure DevOps and GitHub integration.
+                        </p>
+                        <div class="module-progress">
+                            <span class="module-progress-text">In Progress (75%)</span>
+                            <span class="module-status status-in-progress">In Progress</span>
+                        </div>
+                        <div class="module-actions">
+                            <a href="#" class="btn btn-primary">Continue</a>
+                            <a href="#" class="btn btn-secondary">Pause</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module 4 -->
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-type">Module 4</div>
+                        <h3 class="module-title">Building Your First Azure App</h3>
+                    </div>
+                    <div class="module-content">
+                        <p class="module-description">
+                            Create and deploy your first web application to Azure. Learn about App Service,
+                            configuration management, and monitoring basics.
+                        </p>
+                        <div class="module-progress">
+                            <span class="module-progress-text">Not Started</span>
+                            <span class="module-status status-not-started">Not Started</span>
+                        </div>
+                        <div class="module-actions">
+                            <a href="#" class="btn btn-primary">Start</a>
+                            <a href="#" class="btn btn-secondary">Preview</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module 5 -->
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-type">Module 5</div>
+                        <h3 class="module-title">Data & Storage Solutions</h3>
+                    </div>
+                    <div class="module-content">
+                        <p class="module-description">
+                            Work with Azure storage solutions, databases, and data services. Learn about SQL Database,
+                            Cosmos DB, and blob storage.
+                        </p>
+                        <div class="module-progress">
+                            <span class="module-progress-text">Not Started</span>
+                            <span class="module-status status-not-started">Not Started</span>
+                        </div>
+                        <div class="module-actions">
+                            <a href="#" class="btn btn-primary">Start</a>
+                            <a href="#" class="btn btn-secondary">Preview</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module 6 -->
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-type">Module 6</div>
+                        <h3 class="module-title">Security & Identity</h3>
+                    </div>
+                    <div class="module-content">
+                        <p class="module-description">
+                            Implement security best practices, authentication, and authorization in your Azure
+                            applications using Azure Active Directory.
+                        </p>
+                        <div class="module-progress">
+                            <span class="module-progress-text">Not Started</span>
+                            <span class="module-status status-not-started">Not Started</span>
+                        </div>
+                        <div class="module-actions">
+                            <a href="#" class="btn btn-primary">Start</a>
+                            <a href="#" class="btn btn-secondary">Preview</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module 7 -->
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-type">Module 7</div>
+                        <h3 class="module-title">DevOps & CI/CD</h3>
+                    </div>
+                    <div class="module-content">
+                        <p class="module-description">
+                            Implement continuous integration and deployment pipelines using Azure DevOps or GitHub
+                            Actions. Learn about infrastructure as code.
+                        </p>
+                        <div class="module-progress">
+                            <span class="module-progress-text">Not Started</span>
+                            <span class="module-status status-not-started">Not Started</span>
+                        </div>
+                        <div class="module-actions">
+                            <a href="#" class="btn btn-primary">Start</a>
+                            <a href="#" class="btn btn-secondary">Preview</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module 8 -->
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-type">Module 8</div>
+                        <h3 class="module-title">Monitoring & Optimization</h3>
+                    </div>
+                    <div class="module-content">
+                        <p class="module-description">
+                            Learn to monitor, debug, and optimize your Azure applications using Application Insights,
+                            logging, and performance monitoring tools.
+                        </p>
+                        <div class="module-progress">
+                            <span class="module-progress-text">Not Started</span>
+                            <span class="module-status status-not-started">Not Started</span>
+                        </div>
+                        <div class="module-actions">
+                            <a href="#" class="btn btn-primary">Start</a>
+                            <a href="#" class="btn btn-secondary">Preview</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer style="background: #323130; color: white; text-align: center; padding: 2rem 0; margin-top: 3rem;">
+        <div class="container">
+            <p>&copy; 2025 Microsoft Learn - Learning Plan | AI-Generated by DesignEtica</p>
+        </div>
+    </footer>
+</body>
+
+</html>

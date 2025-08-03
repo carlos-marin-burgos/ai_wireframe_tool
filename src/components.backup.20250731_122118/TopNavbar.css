@@ -1,0 +1,129 @@
+/* Top Navigation Bar */
+.top-nav {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 60px;
+  background: transparent;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border-bottom: 0px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  z-index: 1000;
+  box-shadow: none !important;
+}
+
+.top-nav * {
+  background: transparent !important;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  position: relative;
+  z-index: 1001;
+}
+
+.navbar-cxs-logo {
+  height: 32px;
+  width: auto;
+  transition: opacity 0.15s ease;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  /* Try to remove white background from image */
+  mix-blend-mode: multiply;
+  filter: contrast(1.2) brightness(1.1);
+  /* Fixed: Show the logo and ensure proper z-index */
+  display: block !important;
+  position: relative;
+  z-index: 1001;
+}
+
+.navbar-cxs-logo:hover {
+  opacity: 0.8;
+  background: transparent !important;
+}
+
+.navbar-logo-button {
+  background: none !important;
+  border: none !important;
+  cursor: pointer;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  transition: none !important;
+  display: flex;
+  align-items: center;
+  box-shadow: none !important;
+  outline: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+}
+
+.navbar-logo-button:hover {
+  background-color: transparent !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.navbar-logo-button:focus {
+  background-color: transparent !important;
+  background: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.navbar-logo-button:active {
+  background-color: transparent !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.navbar-logo-button:focus-visible {
+  background-color: transparent !important;
+  background: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.navbar-logo-text {
+  font-size: 26px;
+  font-weight: 600;
+  color: #323130;
+  font-family: "Orbitron", "Segoe UI Variable Display", "Segoe UI", system-ui,
+    sans-serif;
+  letter-spacing: -0.01em;
+  background: transparent !important;
+}
+
+/* Nuclear option - target everything in the logo area */
+.navbar-left *,
+.navbar-logo-button *,
+.navbar-cxs-logo,
+.navbar-logo-text {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}

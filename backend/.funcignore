@@ -1,0 +1,71 @@
+# Development and test files
+*.js.map
+*.ts
+.git*
+.vscode/
+local.settings.json
+.env
+.env.*
+.npmrc
+
+# Documentation
+*.md
+getting_started.md
+
+# Development scripts and servers
+setup-*.sh
+start-*.sh
+create-*.sh
+monitor-*.sh
+run-*.sh
+simple-server.js
+express4-server.js
+fixed-*.js
+minimal-server.js
+mock-server.js
+working-server.js
+dashboard.js
+health-check.js
+
+# Test files
+test*
+*test*
+check-dependencies.js
+
+# Backup and monitoring files
+auto-backup.js
+template-backup.js
+integrity-checker.js
+monitoring.js
+prevention-summary.md
+
+# Temporary and cache files
+tmp_backup_extract/
+backups/
+template-backups/
+templates/
+*.log
+func.log
+template-monitor.log
+.file-checksums.json
+
+# Disabled source files
+src/
+src.disabled/
+
+# Development dependencies and configs
+package-lock.json
+azure-openai-verify.js
+env-config.js
+
+# Extracted and fallback files
+extracted-*.html
+fallback-*.js
+*fallback*
+
+# macOS files
+.DS_Store
+
+# Build artifacts
+node_modules/.cache/
+*.tsbuildinfo

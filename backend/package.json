@@ -1,0 +1,30 @@
+{
+  "name": "designetica-backend",
+  "version": "1.0.0",
+  "description": "Azure Functions App - Production Deployment",
+  "scripts": {
+    "start": "func start",
+    "start:prod": "node production-server.js",
+    "build": "echo 'Build completed'",
+    "local:express": "node simple-server.cjs"
+  },
+  "keywords": [
+    "azure",
+    "openai",
+    "wireframe",
+    "generator"
+  ],
+  "author": "Designetica Team",
+  "license": "ISC",
+  "dependencies": {
+    "@azure/functions": "^4.0.0",
+    "@azure/identity": "4.10.2",
+    "@azure/keyvault-secrets": "^4.7.0",
+    "cors": "2.8.5",
+    "express": "5.1.0",
+    "openai": "5.10.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

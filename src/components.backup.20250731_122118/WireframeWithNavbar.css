@@ -1,0 +1,22 @@
+/* Wireframe with Navbar Wrapper */
+.wireframe-with-navbar {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+}
+
+.wireframe-content {
+  flex: 1;
+  padding-top: 0;
+  min-height: calc(100vh - 54px); /* Account for navbar height */
+  width: 100%;
+}
+
+/* Ensure the navbar is always on top */
+.wireframe-with-navbar .microsoft-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}

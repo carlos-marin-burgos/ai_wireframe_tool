@@ -1,0 +1,38 @@
+[
+  {
+    "timestamp": "2025-07-31T18:58:12.770Z",
+    "type": "CRITICAL_ISSUE",
+    "message": "Critical service apiEndpoint is unhealthy",
+    "resolved": false
+  },
+  {
+    "timestamp": "2025-07-31T19:03:13.956Z",
+    "type": "CRITICAL_ISSUE",
+    "message": "Critical service apiEndpoint is unhealthy",
+    "resolved": false
+  },
+  {
+    "timestamp": "2025-07-31T19:08:15.131Z",
+    "type": "CRITICAL_ISSUE",
+    "message": "Critical service apiEndpoint is unhealthy",
+    "resolved": false
+  },
+  {
+    "timestamp": "2025-07-31T19:13:16.220Z",
+    "type": "CRITICAL_ISSUE",
+    "message": "Critical service apiEndpoint is unhealthy",
+    "resolved": false
+  },
+  {
+    "timestamp": "2025-07-31T23:18:51.511Z",
+    "type": "CRITICAL_ISSUE",
+    "message": "Critical service apiEndpoint is unhealthy",
+    "resolved": false
+  },
+  {
+    "timestamp": "2025-08-01T04:18:58.507Z",
+    "type": "CRITICAL_ISSUE",
+    "message": "Critical service apiEndpoint is unhealthy",
+    "resolved": false
+  }
+]
