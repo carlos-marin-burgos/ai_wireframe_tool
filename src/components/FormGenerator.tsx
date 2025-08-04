@@ -1,66 +1,66 @@
 import React from 'react';
 
 export interface FormTemplate {
-    id: string;
-    name: string;
-    description: string;
-    fields: FormField[];
-    submitText?: string;
+  id: string;
+  name: string;
+  description: string;
+  fields: FormField[];
+  submitText?: string;
 }
 
 export interface FormField {
-    type: 'text' | 'email' | 'password' | 'textarea' | 'select' | 'checkbox' | 'radio';
-    label: string;
-    name: string;
-    id?: string;
-    required?: boolean;
-    placeholder?: string;
-    options?: string[];
-    description?: string;
-    rows?: number;
-    minLength?: number;
+  type: 'text' | 'email' | 'password' | 'textarea' | 'select' | 'checkbox' | 'radio';
+  label: string;
+  name: string;
+  id?: string;
+  required?: boolean;
+  placeholder?: string;
+  options?: string[];
+  description?: string;
+  rows?: number;
+  minLength?: number;
 }
 
 export const FormTemplates: FormTemplate[] = [
-    {
-        id: 'contact',
-        name: 'Contact Form',
-        description: 'Basic contact form with name, email, and message',
-        fields: [
-            { type: 'text', label: 'Name', name: 'name', required: true, placeholder: 'Your Name' },
-            { type: 'email', label: 'Email', name: 'email', required: true, placeholder: 'your@email.com' },
-            { type: 'textarea', label: 'Message', name: 'message', required: true, placeholder: 'Your message...' }
-        ]
-    },
-    {
-        id: 'login',
-        name: 'Login Form',
-        description: 'User authentication form',
-        fields: [
-            { type: 'email', label: 'Email', name: 'email', required: true, placeholder: 'your@email.com' },
-            { type: 'password', label: 'Password', name: 'password', required: true },
-            { type: 'checkbox', label: 'Remember me', name: 'remember' }
-        ]
-    },
-    {
-        id: 'registration',
-        name: 'Registration Form',
-        description: 'User registration form',
-        fields: [
-            { type: 'text', label: 'First Name', name: 'firstName', required: true },
-            { type: 'text', label: 'Last Name', name: 'lastName', required: true },
-            { type: 'email', label: 'Email', name: 'email', required: true },
-            { type: 'password', label: 'Password', name: 'password', required: true },
-            { type: 'password', label: 'Confirm Password', name: 'confirmPassword', required: true }
-        ]
-    }
+  {
+    id: 'contact',
+    name: 'Contact Form',
+    description: 'Basic contact form with name, email, and message',
+    fields: [
+      { type: 'text', label: 'Name', name: 'name', required: true, placeholder: 'Your Name' },
+      { type: 'email', label: 'Email', name: 'email', required: true, placeholder: 'your@email.com' },
+      { type: 'textarea', label: 'Message', name: 'message', required: true, placeholder: 'Your message...' }
+    ]
+  },
+  {
+    id: 'login',
+    name: 'Login Form',
+    description: 'User authentication form',
+    fields: [
+      { type: 'email', label: 'Email', name: 'email', required: true, placeholder: 'your@email.com' },
+      { type: 'password', label: 'Password', name: 'password', required: true },
+      { type: 'checkbox', label: 'Remember me', name: 'remember' }
+    ]
+  },
+  {
+    id: 'registration',
+    name: 'Registration Form',
+    description: 'User registration form',
+    fields: [
+      { type: 'text', label: 'First Name', name: 'firstName', required: true },
+      { type: 'text', label: 'Last Name', name: 'lastName', required: true },
+      { type: 'email', label: 'Email', name: 'email', required: true },
+      { type: 'password', label: 'Password', name: 'password', required: true },
+      { type: 'password', label: 'Confirm Password', name: 'confirmPassword', required: true }
+    ]
+  }
 ];
 
 export const generateFormHTML = (template: FormTemplate): string => {
-    const fieldsHTML = template.fields.map(field => {
-        switch (field.type) {
-            case 'textarea':
-                return `
+  const fieldsHTML = template.fields.map(field => {
+    switch (field.type) {
+      case 'textarea':
+        return `
           <div class="form-field">
             <label for="${field.name}">${field.label}${field.required ? ' *' : ''}</label>
             <textarea 
@@ -71,9 +71,9 @@ export const generateFormHTML = (template: FormTemplate): string => {
             ></textarea>
           </div>
         `;
-            case 'select':
-                const options = field.options?.map(option => `<option value="${option}">${option}</option>`).join('') || '';
-                return `
+      case 'select':
+        const options = field.options?.map(option => `<option value="${option}">${option}</option>`).join('') || '';
+        return `
           <div class="form-field">
             <label for="${field.name}">${field.label}${field.required ? ' *' : ''}</label>
             <select id="${field.name}" name="${field.name}" ${field.required ? 'required' : ''}>
@@ -81,8 +81,8 @@ export const generateFormHTML = (template: FormTemplate): string => {
             </select>
           </div>
         `;
-            case 'checkbox':
-                return `
+      case 'checkbox':
+        return `
           <div class="form-field checkbox-field">
             <input 
               type="checkbox" 
@@ -92,21 +92,21 @@ export const generateFormHTML = (template: FormTemplate): string => {
             <label for="${field.name}">${field.label}</label>
           </div>
         `;
-            case 'radio':
-                const radioOptions = field.options?.map(option => `
+      case 'radio':
+        const radioOptions = field.options?.map(option => `
           <div class="radio-option">
             <input type="radio" id="${field.name}_${option}" name="${field.name}" value="${option}"/>
             <label for="${field.name}_${option}">${option}</label>
           </div>
         `).join('') || '';
-                return `
+        return `
           <div class="form-field">
             <label>${field.label}${field.required ? ' *' : ''}</label>
             ${radioOptions}
           </div>
         `;
-            default:
-                return `
+      default:
+        return `
           <div class="form-field">
             <label for="${field.name}">${field.label}${field.required ? ' *' : ''}</label>
             <input 
@@ -118,10 +118,10 @@ export const generateFormHTML = (template: FormTemplate): string => {
             />
           </div>
         `;
-        }
-    }).join('');
+    }
+  }).join('');
 
-    return `
+  return `
     <div class="form-container">
       <form class="generated-form">
         <h2>${template.name}</h2>
