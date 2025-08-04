@@ -1,26 +1,30 @@
 # 🚀 Microsoft Transfer Package
 
 ## Repository Information
-- **Current Owner**: carlosUX
+
+- **Current Owner**: carlos-marin-burgos
 - **Repository**: ai_wireframe_tool
-- **Current URL**: https://github.com/carlosUX/ai_wireframe_tool
+- **Current URL**: https://github.com/carlos-marin-burgos/ai_wireframe_tool
 - **Transfer Date**: August 3, 2025
 
 ## 📋 Pre-Transfer Checklist
 
 ### ✅ Security & Credentials
+
 - [x] Sensitive Azure OpenAI credentials removed/sanitized
 - [x] `.gitignore` properly configured for sensitive files
 - [x] No hardcoded secrets in codebase
 - [x] Local settings files marked as templates
 
 ### ✅ Code Quality
+
 - [x] TypeScript compilation errors resolved
 - [x] All major functionality working
 - [x] Development environment tested
 - [x] Dependencies up to date
 
 ### ✅ Documentation
+
 - [x] README.md updated and comprehensive
 - [x] Setup instructions provided
 - [x] API documentation included
@@ -31,6 +35,7 @@
 **AI Wireframe Tool** - An intelligent wireframing platform that combines Microsoft Atlas design system with Azure OpenAI for rapid prototyping.
 
 ### Key Features
+
 - **AI-Powered Generation**: Uses Azure OpenAI GPT-4o for intelligent wireframe creation
 - **Microsoft Atlas Integration**: Built-in component library using Microsoft design tokens
 - **Real-time Collaboration**: Interactive wireframe editing and preview
@@ -38,6 +43,7 @@
 - **Presentation Mode**: Professional presentation interface for team demos
 
 ### Technology Stack
+
 - **Frontend**: React 18 + TypeScript + Vite
 - **Backend**: Azure Functions (Node.js)
 - **AI**: Azure OpenAI Service (GPT-4o)
@@ -47,6 +53,7 @@
 ## 🚀 Quick Start (Post-Transfer)
 
 ### 1. Azure OpenAI Setup
+
 ```bash
 # Navigate to backend directory
 cd backend
@@ -56,12 +63,15 @@ cp local.settings.json.template local.settings.json
 ```
 
 Required Azure services:
+
 - Azure OpenAI Service with GPT-4o deployment
 - Azure Functions (for backend API)
 - Azure Static Web Apps (optional, for hosting)
 
 ### 2. Environment Configuration
+
 Update `backend/local.settings.json`:
+
 ```json
 {
   "Values": {
@@ -73,6 +83,7 @@ Update `backend/local.settings.json`:
 ```
 
 ### 3. Development Setup
+
 ```bash
 # Install frontend dependencies
 npm install
@@ -112,6 +123,7 @@ ai_wireframe_tool/
 ## 🎯 Current Status
 
 ### ✅ Working Features
+
 - AI wireframe generation with Azure OpenAI
 - Component library with Microsoft Atlas components
 - Real-time wireframe editing and preview
@@ -121,6 +133,7 @@ ai_wireframe_tool/
 - Health monitoring and error handling
 
 ### 🔧 In Progress / Known Issues
+
 - Component Library Modal: Click handler debugging
 - Presentation Mode: User experience improvements needed
 - Advanced Figma integration features
@@ -128,18 +141,21 @@ ai_wireframe_tool/
 ## 🤝 Handoff Notes
 
 ### Development Environment
+
 - Node.js 18+ required
 - Azure Functions Core Tools v4 required
 - Vite dev server runs on port 5173
 - Azure Functions backend runs on port 7072
 
 ### Key Dependencies
+
 - `@azure/openai` - Azure OpenAI SDK
 - `react` + `typescript` - Frontend framework
 - `@azure/functions` - Backend functions framework
 - `vite` - Build tool and dev server
 
 ### Testing
+
 - Run `npm run dev:full` to start complete development environment
 - Access frontend at `http://localhost:5173`
 - Backend APIs available at `http://localhost:7072/api/`
@@ -147,10 +163,12 @@ ai_wireframe_tool/
 ## 📞 Support Information
 
 ### Original Developer
+
 - **GitHub**: @carlosUX
 - **Contact**: Available for transition questions
 
 ### Documentation
+
 - Complete setup guide in `README.md`
 - API documentation in `backend/API_REFERENCE.md`
 - Deployment guide in `DEPLOYMENT_OPTIMIZATION.md`
