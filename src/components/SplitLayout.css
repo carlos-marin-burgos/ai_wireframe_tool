@@ -23,7 +23,21 @@
   overflow: hidden;
   position: relative;
   margin-top: 60px; /* Account for fixed navbar */
- background: radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%), radial-gradient(circle at 40% 40%, rgba(32, 201, 151, 0.1) 0%, transparent 50%);
+  background: radial-gradient(
+      circle at 20% 80%,
+      rgba(255, 255, 255, 0.15) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 40%,
+      rgba(32, 201, 151, 0.1) 0%,
+      transparent 50%
+    );
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     sans-serif;
 }
@@ -48,7 +62,7 @@
   margin-left: 380px;
   padding: 0;
   padding-top: 60px;
- background: radial-gradient(
+  background: radial-gradient(
       circle at 20% 80%,
       rgba(255, 255, 255, 0.15) 0%,
       transparent 50%
@@ -1801,6 +1815,39 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   box-shadow: 0 3px 7px rgba(99, 102, 241, 0.4);
 }
 
+/* Atlas Library button for chat interface */
+.chat-atlas-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #0078d4;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  position: absolute;
+  right: 84px; /* Position it to the left of the image button */
+  bottom: 8px;
+  font-size: 0.85rem;
+  box-shadow: 0 2px 5px rgba(0, 120, 212, 0.3);
+}
+
+.chat-atlas-btn:hover {
+  background: #106ebe;
+  transform: scale(1.05);
+  box-shadow: 0 3px 7px rgba(0, 120, 212, 0.4);
+}
+
+.chat-atlas-btn img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
 .chat-stop-btn:hover {
   background: linear-gradient(135deg, #dc2626, #b91c1c);
   transform: scale(1.05);
@@ -2521,7 +2568,7 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
     margin: 10px;
     padding: 40px 20px 20px;
   }
-  
+
   .exit-presentation-btn {
     top: 10px;
     right: 10px;
@@ -2529,4 +2576,3 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
     font-size: 12px;
   }
 }
-

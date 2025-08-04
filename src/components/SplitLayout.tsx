@@ -134,15 +134,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   // Component Library Modal state
   const [isComponentLibraryOpen, setIsComponentLibraryOpen] = useState(false);
 
-  // 🧪 DEBUG: Force modal open after 2 seconds for testing
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      console.log('🧪 DEBUG: Force opening modal after 2 seconds');
-      setIsComponentLibraryOpen(true);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
-
   // Enhanced chat state
   const [messageReactions, setMessageReactions] = useState<Record<string, Array<{
     emoji: string;
@@ -507,11 +498,8 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   }, [isUpdatingWireframe, wireframeToUpdate, savedWireframes, addMessage]);
 
   const handleOpenLibrary = useCallback(() => {
-    console.log('🔧 DEBUG: handleOpenLibrary called in SplitLayout');
-    console.log('🔧 DEBUG: Current isComponentLibraryOpen state:', isComponentLibraryOpen);
     setIsComponentLibraryOpen(true);
-    console.log('🔧 DEBUG: setIsComponentLibraryOpen(true) called');
-  }, [isComponentLibraryOpen]);
+  }, []);
 
   // Export handlers
   const handleExportPowerPoint = useCallback(async () => {
@@ -755,6 +743,19 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                 <FiImage />
               </button>
 
+              {/* Atlas Library button */}
+              <button
+                type="button"
+                onClick={handleOpenLibrary}
+                className="chat-atlas-btn"
+                title="Open Atlas Component Library"
+              >
+                <img
+                  src="/atlas-light.svg"
+                  alt="Atlas"
+                />
+              </button>
+
               {/* Send button */}
               <button
                 type="submit"
@@ -837,24 +838,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               onPresentationMode={handlePresentationMode}
               onShareUrl={handleShareUrl}
             />
-
-            {/* DEBUG: Temporary test button */}
-            <div style={{ padding: '8px', background: '#ff6b6b', color: 'white', margin: '4px' }}>
-              <button
-                onClick={() => {
-                  console.log('🧪 DEBUG: Direct test button clicked');
-                  console.log('🧪 DEBUG: Current isComponentLibraryOpen:', isComponentLibraryOpen);
-                  setIsComponentLibraryOpen(true);
-                  console.log('🧪 DEBUG: Called setIsComponentLibraryOpen(true)');
-                }}
-                style={{ background: 'white', color: 'black', padding: '4px 8px', border: 'none', borderRadius: '4px' }}
-              >
-                🧪 TEST MODAL
-              </button>
-              <span style={{ marginLeft: '8px', fontSize: '12px' }}>
-                Modal State: {isComponentLibraryOpen ? 'OPEN' : 'CLOSED'}
-              </span>
-            </div>
 
             {/* Always show PageNavigation when we have a wireframe */}
             <PageNavigation
