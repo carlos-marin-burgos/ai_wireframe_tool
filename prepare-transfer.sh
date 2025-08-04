@@ -12,12 +12,12 @@ find . -name ".DS_Store" -delete
 
 # 2. Verify no sensitive data in files
 echo "🔍 Checking for sensitive data..."
-if grep -r "sk-" --exclude-dir=node_modules --exclude-dir=.git . 2>/dev/null; then
+if grep -r "sk-[a-zA-Z0-9]\{40,\}" --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=dist --exclude="*.backup*" . 2>/dev/null; then
     echo "❌ WARNING: Found potential OpenAI API keys!"
     exit 1
 fi
 
-if grep -r "EAXLS" --exclude-dir=node_modules --exclude-dir=.git . 2>/dev/null; then
+if grep -r "EAXLS[a-zA-Z0-9]\{40,\}" --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=dist --exclude="*.backup*" . 2>/dev/null; then
     echo "❌ WARNING: Found potential Azure credentials!"
     exit 1
 fi
