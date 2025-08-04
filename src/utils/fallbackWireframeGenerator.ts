@@ -14,35 +14,35 @@ interface FallbackWireframeOptions {
 // Color scheme definitions
 const COLOR_SCHEMES = {
   primary: {
-    main: '#0078d4',
-    secondary: '#106ebe',
-    bg: '#ffffff',
-    surface: '#f8f9fa',
-    text: '#171717',
-    textSecondary: '#605e5c',
-    border: '#e1dfdd',
-    accent: '#0078d4'
+    main: "#0078d4",
+    secondary: "#106ebe",
+    bg: "#ffffff",
+    surface: "#f8f9fa",
+    text: "#171717",
+    textSecondary: "#605e5c",
+    border: "#e1dfdd",
+    accent: "#0078d4",
   },
   secondary: {
-    main: '#8b5dae',
-    secondary: '#6b46c1',
-    bg: '#ffffff',
-    surface: '#f8f9fa',
-    text: '#171717',
-    textSecondary: '#605e5c',
-    border: '#e1dfdd',
-    accent: '#8b5dae'
+    main: "#8b5dae",
+    secondary: "#6b46c1",
+    bg: "#ffffff",
+    surface: "#f8f9fa",
+    text: "#171717",
+    textSecondary: "#605e5c",
+    border: "#e1dfdd",
+    accent: "#8b5dae",
   },
   success: {
-    main: '#107c10',
-    secondary: '#0e6b0e',
-    bg: '#ffffff',
-    surface: '#f8f9fa',
-    text: '#171717',
-    textSecondary: '#605e5c',
-    border: '#e1dfdd',
-    accent: '#107c10'
-  }
+    main: "#107c10",
+    secondary: "#0e6b0e",
+    bg: "#ffffff",
+    surface: "#f8f9fa",
+    text: "#171717",
+    textSecondary: "#605e5c",
+    border: "#e1dfdd",
+    accent: "#107c10",
+  },
 };
 
 // Base CSS for all wireframes
@@ -134,9 +134,15 @@ const getBaseCSS = (colors: any) => `
 `;
 
 // Landing page template
-const generateLandingPage = (description: string, _theme: string, colorScheme: string): string => {
-  const colors = COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] || COLOR_SCHEMES.primary;
-  
+const generateLandingPage = (
+  description: string,
+  _theme: string,
+  colorScheme: string
+): string => {
+  const colors =
+    COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] ||
+    COLOR_SCHEMES.primary;
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -197,17 +203,21 @@ const generateLandingPage = (description: string, _theme: string, colorScheme: s
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">🪟 Microsoft Learn</div>
-                <nav class="nav">
-                    <a href="#">Home</a>
-                    <a href="#">Learning Paths</a>
-                    <a href="#">Certifications</a>
-                    <a href="#">Documentation</a>
-                </nav>
+    <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
+        <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
+            <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
+                <svg width="24" height="24" fill="#0078d4" viewBox="0 0 24 24">
+                    <path d="M11.25 4.533a9.707 9.707 0 00-6.984 2.708L3.482 6.457C5.283 4.457 8.145 3.25 11.25 3.25s5.967 1.207 7.768 3.207l-.784.784A9.707 9.707 0 0011.25 4.533zM18.017 8.017L17.233 8.8a8.25 8.25 0 00-11.966 0l-.784-.784a9.75 9.75 0 0113.534 0zM15.516 10.516L14.732 11.3a5.25 5.25 0 00-7.464 0l-.784-.784a6.75 6.75 0 019.032 0zM13.016 13.016L12.232 13.8a2.25 2.25 0 00-3.464 0l-.784-.784a3.75 3.75 0 015.032 0z"/>
+                </svg>
+                <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
             </div>
+            <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Documentation</a>
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Learning Paths</a>
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Certifications</a>
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Q&A</a>
+                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Sign in</button>
+            </nav>
         </div>
     </header>
 
@@ -253,9 +263,15 @@ const generateLandingPage = (description: string, _theme: string, colorScheme: s
 };
 
 // Dashboard template
-const generateDashboard = (description: string, _theme: string, colorScheme: string): string => {
-  const colors = COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] || COLOR_SCHEMES.primary;
-  
+const generateDashboard = (
+  description: string,
+  _theme: string,
+  colorScheme: string
+): string => {
+  const colors =
+    COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] ||
+    COLOR_SCHEMES.primary;
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -359,16 +375,21 @@ const generateDashboard = (description: string, _theme: string, colorScheme: str
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">📊 Analytics Dashboard</div>
-                <nav class="nav">
-                    <a href="#">Overview</a>
-                    <a href="#">Reports</a>
-                    <a href="#">Settings</a>
-                </nav>
+    <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
+        <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
+            <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
+                <svg width="24" height="24" fill="#0078d4" viewBox="0 0 24 24">
+                    <path d="M11.25 4.533a9.707 9.707 0 00-6.984 2.708L3.482 6.457C5.283 4.457 8.145 3.25 11.25 3.25s5.967 1.207 7.768 3.207l-.784.784A9.707 9.707 0 0011.25 4.533z"/>
+                </svg>
+                <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
             </div>
+            <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Overview</a>
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Reports</a>
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Analytics</a>
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Settings</a>
+                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Dashboard</button>
+            </nav>
         </div>
     </header>
 
@@ -446,9 +467,15 @@ const generateDashboard = (description: string, _theme: string, colorScheme: str
 };
 
 // Form template
-const generateForm = (description: string, _theme: string, colorScheme: string): string => {
-  const colors = COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] || COLOR_SCHEMES.primary;
-  
+const generateForm = (
+  description: string,
+  _theme: string,
+  colorScheme: string
+): string => {
+  const colors =
+    COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] ||
+    COLOR_SCHEMES.primary;
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -457,7 +484,9 @@ const generateForm = (description: string, _theme: string, colorScheme: string):
     <title>Form - ${description}</title>
     <style>
         ${getBaseCSS(colors)}
-        .main { padding: 40px 0; background: ${colors.surface}; min-height: 100vh; }
+        .main { padding: 40px 0; background: ${
+          colors.surface
+        }; min-height: 100vh; }
         .form-container { 
             max-width: 600px; 
             margin: 0 auto; 
@@ -536,16 +565,21 @@ const generateForm = (description: string, _theme: string, colorScheme: string):
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">📝 Microsoft Forms</div>
-                <nav class="nav">
-                    <a href="#">Home</a>
-                    <a href="#">Forms</a>
-                    <a href="#">Templates</a>
-                </nav>
+    <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
+        <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
+            <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
+                <svg width="24" height="24" fill="#0078d4" viewBox="0 0 24 24">
+                    <path d="M11.25 4.533a9.707 9.707 0 00-6.984 2.708L3.482 6.457C5.283 4.457 8.145 3.25 11.25 3.25s5.967 1.207 7.768 3.207l-.784.784A9.707 9.707 0 0011.25 4.533z"/>
+                </svg>
+                <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
             </div>
+            <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Forms</a>
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Templates</a>
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Examples</a>
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Support</a>
+                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Create Form</button>
+            </nav>
         </div>
     </header>
 
@@ -608,9 +642,15 @@ const generateForm = (description: string, _theme: string, colorScheme: string):
 };
 
 // Content/Article template
-const generateContent = (description: string, _theme: string, colorScheme: string): string => {
-  const colors = COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] || COLOR_SCHEMES.primary;
-  
+const generateContent = (
+  description: string,
+  _theme: string,
+  colorScheme: string
+): string => {
+  const colors =
+    COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] ||
+    COLOR_SCHEMES.primary;
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -700,10 +740,23 @@ const generateContent = (description: string, _theme: string, colorScheme: strin
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">📚 Microsoft Learn</div>
+    <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
+        <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
+            <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
+                <svg width="24" height="24" fill="#0078d4" viewBox="0 0 24 24">
+                    <path d="M11.25 4.533a9.707 9.707 0 00-6.984 2.708L3.482 6.457C5.283 4.457 8.145 3.25 11.25 3.25s5.967 1.207 7.768 3.207l-.784.784A9.707 9.707 0 0011.25 4.533z"/>
+                </svg>
+                <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
+            </div>
+            <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Documentation</a>
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Learning Paths</a>
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Certifications</a>
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Q&A</a>
+                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Browse</button>
+            </nav>
+        </div>
+    </header>
                 <nav class="nav">
                     <a href="#">Home</a>
                     <a href="#">Documentation</a>
@@ -790,9 +843,15 @@ const result = example();
 };
 
 // Generic template for unmatched descriptions
-const generateGeneric = (description: string, _theme: string, colorScheme: string): string => {
-  const colors = COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] || COLOR_SCHEMES.primary;
-  
+const generateGeneric = (
+  description: string,
+  _theme: string,
+  colorScheme: string
+): string => {
+  const colors =
+    COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] ||
+    COLOR_SCHEMES.primary;
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -838,17 +897,21 @@ const generateGeneric = (description: string, _theme: string, colorScheme: strin
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">🪟 Microsoft Learn</div>
-                <nav class="nav">
-                    <a href="#">Home</a>
-                    <a href="#">Documentation</a>
-                    <a href="#">Community</a>
-                    <a href="#">Support</a>
-                </nav>
+    <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
+        <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
+            <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
+                <svg width="24" height="24" fill="#0078d4" viewBox="0 0 24 24">
+                    <path d="M11.25 4.533a9.707 9.707 0 00-6.984 2.708L3.482 6.457C5.283 4.457 8.145 3.25 11.25 3.25s5.967 1.207 7.768 3.207l-.784.784A9.707 9.707 0 0011.25 4.533z"/>
+                </svg>
+                <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
             </div>
+            <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Home</a>
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Documentation</a>
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Community</a>
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Support</a>
+                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Get Started</button>
+            </nav>
         </div>
     </header>
 
@@ -1051,16 +1114,21 @@ const generateCustomForm = (description: string, _theme: string, colorScheme: st
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">📝 Microsoft Forms</div>
-                <nav class="nav">
-                    <a href="#">Home</a>
-                    <a href="#">Forms</a>
-                    <a href="#">Templates</a>
-                </nav>
+    <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
+        <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
+            <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
+                <svg width="24" height="24" fill="#0078d4" viewBox="0 0 24 24">
+                    <path d="M11.25 4.533a9.707 9.707 0 00-6.984 2.708L3.482 6.457C5.283 4.457 8.145 3.25 11.25 3.25s5.967 1.207 7.768 3.207l-.784.784A9.707 9.707 0 0011.25 4.533z"/>
+                </svg>
+                <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
             </div>
+            <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Forms</a>
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Templates</a>
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Examples</a>
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Support</a>
+                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Create Form</button>
+            </nav>
         </div>
     </header>
 
@@ -1092,48 +1160,66 @@ const generateCustomForm = (description: string, _theme: string, colorScheme: st
 // Pattern-based wireframe generators
 interface WireframePattern {
   condition: (desc: string) => boolean;
-  generator: (description: string, theme: string, colorScheme: string) => string;
+  generator: (
+    description: string,
+    theme: string,
+    colorScheme: string
+  ) => string;
   category: string;
 }
 
 const wireframePatterns: WireframePattern[] = [
   {
-    condition: (desc: string) => /\b(landing|home|welcome|marketing|hero|main\s*page)\b/i.test(desc),
+    condition: (desc: string) =>
+      /\b(landing|home|welcome|marketing|hero|main\s*page)\b/i.test(desc),
     generator: generateLandingPage,
-    category: 'landing'
+    category: "landing",
   },
   {
-    condition: (desc: string) => /\b(dashboard|analytics|metrics|stats|overview|admin|control\s*panel)\b/i.test(desc),
+    condition: (desc: string) =>
+      /\b(dashboard|analytics|metrics|stats|overview|admin|control\s*panel)\b/i.test(
+        desc
+      ),
     generator: generateDashboard,
-    category: 'dashboard'
+    category: "dashboard",
   },
   {
-    condition: (desc: string) => /\b(form|input|register|signup|contact|submit|survey)\b/i.test(desc),
+    condition: (desc: string) =>
+      /\b(form|input|register|signup|contact|submit|survey)\b/i.test(desc),
     generator: generateForm,
-    category: 'form'
+    category: "form",
   },
   {
-    condition: (desc: string) => /\b(article|blog|content|documentation|tutorial|guide|post)\b/i.test(desc),
+    condition: (desc: string) =>
+      /\b(article|blog|content|documentation|tutorial|guide|post)\b/i.test(
+        desc
+      ),
     generator: generateContent,
-    category: 'content'
-  }
+    category: "content",
+  },
 ];
 
 /**
  * Generate a fallback wireframe when API is unavailable
  */
-export function generateFallbackWireframe(options: FallbackWireframeOptions): string {
-  const { description, theme = 'microsoftlearn', colorScheme = 'primary' } = options;
-  
-  console.log('🔄 Generating client-side fallback wireframe:', {
-    description: description.substring(0, 50) + '...',
+export function generateFallbackWireframe(
+  options: FallbackWireframeOptions
+): string {
+  const {
+    description,
+    theme = "microsoftlearn",
+    colorScheme = "primary",
+  } = options;
+
+  console.log("🔄 Generating client-side fallback wireframe:", {
+    description: description.substring(0, 50) + "...",
     theme,
-    colorScheme
+    colorScheme,
   });
 
   // Find matching template
-  const matchingTemplate = wireframePatterns.find((template: WireframePattern) => 
-    template.condition(description)
+  const matchingTemplate = wireframePatterns.find(
+    (template: WireframePattern) => template.condition(description)
   );
 
   if (matchingTemplate) {
@@ -1142,7 +1228,7 @@ export function generateFallbackWireframe(options: FallbackWireframeOptions): st
   }
 
   // Use generic template as final fallback
-  console.log('📄 Using generic template for fallback');
+  console.log("📄 Using generic template for fallback");
   return generateGeneric(description, theme, colorScheme);
 }
 
@@ -1152,31 +1238,34 @@ export function generateFallbackWireframe(options: FallbackWireframeOptions): st
 export async function shouldUseFallback(): Promise<boolean> {
   try {
     // First check if API is responding at all
-    const response = await fetch('/api/generateWireframe', {
-      method: 'POST',
+    const response = await fetch("/api/generateWireframe", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ description: 'health check test' }),
-      signal: AbortSignal.timeout(3000) // 3 second timeout
+      body: JSON.stringify({ description: "health check test" }),
+      signal: AbortSignal.timeout(3000), // 3 second timeout
     });
-    
+
     if (!response.ok) {
-      console.warn('API returned non-OK status:', response.status);
+      console.warn("API returned non-OK status:", response.status);
       return true;
     }
-    
+
     const data = await response.json();
-    
+
     // Check if API returned an error or is using fallback
     if (data.error || data.fallbackUsed) {
-      console.warn('API is experiencing issues:', data.error || 'using fallback');
+      console.warn(
+        "API is experiencing issues:",
+        data.error || "using fallback"
+      );
       return true;
     }
-    
+
     return false;
   } catch (error) {
-    console.warn('API health check failed, using fallback mode:', error);
+    console.warn("API health check failed, using fallback mode:", error);
     return true;
   }
 }

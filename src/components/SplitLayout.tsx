@@ -131,8 +131,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   const [isUpdatingWireframe, setIsUpdatingWireframe] = useState(false);
   const [wireframeToUpdate, setWireframeToUpdate] = useState<SavedWireframe | undefined>();
 
-  // Component Library Modal state
-  const [isComponentLibraryOpen, setIsComponentLibraryOpen] = useState(false);
+  // Component Library Modal removed - using direct AI generation instead
 
   // Enhanced chat state
   const [messageReactions, setMessageReactions] = useState<Record<string, Array<{
@@ -582,9 +581,10 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     handleOpenEnhancedSave();
   }, [handleOpenEnhancedSave]);
 
-  // Enhanced form submission with notifications
+  // Direct AI generation with Microsoft Learn components - no modal
   const enhancedHandleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
+    console.log('🚀 Direct AI generation called!', { description: description.trim(), loading });
 
     if (description.trim() && !loading) {
       // Close image upload zone when starting generation for cleaner UI
@@ -592,24 +592,26 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         setShowImageUpload(false);
       }
 
+      // Direct AI approach: Skip modal, go straight to AI generation with Microsoft Learn components
+      console.log('🤖 Direct AI approach: Calling handleSubmit for immediate AI generation');
+
       // Only add a message if it's coming from the form input (not initial description)
       // Check our ref to make sure this isn't the first message from landing page
       if (initialMessageAddedRef.current || conversationHistory.length > 0) {
         addMessage('user', description);
+        addMessage('ai', '� Generating wireframe with Microsoft Learn components...');
       }
 
-      try {
-        // Call the parent submit handler
-        handleSubmit(e);
-        // Success notification removed
-        // Clear the input
-        setDescription('');
-      } catch (err) {
-        console.error('Wireframe generation error:', err);
-        // Error notification removed
-      }
+      // Call the original handleSubmit for direct AI generation
+      handleSubmit(e);
+    } else {
+      console.log('❌ enhancedHandleSubmit: Conditions not met', {
+        descriptionTrimmed: description.trim(),
+        descriptionLength: description.trim().length,
+        loading
+      });
     }
-  }, [description, loading, handleSubmit, addMessage, setDescription, conversationHistory.length, showImageUpload, setShowImageUpload]);
+  }, [description, loading, setDescription, conversationHistory.length, showImageUpload, setShowImageUpload, addMessage]);
 
   // Scroll to bottom of chat
   const scrollToBottom = () => {
@@ -955,7 +957,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
                     if (description.trim() && !loading) {
-                      handleSubmit(e);
+                      enhancedHandleSubmit(e);
                     }
                   }
                 }}
@@ -1104,7 +1106,10 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       {/* Component Library Modal */}
       <ComponentLibraryModal
         isOpen={isComponentLibraryOpen}
-        onClose={() => setIsComponentLibraryOpen(false)}
+        onClose={() => {
+          console.log('🔄 Component library modal closing');
+          setIsComponentLibraryOpen(false);
+        }}
         onAddComponent={(component: any) => {
           console.log('✨ Component added:', component.name);
           if (onAddComponent) {
@@ -1112,6 +1117,14 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
           }
           addMessage('ai', `✨ Added ${component.name} to your wireframe!`);
         }}
+        onGenerateWithAI={(description: string) => {
+          console.log('🤖 AI generation requested for:', description);
+          // Call the original handleSubmit to trigger AI generation
+          const mockEvent = new Event('submit') as any;
+          handleSubmit(mockEvent);
+          addMessage('ai', '🤖 Generating wireframe with AI...');
+        }}
+        currentDescription={description}
       />
 
       {/* HTML Code Viewer */}

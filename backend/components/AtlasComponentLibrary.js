@@ -8,8 +8,7 @@ class AtlasComponentLibrary {
     this.baseStyles = `
       <style>
         .atlas-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        .atlas-header { background: #0078d4; color: white; padding: 1rem 0; }
-        .atlas-hero { background: #f5f5f5; padding: 60px 0; text-align: center; }
+        .atlas-hero { background: #E8E6DF; padding: 60px 0; text-align: center; }
         .atlas-button { background: #0078d4; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; }
         .atlas-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 16px; }
         .atlas-textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 16px; resize: vertical; }
@@ -28,74 +27,81 @@ class AtlasComponentLibrary {
    */
   generateComponent(type, options = {}) {
     switch (type) {
-      case 'site-header':
+      case "site-header":
         return this.generateSiteHeader(options);
-      
-      case 'hero-section':
+
+      case "hero-section":
         return this.generateHeroSection(options);
-      
-      case 'container':
+
+      case "container":
         return this.generateContainer(options);
-      
-      case 'heading':
+
+      case "heading":
         return this.generateHeading(options);
-      
-      case 'paragraph':
+
+      case "paragraph":
         return this.generateParagraph(options);
-      
-      case 'input-field':
+
+      case "input-field":
         return this.generateInputField(options);
-      
-      case 'textarea-field':
+
+      case "textarea-field":
         return this.generateTextareaField(options);
-      
-      case 'primary-button':
+
+      case "primary-button":
         return this.generatePrimaryButton(options);
-      
-      case 'footer':
+
+      case "footer":
         return this.generateFooter(options);
-      
-      case 'card':
+
+      case "card":
         return this.generateCard(options);
-      
-      case 'grid':
+
+      case "grid":
         return this.generateGrid(options);
-      
+
       default:
         return `<!-- Unknown component: ${type} -->`;
     }
   }
 
   generateSiteHeader(options = {}) {
-    const title = options.title || 'Atlas Design System';
-    const navigation = options.navigation || [
-      { text: 'Home', href: '#' },
-      { text: 'About', href: '#' },
-      { text: 'Services', href: '#' },
-      { text: 'Contact', href: '#' }
-    ];
-
-    const navItems = navigation.map(item => 
-      `<a href="${item.href}" style="color: white; text-decoration: none; margin: 0 15px;">${item.text}</a>`
-    ).join('');
-
+    // Use Microsoft Learn site header instead of generic blue header
     return `
-      <header class="atlas-header">
-        <div class="atlas-container">
-          <nav style="display: flex; justify-content: space-between; align-items: center;">
-            <h1 style="margin: 0; font-size: 1.5rem;">${title}</h1>
-            <div>${navItems}</div>
-          </nav>
-        </div>
-      </header>
+      <div style="display: flex; align-items: center; padding: 12px 24px; background: white; border-bottom: 1px solid #e1e5e9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+        <!-- Microsoft logo -->
+        <a href="https://www.microsoft.com" aria-label="Microsoft" style="display: flex; align-items: center; margin-right: 16px; text-decoration: none;">
+          <svg aria-hidden="true" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;">
+            <path d="M11.5216 0.5H0V11.9067H11.5216V0.5Z" fill="#f25022" />
+            <path d="M24.2418 0.5H12.7202V11.9067H24.2418V0.5Z" fill="#7fba00" />
+            <path d="M11.5216 13.0933H0V24.5H11.5216V13.0933Z" fill="#00a4ef" />
+            <path d="M24.2418 13.0933H12.7202V24.5H24.2418V13.0933Z" fill="#ffb900" />
+          </svg>
+        </a>
+
+        <!-- Divider -->
+        <div style="width: 1px; height: 24px; background: #e1e5e9; margin-right: 16px;"></div>
+
+        <!-- Brand -->
+        <a href="#" style="color: #323130; text-decoration: none; font-weight: 600; font-size: 16px; margin-right: auto;">
+          <span>Microsoft Learn</span>
+        </a>
+
+        <!-- Navigation -->
+        <nav aria-label="site header navigation" style="display: flex; align-items: center; gap: 8px;">
+          <a href="#" style="color: #323130; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.2s; font-size: 14px;">Documentation</a>
+          <a href="#" style="color: #323130; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.2s; font-size: 14px;">Training</a>
+          <a href="#" style="color: #323130; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.2s; font-size: 14px;">Certifications</a>
+        </nav>
+      </div>
     `;
   }
 
   generateHeroSection(options = {}) {
-    const title = options.title || 'Welcome to Atlas';
-    const subtitle = options.subtitle || 'Building beautiful web experiences';
-    const buttonText = options.buttonText || 'Get Started';
-    const buttonHref = options.buttonHref || '#';
+    const title = options.title || "Welcome to Atlas";
+    const subtitle = options.subtitle || "Building beautiful web experiences";
+    const buttonText = options.buttonText || "Get Started";
+    const buttonHref = options.buttonHref || "#";
 
     return `
       <section class="atlas-hero">
@@ -109,9 +115,9 @@ class AtlasComponentLibrary {
   }
 
   generateContainer(options = {}) {
-    const content = options.content || '';
-    const className = options.className || '';
-    
+    const content = options.content || "";
+    const className = options.className || "";
+
     return `
       <div class="atlas-container ${className}">
         ${content}
@@ -120,27 +126,27 @@ class AtlasComponentLibrary {
   }
 
   generateHeading(options = {}) {
-    const text = options.text || 'Heading';
+    const text = options.text || "Heading";
     const level = options.level || 2;
-    const className = options.className || '';
-    
+    const className = options.className || "";
+
     return `<h${level} class="${className}" style="color: #333; margin-bottom: 1rem;">${text}</h${level}>`;
   }
 
   generateParagraph(options = {}) {
-    const text = options.text || 'Paragraph text';
-    const className = options.className || '';
-    
+    const text = options.text || "Paragraph text";
+    const className = options.className || "";
+
     return `<p class="${className}" style="color: #666; line-height: 1.6; margin-bottom: 1rem;">${text}</p>`;
   }
 
   generateInputField(options = {}) {
-    const label = options.label || 'Input Field';
-    const placeholder = options.placeholder || '';
-    const type = options.type || 'text';
-    const required = options.required ? 'required' : '';
-    const id = options.id || label.toLowerCase().replace(/\s+/g, '-');
-    
+    const label = options.label || "Input Field";
+    const placeholder = options.placeholder || "";
+    const type = options.type || "text";
+    const required = options.required ? "required" : "";
+    const id = options.id || label.toLowerCase().replace(/\s+/g, "-");
+
     return `
       <div style="margin-bottom: 1rem;">
         <label for="${id}" style="display: block; margin-bottom: 0.5rem; font-weight: bold; color: #333;">${label}</label>
@@ -150,12 +156,12 @@ class AtlasComponentLibrary {
   }
 
   generateTextareaField(options = {}) {
-    const label = options.label || 'Message';
-    const placeholder = options.placeholder || '';
+    const label = options.label || "Message";
+    const placeholder = options.placeholder || "";
     const rows = options.rows || 4;
-    const required = options.required ? 'required' : '';
-    const id = options.id || label.toLowerCase().replace(/\s+/g, '-');
-    
+    const required = options.required ? "required" : "";
+    const id = options.id || label.toLowerCase().replace(/\s+/g, "-");
+
     return `
       <div style="margin-bottom: 1rem;">
         <label for="${id}" style="display: block; margin-bottom: 0.5rem; font-weight: bold; color: #333;">${label}</label>
@@ -165,11 +171,11 @@ class AtlasComponentLibrary {
   }
 
   generatePrimaryButton(options = {}) {
-    const text = options.text || 'Button';
-    const href = options.href || '#';
-    const type = options.type || 'button';
-    const className = options.className || '';
-    
+    const text = options.text || "Button";
+    const href = options.href || "#";
+    const type = options.type || "button";
+    const className = options.className || "";
+
     if (options.href) {
       return `<a href="${href}" class="atlas-button ${className}" style="text-decoration: none; display: inline-block;">${text}</a>`;
     } else {
@@ -178,16 +184,20 @@ class AtlasComponentLibrary {
   }
 
   generateFooter(options = {}) {
-    const copyright = options.copyright || '© 2025 Atlas Design System. All rights reserved.';
+    const copyright =
+      options.copyright || "© 2025 Atlas Design System. All rights reserved.";
     const links = options.links || [
-      { text: 'Privacy Policy', href: '#' },
-      { text: 'Terms of Service', href: '#' },
-      { text: 'Contact', href: '#' }
+      { text: "Privacy Policy", href: "#" },
+      { text: "Terms of Service", href: "#" },
+      { text: "Contact", href: "#" },
     ];
 
-    const linkItems = links.map(link => 
-      `<a href="${link.href}" style="color: #ccc; text-decoration: none; margin: 0 10px;">${link.text}</a>`
-    ).join('');
+    const linkItems = links
+      .map(
+        (link) =>
+          `<a href="${link.href}" style="color: #ccc; text-decoration: none; margin: 0 10px;">${link.text}</a>`
+      )
+      .join("");
 
     return `
       <footer class="atlas-footer">
@@ -200,10 +210,10 @@ class AtlasComponentLibrary {
   }
 
   generateCard(options = {}) {
-    const title = options.title || 'Card Title';
-    const content = options.content || 'Card content goes here.';
-    const className = options.className || '';
-    
+    const title = options.title || "Card Title";
+    const content = options.content || "Card content goes here.";
+    const className = options.className || "";
+
     return `
       <div class="atlas-card ${className}">
         <h3 style="margin-top: 0; color: #333;">${title}</h3>
@@ -214,10 +224,10 @@ class AtlasComponentLibrary {
 
   generateGrid(options = {}) {
     const items = options.items || [];
-    const className = options.className || '';
-    
-    const gridItems = items.map(item => this.generateCard(item)).join('');
-    
+    const className = options.className || "";
+
+    const gridItems = items.map((item) => this.generateCard(item)).join("");
+
     return `
       <div class="atlas-grid ${className}">
         ${gridItems}
