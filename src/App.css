@@ -91,7 +91,7 @@ body {
 
 /* Add padding only when navbar is present (split layout) */
 .app-content.with-navbar {
-  padding-top: 60px;
+  padding-top: 0px;
 }
 
 /* Floating back button for wireframe view */
@@ -112,7 +112,7 @@ body {
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   transition: all 0.2s ease;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
 }
 
 .floating-back-button:hover {

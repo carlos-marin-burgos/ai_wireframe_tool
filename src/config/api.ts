@@ -1,33 +1,112 @@
 // API configuration for different environments
 const isDevelopment = import.meta.env.DEV;
 
+// Centralized port configuration to avoid conflicts
+const PORTS = {
+  development: {
+    primary: 7071, // Main backend with AI
+    fallback: 7072, // Fallback backend
+    frontend: 5173, // Frontend dev server
+  },
+  production: {
+    primary: 443,
+    frontend: 443,
+  },
+};
+
 export const API_CONFIG = {
-  // Use fallback suggestions if Azure Functions fail
-  BASE_URL: isDevelopment
-    ? "http://localhost:7072"
-    : "https://func-designetica-vjib6nx2wh4a4.azurewebsites.net",
-  
-  // Fallback suggestions for when API fails
+  // Static configuration
   FALLBACK_SUGGESTIONS: [
     "Add clear visual hierarchy with consistent typography and spacing",
-    "Implement responsive design with mobile-first approach", 
+    "Implement responsive design with mobile-first approach",
     "Include accessibility features like keyboard navigation and ARIA labels",
     "Use Microsoft Learn design system components for consistency",
     "Add loading states and error handling for better user feedback",
-    "Create intuitive navigation with breadcrumbs and clear call-to-actions"
+    "Create intuitive navigation with breadcrumbs and clear call-to-actions",
   ],
 
   ENDPOINTS: {
     GENERATE_WIREFRAME: "/api/generate-html-wireframe",
-    GENERATE_SUGGESTIONS: "/api/generate-suggestions", 
+    GENERATE_SUGGESTIONS: "/api/generate-suggestions",
     GET_TEMPLATE: "/api/get-template",
     HEALTH: "/api/health",
   },
+
+  // Port configuration
+  PORTS,
+
+  // Get BASE_URL (static for now, can be made dynamic later)
+  BASE_URL: isDevelopment
+    ? `http://localhost:${PORTS.development.primary}`
+    : "https://func-designetica-vjib6nx2wh4a4.azurewebsites.net",
+};
+
+// Health check to verify backend has AI capabilities
+export const verifyBackendAI = async (baseUrl: string): Promise<boolean> => {
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+    const response = await fetch(`${baseUrl}/api/generate-html-wireframe`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ description: "AI capability test" }),
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (response.ok) {
+      const data = await response.json();
+      return data.aiGenerated === true && data.source?.includes("openai");
+    }
+    return false;
+  } catch (error) {
+    console.warn("Backend AI verification failed:", error);
+    return false;
+  }
+};
+
+// Auto-detect working backend (can be called at runtime)
+export const detectWorkingBackend = async (): Promise<string> => {
+  if (!isDevelopment) {
+    return API_CONFIG.BASE_URL;
+  }
+
+  const portsToTest = [PORTS.development.primary, PORTS.development.fallback];
+
+  for (const port of portsToTest) {
+    const testUrl = `http://localhost:${port}`;
+    try {
+      // Test health endpoint first
+      const healthResponse = await fetch(`${testUrl}/api/health`, {
+        method: "GET",
+        signal: AbortSignal.timeout(2000),
+      });
+
+      if (healthResponse.ok) {
+        // Test AI capabilities
+        const hasAI = await verifyBackendAI(testUrl);
+        if (hasAI) {
+          console.log(`✅ AI-enabled backend detected on port ${port}`);
+          return testUrl;
+        } else {
+          console.log(`⚠️ Backend on port ${port} has no AI capabilities`);
+        }
+      }
+    } catch (error) {
+      console.log(`❌ Port ${port} not available`);
+    }
+  }
+
+  console.warn("⚠️ No AI-enabled backend detected, using primary port");
+  return API_CONFIG.BASE_URL;
 };
 
 // Helper function to get full API URL
-export const getApiUrl = (endpoint: string) => {
-  return `${API_CONFIG.BASE_URL}${endpoint}`;
+export const getApiUrl = (endpoint: string, customBaseUrl?: string) => {
+  const baseUrl = customBaseUrl || API_CONFIG.BASE_URL;
+  return `${baseUrl}${endpoint}`;
 };
 
 export const apiRequest = async (

@@ -1,0 +1,16 @@
+{
+  "development": {
+    "frontend": 5173,
+    "backend": 7071,
+    "fallbackBackend": 7072
+  },
+  "production": {
+    "frontend": 443,
+    "backend": 443
+  },
+  "endpoints": {
+    "health": "/api/health",
+    "wireframe": "/api/generate-html-wireframe",
+    "suggestions": "/api/generate-suggestions"
+  }
+}

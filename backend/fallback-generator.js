@@ -1,6 +1,6 @@
 const { validateWireframeParams } = require("./types");
 const { TemplateManager, selectTemplate } = require("./template-manager");
-const { generateSiteHeaderHTML } = require('./components/SiteHeaderGenerator');
+const { generateSiteHeaderHTML } = require("./components/SiteHeaderGenerator");
 
 // Initialize template manager
 const templateManager = new TemplateManager();
@@ -653,7 +653,11 @@ function generateIntelligentStyles(
       color: #323130;
       background: ${requirements.modern ? "#faf9f8" : "#f3f2f1"};
       font-size: 14px;
-      ${requirements.minimal ? "font-weight: 400;" : "/* minimal styling disabled */"}
+      ${
+        requirements.minimal
+          ? "font-weight: 400;"
+          : "/* minimal styling disabled */"
+      }
     }
     
     .container {
@@ -662,7 +666,7 @@ function generateIntelligentStyles(
       padding: 0 2rem;
     }
     
-    header {
+    .hero-section {
       background: ${
         hasHero
           ? "#E8E6DF" // Use tan background for hero sections (no blue!)
@@ -676,26 +680,12 @@ function generateIntelligentStyles(
       };
       text-align: center;
       ${
-        requirements.modern ? "box-shadow: 0 4px 20px rgba(232, 230, 223, 0.5);" : ""
+        requirements.modern
+          ? "box-shadow: 0 4px 20px rgba(232, 230, 223, 0.5);"
+          : ""
       }
       position: relative;
       overflow: hidden;
-    }
-    
-    header::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: ${
-        hasHero
-          ? "linear-gradient(135deg, #0078d4 0%, #005a9b 50%, #003d6b 100%)"
-          : "linear-gradient(135deg, #0078d4 0%, #005a9b 100%)"
-      };
-      opacity: ${hasHero ? "1" : "0.95"};
-      z-index: 1;
     }
     
     .header-content {
@@ -1096,14 +1086,14 @@ function generateIntelligentStyles(
  */
 function generateDynamicContent(elements, purpose, description) {
   let content = `
-    <header>
+    <section class="hero-section">
       <div class="container">
         <div class="header-content">
           <h2>${description.charAt(0).toUpperCase() + description.slice(1)}</h2>
           <p>AI-Generated Smart Wireframe</p>
         </div>
       </div>
-    </header>
+    </section>
     
     <main>
       <div class="container">

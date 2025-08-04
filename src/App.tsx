@@ -15,6 +15,7 @@ import { API_CONFIG, getApiUrl } from "./config/api";
 import { useWireframeGeneration } from './hooks/useWireframeGeneration';
 import { PerformanceTracker } from "./utils/performance";
 import { generateHeroHTML } from "./components/HeroGenerator";
+import { PerformanceMonitor, usePerformanceMonitor } from "./components/PerformanceMonitor";
 
 interface SavedWireframe {
   id: string;
@@ -48,6 +49,10 @@ function AppContent() {
   const [showLandingPage, setShowLandingPage] = useState(true);
   const [isAnalyzingImage, setIsAnalyzingImage] = useState(false);
   const [toasts, setToasts] = useState<ToastData[]>([]);
+  const [fastMode, setFastMode] = useState(false);
+
+  // Performance monitoring
+  const performanceMonitor = usePerformanceMonitor();
 
   // Use our enhanced wireframe generation hook
   const {
@@ -203,7 +208,8 @@ function AppContent() {
         actualDescription,
         designTheme,
         colorScheme,
-        true  // skipCache: true to force fresh generation for debugging
+        true,  // skipCache: true to force fresh generation for debugging
+        fastMode  // Pass fast mode preference
       );
 
       console.log('✅ Wireframe generation result:', {

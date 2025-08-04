@@ -22,7 +22,7 @@
   width: 100%;
   overflow: hidden;
   position: relative;
-  margin-top: 60px; /* Account for fixed navbar */
+  margin-top: 50px; /* Account for fixed navbar */
   background: radial-gradient(
       circle at 20% 80%,
       rgba(255, 255, 255, 0.15) 0%,
@@ -61,7 +61,7 @@
   flex: 1;
   margin-left: 380px;
   padding: 0;
-  padding-top: 60px;
+  padding-top: 30px;
   background: radial-gradient(
       circle at 20% 80%,
       rgba(255, 255, 255, 0.15) 0%,

@@ -146,7 +146,8 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   // Presentation Mode state
   const [isPresentationModeOpen, setIsPresentationModeOpen] = useState(false);
 
-
+  // Component Library Modal state
+  const [isComponentLibraryOpen, setIsComponentLibraryOpen] = useState(false);
 
   // Clear AI suggestions when SplitLayout loads
   useEffect(() => {

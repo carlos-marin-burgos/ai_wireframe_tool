@@ -2,6 +2,12 @@
 const crypto = require("crypto");
 const path = require("path");
 
+// Import performance optimizations
+const {
+  generateOptimizedWireframe,
+  getPerformanceStats,
+} = require("../utils/performance-wireframe-generator");
+
 // Import Atlas Component Library - ONLY source for ALL components
 const AtlasComponentLibrary = require("../components/AtlasComponentLibrary");
 
@@ -11,22 +17,26 @@ const atlasLibrary = new AtlasComponentLibrary();
 // CRITICAL: Verify OpenAI configuration immediately
 function verifyOpenAIConfiguration() {
   const requiredEnvVars = [
-    'AZURE_OPENAI_ENDPOINT',
-    'AZURE_OPENAI_KEY', 
-    'AZURE_OPENAI_DEPLOYMENT'
+    "AZURE_OPENAI_ENDPOINT",
+    "AZURE_OPENAI_KEY",
+    "AZURE_OPENAI_DEPLOYMENT",
   ];
-  
-  const missing = requiredEnvVars.filter(envVar => !process.env[envVar]);
-  
+
+  const missing = requiredEnvVars.filter((envVar) => !process.env[envVar]);
+
   if (missing.length > 0) {
     console.error("🚨 CRITICAL: Missing OpenAI configuration:", missing);
-    console.error("🔧 Please check your local.settings.json or environment variables");
+    console.error(
+      "🔧 Please check your local.settings.json or environment variables"
+    );
     return false;
   }
-  
+
   console.log("✅ OpenAI Configuration Valid:");
   console.log(`   📡 Endpoint: ${process.env.AZURE_OPENAI_ENDPOINT}`);
-  console.log(`   🔑 Key: ${process.env.AZURE_OPENAI_KEY?.substring(0, 10)}...`);
+  console.log(
+    `   🔑 Key: ${process.env.AZURE_OPENAI_KEY?.substring(0, 10)}...`
+  );
   console.log(`   🚀 Deployment: ${process.env.AZURE_OPENAI_DEPLOYMENT}`);
   return true;
 }
@@ -46,31 +56,48 @@ const { AIContextManager } = require("../ai/ai-context-manager");
  * instead of AI-generated hero sections
  */
 function useExistingHeroComponent(html, description) {
-  if (!html || typeof html !== 'string') return html;
-  
+  if (!html || typeof html !== "string") return html;
+
   // Check if this wireframe should have a hero section
-  const heroKeywords = ['landing', 'hero', 'banner', 'homepage', 'main page', 'welcome', 'introduction', 'featured', 'showcase', 'marketing', 'promotional'];
-  const needsHero = heroKeywords.some(keyword => description.toLowerCase().includes(keyword)) || 
-                   description.toLowerCase().includes('page') || 
-                   description.toLowerCase().includes('site') || 
-                   description.toLowerCase().includes('website');
-  
+  const heroKeywords = [
+    "landing",
+    "hero",
+    "banner",
+    "homepage",
+    "main page",
+    "welcome",
+    "introduction",
+    "featured",
+    "showcase",
+    "marketing",
+    "promotional",
+  ];
+  const needsHero =
+    heroKeywords.some((keyword) =>
+      description.toLowerCase().includes(keyword)
+    ) ||
+    description.toLowerCase().includes("page") ||
+    description.toLowerCase().includes("site") ||
+    description.toLowerCase().includes("website");
+
   if (!needsHero) return html;
-  
+
   // Extract title from description for hero
-  const heroTitle = description.length > 50 ? 
-    "Build your next great idea" : 
-    description.charAt(0).toUpperCase() + description.slice(1);
-    
-  const heroSubtitle = "Transform your vision into reality with Microsoft Learn's comprehensive resources and tools.";
-  
+  const heroTitle =
+    description.length > 50
+      ? "Build your next great idea"
+      : description.charAt(0).toUpperCase() + description.slice(1);
+
+  const heroSubtitle =
+    "Transform your vision into reality with Microsoft Learn's comprehensive resources and tools.";
+
   // Generate hero component using Atlas Component Library - ONLY source
-  const existingHero = atlasLibrary.generateComponent('hero-section', {
+  const existingHero = atlasLibrary.generateComponent("hero-section", {
     title: heroTitle,
     subtitle: heroSubtitle,
-    ctaText: "Get Started"
+    ctaText: "Get Started",
   });
-  
+
   // Find and replace any existing hero/banner sections with our component
   // Look for common hero section patterns
   const heroPatterns = [
@@ -79,12 +106,12 @@ function useExistingHeroComponent(html, description) {
     /<div[^>]*class="[^"]*hero[^"]*"[^>]*>.*?<\/div>/gis,
     /<section[^>]*hero[^>]*>.*?<\/section>/gis,
     /<div[^>]*style="[^"]*background[^"]*linear-gradient[^"]*"[^>]*>.*?<\/div>/gis,
-    /<section[^>]*style="[^"]*background[^"]*#[0-9a-fA-F]{6}[^"]*"[^>]*>.*?<\/section>/gis
+    /<section[^>]*style="[^"]*background[^"]*#[0-9a-fA-F]{6}[^"]*"[^>]*>.*?<\/section>/gis,
   ];
-  
+
   let processedHtml = html;
   let heroReplaced = false;
-  
+
   // Try to replace each hero pattern
   for (const pattern of heroPatterns) {
     if (pattern.test(processedHtml)) {
@@ -93,16 +120,21 @@ function useExistingHeroComponent(html, description) {
       break; // Only replace the first hero section found
     }
   }
-  
+
   // If no hero was found but one is needed, insert after the nav
   if (!heroReplaced) {
-    const navEndIndex = processedHtml.indexOf('</header>');
+    const navEndIndex = processedHtml.indexOf("</header>");
     if (navEndIndex !== -1) {
-      const insertPoint = navEndIndex + '</header>'.length;
-      processedHtml = processedHtml.slice(0, insertPoint) + '\n' + existingHero + '\n' + processedHtml.slice(insertPoint);
+      const insertPoint = navEndIndex + "</header>".length;
+      processedHtml =
+        processedHtml.slice(0, insertPoint) +
+        "\n" +
+        existingHero +
+        "\n" +
+        processedHtml.slice(insertPoint);
     }
   }
-  
+
   return processedHtml;
 }
 
@@ -150,7 +182,7 @@ const logger = {
   },
   warn: (message, data = {}) => {
     console.warn(`[WARN] ${message}`, data);
-  }
+  },
 };
 
 // Initialize advanced AI systems for context-aware generation
@@ -165,36 +197,39 @@ let openai = null;
 function initializeOpenAI() {
   try {
     // Check if OpenAI is disabled via environment variable
-    if (process.env.DISABLE_OPENAI === 'true') {
+    if (process.env.DISABLE_OPENAI === "true") {
       logger.info("🚫 OpenAI disabled via DISABLE_OPENAI environment variable");
       return false;
     }
-    
+
     // Only initialize if we have the required environment variables
     if (process.env.AZURE_OPENAI_KEY && process.env.AZURE_OPENAI_ENDPOINT) {
       const { OpenAI } = require("openai");
-      
+
       // Ensure endpoint format is correct for Azure OpenAI
-      const endpoint = process.env.AZURE_OPENAI_ENDPOINT.replace(/\/$/, ''); // Remove trailing slash
-      const deployment = process.env.AZURE_OPENAI_DEPLOYMENT || 'designetica-gpt4o';
-      
+      const endpoint = process.env.AZURE_OPENAI_ENDPOINT.replace(/\/$/, ""); // Remove trailing slash
+      const deployment =
+        process.env.AZURE_OPENAI_DEPLOYMENT || "designetica-gpt4o";
+
       openai = new OpenAI({
         apiKey: process.env.AZURE_OPENAI_KEY,
         baseURL: `${endpoint}/openai/deployments/${deployment}`,
-        defaultQuery: { 'api-version': '2024-02-15-preview' },
+        defaultQuery: { "api-version": "2024-02-15-preview" },
         defaultHeaders: {
-          'api-key': process.env.AZURE_OPENAI_KEY,
+          "api-key": process.env.AZURE_OPENAI_KEY,
         },
       });
-      
+
       logger.info("🤖 OpenAI client initialized successfully", {
         endpoint: endpoint,
         deployment: deployment,
-        keyPresent: !!process.env.AZURE_OPENAI_KEY
+        keyPresent: !!process.env.AZURE_OPENAI_KEY,
       });
       return true;
     } else {
-      logger.warn("⚠️ OpenAI environment variables not found, using pattern-based generation");
+      logger.warn(
+        "⚠️ OpenAI environment variables not found, using pattern-based generation"
+      );
       return false;
     }
   } catch (error) {
@@ -211,19 +246,21 @@ function createWireframePrompt(
   colorScheme = "primary"
 ) {
   // Get the official site header from Atlas Component Library - ONLY source for components
-  const officialSiteHeader = atlasLibrary.generateComponent('site-header');
-  
+  const officialSiteHeader = atlasLibrary.generateComponent("site-header");
+
   const basePrompt = `You are an expert UI/UX designer creating HTML wireframes for Microsoft Learn platform.
 
 Create a complete, responsive HTML wireframe based on this description: "${description}"
 
 CRITICAL REQUIREMENTS:
 - MANDATORY: Use ONLY the provided official Microsoft Learn site header below - DO NOT generate your own
-- MANDATORY: DO NOT create any custom CSS for the header - use the provided header exactly as-is
+- MANDATORY: DO NOT create any custom CSS for any header elements - use the provided header exactly as-is
+- MANDATORY: DO NOT generate any <header> tags or header CSS - the site header is already provided
+- MANDATORY: DO NOT create any CSS rules for header, header::before, header::after, or any header pseudo-elements
 - The site header is already styled - just use it as the first body element
 - Use Microsoft Learn design system (Segoe UI font, #0078d4 primary color)
 - Include proper semantic HTML structure
-- Add minimal inline CSS for content styling only (NOT for the header)
+- Add minimal inline CSS for content styling only (NOT for any header elements)
 - Use Microsoft Learn color palette: #0078d4 (primary), #f3f2f1 (background), #171717 (text)
 - For hero sections, banners, and footers use tan background: #E8E6DF (no blue backgrounds!)
 - Use tan (#E8E6DF) for card backgrounds and section backgrounds instead of blue
@@ -240,8 +277,11 @@ ${officialSiteHeader}
 IMPORTANT: 
 - DO NOT create CSS for .site-header, .site-header-logo, or any header classes
 - DO NOT generate your own header - use the provided one exactly
+- DO NOT create any <header> tags in your HTML
+- DO NOT create any CSS targeting header elements
 - The header above is complete and styled - just place it at the start of <body>
-- Focus your CSS on content areas only, not the header
+- Focus your CSS on content areas only, not any header elements
+- After the provided site header, start with <main> or other content elements
 
 Style preferences:
 - Clean, professional Microsoft Learn aesthetic
@@ -257,16 +297,25 @@ BUTTON STYLING REQUIREMENTS:
 - All buttons should have proper hover states and be properly sized
 - Use Microsoft Learn button styling, not generic HTML buttons
 
-Generate ONLY the complete HTML code (starting with <!DOCTYPE html> and ending with </html>). No explanations or markdown formatting.`;
+Generate ONLY the complete HTML code (starting with <!DOCTYPE html> and ending with </html>). No explanations or markdown formatting. DO NOT include any <header> tags or header-related CSS in your response.`;
 
   return basePrompt;
 }
 
 // Generate wireframe using OpenAI with robust error handling
-async function generateWireframeWithOpenAI(description, colorScheme = "primary", correlationId, sessionId = null, generationContext = null) {
+async function generateWireframeWithOpenAI(
+  description,
+  colorScheme = "primary",
+  correlationId,
+  sessionId = null,
+  generationContext = null
+) {
   try {
     if (!openai) {
-      logger.warn("🔄 OpenAI client not available, falling back to pattern-based generation", { correlationId });
+      logger.warn(
+        "🔄 OpenAI client not available, falling back to pattern-based generation",
+        { correlationId }
+      );
       return null;
     }
 
@@ -275,12 +324,12 @@ async function generateWireframeWithOpenAI(description, colorScheme = "primary",
       description: description.substring(0, 50) + "...",
       colorScheme,
       hasContext: !!generationContext,
-      historyLength: generationContext?.recentHistory?.length || 0
+      historyLength: generationContext?.recentHistory?.length || 0,
     });
 
     // Use advanced AI engine for comprehensive analysis
     const designAnalysis = await aiEngine.analyzeDesignIntent(description);
-    
+
     // Generate sophisticated context-aware prompt
     const advancedPrompt = promptEngine.generateAdvancedPrompt({
       description,
@@ -291,87 +340,97 @@ async function generateWireframeWithOpenAI(description, colorScheme = "primary",
       qualityTargets: {
         targetAccessibility: 0.95,
         targetPerformance: 0.9,
-        targetResponsive: 0.95
-      }
+        targetResponsive: 0.95,
+      },
     });
 
     logger.info("🎯 Advanced prompt generated with context", {
       correlationId,
       promptLength: advancedPrompt.length,
       designComplexity: designAnalysis.designComplexity,
-      recommendedComponents: designAnalysis.recommendedComponents?.length || 0
+      recommendedComponents: designAnalysis.recommendedComponents?.length || 0,
     });
-    
+
     // Call OpenAI with advanced context-aware prompt
     const startTime = Date.now();
     const response = await Promise.race([
       openai.chat.completions.create({
-        model: process.env.AZURE_OPENAI_DEPLOYMENT || 'designetica-gpt4o',
+        model: process.env.AZURE_OPENAI_DEPLOYMENT || "designetica-gpt4o",
         messages: [
           {
-            role: "system", 
-            content: "You are a world-class Senior Frontend Architect and UX Designer with 15+ years of experience creating production-ready, accessible interfaces that exceed industry standards."
+            role: "system",
+            content:
+              "You are a world-class Senior Frontend Architect and UX Designer with 15+ years of experience creating production-ready, accessible interfaces that exceed industry standards.",
           },
           {
-            role: "user", 
-            content: advancedPrompt
-          }
+            role: "user",
+            content: advancedPrompt,
+          },
         ],
         max_tokens: 4000,
         temperature: 0.7,
       }),
       // 30 second timeout for complex wireframes
-      new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('OpenAI request timeout')), 30000)
-      )
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("OpenAI request timeout")), 30000)
+      ),
     ]);
 
     const openaiTime = Date.now() - startTime;
-    
+
     if (response?.choices?.[0]?.message?.content) {
       let html = response.choices[0].message.content.trim();
-      
+
       // Clean up any markdown formatting from AI response
-      if (html.startsWith('```html')) {
-        html = html.replace(/^```html\n?/, '').replace(/\n?```$/, '');
-      } else if (html.startsWith('```')) {
-        html = html.replace(/^```[a-zA-Z]*\n?/, '').replace(/\n?```$/, '');
+      if (html.startsWith("```html")) {
+        html = html.replace(/^```html\n?/, "").replace(/\n?```$/, "");
+      } else if (html.startsWith("```")) {
+        html = html.replace(/^```[a-zA-Z]*\n?/, "").replace(/\n?```$/, "");
       }
-      
+
       // Basic validation of HTML response
-      if (html.includes('<!DOCTYPE html>') && html.includes('</html>')) {
+      if (html.includes("<!DOCTYPE html>") && html.includes("</html>")) {
         logger.info("✅ OpenAI wireframe generated successfully", {
           correlationId,
           openaiTimeMs: openaiTime,
-          htmlLength: html.length
+          htmlLength: html.length,
         });
         return html;
       } else {
-        logger.warn("⚠️ OpenAI returned invalid HTML format", { correlationId });
+        logger.warn("⚠️ OpenAI returned invalid HTML format", {
+          correlationId,
+        });
         return null;
       }
     } else {
       logger.warn("⚠️ OpenAI returned empty response", { correlationId });
       return null;
     }
-    
   } catch (error) {
     // Handle specific error types
     if (error.status === 401) {
-      logger.error("🔐 OpenAI authentication failed - API key may be invalid or expired", error, { correlationId });
+      logger.error(
+        "🔐 OpenAI authentication failed - API key may be invalid or expired",
+        error,
+        { correlationId }
+      );
       // Disable OpenAI for subsequent requests to avoid repeated failures
       openai = null;
     } else if (error.status === 404) {
-      logger.error("🔍 OpenAI deployment not found - check deployment name", error, { correlationId });
+      logger.error(
+        "🔍 OpenAI deployment not found - check deployment name",
+        error,
+        { correlationId }
+      );
       openai = null;
-    } else if (error.message?.includes('timeout')) {
+    } else if (error.message?.includes("timeout")) {
       logger.error("⏰ OpenAI request timed out", error, { correlationId });
     } else {
       logger.error("❌ OpenAI wireframe generation failed", error, {
         correlationId,
         errorType: error.name,
         errorMessage: error.message,
-        errorStatus: error.status
+        errorStatus: error.status,
       });
     }
     return null;
@@ -379,161 +438,279 @@ async function generateWireframeWithOpenAI(description, colorScheme = "primary",
 }
 
 // Smart wireframe generator with AI-first approach - ALWAYS prioritize AI
-async function generateWireframeFromDescription(description, colorScheme, correlationId, sessionId = null, generationContext = null) {
+async function generateWireframeFromDescription(
+  description,
+  colorScheme,
+  correlationId,
+  sessionId = null,
+  generationContext = null
+) {
   try {
     // ABSOLUTE PRIORITY 1: OpenAI with multiple retry attempts
     if (openai) {
-      logger.info("🤖 AI-FIRST APPROACH: Attempting OpenAI generation with retries", { 
-        correlationId, 
-        hasContext: !!generationContext,
-        contextHistory: generationContext?.recentHistory?.length || 0,
-        description: description.substring(0, 100) + "..."
-      });
-      
+      logger.info(
+        "🤖 AI-FIRST APPROACH: Attempting OpenAI generation with retries",
+        {
+          correlationId,
+          hasContext: !!generationContext,
+          contextHistory: generationContext?.recentHistory?.length || 0,
+          description: description.substring(0, 100) + "...",
+        }
+      );
+
       // Try AI with up to 3 attempts for robustness
       for (let attempt = 1; attempt <= 3; attempt++) {
         try {
           logger.info(`🎯 AI Attempt ${attempt}/3`, { correlationId });
-          const aiHtml = await generateWireframeWithOpenAI(description, colorScheme, correlationId, sessionId, generationContext);
-          
-          if (aiHtml && aiHtml.length > 500) { // Ensure we got substantial content
-            logger.info("✅ SUCCESS: AI-generated wireframe created", { 
-              correlationId, 
+          const aiHtml = await generateWireframeWithOpenAI(
+            description,
+            colorScheme,
+            correlationId,
+            sessionId,
+            generationContext
+          );
+
+          if (aiHtml && aiHtml.length > 500) {
+            // Ensure we got substantial content
+            logger.info("✅ SUCCESS: AI-generated wireframe created", {
+              correlationId,
               attempt,
               contentLength: aiHtml.length,
-              hasDoctype: aiHtml.includes('<!DOCTYPE html>')
+              hasDoctype: aiHtml.includes("<!DOCTYPE html>"),
             });
-            
+
             // Post-process to use existing hero component instead of AI-generated heroes
             const processedHtml = useExistingHeroComponent(aiHtml, description);
-            
+
             // Record successful AI interaction
             if (sessionId && generationContext !== null) {
               contextManager.addDesignInteraction(sessionId, {
                 description,
-                generationMethod: 'openai_context_aware',
+                generationMethod: "openai_context_aware",
                 success: true,
                 attempt,
                 qualityMetrics: {
-                  hasValidHTML: processedHtml.includes('<!DOCTYPE html>'),
+                  hasValidHTML: processedHtml.includes("<!DOCTYPE html>"),
                   contentLength: processedHtml.length,
-                  hasComponents: processedHtml.includes('class='),
-                  usesExistingHero: processedHtml.includes('ms-learn-hero')
-                }
+                  hasComponents: processedHtml.includes("class="),
+                  usesExistingHero: processedHtml.includes("ms-learn-hero"),
+                },
               });
             }
-            
-            return { html: processedHtml, source: 'openai-context-aware', aiGenerated: true, attempt };
+
+            return {
+              html: processedHtml,
+              source: "openai-context-aware",
+              aiGenerated: true,
+              attempt,
+            };
           } else {
-            logger.warn(`⚠️ AI attempt ${attempt} produced insufficient content`, { 
-              correlationId, 
-              contentLength: aiHtml?.length || 0 
-            });
+            logger.warn(
+              `⚠️ AI attempt ${attempt} produced insufficient content`,
+              {
+                correlationId,
+                contentLength: aiHtml?.length || 0,
+              }
+            );
           }
         } catch (aiError) {
-          logger.warn(`🔄 AI attempt ${attempt} failed:`, aiError.message, { correlationId });
+          logger.warn(`🔄 AI attempt ${attempt} failed:`, aiError.message, {
+            correlationId,
+          });
           if (attempt < 3) {
-            await new Promise(resolve => setTimeout(resolve, 1000 * attempt)); // Progressive delay
+            await new Promise((resolve) => setTimeout(resolve, 1000 * attempt)); // Progressive delay
           }
         }
       }
-      
-      logger.error("❌ ALL AI ATTEMPTS FAILED - This should be rare!", { correlationId });
+
+      logger.error("❌ ALL AI ATTEMPTS FAILED - This should be rare!", {
+        correlationId,
+      });
     } else {
-      logger.error("🚫 CRITICAL: OpenAI client not initialized - Check configuration!", { correlationId });
+      logger.error(
+        "🚫 CRITICAL: OpenAI client not initialized - Check configuration!",
+        { correlationId }
+      );
     }
 
     // EMERGENCY FALLBACK ONLY: Templates when AI completely fails
-    logger.warn("🚨 EMERGENCY FALLBACK: Using templates (AI failed completely)", { 
-      correlationId, 
-      description: description.substring(0, 50) + "...",
-      reason: "All AI attempts exhausted"
-    });
-    
+    logger.warn(
+      "🚨 EMERGENCY FALLBACK: Using templates (AI failed completely)",
+      {
+        correlationId,
+        description: description.substring(0, 50) + "...",
+        reason: "All AI attempts exhausted",
+      }
+    );
+
     try {
-      const templateHtml = createFallbackWireframe(description, "microsoftlearn", colorScheme);
-      
+      const templateHtml = createFallbackWireframe(
+        description,
+        "microsoftlearn",
+        colorScheme
+      );
+
       // Only use templates as absolute last resort
       if (templateHtml && templateHtml.length > 5000) {
-        logger.warn("⚠️ FALLBACK: Using template (AI unavailable)", { 
+        logger.warn("⚠️ FALLBACK: Using template (AI unavailable)", {
           correlationId,
           templateLength: templateHtml.length,
-          reason: "AI completely failed"
+          reason: "AI completely failed",
         });
-        
+
         // Post-process fallback template to use existing hero component
-        const processedTemplateHtml = useExistingHeroComponent(templateHtml, description);
-        
+        const processedTemplateHtml = useExistingHeroComponent(
+          templateHtml,
+          description
+        );
+
         // Record that we had to use fallback
         if (sessionId && generationContext !== null) {
           contextManager.addDesignInteraction(sessionId, {
             description,
-            generationMethod: 'emergency_template',
+            generationMethod: "emergency_template",
             success: false,
-            fallbackReason: 'ai_completely_failed'
+            fallbackReason: "ai_completely_failed",
           });
         }
-        
-        return { 
-          html: processedTemplateHtml, 
-          source: 'emergency-template', 
+
+        return {
+          html: processedTemplateHtml,
+          source: "emergency-template",
           aiGenerated: false,
-          warning: 'AI failed - using template fallback'
+          warning: "AI failed - using template fallback",
         };
       }
     } catch (templateError) {
-      logger.error("💥 Even template fallback failed!", templateError, { correlationId });
+      logger.error("💥 Even template fallback failed!", templateError, {
+        correlationId,
+      });
     }
-    
+
     // Fallback to pattern-based generation
-    logger.info("🔧 Using pattern-based wireframe generation", { correlationId });
+    logger.info("🔧 Using pattern-based wireframe generation", {
+      correlationId,
+    });
     const desc = description.toLowerCase();
-    
+
     // Check for common wireframe patterns
-    if (desc.includes('form') || desc.includes('textbox') || desc.includes('input') || desc.includes('submit')) {
+    if (
+      desc.includes("form") ||
+      desc.includes("textbox") ||
+      desc.includes("input") ||
+      desc.includes("submit")
+    ) {
       // Use Atlas Component Library for form components - ONLY source
       const formHtml = generateFormWireframeFromAtlas(description, colorScheme);
-      return { html: useExistingHeroComponent(formHtml, description), source: 'pattern-form-atlas', aiGenerated: false };
-    } else if (desc.includes('dashboard') || desc.includes('chart') || desc.includes('analytics')) {
-      const dashboardHtml = generateDashboardWireframe(description, colorScheme);
-      return { html: useExistingHeroComponent(dashboardHtml, description), source: 'pattern-dashboard', aiGenerated: false };
-    } else if (desc.includes('landing') || desc.includes('hero') || desc.includes('marketing')) {
+      return {
+        html: useExistingHeroComponent(formHtml, description),
+        source: "pattern-form-atlas",
+        aiGenerated: false,
+      };
+    } else if (
+      desc.includes("dashboard") ||
+      desc.includes("chart") ||
+      desc.includes("analytics")
+    ) {
+      const dashboardHtml = generateDashboardWireframe(
+        description,
+        colorScheme
+      );
+      return {
+        html: useExistingHeroComponent(dashboardHtml, description),
+        source: "pattern-dashboard",
+        aiGenerated: false,
+      };
+    } else if (
+      desc.includes("landing") ||
+      desc.includes("hero") ||
+      desc.includes("marketing")
+    ) {
       const landingHtml = generateLandingWireframe(description, colorScheme);
-      return { html: useExistingHeroComponent(landingHtml, description), source: 'pattern-landing', aiGenerated: false };
-    } else if (desc.includes('blog') || desc.includes('article') || desc.includes('content')) {
+      return {
+        html: useExistingHeroComponent(landingHtml, description),
+        source: "pattern-landing",
+        aiGenerated: false,
+      };
+    } else if (
+      desc.includes("blog") ||
+      desc.includes("article") ||
+      desc.includes("content")
+    ) {
       const contentHtml = generateContentWireframe(description, colorScheme);
-      return { html: useExistingHeroComponent(contentHtml, description), source: 'pattern-content', aiGenerated: false };
+      return {
+        html: useExistingHeroComponent(contentHtml, description),
+        source: "pattern-content",
+        aiGenerated: false,
+      };
     } else {
       // Use the enhanced fallback template with Microsoft Learn navigation
-      const fallbackHtml = createInlineFallbackTemplate ? 
-        createInlineFallbackTemplate(description, "microsoftlearn", colorScheme) : 
-        createSimpleFallback(description, colorScheme);
-      return { html: useExistingHeroComponent(fallbackHtml, description), source: 'pattern-generic', aiGenerated: false };
+      const fallbackHtml = createInlineFallbackTemplate
+        ? createInlineFallbackTemplate(
+            description,
+            "microsoftlearn",
+            colorScheme
+          )
+        : createSimpleFallback(description, colorScheme);
+      return {
+        html: useExistingHeroComponent(fallbackHtml, description),
+        source: "pattern-generic",
+        aiGenerated: false,
+      };
     }
-    
   } catch (error) {
-    logger.error("💥 Error in wireframe generation, using emergency fallback", error, { correlationId });
-    const emergencyHtml = createInlineFallbackTemplate ? 
-      createInlineFallbackTemplate("Emergency fallback", "microsoftlearn", colorScheme) : 
-      createSimpleFallback("Emergency fallback", colorScheme);
-    return { html: useExistingHeroComponent(emergencyHtml, description), source: 'emergency-fallback', aiGenerated: false };
+    logger.error(
+      "💥 Error in wireframe generation, using emergency fallback",
+      error,
+      { correlationId }
+    );
+    const emergencyHtml = createInlineFallbackTemplate
+      ? createInlineFallbackTemplate(
+          "Emergency fallback",
+          "microsoftlearn",
+          colorScheme
+        )
+      : createSimpleFallback("Emergency fallback", colorScheme);
+    return {
+      html: useExistingHeroComponent(emergencyHtml, description),
+      source: "emergency-fallback",
+      aiGenerated: false,
+    };
   }
 }
 
 // Generate form wireframe using ONLY Atlas Component Library
 function generateFormWireframeFromAtlas(description, colorScheme) {
-  const siteHeader = atlasLibrary.generateComponent('site-header');
-  const container = atlasLibrary.generateComponent('container', {
+  const siteHeader = atlasLibrary.generateComponent("site-header");
+  const container = atlasLibrary.generateComponent("container", {
     content: `
-      ${atlasLibrary.generateComponent('heading', { text: 'Contact Form', level: 1 })}
-      ${atlasLibrary.generateComponent('paragraph', { text: 'Please fill out the form below to get in touch with us.' })}
-      ${atlasLibrary.generateComponent('input-field', { label: 'Name', placeholder: 'Enter your full name' })}
-      ${atlasLibrary.generateComponent('input-field', { label: 'Email', placeholder: 'Enter your email address', type: 'email' })}
-      ${atlasLibrary.generateComponent('textarea-field', { label: 'Message', placeholder: 'Enter your message here', rows: 5 })}
-      ${atlasLibrary.generateComponent('primary-button', { text: 'Send Message' })}
-    `
+      ${atlasLibrary.generateComponent("heading", {
+        text: "Contact Form",
+        level: 1,
+      })}
+      ${atlasLibrary.generateComponent("paragraph", {
+        text: "Please fill out the form below to get in touch with us.",
+      })}
+      ${atlasLibrary.generateComponent("input-field", {
+        label: "Name",
+        placeholder: "Enter your full name",
+      })}
+      ${atlasLibrary.generateComponent("input-field", {
+        label: "Email",
+        placeholder: "Enter your email address",
+        type: "email",
+      })}
+      ${atlasLibrary.generateComponent("textarea-field", {
+        label: "Message",
+        placeholder: "Enter your message here",
+        rows: 5,
+      })}
+      ${atlasLibrary.generateComponent("primary-button", {
+        text: "Send Message",
+      })}
+    `,
   });
-  const footer = atlasLibrary.generateComponent('footer');
+  const footer = atlasLibrary.generateComponent("footer");
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -553,22 +730,22 @@ function generateFormWireframeFromAtlas(description, colorScheme) {
 // Generate form wireframe based on description
 function generateFormWireframe(description, colorScheme) {
   const desc = description.toLowerCase();
-  
+
   // Extract specific number mentioned
   const numberMatch = desc.match(/(\d+)\s*(textbox|input|field)/);
   const requestedCount = numberMatch ? parseInt(numberMatch[1]) : 1;
-  
+
   // Extract form details from description
-  const hasName = desc.includes('name');
-  const hasEmail = desc.includes('email');
-  const hasPhone = desc.includes('phone');
-  const hasMessage = desc.includes('message') || desc.includes('comment');
-  const hasPassword = desc.includes('password');
-  const hasAddress = desc.includes('address');
-  
-  let formFields = '';
+  const hasName = desc.includes("name");
+  const hasEmail = desc.includes("email");
+  const hasPhone = desc.includes("phone");
+  const hasMessage = desc.includes("message") || desc.includes("comment");
+  const hasPassword = desc.includes("password");
+  const hasAddress = desc.includes("address");
+
+  let formFields = "";
   let fieldCount = 0;
-  
+
   // Add fields based on specific requests or fill up to requested count
   if (hasName || (fieldCount < requestedCount && !hasEmail && !hasPhone)) {
     formFields += `
@@ -578,8 +755,8 @@ function generateFormWireframe(description, colorScheme) {
             </div>`;
     fieldCount++;
   }
-  
-  if (hasEmail || (fieldCount < requestedCount)) {
+
+  if (hasEmail || fieldCount < requestedCount) {
     formFields += `
             <div class="form-group">
                 <label for="email">Email</label>
@@ -587,8 +764,8 @@ function generateFormWireframe(description, colorScheme) {
             </div>`;
     fieldCount++;
   }
-  
-  if (hasPhone || (fieldCount < requestedCount)) {
+
+  if (hasPhone || fieldCount < requestedCount) {
     formFields += `
             <div class="form-group">
                 <label for="phone">Phone</label>
@@ -596,7 +773,7 @@ function generateFormWireframe(description, colorScheme) {
             </div>`;
     fieldCount++;
   }
-  
+
   // Add generic fields if we still need more to reach requested count
   while (fieldCount < requestedCount) {
     const fieldNum = fieldCount + 1;
@@ -607,7 +784,7 @@ function generateFormWireframe(description, colorScheme) {
             </div>`;
     fieldCount++;
   }
-  
+
   if (hasPassword) {
     formFields += `
             <div class="form-group">
@@ -615,7 +792,7 @@ function generateFormWireframe(description, colorScheme) {
                 <input type="password" id="password" name="password" class="form-control" placeholder="Enter password">
             </div>`;
   }
-  
+
   if (hasAddress) {
     formFields += `
             <div class="form-group">
@@ -623,7 +800,7 @@ function generateFormWireframe(description, colorScheme) {
                 <textarea id="address" name="address" class="form-control" rows="3" placeholder="Enter your address"></textarea>
             </div>`;
   }
-  
+
   if (hasMessage) {
     formFields += `
             <div class="form-group">
@@ -631,7 +808,7 @@ function generateFormWireframe(description, colorScheme) {
                 <textarea id="message" name="message" class="form-control" rows="4" placeholder="Enter your message"></textarea>
             </div>`;
   }
-  
+
   // If no specific fields found, add default ones based on textbox count
   if (!formFields) {
     const defaultCount = Math.max(requestedCount, 2); // Default to 2 if no count specified
@@ -643,6 +820,9 @@ function generateFormWireframe(description, colorScheme) {
             </div>`;
     }
   }
+
+  // Use Atlas Component Library for the site header
+  const siteHeader = atlasLibrary.generateComponent("site-header");
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -657,18 +837,6 @@ function generateFormWireframe(description, colorScheme) {
             background: #f3f2f1; 
             color: #171717; 
             line-height: 1.5; 
-        }
-        .header { 
-            background: #ffffff; 
-            padding: 12px 24px; 
-            border-bottom: 1px solid #e1dfdd; 
-            display: flex; 
-            align-items: center; 
-        }
-        .logo { 
-            font-weight: 600; 
-            font-size: 18px; 
-            color: #0078d4; 
         }
         .main { 
             max-width: 600px; 
@@ -740,12 +908,7 @@ function generateFormWireframe(description, colorScheme) {
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="logo">
-            <img src="/windowsLogo.png" alt="Windows Logo" width="24" height="24" style="margin-right: 8px; vertical-align: middle;" />
-            Microsoft Learn
-        </div>
-    </header>
+    ${siteHeader}
     <main class="main">
         <div class="form-container">
             <h1 class="form-title">${description}</h1>
@@ -763,6 +926,9 @@ function generateFormWireframe(description, colorScheme) {
 
 // Dashboard-focused wireframe
 function generateDashboardWireframe(description, colorScheme) {
+  // Use Atlas Component Library for the site header
+  const siteHeader = atlasLibrary.generateComponent("site-header");
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -776,36 +942,6 @@ function generateDashboardWireframe(description, colorScheme) {
             background: #f8f9fa; 
             color: #171717; 
             line-height: 1.5; 
-        }
-        .header { 
-            background: #ffffff; 
-            padding: 12px 24px; 
-            border-bottom: 1px solid #e1dfdd; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-        }
-        .logo { 
-            font-weight: 600; 
-            font-size: 18px; 
-            color: #0078d4; 
-        }
-        .user-menu { 
-            display: flex; 
-            align-items: center; 
-            gap: 16px; 
-        }
-        .avatar { 
-            width: 32px; 
-            height: 32px; 
-            border-radius: 50%; 
-            background: #0078d4; 
-            color: white; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 14px; 
-            font-weight: 500; 
         }
         .main { 
             max-width: 1400px; 
@@ -911,15 +1047,7 @@ function generateDashboardWireframe(description, colorScheme) {
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="logo">
-            <img src="/windowsLogo.png" alt="Windows Logo" width="24" height="24" style="margin-right: 8px; vertical-align: middle;" />
-            Microsoft Learn Dashboard
-        </div>
-        <div class="user-menu">
-            <div class="avatar">JD</div>
-        </div>
-    </header>
+    ${siteHeader}
     <main class="main">
         <h1 class="page-title">${description}</h1>
         
@@ -985,6 +1113,9 @@ function generateDashboardWireframe(description, colorScheme) {
 
 // Landing page wireframe
 function generateLandingWireframe(description, colorScheme) {
+  // Use Atlas Component Library for the site header
+  const siteHeader = atlasLibrary.generateComponent("site-header");
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -998,54 +1129,6 @@ function generateLandingWireframe(description, colorScheme) {
             background: #ffffff; 
             color: #171717; 
             line-height: 1.6; 
-        }
-        .header { 
-            background: rgba(255,255,255,0.95); 
-            backdrop-filter: blur(10px); 
-            padding: 16px 24px; 
-            position: fixed; 
-            top: 0; 
-            width: 100%; 
-            border-bottom: 1px solid #e1dfdd; 
-            z-index: 1000; 
-        }
-        .header-content { 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-        }
-        .logo { 
-            font-weight: 600; 
-            font-size: 20px; 
-            color: #0078d4; 
-        }
-        .nav { 
-            display: flex; 
-            gap: 32px; 
-        }
-        .nav a { 
-            color: #171717; 
-            text-decoration: none; 
-            font-weight: 500; 
-            transition: color 0.2s; 
-        }
-        .nav a:hover { 
-            color: #0078d4; 
-        }
-        .cta-btn { 
-            background: #0078d4; 
-            color: white; 
-            padding: 12px 24px; 
-            border: none; 
-            border-radius: 4px; 
-            font-weight: 500; 
-            text-decoration: none; 
-            transition: background 0.2s; 
-        }
-        .cta-btn:hover { 
-            background: #106ebe; 
         }
         ${getBreadcrumbStyles()}
         .hero { 
@@ -1164,21 +1247,7 @@ function generateLandingWireframe(description, colorScheme) {
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <img src="/windowsLogo.png" alt="Windows Logo" width="24" height="24" style="margin-right: 8px; vertical-align: middle;" />
-                Microsoft Learn
-            </div>
-            <nav class="nav">
-                <a href="#">Learn</a>
-                <a href="#">Docs</a>
-                <a href="#">Community</a>
-                <a href="#">Support</a>
-            </nav>
-            <a href="#" class="cta-btn">Get Started</a>
-        </div>
-    </header>
+    ${siteHeader}
     <section class="hero">
         <div class="hero-content">
             <h1>${description}</h1>
@@ -1220,6 +1289,8 @@ function generateLandingWireframe(description, colorScheme) {
 
 // Content-focused wireframe
 function generateContentWireframe(description, colorScheme) {
+  // Use Atlas Component Library for the site header
+  const siteHeader = atlasLibrary.generateComponent("site-header");
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -1234,38 +1305,6 @@ function generateContentWireframe(description, colorScheme) {
             background: #ffffff; 
             color: #171717; 
             line-height: 1.6; 
-        }
-        .header { 
-            background: #f8f9fa; 
-            padding: 16px 24px; 
-            border-bottom: 1px solid #e5e7eb; 
-            position: sticky; 
-            top: 0; 
-            z-index: 100; 
-        }
-        .header-content { 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-        }
-        .logo { 
-            font-weight: 600; 
-            font-size: 20px; 
-            color: #0078d4; 
-        }
-        .nav { 
-            display: flex; 
-            gap: 32px; 
-        }
-        .nav a { 
-            color: #4b5563; 
-            text-decoration: none; 
-            font-weight: 500; 
-        }
-        .nav a:hover { 
-            color: #0078d4; 
         }
         ${getBreadcrumbStyles()}
         .container { 
@@ -1351,20 +1390,7 @@ function generateContentWireframe(description, colorScheme) {
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <img src="/windowsLogo.png" alt="Windows Logo" width="24" height="24" style="margin-right: 8px; vertical-align: middle;" />
-                Microsoft Learn
-            </div>
-            <nav class="nav">
-                <a href="#">Docs</a>
-                <a href="#">Learn</a>
-                <a href="#">Support</a>
-                <a href="#">Community</a>
-            </nav>
-        </div>
-    </header>
+    ${siteHeader}
     
     <div class="container">
         <header class="article-header">
@@ -1431,6 +1457,8 @@ function example() {
 
 // Simple fallback for when no pattern matches
 function createSimpleFallback(description, colorScheme) {
+  // ALWAYS use the official Microsoft Learn site header from Atlas Component Library
+  const siteHeader = atlasLibrary.generateComponent("site-header");
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -1445,18 +1473,6 @@ function createSimpleFallback(description, colorScheme) {
             background: #f3f2f1; 
             color: #171717; 
             line-height: 1.5; 
-        }
-        .header { 
-            background: #ffffff; 
-            padding: 12px 24px; 
-            border-bottom: 1px solid #e1dfdd; 
-            display: flex; 
-            align-items: center; 
-        }
-        .logo { 
-            font-weight: 600; 
-            font-size: 18px; 
-            color: #0078d4; 
         }
         ${getBreadcrumbStyles()}
         .main { 
@@ -1528,12 +1544,7 @@ function createSimpleFallback(description, colorScheme) {
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="logo">
-            <img src="/windowsLogo.png" alt="Windows Logo" width="24" height="24" style="margin-right: 8px; vertical-align: middle;" />
-            Microsoft Learn
-        </div>
-    </header>
+    ${siteHeader}
     
     <main class="main">
         <section class="hero">
@@ -1568,18 +1579,18 @@ function createSimpleFallback(description, colorScheme) {
 
 // Breadcrumb utility for multi-page wireframes
 function generateBreadcrumb(currentPage = 1, totalPages = 3) {
-  if (totalPages <= 1) return '';
-  
-  let breadcrumbItems = '';
+  if (totalPages <= 1) return "";
+
+  let breadcrumbItems = "";
   for (let i = 1; i <= totalPages; i++) {
     const isActive = i === currentPage;
-    const activeClass = isActive ? 'active' : '';
+    const activeClass = isActive ? "active" : "";
     breadcrumbItems += `
       <button class="breadcrumb-item ${activeClass}" onclick="navigateToPage(${i})">
         Page ${i}
       </button>`;
   }
-  
+
   return `
     <div class="breadcrumb-nav">
       <div class="breadcrumb-container">
@@ -1672,18 +1683,18 @@ function getBreadcrumbScript() {
 
 // Validation functions
 function isValidDescription(description) {
-  if (!description || typeof description !== 'string') {
+  if (!description || typeof description !== "string") {
     return false;
   }
-  
+
   if (description.trim().length < 3) {
     return false;
   }
-  
+
   if (description.length > 1000) {
     return false;
   }
-  
+
   return true;
 }
 
@@ -1701,9 +1712,9 @@ module.exports = async function (context, req) {
         "X-Correlation-ID": correlationId,
         // Cache-busting headers for development
         "Cache-Control": "no-cache, no-store, must-revalidate",
-        "Pragma": "no-cache",
-        "Expires": "0",
-        "X-Development-Mode": "true"
+        Pragma: "no-cache",
+        Expires: "0",
+        "X-Development-Mode": "true",
       },
     };
 
@@ -1727,31 +1738,40 @@ module.exports = async function (context, req) {
     if (req.method === "POST" && req.body) {
       description = req.body.description || req.body.prompt || description;
       colorScheme = req.body.colorScheme || colorScheme;
-      sessionId = req.body.sessionId || req.headers['x-session-id'] || `session_${correlationId}`;
-      userAgent = req.headers['user-agent'];
+      sessionId =
+        req.body.sessionId ||
+        req.headers["x-session-id"] ||
+        `session_${correlationId}`;
+      userAgent = req.headers["user-agent"];
     } else if (req.method === "GET" && req.query) {
       description = req.query.description || req.query.prompt || description;
       colorScheme = req.query.colorScheme || colorScheme;
-      sessionId = req.query.sessionId || req.headers['x-session-id'] || `session_${correlationId}`;
-      userAgent = req.headers['user-agent'];
+      sessionId =
+        req.query.sessionId ||
+        req.headers["x-session-id"] ||
+        `session_${correlationId}`;
+      userAgent = req.headers["user-agent"];
     }
 
     // Initialize context-aware session
     logger.info("🧠 Initializing context-aware session", {
       correlationId,
       sessionId,
-      hasUserAgent: !!userAgent
+      hasUserAgent: !!userAgent,
     });
 
     const session = contextManager.initializeSession(sessionId, userAgent);
-    const generationContext = contextManager.getGenerationContext(sessionId, description);
+    const generationContext = contextManager.getGenerationContext(
+      sessionId,
+      description
+    );
 
     logger.info("📚 Context analysis completed", {
       correlationId,
       sessionId,
       hasHistory: generationContext?.recentHistory?.length > 0,
       successfulPatterns: generationContext?.successfulPatterns?.length || 0,
-      userPreferences: generationContext?.userPreferences || {}
+      userPreferences: generationContext?.userPreferences || {},
     });
 
     // Initialize OpenAI client if not already done
@@ -1762,15 +1782,104 @@ module.exports = async function (context, req) {
     logger.info("🔧 Starting wireframe generation", {
       correlationId,
       description: description.substring(0, 50) + "...",
-      hasOpenAI: !!openai
+      hasOpenAI: !!openai,
     });
 
-    // Use context-aware AI + pattern-based generation
+    // Performance optimization: detect if fast mode should be used
+    const isSimpleRequest =
+      description.length < 100 &&
+      !description.includes("complex") &&
+      !description.includes("advanced") &&
+      !description.includes("custom") &&
+      !description.includes("interactive");
+
+    // Use performance-optimized generation for simple requests
+    if (isSimpleRequest) {
+      logger.info("⚡ Using fast mode for simple request", {
+        correlationId,
+        descriptionLength: description.length,
+      });
+
+      const fastResult = await generateOptimizedWireframe(
+        description,
+        colorScheme,
+        {
+          fastMode: true,
+          skipCache: false,
+        }
+      );
+
+      const processingTime = Date.now() - startTime;
+
+      context.res.status = 200;
+      context.res.headers = {
+        ...context.res.headers,
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        Pragma: "no-cache",
+        Expires: "0",
+        "X-Fast-Mode": "true",
+      };
+      context.res.body = {
+        html: fastResult.html,
+        fallback: false,
+        correlationId,
+        processingTimeMs: Math.round(fastResult.responseTime),
+        theme: "microsoftlearn",
+        colorScheme,
+        aiGenerated: false,
+        source: fastResult.source,
+        fastMode: true,
+        pattern: fastResult.pattern,
+      };
+      return;
+    }
+
+    // For complex requests, check if user wants fast mode
+    const requestsFastMode = req.body?.fastMode || req.query?.fastMode;
+    if (requestsFastMode) {
+      logger.info("⚡ Fast mode requested by user", { correlationId });
+
+      const fastResult = await generateOptimizedWireframe(
+        description,
+        colorScheme,
+        {
+          fastMode: true,
+          useAI: false,
+          skipCache: false,
+        }
+      );
+
+      const processingTime = Date.now() - startTime;
+
+      context.res.status = 200;
+      context.res.headers = {
+        ...context.res.headers,
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        Pragma: "no-cache",
+        Expires: "0",
+        "X-Fast-Mode": "true",
+      };
+      context.res.body = {
+        html: fastResult.html,
+        fallback: false,
+        correlationId,
+        processingTimeMs: Math.round(fastResult.responseTime),
+        theme: "microsoftlearn",
+        colorScheme,
+        aiGenerated: false,
+        source: fastResult.source,
+        fastMode: true,
+        pattern: fastResult.pattern,
+      };
+      return;
+    }
+
+    // Use context-aware AI + pattern-based generation for complex requests
     const result = await generateWireframeFromDescription(
-      description, 
-      colorScheme, 
-      correlationId, 
-      sessionId, 
+      description,
+      colorScheme,
+      correlationId,
+      sessionId,
       generationContext
     );
     const processingTime = Date.now() - startTime;
@@ -1780,7 +1889,7 @@ module.exports = async function (context, req) {
       processingTimeMs: processingTime,
       htmlLength: result.html.length,
       source: result.source,
-      aiGenerated: result.aiGenerated
+      aiGenerated: result.aiGenerated,
     });
 
     context.res.status = 200;
@@ -1788,20 +1897,19 @@ module.exports = async function (context, req) {
     context.res.headers = {
       ...context.res.headers,
       "Cache-Control": "no-cache, no-store, must-revalidate",
-      "Pragma": "no-cache",
-      "Expires": "0"
+      Pragma: "no-cache",
+      Expires: "0",
     };
     context.res.body = {
       html: result.html,
-      fallback: result.source.includes('fallback'),
+      fallback: result.source.includes("fallback"),
       correlationId,
       processingTimeMs: processingTime,
       theme: "microsoftlearn",
       colorScheme,
       aiGenerated: result.aiGenerated,
-      source: result.source
+      source: result.source,
     };
-
   } catch (error) {
     const processingTime = Date.now() - startTime;
 
@@ -1821,13 +1929,17 @@ module.exports = async function (context, req) {
       correlationId,
       processingTimeMs: processingTime,
       aiGenerated: false,
-      source: "error-fallback"
+      source: "error-fallback",
     };
   }
 };
 
 // Export the generateWireframeFromDescription function for use by other modules
-module.exports.generateWireframeFromDescription = generateWireframeFromDescription;
+module.exports.generateWireframeFromDescription =
+  generateWireframeFromDescription;
+
+// Export performance stats function
+module.exports.getPerformanceStats = getPerformanceStats;
 
 // Initialize OpenAI when module is loaded
 initializeOpenAI();

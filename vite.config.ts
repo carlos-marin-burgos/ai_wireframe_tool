@@ -9,7 +9,7 @@ export default defineConfig({
     port: 5173, // Explicit port for frontend
     proxy: {
       "/api": {
-        target: "http://localhost:5001",
+        target: "http://localhost:7071",
         changeOrigin: true,
         secure: false,
       },
@@ -18,7 +18,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: './index.html',
+        main: "./index.html",
       },
       // Copy staticwebapp.config.json to output
       external: [],
@@ -26,8 +26,8 @@ export default defineConfig({
     // Ensure config file is copied to output
     copyPublicDir: true,
     // Configure CSS minification to be less strict
-    minify: 'esbuild',
-    target: 'es2015',
+    minify: "esbuild",
+    target: "es2015",
   },
-  publicDir: 'public',
+  publicDir: "public",
 });
