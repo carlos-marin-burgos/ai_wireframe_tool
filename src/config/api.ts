@@ -4,7 +4,7 @@ const isDevelopment = import.meta.env.DEV;
 export const API_CONFIG = {
   // Use fallback suggestions if Azure Functions fail
   BASE_URL: isDevelopment
-    ? "http://localhost:5001"
+    ? "http://localhost:7072"
     : "https://func-designetica-vjib6nx2wh4a4.azurewebsites.net",
   
   // Fallback suggestions for when API fails

@@ -12,7 +12,20 @@
 .split-layout {
   display: grid;
   grid-template-columns: 350px 1fr;
-  height: calc(100vh - 60px);
+  height: cal.ms-header-containe.ms-header-brand,
+.microsoft-learn-header .logo-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}icrosoft-learn-header .header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 60px;
+} 60px);
   background: #f8f9fa;
 }
 
@@ -442,5 +455,253 @@
   .header-btn {
     padding: 4px 8px;
     font-size: 0.8rem;
+  }
+}
+
+/* ============================================
+   MICROSOFT LEARN SITE HEADER STYLES
+   ============================================ */
+
+/* Site Header - Microsoft Learn Style */
+.ms-header,
+.microsoft-learn-header {
+  background: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+  z-index: 100;
+}
+
+/* Dark theme variations */
+.ms-header--dark,
+.microsoft-learn-header {
+  background: #2B2B2B;
+  border-bottom-color: #605e5c;
+  color: #ffffff;
+  padding: 12px 24px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.ms-header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 56px;
+}
+
+.ms-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ms-header-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.ms-logo {
+  height: 20px;
+  width: auto;
+}
+
+.ms-header-title,
+.microsoft-learn-header .ms-logo {
+  font-size: 18px;
+  font-weight: 600;
+  color: #323130;
+}
+
+.ms-header--dark .ms-header-title,
+.microsoft-learn-header .ms-logo {
+  color: #ffffff;
+}
+
+.ms-header-nav,
+.microsoft-learn-header .main-nav {
+  flex: 1;
+  margin: 0 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.ms-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.ms-nav-item {
+  position: relative;
+}
+
+.ms-nav-link,
+.microsoft-learn-header .main-nav a {
+  text-decoration: none;
+  color: #323130;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: block;
+}
+
+.ms-nav-link:hover,
+.microsoft-learn-header .main-nav a:hover {
+  background: #f3f2f1;
+  color: #0078d4;
+}
+
+.ms-header--dark .ms-nav-link,
+.microsoft-learn-header .main-nav a {
+  color: #CCCCCC;
+}
+
+.ms-header--dark .ms-nav-link:hover,
+.microsoft-learn-header .main-nav a:hover {
+  background: #464648;
+  color: #ffffff;
+}
+
+.ms-header-actions,
+.microsoft-learn-header .user-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ms-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ms-search-input {
+  width: 240px;
+  padding: 8px 12px 8px 36px;
+  border: 1px solid #d2d0ce;
+  border-radius: 4px;
+  font-size: 14px;
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.ms-search-input:focus {
+  border-color: #0078d4;
+  box-shadow: 0 0 0 1px #0078d4;
+}
+
+.ms-search-icon {
+  position: absolute;
+  left: 12px;
+  color: #605e5c;
+  font-size: 16px;
+}
+
+.ms-user-menu {
+  position: relative;
+}
+
+.ms-user-button {
+  background: none;
+  border: none;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #f3f2f1;
+  color: #323130;
+  transition: background-color 0.2s ease;
+}
+
+.ms-user-button:hover {
+  background: #e1dfdd;
+}
+
+.ms-header--dark .ms-user-button {
+  background: #605e5c;
+  color: #ffffff;
+}
+
+.ms-header--dark .ms-user-button:hover {
+  background: #797775;
+}
+
+/* Microsoft Learn specific button styles */
+.microsoft-learn-header .search-btn,
+.microsoft-learn-header .profile-btn {
+  background: none;
+  border: none;
+  color: #CCCCCC;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.microsoft-learn-header .profile-btn {
+  background: #0078D4;
+  color: white;
+  font-size: 14px;
+}
+
+.microsoft-learn-header .search-btn:hover {
+  background: #464648;
+  color: #ffffff;
+}
+
+.microsoft-learn-header .profile-btn:hover {
+  background: #106ebe;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .ms-header-container {
+    padding: 0 12px;
+    height: 48px;
+  }
+  
+  .ms-header-nav {
+    display: none;
+  }
+  
+  .ms-search-input {
+    width: 180px;
+  }
+  
+  .ms-header-title {
+    font-size: 16px;
+  }
+  
+  .ms-logo {
+    height: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ms-search-box {
+    display: none;
+  }
+  
+  .ms-header-actions {
+    gap: 8px;
   }
 }

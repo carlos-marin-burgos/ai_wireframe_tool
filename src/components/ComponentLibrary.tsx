@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { FiX, FiSearch, FiGrid, FiList } from 'react-icons/fi';
 import './ComponentLibrary.css';
-import { generateSiteHeaderHTML } from './SiteHeaderGenerator';
+// Removed problematic import - function not available in frontend
+// import { generateSiteHeaderHTML } from './SiteHeaderGenerator';
 
 interface ComponentLibraryItem {
     id: string;
@@ -180,11 +181,19 @@ const SAMPLE_COMPONENTS: ComponentLibraryItem[] = [
         description: 'Official Microsoft Learn site header with navigation, search, and branding',
         preview: <div
             className="ms-site-header-preview"
-            dangerouslySetInnerHTML={{ __html: generateSiteHeaderHTML() }}
-        />,
+            style={{
+                padding: '10px',
+                background: '#f0f0f0',
+                borderRadius: '4px',
+                fontSize: '12px',
+                color: '#666'
+            }}
+        >
+            Microsoft Learn Header Preview
+        </div>,
         defaultProps: {
             brand: 'Designetica',
-            items: ['Learn', 'Documentation', 'Samples'],
+            items: ['Home', 'About', 'Contact'],
             showSearch: true,
             showProfile: true
         },

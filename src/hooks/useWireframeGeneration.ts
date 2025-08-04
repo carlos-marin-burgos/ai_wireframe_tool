@@ -116,8 +116,10 @@ export const useWireframeGeneration = () => {
     if (useAI) {
       const timer1 = setTimeout(() => setLoadingStage('Analyzing your description...'), 1000);
       const timer2 = setTimeout(() => setLoadingStage('Generating wireframe code...'), 3000);
-      const timer3 = setTimeout(() => setLoadingStage('Optimizing layout...'), 6000);
-      loadingTimersRef.current = [timer1, timer2, timer3];
+      const timer3 = setTimeout(() => setLoadingStage('Optimizing layout...'), 8000);
+      const timer4 = setTimeout(() => setLoadingStage('Finalizing components...'), 15000);
+      const timer5 = setTimeout(() => setLoadingStage('Almost done...'), 25000);
+      loadingTimersRef.current = [timer1, timer2, timer3, timer4, timer5];
     } else {
       const timer1 = setTimeout(() => setLoadingStage('Creating components...'), 200);
       const timer2 = setTimeout(() => setLoadingStage('Applying styling...'), 400);
@@ -264,7 +266,7 @@ export const useWireframeGeneration = () => {
         };
         
         console.log('✅ Enhanced fallback wireframe generated successfully');
-        setError('Backend server is not running. Please start the backend using: ./start-backend.sh');
+        setError('Using offline mode - backend unavailable');
         setFallback(true);
         
         return {

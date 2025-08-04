@@ -25,13 +25,6 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
                     <span className="navbar-logo-text">Designetica</span>
                 </button>
             </div>
-            <div className="navbar-center">
-                <div className="navbar-nav">
-                    <span className="nav-link">Learn</span>
-                    <span className="nav-link">Documentation</span>
-                    <span className="nav-link">Samples</span>
-                </div>
-            </div>
             <div className="navbar-right">
                 <img src="/cxsLogo.png" alt="CXS Logo" className="navbar-cxs-logo" />
             </div>

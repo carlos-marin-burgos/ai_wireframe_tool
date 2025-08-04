@@ -2413,3 +2413,120 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   border-radius: 4px;
 }
 
+/* Presentation Mode Styles */
+.presentation-mode-btn {
+  background: #0078d4;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.presentation-mode-btn:hover {
+  background: #106ebe;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 120, 212, 0.3);
+}
+
+.presentation-mode-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #000;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+}
+
+.presentation-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+}
+
+.presentation-header {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 100px;
+  z-index: 10000;
+  color: white;
+}
+
+.presentation-header h1 {
+  margin: 0 0 5px 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.presentation-header p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.exit-presentation-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #323130;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 10000;
+  transition: all 0.2s ease;
+}
+
+.exit-presentation-btn:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.presentation-iframe-container {
+  flex: 1;
+  padding: 60px 40px 40px;
+  overflow: auto;
+  background: white;
+  margin: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.presentation-iframe-container iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 4px;
+}
+
+/* Responsive presentation mode */
+@media (max-width: 768px) {
+  .presentation-iframe-container {
+    margin: 10px;
+    padding: 40px 20px 20px;
+  }
+  
+  .exit-presentation-btn {
+    top: 10px;
+    right: 10px;
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+}
+

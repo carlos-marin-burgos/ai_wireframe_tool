@@ -13,6 +13,7 @@ import ImageUploadZone from "./ImageUploadZone";
 import PageNavigation from "./PageNavigation";
 import HtmlCodeViewer from "./HtmlCodeViewer";
 import PresentationMode from "./PresentationMode";
+
 import { exportToPowerPoint, generateShareUrl } from "../utils/powerpointExport";
 import {
   FiSend,
@@ -145,6 +146,14 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   // Presentation Mode state
   const [isPresentationModeOpen, setIsPresentationModeOpen] = useState(false);
+
+
+
+  // Clear AI suggestions when SplitLayout loads
+  useEffect(() => {
+    console.log('🧹 SplitLayout mounted - clearing AI suggestions');
+    setShowAiSuggestions(false);
+  }, [setShowAiSuggestions]); // Include dependency for proper function reference
 
   // Add message to conversation
   const addMessage = useCallback((type: 'user' | 'ai', content: string) => {
@@ -489,7 +498,9 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   }, [isUpdatingWireframe, wireframeToUpdate, savedWireframes, addMessage]);
 
   const handleOpenLibrary = useCallback(() => {
+    console.log('🔧 DEBUG: handleOpenLibrary called');
     setIsComponentLibraryOpen(true);
+    console.log('🔧 DEBUG: setIsComponentLibraryOpen(true) called');
   }, []);
 
   // Export handlers
@@ -516,11 +527,9 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     }
   }, [wireframePages, pageContents, htmlWireframe]);
 
-  const handlePresentationMode = useCallback(() => {
-    setIsPresentationModeOpen(true);
-  }, []);
 
-  const handleShareUrl = useCallback(() => {
+
+  const handleShareUrl = useCallback(async () => {
     try {
       // Prepare wireframe data for sharing
       const wireframeData = {
@@ -537,22 +546,25 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         }
       };
 
-      const shareUrl = generateShareUrl(wireframeData);
+      const contentToShare = htmlWireframe || '<p>No wireframe content available</p>';
+      const result = await generateShareUrl(contentToShare, wireframeData.name);
 
-      // Copy to clipboard
-      navigator.clipboard.writeText(shareUrl).then(() => {
-        // Show success message - could be enhanced with a toast notification
-        console.log('✅ Share URL copied to clipboard!');
-        alert('Share URL copied to clipboard!');
-      }).catch(err => {
-        console.error('Failed to copy URL:', err);
-        // Fallback: show URL in prompt
-        prompt('Copy this URL to share:', shareUrl);
-      });
+      if (result.success) {
+        // Show success message with toast notification
+        console.log('✅ Share URL generated:', result.shareUrl);
+        console.log('Share URL copied to clipboard!');
+      } else {
+        console.error('Failed to generate share URL:', result.message);
+      }
     } catch (error) {
       console.error('Share URL generation failed:', error);
     }
   }, [wireframePages, pageContents, htmlWireframe]);
+
+  // Presentation Mode handler
+  const handlePresentationMode = useCallback(() => {
+    setIsPresentationModeOpen(true);
+  }, []);
 
   // Load saved wireframes from localStorage on component mount
   useEffect(() => {
@@ -1119,6 +1131,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
           content: htmlWireframe
         }] : []}
       />
+
     </div>
   );
 };

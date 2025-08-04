@@ -320,9 +320,9 @@ async function generateWireframeWithOpenAI(description, colorScheme = "primary",
         max_tokens: 4000,
         temperature: 0.7,
       }),
-      // 15 second timeout
+      // 30 second timeout for complex wireframes
       new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('OpenAI request timeout')), 15000)
+        setTimeout(() => reject(new Error('OpenAI request timeout')), 30000)
       )
     ]);
 

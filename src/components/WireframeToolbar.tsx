@@ -42,7 +42,10 @@ const WireframeToolbar: React.FC<WireframeToolbarProps> = ({
 
                 <button
                     className="toolbar-btn"
-                    onClick={onOpenLibrary}
+                    onClick={() => {
+                        console.log('🔧 DEBUG: Atlas Library button clicked in WireframeToolbar');
+                        onOpenLibrary?.();
+                    }}
                     title="Atlas Component Library"
                 >
                     <img

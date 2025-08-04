@@ -145,7 +145,18 @@ Provide a JSON response with:
         max_tokens: 1000
       });
 
-      return JSON.parse(response.choices[0].message.content);
+      // Clean the response content to handle markdown code blocks
+      const content = response.choices[0].message.content;
+      let cleanContent = content;
+      
+      // Remove markdown code blocks if present
+      if (content.includes('```json')) {
+        cleanContent = content.replace(/```json\s*/, '').replace(/```\s*$/, '');
+      } else if (content.includes('```')) {
+        cleanContent = content.replace(/```\s*/, '').replace(/```\s*$/, '');
+      }
+      
+      return JSON.parse(cleanContent.trim());
     } catch (error) {
       console.warn("⚠️ Design analysis failed, using basic analysis:", error);
       return this.getBasicDesignAnalysis(description);
@@ -336,7 +347,18 @@ Provide JSON response with:
         max_tokens: 800
       });
 
-      return JSON.parse(response.choices[0].message.content);
+      // Clean the response content to handle markdown code blocks
+      const content = response.choices[0].message.content;
+      let cleanContent = content;
+      
+      // Remove markdown code blocks if present
+      if (content.includes('```json')) {
+        cleanContent = content.replace(/```json\s*/, '').replace(/```\s*$/, '');
+      } else if (content.includes('```')) {
+        cleanContent = content.replace(/```\s*/, '').replace(/```\s*$/, '');
+      }
+      
+      return JSON.parse(cleanContent.trim());
     } catch (error) {
       return {
         confidenceScore: 0.8,
@@ -514,7 +536,18 @@ Provide JSON response with:
         max_tokens: 1000
       });
 
-      return JSON.parse(response.choices[0].message.content);
+      // Clean the response content to handle markdown code blocks
+      const content = response.choices[0].message.content;
+      let cleanContent = content;
+      
+      // Remove markdown code blocks if present
+      if (content.includes('```json')) {
+        cleanContent = content.replace(/```json\s*/, '').replace(/```\s*$/, '');
+      } else if (content.includes('```')) {
+        cleanContent = content.replace(/```\s*/, '').replace(/```\s*$/, '');
+      }
+      
+      return JSON.parse(cleanContent.trim());
     } catch (error) {
       console.warn("⚠️ Suggestion generation failed:", error);
       return {

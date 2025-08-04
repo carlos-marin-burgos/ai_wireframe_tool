@@ -219,6 +219,9 @@ function AppContent() {
         if (typeof result.html === 'string' && result.html.length > 0) {
           handleWireframeGenerated(result.html); // Use the proper handler function
 
+          // Close AI suggestions panel after successful generation
+          setShowAiSuggestions(false);
+
           // Show success notification
           // Success notification removed
         } else {
@@ -716,10 +719,12 @@ function AppContent() {
         if (typeof result.html === 'string' && result.html.length > 0) {
           handleWireframeGenerated(result.html);
         } else {
-          alert("Error: Received invalid wireframe data. Please try again.");
+          console.error("Error: Received invalid wireframe data");
+          showToast("Error: Received invalid wireframe data. Please try again.", 'error');
         }
       } else {
-        alert("Error: No wireframe generated. Please try again.");
+        console.error("Error: No wireframe generated");
+        showToast("Error: No wireframe generated. Please try again.", 'error');
       }
     } catch (err) {
       console.error("🎨 Error in design change:", err);

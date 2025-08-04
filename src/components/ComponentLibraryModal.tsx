@@ -23,7 +23,12 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     onClose,
     onAddComponent
 }) => {
-    if (!isOpen) return null;
+    console.log('🔧 DEBUG: ComponentLibraryModal rendered with isOpen:', isOpen);
+
+    if (!isOpen) {
+        console.log('🔧 DEBUG: Modal not open, returning null');
+        return null;
+    }
 
     const components: Component[] = [
         {
@@ -52,28 +57,28 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             name: 'Contact Form',
             description: 'Microsoft Learn contact form with validation',
             category: 'Forms',
-            htmlCode: FormTemplates.contact()
+            htmlCode: generateFormHTML(FormTemplates.find(t => t.id === 'contact')!)
         },
         {
             id: 'form-feedback',
             name: 'Feedback Form',
             description: 'Microsoft Learn feedback form with radio buttons',
             category: 'Forms',
-            htmlCode: FormTemplates.feedback()
+            htmlCode: generateFormHTML(FormTemplates.find(t => t.id === 'feedback') || FormTemplates[0])
         },
         {
             id: 'form-registration',
             name: 'Registration Form',
             description: 'Microsoft Learn registration form with validation',
             category: 'Forms',
-            htmlCode: FormTemplates.registration()
+            htmlCode: generateFormHTML(FormTemplates.find(t => t.id === 'registration')!)
         },
         {
             id: 'form-survey',
             name: 'Survey Form',
             description: 'Microsoft Learn survey form with various inputs',
             category: 'Forms',
-            htmlCode: FormTemplates.survey()
+            htmlCode: generateFormHTML(FormTemplates.find(t => t.id === 'survey') || FormTemplates[0])
         },
         {
             id: 'form-input-text',
@@ -81,6 +86,9 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Microsoft Learn text input with proper styling',
             category: 'Forms',
             htmlCode: generateFormHTML({
+                id: 'sample-input-form',
+                name: 'Sample Input Form',
+                description: 'Example form with text input',
                 fields: [{
                     id: 'sample-input',
                     name: 'input',
@@ -99,6 +107,9 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Microsoft Learn textarea with validation',
             category: 'Forms',
             htmlCode: generateFormHTML({
+                id: 'sample-textarea-form',
+                name: 'Sample Textarea Form',
+                description: 'Example form with textarea',
                 fields: [{
                     id: 'sample-textarea',
                     name: 'textarea',
@@ -118,6 +129,9 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Microsoft Learn select field with options',
             category: 'Forms',
             htmlCode: generateFormHTML({
+                id: 'sample-select-form',
+                name: 'Sample Select Form',
+                description: 'Example form with select',
                 fields: [{
                     id: 'sample-select',
                     name: 'select',
@@ -136,6 +150,9 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Microsoft Learn checkbox with proper styling',
             category: 'Forms',
             htmlCode: generateFormHTML({
+                id: 'sample-checkbox-form',
+                name: 'Sample Checkbox Form',
+                description: 'Example form with checkbox',
                 fields: [{
                     id: 'sample-checkbox',
                     name: 'checkbox',
@@ -153,6 +170,9 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Microsoft Learn radio buttons with validation',
             category: 'Forms',
             htmlCode: generateFormHTML({
+                id: 'sample-radio-form',
+                name: 'Sample Radio Form',
+                description: 'Example form with radio buttons',
                 fields: [{
                     id: 'sample-radio',
                     name: 'radio',

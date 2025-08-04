@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Azure Functions App - Production Deployment",
   "scripts": {
-    "start": "func start",
+    "start": "func start --port 7072",
     "start:prod": "node production-server.js",
     "build": "echo 'Build completed'",
     "local:express": "node simple-server.cjs"
