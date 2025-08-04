@@ -23,14 +23,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     onClose,
     onAddComponent
 }) => {
-    console.log('🔧 DEBUG: ComponentLibraryModal rendered with isOpen:', isOpen);
-
-    if (!isOpen) {
-        console.log('🔧 DEBUG: Modal not open, returning null');
-        return null;
-    }
-
-    const components: Component[] = [
+    if (!isOpen) return null; const components: Component[] = [
         {
             id: 'button-primary',
             name: 'Primary Button',

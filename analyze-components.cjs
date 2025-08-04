@@ -9,8 +9,11 @@ const fs = require('fs');
 const path = require('path');
 
 // Read component directory
-const componentsDir = '/Users/carlosmarinburgos/designetica/src/components';
-const srcDir = '/Users/carlosmarinburgos/designetica/src';
+const path = require('path');
+
+// Use relative paths instead of hardcoded paths
+const componentsDir = path.join(__dirname, 'src', 'components');
+const srcDir = path.join(__dirname, 'src');
 
 function getAllTsxFiles(dir) {
   const files = [];

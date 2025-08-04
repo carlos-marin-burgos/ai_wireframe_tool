@@ -498,9 +498,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   }, [isUpdatingWireframe, wireframeToUpdate, savedWireframes, addMessage]);
 
   const handleOpenLibrary = useCallback(() => {
-    console.log('🔧 DEBUG: handleOpenLibrary called');
     setIsComponentLibraryOpen(true);
-    console.log('🔧 DEBUG: setIsComponentLibraryOpen(true) called');
   }, []);
 
   // Export handlers

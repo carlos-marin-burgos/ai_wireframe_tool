@@ -14,6 +14,9 @@ out/
 .env.test.local
 .env.production.local
 
+# Azure Functions
+backend/local.settings.json
+
 # Log files
 npm-debug.log*
 yarn-debug.log*
@@ -30,6 +33,18 @@ logs
 
 # Backup files
 backups/
+*.backup*
 *.tar.gz
 *.zip
 backup_*
+src/components.backup.*
+*.bak
+*.old
+
+# Temporary files
+temp/
+tmp/
+.tmp/
+
+# Transfer preparation
+.transfer-prep/
