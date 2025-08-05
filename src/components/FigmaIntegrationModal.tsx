@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
     FiX,
     FiUpload,
@@ -9,22 +9,16 @@ import {
     FiAlertCircle,
     FiFileText,
     FiLayers,
-    FiSettings
+    FiSettings,
+    FiExternalLink
 } from 'react-icons/fi';
 import './FigmaIntegrationModal.css';
-
-interface FigmaFile {
-    id: string;
-    name: string;
-    thumbnail: string;
-    lastModified: string;
-    teamName: string;
-}
+import { figmaApi, FigmaFile as ApiFigmaFile, FigmaFrame } from '../services/figmaApi';
 
 interface FigmaIntegrationModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onImport: (fileId: string, format: 'wireframe' | 'components') => void;
+    onImport: (html: string, fileName: string) => void;
     onExport: (format: 'figma-file' | 'figma-components') => void;
 }
 
@@ -36,63 +30,133 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 }) => {
     const [activeTab, setActiveTab] = useState<'import' | 'export' | 'sync'>('import');
     const [isConnected, setIsConnected] = useState(false);
-    const [figmaFiles] = useState<FigmaFile[]>([
-        {
-            id: 'file1',
-            name: 'Design System v2.0',
-            thumbnail: '/api/placeholder/200/150',
-            lastModified: '2 hours ago',
-            teamName: 'Product Team'
-        },
-        {
-            id: 'file2',
-            name: 'Mobile App Wireframes',
-            thumbnail: '/api/placeholder/200/150',
-            lastModified: '1 day ago',
-            teamName: 'Mobile Team'
-        },
-        {
-            id: 'file3',
-            name: 'Web Dashboard Components',
-            thumbnail: '/api/placeholder/200/150',
-            lastModified: '3 days ago',
-            teamName: 'Web Team'
-        }
-    ]);
-    const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
+    const [accessToken, setAccessToken] = useState('');
+    const [figmaUrl, setFigmaUrl] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
+    const [frames, setFrames] = useState<FigmaFrame[]>([]);
+    const [selectedFrames, setSelectedFrames] = useState<string[]>([]);
     const [exportFormat, setExportFormat] = useState<'figma-file' | 'figma-components'>('figma-file');
 
-    const handleConnect = useCallback(async () => {
-        setIsLoading(true);
-        // Simulate API call
-        setTimeout(() => {
-            setIsConnected(true);
-            setIsLoading(false);
-        }, 1500);
-    }, []);
+    // Clear messages after 5 seconds
+    useEffect(() => {
+        if (error || success) {
+            const timer = setTimeout(() => {
+                setError(null);
+                setSuccess(null);
+            }, 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [error, success]);
 
-    const handleFileSelect = useCallback((fileId: string) => {
-        setSelectedFiles(prev =>
-            prev.includes(fileId)
-                ? prev.filter(id => id !== fileId)
-                : [...prev, fileId]
+    const handleConnect = useCallback(async () => {
+        if (!accessToken.trim()) {
+            setError('Please enter your Figma access token');
+            return;
+        }
+
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            figmaApi.setAccessToken(accessToken);
+            const isValid = await figmaApi.validateToken();
+
+            if (isValid) {
+                setIsConnected(true);
+                setSuccess('Successfully connected to Figma!');
+            } else {
+                setError('Invalid access token. Please check your credentials.');
+            }
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Failed to connect to Figma');
+        } finally {
+            setIsLoading(false);
+        }
+    }, [accessToken]);
+
+    const handleLoadFrames = useCallback(async () => {
+        if (!figmaUrl.trim()) {
+            setError('Please enter a Figma file URL');
+            return;
+        }
+
+        setIsLoading(true);
+        setError(null);
+        setFrames([]);
+
+        try {
+            const fileKey = figmaApi.parseFileUrl(figmaUrl);
+            if (!fileKey) {
+                setError('Invalid Figma URL. Please use a valid Figma file URL.');
+                return;
+            }
+
+            const fileData = await figmaApi.getFile(fileKey);
+            const extractedFrames = figmaApi.extractFrames(fileData.document);
+
+            setFrames(extractedFrames);
+            setSuccess(`Loaded ${extractedFrames.length} frames from Figma file`);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Failed to load Figma file');
+        } finally {
+            setIsLoading(false);
+        }
+    }, [figmaUrl]);
+
+    const handleFrameSelect = useCallback((frameId: string) => {
+        setSelectedFrames(prev =>
+            prev.includes(frameId)
+                ? prev.filter(id => id !== frameId)
+                : [...prev, frameId]
         );
     }, []);
 
-    const handleImport = useCallback(() => {
-        if (selectedFiles.length > 0) {
-            selectedFiles.forEach(fileId => {
-                onImport(fileId, 'wireframe');
-            });
-            onClose();
+    const handleImport = useCallback(async () => {
+        if (selectedFrames.length === 0) {
+            setError('Please select at least one frame to import');
+            return;
         }
-    }, [selectedFiles, onImport, onClose]);
+
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            const fileKey = figmaApi.parseFileUrl(figmaUrl);
+            if (!fileKey) {
+                setError('Invalid Figma URL');
+                return;
+            }
+
+            const selectedFrameObjects = frames.filter(frame => selectedFrames.includes(frame.id));
+            const html = await figmaApi.convertFramesToWireframe(selectedFrameObjects, fileKey);
+
+            onImport(html, 'Figma Import');
+            setSuccess('Successfully imported frames as wireframe!');
+            onClose();
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Failed to import frames');
+        } finally {
+            setIsLoading(false);
+        }
+    }, [selectedFrames, frames, figmaUrl, onImport, onClose]);
 
     const handleExport = useCallback(() => {
         onExport(exportFormat);
+        setSuccess('Export initiated! Check your Figma workspace.');
         onClose();
     }, [exportFormat, onExport, onClose]);
+
+    const handleDisconnect = useCallback(() => {
+        setIsConnected(false);
+        setAccessToken('');
+        setFrames([]);
+        setSelectedFrames([]);
+        setFigmaUrl('');
+        figmaApi.setAccessToken('');
+        setSuccess('Disconnected from Figma');
+    }, []);
 
     if (!isOpen) return null;
 
@@ -102,12 +166,27 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 <div className="figma-modal-header">
                     <div className="figma-modal-title">
                         <FiLink className="figma-icon" />
-                        <h2>Figma Integration Bridge</h2>
+                        <h2>Figma Integration</h2>
                     </div>
                     <button className="figma-modal-close" onClick={onClose} aria-label="Close Figma integration modal">
                         <FiX />
                     </button>
                 </div>
+
+                {/* Status Messages */}
+                {error && (
+                    <div className="figma-message figma-error">
+                        <FiAlertCircle />
+                        <span>{error}</span>
+                    </div>
+                )}
+
+                {success && (
+                    <div className="figma-message figma-success">
+                        <FiCheck />
+                        <span>{success}</span>
+                    </div>
+                )}
 
                 {/* Connection Status */}
                 <div className={`figma-connection-status ${isConnected ? 'connected' : 'disconnected'}`}>
@@ -115,14 +194,14 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                         <>
                             <FiCheck className="status-icon" />
                             <span>Connected to Figma</span>
+                            <button className="disconnect-btn" onClick={handleDisconnect}>
+                                Disconnect
+                            </button>
                         </>
                     ) : (
                         <>
                             <FiAlertCircle className="status-icon" />
                             <span>Not connected to Figma</span>
-                            <button className="connect-btn" onClick={handleConnect} disabled={isLoading} aria-label="Connect to Figma">
-                                {isLoading ? <FiRefreshCw className="spinning" /> : 'Connect'}
-                            </button>
                         </>
                     )}
                 </div>
@@ -132,7 +211,6 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                     <button
                         className={`figma-tab ${activeTab === 'import' ? 'active' : ''}`}
                         onClick={() => setActiveTab('import')}
-                        aria-label="Import from Figma tab"
                     >
                         <FiUpload />
                         Import from Figma
@@ -140,105 +218,131 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                     <button
                         className={`figma-tab ${activeTab === 'export' ? 'active' : ''}`}
                         onClick={() => setActiveTab('export')}
-                        aria-label="Export to Figma tab"
                     >
                         <FiDownload />
                         Export to Figma
-                    </button>
-                    <button
-                        className={`figma-tab ${activeTab === 'sync' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('sync')}
-                        aria-label="Sync and settings tab"
-                    >
-                        <FiRefreshCw />
-                        Sync & Settings
                     </button>
                 </div>
 
                 <div className="figma-modal-content">
                     {/* Import Tab */}
                     {activeTab === 'import' && (
-                        <div className="figma-import-section">
-                            <div className="section-header">
-                                <h3>Import Figma Designs</h3>
-                                <p>Select Figma files to convert into wireframes</p>
-                            </div>
-
-                            {isConnected ? (
-                                <>
-                                    <div className="figma-files-grid">
-                                        {figmaFiles.map((file) => (
-                                            <div
-                                                key={file.id}
-                                                className={`figma-file-card ${selectedFiles.includes(file.id) ? 'selected' : ''}`}
-                                                onClick={() => handleFileSelect(file.id)}
-                                            >
-                                                <div className="file-thumbnail">
-                                                    <div className="thumbnail-placeholder">
-                                                        <FiFileText />
-                                                    </div>
-                                                </div>
-                                                <div className="file-info">
-                                                    <h4>{file.name}</h4>
-                                                    <p className="file-team">{file.teamName}</p>
-                                                    <p className="file-modified">{file.lastModified}</p>
-                                                </div>
-                                                {selectedFiles.includes(file.id) && (
-                                                    <div className="file-selected-indicator">
-                                                        <FiCheck />
-                                                    </div>
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    <div className="import-options">
-                                        <div className="option-group">
-                                            <label htmlFor="import-type">Import as:</label>
-                                            <select id="import-type" defaultValue="wireframe" aria-label="Select import type">
-                                                <option value="wireframe">Wireframe Structure</option>
-                                                <option value="components">Component Library</option>
-                                                <option value="styles">Design Tokens Only</option>
-                                            </select>
-                                        </div>
-                                        <div className="option-group">
-                                            <label>
-                                                <input type="checkbox" defaultChecked />
-                                                Preserve layer names
-                                            </label>
-                                        </div>
-                                        <div className="option-group">
-                                            <label>
-                                                <input type="checkbox" defaultChecked />
-                                                Import design tokens (colors, typography)
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div className="modal-actions">
-                                        <button
-                                            className="btn-secondary"
-                                            onClick={onClose}
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button
-                                            className="btn-primary"
-                                            onClick={handleImport}
-                                            disabled={selectedFiles.length === 0}
-                                        >
-                                            Import {selectedFiles.length > 0 ? `(${selectedFiles.length})` : ''}
-                                        </button>
-                                    </div>
-                                </>
-                            ) : (
-                                <div className="figma-connect-prompt">
-                                    <FiLink className="connect-icon" />
+                        <div className="figma-tab-content">
+                            {!isConnected ? (
+                                <div className="figma-auth-section">
                                     <h3>Connect to Figma</h3>
-                                    <p>Connect your Figma account to import designs and sync with your wireframes.</p>
-                                    <button className="btn-primary" onClick={handleConnect}>
-                                        Connect to Figma
+                                    <p>Enter your Figma access token to get started.</p>
+
+                                    <div className="figma-input-group">
+                                        <label htmlFor="figma-token">Figma Access Token</label>
+                                        <input
+                                            id="figma-token"
+                                            type="password"
+                                            placeholder="figd_..."
+                                            value={accessToken}
+                                            onChange={(e) => setAccessToken(e.target.value)}
+                                            className="figma-input"
+                                        />
+                                        <small>
+                                            <a
+                                                href="https://www.figma.com/developers/api#access-tokens"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="figma-link"
+                                            >
+                                                <FiExternalLink />
+                                                How to get your access token
+                                            </a>
+                                        </small>
+                                    </div>
+
+                                    <button
+                                        className="figma-btn figma-btn-primary"
+                                        onClick={handleConnect}
+                                        disabled={isLoading || !accessToken.trim()}
+                                    >
+                                        {isLoading ? <FiRefreshCw className="spinning" /> : <FiLink />}
+                                        {isLoading ? 'Connecting...' : 'Connect to Figma'}
                                     </button>
+                                </div>
+                            ) : (
+                                <div className="figma-import-section">
+                                    <div className="figma-input-group">
+                                        <label htmlFor="figma-url">Figma File URL</label>
+                                        <input
+                                            id="figma-url"
+                                            type="url"
+                                            placeholder="https://www.figma.com/file/..."
+                                            value={figmaUrl}
+                                            onChange={(e) => setFigmaUrl(e.target.value)}
+                                            className="figma-input"
+                                        />
+                                    </div>
+
+                                    <button
+                                        className="figma-btn figma-btn-secondary"
+                                        onClick={handleLoadFrames}
+                                        disabled={isLoading || !figmaUrl.trim()}
+                                    >
+                                        {isLoading ? <FiRefreshCw className="spinning" /> : <FiLayers />}
+                                        {isLoading ? 'Loading...' : 'Load Frames'}
+                                    </button>
+
+                                    {frames.length > 0 && (
+                                        <div className="figma-frames-section">
+                                            <h4>Select Frames to Import ({frames.length} available)</h4>
+                                            <div className="figma-frames-grid">
+                                                {frames.map((frame) => (
+                                                    <div
+                                                        key={frame.id}
+                                                        className={`figma-frame-card ${selectedFrames.includes(frame.id) ? 'selected' : ''}`}
+                                                        onClick={() => handleFrameSelect(frame.id)}
+                                                    >
+                                                        <div className="frame-preview">
+                                                            <FiFileText size={24} />
+                                                        </div>
+                                                        <div className="frame-info">
+                                                            <h5>{frame.name}</h5>
+                                                            <span className="frame-type">{frame.type}</span>
+                                                            {frame.absoluteBoundingBox && (
+                                                                <span className="frame-size">
+                                                                    {Math.round(frame.absoluteBoundingBox.width)} × {Math.round(frame.absoluteBoundingBox.height)}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        {selectedFrames.includes(frame.id) && (
+                                                            <div className="frame-selected-indicator">
+                                                                <FiCheck />
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+
+                                            <div className="figma-actions">
+                                                <button
+                                                    className="figma-btn figma-btn-outline"
+                                                    onClick={() => setSelectedFrames(frames.map(f => f.id))}
+                                                >
+                                                    Select All
+                                                </button>
+                                                <button
+                                                    className="figma-btn figma-btn-outline"
+                                                    onClick={() => setSelectedFrames([])}
+                                                >
+                                                    Clear Selection
+                                                </button>
+                                                <button
+                                                    className="figma-btn figma-btn-primary"
+                                                    onClick={handleImport}
+                                                    disabled={isLoading || selectedFrames.length === 0}
+                                                >
+                                                    {isLoading ? <FiRefreshCw className="spinning" /> : <FiUpload />}
+                                                    Import Selected ({selectedFrames.length})
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>
@@ -246,26 +350,15 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 
                     {/* Export Tab */}
                     {activeTab === 'export' && (
-                        <div className="figma-export-section">
-                            <div className="section-header">
+                        <div className="figma-tab-content">
+                            <div className="figma-export-section">
                                 <h3>Export to Figma</h3>
-                                <p>Export your wireframes to Figma for further design development</p>
-                            </div>
+                                <p>Export your current wireframe to Figma.</p>
 
-                            <div className="export-preview">
-                                <div className="current-wireframe-preview">
-                                    <div className="preview-placeholder">
-                                        <FiLayers />
-                                        <span>Current Wireframe</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="export-options">
-                                <div className="option-group">
-                                    <label>Export format:</label>
-                                    <div className="radio-group">
-                                        <label>
+                                <div className="figma-input-group">
+                                    <label>Export Format</label>
+                                    <div className="figma-radio-group">
+                                        <label className="figma-radio-label">
                                             <input
                                                 type="radio"
                                                 name="exportFormat"
@@ -273,9 +366,9 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                                                 checked={exportFormat === 'figma-file'}
                                                 onChange={(e) => setExportFormat(e.target.value as any)}
                                             />
-                                            New Figma File
+                                            <span>Complete Figma File</span>
                                         </label>
-                                        <label>
+                                        <label className="figma-radio-label">
                                             <input
                                                 type="radio"
                                                 name="exportFormat"
@@ -283,99 +376,18 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                                                 checked={exportFormat === 'figma-components'}
                                                 onChange={(e) => setExportFormat(e.target.value as any)}
                                             />
-                                            Figma Components
+                                            <span>Component Library</span>
                                         </label>
                                     </div>
                                 </div>
 
-                                <div className="option-group">
-                                    <label>
-                                        <input type="checkbox" defaultChecked />
-                                        Include annotations
-                                    </label>
-                                </div>
-                                <div className="option-group">
-                                    <label>
-                                        <input type="checkbox" defaultChecked />
-                                        Export responsive breakpoints
-                                    </label>
-                                </div>
-                                <div className="option-group">
-                                    <label>
-                                        <input type="checkbox" />
-                                        Create component variants
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div className="modal-actions">
-                                <button className="btn-secondary" onClick={onClose}>
-                                    Cancel
-                                </button>
-                                <button className="btn-primary" onClick={handleExport}>
+                                <button
+                                    className="figma-btn figma-btn-primary"
+                                    onClick={handleExport}
+                                    disabled={isLoading}
+                                >
+                                    <FiDownload />
                                     Export to Figma
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Sync Tab */}
-                    {activeTab === 'sync' && (
-                        <div className="figma-sync-section">
-                            <div className="section-header">
-                                <h3>Sync & Settings</h3>
-                                <p>Manage your Figma integration settings and sync preferences</p>
-                            </div>
-
-                            <div className="sync-settings">
-                                <div className="setting-group">
-                                    <div className="setting-header">
-                                        <FiRefreshCw />
-                                        <h4>Auto-sync</h4>
-                                    </div>
-                                    <label>
-                                        <input type="checkbox" />
-                                        Automatically sync changes between platforms
-                                    </label>
-                                    <label>
-                                        <input type="checkbox" defaultChecked />
-                                        Sync design tokens (colors, typography, spacing)
-                                    </label>
-                                    <label>
-                                        <input type="checkbox" />
-                                        Sync component updates
-                                    </label>
-                                </div>
-
-                                <div className="setting-group">
-                                    <div className="setting-header">
-                                        <FiSettings />
-                                        <h4>Export Settings</h4>
-                                    </div>
-                                    <div className="option-group">
-                                        <label htmlFor="export-format">Default export format:</label>
-                                        <select id="export-format" defaultValue="figma-file" aria-label="Select default export format">
-                                            <option value="figma-file">Figma File</option>
-                                            <option value="figma-components">Components</option>
-                                        </select>
-                                    </div>
-                                    <div className="option-group">
-                                        <label htmlFor="frame-naming">Frame naming convention:</label>
-                                        <select id="frame-naming" defaultValue="descriptive" aria-label="Select frame naming convention">
-                                            <option value="descriptive">Descriptive (Homepage - Header)</option>
-                                            <option value="simple">Simple (Frame 1, Frame 2)</option>
-                                            <option value="custom">Custom Pattern</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="modal-actions">
-                                <button className="btn-secondary" onClick={onClose}>
-                                    Cancel
-                                </button>
-                                <button className="btn-primary">
-                                    Save Settings
                                 </button>
                             </div>
                         </div>

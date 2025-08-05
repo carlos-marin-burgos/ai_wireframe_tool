@@ -46,7 +46,7 @@ var abbreviations = loadJsonContent('abbreviations.json')
 
 // Resource names using the token
 var openAiAccountName = take('${abbreviations.cognitiveServices}-${environmentName}-${resourceToken}', 64)
-var storageAccountName = take('${abbreviations.storageAccount}${environmentName}${resourceToken}', 24)
+var storageAccountName = take('${abbreviations.storageAccount}${replace(environmentName, '-', '')}${resourceToken}', 24)
 var logAnalyticsName = take('${abbreviations.logAnalyticsWorkspace}-${environmentName}-${resourceToken}', 63)
 var applicationInsightsName = '${abbreviations.applicationInsights}-${environmentName}-${resourceToken}'
 var userAssignedIdentityName = '${abbreviations.userAssignedIdentity}-${environmentName}-${resourceToken}'

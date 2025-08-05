@@ -4208,5 +4208,49 @@
         "ssl"
       ]
     }
+  },
+  {
+    "timestamp": "2025-08-04T18:37:33.844Z",
+    "checks": {
+      "healthEndpoint": {
+        "status": "HEALTHY",
+        "statusCode": 200,
+        "responseTime": 356,
+        "error": null,
+        "responseSize": 63
+      },
+      "apiEndpoint": {
+        "status": "HEALTHY",
+        "statusCode": 200,
+        "responseTime": 177,
+        "error": null,
+        "responseSize": 6475,
+        "apiValidation": "PASSED"
+      },
+      "website": {
+        "status": "HEALTHY",
+        "statusCode": 200,
+        "responseTime": 212,
+        "error": null,
+        "responseSize": 1085
+      },
+      "dns": {
+        "status": "HEALTHY",
+        "address": "20.80.156.48",
+        "responseTime": 2
+      },
+      "ssl": {
+        "status": "UNHEALTHY",
+        "error": "Hostname/IP does not match certificate's altnames: Host: designetica.carlosmarin.net. is not in the cert's altnames: DNS:*.msha-slice-1-wus2-1-ase.p.azurewebsites.net, DNS:*.scm.msha-slice-1-wus2-1-ase.p.azurewebsites.net, DNS:*.msha-slice-1-wus2-1-ase.p.azure-mobile.net, DNS:*.scm.msha-slice-1-wus2-1-ase.p.azure-mobile.net, DNS:msha-slice-1-wus2-1-ase.scm.p.azurewebsites.net",
+        "responseTime": 143
+      }
+    },
+    "overall": {
+      "status": "WARNING",
+      "message": "Some services have issues: ssl",
+      "warnings": [
+        "ssl"
+      ]
+    }
   }
 ]

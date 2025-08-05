@@ -109,7 +109,7 @@
   width: 100%;
   min-height: 120px;
   padding: 1rem;
-  padding-right: 85px;
+  padding-right: 55px; /* Reduced from 85px since we removed the image upload button */
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   font-size: 1rem;
@@ -461,30 +461,6 @@
   cursor: not-allowed;
 }
 
-/* Image Upload Button */
-.image-upload-btn {
-  position: absolute;
-  bottom: 12px;
-  right: 60px; /* Position to the left of send button */
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: #64748b;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border: none;
-  transition: all 0.2s ease;
-  font-size: 16px;
-}
-
-.image-upload-btn:hover {
-  background-color: #475569;
-  transform: scale(1.05);
-}
-
 /* Image Upload Section */
 .image-upload-section {
   margin-top: 1rem;
@@ -502,12 +478,112 @@
   }
 }
 
-/* Responsive adjustments for upload zone */
+/* Integration Pills Container */
+.integration-pills-container {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.integration-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Figma pill styling */
+.integration-pill.figma-pill {
+  background: linear-gradient(135deg, #e879f9 0%, #8b5cf6 100%);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.integration-pill.figma-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+  background: linear-gradient(135deg, #f093fb 0%, #9d4edd 100%);
+}
+
+/* Image pill styling */
+.integration-pill.image-pill {
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+  box-shadow: 0 4px 12px rgba(8, 145, 178, 0.3);
+}
+
+.integration-pill.image-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(8, 145, 178, 0.4);
+  background: linear-gradient(135deg, #22d3ee 0%, #0e7490 100%);
+}
+
+.integration-pill:active {
+  transform: translateY(0);
+}
+
+.pill-icon {
+  font-size: 16px;
+  color: white;
+}
+
+/* Add a subtle shimmer effect */
+.integration-pill::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.integration-pill:hover::before {
+  left: 100%;
+}
+
+/* Responsive adjustments for integration pills */
 @media (max-width: 768px) {
-  .image-upload-btn {
-    right: 55px; /* Adjust for smaller screens */
-    width: 32px;
-    height: 32px;
+  .integration-pills-container {
+    gap: 8px;
+  }
+
+  .integration-pill {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+
+  .pill-icon {
     font-size: 14px;
+  }
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 480px) {
+  .integration-pills-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .integration-pill {
+    width: 100%;
+    max-width: 200px;
+    justify-content: center;
   }
 }

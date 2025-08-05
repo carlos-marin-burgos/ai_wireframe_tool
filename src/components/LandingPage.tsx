@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import "./LandingPage.css";
 import Footer from './Footer';
 import ImageUploadZone from './ImageUploadZone';
+import FigmaIntegrationModal from './FigmaIntegrationModal';
 
 interface LandingPageProps {
   error: string | null;
@@ -20,6 +21,8 @@ interface LandingPageProps {
   onImageUpload?: (file: File) => void;
   onAnalyzeImage?: (imageUrl: string, fileName: string) => void;
   isAnalyzingImage?: boolean;
+  onFigmaImport?: (html: string, fileName: string) => void;
+  onFigmaExport?: (format: 'figma-file' | 'figma-components') => void;
 }
 
 import {
@@ -29,6 +32,7 @@ import {
   FiStopCircle,
   FiCpu,
   FiImage,
+  FiLink,
 } from "react-icons/fi";
 
 const LandingPage: React.FC<LandingPageProps> = ({
@@ -48,12 +52,17 @@ const LandingPage: React.FC<LandingPageProps> = ({
   onImageUpload,
   onAnalyzeImage,
   isAnalyzingImage = false,
+  onFigmaImport,
+  onFigmaExport,
 }) => {
   // Create ref for textarea autofocus
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // State for image upload modal
   const [showImageUpload, setShowImageUpload] = useState(false);
+
+  // State for Figma integration modal
+  const [isFigmaModalOpen, setIsFigmaModalOpen] = useState(false);
 
   // Debounce timer for AI suggestions
   const debounceTimerRef = useRef<number | null>(null);
@@ -90,6 +99,21 @@ const LandingPage: React.FC<LandingPageProps> = ({
   // Toggle image upload modal
   const toggleImageUpload = () => {
     setShowImageUpload(prev => !prev);
+  };
+
+  // Figma Integration handlers
+  const handleFigmaImport = (html: string, fileName: string) => {
+    if (onFigmaImport) {
+      onFigmaImport(html, fileName);
+    }
+    setIsFigmaModalOpen(false);
+  };
+
+  const handleFigmaExport = (format: 'figma-file' | 'figma-components') => {
+    if (onFigmaExport) {
+      onFigmaExport(format);
+    }
+    setIsFigmaModalOpen(false);
   };
 
   return (
@@ -136,16 +160,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
                   required
                   className="app-textarea main-input"
                 />
-
-                {/* Image upload button */}
-                <button
-                  type="button"
-                  onClick={toggleImageUpload}
-                  className="image-upload-btn"
-                  title="Upload UI image to analyze"
-                >
-                  <FiImage />
-                </button>
 
                 <button
                   type="submit"
@@ -195,6 +209,32 @@ const LandingPage: React.FC<LandingPageProps> = ({
                   </div>
                 </div>
               )}
+
+              {/* Integration Pills Container */}
+              <div className="integration-pills-container">
+                <button
+                  type="button"
+                  className="integration-pill figma-pill"
+                  onClick={() => {
+                    console.log('🔗 Figma pill clicked on landing page!');
+                    setIsFigmaModalOpen(true);
+                  }}
+                  title="Import designs from Figma"
+                >
+                  <FiLink className="pill-icon" />
+                  <span>Import from Figma</span>
+                </button>
+
+                <button
+                  type="button"
+                  className="integration-pill image-pill"
+                  onClick={toggleImageUpload}
+                  title="Upload UI image to analyze"
+                >
+                  <FiImage className="pill-icon" />
+                  <span>Upload Image</span>
+                </button>
+              </div>
             </div>
           </form>
 
@@ -221,6 +261,15 @@ const LandingPage: React.FC<LandingPageProps> = ({
 
         </div>
       </div>
+
+      {/* Figma Integration Modal */}
+      <FigmaIntegrationModal
+        isOpen={isFigmaModalOpen}
+        onClose={() => setIsFigmaModalOpen(false)}
+        onImport={handleFigmaImport}
+        onExport={handleFigmaExport}
+      />
+
       <Footer />
     </div>
   );

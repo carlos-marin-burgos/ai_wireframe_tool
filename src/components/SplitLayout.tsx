@@ -21,6 +21,7 @@ import {
   FiStopCircle,
   FiCpu,
   FiImage,
+  FiLink,
 } from 'react-icons/fi';
 
 interface SplitLayoutProps {
@@ -417,12 +418,18 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     setIsFigmaModalOpen(true);
   }, []);
 
-  const handleFigmaImport = useCallback((fileId: string, format: 'wireframe' | 'components') => {
+  const handleFigmaImport = useCallback((html: string, fileName: string) => {
     // Handle Figma file import
-    console.log('Importing Figma file:', fileId, 'as', format);
-    addMessage('ai', `Imported Figma file as ${format} successfully! Converting to wireframe components...`);
+    console.log('Importing Figma file:', fileName);
+
+    // Set the imported HTML as the current wireframe
+    if (setHtmlWireframe) {
+      setHtmlWireframe(html);
+    }
+
+    addMessage('ai', `✅ Successfully imported "${fileName}" from Figma! The wireframe has been converted and is ready for editing.`);
     setIsFigmaModalOpen(false);
-  }, [addMessage]);
+  }, [addMessage, setHtmlWireframe]);
 
   const handleFigmaExport = useCallback((format: 'figma-file' | 'figma-components') => {
     // Handle Figma export

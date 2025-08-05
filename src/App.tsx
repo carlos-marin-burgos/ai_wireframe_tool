@@ -843,6 +843,19 @@ function AppContent() {
     }
   };
 
+  // Figma integration handlers
+  const handleFigmaImport = (html: string, fileName: string) => {
+    console.log('Figma file imported:', fileName);
+    setHtmlWireframe(html);
+    setShowLandingPage(false);
+    setDescription(`Imported from Figma: ${fileName}`);
+  };
+
+  const handleFigmaExport = (format: 'figma-file' | 'figma-components') => {
+    console.log('Exporting to Figma as:', format);
+    // TODO: Implement actual Figma export functionality
+  };
+
   return (
     <div className={`app-content with-navbar`}>
       {/* Always show Designetica TopNavbar */}
@@ -876,6 +889,8 @@ function AppContent() {
           onImageUpload={handleImageUpload}
           onAnalyzeImage={handleAnalyzeImage}
           isAnalyzingImage={isAnalyzingImage}
+          onFigmaImport={handleFigmaImport}
+          onFigmaExport={handleFigmaExport}
         />
       ) : (
         <SplitLayout
