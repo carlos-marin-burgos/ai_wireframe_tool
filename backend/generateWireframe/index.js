@@ -20,6 +20,7 @@ function verifyOpenAIConfiguration() {
     "AZURE_OPENAI_ENDPOINT",
     "AZURE_OPENAI_KEY",
     "AZURE_OPENAI_DEPLOYMENT",
+    "AZURE_OPENAI_API_VERSION",
   ];
 
   const missing = requiredEnvVars.filter((envVar) => !process.env[envVar]);
@@ -192,48 +193,107 @@ const contextManager = new AIContextManager();
 
 // Initialize OpenAI client with proper error handling
 let openai = null;
+let openaiInitializationAttempts = 0;
+let lastOpenaiError = null;
 
 // Azure OpenAI configuration with fallback handling
 function initializeOpenAI() {
   try {
+    openaiInitializationAttempts++;
+    console.log(
+      `🔧 initializeOpenAI called (attempt #${openaiInitializationAttempts})`
+    );
+
     // Check if OpenAI is disabled via environment variable
     if (process.env.DISABLE_OPENAI === "true") {
-      logger.info("🚫 OpenAI disabled via DISABLE_OPENAI environment variable");
+      console.log("🚫 OpenAI disabled via DISABLE_OPENAI environment variable");
       return false;
     }
 
+    // Log all environment variables for debugging
+    console.log("🔍 Environment variables check:");
+    console.log("  AZURE_OPENAI_KEY:", !!process.env.AZURE_OPENAI_KEY);
+    console.log("  AZURE_OPENAI_ENDPOINT:", process.env.AZURE_OPENAI_ENDPOINT);
+    console.log(
+      "  AZURE_OPENAI_DEPLOYMENT:",
+      process.env.AZURE_OPENAI_DEPLOYMENT
+    );
+    console.log(
+      "  AZURE_OPENAI_API_VERSION:",
+      process.env.AZURE_OPENAI_API_VERSION
+    );
+
     // Only initialize if we have the required environment variables
     if (process.env.AZURE_OPENAI_KEY && process.env.AZURE_OPENAI_ENDPOINT) {
+      console.log(
+        "✅ Required environment variables found, initializing OpenAI..."
+      );
+
       const { OpenAI } = require("openai");
 
       // Ensure endpoint format is correct for Azure OpenAI
       const endpoint = process.env.AZURE_OPENAI_ENDPOINT.replace(/\/$/, ""); // Remove trailing slash
       const deployment =
         process.env.AZURE_OPENAI_DEPLOYMENT || "designetica-gpt4o";
+      const apiVersion =
+        process.env.AZURE_OPENAI_API_VERSION || "2024-08-01-preview";
+
+      console.log("🔧 Creating OpenAI client with:");
+      console.log("  endpoint:", endpoint);
+      console.log("  deployment:", deployment);
+      console.log("  apiVersion:", apiVersion);
+      console.log("  baseURL:", `${endpoint}/openai/deployments/${deployment}`);
 
       openai = new OpenAI({
         apiKey: process.env.AZURE_OPENAI_KEY,
         baseURL: `${endpoint}/openai/deployments/${deployment}`,
-        defaultQuery: { "api-version": "2024-02-15-preview" },
+        defaultQuery: { "api-version": apiVersion },
         defaultHeaders: {
           "api-key": process.env.AZURE_OPENAI_KEY,
         },
       });
 
+      console.log("🤖 OpenAI client initialized successfully");
       logger.info("🤖 OpenAI client initialized successfully", {
         endpoint: endpoint,
         deployment: deployment,
+        apiVersion: apiVersion,
         keyPresent: !!process.env.AZURE_OPENAI_KEY,
+        attempt: openaiInitializationAttempts,
       });
+
+      // Clear any previous errors
+      lastOpenaiError = null;
       return true;
     } else {
+      console.log("⚠️ Missing required environment variables:");
+      console.log("  AZURE_OPENAI_KEY missing:", !process.env.AZURE_OPENAI_KEY);
+      console.log(
+        "  AZURE_OPENAI_ENDPOINT missing:",
+        !process.env.AZURE_OPENAI_ENDPOINT
+      );
+
       logger.warn(
         "⚠️ OpenAI environment variables not found, using pattern-based generation"
       );
       return false;
     }
   } catch (error) {
-    logger.error("❌ Failed to initialize OpenAI client", error);
+    console.error("❌ Failed to initialize OpenAI client:", error);
+    logger.error("❌ Failed to initialize OpenAI client", error, {
+      attempt: openaiInitializationAttempts,
+      errorType: error.name,
+      errorMessage: error.message,
+    });
+
+    // Store the error for health checks
+    lastOpenaiError = {
+      message: error.message,
+      type: error.name,
+      timestamp: new Date().toISOString(),
+      attempt: openaiInitializationAttempts,
+    };
+
     openai = null;
     return false;
   }
@@ -300,6 +360,162 @@ BUTTON STYLING REQUIREMENTS:
 Generate ONLY the complete HTML code (starting with <!DOCTYPE html> and ending with </html>). No explanations or markdown formatting. DO NOT include any <header> tags or header-related CSS in your response.`;
 
   return basePrompt;
+}
+
+// Create wireframe prompt based on image analysis results
+function createImageBasedWireframePrompt(
+  imageAnalysis,
+  colorScheme = "primary"
+) {
+  // Get the official site header from Atlas Component Library
+  const officialSiteHeader = atlasLibrary.generateComponent("site-header");
+
+  const { components, layout, designTokens, wireframeDescription, confidence } = imageAnalysis;
+
+  // Build component descriptions
+  const componentDescriptions = components.map(comp => {
+    const pos = comp.bounds ? `at position ${comp.bounds.x}%, ${comp.bounds.y}%` : '';
+    const text = comp.text ? `with text "${comp.text}"` : '';
+    const style = comp.properties ? `styled as ${JSON.stringify(comp.properties)}` : '';
+    return `- ${comp.type} ${pos} ${text} ${style}`.trim();
+  }).join('\n');
+
+  const basePrompt = `You are an expert UI/UX designer creating HTML wireframes that EXACTLY match uploaded images.
+
+Create a complete, responsive HTML wireframe that recreates the EXACT layout and components from this analyzed image:
+
+IMAGE ANALYSIS RESULTS:
+Overall Description: ${wireframeDescription}
+Confidence: ${confidence}
+
+DETECTED COMPONENTS:
+${componentDescriptions}
+
+LAYOUT STRUCTURE:
+- Type: ${layout.type}
+- Columns: ${layout.columns || 'auto'}
+- Sections: ${layout.sections?.join(', ') || 'main'}
+
+DESIGN TOKENS FROM IMAGE:
+- Colors: ${designTokens.colors?.join(', ') || '#0078d4, #ffffff'}
+- Fonts: ${designTokens.fonts?.join(', ') || 'Segoe UI'}
+- Spacing: ${designTokens.spacing?.join('px, ') || '16, 24, 32'}px
+
+CRITICAL REQUIREMENTS:
+- MANDATORY: Use ONLY the provided official Microsoft Learn site header below
+- RECREATE the EXACT layout structure detected in the image
+- PLACE components in their EXACT positions as detected
+- USE the detected colors and styling from the image analysis
+- MATCH the component types and text content exactly as analyzed
+- MAINTAIN the same visual hierarchy and spacing patterns
+- Include proper semantic HTML structure
+- Make it responsive and accessible
+
+MANDATORY SITE HEADER - USE EXACTLY AS PROVIDED:
+${officialSiteHeader}
+
+RECREATION INSTRUCTIONS:
+1. Start with the provided site header (DO NOT MODIFY)
+2. Recreate the exact layout type: ${layout.type}
+3. Place each component in its detected position
+4. Use the detected colors: ${designTokens.colors?.slice(0, 3).join(', ')}
+5. Match the text content exactly as detected
+6. Maintain the same visual proportions and spacing
+
+TARGET: Create a wireframe that looks EXACTLY like the uploaded image but using clean HTML/CSS code.
+
+Generate ONLY the complete HTML code (starting with <!DOCTYPE html> and ending with </html>). No explanations or markdown formatting.`;
+
+  return basePrompt;
+}
+
+// Generate wireframe from image analysis using OpenAI
+async function generateWireframeFromImageAnalysis(
+  imageAnalysis,
+  colorScheme = "primary",
+  correlationId
+) {
+  try {
+    if (!openai) {
+      logger.warn(
+        "🔄 OpenAI client not available for image-based generation",
+        { correlationId }
+      );
+      return null;
+    }
+
+    logger.info("📸 Generating wireframe from image analysis", {
+      correlationId,
+      componentsCount: imageAnalysis.components?.length || 0,
+      layoutType: imageAnalysis.layout?.type,
+      confidence: imageAnalysis.confidence
+    });
+
+    // Create specialized prompt for image-based wireframe
+    const imagePrompt = createImageBasedWireframePrompt(imageAnalysis, colorScheme);
+
+    // Call OpenAI with image analysis context
+    const startTime = Date.now();
+    const response = await Promise.race([
+      openai.chat.completions.create({
+        model: process.env.AZURE_OPENAI_DEPLOYMENT || "designetica-gpt4o",
+        messages: [
+          {
+            role: "system",
+            content: "You are an expert UI recreator who converts image analysis data into pixel-perfect HTML wireframes. You excel at matching layouts, positioning, and styling from visual analysis data."
+          },
+          {
+            role: "user",
+            content: imagePrompt
+          }
+        ],
+        max_tokens: 4000,
+        temperature: 0.3 // Lower temperature for more accurate recreation
+      }),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Image wireframe generation timeout")), 35000)
+      )
+    ]);
+
+    const processingTime = Date.now() - startTime;
+
+    if (response?.choices?.[0]?.message?.content) {
+      let html = response.choices[0].message.content.trim();
+
+      // Clean up any markdown formatting
+      if (html.startsWith("```html")) {
+        html = html.replace(/^```html\n?/, "").replace(/\n?```$/, "");
+      } else if (html.startsWith("```")) {
+        html = html.replace(/^```[a-zA-Z]*\n?/, "").replace(/\n?```$/, "");
+      }
+
+      // Validate HTML response
+      if (html.includes("<!DOCTYPE html>") && html.includes("</html>")) {
+        logger.info("✅ Image-based wireframe generated successfully", {
+          correlationId,
+          processingTimeMs: processingTime,
+          htmlLength: html.length,
+          confidence: imageAnalysis.confidence
+        });
+        return html;
+      } else {
+        logger.warn("⚠️ Invalid HTML format from image-based generation", {
+          correlationId
+        });
+        return null;
+      }
+    } else {
+      logger.warn("⚠️ No response from image-based generation", { correlationId });
+      return null;
+    }
+  } catch (error) {
+    logger.error("❌ Image-based wireframe generation failed", error, {
+      correlationId,
+      errorType: error.name,
+      errorMessage: error.message
+    });
+    return null;
+  }
 }
 
 // Generate wireframe using OpenAI with robust error handling
@@ -1786,6 +2002,9 @@ module.exports = async function (context, req) {
     });
 
     // Performance optimization: detect if fast mode should be used
+    // But respect explicit fastMode parameter from user
+    const requestsFastMode = req.body?.fastMode || req.query?.fastMode;
+
     const isSimpleRequest =
       description.length < 100 &&
       !description.includes("complex") &&
@@ -1793,8 +2012,8 @@ module.exports = async function (context, req) {
       !description.includes("custom") &&
       !description.includes("interactive");
 
-    // Use performance-optimized generation for simple requests
-    if (isSimpleRequest) {
+    // Use performance-optimized generation for simple requests ONLY if user hasn't explicitly disabled fast mode
+    if (isSimpleRequest && requestsFastMode !== false) {
       logger.info("⚡ Using fast mode for simple request", {
         correlationId,
         descriptionLength: description.length,
@@ -1835,7 +2054,6 @@ module.exports = async function (context, req) {
     }
 
     // For complex requests, check if user wants fast mode
-    const requestsFastMode = req.body?.fastMode || req.query?.fastMode;
     if (requestsFastMode) {
       logger.info("⚡ Fast mode requested by user", { correlationId });
 

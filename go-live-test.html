@@ -30,11 +30,20 @@
             text-decoration: none;
             border-radius: 8px;
             margin: 16px 16px 16px 0;
-            transition: background 0.2s;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: 2px solid transparent;
         }
 
         .test-link:hover {
             background: #106ebe;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 120, 212, 0.3);
+        }
+
+        .test-link:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(0, 120, 212, 0.2);
         }
 
         .test-link.vite {
@@ -98,11 +107,20 @@
             <h2>🧪 Test Options</h2>
             <p><strong>Choose your testing method:</strong></p>
 
-            <a href="dist/index.html" class="test-link">
-                📦 Production Build (Go Live)
+            <a href="https://designetica.carlosmarin.net" class="test-link" target="_blank" rel="noopener">
+                🌟 Custom Domain (designetica.carlosmarin.net)
             </a>
 
-            <a href="http://localhost:5173" class="test-link vite" target="_blank">
+            <a href="https://mango-water-06e1c9c0f.1.azurestaticapps.net" class="test-link" target="_blank"
+                rel="noopener">
+                🚀 Azure Default URL (mango-water...)
+            </a>
+
+            <a href="dist/index.html" class="test-link">
+                📦 Local Build (dist/index.html)
+            </a>
+
+            <a href="http://localhost:5173" class="test-link vite" target="_blank" rel="noopener">
                 ⚡ Vite Dev Server (if running)
             </a>
         </div>
@@ -144,6 +162,30 @@
         console.log('🚀 Go Live Test Page Loaded');
         console.log('📍 Current URL:', window.location.href);
         console.log('🎯 Ready to test modal functionality');
+
+        // Add click handlers to test buttons
+        document.addEventListener('DOMContentLoaded', function () {
+            const links = document.querySelectorAll('.test-link');
+
+            links.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    const isExternal = href.startsWith('http');
+
+                    console.log('🔗 Clicking link:', href);
+
+                    if (isExternal) {
+                        // External links should open in new tab
+                        e.preventDefault();
+                        window.open(href, '_blank', 'noopener,noreferrer');
+                        console.log('✅ Opening external link in new tab');
+                    } else {
+                        // Local links should navigate normally
+                        console.log('📁 Opening local file');
+                    }
+                });
+            });
+        });
     </script>
 </body>
 
