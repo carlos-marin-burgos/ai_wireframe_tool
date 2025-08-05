@@ -1082,14 +1082,61 @@ function generateIntelligentStyles(
 }
 
 /**
+ * Generate clean demo title based on description keywords
+ */
+function generateCleanTitle(description) {
+  const desc = description.toLowerCase();
+
+  // Microsoft Learn specific titles
+  if (desc.includes("microsoft learn") && desc.includes("course")) {
+    return "Microsoft Learn Course Page";
+  }
+  if (desc.includes("microsoft") && desc.includes("doc")) {
+    return "Microsoft Documentation";
+  }
+  if (desc.includes("learning path") || desc.includes("learning module")) {
+    return "Learning Path Overview";
+  }
+
+  // Generic titles based on purpose
+  if (desc.includes("dashboard") || desc.includes("admin")) {
+    return "Admin Dashboard";
+  }
+  if (
+    desc.includes("ecommerce") ||
+    desc.includes("product") ||
+    desc.includes("shopping")
+  ) {
+    return "E-commerce Platform";
+  }
+  if (desc.includes("landing") || desc.includes("home")) {
+    return "Landing Page";
+  }
+  if (desc.includes("documentation") || desc.includes("docs")) {
+    return "Documentation Hub";
+  }
+  if (desc.includes("profile") || desc.includes("user")) {
+    return "User Profile";
+  }
+  if (desc.includes("form") || desc.includes("contact")) {
+    return "Contact Form";
+  }
+
+  // Default clean title
+  return "Demo Wireframe Layout";
+}
+
+/**
  * Generate dynamic HTML content based on analysis
  */
 function generateDynamicContent(elements, purpose, description) {
+  const cleanTitle = generateCleanTitle(description);
+
   let content = `
     <section class="hero-section">
       <div class="container">
         <div class="header-content">
-          <h2>${description.charAt(0).toUpperCase() + description.slice(1)}</h2>
+          <h2>${cleanTitle}</h2>
           <p>AI-Generated Smart Wireframe</p>
         </div>
       </div>
@@ -1239,17 +1286,7 @@ function generateAtlasCard(card) {
         </div>
         <div class="card-footer-item">
           <div class="buttons">
-            ${
-              card.type === "course"
-                ? `
-            <button class="btn btn-secondary">Save</button>
-            <button class="btn btn-primary">Start</button>
-            `
-                : `
-            <button class="btn btn-secondary">Details</button>
-            <button class="btn btn-primary">Add to Cart</button>
-            `
-            }
+            <button class="btn btn-primary">View Details</button>
           </div>
         </div>
       </div>

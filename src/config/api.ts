@@ -35,8 +35,10 @@ export const API_CONFIG = {
   // Port configuration
   PORTS,
 
-  // Get BASE_URL (always use Azure Functions in production)
-  BASE_URL: "https://func-designetica-vjib6nx2wh4a4.azurewebsites.net",
+  // Get BASE_URL - use local server in development, Azure in production
+  BASE_URL: isDevelopment
+    ? `http://localhost:${PORTS.development.primary}`
+    : "https://func-designetica-vjib6nx2wh4a4.azurewebsites.net",
 };
 
 // Health check to verify backend has AI capabilities

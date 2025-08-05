@@ -10,6 +10,7 @@ import ComponentLibraryModal from "./ComponentLibraryModal";
 import LinkableWireframe from "./LinkableWireframe";
 import EnhancedMessage from "./EnhancedMessage";
 import ImageUploadZone from "./ImageUploadZone";
+import DemoImageSelector from "./DemoImageSelector";
 import PageNavigation from "./PageNavigation";
 import HtmlCodeViewer from "./HtmlCodeViewer";
 import PresentationMode from "./PresentationMode";
@@ -125,6 +126,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   // Image Upload and Analysis state
   const [showImageUpload, setShowImageUpload] = useState(false);
+  const [showDemoSelector, setShowDemoSelector] = useState(false);
 
   // Enhanced Save System state
   const [isEnhancedSaveModalOpen, setIsEnhancedSaveModalOpen] = useState(false);
@@ -458,7 +460,32 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   const toggleImageUpload = useCallback(() => {
     setShowImageUpload(prev => !prev);
-  }, []);
+    // Close demo selector when opening image upload
+    if (!showImageUpload) {
+      setShowDemoSelector(false);
+    }
+  }, [showImageUpload]);
+
+  const toggleDemoSelector = useCallback(() => {
+    setShowDemoSelector(prev => !prev);
+    // Close image upload when opening demo selector
+    if (!showDemoSelector) {
+      setShowImageUpload(false);
+    }
+  }, [showDemoSelector]);
+
+  const handleDemoGenerate = useCallback((imagePath: string, description: string) => {
+    setDescription(description);
+    setShowDemoSelector(false);
+
+    // Add demo message to chat
+    addMessage('user', `🎯 Demo: ${description}`);
+
+    // Generate wireframe immediately
+    setTimeout(() => {
+      handleSubmit({ preventDefault: () => { } } as React.FormEvent);
+    }, 100);
+  }, [setDescription, addMessage, handleSubmit]);
 
   // Enhanced Save System handlers
   const handleOpenEnhancedSave = useCallback(() => {

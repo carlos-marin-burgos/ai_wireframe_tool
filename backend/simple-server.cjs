@@ -8,7 +8,9 @@ const {
 const { createFallbackWireframe } = require("./fallback-generator");
 
 // Import Enhanced AI System
-const { AIEnhancedWireframeGenerator } = require("./ai/ai-enhanced-wireframe-generator");
+const {
+  AIEnhancedWireframeGenerator,
+} = require("./ai/ai-enhanced-wireframe-generator");
 
 require("dotenv").config();
 
@@ -46,8 +48,8 @@ app.use(cors());
 app.use(express.json());
 
 // Serve static files
-app.use(express.static('../'));  // Serve files from the parent directory
-app.use('/public', express.static('../public'));  // Serve public assets
+app.use(express.static("../")); // Serve files from the parent directory
+app.use("/public", express.static("../public")); // Serve public assets
 
 // Root route - serve a simple interface
 app.get("/", (req, res) => {
@@ -325,8 +327,8 @@ app.post("/api/generate-enhanced-wireframe", async (req, res) => {
     designTheme = "microsoftlearn",
     colorScheme = "primary",
     enhanceQuality = true,
-    userAgent = req.get('User-Agent'),
-    userFeedback = null
+    userAgent = req.get("User-Agent"),
+    userFeedback = null,
   } = req.body;
 
   if (!description || description.trim().length === 0) {
@@ -336,8 +338,8 @@ app.post("/api/generate-enhanced-wireframe", async (req, res) => {
   console.log("✨ Enhanced AI wireframe generation request:");
   console.log(`📝 Description: "${description}"`);
   console.log(`🎨 Theme: ${designTheme}, Color Scheme: ${colorScheme}`);
-  console.log(`🔧 Enhancement: ${enhanceQuality ? 'enabled' : 'disabled'}`);
-  console.log(`👤 Session: ${sessionId || 'new'}`);
+  console.log(`🔧 Enhancement: ${enhanceQuality ? "enabled" : "disabled"}`);
+  console.log(`👤 Session: ${sessionId || "new"}`);
 
   try {
     const result = await enhancedAI.generateEnhancedWireframe({
@@ -347,28 +349,31 @@ app.post("/api/generate-enhanced-wireframe", async (req, res) => {
       designTheme,
       colorScheme,
       enhanceQuality,
-      userFeedback
+      userFeedback,
     });
 
     return res.json({
       ...result,
       timestamp: new Date().toISOString(),
-      version: "enhanced-v2.0"
+      version: "enhanced-v2.0",
     });
-
   } catch (error) {
     console.error("❌ Enhanced AI generation failed:", error);
 
     // Emergency fallback
-    const emergencyHtml = generateEmergencyFallback(description, designTheme, colorScheme);
-    
+    const emergencyHtml = generateEmergencyFallback(
+      description,
+      designTheme,
+      colorScheme
+    );
+
     res.status(500).json({
       html: emergencyHtml,
       fallback: true,
       enhanced: false,
       error: error.message,
       timestamp: new Date().toISOString(),
-      generatedBy: "EmergencyFallback"
+      generatedBy: "EmergencyFallback",
     });
   }
 });
@@ -378,7 +383,7 @@ app.post("/api/generate-design-suggestions", async (req, res) => {
   const {
     description = "",
     sessionId = null,
-    currentWireframe = null
+    currentWireframe = null,
   } = req.body;
 
   if (!description || description.trim().length === 0) {
@@ -387,7 +392,7 @@ app.post("/api/generate-design-suggestions", async (req, res) => {
 
   try {
     console.log("💡 Generating enhanced design suggestions...");
-    
+
     const suggestions = await enhancedAI.generateDesignSuggestions(
       description,
       sessionId,
@@ -397,23 +402,22 @@ app.post("/api/generate-design-suggestions", async (req, res) => {
     return res.json({
       ...suggestions,
       timestamp: new Date().toISOString(),
-      sessionId
+      sessionId,
     });
-
   } catch (error) {
     console.error("❌ Enhanced suggestion generation failed:", error);
-    
+
     res.status(500).json({
       suggestions: [
         {
           title: "Enhance User Experience",
           description: "Focus on improving usability and accessibility",
           impact: "high",
-          category: "ux"
-        }
+          category: "ux",
+        },
       ],
       error: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 });
@@ -422,17 +426,17 @@ app.post("/api/generate-design-suggestions", async (req, res) => {
 app.get("/api/ai-analytics", (req, res) => {
   try {
     const stats = enhancedAI.getEnhancedStats();
-    
+
     return res.json({
       ...stats,
       timestamp: new Date().toISOString(),
-      version: "enhanced-v2.0"
+      version: "enhanced-v2.0",
     });
   } catch (error) {
     console.error("❌ Analytics retrieval failed:", error);
     res.status(500).json({
       error: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 });
@@ -510,7 +514,7 @@ DESIGN SPECIFICATIONS:
 - Background: ${colors.bg}
 - Text color: ${colors.text}
 - Border color: ${colors.border}
-- Banner/Hero background: ${colors.banner || '#E7E5DE'}
+- Banner/Hero background: ${colors.banner || "#E7E5DE"}
 
 ${
   isMicrosoftLearn
@@ -639,280 +643,11 @@ async function generateIntelligentFallback(
     lowerDesc.includes("learn") ||
     lowerDesc.includes("microsoft")
   ) {
-    // Check if this should be the Learn Home Page template
-    if (
-      lowerDesc.includes("hero") ||
-      lowerDesc.includes("landing") ||
-      lowerDesc.includes("home") ||
-      lowerDesc.includes("banner") ||
-      lowerDesc.includes("header") ||
-      lowerDesc.includes("welcome") ||
-      (lowerDesc.includes("learn") && lowerDesc.includes("home"))
-    ) {
-      console.log("🎯 Microsoft Learn Home Page template triggered");
-      return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Microsoft Learn Home Page</title>
-  <style>
-    /* Microsoft Atlas Display Atomics */
-    .display-block { display: block; }
-    .display-flex { display: flex; }
-    .display-none { display: none; }
-    
-    @media (min-width: 768px) {
-      .display-block-tablet { display: block; }
-      .display-flex-tablet { display: flex; }
-      .display-none-tablet { display: none; }
-    }
-    
-    /* Atlas Button System */
-    .button {
-      border-radius: 2px;
-      border: 1px solid transparent;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Segoe UI', sans-serif;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.2s ease;
-      box-sizing: border-box;
-      min-width: 80px;
-    }
-    
-    .button-lg {
-      padding: 10px 20px;
-      font-size: 16px;
-      line-height: 24px;
-      min-height: 44px;
-    }
-    
-    .button-primary {
-      color: #ffffff;
-      background-color: #0078d4;
-      border-color: #0078d4;
-    }
-    
-    .button-primary:hover:not(:disabled) {
-      background-color: #106ebe;
-      border-color: #106ebe;
-    }    
-    
-    /* CSS Custom Properties for Microsoft Learn Atlas Design System */
-    :root {
-      --hero-background-image-light: linear-gradient(135deg, #E8E6DF 0%, #F5F3ED 100%);
-      --color-accent-primary: #0078d4;
-      --color-text-primary: #323130;
-      --color-background-accent: #E8E6DF;
-    }
-    
-    /* Base layout system */
-    * { box-sizing: border-box; }
-    body { 
-      margin: 0; 
-      font-family: 'Segoe UI', sans-serif;
-      color: var(--color-text-primary);
-      background-color: white;
-      min-height: 100vh;
-    }
-    
-    .content-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      width: 100%;
-      padding: 0 24px;
-    }
-    
-    /* Microsoft Learn Atlas Design System Classes */
-    .hero {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      min-height: 300px;
-      padding: 2rem;
-    }
-    
-    .hero-image {
-      background-image: var(--hero-background-image-light);
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-    }
-    
-    .background-color-body-accent {
-      background-color: #E8E6DF;
-    }
-    
-    .gradient-border-right {
-      position: relative;
-    }
-    
-    .gradient-border-right::after {
-      content: '';
-      position: absolute;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      width: 4px;
-      background: linear-gradient(180deg, #E8E6DF 0%, rgba(232, 230, 223, 0) 100%);
-    }
-    
-    .hero-content {
-      max-width: 800px;
-      z-index: 1;
-    }
-    
-    .letter-spacing-wide {
-      letter-spacing: 0.2em;
-    }
-    
-    .text-transform-uppercase {
-      text-transform: uppercase;
-    }
-    
-    .font-size-sm {
-      font-size: 0.875rem;
-      line-height: 1.25rem;
-    }
-    
-    .font-size-h1 {
-      font-size: 2.5rem;
-      line-height: 3rem;
-    }
-    
-    .font-size-lg {
-      font-size: 1.125rem;
-      line-height: 1.75rem;
-    }
-    
-    .font-weight-semibold {
-      font-weight: 600;
-    }
-    
-    .margin-block-sm {
-      margin-top: 0.5rem;
-      margin-bottom: 0.5rem;
-    }
-    
-    .margin-top-md {
-      margin-top: 1rem;
-    }
-    
-    .buttons {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-    
-    .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0.5rem 1rem;
-      border-radius: 0.25rem;
-      font-family: inherit;
-      font-size: 0.875rem;
-      font-weight: 600;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      min-height: 2.5rem;
-    }
-    
-    .button.border {
-      border: 1px solid #0078d4;
-      background-color: #0078d4;
-      color: white;
-    }
-    
-    .button.button-clear {
-      background-color: transparent;
-      color: #0078d4;
-    }
-    
-    .button:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
-    }
-    
-    @media (max-width: 767px) {
-      .hero-section { 
-        flex-direction: column; 
-        padding: 15px; 
-        gap: 20px; 
-        min-height: auto;
-      }
-      .hero-content-wrapper { 
-        width: 100%; 
-        padding: 20px 0; 
-        max-width: none; 
-      }
-      .hero-image-wrapper { 
-        width: 100%; 
-        min-width: 100%; 
-        height: 200px; 
-      }
-    }
-  </style>
-</head>
-<body>
-  ${generateMicrosoftNavHTML()}
-  <header style="background: white; border-bottom: 1px solid #e5e5e5; position: relative; width: 100%; font-family: 'Segoe UI', sans-serif;">
-    <div class="content-container" style="display: flex; align-items: center; height: 54px; box-sizing: border-box;">
-      <div style="display: flex; align-items: center; gap: 13px;">
-        <!-- Microsoft Logo -->
-        <div style="position: relative; width: 26px; height: 26px;">
-          <div style="position: absolute; top: 0; left: 0; width: 12px; height: 12px; background: #F26522;"></div>
-          <div style="position: absolute; top: 0; right: 0; width: 12px; height: 12px; background: #8DC63F;"></div>
-          <div style="position: absolute; bottom: 0; left: 0; width: 12px; height: 12px; background: #00AEEF;"></div>
-          <div style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: #FFC20E;"></div>
-        </div>
-        <div style="width: 2px; height: 24px; background: #2F2F2F;"></div>
-        <span style="font-family: 'Segoe UI', sans-serif; font-weight: 600; font-size: 20px; color: #171717; line-height: 1;">Docs</span>
-      </div>
-      
-      <!-- Navigation -->
-      <nav style="display: flex; align-items: center; gap: 8px; margin-left: 24px;">
-        <div style="display: flex; align-items: center; padding: 6px 8px; gap: 4px; cursor: pointer;">
-          <span style="font-family: 'Segoe UI', sans-serif; font-weight: 400; font-size: 14px; color: #171717;">Browse</span>
-        </div>
-        <div style="display: flex; align-items: center; padding: 6px 8px; gap: 4px; cursor: pointer;">
-          <span style="font-family: 'Segoe UI', sans-serif; font-weight: 400; font-size: 14px; color: #171717;">Learn</span>
-        </div>
-      </nav>
-      
-      <!-- Profile -->
-      <div style="display: flex; align-items: center; gap: 8px; margin-left: auto;">
-        <div style="width: 36px; height: 36px; border-radius: 50%; background: url('public/mina.png') center/cover; border: 2px solid #d1ccf0;"></div>
-      </div>
-    </div>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="hero hero-image background-color-body-accent gradient-border-right gradient-border-body-accent" style="--hero-background-image-light: url('public/hero300.png'); --hero-background-image-dark: url('public/hero300.png');">
-    <div class="hero-content">
-      <p class="letter-spacing-wide text-transform-uppercase font-size-sm">MICROSOFT LEARN</p>
-      <h1 class="font-size-h1 font-weight-semibold">Learning for everyone, everywhere</h1>
-      <p class="font-size-lg font-weight-semibold margin-block-sm">Explore Microsoft product documentation, training, credentials, Q&A, code references, and shows.</p>
-      <div class="buttons margin-top-md">
-        <button class="button border button-clear">Get Started</button>
-        <button class="button border">Browse</button>
-      </div>
-    </div>
-  </section>
-  
-  <footer style="background: #f3f2f1; color: #605e5c; text-align: center; padding: 20px;">
-    <div class="content-container">
-      <p style="margin: 0; font-size: 14px;">© 2025 Microsoft Learn - Designetica</p>
-    </div>
-  </footer>
-</body>
-</html>`;
-    }
+    // Always use our enhanced fallback generator for Microsoft Learn content
+    console.log(
+      "🎯 Using enhanced fallback generator for Microsoft Learn content"
+    );
+    return createFallbackWireframe(description, designTheme, colorScheme);
   }
 
   // Define color schemes

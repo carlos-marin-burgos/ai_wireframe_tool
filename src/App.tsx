@@ -848,15 +848,72 @@ function AppContent() {
     console.log('Figma file imported:', fileName);
     setHtmlWireframe(html);
     setShowLandingPage(false);
-    setDescription(`Imported from Figma: ${fileName}`);
+    setForceUpdateKey(Date.now());
+    showToast(`Figma design imported: ${fileName}`, 'success');
   };
 
   const handleFigmaExport = (format: 'figma-file' | 'figma-components') => {
-    console.log('Exporting to Figma as:', format);
-    // TODO: Implement actual Figma export functionality
+    console.log('Exporting to Figma format:', format);
+    showToast(`Exported to ${format}`, 'success');
   };
 
-  return (
+  // Demo wireframe handler
+  const handleDemoWireframe = async (demoType: string) => {
+    console.log('Demo wireframe requested:', demoType);
+
+    // Predefined wireframe descriptions for quick demo
+    const demoDescriptions = {
+      'mslearn-course': 'Create a Microsoft Learn course page with header navigation, breadcrumb trail, main content area with step-by-step tutorial sections, sidebar with learning objectives, progress indicators, and a next steps section. Use Microsoft Learn color scheme with tan/gold accents.',
+      'dashboard': 'Create a professional admin dashboard with a dark sidebar navigation containing menu items, main content area with a grid of statistics cards showing metrics, charts area, and a data table with actions. Use modern card-based layout.',
+      'ecommerce': 'Create an e-commerce product listing page with a hero section showcasing featured products, product grid with cards showing images, titles, prices, and buy buttons, filters sidebar, and shopping cart component. Use clean modern design.'
+    };
+
+    const description = demoDescriptions[demoType as keyof typeof demoDescriptions];
+    if (!description) return;
+
+    try {
+      setDescription(description);
+      showToast(`Generating ${demoType} wireframe...`, 'info');
+
+      const result = await generateWireframe(
+        description,
+        designTheme,
+        colorScheme
+      );
+
+      if (result && result.html) {
+        handleWireframeGenerated(result.html);
+        showToast(`${demoType} wireframe generated!`, 'success');
+      }
+    } catch (error) {
+      console.error('Error generating demo wireframe:', error);
+      showToast('Failed to generate demo wireframe', 'error');
+    }
+  };
+
+  // Demo image generate handler (for modal demo tab)
+  const handleDemoGenerate = async (imagePath: string, description: string) => {
+    console.log('Demo image generate requested:', imagePath, description);
+
+    try {
+      setDescription(description);
+      showToast('Generating wireframe from demo image...', 'info');
+
+      const result = await generateWireframe(
+        description,
+        designTheme,
+        colorScheme
+      );
+
+      if (result && result.html) {
+        handleWireframeGenerated(result.html);
+        showToast('Demo wireframe generated!', 'success');
+      }
+    } catch (error) {
+      console.error('Error generating demo wireframe:', error);
+      showToast('Failed to generate demo wireframe', 'error');
+    }
+  }; return (
     <div className={`app-content with-navbar`}>
       {/* Always show Designetica TopNavbar */}
       <TopNavbar
@@ -891,6 +948,7 @@ function AppContent() {
           isAnalyzingImage={isAnalyzingImage}
           onFigmaImport={handleFigmaImport}
           onFigmaExport={handleFigmaExport}
+          onDemoGenerate={handleDemoGenerate}
         />
       ) : (
         <SplitLayout

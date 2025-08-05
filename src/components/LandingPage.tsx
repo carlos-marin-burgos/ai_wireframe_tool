@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import "./LandingPage.css";
 import Footer from './Footer';
-import ImageUploadZone from './ImageUploadZone';
+import ImageUploadModal from './ImageUploadModal';
 import FigmaIntegrationModal from './FigmaIntegrationModal';
 
 interface LandingPageProps {
@@ -23,6 +23,7 @@ interface LandingPageProps {
   isAnalyzingImage?: boolean;
   onFigmaImport?: (html: string, fileName: string) => void;
   onFigmaExport?: (format: 'figma-file' | 'figma-components') => void;
+  onDemoGenerate?: (imagePath: string, description: string) => void;
 }
 
 import {
@@ -33,6 +34,7 @@ import {
   FiCpu,
   FiImage,
   FiLink,
+  FiZap,
 } from "react-icons/fi";
 
 const LandingPage: React.FC<LandingPageProps> = ({
@@ -54,6 +56,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
   isAnalyzingImage = false,
   onFigmaImport,
   onFigmaExport,
+  onDemoGenerate,
 }) => {
   // Create ref for textarea autofocus
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -239,24 +242,15 @@ const LandingPage: React.FC<LandingPageProps> = ({
           </form>
 
           {/* Image Upload Zone */}
-          {showImageUpload && onImageUpload && onAnalyzeImage && (
-            <div className="image-upload-section">
-              <ImageUploadZone
-                onImageUpload={(file) => {
-                  const reader = new FileReader();
-                  reader.onload = (e) => {
-                    const imageDataUrl = e.target?.result as string;
-                    onImageUpload(file);
-                    if (onAnalyzeImage) {
-                      onAnalyzeImage(imageDataUrl, file.name);
-                    }
-                  };
-                  reader.readAsDataURL(file);
-                }}
-                onAnalyzeImage={onAnalyzeImage}
-                isAnalyzing={isAnalyzingImage}
-              />
-            </div>
+          {showImageUpload && onImageUpload && onAnalyzeImage && onDemoGenerate && (
+            <ImageUploadModal
+              isOpen={showImageUpload}
+              onClose={() => setShowImageUpload(false)}
+              onImageUpload={onImageUpload}
+              onAnalyzeImage={onAnalyzeImage}
+              onDemoGenerate={onDemoGenerate}
+              isAnalyzing={isAnalyzingImage}
+            />
           )}
 
         </div>

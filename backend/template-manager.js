@@ -156,9 +156,9 @@ class TemplateManager {
 
 // Template selection logic - moved from fallback-generator.js
 const TEMPLATE_CONDITIONS = {
-  "learn-home-page": [
+  "microsoft-learn-home": [
     "learn home page",
-    "home page", 
+    "home page",
     "landing page",
     "microsoft learn landing page",
     "main page",
@@ -166,6 +166,20 @@ const TEMPLATE_CONDITIONS = {
     "banner",
     "header",
     "welcome",
+    "microsoft learn course page",
+    "course page",
+    "learning modules",
+    "progress tracking",
+  ],
+  "microsoft-docs": [
+    "documentation page",
+    "microsoft docs",
+    "docs page",
+    "microsoft documentation",
+    "breadcrumb",
+    "sidebar",
+    "table of contents",
+    "code examples",
   ],
   "azure-learning-path": [
     "create an azure learning path with course cards",
@@ -173,13 +187,13 @@ const TEMPLATE_CONDITIONS = {
     "azure learning path",
   ],
   "microsoft-learning-plan": [
-    "microsoft learning plan", 
+    "microsoft learning plan",
     "microsoft learn plan",
     "ms learning plan",
   ],
   "certification-tracker": [
     "build a certification progress tracker with modules",
-    "certification progress tracker with modules", 
+    "certification progress tracker with modules",
     "certification progress tracker",
     "certification tracker",
   ],
