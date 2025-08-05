@@ -4,7 +4,7 @@ const isDevelopment = import.meta.env.DEV;
 // Centralized port configuration to avoid conflicts
 const PORTS = {
   development: {
-    primary: 7071, // Main backend with AI
+    primary: 5001, // Simple Express server
     fallback: 7072, // Fallback backend
     frontend: 5173, // Frontend dev server
   },
@@ -17,16 +17,16 @@ const PORTS = {
 export const API_CONFIG = {
   // Static configuration
   FALLBACK_SUGGESTIONS: [
-    "Add clear visual hierarchy with consistent typography and spacing",
-    "Implement responsive design with mobile-first approach",
-    "Include accessibility features like keyboard navigation and ARIA labels",
-    "Use Microsoft Learn design system components for consistency",
-    "Add loading states and error handling for better user feedback",
-    "Create intuitive navigation with breadcrumbs and clear call-to-actions",
+    "Create a Microsoft Learn-style documentation layout with step-by-step tutorials",
+    "Add Microsoft Learn navigation with breadcrumbs and learning path indicators",
+    "Include learning progress tracking and achievement badges",
+    "Design with Microsoft Learn color palette (tan/gold accents on white)",
+    "Add Microsoft Learn components: code samples, callout boxes, and next steps",
+    "Implement Microsoft Learn module structure with clear objectives and assessments",
   ],
 
   ENDPOINTS: {
-    GENERATE_WIREFRAME: "/api/generate-html-wireframe",
+    GENERATE_WIREFRAME: "/api/generate-html-wireframe", // Updated for simple server
     GENERATE_SUGGESTIONS: "/api/generate-suggestions",
     GET_TEMPLATE: "/api/get-template",
     HEALTH: "/api/health",
@@ -35,10 +35,8 @@ export const API_CONFIG = {
   // Port configuration
   PORTS,
 
-  // Get BASE_URL (static for now, can be made dynamic later)
-  BASE_URL: isDevelopment
-    ? `http://localhost:${PORTS.development.primary}`
-    : "https://func-designetica-vjib6nx2wh4a4.azurewebsites.net",
+  // Get BASE_URL (always use Azure Functions in production)
+  BASE_URL: "https://func-designetica-vjib6nx2wh4a4.azurewebsites.net",
 };
 
 // Health check to verify backend has AI capabilities
@@ -47,7 +45,7 @@ export const verifyBackendAI = async (baseUrl: string): Promise<boolean> => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-    const response = await fetch(`${baseUrl}/api/generate-html-wireframe`, {
+    const response = await fetch(`${baseUrl}/api/generate-wireframe`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ description: "AI capability test" }),

@@ -370,15 +370,22 @@ function createImageBasedWireframePrompt(
   // Get the official site header from Atlas Component Library
   const officialSiteHeader = atlasLibrary.generateComponent("site-header");
 
-  const { components, layout, designTokens, wireframeDescription, confidence } = imageAnalysis;
+  const { components, layout, designTokens, wireframeDescription, confidence } =
+    imageAnalysis;
 
   // Build component descriptions
-  const componentDescriptions = components.map(comp => {
-    const pos = comp.bounds ? `at position ${comp.bounds.x}%, ${comp.bounds.y}%` : '';
-    const text = comp.text ? `with text "${comp.text}"` : '';
-    const style = comp.properties ? `styled as ${JSON.stringify(comp.properties)}` : '';
-    return `- ${comp.type} ${pos} ${text} ${style}`.trim();
-  }).join('\n');
+  const componentDescriptions = components
+    .map((comp) => {
+      const pos = comp.bounds
+        ? `at position ${comp.bounds.x}%, ${comp.bounds.y}%`
+        : "";
+      const text = comp.text ? `with text "${comp.text}"` : "";
+      const style = comp.properties
+        ? `styled as ${JSON.stringify(comp.properties)}`
+        : "";
+      return `- ${comp.type} ${pos} ${text} ${style}`.trim();
+    })
+    .join("\n");
 
   const basePrompt = `You are an expert UI/UX designer creating HTML wireframes that EXACTLY match uploaded images.
 
@@ -393,13 +400,13 @@ ${componentDescriptions}
 
 LAYOUT STRUCTURE:
 - Type: ${layout.type}
-- Columns: ${layout.columns || 'auto'}
-- Sections: ${layout.sections?.join(', ') || 'main'}
+- Columns: ${layout.columns || "auto"}
+- Sections: ${layout.sections?.join(", ") || "main"}
 
 DESIGN TOKENS FROM IMAGE:
-- Colors: ${designTokens.colors?.join(', ') || '#0078d4, #ffffff'}
-- Fonts: ${designTokens.fonts?.join(', ') || 'Segoe UI'}
-- Spacing: ${designTokens.spacing?.join('px, ') || '16, 24, 32'}px
+- Colors: ${designTokens.colors?.join(", ") || "#0078d4, #ffffff"}
+- Fonts: ${designTokens.fonts?.join(", ") || "Segoe UI"}
+- Spacing: ${designTokens.spacing?.join("px, ") || "16, 24, 32"}px
 
 CRITICAL REQUIREMENTS:
 - MANDATORY: Use ONLY the provided official Microsoft Learn site header below
@@ -418,7 +425,7 @@ RECREATION INSTRUCTIONS:
 1. Start with the provided site header (DO NOT MODIFY)
 2. Recreate the exact layout type: ${layout.type}
 3. Place each component in its detected position
-4. Use the detected colors: ${designTokens.colors?.slice(0, 3).join(', ')}
+4. Use the detected colors: ${designTokens.colors?.slice(0, 3).join(", ")}
 5. Match the text content exactly as detected
 6. Maintain the same visual proportions and spacing
 
@@ -437,10 +444,9 @@ async function generateWireframeFromImageAnalysis(
 ) {
   try {
     if (!openai) {
-      logger.warn(
-        "🔄 OpenAI client not available for image-based generation",
-        { correlationId }
-      );
+      logger.warn("🔄 OpenAI client not available for image-based generation", {
+        correlationId,
+      });
       return null;
     }
 
@@ -448,11 +454,14 @@ async function generateWireframeFromImageAnalysis(
       correlationId,
       componentsCount: imageAnalysis.components?.length || 0,
       layoutType: imageAnalysis.layout?.type,
-      confidence: imageAnalysis.confidence
+      confidence: imageAnalysis.confidence,
     });
 
     // Create specialized prompt for image-based wireframe
-    const imagePrompt = createImageBasedWireframePrompt(imageAnalysis, colorScheme);
+    const imagePrompt = createImageBasedWireframePrompt(
+      imageAnalysis,
+      colorScheme
+    );
 
     // Call OpenAI with image analysis context
     const startTime = Date.now();
@@ -462,19 +471,23 @@ async function generateWireframeFromImageAnalysis(
         messages: [
           {
             role: "system",
-            content: "You are an expert UI recreator who converts image analysis data into pixel-perfect HTML wireframes. You excel at matching layouts, positioning, and styling from visual analysis data."
+            content:
+              "You are an expert UI recreator who converts image analysis data into pixel-perfect HTML wireframes. You excel at matching layouts, positioning, and styling from visual analysis data.",
           },
           {
             role: "user",
-            content: imagePrompt
-          }
+            content: imagePrompt,
+          },
         ],
         max_tokens: 4000,
-        temperature: 0.3 // Lower temperature for more accurate recreation
+        temperature: 0.3, // Lower temperature for more accurate recreation
       }),
       new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("Image wireframe generation timeout")), 35000)
-      )
+        setTimeout(
+          () => reject(new Error("Image wireframe generation timeout")),
+          35000
+        )
+      ),
     ]);
 
     const processingTime = Date.now() - startTime;
@@ -495,24 +508,26 @@ async function generateWireframeFromImageAnalysis(
           correlationId,
           processingTimeMs: processingTime,
           htmlLength: html.length,
-          confidence: imageAnalysis.confidence
+          confidence: imageAnalysis.confidence,
         });
         return html;
       } else {
         logger.warn("⚠️ Invalid HTML format from image-based generation", {
-          correlationId
+          correlationId,
         });
         return null;
       }
     } else {
-      logger.warn("⚠️ No response from image-based generation", { correlationId });
+      logger.warn("⚠️ No response from image-based generation", {
+        correlationId,
+      });
       return null;
     }
   } catch (error) {
     logger.error("❌ Image-based wireframe generation failed", error, {
       correlationId,
       errorType: error.name,
-      errorMessage: error.message
+      errorMessage: error.message,
     });
     return null;
   }
@@ -1950,6 +1965,7 @@ module.exports = async function (context, req) {
     let colorScheme = "primary";
     let sessionId = null;
     let userAgent = null;
+    let imageAnalysis = null; // New: Support for image analysis data
 
     if (req.method === "POST" && req.body) {
       description = req.body.description || req.body.prompt || description;
@@ -1959,6 +1975,7 @@ module.exports = async function (context, req) {
         req.headers["x-session-id"] ||
         `session_${correlationId}`;
       userAgent = req.headers["user-agent"];
+      imageAnalysis = req.body.imageAnalysis || null; // New: Extract image analysis data
     } else if (req.method === "GET" && req.query) {
       description = req.query.description || req.query.prompt || description;
       colorScheme = req.query.colorScheme || colorScheme;
@@ -1967,6 +1984,7 @@ module.exports = async function (context, req) {
         req.headers["x-session-id"] ||
         `session_${correlationId}`;
       userAgent = req.headers["user-agent"];
+      // Note: Image analysis not supported via GET for security reasons
     }
 
     // Initialize context-aware session
@@ -2092,14 +2110,76 @@ module.exports = async function (context, req) {
       return;
     }
 
-    // Use context-aware AI + pattern-based generation for complex requests
-    const result = await generateWireframeFromDescription(
-      description,
-      colorScheme,
-      correlationId,
-      sessionId,
-      generationContext
-    );
+    // Determine generation method based on input
+    let result;
+
+    if (
+      imageAnalysis &&
+      imageAnalysis.components &&
+      imageAnalysis.components.length > 0
+    ) {
+      // Priority 1: Image-based wireframe generation
+      logger.info("📸 Using image-based wireframe generation", {
+        correlationId,
+        componentsDetected: imageAnalysis.components.length,
+        confidence: imageAnalysis.confidence,
+        layoutType: imageAnalysis.layout?.type,
+      });
+
+      const imageBasedHtml = await generateWireframeFromImageAnalysis(
+        imageAnalysis,
+        colorScheme,
+        correlationId
+      );
+
+      if (imageBasedHtml) {
+        result = {
+          html: imageBasedHtml,
+          source: "image-analysis-ai",
+          aiGenerated: true,
+          imageAnalysis: {
+            confidence: imageAnalysis.confidence,
+            componentsCount: imageAnalysis.components.length,
+            layoutType: imageAnalysis.layout?.type,
+          },
+        };
+      } else {
+        // Fallback to description-based generation if image analysis fails
+        logger.warn(
+          "📸 Image-based generation failed, falling back to description-based",
+          {
+            correlationId,
+          }
+        );
+
+        // Enhance description with image analysis context
+        const enhancedDescription = `${description}. 
+        Based on image analysis: detected ${
+          imageAnalysis.components.length
+        } components including ${imageAnalysis.components
+          .map((c) => c.type)
+          .join(", ")}. 
+        Layout type: ${imageAnalysis.layout?.type}. 
+        ${imageAnalysis.wireframeDescription}`;
+
+        result = await generateWireframeFromDescription(
+          enhancedDescription,
+          colorScheme,
+          correlationId,
+          sessionId,
+          generationContext
+        );
+      }
+    } else {
+      // Standard context-aware AI + pattern-based generation
+      result = await generateWireframeFromDescription(
+        description,
+        colorScheme,
+        correlationId,
+        sessionId,
+        generationContext
+      );
+    }
     const processingTime = Date.now() - startTime;
 
     logger.info("✅ Wireframe generation completed successfully", {

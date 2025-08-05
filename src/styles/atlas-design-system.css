@@ -4,18 +4,18 @@
 */
 
 /* Import Component Libraries */
-@import './atlas-cards.css';
-@import './atlas-breadcrumb.css';
+@import "./atlas-cards.css";
+@import "./atlas-breadcrumb.css";
 
 /* CSS Variables for Microsoft Design Language */
 :root {
   /* Colors */
-  --atlas-color-primary: #0078d4;
+  --atlas-color-primary: #f2cc60;
   --atlas-color-primary-hover: #106ebe;
   --atlas-color-primary-pressed: #005a9e;
   --atlas-color-secondary: #605e5c;
   --atlas-color-accent: #0078d4;
-  
+
   /* Neutral colors */
   --atlas-color-neutral-10: #faf9f8;
   --atlas-color-neutral-20: #f3f2f1;
@@ -33,9 +33,10 @@
   --atlas-color-neutral-140: #201f1e;
   --atlas-color-neutral-150: #16110e;
   --atlas-color-neutral-160: #11100f;
-  
+
   /* Typography */
-  --atlas-font-family: "Segoe UI Variable Text", "Segoe UI", -apple-system, system-ui, sans-serif;
+  --atlas-font-family: "Segoe UI Variable Text", "Segoe UI", -apple-system,
+    system-ui, sans-serif;
   --atlas-font-size-caption: 12px;
   --atlas-font-size-body: 14px;
   --atlas-font-size-body-large: 16px;
@@ -44,7 +45,7 @@
   --atlas-font-size-title-2: 32px;
   --atlas-font-size-title-1: 40px;
   --atlas-font-size-display: 52px;
-  
+
   /* Spacing */
   --atlas-spacing-xs: 4px;
   --atlas-spacing-sm: 8px;
@@ -53,13 +54,17 @@
   --atlas-spacing-xl: 20px;
   --atlas-spacing-xxl: 24px;
   --atlas-spacing-xxxl: 32px;
-  
+
   /* Shadows */
-  --atlas-shadow-2: 0 1.6px 3.6px 0 rgba(0,0,0,0.132), 0 0.3px 0.9px 0 rgba(0,0,0,0.108);
-  --atlas-shadow-4: 0 3.2px 7.2px 0 rgba(0,0,0,0.132), 0 0.6px 1.8px 0 rgba(0,0,0,0.108);
-  --atlas-shadow-8: 0 6.4px 14.4px 0 rgba(0,0,0,0.132), 0 1.2px 3.6px 0 rgba(0,0,0,0.108);
-  --atlas-shadow-16: 0 12.8px 28.8px 0 rgba(0,0,0,0.132), 0 2.4px 7.2px 0 rgba(0,0,0,0.108);
-  
+  --atlas-shadow-2: 0 1.6px 3.6px 0 rgba(0, 0, 0, 0.132),
+    0 0.3px 0.9px 0 rgba(0, 0, 0, 0.108);
+  --atlas-shadow-4: 0 3.2px 7.2px 0 rgba(0, 0, 0, 0.132),
+    0 0.6px 1.8px 0 rgba(0, 0, 0, 0.108);
+  --atlas-shadow-8: 0 6.4px 14.4px 0 rgba(0, 0, 0, 0.132),
+    0 1.2px 3.6px 0 rgba(0, 0, 0, 0.108);
+  --atlas-shadow-16: 0 12.8px 28.8px 0 rgba(0, 0, 0, 0.132),
+    0 2.4px 7.2px 0 rgba(0, 0, 0, 0.108);
+
   /* Border radius */
   --atlas-corner-radius-sm: 4px;
   --atlas-corner-radius-md: 6px;

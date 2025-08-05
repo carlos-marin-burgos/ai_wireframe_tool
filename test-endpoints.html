@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Endpoint Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .test-button {
+            background: #0078d4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        .result {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #f8f9fa;
+        }
+
+        .success {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .error {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔧 API Endpoint Testing</h1>
+    <p>Testing the fixed API endpoints to ensure "offline mode" is resolved:</p>
+
+    <button class="test-button" onclick="testHealth()">Test Health Endpoint</button>
+    <button class="test-button" onclick="testWireframe()">Test Wireframe Generation</button>
+    <button class="test-button" onclick="testImageAnalysis()">Test Image Analysis</button>
+
+    <div id="results"></div>
+
+    <script>
+        const API_BASE = 'https://func-designetica-vjib6nx2wh4a4.azurewebsites.net';
+
+        function addResult(title, success, data) {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `result ${success ? 'success' : 'error'}`;
+            div.innerHTML = `
+                <h3>${success ? '✅' : '❌'} ${title}</h3>
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+            `;
+            results.appendChild(div);
+        }
+
+        async function testHealth() {
+            try {
+                const response = await fetch(`${API_BASE}/api/health`);
+                const data = await response.json();
+                addResult('Health Check', response.ok, data);
+            } catch (error) {
+                addResult('Health Check', false, { error: error.message });
+            }
+        }
+
+        async function testWireframe() {
+            try {
+                const response = await fetch(`${API_BASE}/api/generate-wireframe`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        description: 'Test wireframe generation',
+                        colorScheme: 'primary'
+                    })
+                });
+
+                const data = await response.json();
+                addResult('Wireframe Generation', response.ok, {
+                    success: response.ok,
+                    hasHtml: !!data.html,
+                    source: data.source,
+                    aiGenerated: data.aiGenerated
+                });
+            } catch (error) {
+                addResult('Wireframe Generation', false, { error: error.message });
+            }
+        }
+
+        async function testImageAnalysis() {
+            try {
+                // Create a simple test image (1x1 transparent PNG)
+                const canvas = document.createElement('canvas');
+                canvas.width = 100;
+                canvas.height = 100;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#0078d4';
+                ctx.fillRect(0, 0, 100, 100);
+
+                canvas.toBlob(async (blob) => {
+                    const formData = new FormData();
+                    formData.append('image', blob, 'test.png');
+
+                    try {
+                        const response = await fetch(`${API_BASE}/api/analyzeUIImage`, {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        const data = await response.json();
+                        addResult('Image Analysis', response.ok, {
+                            success: data.success,
+                            hasAnalysis: !!data.analysis,
+                            confidence: data.analysis?.confidence
+                        });
+                    } catch (error) {
+                        addResult('Image Analysis', false, { error: error.message });
+                    }
+                });
+            } catch (error) {
+                addResult('Image Analysis', false, { error: error.message });
+            }
+        }
+
+        // Auto-run health check on load
+        window.onload = () => testHealth();
+    </script>
+</body>
+
+</html>

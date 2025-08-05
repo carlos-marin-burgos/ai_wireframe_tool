@@ -105,6 +105,31 @@
   color: #dc2626;
 }
 
+.connect-btn {
+  margin-left: auto;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.connect-btn:hover {
+  background: #2563eb;
+}
+
+.connect-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .disconnect-btn {
   margin-left: auto;
   background: none;
@@ -237,6 +262,55 @@
 
 .figma-button.secondary:hover {
   background: #e5e7eb;
+}
+
+.figma-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.figma-btn-primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.figma-btn-primary:hover {
+  background: #2563eb;
+}
+
+.figma-btn-primary:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.figma-btn-secondary {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.figma-btn-secondary:hover {
+  background: #e5e7eb;
+}
+
+.figma-btn-outline {
+  background: transparent;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+}
+
+.figma-btn-outline:hover {
+  background: #f9fafb;
+  color: #374151;
 }
 
 .figma-loading {

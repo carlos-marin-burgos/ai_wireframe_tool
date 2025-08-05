@@ -58,8 +58,8 @@
 
 :root {
   /* Primary */
-  --primary-primary: #0078d4;
-  --primary-secondary: #0065b3;
+  --primary-primary: #f2cc60;
+  --primary-secondary: #e6b800;
   --primary-bg: #f5f5f5;
   --primary-text: #000000;
 
@@ -70,9 +70,9 @@
   --success-text: #000000;
 
   /* Info */
-  --info-primary: #0078d4;
-  --info-secondary: #004377;
-  --info-bg: #ebf3fc;
+  --info-primary: #f2cc60;
+  --info-secondary: #e6b800;
+  --info-bg: #fef9e7;
   --info-text: #000000;
 
   /* Danger */

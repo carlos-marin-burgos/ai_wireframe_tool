@@ -15,9 +15,9 @@ class EnhancedAIEngine {
       totalRequests: 0,
       successfulGenerations: 0,
       averageResponseTime: 0,
-      failureRate: 0
+      failureRate: 0,
     };
-    
+
     this.initializeAI();
   }
 
@@ -56,33 +56,41 @@ class EnhancedAIEngine {
   async generateAdvancedWireframe(options) {
     const startTime = Date.now();
     const sessionId = options.sessionId || crypto.randomUUID();
-    
+
     try {
       this.performanceMetrics.totalRequests++;
 
       // Analyze user intent and extract design requirements
-      const designAnalysis = await this.analyzeDesignIntent(options.description);
-      
+      const designAnalysis = await this.analyzeDesignIntent(
+        options.description
+      );
+
       // Get conversation context for continuity
       const context = this.getConversationContext(sessionId);
-      
+
       // Generate enhanced prompt with context awareness
       const enhancedPrompt = this.createAdvancedPrompt({
         ...options,
         designAnalysis,
         context,
-        sessionId
+        sessionId,
       });
 
       // Use advanced generation with multiple passes
-      const wireframeResult = await this.multiPassGeneration(enhancedPrompt, options);
-      
+      const wireframeResult = await this.multiPassGeneration(
+        enhancedPrompt,
+        options
+      );
+
       // Analyze and improve the generated wireframe
-      const enhancedResult = await this.enhanceGeneratedWireframe(wireframeResult, options);
-      
+      const enhancedResult = await this.enhanceGeneratedWireframe(
+        wireframeResult,
+        options
+      );
+
       // Update conversation context
       this.updateConversationContext(sessionId, options, enhancedResult);
-      
+
       // Update performance metrics
       const responseTime = Date.now() - startTime;
       this.updatePerformanceMetrics(responseTime, true);
@@ -98,14 +106,13 @@ class EnhancedAIEngine {
           responseTime,
           confidenceScore: enhancedResult.confidenceScore,
           designPatterns: enhancedResult.detectedPatterns,
-          suggestions: enhancedResult.suggestions
-        }
+          suggestions: enhancedResult.suggestions,
+        },
       };
-
     } catch (error) {
       console.error("❌ Enhanced AI generation failed:", error);
       this.updatePerformanceMetrics(Date.now() - startTime, false);
-      
+
       // Intelligent fallback with context preservation
       return this.intelligentFallback(options, sessionId);
     }
@@ -138,24 +145,28 @@ Provide a JSON response with:
       const response = await this.openai.chat.completions.create({
         model: process.env.AZURE_OPENAI_DEPLOYMENT,
         messages: [
-          { role: "system", content: "You are a UX analyst who extracts design requirements from user descriptions. Return only valid JSON." },
-          { role: "user", content: analysisPrompt }
+          {
+            role: "system",
+            content:
+              "You are a UX analyst who extracts design requirements from user descriptions. Return only valid JSON.",
+          },
+          { role: "user", content: analysisPrompt },
         ],
         temperature: 0.3, // Lower temperature for analysis
-        max_tokens: 1000
+        max_tokens: 1000,
       });
 
       // Clean the response content to handle markdown code blocks
       const content = response.choices[0].message.content;
       let cleanContent = content;
-      
+
       // Remove markdown code blocks if present
-      if (content.includes('```json')) {
-        cleanContent = content.replace(/```json\s*/, '').replace(/```\s*$/, '');
-      } else if (content.includes('```')) {
-        cleanContent = content.replace(/```\s*/, '').replace(/```\s*$/, '');
+      if (content.includes("```json")) {
+        cleanContent = content.replace(/```json\s*/, "").replace(/```\s*$/, "");
+      } else if (content.includes("```")) {
+        cleanContent = content.replace(/```\s*/, "").replace(/```\s*$/, "");
       }
-      
+
       return JSON.parse(cleanContent.trim());
     } catch (error) {
       console.warn("⚠️ Design analysis failed, using basic analysis:", error);
@@ -167,11 +178,21 @@ Provide a JSON response with:
    * Create advanced prompt with context awareness
    */
   createAdvancedPrompt(options) {
-    const { description, designAnalysis, context, designTheme = "microsoftlearn", colorScheme = "primary" } = options;
+    const {
+      description,
+      designAnalysis,
+      context,
+      designTheme = "microsoftlearn",
+      colorScheme = "primary",
+    } = options;
 
-    const contextualInformation = context ? `
-Previous context: The user previously worked on ${context.lastDesign} with focus on ${context.preferences.join(", ")}.
-Continue this design language and maintain consistency.` : "";
+    const contextualInformation = context
+      ? `
+Previous context: The user previously worked on ${
+          context.lastDesign
+        } with focus on ${context.preferences.join(", ")}.
+Continue this design language and maintain consistency.`
+      : "";
 
     const advancedPrompt = `You are an expert UI/UX designer with deep knowledge of modern web design, accessibility, and user experience principles.
 
@@ -234,20 +255,27 @@ Return ONLY the HTML code, starting with <!DOCTYPE html> and ending with </html>
       const initialResponse = await this.openai.chat.completions.create({
         model: process.env.AZURE_OPENAI_DEPLOYMENT,
         messages: [
-          { role: "system", content: "You are an expert frontend developer creating production-ready HTML wireframes." },
-          { role: "user", content: prompt }
+          {
+            role: "system",
+            content:
+              "You are an expert frontend developer creating production-ready HTML wireframes using Microsoft Learn design principles. IMPORTANT COLOR RULES: Use tan/gold colors (#F2CC60, #E6B800) for banners, hero sections, headers, and primary backgrounds. Blue colors are ONLY allowed for buttons, links, and interactive elements. Focus on educational content structure and include learning-oriented components.",
+          },
+          { role: "user", content: prompt },
         ],
         temperature: 0.7,
         max_tokens: 4000,
         top_p: 0.9,
         frequency_penalty: 0.1,
-        presence_penalty: 0.1
+        presence_penalty: 0.1,
       });
 
       let html = initialResponse.choices[0].message.content.trim();
-      
+
       // Clean up any markdown formatting
-      html = html.replace(/```html\n?/g, "").replace(/```\n?/g, "").trim();
+      html = html
+        .replace(/```html\n?/g, "")
+        .replace(/```\n?/g, "")
+        .trim();
 
       // Second pass: Enhancement and optimization (if needed)
       if (options.enhanceQuality && html.length > 1000) {
@@ -267,16 +295,23 @@ Return only the improved HTML code.`;
         const enhancedResponse = await this.openai.chat.completions.create({
           model: process.env.AZURE_OPENAI_DEPLOYMENT,
           messages: [
-            { role: "system", content: "You are a frontend optimization expert focusing on accessibility and performance." },
-            { role: "user", content: enhancementPrompt }
+            {
+              role: "system",
+              content:
+                "You are a frontend optimization expert focusing on accessibility and performance.",
+            },
+            { role: "user", content: enhancementPrompt },
           ],
           temperature: 0.5,
-          max_tokens: 4000
+          max_tokens: 4000,
         });
 
         const enhancedHtml = enhancedResponse.choices[0].message.content.trim();
         if (enhancedHtml.includes("<!DOCTYPE html>")) {
-          html = enhancedHtml.replace(/```html\n?/g, "").replace(/```\n?/g, "").trim();
+          html = enhancedHtml
+            .replace(/```html\n?/g, "")
+            .replace(/```\n?/g, "")
+            .trim();
         }
       }
 
@@ -293,14 +328,16 @@ Return only the improved HTML code.`;
   async enhanceGeneratedWireframe(wireframeResult, options) {
     try {
       // Analyze the generated wireframe
-      const analysis = await this.analyzeGeneratedWireframe(wireframeResult.html);
-      
+      const analysis = await this.analyzeGeneratedWireframe(
+        wireframeResult.html
+      );
+
       return {
         html: wireframeResult.html,
         confidenceScore: analysis.confidenceScore,
         detectedPatterns: analysis.patterns,
         suggestions: analysis.improvements,
-        qualityMetrics: analysis.metrics
+        qualityMetrics: analysis.metrics,
       };
     } catch (error) {
       console.warn("⚠️ Wireframe enhancement failed:", error);
@@ -309,7 +346,7 @@ Return only the improved HTML code.`;
         confidenceScore: 0.8,
         detectedPatterns: ["standard-layout"],
         suggestions: [],
-        qualityMetrics: {}
+        qualityMetrics: {},
       };
     }
   }
@@ -340,24 +377,27 @@ Provide JSON response with:
       const response = await this.openai.chat.completions.create({
         model: process.env.AZURE_OPENAI_DEPLOYMENT,
         messages: [
-          { role: "system", content: "You are a code quality analyzer. Return only valid JSON." },
-          { role: "user", content: analysisPrompt }
+          {
+            role: "system",
+            content: "You are a code quality analyzer. Return only valid JSON.",
+          },
+          { role: "user", content: analysisPrompt },
         ],
         temperature: 0.2,
-        max_tokens: 800
+        max_tokens: 800,
       });
 
       // Clean the response content to handle markdown code blocks
       const content = response.choices[0].message.content;
       let cleanContent = content;
-      
+
       // Remove markdown code blocks if present
-      if (content.includes('```json')) {
-        cleanContent = content.replace(/```json\s*/, '').replace(/```\s*$/, '');
-      } else if (content.includes('```')) {
-        cleanContent = content.replace(/```\s*/, '').replace(/```\s*$/, '');
+      if (content.includes("```json")) {
+        cleanContent = content.replace(/```json\s*/, "").replace(/```\s*$/, "");
+      } else if (content.includes("```")) {
+        cleanContent = content.replace(/```\s*/, "").replace(/```\s*$/, "");
       }
-      
+
       return JSON.parse(cleanContent.trim());
     } catch (error) {
       return {
@@ -368,8 +408,8 @@ Provide JSON response with:
           accessibilityScore: 0.8,
           performanceScore: 0.8,
           modernityScore: 0.8,
-          responsiveScore: 0.8
-        }
+          responsiveScore: 0.8,
+        },
       };
     }
   }
@@ -389,11 +429,11 @@ Provide JSON response with:
       lastDesign: options.description,
       timestamp: Date.now(),
       preferences: result.detectedPatterns || [],
-      successfulPatterns: result.qualityMetrics || {}
+      successfulPatterns: result.qualityMetrics || {},
     };
-    
+
     this.conversationHistory.set(sessionId, context);
-    
+
     // Clean up old contexts (keep last 50)
     if (this.conversationHistory.size > 50) {
       const oldestKey = this.conversationHistory.keys().next().value;
@@ -408,14 +448,20 @@ Provide JSON response with:
     if (success) {
       this.performanceMetrics.successfulGenerations++;
     }
-    
+
     // Update average response time
-    const totalTime = this.performanceMetrics.averageResponseTime * (this.performanceMetrics.totalRequests - 1);
-    this.performanceMetrics.averageResponseTime = (totalTime + responseTime) / this.performanceMetrics.totalRequests;
-    
+    const totalTime =
+      this.performanceMetrics.averageResponseTime *
+      (this.performanceMetrics.totalRequests - 1);
+    this.performanceMetrics.averageResponseTime =
+      (totalTime + responseTime) / this.performanceMetrics.totalRequests;
+
     // Update failure rate
-    this.performanceMetrics.failureRate = 
-      ((this.performanceMetrics.totalRequests - this.performanceMetrics.successfulGenerations) / this.performanceMetrics.totalRequests) * 100;
+    this.performanceMetrics.failureRate =
+      ((this.performanceMetrics.totalRequests -
+        this.performanceMetrics.successfulGenerations) /
+        this.performanceMetrics.totalRequests) *
+      100;
   }
 
   /**
@@ -424,14 +470,21 @@ Provide JSON response with:
   intelligentFallback(options, sessionId) {
     // Implement smart fallback that maintains conversation context
     return {
-      html: this.generateBasicWireframe(options.description, options.designTheme, options.colorScheme),
+      html: this.generateBasicWireframe(
+        options.description,
+        options.designTheme,
+        options.colorScheme
+      ),
       metadata: {
         sessionId,
         generationMethod: "intelligent-fallback",
         aiGenerated: false,
         fallbackReason: "AI generation failed",
-        suggestions: ["Try simplifying the description", "Check AI service availability"]
-      }
+        suggestions: [
+          "Try simplifying the description",
+          "Check AI service availability",
+        ],
+      },
     };
   }
 
@@ -440,9 +493,11 @@ Provide JSON response with:
    */
   getBasicDesignAnalysis(description) {
     const desc = description.toLowerCase();
-    
+
     return {
-      primaryPurpose: desc.includes("dashboard") ? "data-visualization" : "content-display",
+      primaryPurpose: desc.includes("dashboard")
+        ? "data-visualization"
+        : "content-display",
       userTypes: ["general-users"],
       keyFeatures: desc.includes("form") ? ["forms"] : ["content"],
       designComplexity: "moderate",
@@ -451,7 +506,7 @@ Provide JSON response with:
       interactionLevel: "interactive",
       dataRequirements: ["text"],
       responsiveNeeds: ["mobile", "desktop"],
-      accessibilityFocus: ["keyboard-navigation", "screen-reader"]
+      accessibilityFocus: ["keyboard-navigation", "screen-reader"],
     };
   }
 
@@ -480,7 +535,7 @@ Provide JSON response with:
             border-radius: 8px; 
             box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
         }
-        h1 { color: #0078d4; margin-bottom: 20px; }
+        h1 { color: #F2CC60; margin-bottom: 20px; }
         .content { line-height: 1.6; }
     </style>
 </head>
@@ -509,19 +564,29 @@ Provide JSON response with:
   async generateDesignSuggestions(description, currentWireframe = null) {
     try {
       const suggestionPrompt = `
-Analyze this design request and provide 5 creative suggestions for improvement:
+Analyze this design request and provide 5 Microsoft Learn-focused suggestions for improvement:
 
 Request: "${description}"
-${currentWireframe ? `Current wireframe provided: Yes` : ''}
+${currentWireframe ? `Current wireframe provided: Yes` : ""}
+
+Focus on Microsoft Learn design principles:
+- Use tan/gold color palette (#F2CC60, #E6B800) for banners, hero sections, and primary backgrounds
+- Blue colors (#0078d4, #106ebe) are acceptable for buttons, links, and interactive elements
+- Emphasize learning and documentation structure
+- Include learning progress indicators
+- Add Microsoft Learn-style navigation with breadcrumbs
+- Use clear step-by-step tutorials format
+- Include code samples and callout boxes
+- Design for educational content consumption
 
 Provide JSON response with:
 {
   "suggestions": [
     {
       "title": "suggestion title",
-      "description": "detailed description",
+      "description": "detailed description focused on Microsoft Learn patterns",
       "impact": "high|medium|low",
-      "category": "layout|interaction|accessibility|performance|visual"
+      "category": "learning|navigation|content|accessibility|microsoft-design"
     }
   ]
 }`;
@@ -529,36 +594,41 @@ Provide JSON response with:
       const response = await this.openai.chat.completions.create({
         model: process.env.AZURE_OPENAI_DEPLOYMENT,
         messages: [
-          { role: "system", content: "You are a creative UX consultant providing design suggestions. Return only valid JSON." },
-          { role: "user", content: suggestionPrompt }
+          {
+            role: "system",
+            content:
+              "You are a Microsoft Learn UX specialist providing design suggestions focused on educational content and Microsoft design principles. Return only valid JSON.",
+          },
+          { role: "user", content: suggestionPrompt },
         ],
         temperature: 0.8,
-        max_tokens: 1000
+        max_tokens: 1000,
       });
 
       // Clean the response content to handle markdown code blocks
       const content = response.choices[0].message.content;
       let cleanContent = content;
-      
+
       // Remove markdown code blocks if present
-      if (content.includes('```json')) {
-        cleanContent = content.replace(/```json\s*/, '').replace(/```\s*$/, '');
-      } else if (content.includes('```')) {
-        cleanContent = content.replace(/```\s*/, '').replace(/```\s*$/, '');
+      if (content.includes("```json")) {
+        cleanContent = content.replace(/```json\s*/, "").replace(/```\s*$/, "");
+      } else if (content.includes("```")) {
+        cleanContent = content.replace(/```\s*/, "").replace(/```\s*$/, "");
       }
-      
+
       return JSON.parse(cleanContent.trim());
     } catch (error) {
       console.warn("⚠️ Suggestion generation failed:", error);
       return {
         suggestions: [
           {
-            title: "Enhance Visual Hierarchy",
-            description: "Improve the visual hierarchy with better typography and spacing",
+            title: "Apply Microsoft Learn Design",
+            description:
+              "Use Microsoft Learn's tan/gold color palette and educational content structure for better learning experience",
             impact: "high",
-            category: "visual"
-          }
-        ]
+            category: "microsoft-design",
+          },
+        ],
       };
     }
   }

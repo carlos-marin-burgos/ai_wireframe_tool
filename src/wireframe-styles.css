@@ -19,7 +19,7 @@
   gap: 8px;
 }icrosoft-learn-header .header-container {
   max-width: 1200px;
-  margin: 0 auto;
+  m  background: #F2CC60;rgin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -112,7 +112,7 @@
 .radio-input {
   width: 16px;
   height: 16px;
-  accent-color: #0078d4;
+  accent-color: #f2cc60;
 }
 
 .radio-label {
@@ -132,8 +132,8 @@
 
 .design-select:focus {
   outline: none;
-  border-color: #0078d4;
-  box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+  border-color: #f2cc60;
+  box-shadow: 0 0 0 2px rgba(242, 204, 96, 0.2);
 }
 
 /* ============================================
@@ -277,19 +277,23 @@
 }
 
 .tab-btn.active {
-  background: linear-gradient(135deg, #0078d4, #106ebe);
-  color: white;
-  box-shadow: 0 4px 12px rgba(0, 120, 212, 0.25);
+  background: linear-gradient(135deg, #f2cc60, #e6b800);
+  color: #2d2d2d;
+  box-shadow: 0 4px 12px rgba(242, 204, 96, 0.25);
 }
 
 .tab-btn.active::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 60%);
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 60%
+  );
   pointer-events: none;
 }
 
@@ -336,22 +340,26 @@
 }
 
 .header-btn.primary {
-  background: linear-gradient(135deg, #0078d4, #106ebe);
-  color: white;
+  background: linear-gradient(135deg, #f2cc60, #e6b800);
+  color: #2d2d2d;
   border-color: transparent;
-  box-shadow: 0 2px 8px rgba(0, 120, 212, 0.3);
+  box-shadow: 0 2px 8px rgba(242, 204, 96, 0.3);
   position: relative;
   overflow: hidden;
 }
 
 .header-btn.primary::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 60%);
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 60%
+  );
   pointer-events: none;
 }
 
@@ -376,7 +384,6 @@
   display: flex;
   flex-direction: column;
 }
-
 
 .wireframe-preview {
   background: white;
@@ -406,7 +413,8 @@
   padding: 2rem;
   background: #0f172a;
   color: #f1f5f9;
-  font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-family: "JetBrains Mono", "Fira Code", "Monaco", "Menlo", "Ubuntu Mono",
+    monospace;
   font-size: 14px;
   line-height: 1.6;
   overflow: auto;
@@ -429,7 +437,7 @@
   .split-layout {
     grid-template-columns: 300px 1fr;
   }
-  
+
   .left-pane {
     padding: 16px;
   }
@@ -440,18 +448,18 @@
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
   }
-  
+
   .left-pane {
     border-right: none;
     border-bottom: 1px solid #e5e5e5;
     height: auto;
     max-height: 40vh;
   }
-  
+
   .header-actions {
     gap: 4px;
   }
-  
+
   .header-btn {
     padding: 4px 8px;
     font-size: 0.8rem;
@@ -476,11 +484,11 @@
 /* Dark theme variations */
 .ms-header--dark,
 .microsoft-learn-header {
-  background: #2B2B2B;
+  background: #2b2b2b;
   border-bottom-color: #605e5c;
   color: #ffffff;
   padding: 12px 24px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .ms-header-container {
@@ -561,12 +569,12 @@
 .ms-nav-link:hover,
 .microsoft-learn-header .main-nav a:hover {
   background: #f3f2f1;
-  color: #0078d4;
+  color: #f2cc60;
 }
 
 .ms-header--dark .ms-nav-link,
 .microsoft-learn-header .main-nav a {
-  color: #CCCCCC;
+  color: #cccccc;
 }
 
 .ms-header--dark .ms-nav-link:hover,
@@ -600,8 +608,8 @@
 }
 
 .ms-search-input:focus {
-  border-color: #0078d4;
-  box-shadow: 0 0 0 1px #0078d4;
+  border-color: #f2cc60;
+  box-shadow: 0 0 0 1px #f2cc60;
 }
 
 .ms-search-icon {
@@ -649,7 +657,7 @@
 .microsoft-learn-header .profile-btn {
   background: none;
   border: none;
-  color: #CCCCCC;
+  color: #cccccc;
   font-size: 16px;
   cursor: pointer;
   padding: 6px 12px;
@@ -658,7 +666,7 @@
 }
 
 .microsoft-learn-header .profile-btn {
-  background: #0078D4;
+  background: #0078d4;
   color: white;
   font-size: 14px;
 }
@@ -678,19 +686,19 @@
     padding: 0 12px;
     height: 48px;
   }
-  
+
   .ms-header-nav {
     display: none;
   }
-  
+
   .ms-search-input {
     width: 180px;
   }
-  
+
   .ms-header-title {
     font-size: 16px;
   }
-  
+
   .ms-logo {
     height: 18px;
   }
@@ -700,7 +708,7 @@
   .ms-search-box {
     display: none;
   }
-  
+
   .ms-header-actions {
     gap: 8px;
   }

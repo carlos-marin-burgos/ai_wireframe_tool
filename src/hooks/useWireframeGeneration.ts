@@ -354,17 +354,18 @@ export const useWireframeGeneration = () => {
             border-radius: 4px;
             margin-bottom: 24px;
         }
-        h1 { color: #0078d4; margin-bottom: 16px; }
+        h1 { color: #F2CC60; margin-bottom: 16px; }
         p { color: #605e5c; line-height: 1.6; margin-bottom: 16px; }
         .btn {
-            background: #0078d4;
-            color: white;
+            background: #F2CC60;
+            color: #2D2D2D;
             padding: 12px 24px;
             border: none;
             border-radius: 4px;
             text-decoration: none;
             display: inline-block;
             margin: 8px;
+            font-weight: 500;
         }
     </style>
 </head>

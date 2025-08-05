@@ -33,6 +33,7 @@ interface AzureAnalysisResult {
     spacing: number[];
   };
   confidence: number;
+  wireframe?: string; // HTML wireframe result
 }
 
 // Mock Azure Configuration - In production, these would come from environment variables
@@ -95,47 +96,76 @@ export const analyzeImageWithAzureVision = async (
 /**
  * Enhanced analysis using GPT-4V for UI component detection
  */
-export const analyzeImageWithGPTVision = async (
+export async function analyzeImageWithGPTVision(
   imageFile: File
-): Promise<AzureAnalysisResult> => {
+): Promise<AzureAnalysisResult> {
   try {
-    const imageBase64 = await fileToBase64(imageFile);
+    // First, analyze the image to get component structure
+    const formData = new FormData();
+    formData.append("image", imageFile);
 
-    // Call your backend endpoint that integrates with GPT-4V
-    const response = await fetch("/api/analyze-ui-image", {
+    const analysisResponse = await fetch("/api/analyzeUIImage", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!analysisResponse.ok) {
+      throw new Error(`Image analysis failed: ${analysisResponse.status}`);
+    }
+
+    const imageAnalysis = await analysisResponse.json();
+
+    if (!imageAnalysis.success) {
+      throw new Error(imageAnalysis.error || "Image analysis failed");
+    }
+
+    // Now generate wireframe using the image analysis
+    const wireframeResponse = await fetch("/api/generate-wireframe", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        image: imageBase64,
-        prompt: `Analyze this UI image and identify all interactive components. For each component, provide:
-        1. Type (button, input, card, navigation, header, text, image)
-        2. Bounding box coordinates as percentages
-        3. Text content if visible
-        4. Confidence score
-        
-        Also analyze the overall layout structure and extract design tokens (colors, spacing, typography).
-        
-        Return the response in this JSON format:
-        {
-          "components": [...],
-          "layout": {...},
-          "designTokens": {...}
-        }`,
+        description: "Generate wireframe based on uploaded image analysis",
+        colorScheme: "light",
+        imageAnalysis: imageAnalysis.analysis, // Pass the full analysis to wireframe generator
       }),
     });
 
-    if (!response.ok) {
-      throw new Error(`GPT Vision API error: ${response.status}`);
+    if (!wireframeResponse.ok) {
+      throw new Error(
+        `Wireframe generation failed: ${wireframeResponse.status}`
+      );
     }
 
-    return await response.json();
+    const wireframeResult = await wireframeResponse.json();
+
+    if (!wireframeResult.success) {
+      throw new Error(wireframeResult.error || "Wireframe generation failed");
+    }
+
+    // Return structured analysis result matching AzureAnalysisResult interface
+    return {
+      components: imageAnalysis.analysis.components || [],
+      layout: imageAnalysis.analysis.layout || { type: "grid", columns: 12 },
+      designTokens: {
+        colors: imageAnalysis.analysis.colors || [],
+        fonts:
+          imageAnalysis.analysis.typography?.map((t: any) => t.fontFamily) ||
+          [],
+        spacing: imageAnalysis.analysis.spacing || [],
+      },
+      confidence: imageAnalysis.analysis.confidence || 0.85,
+      wireframe: wireframeResult.html,
+    };
   } catch (error) {
-    console.error("GPT Vision analysis failed:", error);
+    console.error("Azure Vision API error:", error);
+
+    // Fallback to enhanced mock analysis for development
+    console.warn("Falling back to enhanced mock analysis");
     return simulateAzureVisionAnalysis();
   }
-};
+}
 
 /**
  * Simulates Azure Vision analysis for development/demo purposes
