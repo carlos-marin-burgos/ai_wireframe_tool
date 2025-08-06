@@ -409,7 +409,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
               <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
                 <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
                   <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
-                    <img src="dist/windowsLogo.png">
+                    <img src="/windowsLogo.png" alt="Microsoft Logo" width="24" height="24">
                     <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
                   </div>
                   <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
