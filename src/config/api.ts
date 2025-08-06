@@ -50,7 +50,7 @@ export const API_CONFIG = {
 
   ENDPOINTS: {
     GENERATE_WIREFRAME: "/api/generate-wireframe", // Azure Functions endpoint
-    GENERATE_SUGGESTIONS: "/api/fast-suggestions", // Updated to use fast suggestions
+    GENERATE_SUGGESTIONS: "/api/generate-suggestions",
     GET_TEMPLATE: "/api/get-template",
     HEALTH: "/api/health",
   },

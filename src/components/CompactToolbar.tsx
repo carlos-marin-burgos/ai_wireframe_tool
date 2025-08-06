@@ -150,7 +150,7 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
                 </button>
 
                 <button
-                    className="compact-btn"
+                    className="compact-btn compact-btn-primary"
                     onClick={onSave}
                     title="Save Wireframe"
                     aria-label="Save Wireframe"

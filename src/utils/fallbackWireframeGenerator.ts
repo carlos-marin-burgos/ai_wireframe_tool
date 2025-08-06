@@ -206,7 +206,7 @@ const generateLandingPage = (
     <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
         <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
             <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
-                <img src="/windowsLogo.png" alt="Microsoft Logo" width="24" height="24">
+                <img src="dist/windowsLogo.png">
                 <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
             </div>
             <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
@@ -218,6 +218,10 @@ const generateLandingPage = (
             </nav>
         </div>
     </header>
+
+    <div class="fallback-notice">
+        <strong>⚡ Smart Template:</strong> This wireframe was generated using intelligent templates while the AI service is temporarily unavailable.
+    </div>
 
     <section class="hero">
         <div class="container">
@@ -372,7 +376,7 @@ const generateDashboard = (
     <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
         <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
             <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
-              <img src="/windowsLogo.png" alt="Microsoft Logo" width="24" height="24">
+              <img src="dist/windowsLogo.png">
                 <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
             </div>
             <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
@@ -384,6 +388,10 @@ const generateDashboard = (
             </nav>
         </div>
     </header>
+
+    <div class="fallback-notice">
+        <strong>⚡ Smart Template:</strong> Dashboard generated using intelligent templates.
+    </div>
 
     <main class="main">
         <div class="container">
@@ -556,7 +564,7 @@ const generateForm = (
     <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
         <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
             <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
-               <img src="/windowsLogo.png" alt="Microsoft Logo" width="24" height="24">
+               <img src="dist/windowsLogo.png">
                 <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
             </div>
             <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
@@ -729,7 +737,9 @@ const generateContent = (
     <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
         <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
             <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
-                <img src="/windowsLogo.png" alt="Microsoft Logo" width="24" height="24">
+                <svg width="24" height="24" fill="#0078d4" viewBox="0 0 24 24">
+                    <path d="M11.25 4.533a9.707 9.707 0 00-6.984 2.708L3.482 6.457C5.283 4.457 8.145 3.25 11.25 3.25s5.967 1.207 7.768 3.207l-.784.784A9.707 9.707 0 0011.25 4.533z"/>
+                </svg>
                 <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
             </div>
             <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
@@ -884,7 +894,9 @@ const generateGeneric = (
     <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
         <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
             <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
-                <img src="/windowsLogo.png" alt="Microsoft Logo" width="24" height="24">
+                <svg width="24" height="24" fill="#0078d4" viewBox="0 0 24 24">
+                    <path d="M11.25 4.533a9.707 9.707 0 00-6.984 2.708L3.482 6.457C5.283 4.457 8.145 3.25 11.25 3.25s5.967 1.207 7.768 3.207l-.784.784A9.707 9.707 0 0011.25 4.533z"/>
+                </svg>
                 <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
             </div>
             <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
@@ -896,6 +908,10 @@ const generateGeneric = (
             </nav>
         </div>
     </header>
+
+    <div class="fallback-notice">
+        <strong>⚡ Smart Template:</strong> Wireframe generated using intelligent templates while AI service is temporarily unavailable.
+    </div>
 
     <main class="main">
         <div class="container">
@@ -1095,7 +1111,9 @@ const generateCustomForm = (description: string, _theme: string, colorScheme: st
     <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
         <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
             <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
-                <img src="/windowsLogo.png" alt="Microsoft Logo" width="24" height="24">
+                <svg width="24" height="24" fill="#0078d4" viewBox="0 0 24 24">
+                    <path d="M11.25 4.533a9.707 9.707 0 00-6.984 2.708L3.482 6.457C5.283 4.457 8.145 3.25 11.25 3.25s5.967 1.207 7.768 3.207l-.784.784A9.707 9.707 0 0011.25 4.533z"/>
+                </svg>
                 <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
             </div>
             <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
