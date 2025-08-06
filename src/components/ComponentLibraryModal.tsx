@@ -40,6 +40,15 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     // Load Fluent UI components
     const { fluentComponents, isLoading, error } = useFluentComponents();
 
+    // Debug: Log Fluent components loading
+    console.log('🔍 Fluent Components Debug:', {
+        fluentComponents: fluentComponents.length,
+        isLoading,
+        error,
+        fluentComponentNames: fluentComponents.map(c => c.name),
+        fluentComponentCategories: [...new Set(fluentComponents.map(c => c.category))]
+    });
+
     const staticComponents: Component[] = [
         // Microsoft Learn Site Headers
         {
@@ -1732,7 +1741,15 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
 
     // Merge static components with Fluent UI components (avoiding duplicates)
     const components = useMemo(() => {
-        return mergeFluentWithExisting(staticComponents, fluentComponents);
+        const merged = mergeFluentWithExisting(staticComponents, fluentComponents);
+        console.log('🔍 Component Merge Debug:', {
+            staticCount: staticComponents.length,
+            fluentCount: fluentComponents.length,
+            mergedCount: merged.length,
+            allCategories: [...new Set(merged.map(c => c.category))],
+            fluentComponentsInMerged: merged.filter(c => c.category === 'GitHub Fluent').length
+        });
+        return merged;
     }, [fluentComponents]);
 
     const handleComponentClick = (component: Component) => {

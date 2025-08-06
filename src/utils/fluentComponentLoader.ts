@@ -41,8 +41,8 @@ export function useFluentComponents() {
       setIsLoading(true);
       setError(null);
 
-      // Try to load from local file first
-      const response = await fetch("/src/components/fluent-library.json");
+      // Try to load from public directory
+      const response = await fetch("/fluent-library.json");
 
       if (response.ok) {
         const data: FluentComponentLibrary = await response.json();
