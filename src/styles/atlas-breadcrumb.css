@@ -1,0 +1,174 @@
+/* 
+   Atlas Breadcrumb - Fluent UI Design System Implementation
+   Following Microsoft Design Guidelines
+*/
+
+/* Breadcrumb Container */
+.atlas-breadcrumb {
+  font-family: var(--atlas-font-family);
+  font-size: var(--atlas-font-size-body);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  padding: var(--atlas-spacing-sm) 0;
+  list-style: none;
+  color: var(--atlas-color-neutral-110);
+}
+
+/* Breadcrumb Items */
+.atlas-breadcrumb-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Breadcrumb Links */
+.atlas-breadcrumb-link {
+  color: var(--atlas-color-neutral-110);
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: var(--atlas-corner-radius-sm);
+  transition: all 0.15s ease-in-out;
+  font-weight: 400;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--atlas-spacing-xs);
+  min-height: 24px;
+}
+
+.atlas-breadcrumb-link:hover {
+  background-color: var(--atlas-color-neutral-20);
+  color: var(--atlas-color-neutral-130);
+}
+
+.atlas-breadcrumb-link:focus {
+  outline: none;
+  background-color: var(--atlas-color-neutral-20);
+  box-shadow: 0 0 0 1px var(--atlas-color-primary);
+}
+
+.atlas-breadcrumb-link:active {
+  background-color: var(--atlas-color-neutral-30);
+}
+
+/* Current/Active Breadcrumb Item */
+.atlas-breadcrumb-current {
+  color: var(--atlas-color-neutral-130);
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: var(--atlas-corner-radius-sm);
+  cursor: default;
+}
+
+/* Breadcrumb Separator */
+.atlas-breadcrumb-separator {
+  color: var(--atlas-color-neutral-90);
+  font-size: 12px;
+  margin: 0 2px;
+  user-select: none;
+  pointer-events: none;
+}
+
+.atlas-breadcrumb-separator::before {
+  content: '/';
+}
+
+/* Alternative separator styles */
+.atlas-breadcrumb-separator.chevron::before {
+  content: '›';
+  font-size: 14px;
+}
+
+.atlas-breadcrumb-separator.arrow::before {
+  content: '→';
+  font-size: 12px;
+}
+
+/* Breadcrumb with Icons */
+.atlas-breadcrumb-icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+/* Compact Breadcrumb */
+.atlas-breadcrumb-compact {
+  font-size: var(--atlas-font-size-caption);
+}
+
+.atlas-breadcrumb-compact .atlas-breadcrumb-link {
+  padding: 2px 6px;
+  min-height: 20px;
+}
+
+/* Breadcrumb Overflow Handling */
+.atlas-breadcrumb-overflow {
+  position: relative;
+  max-width: 100%;
+}
+
+.atlas-breadcrumb-ellipsis {
+  color: var(--atlas-color-neutral-90);
+  padding: 4px 8px;
+  cursor: pointer;
+  border-radius: var(--atlas-corner-radius-sm);
+  transition: all 0.15s ease-in-out;
+}
+
+.atlas-breadcrumb-ellipsis:hover {
+  background-color: var(--atlas-color-neutral-20);
+  color: var(--atlas-color-neutral-130);
+}
+
+.atlas-breadcrumb-ellipsis::before {
+  content: '...';
+}
+
+/* Responsive Breadcrumb */
+@media (max-width: 768px) {
+  .atlas-breadcrumb {
+    font-size: var(--atlas-font-size-caption);
+  }
+  
+  .atlas-breadcrumb-link {
+    padding: 2px 6px;
+    min-height: 20px;
+  }
+  
+  .atlas-breadcrumb-current {
+    padding: 2px 6px;
+  }
+}
+
+/* Breadcrumb Navigation Styles */
+.atlas-breadcrumb-nav {
+  margin-bottom: var(--atlas-spacing-lg);
+  padding: var(--atlas-spacing-md);
+  background-color: var(--atlas-color-neutral-10);
+  border-bottom: 1px solid var(--atlas-color-neutral-30);
+}
+
+/* High Contrast Support */
+@media (prefers-contrast: high) {
+  .atlas-breadcrumb-link {
+    border: 1px solid transparent;
+  }
+  
+  .atlas-breadcrumb-link:hover {
+    border-color: var(--atlas-color-neutral-130);
+  }
+  
+  .atlas-breadcrumb-link:focus {
+    border-color: var(--atlas-color-primary);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .atlas-breadcrumb-link {
+    transition: none;
+  }
+}

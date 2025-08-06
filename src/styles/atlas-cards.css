@@ -1,0 +1,164 @@
+/* 
+   Atlas Cards - Fluent UI Design System Implementation
+   Following Microsoft Design Guidelines
+*/
+
+/* Base Card Styles */
+.atlas-card {
+  background-color: var(--atlas-color-neutral-10);
+  border: 1px solid var(--atlas-color-neutral-30);
+  border-radius: var(--atlas-corner-radius-md);
+  box-shadow: var(--atlas-shadow-2);
+  overflow: hidden;
+  transition: all 0.15s ease-in-out;
+  position: relative;
+  font-family: var(--atlas-font-family);
+}
+
+.atlas-card:hover {
+  box-shadow: var(--atlas-shadow-8);
+  transform: translateY(-1px);
+}
+
+/* Card Size Variants */
+.atlas-card-8 {
+  padding: 8px;
+}
+
+.atlas-card-12 {
+  padding: 12px;
+}
+
+.atlas-card-16 {
+  padding: 16px;
+}
+
+/* Card Appearance Variants */
+.atlas-card-filled {
+  background-color: var(--atlas-color-neutral-20);
+  border: 1px solid var(--atlas-color-neutral-40);
+}
+
+.atlas-card-filled-alternative {
+  background-color: var(--atlas-color-neutral-30);
+  border: 1px solid var(--atlas-color-neutral-50);
+}
+
+.atlas-card-outline {
+  background-color: transparent;
+  border: 1px solid var(--atlas-color-neutral-60);
+}
+
+.atlas-card-subtle {
+  background-color: var(--atlas-color-neutral-10);
+  border: 1px solid transparent;
+  box-shadow: none;
+}
+
+.atlas-card-subtle:hover {
+  border: 1px solid var(--atlas-color-neutral-30);
+  box-shadow: var(--atlas-shadow-2);
+}
+
+/* Card Header */
+.atlas-card-header {
+  padding: var(--atlas-spacing-lg);
+  border-bottom: 1px solid var(--atlas-color-neutral-30);
+  background-color: var(--atlas-color-neutral-10);
+}
+
+.atlas-card-header h1,
+.atlas-card-header h2,
+.atlas-card-header h3,
+.atlas-card-header h4,
+.atlas-card-header h5,
+.atlas-card-header h6 {
+  margin: 0;
+  color: var(--atlas-color-neutral-130);
+  font-weight: 600;
+}
+
+/* Card Content */
+.atlas-card-content {
+  padding: var(--atlas-spacing-lg);
+  color: var(--atlas-color-neutral-110);
+  line-height: 1.5;
+}
+
+/* Card Footer */
+.atlas-card-footer {
+  padding: var(--atlas-spacing-lg);
+  border-top: 1px solid var(--atlas-color-neutral-30);
+  background-color: var(--atlas-color-neutral-10);
+}
+
+/* Interactive Card States */
+.atlas-card-selectable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.atlas-card-selectable:hover {
+  background-color: var(--atlas-color-neutral-20);
+  border-color: var(--atlas-color-neutral-50);
+}
+
+.atlas-card-selectable:active {
+  background-color: var(--atlas-color-neutral-30);
+  transform: translateY(0);
+}
+
+.atlas-card-selected {
+  border-color: var(--atlas-color-primary);
+  background-color: var(--atlas-color-neutral-10);
+}
+
+.atlas-card-selected::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background-color: var(--atlas-color-primary);
+}
+
+/* Card with Actions */
+.atlas-card-actions {
+  display: flex;
+  gap: var(--atlas-spacing-sm);
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Responsive Cards */
+@media (max-width: 768px) {
+  .atlas-card {
+    margin: var(--atlas-spacing-sm);
+  }
+  
+  .atlas-card-header,
+  .atlas-card-content,
+  .atlas-card-footer {
+    padding: var(--atlas-spacing-md);
+  }
+}
+
+/* Card Grid Layout */
+.atlas-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--atlas-spacing-lg);
+  padding: var(--atlas-spacing-lg);
+}
+
+/* Card List Layout */
+.atlas-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-spacing-md);
+}
+
+.atlas-cards-list .atlas-card {
+  margin-bottom: 0;
+}
