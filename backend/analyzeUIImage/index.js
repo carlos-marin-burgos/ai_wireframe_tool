@@ -1,38 +1,47 @@
+// Azure OpenAI configuration
 const { OpenAI } = require("openai");
 
-// Global OpenAI client instance
+// Initialize OpenAI client with error handling
 let openai = null;
 
-// Initialize OpenAI client
 function initializeOpenAI() {
   try {
-    if (!process.env.AZURE_OPENAI_ENDPOINT || !process.env.AZURE_OPENAI_KEY) {
-      console.log("⚠️ OpenAI configuration missing, using fallback responses");
+    console.log("🔧 Initializing OpenAI for image analysis...");
+
+    if (!process.env.AZURE_OPENAI_KEY || !process.env.AZURE_OPENAI_ENDPOINT) {
+      console.error("❌ Missing OpenAI configuration for image analysis");
       return false;
     }
 
+    const endpoint = process.env.AZURE_OPENAI_ENDPOINT.replace(/\/$/, "");
+    const deployment =
+      process.env.AZURE_OPENAI_DEPLOYMENT || "designetica-gpt4o";
+    const apiVersion =
+      process.env.AZURE_OPENAI_API_VERSION || "2024-08-01-preview";
+
     openai = new OpenAI({
       apiKey: process.env.AZURE_OPENAI_KEY,
-      baseURL: `${process.env.AZURE_OPENAI_ENDPOINT}/openai/deployments/${
-        process.env.AZURE_OPENAI_DEPLOYMENT || "designetica-gpt4o"
-      }`,
-      defaultQuery: {
-        "api-version":
-          process.env.AZURE_OPENAI_API_VERSION || "2024-08-01-preview",
-      },
+      baseURL: `${endpoint}/openai/deployments/${deployment}`,
+      defaultQuery: { "api-version": apiVersion },
       defaultHeaders: {
         "api-key": process.env.AZURE_OPENAI_KEY,
       },
     });
 
-    console.log("✅ OpenAI client initialized successfully");
+    console.log("✅ OpenAI initialized for image analysis");
     return true;
   } catch (error) {
-    console.error("❌ Failed to initialize OpenAI client:", error.message);
+    console.error("❌ Failed to initialize OpenAI for image analysis:", error);
     return false;
   }
 }
 
+// Initialize on startup
+initializeOpenAI();
+
+/**
+ * Analyzes UI images using Azure OpenAI GPT-4 Vision to detect components and layout
+ */
 module.exports = async function (context, req) {
   // Set CORS headers first
   context.res = {

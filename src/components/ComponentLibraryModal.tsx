@@ -303,6 +303,104 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             htmlCode: '<div style="margin-bottom: 16px;"><label style="display: block; margin-bottom: 4px; font-weight: 600; color: #323130;">Label:</label><input type="text" style="width: 100%; max-width: 300px; padding: 8px 12px; border: 1px solid #e1dfdd; border-radius: 4px; font-size: 14px;" placeholder="Enter text..."></div>'
         },
         {
+            id: 'fluent-select',
+            name: 'FluentUI Select',
+            description: 'Microsoft FluentUI Select component with dropdown arrow and options',
+            category: 'Forms',
+            htmlCode: `<div style="max-width: 300px; font-family: 'Segoe UI', Tahoma, Arial, sans-serif;">
+    <label style="
+        display: block; 
+        margin-bottom: 4px; 
+        font-size: 14px; 
+        font-weight: 600; 
+        color: #323130;
+    ">Select an option</label>
+    
+    <div style="position: relative;">
+        <select style="
+            width: 100%;
+            height: 32px;
+            padding: 4px 24px 4px 8px;
+            border: 1px solid #8a8886;
+            border-radius: 2px;
+            background: white;
+            font-size: 14px;
+            font-family: inherit;
+            color: #323130;
+            cursor: pointer;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        " class="fluent-select-input"
+        onmouseover="this.style.borderColor='#323130'"
+        onmouseout="this.style.borderColor='#8a8886'"
+        onfocus="this.style.borderColor='#0078d4'; this.style.boxShadow='0 0 0 1px #0078d4'"
+        onblur="this.style.borderColor='#8a8886'; this.style.boxShadow='none'">
+            <option value="">Choose an option</option>
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+            <option value="option4">Option 4</option>
+        </select>
+        
+        <!-- Custom dropdown arrow -->
+        <div style="
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: #605e5c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+        ">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M4.427 7.427l3.396 3.396a.25.25 0 00.354 0l3.396-3.396A.25.25 0 0011.396 7H4.604a.25.25 0 00-.177.427z"/>
+            </svg>
+        </div>
+    </div>
+    
+    <style>
+        .fluent-select-input:hover {
+            border-color: #323130 !important;
+        }
+        
+        .fluent-select-input:focus {
+            border-color: #0078d4 !important;
+            box-shadow: 0 0 0 1px #0078d4 !important;
+        }
+        
+        .fluent-select-input:disabled {
+            background-color: #f3f2f1;
+            color: #a19f9d;
+            border-color: #c8c6c4;
+            cursor: not-allowed;
+        }
+        
+        /* Custom scrollbar for options */
+        .fluent-select-input option {
+            padding: 8px;
+            font-size: 14px;
+            color: #323130;
+            background: white;
+        }
+        
+        .fluent-select-input option:hover {
+            background: #f3f2f1;
+        }
+        
+        .fluent-select-input option:checked {
+            background: #0078d4;
+            color: white;
+        }
+    </style>
+</div>`
+        },
+        {
             id: 'navigation-header',
             name: 'Microsoft Learn Header',
             description: 'Microsoft Learn site header with navigation',

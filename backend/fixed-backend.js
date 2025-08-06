@@ -1,10 +1,5 @@
-const express = require("express");    // Mock wireframe generation
-    const wireframe = `
-        <div style="max-width: 800px; margin: 0 auto; padding: 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
-            <header style="background: #e8e6df; border-bottom: 2px solid #e8e6df; padding: 20px; margin-bottom: 30px; border-radius: 8px;">
-                <h1 style="color: #333; margin: 0;">Generated Wireframe</h1>
-                <p style="color: #666; margin: 10px 0 0 0;">Based on: "${wireframePrompt}"</p>
-            </header>cors = require("cors");
+const express = require("express");
+const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 5001;
 
@@ -41,8 +36,8 @@ app.post("/api/generate-html-wireframe", (req, res) => {
   // Mock wireframe generation
   const wireframe = `
         <div style="max-width: 800px; margin: 0 auto; padding: 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
-            <header style="background: #e8e6df; border-bottom: 2px solid #e8e6df; padding: 20px; margin-bottom: 30px; border-radius: 8px;">
-                <h1 style="color: #333; margin: 0;">Generated Wireframe</h1>
+            <header style="border-bottom: 2px solid #0078d4; padding-bottom: 20px; margin-bottom: 30px;">
+                <h1 style="color: #e8e6df; margin: 0;">Generated Wireframe</h1>
                 <p style="color: #666; margin: 10px 0 0 0;">Based on: "${wireframePrompt}"</p>
             </header>
             

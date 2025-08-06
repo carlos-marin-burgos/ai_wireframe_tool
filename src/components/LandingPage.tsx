@@ -3,7 +3,6 @@ import "./LandingPage.css";
 import Footer from './Footer';
 import ImageUploadModal from './ImageUploadModal';
 import FigmaIntegrationModal from './FigmaIntegrationModal';
-import GitHubConnectButton from './GitHubConnectButton';
 
 interface LandingPageProps {
   error: string | null;
@@ -36,6 +35,7 @@ import {
   FiImage,
   FiLink,
   FiZap,
+  FiGithub,
 } from "react-icons/fi";
 
 const LandingPage: React.FC<LandingPageProps> = ({
@@ -65,8 +65,9 @@ const LandingPage: React.FC<LandingPageProps> = ({
   // State for image upload modal
   const [showImageUpload, setShowImageUpload] = useState(false);
 
-  // State for Figma integration modal
+  // Modal states
   const [isFigmaModalOpen, setIsFigmaModalOpen] = useState(false);
+  const [isGitHubModalOpen, setIsGitHubModalOpen] = useState(false);
 
   // Debounce timer for AI suggestions
   const debounceTimerRef = useRef<number | null>(null);
@@ -216,8 +217,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
 
               {/* Integration Pills Container */}
               <div className="integration-pills-container">
-                <GitHubConnectButton />
-
                 <button
                   type="button"
                   className="integration-pill figma-pill"
@@ -239,6 +238,19 @@ const LandingPage: React.FC<LandingPageProps> = ({
                 >
                   <FiImage className="pill-icon" />
                   <span>Upload Image</span>
+                </button>
+
+                <button
+                  type="button"
+                  className="integration-pill github-pill"
+                  onClick={() => {
+                    console.log('🔗 GitHub pill clicked on landing page!');
+                    setIsGitHubModalOpen(true);
+                  }}
+                  title="Connect to GitHub repository"
+                >
+                  <FiGithub className="pill-icon" />
+                  <span>Connect GitHub</span>
                 </button>
               </div>
             </div>
@@ -266,6 +278,64 @@ const LandingPage: React.FC<LandingPageProps> = ({
         onImport={handleFigmaImport}
         onExport={handleFigmaExport}
       />
+
+      {/* GitHub Connect Modal */}
+      {isGitHubModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsGitHubModalOpen(false)}>
+          <div className="modal-content github-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>🚀 Connect to GitHub</h2>
+              <button
+                className="modal-close-btn"
+                onClick={() => setIsGitHubModalOpen(false)}
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="modal-body">
+              <div className="github-benefits">
+                <div className="benefit-item">
+                  <FiZap className="benefit-icon" />
+                  <div>
+                    <h4>Import Repositories</h4>
+                    <p>Import existing projects and wireframes from your GitHub repositories</p>
+                  </div>
+                </div>
+
+                <div className="benefit-item">
+                  <FiFolder className="benefit-icon" />
+                  <div>
+                    <h4>Save Wireframes</h4>
+                    <p>Automatically save your wireframes to GitHub for version control</p>
+                  </div>
+                </div>
+
+                <div className="benefit-item">
+                  <FiLink className="benefit-icon" />
+                  <div>
+                    <h4>Team Collaboration</h4>
+                    <p>Share wireframes with your team through GitHub integration</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="modal-actions">
+                <button className="btn-primary github-connect-btn">
+                  <FiGithub />
+                  Connect with GitHub
+                </button>
+                <button
+                  className="btn-secondary"
+                  onClick={() => setIsGitHubModalOpen(false)}
+                >
+                  Maybe Later
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>

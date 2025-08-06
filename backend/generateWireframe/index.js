@@ -2019,15 +2019,61 @@ module.exports = async function (context, req) {
       hasOpenAI: !!openai,
     });
 
-    // AI-FIRST APPROACH: Only use fast mode when explicitly requested
+    // Performance optimization: detect if fast mode should be used
+    // But respect explicit fastMode parameter from user
     const requestsFastMode = req.body?.fastMode || req.query?.fastMode;
 
-    // Only use fast mode if explicitly requested by the user
-    if (requestsFastMode === true) {
-      logger.info("⚡ Fast mode explicitly requested by user", {
+    const isSimpleRequest =
+      description.length < 100 &&
+      !description.includes("complex") &&
+      !description.includes("advanced") &&
+      !description.includes("custom") &&
+      !description.includes("interactive");
+
+    // Use performance-optimized generation for simple requests ONLY if user hasn't explicitly disabled fast mode
+    if (isSimpleRequest && requestsFastMode !== false) {
+      logger.info("⚡ Using fast mode for simple request", {
         correlationId,
         descriptionLength: description.length,
       });
+
+      const fastResult = await generateOptimizedWireframe(
+        description,
+        colorScheme,
+        {
+          fastMode: true,
+          skipCache: false,
+        }
+      );
+
+      const processingTime = Date.now() - startTime;
+
+      context.res.status = 200;
+      context.res.headers = {
+        ...context.res.headers,
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        Pragma: "no-cache",
+        Expires: "0",
+        "X-Fast-Mode": "true",
+      };
+      context.res.body = {
+        html: fastResult.html,
+        fallback: false,
+        correlationId,
+        processingTimeMs: Math.round(fastResult.responseTime),
+        theme: "microsoftlearn",
+        colorScheme,
+        aiGenerated: false,
+        source: fastResult.source,
+        fastMode: true,
+        pattern: fastResult.pattern,
+      };
+      return;
+    }
+
+    // For complex requests, check if user wants fast mode
+    if (requestsFastMode) {
+      logger.info("⚡ Fast mode requested by user", { correlationId });
 
       const fastResult = await generateOptimizedWireframe(
         description,
@@ -2063,13 +2109,6 @@ module.exports = async function (context, req) {
       };
       return;
     }
-
-    // DEFAULT: Always try AI generation first for all requests
-    logger.info("🤖 Using AI-first approach for wireframe generation", {
-      correlationId,
-      descriptionLength: description.length,
-      aiConfigured: !!openai,
-    });
 
     // Determine generation method based on input
     let result;
