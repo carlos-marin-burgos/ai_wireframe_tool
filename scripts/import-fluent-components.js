@@ -2,10 +2,10 @@
 
 /**
  * 🚀 Fluent UI Component Auto-Importer
- * 
+ *
  * This script automatically imports components from Microsoft's Fluent UI repository
  * and converts them to your component library format.
- * 
+ *
  * Features:
  * - Fetches latest Fluent UI components from GitHub
  * - Converts React components to HTML templates
@@ -13,33 +13,39 @@
  * - Maintains Microsoft design standards
  */
 
-const https = require('https');
-const fs = require('fs');
-const path = require('path');
+const https = require("https");
+const fs = require("fs");
+const path = require("path");
 
 // Configuration
-const FLUENT_UI_REPO = 'microsoft/fluentui';
-const FLUENT_UI_API_BASE = 'https://api.github.com/repos/microsoft/fluentui';
-const COMPONENTS_OUTPUT_PATH = path.join(__dirname, '../src/components/fluent-library.json');
-const BACKUP_PATH = path.join(__dirname, '../backups/fluent-components-backup.json');
+const FLUENT_UI_REPO = "microsoft/fluentui";
+const FLUENT_UI_API_BASE = "https://api.github.com/repos/microsoft/fluentui";
+const COMPONENTS_OUTPUT_PATH = path.join(
+  __dirname,
+  "../src/components/fluent-library.json"
+);
+const BACKUP_PATH = path.join(
+  __dirname,
+  "../backups/fluent-components-backup.json"
+);
 
 // GitHub API helper
 function githubRequest(endpoint) {
   return new Promise((resolve, reject) => {
     const options = {
-      hostname: 'api.github.com',
+      hostname: "api.github.com",
       path: endpoint,
-      method: 'GET',
+      method: "GET",
       headers: {
-        'User-Agent': 'Designetica-FluentUI-Importer',
-        'Accept': 'application/vnd.github.v3+json'
-      }
+        "User-Agent": "Designetica-FluentUI-Importer",
+        Accept: "application/vnd.github.v3+json",
+      },
     };
 
     const req = https.request(options, (res) => {
-      let data = '';
-      res.on('data', chunk => data += chunk);
-      res.on('end', () => {
+      let data = "";
+      res.on("data", (chunk) => (data += chunk));
+      res.on("end", () => {
         try {
           resolve(JSON.parse(data));
         } catch (error) {
@@ -48,45 +54,62 @@ function githubRequest(endpoint) {
       });
     });
 
-    req.on('error', reject);
+    req.on("error", reject);
     req.end();
   });
 }
 
 // Fetch Fluent UI components structure
 async function fetchFluentComponents() {
-  console.log('🔍 Discovering Fluent UI components...');
-  
+  console.log("🔍 Discovering Fluent UI components...");
+
   try {
     // Get the main components directory
-    const componentsTree = await githubRequest('/repos/microsoft/fluentui/contents/packages/react-components/react-button/src');
-    
-    console.log('📦 Found component structure:', componentsTree.length, 'items');
-    
+    const componentsTree = await githubRequest(
+      "/repos/microsoft/fluentui/contents/packages/react-components/react-button/src"
+    );
+
+    console.log(
+      "📦 Found component structure:",
+      componentsTree.length,
+      "items"
+    );
+
     const components = [];
-    
+
     // Process each component
-    for (const item of componentsTree.slice(0, 5)) { // Limit for demo
-      if (item.type === 'file' && item.name.endsWith('.tsx')) {
+    for (const item of componentsTree.slice(0, 5)) {
+      // Limit for demo
+      if (item.type === "file" && item.name.endsWith(".tsx")) {
         console.log(`📝 Processing: ${item.name}`);
-        
+
         try {
-          const fileContent = await githubRequest(`/repos/microsoft/fluentui/contents/${item.path}`);
-          const code = Buffer.from(fileContent.content, 'base64').toString('utf-8');
-          
+          const fileContent = await githubRequest(
+            `/repos/microsoft/fluentui/contents/${item.path}`
+          );
+          const code = Buffer.from(fileContent.content, "base64").toString(
+            "utf-8"
+          );
+
           // Convert React component to HTML template
           const htmlTemplate = convertReactToHTML(code, item.name);
-          
+
           if (htmlTemplate) {
             components.push({
-              id: `fluent-${item.name.replace('.tsx', '').toLowerCase()}`,
-              name: `Fluent ${item.name.replace('.tsx', '').replace(/([A-Z])/g, ' $1').trim()}`,
-              description: `Official Microsoft Fluent UI ${item.name.replace('.tsx', '')} component`,
-              category: 'Fluent',
+              id: `fluent-${item.name.replace(".tsx", "").toLowerCase()}`,
+              name: `Fluent ${item.name
+                .replace(".tsx", "")
+                .replace(/([A-Z])/g, " $1")
+                .trim()}`,
+              description: `Official Microsoft Fluent UI ${item.name.replace(
+                ".tsx",
+                ""
+              )} component`,
+              category: "Fluent",
               htmlCode: htmlTemplate,
-              source: 'fluent-ui',
+              source: "fluent-ui",
               lastUpdated: new Date().toISOString(),
-              githubPath: item.path
+              githubPath: item.path,
             });
           }
         } catch (error) {
@@ -94,10 +117,10 @@ async function fetchFluentComponents() {
         }
       }
     }
-    
+
     return components;
   } catch (error) {
-    console.error('❌ Failed to fetch Fluent components:', error);
+    console.error("❌ Failed to fetch Fluent components:", error);
     return [];
   }
 }
@@ -106,15 +129,19 @@ async function fetchFluentComponents() {
 function convertReactToHTML(reactCode, fileName) {
   try {
     // Extract component name
-    const componentMatch = reactCode.match(/export\s+(?:const|function)\s+(\w+)/);
-    const componentName = componentMatch ? componentMatch[1] : fileName.replace('.tsx', '');
-    
+    const componentMatch = reactCode.match(
+      /export\s+(?:const|function)\s+(\w+)/
+    );
+    const componentName = componentMatch
+      ? componentMatch[1]
+      : fileName.replace(".tsx", "");
+
     // Generate HTML template based on component type
-    if (fileName.toLowerCase().includes('button')) {
+    if (fileName.toLowerCase().includes("button")) {
       return generateButtonHTML(componentName, reactCode);
-    } else if (fileName.toLowerCase().includes('input')) {
+    } else if (fileName.toLowerCase().includes("input")) {
       return generateInputHTML(componentName, reactCode);
-    } else if (fileName.toLowerCase().includes('card')) {
+    } else if (fileName.toLowerCase().includes("card")) {
       return generateCardHTML(componentName, reactCode);
     } else {
       return generateGenericHTML(componentName, reactCode);
@@ -128,9 +155,10 @@ function convertReactToHTML(reactCode, fileName) {
 // Generate Button HTML
 function generateButtonHTML(componentName, reactCode) {
   // Extract props and styling information
-  const hasVariants = reactCode.includes('variant') || reactCode.includes('appearance');
-  const hasSizes = reactCode.includes('size');
-  
+  const hasVariants =
+    reactCode.includes("variant") || reactCode.includes("appearance");
+  const hasSizes = reactCode.includes("size");
+
   return `<!-- Fluent UI ${componentName} Component -->
 <button class="fluent-button" 
         style="
@@ -293,61 +321,65 @@ function saveComponents(components) {
         fs.mkdirSync(backupDir, { recursive: true });
       }
       fs.copyFileSync(COMPONENTS_OUTPUT_PATH, BACKUP_PATH);
-      console.log('📁 Created backup');
+      console.log("📁 Created backup");
     }
-    
+
     // Save new components
     const outputDir = path.dirname(COMPONENTS_OUTPUT_PATH);
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
-    
+
     const output = {
       lastUpdated: new Date().toISOString(),
-      source: 'microsoft/fluentui',
+      source: "microsoft/fluentui",
       totalComponents: components.length,
-      components: components
+      components: components,
     };
-    
+
     fs.writeFileSync(COMPONENTS_OUTPUT_PATH, JSON.stringify(output, null, 2));
-    console.log(`✅ Saved ${components.length} Fluent UI components to ${COMPONENTS_OUTPUT_PATH}`);
-    
+    console.log(
+      `✅ Saved ${components.length} Fluent UI components to ${COMPONENTS_OUTPUT_PATH}`
+    );
+
     return true;
   } catch (error) {
-    console.error('❌ Failed to save components:', error);
+    console.error("❌ Failed to save components:", error);
     return false;
   }
 }
 
 // Main execution
 async function main() {
-  console.log('🚀 Starting Fluent UI Component Import...');
+  console.log("🚀 Starting Fluent UI Component Import...");
   console.log(`📡 Source: https://github.com/${FLUENT_UI_REPO}`);
   console.log(`📁 Output: ${COMPONENTS_OUTPUT_PATH}`);
-  console.log('─'.repeat(50));
-  
+  console.log("─".repeat(50));
+
   try {
     const components = await fetchFluentComponents();
-    
+
     if (components.length > 0) {
       const success = saveComponents(components);
-      
+
       if (success) {
-        console.log('─'.repeat(50));
-        console.log('🎉 Fluent UI import completed successfully!');
+        console.log("─".repeat(50));
+        console.log("🎉 Fluent UI import completed successfully!");
         console.log(`📊 Imported ${components.length} components`);
-        console.log('🔄 Components can now be used in your library');
-        console.log('');
-        console.log('Next steps:');
-        console.log('1. Run your app to see the new Fluent components');
-        console.log('2. Check the component library modal');
-        console.log('3. Start using official Microsoft components!');
+        console.log("🔄 Components can now be used in your library");
+        console.log("");
+        console.log("Next steps:");
+        console.log("1. Run your app to see the new Fluent components");
+        console.log("2. Check the component library modal");
+        console.log("3. Start using official Microsoft components!");
       }
     } else {
-      console.log('⚠️ No components imported. Check your connection and try again.');
+      console.log(
+        "⚠️ No components imported. Check your connection and try again."
+      );
     }
   } catch (error) {
-    console.error('❌ Import failed:', error);
+    console.error("❌ Import failed:", error);
     process.exit(1);
   }
 }

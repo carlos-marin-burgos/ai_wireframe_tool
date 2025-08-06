@@ -1,10 +1,10 @@
 /**
  * 🔄 Fluent UI Component Loader
- * 
+ *
  * Integrates imported Fluent UI components with your existing component library
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 interface FluentComponent {
   id: string;
@@ -26,7 +26,9 @@ interface FluentComponentLibrary {
 
 // Hook to load Fluent UI components
 export function useFluentComponents() {
-  const [fluentComponents, setFluentComponents] = useState<FluentComponent[]>([]);
+  const [fluentComponents, setFluentComponents] = useState<FluentComponent[]>(
+    []
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -40,22 +42,22 @@ export function useFluentComponents() {
       setError(null);
 
       // Try to load from local file first
-      const response = await fetch('/src/components/fluent-library.json');
-      
+      const response = await fetch("/src/components/fluent-library.json");
+
       if (response.ok) {
         const data: FluentComponentLibrary = await response.json();
         setFluentComponents(data.components || []);
-        console.log('✅ Loaded', data.totalComponents, 'Fluent UI components');
+        console.log("✅ Loaded", data.totalComponents, "Fluent UI components");
       } else {
         // Fallback: Generate some default Fluent components
         const defaultComponents = generateDefaultFluentComponents();
         setFluentComponents(defaultComponents);
-        console.log('📦 Using default Fluent components');
+        console.log("📦 Using default Fluent components");
       }
     } catch (error) {
-      console.error('❌ Failed to load Fluent components:', error);
-      setError('Failed to load Fluent UI components');
-      
+      console.error("❌ Failed to load Fluent components:", error);
+      setError("Failed to load Fluent UI components");
+
       // Use fallback components
       const fallbackComponents = generateDefaultFluentComponents();
       setFluentComponents(fallbackComponents);
@@ -72,7 +74,7 @@ export function useFluentComponents() {
     fluentComponents,
     isLoading,
     error,
-    refreshComponents
+    refreshComponents,
   };
 }
 
@@ -80,11 +82,11 @@ export function useFluentComponents() {
 function generateDefaultFluentComponents(): FluentComponent[] {
   return [
     {
-      id: 'fluent-primary-button',
-      name: 'Fluent Primary Button',
-      description: 'Microsoft Fluent UI primary button component',
-      category: 'Fluent',
-      source: 'built-in',
+      id: "fluent-primary-button",
+      name: "Fluent Primary Button",
+      description: "Microsoft Fluent UI primary button component",
+      category: "Fluent",
+      source: "built-in",
       lastUpdated: new Date().toISOString(),
       htmlCode: `<!-- Fluent UI Primary Button -->
 <button class="fluent-button-primary" 
@@ -108,14 +110,14 @@ function generateDefaultFluentComponents(): FluentComponent[] {
         onfocus="this.style.outline='2px solid #c7e0f4'; this.style.outlineOffset='2px';"
         onblur="this.style.outline='none';">
   Primary Action
-</button>`
+</button>`,
     },
     {
-      id: 'fluent-secondary-button',
-      name: 'Fluent Secondary Button',
-      description: 'Microsoft Fluent UI secondary button component',
-      category: 'Fluent',
-      source: 'built-in',
+      id: "fluent-secondary-button",
+      name: "Fluent Secondary Button",
+      description: "Microsoft Fluent UI secondary button component",
+      category: "Fluent",
+      source: "built-in",
       lastUpdated: new Date().toISOString(),
       htmlCode: `<!-- Fluent UI Secondary Button -->
 <button class="fluent-button-secondary" 
@@ -139,14 +141,14 @@ function generateDefaultFluentComponents(): FluentComponent[] {
         onfocus="this.style.outline='2px solid #c7e0f4'; this.style.outlineOffset='2px';"
         onblur="this.style.outline='none';">
   Secondary Action
-</button>`
+</button>`,
     },
     {
-      id: 'fluent-text-input',
-      name: 'Fluent Text Input',
-      description: 'Microsoft Fluent UI text input component',
-      category: 'Fluent',
-      source: 'built-in',
+      id: "fluent-text-input",
+      name: "Fluent Text Input",
+      description: "Microsoft Fluent UI text input component",
+      category: "Fluent",
+      source: "built-in",
       lastUpdated: new Date().toISOString(),
       htmlCode: `<!-- Fluent UI Text Input -->
 <div class="fluent-input-container" style="margin-bottom: 16px;">
@@ -179,14 +181,14 @@ function generateDefaultFluentComponents(): FluentComponent[] {
          "
          onfocus="this.style.borderColor='#0078d4'; this.style.boxShadow='0 0 0 2px rgba(0, 120, 212, 0.2)';"
          onblur="this.style.borderColor='#8a8886'; this.style.boxShadow='none';" />
-</div>`
+</div>`,
     },
     {
-      id: 'fluent-card',
-      name: 'Fluent Card',
-      description: 'Microsoft Fluent UI card component',
-      category: 'Fluent',
-      source: 'built-in',
+      id: "fluent-card",
+      name: "Fluent Card",
+      description: "Microsoft Fluent UI card component",
+      category: "Fluent",
+      source: "built-in",
       lastUpdated: new Date().toISOString(),
       htmlCode: `<!-- Fluent UI Card -->
 <div class="fluent-card" 
@@ -235,14 +237,14 @@ function generateDefaultFluentComponents(): FluentComponent[] {
           onmouseout="this.style.backgroundColor='#0078d4';">
     Learn More
   </button>
-</div>`
+</div>`,
     },
     {
-      id: 'fluent-toggle',
-      name: 'Fluent Toggle',
-      description: 'Microsoft Fluent UI toggle switch component',
-      category: 'Fluent',
-      source: 'built-in',
+      id: "fluent-toggle",
+      name: "Fluent Toggle",
+      description: "Microsoft Fluent UI toggle switch component",
+      category: "Fluent",
+      source: "built-in",
       lastUpdated: new Date().toISOString(),
       htmlCode: `<!-- Fluent UI Toggle Switch -->
 <div class="fluent-toggle-container" style="display: flex; align-items: center; margin-bottom: 16px;">
@@ -287,14 +289,14 @@ function generateDefaultFluentComponents(): FluentComponent[] {
          ">
     </div>
   </div>
-</div>`
+</div>`,
     },
     {
-      id: 'fluent-dropdown',
-      name: 'Fluent Dropdown',
-      description: 'Microsoft Fluent UI dropdown/select component',
-      category: 'Fluent',
-      source: 'built-in',
+      id: "fluent-dropdown",
+      name: "Fluent Dropdown",
+      description: "Microsoft Fluent UI dropdown/select component",
+      category: "Fluent",
+      source: "built-in",
       lastUpdated: new Date().toISOString(),
       htmlCode: `<!-- Fluent UI Dropdown -->
 <div class="fluent-dropdown-container" style="margin-bottom: 16px;">
@@ -336,14 +338,14 @@ function generateDefaultFluentComponents(): FluentComponent[] {
     <option value="option2">Option 2</option>
     <option value="option3">Option 3</option>
   </select>
-</div>`
+</div>`,
     },
     {
-      id: 'fluent-checkbox',
-      name: 'Fluent Checkbox',
-      description: 'Microsoft Fluent UI checkbox component',
-      category: 'Fluent',
-      source: 'built-in',
+      id: "fluent-checkbox",
+      name: "Fluent Checkbox",
+      description: "Microsoft Fluent UI checkbox component",
+      category: "Fluent",
+      source: "built-in",
       lastUpdated: new Date().toISOString(),
       htmlCode: `<!-- Fluent UI Checkbox -->
 <div class="fluent-checkbox-container" style="display: flex; align-items: center; margin-bottom: 16px;">
@@ -395,14 +397,14 @@ function generateDefaultFluentComponents(): FluentComponent[] {
           "></span>
     Checkbox Label
   </label>
-</div>`
+</div>`,
     },
     {
-      id: 'fluent-progress-bar',
-      name: 'Fluent Progress Bar',
-      description: 'Microsoft Fluent UI progress indicator',
-      category: 'Fluent',
-      source: 'built-in',
+      id: "fluent-progress-bar",
+      name: "Fluent Progress Bar",
+      description: "Microsoft Fluent UI progress indicator",
+      category: "Fluent",
+      source: "built-in",
       lastUpdated: new Date().toISOString(),
       htmlCode: `<!-- Fluent UI Progress Bar -->
 <div class="fluent-progress-container" style="margin-bottom: 16px;">
@@ -438,14 +440,14 @@ function generateDefaultFluentComponents(): FluentComponent[] {
            transition: width 0.3s ease;
          "></div>
   </div>
-</div>`
+</div>`,
     },
     {
-      id: 'fluent-search-box',
-      name: 'Fluent Search Box',
-      description: 'Microsoft Fluent UI search input with icon',
-      category: 'Fluent',
-      source: 'built-in',
+      id: "fluent-search-box",
+      name: "Fluent Search Box",
+      description: "Microsoft Fluent UI search input with icon",
+      category: "Fluent",
+      source: "built-in",
       lastUpdated: new Date().toISOString(),
       htmlCode: `<!-- Fluent UI Search Box -->
 <div class="fluent-search-container" style="position: relative; margin-bottom: 16px;">
@@ -493,14 +495,14 @@ function generateDefaultFluentComponents(): FluentComponent[] {
            background-size: 16px;
          "></div>
   </div>
-</div>`
+</div>`,
     },
     {
-      id: 'fluent-spinner',
-      name: 'Fluent Spinner',
-      description: 'Microsoft Fluent UI loading spinner',
-      category: 'Fluent',
-      source: 'built-in',
+      id: "fluent-spinner",
+      name: "Fluent Spinner",
+      description: "Microsoft Fluent UI loading spinner",
+      category: "Fluent",
+      source: "built-in",
       lastUpdated: new Date().toISOString(),
       htmlCode: `<!-- Fluent UI Spinner -->
 <div class="fluent-spinner-container" style="display: flex; align-items: center; margin-bottom: 16px;">
@@ -527,161 +529,174 @@ function generateDefaultFluentComponents(): FluentComponent[] {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-</style>`
-    }
+</style>`,
+    },
   ];
 }
 
 // Utility to merge Fluent components with existing components
-export function mergeFluentWithExisting(existingComponents: any[], fluentComponents: FluentComponent[]) {
+export function mergeFluentWithExisting(
+  existingComponents: any[],
+  fluentComponents: FluentComponent[]
+) {
   // Create a combined array
   const combined = [...existingComponents];
-  
+
   // Add Fluent components with unique IDs, checking for duplicates
-  fluentComponents.forEach(fluentComp => {
-    const exists = combined.find(comp => comp.id === fluentComp.id);
+  fluentComponents.forEach((fluentComp) => {
+    const exists = combined.find((comp) => comp.id === fluentComp.id);
     const isDuplicate = isDuplicateComponent(fluentComp.id, fluentComp.name);
-    
+
     if (!exists && !isDuplicate) {
       combined.push(fluentComp);
       console.log(`✅ Added Fluent component: ${fluentComp.name}`);
     } else if (isDuplicate) {
-      console.log(`⚠️  Skipped duplicate component: ${fluentComp.name} (${fluentComp.id})`);
+      console.log(
+        `⚠️  Skipped duplicate component: ${fluentComp.name} (${fluentComp.id})`
+      );
     }
   });
-  
+
   return combined;
 }
 
 // Existing component IDs to avoid duplicating
 const EXISTING_COMPONENT_IDS = [
   // MS Learn Headers
-  'ms-learn-header-default',
-  'ms-learn-header-hero',
-  'ms-learn-header-minimal',
-  'ms-learn-header-with-breadcrumb',
-  'ms-learn-header-with-tabs',
-  'ms-learn-header-dark',
-  
+  "ms-learn-header-default",
+  "ms-learn-header-hero",
+  "ms-learn-header-minimal",
+  "ms-learn-header-with-breadcrumb",
+  "ms-learn-header-with-tabs",
+  "ms-learn-header-dark",
+
   // Buttons (various styles)
-  'button-primary',
-  'button-secondary', 
-  'button-cta',
-  'button-link',
-  'button-icon',
-  'button-outline',
-  'button-ghost',
-  'button-danger',
-  'button-success',
-  'button-warning',
-  
+  "button-primary",
+  "button-secondary",
+  "button-cta",
+  "button-link",
+  "button-icon",
+  "button-outline",
+  "button-ghost",
+  "button-danger",
+  "button-success",
+  "button-warning",
+
   // Form Components
-  'form-contact',
-  'form-newsletter',
-  'form-login',
-  'form-register',
-  'form-search',
-  'form-feedback',
-  'form-quiz',
-  'form-survey',
-  'form-upload',
-  
+  "form-contact",
+  "form-newsletter",
+  "form-login",
+  "form-register",
+  "form-search",
+  "form-feedback",
+  "form-quiz",
+  "form-survey",
+  "form-upload",
+
   // Cards
-  'card-basic',
-  'card-feature',
-  'card-testimonial',
-  'card-pricing',
-  'card-product',
-  'card-blog',
-  'card-team-member',
-  'card-statistic',
-  
+  "card-basic",
+  "card-feature",
+  "card-testimonial",
+  "card-pricing",
+  "card-product",
+  "card-blog",
+  "card-team-member",
+  "card-statistic",
+
   // Input variations that might conflict
-  'input-text',
-  'input-email',
-  'input-password',
-  'input-search',
-  'input-number',
-  'input-tel',
-  'input-url',
-  'input-date',
-  'textarea',
-  'select',
-  'checkbox',
-  'radio',
-  'toggle',
-  'slider',
-  
+  "input-text",
+  "input-email",
+  "input-password",
+  "input-search",
+  "input-number",
+  "input-tel",
+  "input-url",
+  "input-date",
+  "textarea",
+  "select",
+  "checkbox",
+  "radio",
+  "toggle",
+  "slider",
+
   // Navigation
-  'nav-main',
-  'nav-sidebar',
-  'nav-breadcrumb',
-  'nav-tabs',
-  'nav-pagination',
-  'nav-footer',
-  
+  "nav-main",
+  "nav-sidebar",
+  "nav-breadcrumb",
+  "nav-tabs",
+  "nav-pagination",
+  "nav-footer",
+
   // Layout
-  'layout-grid',
-  'layout-flex',
-  'layout-section',
-  'layout-container',
-  'layout-hero',
-  'layout-sidebar',
-  
+  "layout-grid",
+  "layout-flex",
+  "layout-section",
+  "layout-container",
+  "layout-hero",
+  "layout-sidebar",
+
   // Common UI patterns that might overlap
-  'modal',
-  'dialog',
-  'dropdown',
-  'accordion',
-  'carousel',
-  'slider',
-  'progress',
-  'spinner',
-  'loader',
-  'alert',
-  'notification',
-  'toast',
-  'tooltip',
-  'popover',
-  'badge',
-  'chip',
-  'tag',
-  'avatar',
-  'icon'
+  "modal",
+  "dialog",
+  "dropdown",
+  "accordion",
+  "carousel",
+  "slider",
+  "progress",
+  "spinner",
+  "loader",
+  "alert",
+  "notification",
+  "toast",
+  "tooltip",
+  "popover",
+  "badge",
+  "chip",
+  "tag",
+  "avatar",
+  "icon",
 ];
 
 // Smart duplicate detection - checks various naming patterns
 function isDuplicateComponent(fluentId: string, fluentName: string): boolean {
   const normalizedFluentId = fluentId.toLowerCase();
   const normalizedFluentName = fluentName.toLowerCase();
-  
+
   // Direct ID match
   if (EXISTING_COMPONENT_IDS.includes(normalizedFluentId)) {
     return true;
   }
-  
+
   // Check for similar naming patterns
   for (const existingId of EXISTING_COMPONENT_IDS) {
     const existingNormalized = existingId.toLowerCase();
-    
+
     // Extract base component type (e.g., "button" from "button-primary")
-    const fluentBaseType = normalizedFluentId.replace(/^fluent-/, '').split('-')[0];
-    const existingBaseType = existingNormalized.split('-')[0];
-    
+    const fluentBaseType = normalizedFluentId
+      .replace(/^fluent-/, "")
+      .split("-")[0];
+    const existingBaseType = existingNormalized.split("-")[0];
+
     // If base types match (button, input, card, etc.)
     if (fluentBaseType === existingBaseType) {
-      console.log(`🔍 Potential duplicate detected: Fluent "${fluentId}" vs existing "${existingId}" (both are ${fluentBaseType} components)`);
+      console.log(
+        `🔍 Potential duplicate detected: Fluent "${fluentId}" vs existing "${existingId}" (both are ${fluentBaseType} components)`
+      );
       return true;
     }
-    
+
     // Check if Fluent component name contains existing component type
-    if (normalizedFluentName.includes(existingBaseType) || 
-        normalizedFluentId.includes(existingBaseType)) {
-      console.log(`🔍 Component type overlap: Fluent "${fluentId}" overlaps with existing "${existingId}"`);
+    if (
+      normalizedFluentName.includes(existingBaseType) ||
+      normalizedFluentId.includes(existingBaseType)
+    ) {
+      console.log(
+        `🔍 Component type overlap: Fluent "${fluentId}" overlaps with existing "${existingId}"`
+      );
       return true;
     }
   }
-  
+
   return false;
 }
 

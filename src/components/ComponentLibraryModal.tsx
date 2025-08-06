@@ -35,7 +35,12 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         onGenerateWithAI: !!onGenerateWithAI,
         currentDescription,
         shouldShowAIButton: !!(onGenerateWithAI && currentDescription)
-    }); const components: Component[] = [
+    });
+
+    // Load Fluent UI components
+    const { fluentComponents, isLoading, error } = useFluentComponents();
+
+    const staticComponents: Component[] = [
         // Microsoft Learn Site Headers
         {
             id: 'ms-learn-header-basic',
@@ -1725,6 +1730,11 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         }
     ];
 
+    // Merge static components with Fluent UI components (avoiding duplicates)
+    const components = useMemo(() => {
+        return mergeFluentWithExisting(staticComponents, fluentComponents);
+    }, [fluentComponents]);
+
     const handleComponentClick = (component: Component) => {
         console.log('🚀 Component clicked:', component.name);
         onAddComponent(component);
@@ -1772,6 +1782,27 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                     {/* Left Sidebar for Categories */}
                     <div className="component-library-sidebar">
                         <h3>Categories</h3>
+
+                        {/* Fluent UI Status */}
+                        <div style={{
+                            padding: '12px',
+                            background: fluentComponents.length > 0 ? '#f3f2f1' : '#fef5e7',
+                            borderRadius: '6px',
+                            marginBottom: '16px',
+                            fontSize: '12px',
+                            border: '1px solid ' + (fluentComponents.length > 0 ? '#e1e5e9' : '#f7d794')
+                        }}>
+                            <div style={{ fontWeight: '600', color: '#323130' }}>
+                                Fluent UI Components
+                            </div>
+                            <div style={{ color: '#605e5c', marginTop: '4px' }}>
+                                {fluentComponents.length > 0
+                                    ? `✅ ${fluentComponents.length} components loaded`
+                                    : '⚠️ Using built-in components'
+                                }
+                            </div>
+                        </div>
+
                         <div className="category-filters">
                             {categories.map(category => (
                                 <button
@@ -1790,6 +1821,47 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
 
                     {/* Main Content Area */}
                     <div className="component-library-main">
+                        {/* Loading indicator for Fluent components */}
+                        {isLoading && (
+                            <div style={{
+                                padding: '20px',
+                                textAlign: 'center',
+                                background: '#f8f9fa',
+                                borderRadius: '8px',
+                                margin: '0 0 20px 0',
+                                border: '1px solid #e1e5e9'
+                            }}>
+                                <div style={{
+                                    display: 'inline-block',
+                                    width: '20px',
+                                    height: '20px',
+                                    border: '2px solid #e1e5e9',
+                                    borderTop: '2px solid #0078d4',
+                                    borderRadius: '50%',
+                                    animation: 'spin 1s linear infinite',
+                                    marginRight: '8px'
+                                }}></div>
+                                <span style={{ color: '#605e5c', fontSize: '14px' }}>
+                                    Loading Fluent UI components...
+                                </span>
+                            </div>
+                        )}
+
+                        {/* Error message for Fluent components */}
+                        {error && (
+                            <div style={{
+                                padding: '12px 16px',
+                                background: '#fef5e7',
+                                border: '1px solid #f7d794',
+                                borderRadius: '4px',
+                                margin: '0 0 20px 0',
+                                color: '#8e5b00',
+                                fontSize: '14px'
+                            }}>
+                                ⚠️ {error} - Using built-in components instead.
+                            </div>
+                        )}
+
                         <div className="component-library-grid">
                             {filteredComponents.map(component => (
                                 <div
