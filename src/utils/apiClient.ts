@@ -80,7 +80,7 @@ async function checkBackendHealth(): Promise<boolean> {
 // Enhanced error messages for better user experience
 function getReadableErrorMessage(error: Error): string {
   if (error.message.includes("Failed to fetch")) {
-    return "Unable to connect to the backend server. Please ensure the Azure Functions backend is running on localhost:7071";
+    return "Unable to connect to the backend server. Please ensure the Azure Functions backend is running on localhost:7072";
   }
   if (error.message.includes("NetworkError")) {
     return "Network connection error. Please check your internet connection and try again";

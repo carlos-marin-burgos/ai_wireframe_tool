@@ -4,13 +4,8 @@ const isDevelopment = import.meta.env.DEV;
 // Centralized port configuration to avoid conflicts
 const PORTS = {
   development: {
-    primary: 7071, // Azure Functions backend (actually running)
-    fallbackPorts: [
-      7072, // Alternative Azure Functions port
-      7070, // Alternative backend port
-      3001, // Express server fallback
-      8080, // Generic fallback
-    ],
+    primary: 7072, // Azure Functions backend (actually running)
+    fallback: 5001, // Simple Express server
     frontend: 5173, // Frontend dev server
   },
   production: {
@@ -107,10 +102,7 @@ export const detectWorkingBackend = async (): Promise<string> => {
     return API_CONFIG.BASE_URL;
   }
 
-  const portsToTest = [
-    PORTS.development.primary,
-    ...PORTS.development.fallbackPorts,
-  ];
+  const portsToTest = [PORTS.development.primary, PORTS.development.fallback];
 
   for (const port of portsToTest) {
     const testUrl = `http://localhost:${port}`;

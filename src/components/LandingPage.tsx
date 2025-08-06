@@ -3,8 +3,6 @@ import "./LandingPage.css";
 import Footer from './Footer';
 import ImageUploadModal from './ImageUploadModal';
 import FigmaIntegrationModal from './FigmaIntegrationModal';
-import GitHubRepositoryBrowser from './GitHubRepositoryBrowser';
-import { githubService, GitHubUser } from '../services/githubService';
 
 interface LandingPageProps {
   error: string | null;
@@ -73,12 +71,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
   const [isFigmaModalOpen, setIsFigmaModalOpen] = useState(false);
   const [isGitHubModalOpen, setIsGitHubModalOpen] = useState(false);
 
-  // GitHub state
-  const [githubUser, setGitHubUser] = useState<GitHubUser | null>(
-    githubService.getCurrentUser()
-  );
-  const [isConnectingGitHub, setIsConnectingGitHub] = useState(false);
-
   // Debounce timer for AI suggestions
   const debounceTimerRef = useRef<number | null>(null);
 
@@ -129,57 +121,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
       onFigmaExport(format);
     }
     setIsFigmaModalOpen(false);
-  };
-
-  // GitHub authentication handlers
-  const handleGitHubConnect = async () => {
-    console.log('🔗 Connecting to GitHub...');
-    setIsConnectingGitHub(true);
-
-    try {
-      // Listen for auth success event
-      const handleAuthSuccess = (event: CustomEvent) => {
-        console.log('✅ GitHub auth successful:', event.detail);
-        setGitHubUser(event.detail.user);
-        setIsGitHubModalOpen(false);
-        setIsConnectingGitHub(false);
-      };
-
-      const handleAuthLogout = () => {
-        console.log('🔓 GitHub auth logged out');
-        setGitHubUser(null);
-        setIsConnectingGitHub(false);
-      };
-
-      // Add event listeners
-      window.addEventListener('github-auth-success', handleAuthSuccess as EventListener);
-      window.addEventListener('github-auth-logout', handleAuthLogout as EventListener);
-
-      // Start OAuth flow
-      githubService.initiateLogin();
-
-      // Cleanup function
-      const cleanup = () => {
-        window.removeEventListener('github-auth-success', handleAuthSuccess as EventListener);
-        window.removeEventListener('github-auth-logout', handleAuthLogout as EventListener);
-      };
-
-      // Set timeout to cleanup if no response in 30 seconds
-      setTimeout(() => {
-        setIsConnectingGitHub(false);
-        cleanup();
-      }, 30000);
-
-    } catch (error) {
-      console.error('❌ GitHub connection failed:', error);
-      setIsConnectingGitHub(false);
-    }
-  };
-
-  const handleGitHubDisconnect = () => {
-    console.log('🔓 Disconnecting from GitHub...');
-    githubService.logout();
-    setGitHubUser(null);
   };
 
   return (
@@ -303,15 +244,15 @@ const LandingPage: React.FC<LandingPageProps> = ({
 
                 <button
                   type="button"
-                  className={`integration-pill github-pill ${githubUser ? 'connected' : ''}`}
+                  className="integration-pill github-pill"
                   onClick={() => {
                     console.log('🔗 GitHub pill clicked on landing page!');
                     setIsGitHubModalOpen(true);
                   }}
-                  title={githubUser ? `Connected as ${githubUser.login}` : "Connect to GitHub repository"}
+                  title="Connect to GitHub repository"
                 >
                   <FiGithub className="pill-icon" />
-                  <span>{githubUser ? `GitHub (${githubUser.login})` : 'Connect GitHub'}</span>
+                  <span>Connect GitHub</span>
                 </button>
               </div>
             </div>
@@ -382,41 +323,15 @@ const LandingPage: React.FC<LandingPageProps> = ({
               </div>
 
               <div className="modal-actions">
-                {githubUser ? (
-                  <div className="github-connected">
-                    <div className="connected-user">
-                      <img
-                        src={githubUser.avatar_url}
-                        alt={githubUser.name || githubUser.login}
-                        className="user-avatar"
-                      />
-                      <div className="user-info">
-                        <span className="user-name">{githubUser.name || githubUser.login}</span>
-                        <span className="connection-status">✅ Connected</span>
-                      </div>
-                    </div>
-                    <button
-                      className="btn-secondary"
-                      onClick={handleGitHubDisconnect}
-                    >
-                      Disconnect
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    className="btn-primary github-connect-btn"
-                    onClick={handleGitHubConnect}
-                    disabled={isConnectingGitHub}
-                  >
-                    <FiGithub />
-                    {isConnectingGitHub ? 'Connecting...' : 'Connect with GitHub'}
-                  </button>
-                )}
+                <button className="btn-primary github-connect-btn">
+                  <FiGithub />
+                  Connect with GitHub
+                </button>
                 <button
                   className="btn-secondary"
                   onClick={() => setIsGitHubModalOpen(false)}
                 >
-                  {githubUser ? 'Close' : 'Maybe Later'}
+                  Maybe Later
                 </button>
               </div>
             </div>
