@@ -43,6 +43,20 @@
   object-fit: contain;
 }
 
+.fluentui-logo {
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #0078d4, #106ebe);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
 .component-library-title h2 {
   margin: 0;
   color: #323130;

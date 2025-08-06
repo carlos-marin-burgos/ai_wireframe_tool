@@ -884,6 +884,843 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         }
     </script>
 </div>`
+        },
+
+        // FluentUI ComboBox Component
+        {
+            id: 'fluentui-combobox',
+            name: 'FluentUI ComboBox',
+            description: 'Dropdown with search and selection capabilities',
+            category: 'Forms',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">ComboBox Examples</h3>
+    
+    <!-- Basic ComboBox -->
+    <div style="margin-bottom: 24px; max-width: 300px;">
+        <label style="display: block; margin-bottom: 4px; font-size: 14px; font-weight: 600; color: #323130;">Select Country</label>
+        <div style="position: relative;">
+            <input type="text" 
+                   placeholder="Type to search or select..."
+                   style="width: 100%; padding: 8px 32px 8px 12px; border: 1px solid #d1d1d1; border-radius: 4px; font-size: 14px; color: #323130; background: white;"
+                   onfocus="this.nextElementSibling.style.display='block'"
+                   onblur="setTimeout(() => this.nextElementSibling.style.display='none', 200)">
+            <div style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #605e5c; pointer-events: none;">▼</div>
+            
+            <!-- Dropdown Options -->
+            <div style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #d1d1d1; border-radius: 4px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 1000; max-height: 200px; overflow-y: auto;">
+                <div style="padding: 8px 12px; cursor: pointer; border-bottom: 1px solid #f3f2f1;" 
+                     onmouseover="this.style.background='#f3f2f1'" 
+                     onmouseout="this.style.background='white'"
+                     onclick="this.parentElement.previousElementSibling.previousElementSibling.value='United States'; this.parentElement.style.display='none';">
+                    United States
+                </div>
+                <div style="padding: 8px 12px; cursor: pointer; border-bottom: 1px solid #f3f2f1;" 
+                     onmouseover="this.style.background='#f3f2f1'" 
+                     onmouseout="this.style.background='white'"
+                     onclick="this.parentElement.previousElementSibling.previousElementSibling.value='Canada'; this.parentElement.style.display='none';">
+                    Canada
+                </div>
+                <div style="padding: 8px 12px; cursor: pointer; border-bottom: 1px solid #f3f2f1;" 
+                     onmouseover="this.style.background='#f3f2f1'" 
+                     onmouseout="this.style.background='white'"
+                     onclick="this.parentElement.previousElementSibling.previousElementSibling.value='United Kingdom'; this.parentElement.style.display='none';">
+                    United Kingdom
+                </div>
+                <div style="padding: 8px 12px; cursor: pointer;" 
+                     onmouseover="this.style.background='#f3f2f1'" 
+                     onmouseout="this.style.background='white'"
+                     onclick="this.parentElement.previousElementSibling.previousElementSibling.value='Germany'; this.parentElement.style.display='none';">
+                    Germany
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Multi-select ComboBox -->
+    <div style="max-width: 300px;">
+        <label style="display: block; margin-bottom: 4px; font-size: 14px; font-weight: 600; color: #323130;">Select Skills (Multi-select)</label>
+        <div style="border: 1px solid #d1d1d1; border-radius: 4px; padding: 4px; min-height: 36px; display: flex; flex-wrap: wrap; gap: 4px; align-items: center;">
+            <!-- Selected Tags -->
+            <span style="background: #e1f5fe; color: #0078d4; padding: 2px 8px; border-radius: 12px; font-size: 12px; display: flex; align-items: center; gap: 4px;">
+                JavaScript <span style="cursor: pointer; font-weight: bold;">×</span>
+            </span>
+            <span style="background: #e1f5fe; color: #0078d4; padding: 2px 8px; border-radius: 12px; font-size: 12px; display: flex; align-items: center; gap: 4px;">
+                React <span style="cursor: pointer; font-weight: bold;">×</span>
+            </span>
+            <input type="text" 
+                   placeholder="Add more skills..."
+                   style="border: none; outline: none; flex: 1; min-width: 120px; font-size: 14px; padding: 4px;">
+        </div>
+    </div>
+</div>`
+        },
+
+        // FluentUI Checkbox Component
+        {
+            id: 'fluentui-checkbox',
+            name: 'FluentUI Checkbox',
+            description: 'Checkbox input with various states and styles',
+            category: 'Forms',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Checkbox Examples</h3>
+    
+    <!-- Basic Checkboxes -->
+    <div style="margin-bottom: 24px;">
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Basic Checkboxes</h4>
+        
+        <label style="display: flex; align-items: center; margin-bottom: 8px; cursor: pointer;">
+            <input type="checkbox" checked style="margin-right: 8px; transform: scale(1.2);">
+            <span style="font-size: 14px; color: #323130;">Checked option</span>
+        </label>
+        
+        <label style="display: flex; align-items: center; margin-bottom: 8px; cursor: pointer;">
+            <input type="checkbox" style="margin-right: 8px; transform: scale(1.2);">
+            <span style="font-size: 14px; color: #323130;">Unchecked option</span>
+        </label>
+        
+        <label style="display: flex; align-items: center; margin-bottom: 8px; cursor: pointer;">
+            <input type="checkbox" indeterminate style="margin-right: 8px; transform: scale(1.2);">
+            <span style="font-size: 14px; color: #323130;">Indeterminate option</span>
+        </label>
+        
+        <label style="display: flex; align-items: center; margin-bottom: 8px; cursor: not-allowed; opacity: 0.6;">
+            <input type="checkbox" disabled style="margin-right: 8px; transform: scale(1.2);">
+            <span style="font-size: 14px; color: #323130;">Disabled option</span>
+        </label>
+    </div>
+    
+    <!-- Checkbox Group -->
+    <div style="margin-bottom: 24px;">
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Notification Preferences</h4>
+        <div style="background: #faf9f8; padding: 16px; border-radius: 6px; border: 1px solid #edebe9;">
+            <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer;">
+                <input type="checkbox" checked style="margin-right: 8px; transform: scale(1.2);">
+                <div>
+                    <div style="font-size: 14px; font-weight: 600; color: #323130;">Email notifications</div>
+                    <div style="font-size: 12px; color: #605e5c;">Receive updates via email</div>
+                </div>
+            </label>
+            
+            <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer;">
+                <input type="checkbox" style="margin-right: 8px; transform: scale(1.2);">
+                <div>
+                    <div style="font-size: 14px; font-weight: 600; color: #323130;">Push notifications</div>
+                    <div style="font-size: 12px; color: #605e5c;">Receive push notifications on your device</div>
+                </div>
+            </label>
+            
+            <label style="display: flex; align-items: center; cursor: pointer;">
+                <input type="checkbox" checked style="margin-right: 8px; transform: scale(1.2);">
+                <div>
+                    <div style="font-size: 14px; font-weight: 600; color: #323130;">SMS notifications</div>
+                    <div style="font-size: 12px; color: #605e5c;">Receive important updates via SMS</div>
+                </div>
+            </label>
+        </div>
+    </div>
+    
+    <!-- Styled Checkboxes -->
+    <div>
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Terms & Conditions</h4>
+        <label style="display: flex; align-items: flex-start; cursor: pointer; padding: 12px; border: 1px solid #d1d1d1; border-radius: 4px; background: white;">
+            <input type="checkbox" required style="margin-right: 12px; margin-top: 2px; transform: scale(1.2);">
+            <div style="font-size: 14px; color: #323130; line-height: 1.4;">
+                I agree to the <a href="#" style="color: #0078d4; text-decoration: none;">Terms of Service</a> and <a href="#" style="color: #0078d4; text-decoration: none;">Privacy Policy</a>
+            </div>
+        </label>
+    </div>
+</div>`
+        },
+
+        // FluentUI Card Footer Component
+        {
+            id: 'fluentui-card-footer',
+            name: 'FluentUI Card Footer',
+            description: 'Card footer with actions and information',
+            category: 'Cards',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Card Footer Examples</h3>
+    
+    <!-- Card with Action Footer -->
+    <div style="background: white; border: 1px solid #edebe9; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 24px; max-width: 320px;">
+        <!-- Card Content -->
+        <div style="padding: 16px;">
+            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #323130;">Project Update</h4>
+            <p style="margin: 0; font-size: 14px; color: #605e5c; line-height: 1.4;">The new feature has been successfully deployed to production and is ready for user testing.</p>
+        </div>
+        
+        <!-- Card Footer -->
+        <div style="padding: 12px 16px; border-top: 1px solid #f3f2f1; background: #faf9f8; border-radius: 0 0 8px 8px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-size: 12px; color: #605e5c;">2 hours ago</div>
+            <div style="display: flex; gap: 8px;">
+                <button style="background: none; border: 1px solid #d1d1d1; color: #323130; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;">Dismiss</button>
+                <button style="background: #0078d4; border: none; color: white; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;">View Details</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Card with Info Footer -->
+    <div style="background: white; border: 1px solid #edebe9; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 24px; max-width: 320px;">
+        <div style="padding: 16px;">
+            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #323130;">User Profile</h4>
+            <p style="margin: 0; font-size: 14px; color: #605e5c;">Software Engineer with 5+ years of experience in React and TypeScript development.</p>
+        </div>
+        
+        <div style="padding: 12px 16px; border-top: 1px solid #f3f2f1; background: #faf9f8; border-radius: 0 0 8px 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 12px; color: #605e5c;">Status:</span>
+                    <span style="background: #f3f9fd; color: #0078d4; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: 600;">Online</span>
+                </div>
+                <div style="font-size: 12px; color: #605e5c;">Last seen: 5 min ago</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Card with Social Footer -->
+    <div style="background: white; border: 1px solid #edebe9; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); max-width: 320px;">
+        <div style="padding: 16px;">
+            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #323130;">Team Achievement</h4>
+            <p style="margin: 0; font-size: 14px; color: #605e5c;">Our development team successfully completed the quarterly sprint with 98% of planned features delivered.</p>
+        </div>
+        
+        <div style="padding: 12px 16px; border-top: 1px solid #f3f2f1; background: #faf9f8; border-radius: 0 0 8px 8px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; gap: 12px;">
+                <button style="background: none; border: none; color: #605e5c; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 13px;" 
+                        onmouseover="this.style.color='#0078d4'" 
+                        onmouseout="this.style.color='#605e5c'">
+                    👍 12
+                </button>
+                <button style="background: none; border: none; color: #605e5c; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 13px;"
+                        onmouseover="this.style.color='#0078d4'" 
+                        onmouseout="this.style.color='#605e5c'">
+                    💬 3
+                </button>
+                <button style="background: none; border: none; color: #605e5c; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 13px;"
+                        onmouseover="this.style.color='#0078d4'" 
+                        onmouseout="this.style.color='#605e5c'">
+                    🔗 Share
+                </button>
+            </div>
+            <div style="font-size: 12px; color: #605e5c;">Dec 15</div>
+        </div>
+    </div>
+</div>`
+        },
+
+        // FluentUI Card Header Component
+        {
+            id: 'fluentui-card-header',
+            name: 'FluentUI Card Header',
+            description: 'Card header with title, avatar, and actions',
+            category: 'Cards',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Card Header Examples</h3>
+    
+    <!-- Card with Simple Header -->
+    <div style="background: white; border: 1px solid #edebe9; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 24px; max-width: 380px;">
+        <!-- Card Header -->
+        <div style="padding: 16px; border-bottom: 1px solid #f3f2f1; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h4 style="margin: 0 0 4px 0; font-size: 16px; font-weight: 600; color: #323130;">Weekly Report</h4>
+                <p style="margin: 0; font-size: 12px; color: #605e5c;">Generated on December 15, 2024</p>
+            </div>
+            <button style="background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px; padding: 4px;">⋯</button>
+        </div>
+        
+        <!-- Card Content -->
+        <div style="padding: 16px;">
+            <p style="margin: 0; font-size: 14px; color: #605e5c; line-height: 1.4;">This week's performance metrics show a 15% improvement in user engagement and a 10% increase in conversion rates.</p>
+        </div>
+    </div>
+    
+    <!-- Card with Avatar Header -->
+    <div style="background: white; border: 1px solid #edebe9; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 24px; max-width: 380px;">
+        <!-- Card Header with Avatar -->
+        <div style="padding: 16px; border-bottom: 1px solid #f3f2f1; display: flex; align-items: center; gap: 12px;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #0078d4, #106ebe); display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; font-weight: 600;">
+                JD
+            </div>
+            <div style="flex: 1;">
+                <h4 style="margin: 0 0 2px 0; font-size: 14px; font-weight: 600; color: #323130;">John Doe</h4>
+                <p style="margin: 0; font-size: 12px; color: #605e5c;">Senior Developer • 2 hours ago</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <button style="background: none; border: 1px solid #d1d1d1; color: #323130; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer;">Follow</button>
+                <button style="background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px; padding: 4px;">⋯</button>
+            </div>
+        </div>
+        
+        <!-- Card Content -->
+        <div style="padding: 16px;">
+            <p style="margin: 0; font-size: 14px; color: #605e5c; line-height: 1.4;">Just completed the new authentication system. The implementation includes two-factor authentication and social login options.</p>
+        </div>
+    </div>
+    
+    <!-- Card with Icon Header -->
+    <div style="background: white; border: 1px solid #edebe9; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 24px; max-width: 380px;">
+        <!-- Card Header with Icon -->
+        <div style="padding: 16px; border-bottom: 1px solid #f3f2f1; display: flex; align-items: center; gap: 12px;">
+            <div style="width: 40px; height: 40px; border-radius: 8px; background: #e1f5fe; display: flex; align-items: center; justify-content: center; color: #0078d4; font-size: 18px;">
+                📊
+            </div>
+            <div style="flex: 1;">
+                <h4 style="margin: 0 0 2px 0; font-size: 16px; font-weight: 600; color: #323130;">Analytics Dashboard</h4>
+                <p style="margin: 0; font-size: 12px; color: #605e5c;">Real-time performance metrics</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="background: #f3f9fd; color: #0078d4; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: 600;">Live</span>
+                <button style="background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px; padding: 4px;">⋯</button>
+            </div>
+        </div>
+        
+        <!-- Card Content -->
+        <div style="padding: 16px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div style="text-align: center;">
+                    <div style="font-size: 24px; font-weight: 600; color: #0078d4; margin-bottom: 4px;">1,234</div>
+                    <div style="font-size: 12px; color: #605e5c;">Active Users</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 24px; font-weight: 600; color: #038387; margin-bottom: 4px;">89.5%</div>
+                    <div style="font-size: 12px; color: #605e5c;">Satisfaction</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Card with Status Header -->
+    <div style="background: white; border: 1px solid #edebe9; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); max-width: 380px;">
+        <!-- Card Header with Status -->
+        <div style="padding: 16px; border-bottom: 1px solid #f3f2f1;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                <h4 style="margin: 0; font-size: 16px; font-weight: 600; color: #323130;">System Status</h4>
+                <span style="background: #f3f9fd; color: #0078d4; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">Operational</span>
+            </div>
+            <p style="margin: 0; font-size: 12px; color: #605e5c;">All systems are running normally</p>
+        </div>
+        
+        <!-- Card Content -->
+        <div style="padding: 16px;">
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 14px; color: #323130;">API Services</span>
+                    <span style="background: #f3f9fd; color: #0078d4; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: 600;">99.9%</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 14px; color: #323130;">Database</span>
+                    <span style="background: #f3f9fd; color: #0078d4; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: 600;">100%</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 14px; color: #323130;">CDN</span>
+                    <span style="background: #fff9f5; color: #ff8c00; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: 600;">98.2%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>`
+        },
+
+        // FluentUI Card Preview Component
+        {
+            id: 'fluentui-card-preview',
+            name: 'FluentUI Card Preview',
+            description: 'Card preview with media and content preview',
+            category: 'Cards',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Card Preview Examples</h3>
+    
+    <!-- Image Preview Card -->
+    <div style="background: white; border: 1px solid #edebe9; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 24px; max-width: 320px; overflow: hidden;">
+        <!-- Card Preview Section -->
+        <div style="position: relative; height: 180px; background: linear-gradient(135deg, #0078d4, #106ebe); overflow: hidden;">
+            <img src="https://via.placeholder.com/320x180/0078d4/ffffff?text=Preview+Image" 
+                 alt="Preview" 
+                 style="width: 100%; height: 100%; object-fit: cover;" />
+            
+            <!-- Preview Overlay -->
+            <div style="position: absolute; top: 8px; right: 8px; background: rgba(0, 0, 0, 0.6); color: white; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">
+                NEW
+            </div>
+            
+            <!-- Preview Actions -->
+            <div style="position: absolute; bottom: 8px; left: 8px; display: flex; gap: 8px;">
+                <button style="background: rgba(255, 255, 255, 0.9); border: none; color: #323130; padding: 6px 8px; border-radius: 16px; font-size: 12px; cursor: pointer; backdrop-filter: blur(4px);">
+                    👁️ Preview
+                </button>
+                <button style="background: rgba(255, 255, 255, 0.9); border: none; color: #323130; padding: 6px 8px; border-radius: 16px; font-size: 12px; cursor: pointer; backdrop-filter: blur(4px);">
+                    ❤️ Like
+                </button>
+            </div>
+        </div>
+        
+        <!-- Card Content -->
+        <div style="padding: 16px;">
+            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #323130;">New Product Launch</h4>
+            <p style="margin: 0 0 12px 0; font-size: 14px; color: #605e5c; line-height: 1.4;">Introducing our latest innovation that will transform the way you work and collaborate.</p>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12px; color: #605e5c;">Dec 15, 2024</span>
+                <button style="background: #0078d4; border: none; color: white; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;">Learn More</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Video Preview Card -->
+    <div style="background: white; border: 1px solid #edebe9; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 24px; max-width: 320px; overflow: hidden;">
+        <!-- Video Preview Section -->
+        <div style="position: relative; height: 180px; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <div style="position: absolute; inset: 0; background: url('https://via.placeholder.com/320x180/000000/ffffff?text=Video+Thumbnail') center/cover;"></div>
+            
+            <!-- Play Button -->
+            <button style="position: relative; z-index: 2; width: 60px; height: 60px; border-radius: 50%; background: rgba(255, 255, 255, 0.9); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; backdrop-filter: blur(4px);">
+                ▶️
+            </button>
+            
+            <!-- Duration -->
+            <div style="position: absolute; bottom: 8px; right: 8px; background: rgba(0, 0, 0, 0.8); color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 600;">
+                3:45
+            </div>
+        </div>
+        
+        <!-- Card Content -->
+        <div style="padding: 16px;">
+            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #323130;">Tutorial: Getting Started</h4>
+            <p style="margin: 0 0 12px 0; font-size: 14px; color: #605e5c; line-height: 1.4;">Learn the basics of our platform in this comprehensive tutorial video.</p>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 12px; color: #605e5c;">1.2K views</span>
+                    <span style="font-size: 12px; color: #605e5c;">•</span>
+                    <span style="font-size: 12px; color: #605e5c;">5 days ago</span>
+                </div>
+                <button style="background: none; border: 1px solid #d1d1d1; color: #323130; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;">Save</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Document Preview Card -->
+    <div style="background: white; border: 1px solid #edebe9; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); max-width: 320px; overflow: hidden;">
+        <!-- Document Preview Section -->
+        <div style="position: relative; height: 180px; background: #f8f9fa; border-bottom: 1px solid #edebe9; display: flex; flex-direction: column; padding: 16px;">
+            <!-- Document Header -->
+            <div style="display: flex; justify-content: between; align-items: flex-start; margin-bottom: 12px;">
+                <div style="flex: 1;">
+                    <div style="font-size: 18px; font-weight: 600; color: #323130; margin-bottom: 4px;">Q4 Report</div>
+                    <div style="font-size: 12px; color: #605e5c;">Microsoft Word Document</div>
+                </div>
+                <div style="width: 32px; height: 32px; background: #0078d4; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: 600;">
+                    W
+                </div>
+            </div>
+            
+            <!-- Document Preview Content -->
+            <div style="flex: 1; overflow: hidden;">
+                <div style="font-size: 12px; color: #323130; line-height: 1.3; margin-bottom: 8px;">
+                    <strong>Executive Summary</strong>
+                </div>
+                <div style="font-size: 11px; color: #605e5c; line-height: 1.2;">
+                    This quarter showed significant growth across all key metrics. Revenue increased by 23% compared to the previous quarter, with customer satisfaction reaching an all-time high...
+                </div>
+            </div>
+            
+            <!-- Document Stats -->
+            <div style="display: flex; justify-content: between; font-size: 10px; color: #605e5c; margin-top: 8px;">
+                <span>12 pages</span>
+                <span>Last modified: 2 hours ago</span>
+            </div>
+        </div>
+        
+        <!-- Card Content -->
+        <div style="padding: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <div>
+                    <div style="font-size: 14px; font-weight: 600; color: #323130;">Quarterly Business Report</div>
+                    <div style="font-size: 12px; color: #605e5c;">by Sarah Johnson</div>
+                </div>
+                <button style="background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px; padding: 4px;">⋯</button>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; gap: 8px;">
+                    <button style="background: #0078d4; border: none; color: white; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;">Open</button>
+                    <button style="background: none; border: 1px solid #d1d1d1; color: #323130; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;">Download</button>
+                </div>
+                <span style="background: #f3f9fd; color: #0078d4; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: 600;">Shared</span>
+            </div>
+        </div>
+    </div>
+</div>`
+        },
+
+        // FluentUI Compound Button Component
+        {
+            id: 'fluentui-compound-button',
+            name: 'FluentUI Compound Button',
+            description: 'Buttons with primary and secondary text content',
+            category: 'Buttons',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Compound Button Examples</h3>
+    
+    <!-- Primary Compound Buttons -->
+    <div style="margin-bottom: 24px;">
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Primary Compound Buttons</h4>
+        <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+            
+            <!-- Create New Project -->
+            <button style="background: #0078d4; border: none; color: white; padding: 12px 16px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 12px; min-width: 200px; text-align: left; transition: background 0.2s;"
+                    onmouseover="this.style.background='#106ebe'" 
+                    onmouseout="this.style.background='#0078d4'">
+                <div style="font-size: 24px;">📁</div>
+                <div>
+                    <div style="font-size: 14px; font-weight: 600; margin-bottom: 2px;">Create New Project</div>
+                    <div style="font-size: 12px; opacity: 0.9;">Start a new project from scratch</div>
+                </div>
+            </button>
+            
+            <!-- Import Data -->
+            <button style="background: #0078d4; border: none; color: white; padding: 12px 16px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 12px; min-width: 200px; text-align: left; transition: background 0.2s;"
+                    onmouseover="this.style.background='#106ebe'" 
+                    onmouseout="this.style.background='#0078d4'">
+                <div style="font-size: 24px;">📥</div>
+                <div>
+                    <div style="font-size: 14px; font-weight: 600; margin-bottom: 2px;">Import Data</div>
+                    <div style="font-size: 12px; opacity: 0.9;">Upload files or connect data sources</div>
+                </div>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Secondary Compound Buttons -->
+    <div style="margin-bottom: 24px;">
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Secondary Compound Buttons</h4>
+        <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+            
+            <!-- View Templates -->
+            <button style="background: transparent; border: 1px solid #d1d1d1; color: #323130; padding: 12px 16px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 12px; min-width: 200px; text-align: left; transition: all 0.2s;"
+                    onmouseover="this.style.background='#f3f2f1'; this.style.borderColor='#c7c6c4'" 
+                    onmouseout="this.style.background='transparent'; this.style.borderColor='#d1d1d1'">
+                <div style="font-size: 24px;">📋</div>
+                <div>
+                    <div style="font-size: 14px; font-weight: 600; margin-bottom: 2px;">View Templates</div>
+                    <div style="font-size: 12px; color: #605e5c;">Browse pre-built templates</div>
+                </div>
+            </button>
+            
+            <!-- Settings -->
+            <button style="background: transparent; border: 1px solid #d1d1d1; color: #323130; padding: 12px 16px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 12px; min-width: 200px; text-align: left; transition: all 0.2s;"
+                    onmouseover="this.style.background='#f3f2f1'; this.style.borderColor='#c7c6c4'" 
+                    onmouseout="this.style.background='transparent'; this.style.borderColor='#d1d1d1'">
+                <div style="font-size: 24px;">⚙️</div>
+                <div>
+                    <div style="font-size: 14px; font-weight: 600; margin-bottom: 2px;">Settings</div>
+                    <div style="font-size: 12px; color: #605e5c;">Configure your preferences</div>
+                </div>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Large Compound Buttons -->
+    <div style="margin-bottom: 24px;">
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Large Compound Buttons</h4>
+        <div style="display: flex; flex-direction: column; gap: 12px; max-width: 400px;">
+            
+            <!-- Upgrade Plan -->
+            <button style="background: linear-gradient(135deg, #0078d4, #106ebe); border: none; color: white; padding: 16px 20px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 16px; text-align: left; transition: transform 0.2s; position: relative; overflow: hidden;"
+                    onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 12px rgba(0, 120, 212, 0.3)'" 
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                <div style="font-size: 32px;">⭐</div>
+                <div style="flex: 1;">
+                    <div style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">Upgrade to Premium</div>
+                    <div style="font-size: 13px; opacity: 0.9; line-height: 1.3;">Unlock advanced features and remove limitations</div>
+                </div>
+                <div style="font-size: 18px; opacity: 0.8;">→</div>
+            </button>
+            
+            <!-- Team Collaboration -->
+            <button style="background: white; border: 2px solid #edebe9; color: #323130; padding: 16px 20px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 16px; text-align: left; transition: all 0.2s;"
+                    onmouseover="this.style.borderColor='#0078d4'; this.style.boxShadow='0 2px 8px rgba(0, 120, 212, 0.1)'" 
+                    onmouseout="this.style.borderColor='#edebe9'; this.style.boxShadow='none'">
+                <div style="font-size: 32px;">👥</div>
+                <div style="flex: 1;">
+                    <div style="font-size: 16px; font-weight: 600; margin-bottom: 4px; color: #323130;">Invite Team Members</div>
+                    <div style="font-size: 13px; color: #605e5c; line-height: 1.3;">Collaborate with your team in real-time</div>
+                </div>
+                <div style="font-size: 18px; color: #605e5c;">→</div>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Action Cards Style -->
+    <div>
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Action Cards</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+            
+            <!-- Analytics -->
+            <button style="background: white; border: 1px solid #edebe9; color: #323130; padding: 16px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.15)'" 
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 1px 3px rgba(0, 0, 0, 0.1)'">
+                <div style="font-size: 28px; margin-bottom: 8px;">📊</div>
+                <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">Analytics</div>
+                <div style="font-size: 12px; color: #605e5c;">View performance metrics</div>
+            </button>
+            
+            <!-- Reports -->
+            <button style="background: white; border: 1px solid #edebe9; color: #323130; padding: 16px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.15)'" 
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 1px 3px rgba(0, 0, 0, 0.1)'">
+                <div style="font-size: 28px; margin-bottom: 8px;">📄</div>
+                <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">Reports</div>
+                <div style="font-size: 12px; color: #605e5c;">Generate detailed reports</div>
+            </button>
+            
+            <!-- Export -->
+            <button style="background: white; border: 1px solid #edebe9; color: #323130; padding: 16px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.15)'" 
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 1px 3px rgba(0, 0, 0, 0.1)'">
+                <div style="font-size: 28px; margin-bottom: 8px;">📤</div>
+                <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">Export</div>
+                <div style="font-size: 12px; color: #605e5c;">Download your data</div>
+            </button>
+        </div>
+    </div>
+</div>`
+        },
+
+        // FluentUI Menu Button Component
+        {
+            id: 'fluentui-menu-button',
+            name: 'FluentUI Menu Button',
+            description: 'Button with dropdown menu options',
+            category: 'Buttons',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Menu Button Examples</h3>
+    
+    <!-- Primary Menu Button -->
+    <div style="margin-bottom: 24px;">
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Primary Menu Button</h4>
+        <div style="position: relative; display: inline-block;">
+            <button onclick="toggleMenu('menu1')" 
+                    style="background: #0078d4; border: none; color: white; padding: 8px 12px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600;">
+                New Item
+                <span style="font-size: 12px;">▼</span>
+            </button>
+            
+            <div id="menu1" style="display: none; position: absolute; top: 100%; left: 0; background: white; border: 1px solid #d1d1d1; border-radius: 4px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 1000; min-width: 160px; margin-top: 4px;">
+                <div onclick="selectOption('Document')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                     onmouseover="this.style.background='#f3f2f1'" 
+                     onmouseout="this.style.background='white'">
+                    📄 Document
+                </div>
+                <div onclick="selectOption('Spreadsheet')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                     onmouseover="this.style.background='#f3f2f1'" 
+                     onmouseout="this.style.background='white'">
+                    📊 Spreadsheet
+                </div>
+                <div onclick="selectOption('Presentation')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                     onmouseover="this.style.background='#f3f2f1'" 
+                     onmouseout="this.style.background='white'">
+                    📈 Presentation
+                </div>
+                <div onclick="selectOption('Folder')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130;" 
+                     onmouseover="this.style.background='#f3f2f1'" 
+                     onmouseout="this.style.background='white'">
+                    📁 Folder
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Secondary Menu Button -->
+    <div style="margin-bottom: 24px;">
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Secondary Menu Button</h4>
+        <div style="position: relative; display: inline-block;">
+            <button onclick="toggleMenu('menu2')" 
+                    style="background: transparent; border: 1px solid #d1d1d1; color: #323130; padding: 8px 12px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 14px;">
+                Actions
+                <span style="font-size: 12px;">▼</span>
+            </button>
+            
+            <div id="menu2" style="display: none; position: absolute; top: 100%; left: 0; background: white; border: 1px solid #d1d1d1; border-radius: 4px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 1000; min-width: 140px; margin-top: 4px;">
+                <div onclick="selectOption('Edit')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                     onmouseover="this.style.background='#f3f2f1'" 
+                     onmouseout="this.style.background='white'">
+                    ✏️ Edit
+                </div>
+                <div onclick="selectOption('Copy')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                     onmouseover="this.style.background='#f3f2f1'" 
+                     onmouseout="this.style.background='white'">
+                    📋 Copy
+                </div>
+                <div onclick="selectOption('Share')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                     onmouseover="this.style.background='#f3f2f1'" 
+                     onmouseout="this.style.background='white'">
+                    🔗 Share
+                </div>
+                <div onclick="selectOption('Delete')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #d13438;" 
+                     onmouseover="this.style.background='#fdf6f6'" 
+                     onmouseout="this.style.background='white'">
+                    🗑️ Delete
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Icon Menu Button -->
+    <div style="margin-bottom: 24px;">
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Icon Menu Button</h4>
+        <div style="position: relative; display: inline-block;">
+            <button onclick="toggleMenu('menu3')" 
+                    style="background: #f3f2f1; border: 1px solid #d1d1d1; color: #323130; padding: 8px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; font-size: 16px;">
+                ⋯
+            </button>
+            
+            <div id="menu3" style="display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #d1d1d1; border-radius: 4px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 1000; min-width: 160px; margin-top: 4px;">
+                <div onclick="selectOption('View Details')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                     onmouseover="this.style.background='#f3f2f1'" 
+                     onmouseout="this.style.background='white'">
+                    👁️ View Details
+                </div>
+                <div onclick="selectOption('Download')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                     onmouseover="this.style.background='#f3f2f1'" 
+                     onmouseout="this.style.background='white'">
+                    💾 Download
+                </div>
+                <div onclick="selectOption('Properties')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                     onmouseover="this.style.background='#f3f2f1'" 
+                     onmouseout="this.style.background='white'">
+                    ⚙️ Properties
+                </div>
+                <div onclick="selectOption('Move to Trash')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #d13438;" 
+                     onmouseover="this.style.background='#fdf6f6'" 
+                     onmouseout="this.style.background='white'">
+                    🗑️ Move to Trash
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Split Menu Button -->
+    <div style="margin-bottom: 24px;">
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Split Menu Button</h4>
+        <div style="display: flex;">
+            <!-- Main Action -->
+            <button onclick="selectOption('Save')" 
+                    style="background: #0078d4; border: none; color: white; padding: 8px 16px; border-radius: 4px 0 0 4px; cursor: pointer; font-size: 14px; font-weight: 600;">
+                Save
+            </button>
+            
+            <!-- Dropdown Part -->
+            <div style="position: relative; display: inline-block;">
+                <button onclick="toggleMenu('menu4')" 
+                        style="background: #106ebe; border: none; color: white; padding: 8px; border-radius: 0 4px 4px 0; cursor: pointer; font-size: 12px; border-left: 1px solid rgba(255, 255, 255, 0.2);">
+                    ▼
+                </button>
+                
+                <div id="menu4" style="display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #d1d1d1; border-radius: 4px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 1000; min-width: 140px; margin-top: 4px;">
+                    <div onclick="selectOption('Save As')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                         onmouseover="this.style.background='#f3f2f1'" 
+                         onmouseout="this.style.background='white'">
+                        💾 Save As...
+                    </div>
+                    <div onclick="selectOption('Save Copy')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                         onmouseover="this.style.background='#f3f2f1'" 
+                         onmouseout="this.style.background='white'">
+                        📋 Save Copy
+                    </div>
+                    <div onclick="selectOption('Export')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130;" 
+                         onmouseover="this.style.background='#f3f2f1'" 
+                         onmouseout="this.style.background='white'">
+                        📤 Export
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Context Menu Button -->
+    <div>
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Context Menu Button</h4>
+        <div style="position: relative; display: inline-block;">
+            <button onclick="toggleMenu('menu5')" 
+                    style="background: white; border: 1px solid #d1d1d1; color: #323130; padding: 8px 12px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 14px;">
+                📁 Project Folder
+                <span style="font-size: 12px;">▼</span>
+            </button>
+            
+            <div id="menu5" style="display: none; position: absolute; top: 100%; left: 0; background: white; border: 1px solid #d1d1d1; border-radius: 4px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 1000; min-width: 180px; margin-top: 4px;">
+                <!-- Group 1 -->
+                <div onclick="selectOption('Open')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                     onmouseover="this.style.background='#f3f2f1'" 
+                     onmouseout="this.style.background='white'">
+                    📂 Open
+                </div>
+                <div onclick="selectOption('Open in New Window')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #e1e1e1;" 
+                     onmouseover="this.style.background='#f3f2f1'" 
+                     onmouseout="this.style.background='white'">
+                    🪟 Open in New Window
+                </div>
+                
+                <!-- Group 2 -->
+                <div onclick="selectOption('Rename')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                     onmouseover="this.style.background='#f3f2f1'" 
+                     onmouseout="this.style.background='white'">
+                    ✏️ Rename
+                </div>
+                <div onclick="selectOption('Move')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                     onmouseover="this.style.background='#f3f2f1'" 
+                     onmouseout="this.style.background='white'">
+                    📦 Move
+                </div>
+                <div onclick="selectOption('Copy')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #e1e1e1;" 
+                     onmouseover="this.style.background='#f3f2f1'" 
+                     onmouseout="this.style.background='white'">
+                    📋 Copy
+                </div>
+                
+                <!-- Group 3 -->
+                <div onclick="selectOption('Properties')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                     onmouseover="this.style.background='#f3f2f1'" 
+                     onmouseout="this.style.background='white'">
+                    ⚙️ Properties
+                </div>
+                <div onclick="selectOption('Delete')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #d13438;" 
+                     onmouseover="this.style.background='#fdf6f6'" 
+                     onmouseout="this.style.background='white'">
+                    🗑️ Delete
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function toggleMenu(menuId) {
+            // Close all other menus
+            const allMenus = document.querySelectorAll('[id^="menu"]');
+            allMenus.forEach(menu => {
+                if (menu.id !== menuId) {
+                    menu.style.display = 'none';
+                }
+            });
+            
+            // Toggle the target menu
+            const menu = document.getElementById(menuId);
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        function selectOption(option) {
+            alert('Selected: ' + option);
+            // Close all menus
+            const allMenus = document.querySelectorAll('[id^="menu"]');
+            allMenus.forEach(menu => menu.style.display = 'none');
+        }
+        
+        // Close menus when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('button') && !event.target.closest('[id^="menu"]')) {
+                const allMenus = document.querySelectorAll('[id^="menu"]');
+                allMenus.forEach(menu => menu.style.display = 'none');
+            }
+        });
+    </script>
+</div>`
         }
     ];
 
@@ -914,13 +1751,11 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             <div className="component-library-modal">
                 <div className="component-library-header">
                     <div className="component-library-title">
-                        <img
-                            src="/atlas-light.svg"
-                            alt="Atlas"
-                            className="atlas-logo"
-                        />
+                        <div className="fluentui-logo">
+                            F
+                        </div>
                         <div>
-                            <h2>Atlas Component Library</h2>
+                            <h2>FluentUI Component Library</h2>
                             <p className="library-instructions">Click components to add them to your wireframe</p>
                         </div>
                     </div>
