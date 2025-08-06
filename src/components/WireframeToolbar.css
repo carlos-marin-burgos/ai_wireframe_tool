@@ -94,12 +94,6 @@
   }
 }
 
-.atlas-logo {
-  width: 16px;
-  height: 16px;
-  object-fit: contain;
-}
-
 .toolbar-btn:hover {
   background: #f9fafb;
   border-color: #9ca3af;
@@ -228,45 +222,45 @@
 
 /* Export Dropdown */
 .export-dropdown {
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
 .export-menu {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: white;
-    border: 1px solid #e1e5e9;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    min-width: 180px;
-    z-index: 1000;
-    padding: 8px 0;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 180px;
+  z-index: 1000;
+  padding: 8px 0;
 }
 
 .export-option {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-    padding: 12px 16px;
-    border: none;
-    background: none;
-    color: #323130;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    text-align: left;
-    transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  color: #323130;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.2s ease;
 }
 
 .export-option:hover {
-    background-color: #f8f9fa;
+  background-color: #f8f9fa;
 }
 
 .export-option svg {
-    width: 16px;
-    height: 16px;
-    color: #0078d4;
+  width: 16px;
+  height: 16px;
+  color: #0078d4;
 }

@@ -24,6 +24,7 @@ import {
   FiImage,
   FiLink,
 } from 'react-icons/fi';
+import { TbBoxModel2 } from 'react-icons/tb'; // Fluent UI style icon for component library
 
 interface SplitLayoutProps {
   description: string;
@@ -780,17 +781,14 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                 <FiImage />
               </button>
 
-              {/* Atlas Library button */}
+              {/* Fluent Library button */}
               <button
                 type="button"
                 onClick={handleOpenLibrary}
                 className="chat-atlas-btn"
-                title="Open Atlas Component Library"
+                title="Open Fluent Component Library"
               >
-                <img
-                  src="/atlas-light.svg"
-                  alt="Atlas"
-                />
+                <TbBoxModel2 />
               </button>
 
               {/* Send button */}
@@ -883,28 +881,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               onPageSwitch={handlePageSwitch}
             />
             <div className="wireframe-container">
-              {/* Enhanced status bar showing generation mode and performance */}
-              {(fallback || (processingTime && processingTime > 0)) ? (
-                <div className={`wireframe-status-bar ${fallback ? 'fallback-mode' : 'api-mode'}`}>
-                  {fallback ? (
-                    <div className="status-indicator fallback">
-                      <span className="status-icon">⚡</span>
-                      <span className="status-text">Smart Templates - Generated using intelligent patterns</span>
-                    </div>
-                  ) : (
-                    <div className="status-indicator api">
-                      <span className="status-icon">🤖</span>
-                      <span className="status-text">AI Generated</span>
-                    </div>
-                  )}
-                  {(processingTime && processingTime > 0) ? (
-                    <div className="processing-time">
-                      <span className="time-label">Generated in</span>
-                      <span className="time-value">{processingTime}ms</span>
-                    </div>
-                  ) : null}
-                </div>
-              ) : null}
+              {/* Status bar removed for cleaner presentation */}
               <div className="wireframe-content">
                 <LinkableWireframe
                   htmlContent={currentPageId ? (pageContents[currentPageId] || htmlWireframe) : htmlWireframe}

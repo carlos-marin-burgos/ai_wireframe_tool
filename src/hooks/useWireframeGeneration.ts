@@ -101,65 +101,43 @@ export const useWireframeGeneration = () => {
         fastMode,
       });
 
-      // Smart AI usage: Use AI for complex requests, fast mode for simple ones
-      const shouldUseFastMode =
-        fastMode ||
-        (description.length < 100 &&
-          !description.includes("dynamic") &&
-          !description.includes("interactive") &&
-          !description.includes("animation") &&
-          !description.includes("complex") &&
-          !description.includes("custom"));
+      // 🤖 AI-ONLY MODE: Always use AI, never fast mode
+      const shouldUseFastMode = false; // Disabled - always use AI
 
       // Reset state
       setIsLoading(true);
       setError(null);
       setFallback(false);
 
-      if (shouldUseFastMode) {
-        setLoadingStage("⚡ Fast mode: Generating instantly...");
-      } else {
-        setLoadingStage("🤖 AI mode: Initializing AI model...");
-      }
+      // 🤖 Always show AI mode loading stages
+      setLoadingStage("🤖 AI mode: Initializing AI model...");
 
       // Create a cache key with version for Microsoft Design Language update
       // DEVELOPMENT: Always skip cache by making key unique
       const cacheKey = `${description}-${theme}-${colorScheme}-${shouldUseFastMode}-DEVELOPMENT-NOCACHE-${Date.now()}`;
 
-      // Set up loading stage timers
-      if (shouldUseFastMode) {
-        const timer1 = setTimeout(
-          () => setLoadingStage("⚡ Creating components..."),
-          100
-        );
-        const timer2 = setTimeout(
-          () => setLoadingStage("⚡ Applying styling..."),
-          200
-        );
-        loadingTimersRef.current = [timer1, timer2];
-      } else {
-        const timer1 = setTimeout(
-          () => setLoadingStage("🤖 Analyzing your description..."),
-          1000
-        );
-        const timer2 = setTimeout(
-          () => setLoadingStage("🤖 Generating wireframe code..."),
-          3000
-        );
-        const timer3 = setTimeout(
-          () => setLoadingStage("🤖 Optimizing layout..."),
-          8000
-        );
-        const timer4 = setTimeout(
-          () => setLoadingStage("🤖 Finalizing components..."),
-          15000
-        );
-        const timer5 = setTimeout(
-          () => setLoadingStage("🤖 Almost done..."),
-          25000
-        );
-        loadingTimersRef.current = [timer1, timer2, timer3, timer4, timer5];
-      }
+      // Set up AI loading stage timers
+      const timer1 = setTimeout(
+        () => setLoadingStage("🤖 Analyzing your description..."),
+        1000
+      );
+      const timer2 = setTimeout(
+        () => setLoadingStage("🤖 Generating wireframe code..."),
+        3000
+      );
+      const timer3 = setTimeout(
+        () => setLoadingStage("🤖 Optimizing layout..."),
+        8000
+      );
+      const timer4 = setTimeout(
+        () => setLoadingStage("🤖 Finalizing components..."),
+        15000
+      );
+      const timer5 = setTimeout(
+        () => setLoadingStage("🤖 Almost done..."),
+        25000
+      );
+      loadingTimersRef.current = [timer1, timer2, timer3, timer4, timer5];
 
       try {
         // DEVELOPMENT: Completely skip cache for debugging

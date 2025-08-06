@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FiSave, FiPlus, FiCode, FiDownload, FiShare2, FiMonitor, FiFigma } from 'react-icons/fi';
+import { TbBoxModel2 } from 'react-icons/tb'; // Fluent UI style icon for component library
 import './WireframeToolbar.css';
 
 interface WireframeToolbarProps {
@@ -43,17 +44,13 @@ const WireframeToolbar: React.FC<WireframeToolbarProps> = ({
                 <button
                     className="toolbar-btn"
                     onClick={() => {
-                        console.log('🔧 DEBUG: Atlas Library button clicked in WireframeToolbar');
+                        console.log('🔧 DEBUG: Fluent Component Library button clicked in WireframeToolbar');
                         onOpenLibrary?.();
                     }}
-                    title="Atlas Component Library"
+                    title="Fluent Component Library"
                 >
-                    <img
-                        src="/atlas-light.svg"
-                        alt="Atlas"
-                        className="atlas-logo"
-                    />
-                    Atlas Library
+                    <TbBoxModel2 />
+                    Fluent Library
                 </button>
 
                 <div className="export-dropdown">

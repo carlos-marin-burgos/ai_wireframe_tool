@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import './ComponentLibraryModal.css';
 import { generateHeroHTML } from './HeroGenerator';
 import { generateFormHTML, FormTemplates } from './FormGenerator';
+import { useFluentComponents, mergeFluentWithExisting } from '../utils/fluentComponentLoader';
 
 interface Component {
     id: string;
@@ -443,9 +444,9 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         },
         {
             id: 'atlas-hero',
-            name: 'Atlas Hero - Azure',
+            name: 'Fluent Hero - Azure',
             description: 'Microsoft Azure themed hero section',
-            category: 'Atlas',
+            category: 'Fluent',
             htmlCode: generateHeroHTML({
                 title: "Build and deploy with Azure",
                 summary: "Create scalable applications with Microsoft Azure cloud services and tools.",
@@ -459,9 +460,9 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         },
         {
             id: 'atlas-hero-ai',
-            name: 'Atlas Hero - AI',
+            name: 'Fluent Hero - AI',
             description: 'AI and machine learning themed hero section',
-            category: 'Atlas',
+            category: 'Fluent',
             htmlCode: generateHeroHTML({
                 title: "Accelerate innovation with AI",
                 summary: "Transform your business with artificial intelligence and machine learning solutions.",
