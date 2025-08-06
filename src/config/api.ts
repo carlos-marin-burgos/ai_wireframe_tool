@@ -4,8 +4,8 @@ const isDevelopment = import.meta.env.DEV;
 // Centralized port configuration to avoid conflicts
 const PORTS = {
   development: {
-    primary: 5001, // Simple Express server
-    fallback: 7072, // Fallback backend
+    primary: 7072, // Azure Functions backend (actually running)
+    fallback: 5001, // Simple Express server
     frontend: 5173, // Frontend dev server
   },
   production: {
@@ -15,18 +15,41 @@ const PORTS = {
 };
 
 export const API_CONFIG = {
-  // Static configuration
+  // Static configuration - Enhanced Microsoft Learn ecosystem suggestions
   FALLBACK_SUGGESTIONS: [
-    "Create a Microsoft Learn-style documentation layout with step-by-step tutorials",
-    "Add Microsoft Learn navigation with breadcrumbs and learning path indicators",
-    "Include learning progress tracking and achievement badges",
-    "Design with Microsoft Learn color palette (tan/gold accents on white)",
-    "Add Microsoft Learn components: code samples, callout boxes, and next steps",
-    "Implement Microsoft Learn module structure with clear objectives and assessments",
+    // Learning Paths & Training
+    "Create a Microsoft Learn learning path browser with role-based filtering (Developer, Admin, Architect)",
+    "Design Azure certification journey pages with exam codes (AZ-900, AZ-104, AZ-204, AZ-305)",
+    "Build Microsoft Learn training dashboard with module completion tracking and time estimates",
+    "Add Microsoft Learn skills assessment portal with technology-specific evaluation paths",
+
+    // Documentation & Content
+    "Generate Microsoft Docs-style API reference pages with code samples and Try It buttons",
+    "Create Microsoft Learn module structure with objectives, knowledge checks, and summary",
+    "Design Microsoft Learn hands-on lab interface with Azure sandbox environment integration",
+    "Build Microsoft Learn Q&A community pages with expert answers and voting system",
+
+    // Product-Specific Content
+    "Design Azure services catalog with pricing, regions, and getting started tutorials",
+    "Create Microsoft 365 admin center training modules with role-based permissions guides",
+    "Build Power Platform learning center with app templates and connector documentation",
+    "Generate Visual Studio Code extension marketplace with development tutorials",
+
+    // Career & Professional Development
+    "Create Microsoft Learn career path explorer with job role requirements and skill mapping",
+    "Design certification preparation hub with study guides, practice exams, and community forums",
+    "Build Microsoft Learn profile dashboard with achievements, transcripts, and learning streaks",
+    "Add Microsoft Learn mentorship platform connecting learners with industry experts",
+
+    // Interactive Learning
+    "Generate Microsoft Learn interactive tutorials with step-by-step Azure portal guidance",
+    "Create Microsoft Learn code playground with live compilation and Azure resource deployment",
+    "Design Microsoft Learn assessment engine with adaptive questioning and personalized feedback",
+    "Build Microsoft Learn virtual labs with real Azure environments and guided exercises",
   ],
 
   ENDPOINTS: {
-    GENERATE_WIREFRAME: "/api/generate-html-wireframe", // Updated for simple server
+    GENERATE_WIREFRAME: "/api/generate-wireframe", // Azure Functions endpoint
     GENERATE_SUGGESTIONS: "/api/generate-suggestions",
     GET_TEMPLATE: "/api/get-template",
     HEALTH: "/api/health",
@@ -50,7 +73,13 @@ export const verifyBackendAI = async (baseUrl: string): Promise<boolean> => {
     const response = await fetch(`${baseUrl}/api/generate-wireframe`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ description: "AI capability test" }),
+      body: JSON.stringify({
+        description:
+          "Create a Microsoft Learn certification preparation dashboard with Azure exam tracking, study progress analytics, hands-on lab access, and personalized learning path recommendations",
+        fastMode: false,
+        useTemplates: false,
+        aiOnly: true,
+      }),
       signal: controller.signal,
     });
 

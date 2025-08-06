@@ -27,6 +27,7 @@ interface LandingPageProps {
 }
 
 import {
+  FiPlus,
   FiFolder,
   FiLoader,
   FiSend,
@@ -34,6 +35,7 @@ import {
   FiCpu,
   FiImage,
   FiLink,
+  FiFigma,
   FiZap,
   FiGithub,
 } from "react-icons/fi";
@@ -160,7 +162,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
                       }
                     }
                   }}
-                  placeholder="How can Designetica help you today?"
+                  placeholder="How can Designetica help you today? (e.g., 'Create a Microsoft Learn certification dashboard with Azure exam tracking and study progress')"
                   rows={4}
                   required
                   className="app-textarea main-input"
@@ -226,7 +228,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
                   }}
                   title="Import designs from Figma"
                 >
-                  <FiLink className="pill-icon" />
+                  <FiFigma className="pill-icon" />
                   <span>Import from Figma</span>
                 </button>
 

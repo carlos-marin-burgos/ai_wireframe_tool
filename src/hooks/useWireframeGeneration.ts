@@ -310,7 +310,7 @@ export const useWireframeGeneration = () => {
           };
 
           console.log("✅ Enhanced fallback wireframe generated successfully");
-          setError("Using offline mode - backend unavailable");
+          setError(null); // Clear any previous errors since fallback succeeded
           setFallback(true);
 
           return {
