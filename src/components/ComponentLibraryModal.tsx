@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import './ComponentLibraryModal.css';
 import { generateHeroHTML } from './HeroGenerator';
 import { generateFormHTML, FormTemplates } from './FormGenerator';
@@ -471,6 +471,419 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                 backgroundColor: "#E8E6DF",
                 heroImageUrl: "https://learn.microsoft.com/media/learn/Product/Azure/azure-ai.svg"
             })
+        },
+
+        // FluentUI ProgressBar Component
+        {
+            id: 'fluentui-progressbar',
+            name: 'FluentUI ProgressBar',
+            description: 'Progress indicator showing completion status',
+            category: 'Data Display',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Progress Bar Example</h3>
+    
+    <!-- Determinate Progress Bar -->
+    <div style="margin-bottom: 24px;">
+        <label style="display: block; margin-bottom: 8px; font-size: 14px; color: #323130;">File Upload Progress (75%)</label>
+        <div style="width: 100%; height: 4px; background-color: #f3f2f1; border-radius: 2px; overflow: hidden;">
+            <div style="width: 75%; height: 100%; background-color: #0078d4; border-radius: 2px; transition: width 0.3s ease;"></div>
+        </div>
+    </div>
+    
+    <!-- Indeterminate Progress Bar -->
+    <div style="margin-bottom: 24px;">
+        <label style="display: block; margin-bottom: 8px; font-size: 14px; color: #323130;">Loading...</label>
+        <div style="width: 100%; height: 4px; background-color: #f3f2f1; border-radius: 2px; overflow: hidden;">
+            <div style="width: 30%; height: 100%; background-color: #0078d4; border-radius: 2px; animation: progress-indeterminate 2s infinite linear;"></div>
+        </div>
+    </div>
+    
+    <style>
+        @keyframes progress-indeterminate {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(333%); }
+        }
+    </style>
+</div>`
+        },
+
+        // FluentUI Popover Component
+        {
+            id: 'fluentui-popover',
+            name: 'FluentUI Popover',
+            description: 'Contextual overlay for additional information',
+            category: 'Overlays',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white; position: relative;">
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Popover Example</h3>
+    
+    <!-- Trigger Button -->
+    <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; cursor: pointer; font-family: inherit;" 
+            onmouseover="document.getElementById('popover-content').style.display='block'" 
+            onmouseout="document.getElementById('popover-content').style.display='none'">
+        Hover for info
+    </button>
+    
+    <!-- Popover Content -->
+    <div id="popover-content" style="display: none; position: absolute; top: 60px; left: 20px; background: white; border: 1px solid #d1d1d1; border-radius: 8px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.14), 0 0px 4px rgba(0, 0, 0, 0.12); padding: 16px; max-width: 280px; z-index: 1000;">
+        <div style="font-size: 14px; font-weight: 600; color: #323130; margin-bottom: 8px;">Additional Information</div>
+        <div style="font-size: 14px; color: #605e5c; line-height: 1.4;">This popover provides contextual information that appears when you hover over the trigger element.</div>
+        
+        <!-- Arrow -->
+        <div style="position: absolute; top: -8px; left: 16px; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 8px solid white;"></div>
+        <div style="position: absolute; top: -9px; left: 16px; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 8px solid #d1d1d1;"></div>
+    </div>
+</div>`
+        },
+
+        // FluentUI Persona Component
+        {
+            id: 'fluentui-persona',
+            name: 'FluentUI Persona',
+            description: 'User profile representation with avatar and details',
+            category: 'Data Display',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Persona Examples</h3>
+    
+    <!-- Large Persona -->
+    <div style="display: flex; align-items: center; margin-bottom: 24px; padding: 12px; border-radius: 8px; background: #faf9f8;">
+        <div style="width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #0078d4, #106ebe); display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; font-weight: 600; margin-right: 16px;">
+            JD
+        </div>
+        <div>
+            <div style="font-size: 20px; font-weight: 600; color: #323130; margin-bottom: 4px;">John Doe</div>
+            <div style="font-size: 14px; color: #605e5c; margin-bottom: 2px;">Senior Software Engineer</div>
+            <div style="font-size: 14px; color: #605e5c;">Microsoft Corporation</div>
+        </div>
+    </div>
+    
+    <!-- Medium Persona -->
+    <div style="display: flex; align-items: center; margin-bottom: 24px; padding: 8px; border-radius: 6px; background: #f3f2f1;">
+        <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #ca5010, #a4400e); display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; font-weight: 600; margin-right: 12px;">
+            AS
+        </div>
+        <div>
+            <div style="font-size: 16px; font-weight: 600; color: #323130; margin-bottom: 2px;">Alice Smith</div>
+            <div style="font-size: 13px; color: #605e5c;">Product Manager</div>
+        </div>
+    </div>
+    
+    <!-- Small Persona -->
+    <div style="display: flex; align-items: center; padding: 6px; border-radius: 4px; background: #edebe9;">
+        <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #038387, #026c70); display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: 600; margin-right: 8px;">
+            BJ
+        </div>
+        <div>
+            <div style="font-size: 14px; font-weight: 600; color: #323130;">Bob Johnson</div>
+        </div>
+    </div>
+</div>`
+        },
+
+        // FluentUI Nav Component
+        {
+            id: 'fluentui-nav',
+            name: 'FluentUI Nav',
+            description: 'Navigation component with hierarchical structure',
+            category: 'Navigation',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; background: white; border-right: 1px solid #edebe9; width: 280px; height: 400px; padding: 16px 0;">
+    <div style="padding: 0 16px 16px 16px; border-bottom: 1px solid #edebe9; margin-bottom: 8px;">
+        <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #323130;">Navigation</h3>
+    </div>
+    
+    <nav style="padding: 0 8px;">
+        <!-- Home -->
+        <a href="#" style="display: flex; align-items: center; padding: 8px 12px; border-radius: 4px; text-decoration: none; color: #323130; background: #f3f2f1; margin-bottom: 2px;">
+            <span style="margin-right: 8px;">🏠</span>
+            <span style="font-size: 14px; font-weight: 600;">Home</span>
+        </a>
+        
+        <!-- Documents -->
+        <a href="#" style="display: flex; align-items: center; padding: 8px 12px; border-radius: 4px; text-decoration: none; color: #323130; margin-bottom: 2px; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">
+            <span style="margin-right: 8px;">📁</span>
+            <span style="font-size: 14px;">Documents</span>
+        </a>
+        
+        <!-- Recent Files (Expandable) -->
+        <div style="margin-bottom: 2px;">
+            <a href="#" style="display: flex; align-items: center; padding: 8px 12px; border-radius: 4px; text-decoration: none; color: #323130; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">
+                <span style="margin-right: 8px;">▶</span>
+                <span style="font-size: 14px;">Recent Files</span>
+            </a>
+            <div style="margin-left: 32px; margin-top: 4px;">
+                <a href="#" style="display: block; padding: 6px 8px; border-radius: 4px; text-decoration: none; color: #605e5c; font-size: 13px; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">
+                    Report.docx
+                </a>
+                <a href="#" style="display: block; padding: 6px 8px; border-radius: 4px; text-decoration: none; color: #605e5c; font-size: 13px; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">
+                    Presentation.pptx
+                </a>
+            </div>
+        </div>
+        
+        <!-- Settings -->
+        <a href="#" style="display: flex; align-items: center; padding: 8px 12px; border-radius: 4px; text-decoration: none; color: #323130; margin-bottom: 2px; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">
+            <span style="margin-right: 8px;">⚙️</span>
+            <span style="font-size: 14px;">Settings</span>
+        </a>
+        
+        <!-- Help -->
+        <a href="#" style="display: flex; align-items: center; padding: 8px 12px; border-radius: 4px; text-decoration: none; color: #323130; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">
+            <span style="margin-right: 8px;">❓</span>
+            <span style="font-size: 14px;">Help</span>
+        </a>
+    </nav>
+</div>`
+        },
+
+        // FluentUI MessageBar Component
+        {
+            id: 'fluentui-messagebar',
+            name: 'FluentUI MessageBar',
+            description: 'Notification messages for different states',
+            category: 'Feedback',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">MessageBar Examples</h3>
+    
+    <!-- Success Message -->
+    <div style="display: flex; align-items: center; padding: 12px 16px; background: #f3f9fd; border: 1px solid #c7e0f4; border-left: 4px solid #0078d4; border-radius: 4px; margin-bottom: 12px;">
+        <span style="margin-right: 12px; color: #0078d4; font-size: 16px;">✓</span>
+        <div>
+            <div style="font-size: 14px; font-weight: 600; color: #323130; margin-bottom: 2px;">Success</div>
+            <div style="font-size: 14px; color: #605e5c;">Your changes have been saved successfully.</div>
+        </div>
+        <button style="margin-left: auto; background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px; padding: 4px;" onclick="this.parentElement.style.display='none'">×</button>
+    </div>
+    
+    <!-- Warning Message -->
+    <div style="display: flex; align-items: center; padding: 12px 16px; background: #fff9f5; border: 1px solid #fdcfb4; border-left: 4px solid #ff8c00; border-radius: 4px; margin-bottom: 12px;">
+        <span style="margin-right: 12px; color: #ff8c00; font-size: 16px;">⚠</span>
+        <div>
+            <div style="font-size: 14px; font-weight: 600; color: #323130; margin-bottom: 2px;">Warning</div>
+            <div style="font-size: 14px; color: #605e5c;">Some features may not work as expected in this browser.</div>
+        </div>
+        <button style="margin-left: auto; background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px; padding: 4px;" onclick="this.parentElement.style.display='none'">×</button>
+    </div>
+    
+    <!-- Error Message -->
+    <div style="display: flex; align-items: center; padding: 12px 16px; background: #fdf6f6; border: 1px solid #f1bbbb; border-left: 4px solid #d13438; border-radius: 4px; margin-bottom: 12px;">
+        <span style="margin-right: 12px; color: #d13438; font-size: 16px;">✕</span>
+        <div>
+            <div style="font-size: 14px; font-weight: 600; color: #323130; margin-bottom: 2px;">Error</div>
+            <div style="font-size: 14px; color: #605e5c;">Failed to connect to the server. Please try again.</div>
+        </div>
+        <button style="margin-left: auto; background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px; padding: 4px;" onclick="this.parentElement.style.display='none'">×</button>
+    </div>
+    
+    <!-- Info Message -->
+    <div style="display: flex; align-items: center; padding: 12px 16px; background: #f6f6f6; border: 1px solid #d1d1d1; border-left: 4px solid #605e5c; border-radius: 4px;">
+        <span style="margin-right: 12px; color: #605e5c; font-size: 16px;">ℹ</span>
+        <div>
+            <div style="font-size: 14px; font-weight: 600; color: #323130; margin-bottom: 2px;">Information</div>
+            <div style="font-size: 14px; color: #605e5c;">New features are available. Check out what's new in the latest update.</div>
+        </div>
+        <button style="margin-left: auto; background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px; padding: 4px;" onclick="this.parentElement.style.display='none'">×</button>
+    </div>
+</div>`
+        },
+
+        // FluentUI Image Component
+        {
+            id: 'fluentui-image',
+            name: 'FluentUI Image',
+            description: 'Responsive image component with different shapes',
+            category: 'Media',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Image Examples</h3>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px;">
+        <!-- Regular Image -->
+        <div>
+            <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #323130;">Regular Image</h4>
+            <img src="https://via.placeholder.com/200x150/0078d4/ffffff?text=Image" 
+                 alt="Example image" 
+                 style="width: 100%; height: 150px; object-fit: cover; border-radius: 4px; border: 1px solid #edebe9;" />
+        </div>
+        
+        <!-- Circular Image -->
+        <div>
+            <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #323130;">Circular Image</h4>
+            <img src="https://via.placeholder.com/150x150/ca5010/ffffff?text=Avatar" 
+                 alt="Avatar image" 
+                 style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 1px solid #edebe9;" />
+        </div>
+        
+        <!-- Image with Placeholder -->
+        <div>
+            <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #323130;">Image Placeholder</h4>
+            <div style="width: 100%; height: 150px; background: #f3f2f1; border: 2px dashed #d1d1d1; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #605e5c;">
+                <div style="font-size: 32px; margin-bottom: 8px;">🖼️</div>
+                <div style="font-size: 14px; text-align: center;">No image available</div>
+            </div>
+        </div>
+        
+        <!-- Image with Caption -->
+        <div>
+            <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #323130;">Image with Caption</h4>
+            <figure style="margin: 0;">
+                <img src="https://via.placeholder.com/200x120/038387/ffffff?text=Graph" 
+                     alt="Chart visualization" 
+                     style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px; border: 1px solid #edebe9;" />
+                <figcaption style="margin-top: 8px; font-size: 13px; color: #605e5c; text-align: center;">Data visualization chart</figcaption>
+            </figure>
+        </div>
+    </div>
+</div>`
+        },
+
+        // FluentUI Dialog Component
+        {
+            id: 'fluentui-dialog',
+            name: 'FluentUI Dialog',
+            description: 'Modal dialog for important user interactions',
+            category: 'Overlays',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white; position: relative;">
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Dialog Example</h3>
+    
+    <!-- Trigger Button -->
+    <button onclick="document.getElementById('dialog-overlay').style.display='flex'" 
+            style="background: #0078d4; color: white; border: none; padding: 10px 20px; border-radius: 4px; font-size: 14px; cursor: pointer; font-family: inherit;">
+        Open Dialog
+    </button>
+    
+    <!-- Dialog Overlay -->
+    <div id="dialog-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); z-index: 1000; align-items: center; justify-content: center;">
+        <!-- Dialog Container -->
+        <div style="background: white; border-radius: 8px; box-shadow: 0 25.6px 57.6px rgba(0, 0, 0, 0.22), 0 4.8px 14.4px rgba(0, 0, 0, 0.18); max-width: 480px; width: 90%; max-height: 90vh; overflow: hidden;">
+            <!-- Dialog Header -->
+            <div style="padding: 24px 24px 16px 24px; border-bottom: 1px solid #edebe9;">
+                <div style="display: flex; align-items: center; justify-content: between;">
+                    <h2 style="margin: 0; font-size: 20px; font-weight: 600; color: #323130; flex: 1;">Confirm Action</h2>
+                    <button onclick="document.getElementById('dialog-overlay').style.display='none'" 
+                            style="background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px; padding: 4px; margin-left: 16px;">
+                        ✕
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Dialog Content -->
+            <div style="padding: 24px;">
+                <p style="margin: 0 0 16px 0; font-size: 14px; color: #323130; line-height: 1.5;">
+                    Are you sure you want to proceed with this action? This operation cannot be undone and will permanently affect your data.
+                </p>
+                
+                <div style="display: flex; align-items: center; margin-bottom: 24px; padding: 12px; background: #fff9f5; border: 1px solid #fdcfb4; border-radius: 4px;">
+                    <span style="margin-right: 8px; color: #ff8c00;">⚠</span>
+                    <span style="font-size: 13px; color: #605e5c;">This action will delete 15 items permanently.</span>
+                </div>
+            </div>
+            
+            <!-- Dialog Footer -->
+            <div style="padding: 16px 24px 24px 24px; display: flex; justify-content: flex-end; gap: 12px;">
+                <button onclick="document.getElementById('dialog-overlay').style.display='none'" 
+                        style="background: transparent; color: #323130; border: 1px solid #d1d1d1; padding: 8px 16px; border-radius: 4px; font-size: 14px; cursor: pointer; font-family: inherit;">
+                    Cancel
+                </button>
+                <button onclick="document.getElementById('dialog-overlay').style.display='none'" 
+                        style="background: #d13438; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; cursor: pointer; font-family: inherit;">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>`
+        },
+
+        // FluentUI DataGrid Component
+        {
+            id: 'fluentui-datagrid',
+            name: 'FluentUI DataGrid',
+            description: 'Data table with sorting and selection capabilities',
+            category: 'Data Display',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Data Grid Example</h3>
+    
+    <!-- Data Grid Container -->
+    <div style="border: 1px solid #d1d1d1; border-radius: 4px; overflow: hidden; background: white;">
+        <!-- Header -->
+        <div style="background: #f8f8f8; border-bottom: 1px solid #d1d1d1; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center;">
+                <input type="checkbox" style="margin-right: 12px; cursor: pointer;" onchange="toggleAllRows(this)">
+                <span style="font-size: 14px; font-weight: 600; color: #323130;">Select all</span>
+            </div>
+            <div style="font-size: 13px; color: #605e5c;">5 items</div>
+        </div>
+        
+        <!-- Table -->
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background: #faf9f8; border-bottom: 1px solid #edebe9;">
+                    <th style="text-align: left; padding: 12px 16px; font-size: 14px; font-weight: 600; color: #323130; width: 40px;">
+                        <input type="checkbox" style="cursor: pointer;">
+                    </th>
+                    <th style="text-align: left; padding: 12px 16px; font-size: 14px; font-weight: 600; color: #323130; cursor: pointer;" onclick="sortTable(0)">
+                        Name <span style="color: #605e5c;">↕</span>
+                    </th>
+                    <th style="text-align: left; padding: 12px 16px; font-size: 14px; font-weight: 600; color: #323130; cursor: pointer;" onclick="sortTable(1)">
+                        Email <span style="color: #605e5c;">↕</span>
+                    </th>
+                    <th style="text-align: left; padding: 12px 16px; font-size: 14px; font-weight: 600; color: #323130; cursor: pointer;" onclick="sortTable(2)">
+                        Role <span style="color: #605e5c;">↕</span>
+                    </th>
+                    <th style="text-align: left; padding: 12px 16px; font-size: 14px; font-weight: 600; color: #323130; cursor: pointer;" onclick="sortTable(3)">
+                        Status <span style="color: #605e5c;">↕</span>
+                    </th>
+                    <th style="text-align: center; padding: 12px 16px; font-size: 14px; font-weight: 600; color: #323130; width: 80px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid #f3f2f1;" onmouseover="this.style.background='#faf9f8'" onmouseout="this.style.background='white'">
+                    <td style="padding: 12px 16px;"><input type="checkbox" style="cursor: pointer;"></td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #323130;">John Doe</td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #605e5c;">john.doe@company.com</td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #605e5c;">Administrator</td>
+                    <td style="padding: 12px 16px;"><span style="background: #f3f9fd; color: #0078d4; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">Active</span></td>
+                    <td style="padding: 12px 16px; text-align: center;"><button style="background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px;">⋯</button></td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f3f2f1;" onmouseover="this.style.background='#faf9f8'" onmouseout="this.style.background='white'">
+                    <td style="padding: 12px 16px;"><input type="checkbox" style="cursor: pointer;"></td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #323130;">Alice Smith</td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #605e5c;">alice.smith@company.com</td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #605e5c;">Editor</td>
+                    <td style="padding: 12px 16px;"><span style="background: #f3f9fd; color: #0078d4; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">Active</span></td>
+                    <td style="padding: 12px 16px; text-align: center;"><button style="background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px;">⋯</button></td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f3f2f1;" onmouseover="this.style.background='#faf9f8'" onmouseout="this.style.background='white'">
+                    <td style="padding: 12px 16px;"><input type="checkbox" style="cursor: pointer;"></td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #323130;">Bob Johnson</td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #605e5c;">bob.johnson@company.com</td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #605e5c;">Viewer</td>
+                    <td style="padding: 12px 16px;"><span style="background: #fff9f5; color: #ff8c00; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">Pending</span></td>
+                    <td style="padding: 12px 16px; text-align: center;"><button style="background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px;">⋯</button></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Footer -->
+        <div style="background: #faf9f8; border-top: 1px solid #edebe9; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
+            <div style="font-size: 13px; color: #605e5c;">Showing 1-3 of 3 items</div>
+            <div style="display: flex; gap: 8px;">
+                <button style="background: #f3f2f1; border: 1px solid #d1d1d1; color: #605e5c; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;" disabled>Previous</button>
+                <button style="background: #f3f2f1; border: 1px solid #d1d1d1; color: #605e5c; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;" disabled>Next</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function toggleAllRows(checkbox) {
+            const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+            checkboxes.forEach(cb => cb.checked = checkbox.checked);
+        }
+        
+        function sortTable(columnIndex) {
+            // Simple sort indication - in real implementation would sort data
+            alert('Sorting by column ' + (columnIndex + 1));
+        }
+    </script>
+</div>`
         }
     ];
 
@@ -479,6 +892,22 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         onAddComponent(component);
         onClose();
     };
+
+    // State for category filtering
+    const [selectedCategory, setSelectedCategory] = useState<string>('All');
+
+    // Get unique categories
+    const categories = useMemo(() => {
+        const allCategories = Array.from(new Set(components.map(c => c.category)));
+        return ['All', ...allCategories.sort()];
+    }, []);
+
+    // Filter components based on selected category
+    const filteredComponents = useMemo(() => {
+        return selectedCategory === 'All'
+            ? components
+            : components.filter(c => c.category === selectedCategory);
+    }, [selectedCategory]);
 
     return (
         <div className="component-library-modal-overlay">
@@ -504,45 +933,67 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                 </div>
 
                 <div className="component-library-content">
-                    <div className="component-library-grid">
-                        {components.map(component => (
-                            <div
-                                key={component.id}
-                                onClick={() => handleComponentClick(component)}
-                                className="component-item"
-                            >
-                                <div className="component-preview">
-                                    <div
-                                        dangerouslySetInnerHTML={{ __html: component.htmlCode }}
-                                    />
-                                </div>
-                                <div className="component-info">
-                                    <h4>{component.name}</h4>
-                                    <p>{component.description}</p>
-                                    <span className="component-category">{component.category}</span>
-                                </div>
-                            </div>
-                        ))}
+                    {/* Left Sidebar for Categories */}
+                    <div className="component-library-sidebar">
+                        <h3>Categories</h3>
+                        <div className="category-filters">
+                            {categories.map(category => (
+                                <button
+                                    key={category}
+                                    onClick={() => setSelectedCategory(category)}
+                                    className={`category-button ${selectedCategory === category ? 'active' : ''}`}
+                                >
+                                    {category}
+                                    <span className="category-count">
+                                        ({category === 'All' ? components.length : components.filter(c => c.category === category).length})
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
                     </div>
 
-                    {/* AI Generation Option */}
-                    {onGenerateWithAI && currentDescription && (
-                        <div className="ai-generation-section">
-                            <h3>Or Generate with AI</h3>
-                            <p>
-                                Skip the component selection and let AI generate a complete wireframe for: "<em>{currentDescription}</em>"
-                            </p>
-                            <button
-                                onClick={() => {
-                                    onGenerateWithAI(currentDescription);
-                                    onClose();
-                                }}
-                                className="ai-generation-button"
-                            >
-                                🤖 Generate with AI
-                            </button>
+                    {/* Main Content Area */}
+                    <div className="component-library-main">
+                        <div className="component-library-grid">
+                            {filteredComponents.map(component => (
+                                <div
+                                    key={component.id}
+                                    onClick={() => handleComponentClick(component)}
+                                    className="component-item"
+                                >
+                                    <div className="component-preview">
+                                        <div
+                                            dangerouslySetInnerHTML={{ __html: component.htmlCode }}
+                                        />
+                                    </div>
+                                    <div className="component-info">
+                                        <h4>{component.name}</h4>
+                                        <p>{component.description}</p>
+                                        <span className="component-category">{component.category}</span>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                    )}
+
+                        {/* AI Generation Option */}
+                        {onGenerateWithAI && currentDescription && (
+                            <div className="ai-generation-section">
+                                <h3>Or Generate with AI</h3>
+                                <p>
+                                    Skip the component selection and let AI generate a complete wireframe for: "<em>{currentDescription}</em>"
+                                </p>
+                                <button
+                                    onClick={() => {
+                                        onGenerateWithAI(currentDescription);
+                                        onClose();
+                                    }}
+                                    className="ai-generation-button"
+                                >
+                                    🤖 Generate with AI
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
