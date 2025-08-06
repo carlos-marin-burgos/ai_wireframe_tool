@@ -41,16 +41,16 @@ param openAiModelDeployments array = [
 ]
 
 // Generate a unique token for resource naming
-var uniqueSuffix = uniqueString(subscription().id, resourceGroup().id, location, environmentName)
+var resourceToken = toLower(uniqueString(subscription().id, resourceGroup().id, location, environmentName))
 var abbreviations = loadJsonContent('abbreviations.json')
 
 // Resource names using the token
-var openAiAccountName = take('${abbreviations.cognitiveServices}-${environmentName}-${uniqueSuffix}', 64)
-var storageAccountName = take('${abbreviations.storageAccount}${replace(environmentName, '-', '')}${uniqueSuffix}', 24)
-var logAnalyticsName = take('${abbreviations.logAnalyticsWorkspace}-${environmentName}-${uniqueSuffix}', 63)
-var applicationInsightsName = '${abbreviations.applicationInsights}-${environmentName}-${uniqueSuffix}'
-var userAssignedIdentityName = '${abbreviations.userAssignedIdentity}-${environmentName}-${uniqueSuffix}'
-var staticWebAppName = '${abbreviations.staticWebApp}-${environmentName}-${uniqueSuffix}'
+var openAiAccountName = take('${abbreviations.cognitiveServices}-${environmentName}-${resourceToken}', 64)
+var storageAccountName = take('${abbreviations.storageAccount}${replace(environmentName, '-', '')}${resourceToken}', 24)
+var logAnalyticsName = take('${abbreviations.logAnalyticsWorkspace}-${environmentName}-${resourceToken}', 63)
+var applicationInsightsName = '${abbreviations.applicationInsights}-${environmentName}-${resourceToken}'
+var userAssignedIdentityName = '${abbreviations.userAssignedIdentity}-${environmentName}-${resourceToken}'
+var staticWebAppName = '${abbreviations.staticWebApp}-${environmentName}-${resourceToken}'
 
 // Tags for all resources
 var tags = {
@@ -214,20 +214,6 @@ resource storageQueueDataContributorRoleAssignment 'Microsoft.Authorization/role
       'Microsoft.Authorization/roleDefinitions',
       '974c5e8b-45b9-4653-ba55-5f855dd0fb88'
     ) // Storage Queue Data Contributor
-    principalId: userAssignedIdentity.properties.principalId
-    principalType: 'ServicePrincipal'
-  }
-}
-
-// Storage Blob Data Contributor role assignment to managed identity
-resource storageBlobDataContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(storageAccount.id, userAssignedIdentity.id, 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')
-  scope: storageAccount
-  properties: {
-    roleDefinitionId: subscriptionResourceId(
-      'Microsoft.Authorization/roleDefinitions',
-      'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
-    ) // Storage Blob Data Contributor
     principalId: userAssignedIdentity.properties.principalId
     principalType: 'ServicePrincipal'
   }

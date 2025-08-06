@@ -89,13 +89,10 @@ const LandingPage: React.FC<LandingPageProps> = ({
         window.clearTimeout(debounceTimerRef.current);
       }
 
-      // Immediate trigger for first 2 characters (fast suggestions only)
-      // Shorter delay for responsive feel
-      const delay = description.length <= 3 ? 100 : 200;
-
+      // Set new timer with 300ms delay
       debounceTimerRef.current = window.setTimeout(() => {
         onGenerateAiSuggestions(description);
-      }, delay);
+      }, 300);
     }
 
     // Cleanup function
