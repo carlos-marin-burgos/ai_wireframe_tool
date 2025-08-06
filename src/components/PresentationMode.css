@@ -11,7 +11,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
 }
 
 .presentation-mode.fullscreen {
@@ -32,7 +32,7 @@
   z-index: 2;
   width: 95%;
   height: 95%;
-  max-width: 1400px;
+  max-width: 1200px;
   max-height: 900px;
   background: #fff;
   border-radius: 12px;
@@ -296,36 +296,36 @@
     height: 100%;
     border-radius: 0;
   }
-  
+
   .presentation-header {
     padding: 16px;
   }
-  
+
   .presentation-title {
     font-size: 20px;
   }
-  
+
   .presentation-nav {
     padding: 12px;
   }
-  
+
   .page-header {
     padding: 16px;
   }
-  
+
   .wireframe-display {
     padding: 16px;
   }
-  
+
   .page-thumbnails {
     padding: 12px 16px;
   }
-  
+
   .thumbnail {
     min-width: 100px;
     padding: 8px;
   }
-  
+
   .thumbnail-preview {
     width: 80px;
     height: 48px;

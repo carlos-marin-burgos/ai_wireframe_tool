@@ -69,12 +69,16 @@ function createFallbackWireframe(
       console.log(
         `🤖 No template match - using AI-generated wireframe for: ${validDesc}`
       );
-      return createInlineFallbackTemplate(validDesc, theme, primaryColor);
+      return createInlineFallbackTemplate(
+        generateCleanTitle(validDesc),
+        theme,
+        primaryColor
+      );
     }
 
     // Try to render the selected template
     const renderedTemplate = templateManager.renderTemplate(templateName, {
-      title: validDesc,
+      title: generateCleanTitle(validDesc),
       primaryColor: primaryColor,
       colorScheme: validColorScheme,
     });
@@ -92,7 +96,11 @@ function createFallbackWireframe(
   // Fallback to AI-generated inline template for non-Microsoft Learn themes or if template loading fails
   console.log(`🔄 Using AI-generated inline wireframe for theme: ${theme}`);
 
-  return createInlineFallbackTemplate(validDesc, theme, primaryColor);
+  return createInlineFallbackTemplate(
+    generateCleanTitle(validDesc),
+    theme,
+    primaryColor
+  );
 }
 
 /**
@@ -1384,7 +1392,7 @@ function getMicrosoftLearnTopNavCSS() {
 
     .ms-learn-topnav {
       font-family: var(--ms-font-family);
-      background-color: var(--ms-color-white);
+      background-color: #ffffff !important;
       position: static;
       z-index: 1000;
       width: 100%;
@@ -1393,18 +1401,20 @@ function getMicrosoftLearnTopNavCSS() {
 
     /* Main Navigation */
     .ms-learn-nav {
-      background-color: var(--ms-color-white);
+      background-color: #ffffff !important;
       border-bottom: 1px solid #e1e1e1;
     }
 
     .ms-learn-nav-container {
-      max-width: 1400px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 0 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       height: 56px;
+        background-color: #fff;
+
     }
 
     .ms-learn-nav-left {

@@ -22,7 +22,7 @@
   --ms-color-gray-900: #1a1a1a;
 
   /* Microsoft Learn UI Colors */
-  --ms-color-banner-bg: #106ebe;
+  --ms-color-banner-bg: #ffffff;
   --ms-color-nav-bg: #ffffff;
   --ms-color-nav-border: #e1e1e1;
   --ms-color-text-primary: #1a1a1a;
@@ -72,7 +72,7 @@
   font-family: var(--ms-font-family);
   font-size: var(--ms-font-size-base);
   color: var(--ms-color-text-primary);
-  background-color: var(--ms-color-white);
+  background-color: #ffffff !important;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -82,13 +82,13 @@
 /* Microsoft Ignite Banner */
 .ms-learn-banner {
   background-color: var(--ms-color-banner-bg);
-  color: var(--ms-color-white);
+  color: var(--ms-color-text-primary);
   font-size: var(--ms-font-size-sm);
   padding: var(--ms-spacing-sm) 0;
 }
 
 .ms-learn-banner-content {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--ms-spacing-md);
   display: flex;
@@ -142,17 +142,17 @@
 .ms-learn-nav {
   background-color: var(--ms-color-nav-bg);
   border-bottom: 1px solid var(--ms-color-nav-border);
-
 }
 
 .ms-learn-nav-container {
-  max-width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--ms-spacing-md);
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 64px;
+  background-color: #fff;
 }
 
 /* Brand and Logo */
@@ -406,7 +406,7 @@
   .ms-learn-nav-container {
     padding: 0 var(--ms-spacing-md);
   }
-  
+
   .ms-learn-nav-items {
     gap: var(--ms-spacing-md);
   }
@@ -420,7 +420,7 @@
   .ms-learn-search-input {
     width: 200px;
   }
-  
+
   .ms-learn-wordmark {
     display: none; /* Hide "Microsoft Learn" text on medium screens */
   }
@@ -447,11 +447,11 @@
     height: 56px;
     padding: 0 var(--ms-spacing-md);
   }
-  
+
   .ms-learn-logo {
     font-size: var(--ms-font-size-base);
   }
-  
+
   .ms-learn-logo img {
     height: 20px; /* Smaller logo on mobile */
   }
@@ -477,11 +477,11 @@
   .ms-learn-logo {
     font-size: var(--ms-font-size-sm);
   }
-  
+
   .ms-learn-logo img {
     height: 18px; /* Even smaller logo on very small screens */
   }
-  
+
   .ms-learn-wordmark {
     display: none; /* Ensure text is hidden on small screens */
   }
@@ -492,7 +492,7 @@
     height: 48px;
     padding: 0 8px;
   }
-  
+
   .ms-learn-logo img {
     height: 16px;
   }

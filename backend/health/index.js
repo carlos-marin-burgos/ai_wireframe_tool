@@ -1,11 +1,15 @@
 module.exports = async function (context, req) {
-  context.log("Health check requested");
-
   context.res = {
-    status: 200,
-    body: {
-      status: "OK",
-      timestamp: new Date().toISOString()
-    }
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  context.res.status = 200;
+  context.res.body = {
+    status: "OK",
+    timestamp: new Date().toISOString(),
+    version: "1.0.0",
+    environment: process.env.NODE_ENV || "production",
   };
 };

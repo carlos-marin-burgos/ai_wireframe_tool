@@ -33,7 +33,6 @@ wait_for_service() {
 # Kill any existing processes on our ports
 echo "🧹 Cleaning up existing processes..."
 lsof -ti:5173 | xargs -r kill -9 2>/dev/null || true
-lsof -ti:7071 | xargs -r kill -9 2>/dev/null || true
 lsof -ti:7072 | xargs -r kill -9 2>/dev/null || true
 
 sleep 2
@@ -42,15 +41,15 @@ sleep 2
 echo ""
 echo "🖥️  Starting Azure Functions backend..."
 cd backend
-func start --port 7071 &
+func start --port 7072 &
 backend_pid=$!
 cd ..
 
 # Wait for backend to be ready
-if wait_for_service 7071 "Backend"; then
+if wait_for_service 7072 "Backend"; then
     # Test AI capabilities
     echo "🤖 Testing AI capabilities..."
-    response=$(curl -s -X POST http://localhost:7071/api/generate-html-wireframe \
+    response=$(curl -s -X POST http://localhost:7072/api/generate-html-wireframe \
         -H "Content-Type: application/json" \
         -d '{"description": "test"}' \
         --max-time 15)
@@ -91,8 +90,8 @@ echo "🎉 Development environment is ready!"
 echo ""
 echo "📍 Access your application:"
 echo "   Frontend: http://localhost:5173"
-echo "   Backend API: http://localhost:7071"
-echo "   Health Check: http://localhost:7071/api/health"
+echo "   Backend API: http://localhost:7072"
+echo "   Health Check: http://localhost:7072/api/health"
 echo ""
 echo "To stop all services, press Ctrl+C or run: ./scripts/stop-dev.sh"
 

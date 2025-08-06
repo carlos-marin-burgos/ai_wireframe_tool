@@ -1,414 +1,387 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{title}}</title>
-    <style>
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
 
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{title}}</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: #323130;
+      line-height: 1.6;
+      background: white;
+    }
+
+    /* Microsoft Learn TopNav Styles */
+    :root {
+      --ms-color-primary: #f2cc60;
+      --ms-color-primary-hover: #e6b800;
+      --ms-color-white: #ffffff;
+      --ms-color-gray-100: #f1f1f1;
+      --ms-color-gray-600: #5c5c5c;
+      --ms-font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      --ms-shadow-nav: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .ms-learn-topnav {
+      font-family: var(--ms-font-family);
+      background-color: var(--ms-color-white);
+      position: static;
+      z-index: 1000;
+      width: 100%;
+      box-shadow: var(--ms-shadow-nav);
+    }
+
+    .ms-learn-nav {
+      background-color: var(--ms-color-white);
+      border-bottom: 1px solid #e1e1e1;
+    }
+
+    /* Navigation styles removed - now handled by fallback-generator.js */
+
+    .ms-learn-nav-left {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .ms-learn-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .ms-learn-logo-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .ms-learn-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .ms-learn-logo-text {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .ms-learn-primary-nav {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .ms-learn-nav-item {
+      position: relative;
+    }
+
+    .ms-learn-nav-button,
+    .ms-learn-nav-link {
+      background: none;
+      border: none;
+      color: #1a1a1a;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      padding: 8px 0;
+      cursor: pointer;
+      transition: color 0.15s ease;
+    }
+
+    .ms-learn-nav-button:hover,
+    .ms-learn-nav-link:hover {
+      color: var(--ms-color-primary);
+    }
+
+    .ms-learn-search-container {
+      display: flex;
+      align-items: center;
+      background: #f3f2f1;
+      border-radius: 4px;
+      padding: 0 12px;
+      gap: 8px;
+    }
+
+    .ms-learn-search-input {
+      border: none;
+      background: transparent;
+      padding: 8px 0;
+      font-size: 14px;
+      color: #323130;
+      width: 200px;
+    }
+
+    .ms-learn-search-input::placeholder {
+      color: #605e5c;
+    }
+
+    .ms-learn-search-button {
+      background: none;
+      border: none;
+      color: #605e5c;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .ms-learn-mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: #323130;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    /* Main Content */
+    .main-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .main-title {
+      font-size: 32px;
+      font-weight: 600;
+      color: #323130;
+      margin-bottom: 32px;
+      border-bottom: 2px solid #f2cc60;
+      padding-bottom: 16px;
+    }
+
+    .content-section {
+      margin-bottom: 32px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: #323130;
+      margin-bottom: 16px;
+    }
+
+    .content-text {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #323130;
+    }
+
+    .content-text p {
+      margin-bottom: 16px;
+    }
+
+    .content-text h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 24px 0 12px 0;
+      color: #323130;
+    }
+
+    .content-text ul,
+    .content-text ol {
+      margin: 16px 0 16px 24px;
+    }
+
+    .content-text li {
+      margin-bottom: 8px;
+    }
+
+    .content-text a {
+      color: #0078d4;
+      text-decoration: none;
+    }
+
+    .content-text a:hover {
+      text-decoration: underline;
+    }
+
+    /* Code blocks */
+    .content-text code {
+      background: #f3f2f1;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: "Consolas", "Monaco", monospace;
+      font-size: 14px;
+    }
+
+    .content-text pre {
+      background: #f8f9fa;
+      border: 1px solid #e1e4e8;
+      border-radius: 6px;
+      padding: 16px;
+      margin: 16px 0;
+      overflow-x: auto;
+    }
+
+    .content-text pre code {
+      background: none;
+      padding: 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
       body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        color: #323130;
-        line-height: 1.6;
-        background: white;
-      }
-
-      /* Microsoft Learn TopNav Styles */
-      :root {
-        --ms-color-primary: #f2cc60;
-        --ms-color-primary-hover: #e6b800;
-        --ms-color-white: #ffffff;
-        --ms-color-gray-100: #f1f1f1;
-        --ms-color-gray-600: #5c5c5c;
-        --ms-font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-        --ms-shadow-nav: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
-
-      .ms-learn-topnav {
-        font-family: var(--ms-font-family);
-        background-color: var(--ms-color-white);
-        position: static;
-        z-index: 1000;
-        width: 100%;
-        box-shadow: var(--ms-shadow-nav);
-      }
-
-      .ms-learn-nav {
-        background-color: var(--ms-color-white);
-        border-bottom: 1px solid #e1e1e1;
-      }
-
-      .ms-learn-nav-container {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 0 16px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        height: 56px;
-      }
-
-      .ms-learn-nav-left {
-        display: flex;
-        align-items: center;
-        gap: 32px;
-      }
-
-      .ms-learn-nav-right {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-      }
-
-      .ms-learn-logo-link {
-        text-decoration: none;
-        color: inherit;
-      }
-
-      .ms-learn-logo {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-
-      .ms-learn-logo-text {
-        font-size: 20px;
-        font-weight: 600;
-        color: #1a1a1a;
-      }
-
-      .ms-learn-primary-nav {
-        display: flex;
-        align-items: center;
-        gap: 24px;
-      }
-
-      .ms-learn-nav-item {
-        position: relative;
-      }
-
-      .ms-learn-nav-button,
-      .ms-learn-nav-link {
-        background: none;
-        border: none;
-        color: #1a1a1a;
-        font-size: 14px;
-        font-weight: 500;
-        text-decoration: none;
-        padding: 8px 0;
-        cursor: pointer;
-        transition: color 0.15s ease;
-      }
-
-      .ms-learn-nav-button:hover,
-      .ms-learn-nav-link:hover {
-        color: var(--ms-color-primary);
-      }
-
-      .ms-learn-search-container {
-        display: flex;
-        align-items: center;
-        background: #f3f2f1;
-        border-radius: 4px;
-        padding: 0 12px;
-        gap: 8px;
-      }
-
-      .ms-learn-search-input {
-        border: none;
-        background: transparent;
-        padding: 8px 0;
-        font-size: 14px;
-        color: #323130;
-        width: 200px;
-      }
-
-      .ms-learn-search-input::placeholder {
-        color: #605e5c;
-      }
-
-      .ms-learn-search-button {
-        background: none;
-        border: none;
-        color: #605e5c;
-        cursor: pointer;
-        padding: 4px;
-      }
-
-      .ms-learn-mobile-toggle {
-        display: none;
-        background: none;
-        border: none;
-        color: #323130;
-        cursor: pointer;
-        padding: 8px;
-      }
-
-      /* Main Content */
-      .main-content {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 40px 24px;
+        padding: 24px 16px;
       }
 
       .main-title {
-        font-size: 32px;
-        font-weight: 600;
-        color: #323130;
-        margin-bottom: 32px;
-        border-bottom: 2px solid #f2cc60;
-        padding-bottom: 16px;
-      }
-
-      .content-section {
-        margin-bottom: 32px;
+        font-size: 28px;
       }
 
       .section-title {
-        font-size: 24px;
-        font-weight: 600;
-        color: #323130;
-        margin-bottom: 16px;
-      }
-
-      .content-text {
-        font-size: 16px;
-        line-height: 1.6;
-        color: #323130;
-      }
-
-      .content-text p {
-        margin-bottom: 16px;
-      }
-
-      .content-text h3 {
         font-size: 20px;
-        font-weight: 600;
-        margin: 24px 0 12px 0;
-        color: #323130;
       }
+    }
+  </style>
+</head>
 
-      .content-text ul,
-      .content-text ol {
-        margin: 16px 0 16px 24px;
-      }
+<body>
+  <!-- Microsoft Learn TopNav -->
+  <header class="ms-learn-topnav">
+    <!-- Main Navigation -->
+    <nav class="ms-learn-nav">
+      <div class="ms-learn-nav-container">
+        <!-- Left Side: Logo and Primary Navigation -->
+        <div class="ms-learn-nav-left">
+          <!-- Microsoft Logo -->
+          <a href="https://learn.microsoft.com" class="ms-learn-logo-link">
+            <div class="ms-learn-logo">
+              <img src="/windowsLogo.png" alt="Windows Logo" width="24" height="24" />
+              <span class="ms-learn-logo-text">Microsoft Learn</span>
+            </div>
+          </a>
 
-      .content-text li {
-        margin-bottom: 8px;
-      }
+          <!-- Primary Navigation -->
+          <div class="ms-learn-primary-nav">
+            <div class="ms-learn-nav-item">
+              <button class="ms-learn-nav-button">Documentation ▼</button>
+            </div>
+            <div class="ms-learn-nav-item">
+              <button class="ms-learn-nav-button">Training ▼</button>
+            </div>
+            <div class="ms-learn-nav-item">
+              <button class="ms-learn-nav-button">Certifications ▼</button>
+            </div>
+            <div class="ms-learn-nav-item">
+              <a href="#" class="ms-learn-nav-link">Q&A</a>
+            </div>
+            <div class="ms-learn-nav-item">
+              <a href="#" class="ms-learn-nav-link">Code Samples</a>
+            </div>
+          </div>
+        </div>
 
-      .content-text a {
-        color: #0078d4;
-        text-decoration: none;
-      }
-
-      .content-text a:hover {
-        text-decoration: underline;
-      }
-
-      /* Code blocks */
-      .content-text code {
-        background: #f3f2f1;
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-family: "Consolas", "Monaco", monospace;
-        font-size: 14px;
-      }
-
-      .content-text pre {
-        background: #f8f9fa;
-        border: 1px solid #e1e4e8;
-        border-radius: 6px;
-        padding: 16px;
-        margin: 16px 0;
-        overflow-x: auto;
-      }
-
-      .content-text pre code {
-        background: none;
-        padding: 0;
-      }
-
-      /* Responsive */
-      @media (max-width: 768px) {
-        body {
-          padding: 24px 16px;
-        }
-
-        .main-title {
-          font-size: 28px;
-        }
-
-        .section-title {
-          font-size: 20px;
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <!-- Microsoft Learn TopNav -->
-    <header class="ms-learn-topnav">
-      <!-- Main Navigation -->
-      <nav class="ms-learn-nav">
-        <div class="ms-learn-nav-container">
-          <!-- Left Side: Logo and Primary Navigation -->
-          <div class="ms-learn-nav-left">
-            <!-- Microsoft Logo -->
-            <a href="https://learn.microsoft.com" class="ms-learn-logo-link">
-              <div class="ms-learn-logo">
-                <img
-                  src="/windowsLogo.png"
-                  alt="Windows Logo"
-                  width="24"
-                  height="24"
-                />
-                <span class="ms-learn-logo-text">Microsoft Learn</span>
-              </div>
-            </a>
-
-            <!-- Primary Navigation -->
-            <div class="ms-learn-primary-nav">
-              <div class="ms-learn-nav-item">
-                <button class="ms-learn-nav-button">Documentation ▼</button>
-              </div>
-              <div class="ms-learn-nav-item">
-                <button class="ms-learn-nav-button">Training ▼</button>
-              </div>
-              <div class="ms-learn-nav-item">
-                <button class="ms-learn-nav-button">Certifications ▼</button>
-              </div>
-              <div class="ms-learn-nav-item">
-                <a href="#" class="ms-learn-nav-link">Q&A</a>
-              </div>
-              <div class="ms-learn-nav-item">
-                <a href="#" class="ms-learn-nav-link">Code Samples</a>
-              </div>
+        <!-- Right Side: Search and User -->
+        <div class="ms-learn-nav-right">
+          <!-- Search -->
+          <div class="ms-learn-search">
+            <div class="ms-learn-search-container">
+              <input type="text" placeholder="Search Microsoft Learn" class="ms-learn-search-input" />
+              <button class="ms-learn-search-button" aria-label="Search">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path
+                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                </svg>
+              </button>
             </div>
           </div>
 
-          <!-- Right Side: Search and User -->
-          <div class="ms-learn-nav-right">
-            <!-- Search -->
-            <div class="ms-learn-search">
-              <div class="ms-learn-search-container">
-                <input
-                  type="text"
-                  placeholder="Search Microsoft Learn"
-                  class="ms-learn-search-input"
-                />
-                <button class="ms-learn-search-button" aria-label="Search">
-                  <svg
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <!-- Mobile Menu Toggle -->
-            <button class="ms-learn-mobile-toggle" aria-label="Toggle menu">
-              <svg
-                width="16"
-                height="16"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M1 2.75A.75.75 0 0 1 1.75 2h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 2.75zm0 5A.75.75 0 0 1 1.75 7h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 7.75zM1.75 12a.75.75 0 0 0 0 1.5h12.5a.75.75 0 0 0 0-1.5H1.75z"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </nav>
-    </header>
-
-    <!-- Main Content -->
-    <div class="main-content">
-      <h1 class="main-title">{{title}}</h1>
-
-      <div class="content-section">
-        <h2 class="section-title">Overview</h2>
-        <div class="content-text">
-          <p>
-            This document provides comprehensive information and guidelines for
-            implementation. The content is organized in a clear, structured
-            format for easy navigation and understanding.
-          </p>
-
-          <p>
-            Use this template for technical documentation, API references,
-            implementation guides, and other structured content that requires a
-            clean, professional layout.
-          </p>
+          <!-- Mobile Menu Toggle -->
+          <button class="ms-learn-mobile-toggle" aria-label="Toggle menu">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path
+                d="M1 2.75A.75.75 0 0 1 1.75 2h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 2.75zm0 5A.75.75 0 0 1 1.75 7h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 7.75zM1.75 12a.75.75 0 0 0 0 1.5h12.5a.75.75 0 0 0 0-1.5H1.75z" />
+            </svg>
+          </button>
         </div>
       </div>
+    </nav>
+  </header>
 
-      <div class="content-section">
-        <h2 class="section-title">Key Features</h2>
-        <div class="content-text">
-          <ul>
-            <li>Clean, distraction-free layout focused on content</li>
-            <li>Optimized typography for readability</li>
-            <li>Responsive design that works on all devices</li>
-            <li>Professional styling suitable for technical documentation</li>
-          </ul>
-        </div>
-      </div>
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1 class="main-title">{{title}}</h1>
 
-      <div class="content-section">
-        <h2 class="section-title">Implementation Details</h2>
-        <div class="content-text">
-          <p>
-            This template follows modern web standards and accessibility
-            guidelines. The layout is designed to maximize readability while
-            maintaining a professional appearance.
-          </p>
+    <div class="content-section">
+      <h2 class="section-title">Overview</h2>
+      <div class="content-text">
+        <p>
+          This document provides comprehensive information and guidelines for
+          implementation. The content is organized in a clear, structured
+          format for easy navigation and understanding.
+        </p>
 
-          <h3>Typography</h3>
-          <p>
-            The font stack uses system fonts for optimal performance and
-            consistency across platforms. Line heights and spacing are optimized
-            for extended reading sessions.
-          </p>
-
-          <h3>Structure</h3>
-          <p>
-            The document structure follows semantic HTML principles with proper
-            heading hierarchy and meaningful content organization.
-          </p>
-        </div>
-      </div>
-
-      <div class="content-section">
-        <h2 class="section-title">Usage Guidelines</h2>
-        <div class="content-text">
-          <p>This template is ideal for:</p>
-          <ol>
-            <li>Technical documentation and specifications</li>
-            <li>API documentation and references</li>
-            <li>Implementation guides and tutorials</li>
-            <li>Policy documents and procedures</li>
-          </ol>
-
-          <p>
-            The clean design ensures content remains the primary focus while
-            maintaining professional presentation standards.
-          </p>
-        </div>
+        <p>
+          Use this template for technical documentation, API references,
+          implementation guides, and other structured content that requires a
+          clean, professional layout.
+        </p>
       </div>
     </div>
-  </body>
+
+    <div class="content-section">
+      <h2 class="section-title">Key Features</h2>
+      <div class="content-text">
+        <ul>
+          <li>Clean, distraction-free layout focused on content</li>
+          <li>Optimized typography for readability</li>
+          <li>Responsive design that works on all devices</li>
+          <li>Professional styling suitable for technical documentation</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Implementation Details</h2>
+      <div class="content-text">
+        <p>
+          This template follows modern web standards and accessibility
+          guidelines. The layout is designed to maximize readability while
+          maintaining a professional appearance.
+        </p>
+
+        <h3>Typography</h3>
+        <p>
+          The font stack uses system fonts for optimal performance and
+          consistency across platforms. Line heights and spacing are optimized
+          for extended reading sessions.
+        </p>
+
+        <h3>Structure</h3>
+        <p>
+          The document structure follows semantic HTML principles with proper
+          heading hierarchy and meaningful content organization.
+        </p>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Usage Guidelines</h2>
+      <div class="content-text">
+        <p>This template is ideal for:</p>
+        <ol>
+          <li>Technical documentation and specifications</li>
+          <li>API documentation and references</li>
+          <li>Implementation guides and tutorials</li>
+          <li>Policy documents and procedures</li>
+        </ol>
+
+        <p>
+          The clean design ensures content remains the primary focus while
+          maintaining professional presentation standards.
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+
 </html>

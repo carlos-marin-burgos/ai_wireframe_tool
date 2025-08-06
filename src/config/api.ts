@@ -26,7 +26,7 @@ export const API_CONFIG = {
   ],
 
   ENDPOINTS: {
-    GENERATE_WIREFRAME: "/api/generate-html-wireframe", // Updated for simple server
+    GENERATE_WIREFRAME: "/api/generate-wireframe", // Fixed to match Azure Functions route
     GENERATE_SUGGESTIONS: "/api/generate-suggestions",
     GET_TEMPLATE: "/api/get-template",
     HEALTH: "/api/health",
@@ -35,9 +35,9 @@ export const API_CONFIG = {
   // Port configuration
   PORTS,
 
-  // Get BASE_URL - use local server in development, Azure in production
+  // Get BASE_URL - use Azure Functions in development, Azure in production
   BASE_URL: isDevelopment
-    ? `http://localhost:${PORTS.development.primary}`
+    ? `http://localhost:${PORTS.development.fallback}`
     : "https://func-designetica-vjib6nx2wh4a4.azurewebsites.net",
 };
 
@@ -73,7 +73,7 @@ export const detectWorkingBackend = async (): Promise<string> => {
     return API_CONFIG.BASE_URL;
   }
 
-  const portsToTest = [PORTS.development.primary, PORTS.development.fallback];
+  const portsToTest = [PORTS.development.fallback, PORTS.development.fallback];
 
   for (const port of portsToTest) {
     const testUrl = `http://localhost:${port}`;

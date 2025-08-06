@@ -93,6 +93,106 @@ class FastWireframeGenerator {
   }
 
   initializeTemplates() {
+    // Pre-compiled templates for instant generation
+    this.templates = new Map();
+    this.initializeTemplates();
+  }
+
+  // Microsoft Learn header HTML
+  getMicrosoftLearnHeader() {
+    return `
+    <header class="ms-learn-header">
+      <div class="ms-learn-nav">
+        <div class="nav-brand">
+          <svg width="108" height="24" viewBox="0 0 108 24" fill="currentColor">
+            <path d="M0 0h23.6v23.6H0V0zm24.8 0h23.6v23.6H24.8V0zm24.8 0h23.6v23.6H49.6V0zm24.8 0h23.6v23.6H74.4V0z"/>
+          </svg>
+          <span>Microsoft Learn</span>
+        </div>
+        <nav class="nav-menu">
+          <a href="#" class="nav-link">Training</a>
+          <a href="#" class="nav-link">Certifications</a>
+          <a href="#" class="nav-link">Documentation</a>
+          <a href="#" class="nav-link">Community</a>
+        </nav>
+        <div class="nav-actions">
+          <button class="search-btn">🔍</button>
+          <button class="profile-btn">👤</button>
+        </div>
+      </div>
+    </header>`;
+  }
+
+  // Microsoft Learn header CSS
+  getMicrosoftLearnHeaderCSS() {
+    return `
+        .ms-learn-header {
+          background: #ffffff;
+          border-bottom: 1px solid #e5e5e5;
+          box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+        .ms-learn-nav {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 20px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          height: 56px;
+        }
+        .nav-brand {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          font-weight: 600;
+          color: #323130;
+          text-decoration: none;
+        }
+        .nav-brand svg {
+          color: #0078d4;
+        }
+        .nav-menu {
+          display: flex;
+          gap: 32px;
+          align-items: center;
+        }
+        .nav-link {
+          color: #323130;
+          text-decoration: none;
+          font-weight: 500;
+          padding: 8px 0;
+          border-bottom: 2px solid transparent;
+          transition: all 0.2s ease;
+        }
+        .nav-link:hover {
+          color: #0078d4;
+          border-bottom-color: #0078d4;
+        }
+        .nav-actions {
+          display: flex;
+          gap: 12px;
+          align-items: center;
+        }
+        .search-btn, .profile-btn {
+          background: none;
+          border: none;
+          padding: 8px;
+          border-radius: 4px;
+          cursor: pointer;
+          color: #323130;
+          font-size: 16px;
+          transition: background-color 0.2s ease;
+        }
+        .search-btn:hover, .profile-btn:hover {
+          background: #f3f2f1;
+        }
+        @media (max-width: 768px) {
+          .nav-menu { display: none; }
+          .ms-learn-nav { padding: 0 16px; }
+        }`;
+  }
+
+  initializeTemplates() {
     // Login form template
     this.templates.set("login", {
       keywords: ["login", "sign in", "authenticate", "auth", "signin"],
@@ -165,10 +265,8 @@ class FastWireframeGenerator {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: #f5f5f5;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
+        ${this.getMicrosoftLearnHeaderCSS()}
         .login-container {
             background: white;
             padding: 40px;
@@ -176,6 +274,7 @@ class FastWireframeGenerator {
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             width: 100%;
             max-width: 400px;
+            margin: 40px auto;
         }
         .login-header { text-align: center; margin-bottom: 32px; }
         .login-header h1 { color: #323130; font-size: 24px; margin-bottom: 8px; }
@@ -204,6 +303,7 @@ class FastWireframeGenerator {
     </style>
 </head>
 <body>
+    ${this.getMicrosoftLearnHeader()}
     <div class="login-container">
         <div class="login-header">
             <h1>Sign in to Microsoft Learn</h1>
@@ -240,14 +340,15 @@ class FastWireframeGenerator {
         body { 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: #f5f5f5;
-            padding: 20px;
         }
-        .container { max-width: 800px; margin: 0 auto; }
+        ${this.getMicrosoftLearnHeaderCSS()}
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
         .header { 
             background: white; 
             padding: 40px; 
             border-radius: 8px 8px 0 0; 
             text-align: center;
+            margin-top: 20px;
         }
         .form-container { 
             background: white; 
@@ -280,6 +381,7 @@ class FastWireframeGenerator {
     </style>
 </head>
 <body>
+    ${this.getMicrosoftLearnHeader()}
     <div class="container">
         <div class="header">
             <h1>Contact Our Support Team</h1>
@@ -330,8 +432,16 @@ class FastWireframeGenerator {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: #f5f5f5;
         }
-        .header { background: white; padding: 20px; border-bottom: 1px solid #e1e5e9; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        ${this.getMicrosoftLearnHeaderCSS()}
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; margin-top: 20px; }
+        .dashboard-header { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 8px; 
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
         .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
         .card { 
             background: white; 
@@ -370,16 +480,16 @@ class FastWireframeGenerator {
             text-decoration: none; 
             font-size: 14px;
         }
+        h1 { color: #323130; margin-bottom: 10px; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="container">
+    ${this.getMicrosoftLearnHeader()}
+    <div class="container">
+        <div class="dashboard-header">
             <h1>Learning Dashboard</h1>
             <p>Track your progress and continue your learning journey</p>
         </div>
-    </div>
-    <div class="container">
         <div class="dashboard-grid">
             <div class="card">
                 <h3>Learning Progress</h3>
@@ -426,6 +536,7 @@ class FastWireframeGenerator {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             line-height: 1.6;
         }
+        ${this.getMicrosoftLearnHeaderCSS()}
         .hero { 
             background: linear-gradient(135deg, ${
               colorScheme === "primary"
@@ -465,6 +576,7 @@ class FastWireframeGenerator {
     </style>
 </head>
 <body>
+    ${this.getMicrosoftLearnHeader()}
     <section class="hero">
         <h1>Learn. Build. Advance.</h1>
         <p>Develop your skills with hands-on training from Microsoft Learn</p>
@@ -484,6 +596,16 @@ class FastWireframeGenerator {
             <div class="feature">
                 <h3>💻 Hands-on Labs</h3>
                 <p>Practice with real Azure environments and sandbox resources</p>
+            </div>
+            <div class="feature">
+                <h3>📂 GitHub Import</h3>
+                <p>Import and enhance your existing GitHub projects with AI-powered wireframes</p>
+                <button style="background: #333; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-top: 12px;">
+                    <svg width="16" height="16" fill="currentColor" style="margin-right: 8px; vertical-align: middle;">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                    </svg>
+                    Import from GitHub
+                </button>
             </div>
         </div>
     </section>
@@ -511,11 +633,13 @@ class FastWireframeGenerator {
             line-height: 1.6;
             color: #323130;
         }
-        .header { 
+        ${this.getMicrosoftLearnHeaderCSS()}
+        .page-header { 
             background: white; 
-            padding: 20px; 
+            padding: 40px 20px; 
             border-bottom: 1px solid #e1e5e9;
             text-align: center;
+            margin-top: 20px;
         }
         .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
         .article { margin-bottom: 40px; }
@@ -556,10 +680,12 @@ class FastWireframeGenerator {
             font-size: 12px; 
             margin-right: 8px;
         }
+        h1 { color: #323130; margin-bottom: 10px; }
     </style>
 </head>
 <body>
-    <div class="header">
+    ${this.getMicrosoftLearnHeader()}
+    <div class="page-header">
         <h1>Microsoft Learn Blog</h1>
         <p>Latest insights, tutorials, and updates from the Microsoft Learn community</p>
     </div>
@@ -626,11 +752,13 @@ class FastWireframeGenerator {
             line-height: 1.6;
             color: #323130;
         }
-        .header { 
-            background: ${colorScheme === "primary" ? "#0078d4" : "#107c10"}; 
-            color: white; 
+        ${this.getMicrosoftLearnHeaderCSS()}
+        .page-header { 
+            background: #e8e6df; 
+            color: #323130; 
             padding: 40px 20px; 
             text-align: center;
+            margin-top: 20px;
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
         .content { 
@@ -639,7 +767,7 @@ class FastWireframeGenerator {
             border-radius: 8px; 
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-        h1 { margin-bottom: 16px; }
+        .page-header h1 { margin-bottom: 16px; }
         p { margin-bottom: 16px; color: #605e5c; }
         .btn { 
             background: ${colorScheme === "primary" ? "#0078d4" : "#107c10"}; 
@@ -653,7 +781,8 @@ class FastWireframeGenerator {
     </style>
 </head>
 <body>
-    <div class="header">
+    ${this.getMicrosoftLearnHeader()}
+    <div class="page-header">
         <h1>${title}</h1>
         <p>Professional solution built with Microsoft Learn design principles</p>
     </div>

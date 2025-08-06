@@ -1,7 +1,7 @@
 /* Microsoft Learn Hero Section - Official Colors and Styling */
 
 .ms-learn-hero {
-  background: #E8E6DF !important; /* Always use the specified background color */
+  background: #e8e6df !important; /* Always use the specified background color */
   color: #161616 !important; /* Black text color */
   padding: 80px 0 64px;
   position: relative;
@@ -21,7 +21,7 @@
 }
 
 .ms-learn-hero-container {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
   position: relative;
