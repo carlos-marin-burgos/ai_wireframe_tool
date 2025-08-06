@@ -3,6 +3,7 @@ import "./LandingPage.css";
 import Footer from './Footer';
 import ImageUploadModal from './ImageUploadModal';
 import FigmaIntegrationModal from './FigmaIntegrationModal';
+import GitHubRepositoryBrowser from './GitHubRepositoryBrowser';
 import { githubService, GitHubUser } from '../services/githubService';
 
 interface LandingPageProps {
