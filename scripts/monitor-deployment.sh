@@ -61,7 +61,7 @@ check_health() {
 
 # Test wireframe generation
 test_wireframe() {
-    local url="$1/api/generateWireframe"
+    local url="$1/api/generate-wireframe"
     local test_payload='{"description": "test wireframe", "colorScheme": "primary"}'
     
     local response=$(curl -s -w "%{http_code}" -X POST \

@@ -206,9 +206,7 @@ const generateLandingPage = (
     <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
         <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
             <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
-                <svg width="24" height="24" fill="#0078d4" viewBox="0 0 24 24">
-                    <path d="M11.25 4.533a9.707 9.707 0 00-6.984 2.708L3.482 6.457C5.283 4.457 8.145 3.25 11.25 3.25s5.967 1.207 7.768 3.207l-.784.784A9.707 9.707 0 0011.25 4.533zM18.017 8.017L17.233 8.8a8.25 8.25 0 00-11.966 0l-.784-.784a9.75 9.75 0 0113.534 0zM15.516 10.516L14.732 11.3a5.25 5.25 0 00-7.464 0l-.784-.784a6.75 6.75 0 019.032 0zM13.016 13.016L12.232 13.8a2.25 2.25 0 00-3.464 0l-.784-.784a3.75 3.75 0 015.032 0z"/>
-                </svg>
+                <img src="dist/windowsLogo.png">
                 <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
             </div>
             <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
@@ -378,9 +376,7 @@ const generateDashboard = (
     <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
         <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
             <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
-                <svg width="24" height="24" fill="#0078d4" viewBox="0 0 24 24">
-                    <path d="M11.25 4.533a9.707 9.707 0 00-6.984 2.708L3.482 6.457C5.283 4.457 8.145 3.25 11.25 3.25s5.967 1.207 7.768 3.207l-.784.784A9.707 9.707 0 0011.25 4.533z"/>
-                </svg>
+              <img src="dist/windowsLogo.png">
                 <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
             </div>
             <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
@@ -568,9 +564,7 @@ const generateForm = (
     <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
         <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
             <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
-                <svg width="24" height="24" fill="#0078d4" viewBox="0 0 24 24">
-                    <path d="M11.25 4.533a9.707 9.707 0 00-6.984 2.708L3.482 6.457C5.283 4.457 8.145 3.25 11.25 3.25s5.967 1.207 7.768 3.207l-.784.784A9.707 9.707 0 0011.25 4.533z"/>
-                </svg>
+               <img src="dist/windowsLogo.png">
                 <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
             </div>
             <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
@@ -1238,7 +1232,7 @@ export function generateFallbackWireframe(
 export async function shouldUseFallback(): Promise<boolean> {
   try {
     // First check if API is responding at all
-    const response = await fetch("/api/generateWireframe", {
+    const response = await fetch("/api/generate-wireframe", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

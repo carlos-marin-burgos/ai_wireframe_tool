@@ -86,7 +86,7 @@ app.post("/api/get-suggestions", (req, res) => {
 });
 
 // Legacy endpoint for compatibility
-app.post("/api/generateWireframe", (req, res) => {
+app.post("/api/generate-wireframe", (req, res) => {
   const { prompt } = req.body;
   res.json({
     success: true,

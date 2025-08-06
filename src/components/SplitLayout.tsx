@@ -3,6 +3,7 @@ import "./SplitLayout.css";
 import SuggestionSourceIndicator from "./SuggestionSourceIndicator";
 import LoadingOverlay from "./LoadingOverlay";
 import WireframeToolbar from "./WireframeToolbar";
+import CompactToolbar from "./CompactToolbar";
 import AddPagesModal from "./AddPagesModal";
 import SaveWireframeModal, { SavedWireframe } from "./SaveWireframeModal";
 import FigmaIntegrationModal from "./FigmaIntegrationModal";
@@ -432,7 +433,30 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
     addMessage('ai', `✅ Successfully imported "${fileName}" from Figma! The wireframe has been converted and is ready for editing.`);
     setIsFigmaModalOpen(false);
-  }, [addMessage, setHtmlWireframe]);
+  }, [setHtmlWireframe, addMessage]);
+
+  // HTML Import handler
+  const handleImportHtml = useCallback(() => {
+    // Create file input element for HTML import
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.html,.htm';
+    input.onchange = (event) => {
+      const file = (event.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const htmlContent = e.target?.result as string;
+          if (htmlContent && setHtmlWireframe) {
+            setHtmlWireframe(htmlContent);
+            addMessage('ai', `✅ Successfully imported "${file.name}"! The HTML wireframe is ready for editing.`);
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+    input.click();
+  }, [setHtmlWireframe, addMessage]);
 
   const handleFigmaExport = useCallback((format: 'figma-file' | 'figma-components') => {
     // Handle Figma export
@@ -863,7 +887,8 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       <div className="right-pane">
         {(htmlWireframe || wireframePages.length > 0) ? (
           <div className="wireframe-panel">
-            <WireframeToolbar
+            <CompactToolbar
+              onImportHtml={handleImportHtml}
               onFigmaIntegration={handleFigmaIntegration}
               onSave={enhancedOnSave}
               onOpenLibrary={handleOpenLibrary}
