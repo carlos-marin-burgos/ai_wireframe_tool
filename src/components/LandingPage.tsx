@@ -3,6 +3,7 @@ import "./LandingPage.css";
 import Footer from './Footer';
 import ImageUploadModal from './ImageUploadModal';
 import FigmaIntegrationModal from './FigmaIntegrationModal';
+import GitHubConnectButton from './GitHubConnectButton';
 
 interface LandingPageProps {
   error: string | null;
@@ -215,6 +216,8 @@ const LandingPage: React.FC<LandingPageProps> = ({
 
               {/* Integration Pills Container */}
               <div className="integration-pills-container">
+                <GitHubConnectButton />
+
                 <button
                   type="button"
                   className="integration-pill figma-pill"

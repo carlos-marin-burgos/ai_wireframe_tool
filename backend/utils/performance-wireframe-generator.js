@@ -104,9 +104,7 @@ class FastWireframeGenerator {
     <header class="ms-learn-header">
       <div class="ms-learn-nav">
         <div class="nav-brand">
-          <svg width="108" height="24" viewBox="0 0 108 24" fill="currentColor">
-            <path d="M0 0h23.6v23.6H0V0zm24.8 0h23.6v23.6H24.8V0zm24.8 0h23.6v23.6H49.6V0zm24.8 0h23.6v23.6H74.4V0z"/>
-          </svg>
+         <img src="assets/windowsLogo.png">
           <span>Microsoft Learn</span>
         </div>
         <nav class="nav-menu">

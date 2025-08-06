@@ -1,0 +1,39 @@
+.github-connect-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #24292e 0%, #1b1f23 100%);
+  box-shadow: 0 4px 12px rgba(36, 41, 46, 0.3);
+}
+
+.github-connect-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(36, 41, 46, 0.4);
+  background: linear-gradient(135deg, #333333 0%, #1a1e22 100%);
+}
+
+.github-connect-btn.connected {
+  background: linear-gradient(135deg, #28a745 0%, #20993d 100%);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.github-connect-btn.connected:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+  background: linear-gradient(135deg, #34ce57 0%, #1e7e34 100%);
+}
+
+.github-connect-btn:active {
+  transform: translateY(0);
+}

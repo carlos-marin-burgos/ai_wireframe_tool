@@ -101,15 +101,9 @@ export const useWireframeGeneration = () => {
         fastMode,
       });
 
-      // Smart AI usage: Use AI for complex requests, fast mode for simple ones
-      const shouldUseFastMode =
-        fastMode ||
-        (description.length < 100 &&
-          !description.includes("dynamic") &&
-          !description.includes("interactive") &&
-          !description.includes("animation") &&
-          !description.includes("complex") &&
-          !description.includes("custom"));
+      // AI-FIRST APPROACH: Always use AI unless explicitly requested fast mode
+      // Only use fast mode when explicitly requested, not for "simple" descriptions
+      const shouldUseFastMode = fastMode; // Always use AI unless fastMode is explicitly true
 
       // Reset state
       setIsLoading(true);
