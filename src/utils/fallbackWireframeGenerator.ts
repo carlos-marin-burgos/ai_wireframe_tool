@@ -219,10 +219,6 @@ const generateLandingPage = (
         </div>
     </header>
 
-    <div class="fallback-notice">
-        <strong>⚡ Smart Template:</strong> This wireframe was generated using intelligent templates while the AI service is temporarily unavailable.
-    </div>
-
     <section class="hero">
         <div class="container">
             <h1>${description}</h1>
@@ -388,10 +384,6 @@ const generateDashboard = (
             </nav>
         </div>
     </header>
-
-    <div class="fallback-notice">
-        <strong>⚡ Smart Template:</strong> Dashboard generated using intelligent templates.
-    </div>
 
     <main class="main">
         <div class="container">
@@ -904,10 +896,6 @@ const generateGeneric = (
             </nav>
         </div>
     </header>
-
-    <div class="fallback-notice">
-        <strong>⚡ Smart Template:</strong> Wireframe generated using intelligent templates while AI service is temporarily unavailable.
-    </div>
 
     <main class="main">
         <div class="container">
