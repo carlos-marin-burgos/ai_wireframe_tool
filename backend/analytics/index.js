@@ -3,8 +3,6 @@
  * Provides aggregated analytics data for business intelligence
  */
 
-const analyticsLogger = require("../utils/analytics-logger");
-
 module.exports = async function (context, req) {
   const startTime = Date.now();
   const correlationId = require("crypto").randomUUID();
@@ -96,32 +94,24 @@ module.exports = async function (context, req) {
       correlationId,
     };
 
-    // Log analytics access
-    analyticsLogger.logAPIPerformance(
-      "/api/analytics",
-      req.method,
-      200,
-      Date.now() - startTime
-    );
-    analyticsLogger.logBusinessMetrics("analytics_access", 1, {
-      hoursRequested: hoursBack,
+    // Simple console logging instead of analytics logger
+    console.log(`📊 [ANALYTICS] Request successful: ${correlationId}`, {
+      hoursBack,
       dataPoints: analyticsData.trends.requestsPerHour.length,
+      responseTimeMs: Date.now() - startTime,
     });
 
     context.res.status = 200;
     context.res.body = analyticsData;
-
-    analyticsLogger.flush();
   } catch (error) {
     const responseTime = Date.now() - startTime;
 
-    analyticsLogger.logAPIPerformance(
-      "/api/analytics",
-      req.method,
-      500,
-      responseTime,
-      error.message
-    );
+    // Simple console logging instead of analytics logger
+    console.error(`❌ [ANALYTICS] Error: ${error.message}`, {
+      correlationId,
+      responseTimeMs: responseTime,
+      stack: error.stack,
+    });
 
     context.res.status = 500;
     context.res.body = {
@@ -130,8 +120,6 @@ module.exports = async function (context, req) {
       timestamp: new Date().toISOString(),
       correlationId,
     };
-
-    analyticsLogger.flush();
   }
 };
 

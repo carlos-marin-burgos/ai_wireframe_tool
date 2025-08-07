@@ -283,13 +283,83 @@
 .linkable-wireframe .nav-section:hover {
   box-shadow: 0 2px 8px rgba(0, 123, 212, 0.2);
   transform: translateY(-1px);
+  outline: 2px dashed rgba(0, 123, 212, 0.5);
+  outline-offset: 2px;
 }
 
-.linkable-wireframe [style*="cursor: grabbing"] {
+/* Enhanced dragging states */
+.linkable-wireframe [data-dragging="true"] {
   cursor: grabbing !important;
-  box-shadow: 0 4px 16px rgba(0, 123, 212, 0.3) !important;
-  transform: scale(1.02) !important;
+  box-shadow: 0 8px 24px rgba(0, 123, 212, 0.4) !important;
+  transform: scale(1.05) rotate(2deg) !important;
   z-index: 1000 !important;
+  opacity: 0.9 !important;
+  transition: none !important;
+}
+
+/* Drop zone indicators */
+.drop-zone-active {
+  background: rgba(0, 123, 212, 0.1) !important;
+  border: 2px dashed #007bd4 !important;
+  border-radius: 8px !important;
+}
+
+.drop-zone-hover {
+  background: rgba(0, 123, 212, 0.2) !important;
+  border: 2px solid #007bd4 !important;
+  animation: pulse-drop-zone 1s infinite;
+}
+
+@keyframes pulse-drop-zone {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 123, 212, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(0, 123, 212, 0.1);
+  }
+}
+
+/* Insertion point indicator */
+.insertion-indicator {
+  position: absolute;
+  height: 3px;
+  background: #007bd4;
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(0, 123, 212, 0.6);
+  z-index: 999;
+  animation: glow-insertion 1s infinite alternate;
+}
+
+@keyframes glow-insertion {
+  from {
+    opacity: 0.7;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Grid snap preview */
+.snap-preview {
+  position: absolute;
+  border: 2px dashed #28a745;
+  background: rgba(40, 167, 69, 0.1);
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 998;
+  animation: snap-highlight 0.3s ease;
+}
+
+@keyframes snap-highlight {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* Drag hint notification */
@@ -323,5 +393,114 @@
   to {
     opacity: 0;
     transform: translateX(100%);
+  }
+}
+
+/* Enhanced Drag & Drop Visual Feedback */
+.drag-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.drag-grid {
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(
+      90deg,
+      rgba(0, 123, 255, 0.1) 1px,
+      transparent 1px
+    ),
+    linear-gradient(rgba(0, 123, 255, 0.1) 1px, transparent 1px);
+  background-size: 10px 10px;
+  animation: gridPulse 2s ease-in-out infinite;
+}
+
+@keyframes gridPulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.drop-zone-available {
+  outline: 2px dashed rgba(0, 123, 255, 0.4) !important;
+  outline-offset: 4px;
+  background-color: rgba(0, 123, 255, 0.05) !important;
+  transition: all 0.2s ease;
+}
+
+.drop-zone-available::before {
+  content: "Drop here";
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 123, 255, 0.9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  z-index: 1001;
+  white-space: nowrap;
+}
+
+/* Global drag state styles */
+body.dragging-active {
+  cursor: grabbing !important;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+body.dragging-active * {
+  cursor: grabbing !important;
+}
+
+/* Enhanced collision detection indicators */
+.collision-detected {
+  outline: 2px solid #dc3545 !important;
+  outline-offset: 2px;
+  background-color: rgba(220, 53, 69, 0.1) !important;
+}
+
+.collision-detected::after {
+  content: "⚠️ Collision";
+  position: absolute;
+  top: -25px;
+  right: 0;
+  background: #dc3545;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  z-index: 1002;
+}
+
+/* Auto-arrangement indicators */
+.auto-arranging {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.auto-arranged {
+  animation: autoArrangeComplete 0.5s ease-out;
+}
+
+@keyframes autoArrangeComplete {
+  0% {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(40, 167, 69, 0.5);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: none;
   }
 }
