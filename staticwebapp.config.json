@@ -1,16 +1,41 @@
 {
   "routes": [
     {
+      "route": "/production-analytics.html",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/simple-analytics.html",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/monitor-analytics.html",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
       "route": "/api/*",
       "allowedRoles": ["anonymous"]
     }
   ],
   "navigationFallback": {
-    "rewrite": "/index.html"
-  },
-  "responseOverrides": {
-    "404": {
-      "rewrite": "/index.html"
-    }
+    "rewrite": "/index.html",
+    "exclude": [
+      "/production-analytics.html",
+      "/simple-analytics.html",
+      "/monitor-analytics.html",
+      "/*.png",
+      "/*.jpg",
+      "/*.ico",
+      "/*.svg",
+      "/*.css",
+      "/*.js",
+      "/*.json"
+    ]
   }
 }
