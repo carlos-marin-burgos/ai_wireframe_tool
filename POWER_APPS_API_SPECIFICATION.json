@@ -1,0 +1,248 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Designetica Wireframe Generator API",
+    "description": "AI-powered wireframe generation API for Microsoft Power Apps integration. Generates custom wireframes and UI suggestions using Azure OpenAI.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Designetica Support",
+      "url": "https://designetica.carlosmarin.net"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://func-designetica-prod-rjsqzg4bs3fc6.azurewebsites.net/api",
+      "description": "Production Azure Functions API"
+    }
+  ],
+  "paths": {
+    "/generate-wireframe": {
+      "post": {
+        "summary": "Generate AI Wireframe",
+        "description": "Creates a custom wireframe based on user description using Azure OpenAI GPT-4o",
+        "operationId": "GenerateWireframe",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WireframeRequest"
+              },
+              "example": {
+                "description": "Create a login form with username, password fields and a blue submit button",
+                "theme": "microsoftlearn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Wireframe generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireframeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request format"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/generate-suggestions": {
+      "post": {
+        "summary": "Generate UI Suggestions",
+        "description": "Provides AI-powered suggestions for UI improvements",
+        "operationId": "GenerateSuggestions",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SuggestionsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Suggestions generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuggestionsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "description": "Verify API status and connectivity",
+        "operationId": "HealthCheck",
+        "responses": {
+          "200": {
+            "description": "API is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "healthy"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "example": "2025-08-07T14:47:10.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "WireframeRequest": {
+        "type": "object",
+        "required": ["description"],
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Detailed description of the wireframe to generate",
+            "example": "Create a dashboard with charts, user profile section, and navigation menu"
+          },
+          "theme": {
+            "type": "string",
+            "description": "UI theme style",
+            "enum": ["microsoftlearn", "minimal", "modern", "classic"],
+            "default": "microsoftlearn"
+          },
+          "colorScheme": {
+            "type": "string",
+            "description": "Color scheme preference",
+            "enum": ["primary", "secondary", "neutral", "accent"],
+            "default": "primary"
+          }
+        }
+      },
+      "WireframeResponse": {
+        "type": "object",
+        "properties": {
+          "html": {
+            "type": "string",
+            "description": "Generated HTML wireframe code"
+          },
+          "aiGenerated": {
+            "type": "boolean",
+            "description": "Indicates if content was AI-generated"
+          },
+          "theme": {
+            "type": "string",
+            "description": "Applied theme"
+          },
+          "colorScheme": {
+            "type": "string",
+            "description": "Applied color scheme"
+          },
+          "correlationId": {
+            "type": "string",
+            "description": "Request correlation identifier"
+          },
+          "processingTimeMs": {
+            "type": "number",
+            "description": "Processing time in milliseconds"
+          },
+          "source": {
+            "type": "string",
+            "description": "Generation source"
+          },
+          "fallback": {
+            "type": "boolean",
+            "description": "Whether fallback logic was used"
+          }
+        }
+      },
+      "SuggestionsRequest": {
+        "type": "object",
+        "required": ["context"],
+        "properties": {
+          "context": {
+            "type": "string",
+            "description": "Context for generating suggestions"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of suggestions needed",
+            "enum": ["ui", "ux", "accessibility", "performance"]
+          }
+        }
+      },
+      "SuggestionsResponse": {
+        "type": "object",
+        "properties": {
+          "suggestions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "priority": {
+                  "type": "string",
+                  "enum": ["high", "medium", "low"]
+                }
+              }
+            }
+          },
+          "aiGenerated": {
+            "type": "boolean"
+          },
+          "correlationId": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "ApiKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Functions-Key",
+        "description": "Azure Functions API key (if required)"
+      }
+    }
+  },
+  "security": [],
+  "tags": [
+    {
+      "name": "Wireframes",
+      "description": "AI wireframe generation endpoints"
+    },
+    {
+      "name": "Suggestions",
+      "description": "UI/UX suggestion endpoints"
+    },
+    {
+      "name": "Health",
+      "description": "API health monitoring"
+    }
+  ]
+}

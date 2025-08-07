@@ -2,6 +2,9 @@
 const crypto = require("crypto");
 const path = require("path");
 
+// Import enhanced analytics logging for Power BI Dashboard
+const analyticsLogger = require("../utils/analytics-logger");
+
 // Import performance optimizations
 const {
   generateOptimizedWireframe,
@@ -1962,6 +1965,22 @@ function isValidDescription(description) {
 module.exports = async function (context, req) {
   const correlationId = crypto.randomUUID();
   const startTime = Date.now();
+  let analyticsData = {
+    correlationId,
+    sessionId: null,
+    description: null,
+    method: req.method,
+    userAgent: req.headers["user-agent"],
+    success: false,
+    errorMessage: null,
+    processingTimeMs: 0,
+    aiGenerated: false,
+    source: "unknown",
+    htmlLength: 0,
+    colorScheme: "primary",
+    hasImageAnalysis: false,
+    imageAnalysisConfidence: 0,
+  };
 
   try {
     // Set CORS headers first
@@ -1982,6 +2001,13 @@ module.exports = async function (context, req) {
     // Handle CORS preflight
     if (req.method === "OPTIONS") {
       context.res.status = 200;
+      // Log API performance for OPTIONS requests
+      analyticsLogger.logAPIPerformance(
+        "/api/generateWireframe",
+        "OPTIONS",
+        200,
+        Date.now() - startTime
+      );
       return;
     }
 
@@ -2016,6 +2042,16 @@ module.exports = async function (context, req) {
       userAgent = req.headers["user-agent"];
       // Note: Image analysis not supported via GET for security reasons
     }
+
+    // Update analytics data with request parameters
+    analyticsData = {
+      ...analyticsData,
+      sessionId,
+      description,
+      colorScheme,
+      hasImageAnalysis: !!imageAnalysis,
+      imageAnalysisConfidence: imageAnalysis?.confidence || 0,
+    };
 
     // Initialize context-aware session
     logger.info("🧠 Initializing context-aware session", {
@@ -2134,12 +2170,45 @@ module.exports = async function (context, req) {
     }
     const processingTime = Date.now() - startTime;
 
+    // Update analytics data with results
+    analyticsData = {
+      ...analyticsData,
+      success: true,
+      processingTimeMs: processingTime,
+      aiGenerated: result.aiGenerated,
+      source: result.source,
+      htmlLength: result.html.length,
+      attempt: result.attempt || 1,
+    };
+
     logger.info("✅ Wireframe generation completed successfully", {
       correlationId,
       processingTimeMs: processingTime,
       htmlLength: result.html.length,
       source: result.source,
       aiGenerated: result.aiGenerated,
+    });
+
+    // 📊 ENHANCED ANALYTICS LOGGING FOR POWER BI DASHBOARD
+    analyticsLogger.logWireframeGeneration(analyticsData);
+
+    // Log API performance metrics
+    analyticsLogger.logAPIPerformance(
+      "/api/generateWireframe",
+      req.method,
+      200,
+      processingTime
+    );
+
+    // Log business metrics
+    analyticsLogger.logBusinessMetrics("wireframe_generated", 1, {
+      source: result.source,
+      aiGenerated: result.aiGenerated,
+      complexityLevel: analyticsData.description
+        ? analyticsData.description.length > 100
+          ? "complex"
+          : "simple"
+        : "simple",
     });
 
     context.res.status = 200;
@@ -2160,13 +2229,35 @@ module.exports = async function (context, req) {
       aiGenerated: result.aiGenerated,
       source: result.source,
     };
+
+    // Flush analytics before function completes
+    analyticsLogger.flush();
   } catch (error) {
     const processingTime = Date.now() - startTime;
+
+    // Update analytics data with error information
+    analyticsData = {
+      ...analyticsData,
+      success: false,
+      processingTimeMs: processingTime,
+      errorMessage: error.message,
+      source: "error-fallback",
+    };
 
     logger.error("💥 Error in wireframe generation", error, {
       correlationId,
       processingTimeMs: processingTime,
     });
+
+    // 📊 LOG ERROR ANALYTICS
+    analyticsLogger.logWireframeGeneration(analyticsData);
+    analyticsLogger.logAPIPerformance(
+      "/api/generateWireframe",
+      req.method,
+      500,
+      processingTime,
+      error.message
+    );
 
     // Emergency fallback
     const html = createSimpleFallback("Error fallback", "primary");
@@ -2181,6 +2272,9 @@ module.exports = async function (context, req) {
       aiGenerated: false,
       source: "error-fallback",
     };
+
+    // Flush analytics even on error
+    analyticsLogger.flush();
   }
 };
 

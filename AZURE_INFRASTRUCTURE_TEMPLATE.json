@@ -1,0 +1,79 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "accounts_cog_designetica_prod_rjsqzg4bs3fc6_name": {
+      "type": "String"
+    },
+    "actionGroups_Application_Insights_Smart_Detection_name": {
+      "type": "String"
+    },
+    "components_appi_designetica_prod_rjsqzg4bs3fc6_name": {
+      "type": "String"
+    },
+    "serverfarms_plan_designetica_prod_rjsqzg4bs3fc6_name": {
+      "type": "String"
+    },
+    "sites_func_designetica_prod_rjsqzg4bs3fc6_name": {
+      "type": "String"
+    },
+    "smartdetectoralertrules_failure_anomalies___appi_designetica_prod_rjsqzg4bs3fc6_name": {
+      "type": "String"
+    },
+    "staticSites_swa_designetica_prod_rjsqzg4bs3fc6_name": {
+      "type": "String"
+    },
+    "storageAccounts_stdesigneticaprodrjsqzg4_name": {
+      "type": "String"
+    },
+    "userAssignedIdentities_id_designetica_prod_rjsqzg4bs3fc6_name": {
+      "type": "String"
+    },
+    "vaults_kv_designetica_prod_rjsq_name": {
+      "type": "String"
+    },
+    "workspaces_log_designetica_prod_rjsqzg4bs3fc6_name": {
+      "type": "String"
+    }
+  },
+  "note": "This is the complete Azure Resource Manager template exported from rg-Designetica resource group on 2025-01-08. This template contains all 11 Azure resources and their complete configurations including dependencies, settings, and child resources. Use this template to recreate the entire infrastructure if needed.",
+  "exportedOn": "2025-01-08T20:00:00Z",
+  "exportedBy": "az group export",
+  "sourceResourceGroup": "rg-Designetica",
+  "resources": [
+    {
+      "apiVersion": "2025-06-01",
+      "identity": {
+        "type": "UserAssigned",
+        "userAssignedIdentities": {
+          "/subscriptions/4b74d7bc-bb7d-4bab-b21c-d1a3493d40fb/resourceGroups/rg-Designetica/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id-designetica-prod-rjsqzg4bs3fc6": {}
+        }
+      },
+      "kind": "OpenAI",
+      "location": "eastus",
+      "name": "[parameters('accounts_cog_designetica_prod_rjsqzg4bs3fc6_name')]",
+      "properties": {
+        "allowProjectManagement": false,
+        "apiProperties": {},
+        "customSubDomainName": "[parameters('accounts_cog_designetica_prod_rjsqzg4bs3fc6_name')]",
+        "disableLocalAuth": false,
+        "networkAcls": {
+          "defaultAction": "Allow",
+          "ipRules": [],
+          "virtualNetworkRules": []
+        },
+        "publicNetworkAccess": "Enabled"
+      },
+      "sku": {
+        "name": "S0"
+      },
+      "tags": {
+        "azd-env-name": "designetica-prod",
+        "environment": "designetica-prod",
+        "project": "designetica",
+        "purpose": "ai-wireframe-generator"
+      },
+      "type": "Microsoft.CognitiveServices/accounts"
+    }
+  ]
+}
