@@ -3,6 +3,7 @@ import "./App.css";
 import "./wireframe-styles.css";
 import "./styles/microsoftlearn-card.css";
 import "./styles/suggestion-indicator.css";
+import "./styles/suggestion-performance.css";
 import "./styles/atlas-design-system.css";
 import LandingPage from "./components/LandingPage";
 import SplitLayout from "./components/SplitLayout";
@@ -16,6 +17,8 @@ import { useWireframeGeneration } from './hooks/useWireframeGeneration';
 import { PerformanceTracker } from "./utils/performance";
 import { generateHeroHTML } from "./components/HeroGenerator";
 import { PerformanceMonitor, usePerformanceMonitor } from "./components/PerformanceMonitor";
+import { getInstantSuggestions, shouldUseAI } from "./utils/fastSuggestions";
+import { getCachedSuggestions, cacheSuggestions } from "./utils/suggestionCache";
 
 interface SavedWireframe {
   id: string;
@@ -750,7 +753,7 @@ function AppContent() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ description: input.trim() }), // Backend expects 'description' parameter
+        body: JSON.stringify({ userInput: input.trim() }), // Changed from 'description' to 'userInput'
         signal: controller.signal
       });
 
@@ -775,21 +778,47 @@ function AppContent() {
       return API_CONFIG.FALLBACK_SUGGESTIONS;
     }
   }; const handleGenerateAiSuggestions = async (input: string) => {
-    // 100% AI-driven suggestions - trigger for any meaningful input (3+ characters)
-    const shouldShowSuggestions = input.trim().length >= 3;
+    // Immediate feedback with fast local suggestions
+    const shouldShowSuggestions = input.trim().length >= 2;
 
     if (shouldShowSuggestions) {
-      setSuggestionLoading(true);
-      try {
-        const suggestions = await generateSmartSuggestions(input);
-        setAiSuggestions(suggestions);
-        setShowAiSuggestions(suggestions.length > 0);
-      } catch (error) {
-        console.warn('Unable to generate AI suggestions, continuing without them');
-        setAiSuggestions([]);
-        setShowAiSuggestions(false);
-      } finally {
+      // 1. Show instant suggestions immediately (no loading state)
+      const instantSuggestions = getInstantSuggestions(input);
+      if (instantSuggestions.length > 0) {
+        setAiSuggestions(instantSuggestions);
+        setShowAiSuggestions(true);
         setSuggestionLoading(false);
+      }
+
+      // 2. Check cache for better suggestions
+      const cached = getCachedSuggestions(input);
+      if (cached && cached.suggestions.length > 0) {
+        setAiSuggestions(cached.suggestions);
+        setShowAiSuggestions(true);
+        setSuggestionLoading(false);
+        return; // Use cached suggestions, no need for AI call
+      }
+
+      // 3. Only use AI for complex inputs or when no instant suggestions available
+      if (shouldUseAI(input) || instantSuggestions.length === 0) {
+        if (instantSuggestions.length === 0) {
+          setSuggestionLoading(true); // Only show loading if no instant suggestions
+        }
+
+        try {
+          const aiSuggestions = await generateSmartSuggestions(input);
+          if (aiSuggestions.length > 0) {
+            setAiSuggestions(aiSuggestions);
+            setShowAiSuggestions(true);
+            // Cache the AI results for future use
+            cacheSuggestions(input, aiSuggestions, 'ai');
+          }
+        } catch (error) {
+          console.warn('AI suggestions failed, keeping instant suggestions');
+          // Keep the instant suggestions that are already showing
+        } finally {
+          setSuggestionLoading(false);
+        }
       }
     } else {
       setAiSuggestions([]);
