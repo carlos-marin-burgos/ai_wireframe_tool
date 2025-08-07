@@ -805,16 +805,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                 <FiImage />
               </button>
 
-              {/* Fluent Library button */}
-              <button
-                type="button"
-                onClick={handleOpenLibrary}
-                className="chat-atlas-btn"
-                title="Open Fluent Component Library"
-              >
-                <TbBoxModel2 />
-              </button>
-
               {/* Send button */}
               <button
                 type="submit"

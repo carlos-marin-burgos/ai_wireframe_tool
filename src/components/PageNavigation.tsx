@@ -26,7 +26,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
 
     // Generate ordinal numbers for breadcrumb labels
     const getOrdinalLabel = (index: number): string => {
-        const ordinals = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth'];
+        const ordinals = ['First page', 'Second page', 'Third page', 'Fourth page', 'Fifth page', 'Sixth page', 'Seventh page', 'Eighth page', 'Ninth page', 'Tenth page'];
         return ordinals[index] || `Page ${index + 1}`;
     };
 
