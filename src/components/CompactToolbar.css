@@ -2,6 +2,7 @@
 .compact-toolbar {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   background: #ffffff;
   border-bottom: 1px solid #e1dfdd;
   padding: 8px 12px;
