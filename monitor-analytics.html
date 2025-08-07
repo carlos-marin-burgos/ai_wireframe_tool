@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,7 +33,7 @@
         .header h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .subtitle {
@@ -45,7 +46,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             padding: 8px 16px;
             border-radius: 20px;
             backdrop-filter: blur(10px);
@@ -60,9 +61,17 @@
         }
 
         @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
         }
 
         .metrics-grid {
@@ -73,12 +82,12 @@
         }
 
         .metric-card {
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             transition: transform 0.3s ease;
         }
 
@@ -123,16 +132,27 @@
             font-weight: 500;
         }
 
-        .positive { background: #e8f5e8; color: #27ae60; }
-        .negative { background: #fee; color: #e74c3c; }
-        .neutral { background: #f0f8ff; color: #3498db; }
+        .positive {
+            background: #e8f5e8;
+            color: #27ae60;
+        }
+
+        .negative {
+            background: #fee;
+            color: #e74c3c;
+        }
+
+        .neutral {
+            background: #f0f8ff;
+            color: #3498db;
+        }
 
         .chart-container {
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
             padding: 25px;
             margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
         .chart-title {
@@ -166,15 +186,20 @@
         }
 
         @keyframes chartGrow {
-            from { transform: scaleX(0); }
-            to { transform: scaleX(1); }
+            from {
+                transform: scaleX(0);
+            }
+
+            to {
+                transform: scaleX(1);
+            }
         }
 
         .recent-activity {
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
         .activity-item {
@@ -235,24 +260,24 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             color: white;
             backdrop-filter: blur(10px);
         }
 
         .btn:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
         }
 
         .btn.active {
-            background: rgba(255,255,255,0.9);
+            background: rgba(255, 255, 255, 0.9);
             color: #333;
         }
 
         .loading {
             text-align: center;
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
             font-size: 1.1rem;
             margin: 40px 0;
         }
@@ -271,18 +296,19 @@
             .metrics-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .controls {
                 flex-direction: column;
                 align-items: center;
             }
-            
+
             .header h1 {
                 font-size: 2rem;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="dashboard">
         <div class="header">
@@ -344,16 +370,16 @@
             try {
                 const response = await fetch(`${API_BASE}/analytics`);
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                
+
                 analyticsData = await response.json();
                 updateMetrics();
                 updateActivity();
-                document.getElementById('last-updated').textContent = 
+                document.getElementById('last-updated').textContent =
                     `Updated: ${new Date().toLocaleTimeString()}`;
-                
+
                 // Clear any error states
                 document.getElementById('status-text').textContent = 'Live Monitoring Active';
-                
+
             } catch (error) {
                 console.error('Failed to load analytics:', error);
                 showError(`Failed to connect to analytics API: ${error.message}`);
@@ -365,10 +391,10 @@
             try {
                 const response = await fetch(`${API_BASE}/health`);
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                
+
                 const healthData = await response.json();
                 updateHealthMetrics(healthData);
-                
+
             } catch (error) {
                 console.error('Failed to load health data:', error);
             }
@@ -513,7 +539,7 @@
             refreshInterval = seconds * 1000;
             document.querySelectorAll('.btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-            
+
             if (autoRefresh) {
                 stopAutoRefresh();
                 startAutoRefresh();
@@ -552,16 +578,16 @@
                 alert('No data to export');
                 return;
             }
-            
+
             const dataStr = JSON.stringify(analyticsData, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
             const url = URL.createObjectURL(dataBlob);
-            
+
             const link = document.createElement('a');
             link.href = url;
             link.download = `designetica-analytics-${new Date().toISOString().split('T')[0]}.json`;
             link.click();
-            
+
             URL.revokeObjectURL(url);
         }
 
@@ -578,4 +604,5 @@
         });
     </script>
 </body>
+
 </html>
