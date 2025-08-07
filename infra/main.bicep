@@ -291,6 +291,10 @@ resource staticWebApp 'Microsoft.Web/staticSites@2024-04-01' = if (gitHubUserNam
   name: staticWebAppName
   location: location
   tags: frontendTags
+  sku: {
+    name: 'Free'
+    tier: 'Free'
+  }
   properties: {
     repositoryUrl: 'https://github.com/${gitHubUserName}/${repositoryName}'
     branch: 'main'

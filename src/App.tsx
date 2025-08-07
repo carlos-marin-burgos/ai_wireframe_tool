@@ -612,7 +612,7 @@ function AppContent() {
           showSecondaryButton: true,
           secondaryCtaText: "Learn More",
           backgroundColor: "#E8E6DF",
-          heroImageUrl: "https://learn.microsoft.com/media/learn/home/hero-learn.svg"
+          heroImageUrl: "hero-learn.svg"
         });
 
       case 'atlas-banner':

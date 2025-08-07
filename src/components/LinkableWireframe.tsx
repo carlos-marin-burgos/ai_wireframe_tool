@@ -33,6 +33,11 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
     const [insertionPoint, setInsertionPoint] = useState<{ element: HTMLElement; position: 'before' | 'after' } | null>(null);
     const [snapPreview, setSnapPreview] = useState<{ x: number; y: number; width: number; height: number } | null>(null);
 
+    // Mouse tracking for drag detection
+    const [mouseDownElement, setMouseDownElement] = useState<HTMLElement | null>(null);
+    const [mouseDownPos, setMouseDownPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+    const [hasMoved, setHasMoved] = useState(false);
+
     // Debug logging for props changes
     useEffect(() => {
         console.log('🔄 LinkableWireframe: htmlContent changed', {
@@ -122,10 +127,57 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         const hasDraggableAttr = element.hasAttribute('data-draggable') ||
             element.getAttribute('draggable') === 'true';
 
-        return Boolean(hasAtlasClass || isPositioned || isContainer || hasDraggableAttr);
+        const isDraggable = Boolean(hasAtlasClass || isPositioned || isContainer || hasDraggableAttr);
+
+        // Add accessibility attributes for draggable elements
+        if (isDraggable) {
+            element.setAttribute('role', 'button');
+            element.setAttribute('aria-grabbed', 'false');
+            element.setAttribute('tabindex', '0');
+            element.setAttribute('aria-label', `Draggable ${element.tagName.toLowerCase()} element. Press Enter or Space to select, then use arrow keys to move.`);
+        }
+
+        return isDraggable;
     }, []);
 
-    // Handle drag start
+    // Handle mouse down - Start tracking potential drag
+    const handleMouseDown = useCallback((event: React.MouseEvent, element: HTMLElement) => {
+        // Only track left clicks on draggable elements
+        if (event.button !== 0 || !isDraggableElement(element)) {
+            return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        setMouseDownElement(element);
+        setMouseDownPos({ x: event.clientX, y: event.clientY });
+        setHasMoved(false);
+        setSelectedElement(element);
+
+        console.log('🎯 Mouse down on:', element.tagName, element.className);
+    }, [isDraggableElement]);
+
+    // Handle mouse up - Complete click or cleanup drag tracking
+    const handleMouseUp = useCallback((event: React.MouseEvent) => {
+        if (mouseDownElement && !hasMoved) {
+            // This was a simple click, not a drag
+            console.log('🎯 Simple click on:', mouseDownElement.tagName);
+            // Don't convert to absolute positioning
+        }
+
+        // Reset tracking
+        setMouseDownElement(null);
+        setMouseDownPos({ x: 0, y: 0 });
+        setHasMoved(false);
+
+        // Handle drag end if we were dragging
+        if (isDragging) {
+            handleDragEnd();
+        }
+    }, [mouseDownElement, hasMoved, isDragging]);
+
+    // Handle drag start - Fixed positioning with accessibility
     const handleDragStart = useCallback((event: React.MouseEvent, element: HTMLElement) => {
         event.preventDefault();
         event.stopPropagation();
@@ -134,6 +186,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         const containerRect = containerRef.current?.getBoundingClientRect();
 
         if (containerRect) {
+            // Calculate correct offset relative to container
             setDragOffset({
                 x: event.clientX - rect.left,
                 y: event.clientY - rect.top
@@ -143,31 +196,65 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
             setIsDragging(true);
             setSelectedElement(element);
 
-            // Enhanced visual feedback for drag start
+            // Ensure element has absolute positioning from the start
+            if (element.style.position !== 'absolute') {
+                const currentLeft = rect.left - containerRect.left;
+                const currentTop = rect.top - containerRect.top;
+
+                // Make sure we don't set negative or invalid positions
+                const safeLeft = Math.max(0, currentLeft);
+                const safeTop = Math.max(0, currentTop);
+
+                element.style.position = 'absolute';
+                element.style.left = `${safeLeft}px`;
+                element.style.top = `${safeTop}px`;
+
+                console.log('🎯 Converting to absolute:', { currentLeft, currentTop, safeLeft, safeTop });
+            }
+
+            // Visual feedback
             element.style.zIndex = '1000';
-            element.style.opacity = '0.8';
+            element.style.opacity = '0.7';
             element.style.cursor = 'grabbing';
+            element.style.transform = 'scale(1.02)';
             element.setAttribute('data-dragging', 'true');
 
-            // Highlight potential drop zones
-            const potentialDropZones = document.querySelectorAll('.wireframe-container, .wireframe-element-container');
-            const zones: HTMLElement[] = [];
-            potentialDropZones.forEach(zone => {
-                if (zone !== element && zone !== element.parentElement) {
-                    zone.classList.add('drop-zone-available');
-                    zones.push(zone as HTMLElement);
-                }
-            });
-            setDropZones(zones);
+            // Accessibility: Announce drag start
+            element.setAttribute('aria-grabbed', 'true');
+            element.setAttribute('aria-describedby', 'drag-instructions');
 
-            // Add body class for global drag state
-            document.body.classList.add('dragging-active');
-
-            console.log('🎯 Enhanced drag start:', element.tagName, element.className, 'Drop zones:', zones.length);
+            console.log('🎯 Drag started:', element.tagName, element.className);
         }
     }, []);
 
-    // Handle drag move
+    // Handle mouse move - Detect if this is a drag operation OR continue existing drag
+    const handleMouseMoveTracking = useCallback((event: React.MouseEvent) => {
+        // If we're already dragging, continue the drag
+        if (isDragging && draggedElement && containerRef.current) {
+            const containerRect = containerRef.current.getBoundingClientRect();
+            const newLeft = Math.max(0, event.clientX - containerRect.left - dragOffset.x);
+            const newTop = Math.max(0, event.clientY - containerRect.top - dragOffset.y);
+
+            draggedElement.style.left = `${newLeft}px`;
+            draggedElement.style.top = `${newTop}px`;
+            return;
+        }
+
+        // If we have a mouse down but haven't started dragging yet, check for movement
+        if (mouseDownElement && !isDragging) {
+            const deltaX = Math.abs(event.clientX - mouseDownPos.x);
+            const deltaY = Math.abs(event.clientY - mouseDownPos.y);
+            const threshold = 5; // pixels to start drag
+
+            if (deltaX > threshold || deltaY > threshold) {
+                setHasMoved(true);
+                // Now start the actual drag
+                handleDragStart(event, mouseDownElement);
+            }
+        }
+    }, [mouseDownElement, mouseDownPos, isDragging, draggedElement, dragOffset]);
+
+    // Handle drag move - Simplified for smooth experience
     const handleDragMove = useCallback((event: React.MouseEvent) => {
         if (!isDragging || !draggedElement || !containerRef.current) return;
 
@@ -177,68 +264,18 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         const newX = event.clientX - containerRect.left - dragOffset.x;
         const newY = event.clientY - containerRect.top - dragOffset.y;
 
-        // Enhanced positioning with container bounds and grid snapping
-        const containerBounds = {
-            left: 0,
-            top: 0,
-            right: containerRect.width - draggedElement.offsetWidth,
-            bottom: containerRect.height - draggedElement.offsetHeight
-        };
+        // Simple boundary constraints
+        const maxX = containerRect.width - draggedElement.offsetWidth;
+        const maxY = containerRect.height - draggedElement.offsetHeight;
 
-        // Apply container boundaries
-        const boundedX = Math.max(containerBounds.left, Math.min(containerBounds.right, newX));
-        const boundedY = Math.max(containerBounds.top, Math.min(containerBounds.bottom, newY));
+        const boundedX = Math.max(0, Math.min(maxX, newX));
+        const boundedY = Math.max(0, Math.min(maxY, newY));
 
-        // Apply grid snapping for precision
-        const snapped = snapToGrid(boundedX, boundedY);
-
-        // Detect collisions with other elements
-        const collisions = detectCollisions(draggedElement, snapped.x, snapped.y);
-
-        // Find closest drop zone
-        const closestDropZone = findClosestDropZone(event.clientX, event.clientY);
-
-        // Update drop zones visual feedback
-        document.querySelectorAll('.drop-zone-active').forEach(el => el.classList.remove('drop-zone-active'));
-        if (closestDropZone) {
-            closestDropZone.classList.add('drop-zone-active');
-        }
-
-        // Show insertion point if over a container
-        if (closestDropZone && closestDropZone.classList.contains('wireframe-container')) {
-            const insertion = findInsertionPoint(event.clientX, event.clientY, closestDropZone);
-            setInsertionPoint(insertion);
-        } else {
-            setInsertionPoint(null);
-        }
-
-        // Update snap preview if no collisions
-        if (collisions.length === 0) {
-            setSnapPreview({
-                x: snapped.x,
-                y: snapped.y,
-                width: draggedElement.offsetWidth,
-                height: draggedElement.offsetHeight
-            });
-
-            // Remove collision indicators
-            draggedElement.classList.remove('collision-detected');
-        } else {
-            setSnapPreview(null);
-
-            // Add collision indicator
-            draggedElement.classList.add('collision-detected');
-        }
-
-        // Update element position (use snapped coordinates for smooth experience)
+        // Update position smoothly
         draggedElement.style.position = 'absolute';
-        draggedElement.style.left = `${snapped.x}px`;
-        draggedElement.style.top = `${snapped.y}px`;
-
-        console.log('🎯 Enhanced dragging to:', snapped.x, snapped.y, 'Collisions:', collisions.length);
-    }, [isDragging, draggedElement, dragOffset]);
-
-    // Helper function to find the closest drop zone
+        draggedElement.style.left = `${boundedX}px`;
+        draggedElement.style.top = `${boundedY}px`;
+    }, [isDragging, draggedElement, dragOffset]);    // Helper function to find the closest drop zone
     const findClosestDropZone = (x: number, y: number) => {
         const elements = document.querySelectorAll('.wireframe-container, .wireframe-element-container');
         let closestElement = null;
@@ -314,61 +351,81 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         };
     };
 
-    // Handle drag end
+    // Handle drag end - Fixed cleanup with accessibility
     const handleDragEnd = useCallback(() => {
         if (!draggedElement) return;
 
-        // Enhanced drag end with auto-arrangement and smart positioning
-
-        // Check if element should be inserted into a container
-        if (insertionPoint) {
-            const { element: targetElement, position } = insertionPoint;
-            const targetContainer = targetElement.parentElement;
-
-            if (targetContainer && position === 'before') {
-                targetContainer.insertBefore(draggedElement, targetElement);
-            } else if (targetContainer && position === 'after') {
-                targetContainer.insertBefore(draggedElement, targetElement.nextSibling);
-            }
-        }
-
-        // Auto-arrange elements to prevent overlaps
-        const container = draggedElement.parentElement;
-        if (container) {
-            autoArrangeElements(container);
-        }
-
-        // Reset visual feedback
+        // Clean reset of visual feedback
         draggedElement.style.zIndex = '';
         draggedElement.style.opacity = '';
         draggedElement.style.cursor = '';
+        draggedElement.style.transform = '';
         draggedElement.removeAttribute('data-dragging');
-        draggedElement.classList.remove('collision-detected');
 
-        // Clear all visual indicators
-        document.querySelectorAll('.drop-zone-active, .drop-zone-hover, .drop-zone-available').forEach(el => {
-            el.classList.remove('drop-zone-active', 'drop-zone-hover', 'drop-zone-available');
-        });
-
-        // Remove global drag state
-        document.body.classList.remove('dragging-active');
+        // Accessibility: Announce drag end
+        draggedElement.setAttribute('aria-grabbed', 'false');
+        draggedElement.removeAttribute('aria-describedby');
 
         // Reset state
         setIsDragging(false);
         setDraggedElement(null);
-        setInsertionPoint(null);
-        setSnapPreview(null);
-        setDropZones([]);
 
         // Update the HTML content
         if (containerRef.current && onUpdateHtml) {
             onUpdateHtml(containerRef.current.innerHTML);
         }
 
-        console.log('🎯 Enhanced drag end completed with auto-arrangement');
-    }, [draggedElement, onUpdateHtml, insertionPoint]);
+        console.log('🎯 Drag completed');
+    }, [draggedElement, onUpdateHtml]);
 
-    // Auto-arrange elements to prevent overlaps
+    // Keyboard movement for accessibility
+    const moveElementWithKeyboard = useCallback((element: HTMLElement, direction: string) => {
+        if (!containerRef.current) return;
+
+        const containerRect = containerRef.current.getBoundingClientRect();
+        const rect = element.getBoundingClientRect();
+
+        // Ensure element has absolute positioning
+        if (element.style.position !== 'absolute') {
+            const currentLeft = rect.left - containerRect.left;
+            const currentTop = rect.top - containerRect.top;
+            element.style.position = 'absolute';
+            element.style.left = `${currentLeft}px`;
+            element.style.top = `${currentTop}px`;
+        }
+
+        const currentLeft = parseInt(element.style.left) || 0;
+        const currentTop = parseInt(element.style.top) || 0;
+        const step = 10; // 10px movement per arrow key press
+
+        let newLeft = currentLeft;
+        let newTop = currentTop;
+
+        switch (direction) {
+            case 'ArrowLeft':
+                newLeft = Math.max(0, currentLeft - step);
+                break;
+            case 'ArrowRight':
+                newLeft = Math.min(containerRect.width - element.offsetWidth, currentLeft + step);
+                break;
+            case 'ArrowUp':
+                newTop = Math.max(0, currentTop - step);
+                break;
+            case 'ArrowDown':
+                newTop = Math.min(containerRect.height - element.offsetHeight, currentTop + step);
+                break;
+        }
+
+        element.style.left = `${newLeft}px`;
+        element.style.top = `${newTop}px`;
+
+        // Update HTML content
+        if (onUpdateHtml) {
+            onUpdateHtml(containerRef.current.innerHTML);
+        }
+
+        console.log(`🎯 Keyboard moved element ${direction}: ${newLeft}, ${newTop}`);
+    }, [onUpdateHtml]);    // Auto-arrange elements to prevent overlaps
     const autoArrangeElements = (container: HTMLElement) => {
         const elements = Array.from(container.children)
             .filter(child => child.classList.contains('wireframe-element')) as HTMLElement[];
@@ -668,10 +725,19 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         <div
             className="linkable-wireframe"
             ref={containerRef}
-            onMouseMove={handleDragMove}
-            onMouseUp={handleDragEnd}
-            onMouseLeave={handleDragEnd}
+            onMouseMove={handleMouseMoveTracking}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+            role="application"
+            aria-label="Wireframe editor - drag and drop elements to rearrange them"
         >
+            {/* Hidden accessibility instructions */}
+            <div id="drag-instructions" className="sr-only">
+                Use mouse to drag elements around the wireframe.
+                Elements will stay within the container boundaries.
+                Press Escape to cancel dragging.
+            </div>
+
             {(cleanHtmlContent && cleanHtmlContent.length > 0) ? (
                 <div
                     dangerouslySetInnerHTML={{ __html: cleanHtmlContent }}
@@ -684,15 +750,33 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
                             return;
                         }
 
-                        // Check if it's draggable for left-click drag
+                        // Check if it's draggable for left-click - START TRACKING, don't drag yet
                         if (e.button === 0 && isDraggableElement(target)) {
-                            // Show drag hint on first use
-                            if (!showDragHint) {
-                                setShowDragHint(true);
-                                setTimeout(() => setShowDragHint(false), 3000);
+                            handleMouseDown(e, target);
+                        }
+                    }}
+                    onKeyDown={(e) => {
+                        const target = e.target as HTMLElement;
+
+                        // Keyboard accessibility for dragging
+                        if (isDraggableElement(target)) {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                // For now, just focus the element - could extend with keyboard dragging
+                                target.focus();
+                                console.log('🎯 Element selected via keyboard:', target.tagName);
                             }
 
-                            handleDragStart(e, target);
+                            // Arrow key movement for accessibility
+                            if (selectedElement === target && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                                e.preventDefault();
+                                moveElementWithKeyboard(target, e.key);
+                            }
+                        }
+
+                        // Escape to cancel any drag operation
+                        if (e.key === 'Escape' && isDragging) {
+                            handleDragEnd();
                         }
                     }}
                 />
@@ -763,50 +847,6 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
                             </div>
                         )}
                     </div>
-                </div>
-            )}
-
-            {/* Drag hint notification */}
-            {showDragHint && (
-                <div className="drag-hint">
-                    🎯 Drag components to move them around! Right-click buttons to add page links.
-                </div>
-            )}
-
-            {/* Enhanced Drag & Drop Visual Feedback */}
-            {showDragHint && (
-                <div className="drag-hint">
-                    ✨ Drag elements around to rearrange them!
-                </div>
-            )}
-
-            {insertionPoint && (
-                <div
-                    className="insertion-indicator"
-                    style={{
-                        '--insert-x': `${insertionPoint.element.getBoundingClientRect().left}px`,
-                        '--insert-y': `${insertionPoint.position === 'before'
-                            ? insertionPoint.element.getBoundingClientRect().top - 2
-                            : insertionPoint.element.getBoundingClientRect().bottom + 2}px`
-                    } as React.CSSProperties}
-                />
-            )}
-
-            {snapPreview && (
-                <div
-                    className="snap-preview"
-                    style={{
-                        '--preview-x': `${snapPreview.x}px`,
-                        '--preview-y': `${snapPreview.y}px`,
-                        '--preview-width': `${snapPreview.width}px`,
-                        '--preview-height': `${snapPreview.height}px`
-                    } as React.CSSProperties}
-                />
-            )}
-
-            {isDragging && (
-                <div className="drag-overlay">
-                    <div className="drag-grid" />
                 </div>
             )}
         </div>

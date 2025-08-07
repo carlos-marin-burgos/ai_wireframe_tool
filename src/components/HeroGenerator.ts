@@ -21,7 +21,7 @@ export function generateHeroHTML(options: HeroOptions = {}): string {
     secondaryCtaText = "Browse",
     showSecondaryButton = true,
     backgroundColor = "#E8E6DF",
-    heroImageUrl = "public/hero300.png"
+    heroImageUrl = "public/hero300.png",
   } = options;
 
   return `
@@ -68,7 +68,9 @@ export function generateHeroHTML(options: HeroOptions = {}): string {
                          background-color: transparent; color: #0078d4;">
             ${ctaText}
           </button>
-          ${showSecondaryButton ? `
+          ${
+            showSecondaryButton
+              ? `
           <button class="button border" 
                   style="display: inline-flex; align-items: center; justify-content: center; 
                          padding: 0.5rem 1rem; border-radius: 0.25rem; font-family: 'Segoe UI', sans-serif; 
@@ -77,7 +79,9 @@ export function generateHeroHTML(options: HeroOptions = {}): string {
                          background-color: #0078d4; color: white;">
             ${secondaryCtaText}
           </button>
-          ` : ''}
+          `
+              : ""
+          }
         </div>
       </div>
     </section>
@@ -160,59 +164,68 @@ export function generateHeroHTML(options: HeroOptions = {}): string {
 // Predefined Hero templates for common scenarios
 export const HeroTemplates = {
   default: () => generateHeroHTML(),
-  
-  learning: () => generateHeroHTML({
-    title: "Master new skills with Microsoft Learn",
-    summary: "Explore hands-on learning paths and earn certifications in Microsoft technologies.",
-    eyebrow: "MICROSOFT LEARN",
-    ctaText: "Start Learning",
-    showSecondaryButton: true,
-    secondaryCtaText: "Browse",
-    backgroundColor: "#E8E6DF",
-    heroImageUrl: "https://learn.microsoft.com/media/learn/home/hero-learn.svg"
-  }),
-  
-  azure: () => generateHeroHTML({
-    title: "Build and deploy with Azure",
-    summary: "Create scalable applications with Microsoft Azure cloud services and tools.",
-    eyebrow: "MICROSOFT AZURE",
-    ctaText: "Get Started",
-    showSecondaryButton: true,
-    secondaryCtaText: "Learn More",
-    backgroundColor: "#E8E6DF",
-    heroImageUrl: "https://learn.microsoft.com/media/learn/Product/Microsoft-Azure/azure.svg"
-  }),
-  
-  developer: () => generateHeroHTML({
-    title: "Developer tools and resources", 
-    summary: "Everything you need to build amazing applications with Microsoft technologies.",
-    eyebrow: "DEVELOPER PLATFORM",
-    ctaText: "Explore Docs",
-    showSecondaryButton: true,
-    secondaryCtaText: "Documentation",
-    backgroundColor: "#E8E6DF",
-    heroImageUrl: "https://learn.microsoft.com/media/learn/Product/VS-Code/vs-code.svg"
-  }),
-  
-  ai: () => generateHeroHTML({
-    title: "Accelerate innovation with AI",
-    summary: "Transform your business with artificial intelligence and machine learning solutions.",
-    eyebrow: "AI & MACHINE LEARNING",
-    ctaText: "Explore AI",
-    showSecondaryButton: false,
-    backgroundColor: "#E8E6DF",
-    heroImageUrl: "https://learn.microsoft.com/media/learn/Product/Azure/azure-ai.svg"
-  }),
-  
-  minimal: () => generateHeroHTML({
-    title: "Simple and focused experience",
-    summary: "Clean, minimalist design that puts content first.",
-    eyebrow: "GETTING STARTED",
-    ctaText: "Get Started",
-    showSecondaryButton: false,
-    backgroundColor: "#E8E6DF",
-    heroImageUrl: "https://learn.microsoft.com/media/learn/home/hero-learn.svg"
-  })
+
+  learning: () =>
+    generateHeroHTML({
+      title: "Master new skills with Microsoft Learn",
+      summary:
+        "Explore hands-on learning paths and earn certifications in Microsoft technologies.",
+      eyebrow: "MICROSOFT LEARN",
+      ctaText: "Start Learning",
+      showSecondaryButton: true,
+      secondaryCtaText: "Browse",
+      backgroundColor: "#E8E6DF",
+      heroImageUrl: "hero-learn.svg",
+    }),
+
+  azure: () =>
+    generateHeroHTML({
+      title: "Build and deploy with Azure",
+      summary:
+        "Create scalable applications with Microsoft Azure cloud services and tools.",
+      eyebrow: "MICROSOFT AZURE",
+      ctaText: "Get Started",
+      showSecondaryButton: true,
+      secondaryCtaText: "Learn More",
+      backgroundColor: "#E8E6DF",
+      heroImageUrl: "azure.svg",
+    }),
+
+  developer: () =>
+    generateHeroHTML({
+      title: "Developer tools and resources",
+      summary:
+        "Everything you need to build amazing applications with Microsoft technologies.",
+      eyebrow: "DEVELOPER PLATFORM",
+      ctaText: "Explore Docs",
+      showSecondaryButton: true,
+      secondaryCtaText: "Documentation",
+      backgroundColor: "#E8E6DF",
+      heroImageUrl: "vscode.svg",
+    }),
+
+  ai: () =>
+    generateHeroHTML({
+      title: "Accelerate innovation with AI",
+      summary:
+        "Transform your business with artificial intelligence and machine learning solutions.",
+      eyebrow: "AI & MACHINE LEARNING",
+      ctaText: "Explore AI",
+      showSecondaryButton: false,
+      backgroundColor: "#E8E6DF",
+      heroImageUrl: "azure-ai.svg",
+    }),
+
+  minimal: () =>
+    generateHeroHTML({
+      title: "Simple and focused experience",
+      summary: "Clean, minimalist design that puts content first.",
+      eyebrow: "GETTING STARTED",
+      ctaText: "Get Started",
+      showSecondaryButton: false,
+      backgroundColor: "#E8E6DF",
+      heroImageUrl: "hero-learn.svg",
+    }),
 };
 
 export default { generateHeroHTML, HeroTemplates };
