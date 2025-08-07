@@ -15,7 +15,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -167,7 +167,7 @@
   align-items: center;
   gap: 6px;
   flex-wrap: wrap;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -209,7 +209,7 @@
   .page-navigation.breadcrumb-style {
     padding: 6px 16px;
   }
-  
+
   .breadcrumb-item {
     font-size: 13px;
     padding: 3px 6px;
@@ -220,12 +220,12 @@
   .breadcrumb-container {
     gap: 4px;
   }
-  
+
   .breadcrumb-item {
     font-size: 12px;
     padding: 2px 4px;
   }
-  
+
   .breadcrumb-separator {
     font-size: 12px;
     margin: 0 1px;
