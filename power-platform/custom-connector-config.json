@@ -1,0 +1,932 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Designetica AI Wireframe Connector",
+    "description": "Custom connector for Designetica AI-powered wireframe generation and analysis with AI Builder integration. Enables Power Apps and Power Automate to leverage advanced wireframe capabilities including image analysis, component detection, and intelligent design suggestions.",
+    "version": "2.0",
+    "contact": {
+      "name": "Designetica Support",
+      "url": "https://designetica.app/support",
+      "email": "support@designetica.app"
+    }
+  },
+  "host": "localhost:7071",
+  "basePath": "/api",
+  "schemes": ["http"],
+  "consumes": ["application/json", "multipart/form-data"],
+  "produces": ["application/json"],
+  "securityDefinitions": {
+    "oauth2_auth": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+      "tokenUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+      "scopes": {
+        "https://designetica.app/.default": "Access Designetica AI services"
+      }
+    },
+    "api_key": {
+      "type": "apiKey",
+      "name": "x-api-key",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "oauth2_auth": ["https://designetica.app/.default"]
+    },
+    {
+      "api_key": []
+    }
+  ],
+  "paths": {
+    "/generate-wireframe": {
+      "post": {
+        "summary": "Generate AI Wireframe",
+        "description": "Generate professional wireframes using GPT-4o with AI Builder component detection integration. Supports text descriptions and design requirements.",
+        "operationId": "GenerateWireframe",
+        "x-ms-visibility": "important",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "description": "Detailed description of the wireframe to generate",
+                  "title": "Wireframe Description",
+                  "x-ms-summary": "What wireframe would you like to create?"
+                },
+                "industry": {
+                  "type": "string",
+                  "description": "Target industry or business domain",
+                  "title": "Industry",
+                  "enum": [
+                    "e-commerce",
+                    "healthcare",
+                    "education",
+                    "finance",
+                    "technology",
+                    "marketing",
+                    "general"
+                  ],
+                  "default": "general"
+                },
+                "deviceType": {
+                  "type": "string",
+                  "description": "Target device for the wireframe",
+                  "title": "Device Type",
+                  "enum": ["desktop", "tablet", "mobile", "responsive"],
+                  "default": "desktop"
+                },
+                "complexity": {
+                  "type": "string",
+                  "description": "Complexity level of the wireframe",
+                  "title": "Complexity Level",
+                  "enum": ["simple", "moderate", "complex"],
+                  "default": "moderate"
+                },
+                "includeAiAnalysis": {
+                  "type": "boolean",
+                  "description": "Include AI Builder component analysis in the response",
+                  "title": "Include AI Analysis",
+                  "default": true
+                },
+                "referenceImage": {
+                  "type": "string",
+                  "format": "byte",
+                  "description": "Optional reference image for style inspiration (base64 encoded)",
+                  "title": "Reference Image"
+                }
+              },
+              "required": ["description"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Wireframe generated successfully",
+            "schema": {
+              "$ref": "#/definitions/WireframeResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "    "/ai-builder/health": {
+      "get": {
+        "summary": "Check AI Builder Health",
+        "description": "Verify that AI Builder integration and backend services are healthy and operational.",
+        "operationId": "CheckAIBuilderHealth",
+        "x-ms-visibility": "important",": {
+      "post": {
+        "summary": "Analyze Wireframe Image",
+        "description": "Analyze uploaded wireframe images using AI Builder object detection to identify components, layout patterns, and design elements.",
+        "operationId": "AnalyzeWireframeImage",
+        "x-ms-visibility": "important",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "image",
+            "in": "formData",
+            "type": "file",
+            "required": true,
+            "description": "Wireframe image to analyze (PNG, JPEG, GIF)",
+            "title": "Wireframe Image",
+            "x-ms-media-kind": "image"
+          },
+          {
+            "name": "analysisDepth",
+            "in": "formData",
+            "type": "string",
+            "enum": ["basic", "detailed", "comprehensive"],
+            "default": "detailed",
+            "description": "Depth of AI analysis to perform",
+            "title": "Analysis Depth"
+          },
+          {
+            "name": "detectComponents",
+            "in": "formData",
+            "type": "boolean",
+            "default": true,
+            "description": "Use AI Builder to detect individual components",
+            "title": "Detect Components"
+          },
+          {
+            "name": "analyzeLayout",
+            "in": "formData",
+            "type": "boolean",
+            "default": true,
+            "description": "Analyze overall layout structure",
+            "title": "Analyze Layout"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Image analysis completed successfully",
+            "schema": {
+              "$ref": "#/definitions/ImageAnalysisResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid image format or analysis parameters",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/wireframe/compare": {
+      "post": {
+        "summary": "Compare Wireframes",
+        "description": "Compare two wireframe designs using AI Builder analysis to identify similarities, differences, and improvement recommendations.",
+        "operationId": "CompareWireframes",
+        "x-ms-visibility": "advanced",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "wireframe1",
+            "in": "formData",
+            "type": "file",
+            "required": true,
+            "description": "First wireframe image for comparison",
+            "title": "Wireframe 1",
+            "x-ms-media-kind": "image"
+          },
+          {
+            "name": "wireframe2",
+            "in": "formData",
+            "type": "file",
+            "required": true,
+            "description": "Second wireframe image for comparison",
+            "title": "Wireframe 2",
+            "x-ms-media-kind": "image"
+          },
+          {
+            "name": "comparisonType",
+            "in": "formData",
+            "type": "string",
+            "enum": ["layout", "components", "styling", "comprehensive"],
+            "default": "comprehensive",
+            "description": "Type of comparison to perform",
+            "title": "Comparison Type"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comparison completed successfully",
+            "schema": {
+              "$ref": "#/definitions/ComparisonResponse"
+            }
+          }
+        }
+      }
+    },
+    "/wireframe/generate-variations": {
+      "post": {
+        "summary": "Generate Wireframe Variations",
+        "description": "Generate multiple design variations of a base wireframe using AI Builder insights for layout optimization and component alternatives.",
+        "operationId": "GenerateWireframeVariations",
+        "x-ms-visibility": "advanced",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "baseWireframeId": {
+                  "type": "string",
+                  "description": "ID of the base wireframe to create variations from",
+                  "title": "Base Wireframe ID"
+                },
+                "variationTypes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["layout", "color", "responsive", "component"]
+                  },
+                  "description": "Types of variations to generate",
+                  "title": "Variation Types"
+                },
+                "maxVariations": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 10,
+                  "default": 5,
+                  "description": "Maximum number of variations to generate",
+                  "title": "Max Variations"
+                },
+                "targetDevices": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["desktop", "tablet", "mobile"]
+                  },
+                  "description": "Target devices for responsive variations",
+                  "title": "Target Devices"
+                }
+              },
+              "required": ["baseWireframeId", "variationTypes"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Variations generated successfully",
+            "schema": {
+              "$ref": "#/definitions/VariationsResponse"
+            }
+          }
+        }
+      }
+    },
+    "/wireframe/batch-process": {
+      "post": {
+        "summary": "Batch Process Wireframes",
+        "description": "Process multiple wireframe images or documents in batch using AI Builder for efficient analysis and component detection across multiple designs.",
+        "operationId": "BatchProcessWireframes",
+        "x-ms-visibility": "advanced",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "files",
+            "in": "formData",
+            "type": "array",
+            "items": {
+              "type": "file"
+            },
+            "required": true,
+            "description": "Multiple wireframe files to process",
+            "title": "Wireframe Files",
+            "x-ms-media-kind": "image"
+          },
+          {
+            "name": "processingMode",
+            "in": "formData",
+            "type": "string",
+            "enum": ["analyze", "compare", "extract-components"],
+            "default": "analyze",
+            "description": "Type of batch processing to perform",
+            "title": "Processing Mode"
+          },
+          {
+            "name": "outputFormat",
+            "in": "formData",
+            "type": "string",
+            "enum": ["json", "csv", "excel"],
+            "default": "json",
+            "description": "Format for batch processing results",
+            "title": "Output Format"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Batch processing completed successfully",
+            "schema": {
+              "$ref": "#/definitions/BatchProcessingResponse"
+            }
+          },
+          "202": {
+            "description": "Batch processing started (async operation)",
+            "schema": {
+              "$ref": "#/definitions/AsyncOperationResponse"
+            }
+          }
+        }
+      }
+    },
+    "/wireframe/ai-suggestions": {
+      "post": {
+        "summary": "Get AI Design Suggestions",
+        "description": "Get AI-powered design suggestions and recommendations for wireframe improvements using AI Builder analysis and design best practices.",
+        "operationId": "GetAIDesignSuggestions",
+        "x-ms-visibility": "important",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "wireframeData": {
+                  "type": "object",
+                  "description": "Wireframe data or image for analysis",
+                  "title": "Wireframe Data",
+                  "properties": {
+                    "imageBase64": {
+                      "type": "string",
+                      "description": "Base64 encoded wireframe image"
+                    },
+                    "components": {
+                      "type": "array",
+                      "description": "Detected or specified components",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                },
+                "suggestionTypes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "accessibility",
+                      "usability",
+                      "performance",
+                      "responsive",
+                      "branding"
+                    ]
+                  },
+                  "description": "Types of suggestions to generate",
+                  "title": "Suggestion Types"
+                },
+                "targetAudience": {
+                  "type": "string",
+                  "description": "Target audience for the wireframe",
+                  "title": "Target Audience"
+                },
+                "businessGoals": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Business goals and objectives",
+                  "title": "Business Goals"
+                }
+              },
+              "required": ["wireframeData"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AI suggestions generated successfully",
+            "schema": {
+              "$ref": "#/definitions/AISuggestionsResponse"
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "description": "Check the health status of the Designetica AI service and AI Builder integration",
+        "operationId": "HealthCheck",
+        "x-ms-visibility": "internal",
+        "responses": {
+          "200": {
+            "description": "Service is healthy",
+            "schema": {
+              "$ref": "#/definitions/HealthResponse"
+            }
+          },
+          "503": {
+            "description": "Service is unhealthy",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/ai-builder/models/status": {
+      "get": {
+        "summary": "AI Builder Model Status",
+        "description": "Check the status of AI Builder models used for wireframe analysis",
+        "operationId": "GetAIBuilderModelStatus",
+        "x-ms-visibility": "internal",
+        "responses": {
+          "200": {
+            "description": "Model status retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/ModelStatusResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "WireframeResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the generated wireframe"
+        },
+        "html": {
+          "type": "string",
+          "description": "HTML representation of the wireframe"
+        },
+        "css": {
+          "type": "string",
+          "description": "CSS styles for the wireframe"
+        },
+        "previewUrl": {
+          "type": "string",
+          "description": "URL to preview the wireframe"
+        },
+        "downloadUrl": {
+          "type": "string",
+          "description": "URL to download the wireframe"
+        },
+        "aiAnalysis": {
+          "$ref": "#/definitions/AIAnalysis"
+        },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "generationTime": {
+              "type": "number",
+              "description": "Time taken to generate the wireframe (ms)"
+            },
+            "complexity": {
+              "type": "string",
+              "description": "Assessed complexity of the wireframe"
+            },
+            "componentCount": {
+              "type": "integer",
+              "description": "Number of components in the wireframe"
+            }
+          }
+        }
+      }
+    },
+    "ImageAnalysisResponse": {
+      "type": "object",
+      "properties": {
+        "components": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DetectedComponent"
+          },
+          "description": "Components detected by AI Builder"
+        },
+        "layout": {
+          "$ref": "#/definitions/LayoutAnalysis"
+        },
+        "designPatterns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DesignPattern"
+          }
+        },
+        "confidence": {
+          "type": "number",
+          "description": "Overall confidence score of the analysis"
+        },
+        "recommendations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "AI-generated recommendations for improvement"
+        }
+      }
+    },
+    "ComparisonResponse": {
+      "type": "object",
+      "properties": {
+        "similarity": {
+          "type": "object",
+          "properties": {
+            "overall": {
+              "type": "number",
+              "description": "Overall similarity score (0-1)"
+            },
+            "layout": {
+              "type": "number",
+              "description": "Layout similarity score"
+            },
+            "components": {
+              "type": "number",
+              "description": "Component similarity score"
+            },
+            "styling": {
+              "type": "number",
+              "description": "Styling similarity score"
+            }
+          }
+        },
+        "differences": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Difference"
+          }
+        },
+        "recommendations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "VariationsResponse": {
+      "type": "object",
+      "properties": {
+        "variations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/WireframeVariation"
+          }
+        },
+        "processingTime": {
+          "type": "number"
+        }
+      }
+    },
+    "BatchProcessingResponse": {
+      "type": "object",
+      "properties": {
+        "processedFiles": {
+          "type": "integer",
+          "description": "Number of files processed"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "downloadUrl": {
+          "type": "string",
+          "description": "URL to download batch processing results"
+        },
+        "summary": {
+          "type": "object",
+          "properties": {
+            "totalComponents": {
+              "type": "integer"
+            },
+            "uniquePatterns": {
+              "type": "integer"
+            },
+            "averageComplexity": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "AISuggestionsResponse": {
+      "type": "object",
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AISuggestion"
+          }
+        },
+        "priorityRecommendations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "improvementScore": {
+          "type": "number",
+          "description": "Potential improvement score if suggestions are implemented"
+        }
+      }
+    },
+    "AsyncOperationResponse": {
+      "type": "object",
+      "properties": {
+        "operationId": {
+          "type": "string",
+          "description": "ID to track the async operation"
+        },
+        "statusUrl": {
+          "type": "string",
+          "description": "URL to check operation status"
+        },
+        "estimatedCompletionTime": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "HealthResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["healthy", "degraded", "unhealthy"]
+        },
+        "services": {
+          "type": "object",
+          "properties": {
+            "aiBuilder": {
+              "type": "string",
+              "description": "AI Builder service status"
+            },
+            "gpt4": {
+              "type": "string",
+              "description": "GPT-4 service status"
+            },
+            "database": {
+              "type": "string",
+              "description": "Database status"
+            }
+          }
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "ModelStatusResponse": {
+      "type": "object",
+      "properties": {
+        "objectDetectionModel": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string",
+              "enum": ["training", "ready", "failed"]
+            },
+            "accuracy": {
+              "type": "number"
+            },
+            "lastTrained": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "formProcessorModel": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string",
+              "enum": ["training", "ready", "failed"]
+            },
+            "accuracy": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "AIAnalysis": {
+      "type": "object",
+      "properties": {
+        "detectedComponents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DetectedComponent"
+          }
+        },
+        "layoutStructure": {
+          "$ref": "#/definitions/LayoutAnalysis"
+        },
+        "accessibilityScore": {
+          "type": "number"
+        },
+        "usabilityScore": {
+          "type": "number"
+        }
+      }
+    },
+    "DetectedComponent": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of detected component"
+        },
+        "confidence": {
+          "type": "number",
+          "description": "AI confidence score for detection"
+        },
+        "boundingBox": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            },
+            "width": {
+              "type": "number"
+            },
+            "height": {
+              "type": "number"
+            }
+          }
+        },
+        "properties": {
+          "type": "object",
+          "description": "Additional component properties"
+        }
+      }
+    },
+    "LayoutAnalysis": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Layout type (e.g., grid, flexbox, traditional)"
+        },
+        "columns": {
+          "type": "integer",
+          "description": "Number of columns in the layout"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Identified layout sections"
+        }
+      }
+    },
+    "DesignPattern": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the design pattern"
+        },
+        "confidence": {
+          "type": "number",
+          "description": "Confidence score for pattern detection"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the pattern usage"
+        }
+      }
+    },
+    "Difference": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of difference detected"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the difference"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["low", "medium", "high"],
+          "description": "Severity of the difference"
+        }
+      }
+    },
+    "WireframeVariation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "variationType": {
+          "type": "string"
+        },
+        "previewUrl": {
+          "type": "string"
+        },
+        "html": {
+          "type": "string"
+        }
+      }
+    },
+    "AISuggestion": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "type": "string",
+          "description": "Category of the suggestion"
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the suggestion"
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description"
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["low", "medium", "high"],
+          "description": "Priority level"
+        },
+        "impactScore": {
+          "type": "number",
+          "description": "Potential impact score"
+        }
+      }
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "Error code"
+            },
+            "message": {
+              "type": "string",
+              "description": "Error message"
+            },
+            "details": {
+              "type": "string",
+              "description": "Additional error details"
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-ms-connector-metadata": [
+    {
+      "propertyName": "Website",
+      "propertyValue": "https://designetica.app"
+    },
+    {
+      "propertyName": "Privacy policy",
+      "propertyValue": "https://designetica.app/privacy"
+    },
+    {
+      "propertyName": "Categories",
+      "propertyValue": "AI;Design;Productivity"
+    }
+  ]
+}

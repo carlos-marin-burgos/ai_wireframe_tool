@@ -1,0 +1,417 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Designetica AI Builder Integration - Production",
+    "description": "Production AI Builder integration for wireframe analysis and generation with Power Platform",
+    "version": "2.0.0",
+    "contact": {
+      "name": "Designetica Support",
+      "url": "https://designetica.com/support",
+      "email": "support@designetica.com"
+    }
+  },
+  "host": "func-designetica-prod.azurewebsites.net",
+  "basePath": "/api",
+  "schemes": ["https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "securityDefinitions": {
+    "azure_auth": {
+      "type": "oauth2",
+      "authorizationUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+      "tokenUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+      "flow": "accessCode",
+      "scopes": {
+        "https://graph.microsoft.com/.default": "Access Designetica AI Builder API"
+      }
+    }
+  },
+  "security": [
+    {
+      "azure_auth": ["https://graph.microsoft.com/.default"]
+    }
+  ],
+  "x-ms-connector-metadata": [
+    {
+      "propertyName": "Website",
+      "propertyValue": "https://designetica.com"
+    },
+    {
+      "propertyName": "Privacy policy",
+      "propertyValue": "https://designetica.com/privacy"
+    },
+    {
+      "propertyName": "Categories",
+      "propertyValue": "AI;Productivity;Content and Files"
+    }
+  ],
+  "paths": {
+    "/ai-builder/health": {
+      "get": {
+        "summary": "Check AI Builder Health",
+        "description": "Verify that AI Builder integration and backend services are healthy and operational for production use.",
+        "operationId": "CheckAIBuilderHealth",
+        "x-ms-visibility": "important",
+        "responses": {
+          "200": {
+            "description": "Health check successful",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Overall health status",
+                  "enum": ["healthy", "degraded", "unhealthy"]
+                },
+                "timestamp": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Health check timestamp"
+                },
+                "services": {
+                  "type": "object",
+                  "properties": {
+                    "aiBuilder": {
+                      "type": "string",
+                      "description": "AI Builder service status"
+                    },
+                    "gpt4": {
+                      "type": "string",
+                      "description": "GPT-4 connectivity status"
+                    },
+                    "powerPlatform": {
+                      "type": "string",
+                      "description": "Power Platform integration status"
+                    }
+                  }
+                },
+                "environment": {
+                  "type": "string",
+                  "description": "Deployment environment"
+                },
+                "version": {
+                  "type": "string",
+                  "description": "API version"
+                },
+                "modelIds": {
+                  "type": "object",
+                  "properties": {
+                    "objectDetection": {
+                      "type": "string",
+                      "description": "Object detection model ID"
+                    },
+                    "formProcessor": {
+                      "type": "string",
+                      "description": "Form processor model ID"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/generate-wireframe": {
+      "post": {
+        "summary": "Generate AI Wireframe",
+        "description": "Generate wireframes using AI Builder integration and GPT-4 powered analysis for Power Platform applications.",
+        "operationId": "GenerateWireframe",
+        "x-ms-visibility": "important",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "description": "Natural language description of the wireframe to generate",
+                  "title": "Wireframe Description",
+                  "x-ms-summary": "Describe the wireframe you want to create"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": ["web", "mobile", "desktop", "tablet"],
+                  "default": "web",
+                  "description": "Type of interface to generate",
+                  "title": "Interface Type",
+                  "x-ms-summary": "Select the target platform"
+                },
+                "complexity": {
+                  "type": "string",
+                  "enum": ["simple", "moderate", "complex"],
+                  "default": "moderate",
+                  "description": "Complexity level of the wireframe",
+                  "title": "Complexity Level",
+                  "x-ms-summary": "Choose wireframe complexity"
+                },
+                "includeNavigation": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Include navigation elements in the wireframe",
+                  "title": "Include Navigation",
+                  "x-ms-summary": "Add navigation components"
+                },
+                "colorScheme": {
+                  "type": "string",
+                  "enum": ["light", "dark", "auto"],
+                  "default": "light",
+                  "description": "Color scheme preference",
+                  "title": "Color Scheme",
+                  "x-ms-summary": "Select color theme"
+                },
+                "powerPlatformOptions": {
+                  "type": "object",
+                  "properties": {
+                    "sharePointSiteId": {
+                      "type": "string",
+                      "description": "SharePoint site ID for document storage",
+                      "title": "SharePoint Site ID"
+                    },
+                    "teamsChannelId": {
+                      "type": "string",
+                      "description": "Teams channel for notifications",
+                      "title": "Teams Channel ID"
+                    },
+                    "approvalRequired": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Require approval workflow",
+                      "title": "Require Approval"
+                    }
+                  }
+                }
+              },
+              "required": ["description", "type"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Wireframe generated successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "wireframeId": {
+                  "type": "string",
+                  "description": "Unique identifier for the generated wireframe"
+                },
+                "html": {
+                  "type": "string",
+                  "description": "Generated HTML wireframe code"
+                },
+                "css": {
+                  "type": "string",
+                  "description": "Generated CSS styles"
+                },
+                "components": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "Component type"
+                      },
+                      "properties": {
+                        "type": "object",
+                        "description": "Component properties and configuration"
+                      },
+                      "position": {
+                        "type": "object",
+                        "properties": {
+                          "x": { "type": "number" },
+                          "y": { "type": "number" },
+                          "width": { "type": "number" },
+                          "height": { "type": "number" }
+                        }
+                      }
+                    }
+                  }
+                },
+                "aiBuilderAnalysis": {
+                  "type": "object",
+                  "properties": {
+                    "detectedComponents": {
+                      "type": "integer",
+                      "description": "Number of components detected by AI Builder"
+                    },
+                    "confidenceScore": {
+                      "type": "number",
+                      "description": "AI Builder confidence score (0-1)"
+                    },
+                    "processingTime": {
+                      "type": "number",
+                      "description": "Processing time in milliseconds"
+                    }
+                  }
+                },
+                "powerPlatformData": {
+                  "type": "object",
+                  "properties": {
+                    "sharePointDocumentId": {
+                      "type": "string",
+                      "description": "SharePoint document ID if stored"
+                    },
+                    "teamsMessageId": {
+                      "type": "string",
+                      "description": "Teams notification message ID"
+                    },
+                    "approvalWorkflowId": {
+                      "type": "string",
+                      "description": "Approval workflow ID if triggered"
+                    }
+                  }
+                },
+                "timestamp": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Generation timestamp"
+                },
+                "metadata": {
+                  "type": "object",
+                  "properties": {
+                    "version": {
+                      "type": "string",
+                      "description": "API version used"
+                    },
+                    "model": {
+                      "type": "string",
+                      "description": "AI model used for generation"
+                    },
+                    "environment": {
+                      "type": "string",
+                      "description": "Deployment environment"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - invalid parameters",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized - invalid authentication",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "503": {
+            "description": "Service unavailable",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Backend Health Check",
+        "description": "Basic health check for the backend infrastructure and Azure Functions runtime.",
+        "operationId": "BackendHealthCheck",
+        "x-ms-visibility": "advanced",
+        "responses": {
+          "200": {
+            "description": "Backend is healthy",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Backend health status"
+                },
+                "timestamp": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Health check timestamp"
+                },
+                "uptime": {
+                  "type": "number",
+                  "description": "Uptime in seconds"
+                },
+                "version": {
+                  "type": "string",
+                  "description": "Backend version"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Backend is unhealthy",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "Error code"
+            },
+            "message": {
+              "type": "string",
+              "description": "Error message"
+            },
+            "details": {
+              "type": "string",
+              "description": "Additional error details"
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Error timestamp"
+            },
+            "traceId": {
+              "type": "string",
+              "description": "Trace ID for debugging"
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-ms-capabilities": {
+    "testConnection": {
+      "operationId": "CheckAIBuilderHealth"
+    }
+  },
+  "x-ms-openai-data": {
+    "openai-enabled": false,
+    "operations": []
+  }
+}

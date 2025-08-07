@@ -619,17 +619,47 @@ async function generateWireframeWithOpenAI(
         html = html.replace(/^```[a-zA-Z]*\n?/, "").replace(/\n?```$/, "");
       }
 
-      // Basic validation of HTML response
-      if (html.includes("<!DOCTYPE html>") && html.includes("</html>")) {
+      // Enhanced validation of HTML response
+      // Accept both complete documents and HTML fragments
+      const hasDoctype =
+        html.includes("<!DOCTYPE html>") && html.includes("</html>");
+      const isValidFragment =
+        html.includes("<") && html.includes(">") && html.length > 10;
+
+      if (hasDoctype || isValidFragment) {
+        // If it's a fragment, wrap it in a complete HTML document
+        if (!hasDoctype && isValidFragment) {
+          html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${description}</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 40px;
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    ${html}
+</body>
+</html>`;
+        }
+
         logger.info("✅ OpenAI wireframe generated successfully", {
           correlationId,
           openaiTimeMs: openaiTime,
           htmlLength: html.length,
+          wasFragment: !hasDoctype,
         });
         return html;
       } else {
         logger.warn("⚠️ OpenAI returned invalid HTML format", {
           correlationId,
+          htmlContent: html.substring(0, 200),
         });
         return null;
       }
