@@ -1,0 +1,745 @@
+{
+  "workflows": [
+    {
+      "name": "AI Builder Wireframe Analysis Pipeline",
+      "displayName": "Automated Wireframe Analysis with AI Builder",
+      "description": "Comprehensive Power Automate workflow that processes wireframe uploads, triggers AI Builder analysis, and distributes results across the organization",
+      "version": "2.0",
+      "category": "Design Automation",
+      "tags": ["AI Builder", "Wireframes", "Design Analysis", "Automation"],
+
+      "trigger": {
+        "type": "SharePoint",
+        "name": "When a file is created or modified",
+        "description": "Triggers when wireframe images are uploaded to SharePoint document library",
+        "configuration": {
+          "site": "https://yourtenant.sharepoint.com/sites/DesigneticaWorkspace",
+          "library": "Wireframe Uploads",
+          "folderPath": "/Wireframes/Inbox",
+          "fileFilter": "*.png,*.jpg,*.jpeg,*.gif",
+          "includeSubfolders": true
+        },
+        "outputs": {
+          "fileId": "triggerOutputs()?['body/Id']",
+          "fileName": "triggerOutputs()?['body/Name']",
+          "fileUrl": "triggerOutputs()?['body/ServerRedirectedEmbedUrl']",
+          "uploadedBy": "triggerOutputs()?['body/Author/Email']",
+          "uploadTime": "triggerOutputs()?['body/TimeCreated']"
+        }
+      },
+
+      "actions": [
+        {
+          "id": "initializeVariables",
+          "type": "Initialize Variables",
+          "name": "Initialize Processing Variables",
+          "description": "Set up variables for the analysis workflow",
+          "runAfter": {},
+          "variables": [
+            {
+              "name": "analysisId",
+              "type": "String",
+              "value": "@{guid()}"
+            },
+            {
+              "name": "processingStatus",
+              "type": "String",
+              "value": "started"
+            },
+            {
+              "name": "analysisResults",
+              "type": "Object",
+              "value": {}
+            },
+            {
+              "name": "errorMessages",
+              "type": "Array",
+              "value": []
+            }
+          ]
+        },
+
+        {
+          "id": "getFileContent",
+          "type": "SharePoint",
+          "name": "Get file content",
+          "description": "Retrieve the uploaded wireframe image content",
+          "runAfter": {
+            "initializeVariables": ["Succeeded"]
+          },
+          "configuration": {
+            "site": "https://yourtenant.sharepoint.com/sites/DesigneticaWorkspace",
+            "library": "Wireframe Uploads",
+            "fileId": "@triggerOutputs()?['body/Id']"
+          },
+          "outputs": {
+            "fileContent": "body('getFileContent')",
+            "contentType": "outputs('getFileContent')?['headers']['Content-Type']"
+          }
+        },
+
+        {
+          "id": "validateImage",
+          "type": "Condition",
+          "name": "Validate Image Format",
+          "description": "Check if uploaded file is a valid image format",
+          "runAfter": {
+            "getFileContent": ["Succeeded"]
+          },
+          "expression": {
+            "or": [
+              {
+                "contains": [
+                  "@outputs('getFileContent')?['headers']['Content-Type']",
+                  "image/png"
+                ]
+              },
+              {
+                "contains": [
+                  "@outputs('getFileContent')?['headers']['Content-Type']",
+                  "image/jpeg"
+                ]
+              },
+              {
+                "contains": [
+                  "@outputs('getFileContent')?['headers']['Content-Type']",
+                  "image/gif"
+                ]
+              }
+            ]
+          },
+          "ifTrue": {
+            "actions": [
+              {
+                "id": "createAnalysisRecord",
+                "type": "SharePoint",
+                "name": "Create Analysis Record",
+                "description": "Create a record in the Analysis Tracking list",
+                "configuration": {
+                  "site": "https://yourtenant.sharepoint.com/sites/DesigneticaWorkspace",
+                  "list": "Wireframe Analysis Tracking",
+                  "item": {
+                    "Title": "@triggerOutputs()?['body/Name']",
+                    "AnalysisId": "@variables('analysisId')",
+                    "Status": "Processing",
+                    "UploadedBy": "@triggerOutputs()?['body/Author/Email']",
+                    "UploadTime": "@triggerOutputs()?['body/TimeCreated']",
+                    "FileUrl": "@triggerOutputs()?['body/ServerRedirectedEmbedUrl']"
+                  }
+                }
+              },
+
+              {
+                "id": "callDesigneticaAIBuilder",
+                "type": "HTTP",
+                "name": "Analyze with AI Builder",
+                "description": "Call Designetica AI Builder integration service",
+                "runAfter": {
+                  "createAnalysisRecord": ["Succeeded"]
+                },
+                "configuration": {
+                  "method": "POST",
+                  "uri": "https://designetica-backend.azurewebsites.net/api/ai-builder/analyze-image",
+                  "headers": {
+                    "Content-Type": "multipart/form-data",
+                    "x-api-key": "@parameters('DesigneticaApiKey')"
+                  },
+                  "formData": {
+                    "image": "@body('getFileContent')",
+                    "analysisDepth": "comprehensive",
+                    "detectComponents": true,
+                    "analyzeLayout": true
+                  },
+                  "authentication": {
+                    "type": "Raw",
+                    "value": "Bearer @{parameters('DesigneticaAccessToken')}"
+                  }
+                }
+              },
+
+              {
+                "id": "parseAnalysisResults",
+                "type": "Parse JSON",
+                "name": "Parse AI Builder Results",
+                "description": "Parse the analysis results from AI Builder",
+                "runAfter": {
+                  "callDesigneticaAIBuilder": ["Succeeded"]
+                },
+                "configuration": {
+                  "content": "@body('callDesigneticaAIBuilder')",
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "components": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "type": { "type": "string" },
+                            "confidence": { "type": "number" },
+                            "boundingBox": { "type": "object" }
+                          }
+                        }
+                      },
+                      "layout": { "type": "object" },
+                      "designPatterns": { "type": "array" },
+                      "confidence": { "type": "number" },
+                      "recommendations": { "type": "array" },
+                      "scores": { "type": "object" }
+                    }
+                  }
+                }
+              },
+
+              {
+                "id": "generateInsightsReport",
+                "type": "Compose",
+                "name": "Generate Insights Report",
+                "description": "Create comprehensive analysis report",
+                "runAfter": {
+                  "parseAnalysisResults": ["Succeeded"]
+                },
+                "inputs": {
+                  "analysisId": "@variables('analysisId')",
+                  "fileName": "@triggerOutputs()?['body/Name']",
+                  "uploadedBy": "@triggerOutputs()?['body/Author/Email']",
+                  "analysisTimestamp": "@utcNow()",
+                  "results": "@body('parseAnalysisResults')",
+                  "summary": {
+                    "totalComponents": "@length(body('parseAnalysisResults')?['components'])",
+                    "overallConfidence": "@body('parseAnalysisResults')?['confidence']",
+                    "layoutType": "@body('parseAnalysisResults')?['layout']?['type']",
+                    "recommendationCount": "@length(body('parseAnalysisResults')?['recommendations'])",
+                    "accessibilityScore": "@body('parseAnalysisResults')?['scores']?['accessibility']",
+                    "usabilityScore": "@body('parseAnalysisResults')?['scores']?['usability']"
+                  }
+                }
+              },
+
+              {
+                "id": "updateAnalysisRecord",
+                "type": "SharePoint",
+                "name": "Update Analysis Record",
+                "description": "Update the analysis tracking record with results",
+                "runAfter": {
+                  "generateInsightsReport": ["Succeeded"]
+                },
+                "configuration": {
+                  "site": "https://yourtenant.sharepoint.com/sites/DesigneticaWorkspace",
+                  "list": "Wireframe Analysis Tracking",
+                  "id": "@body('createAnalysisRecord')?['ID']",
+                  "item": {
+                    "Status": "Completed",
+                    "ComponentCount": "@length(body('parseAnalysisResults')?['components'])",
+                    "ConfidenceScore": "@body('parseAnalysisResults')?['confidence']",
+                    "LayoutType": "@body('parseAnalysisResults')?['layout']?['type']",
+                    "AccessibilityScore": "@body('parseAnalysisResults')?['scores']?['accessibility']",
+                    "UsabilityScore": "@body('parseAnalysisResults')?['scores']?['usability']",
+                    "RecommendationsCount": "@length(body('parseAnalysisResults')?['recommendations'])",
+                    "AnalysisResults": "@string(outputs('generateInsightsReport'))",
+                    "CompletedTime": "@utcNow()"
+                  }
+                }
+              },
+
+              {
+                "id": "checkScores",
+                "type": "Condition",
+                "name": "Check Quality Scores",
+                "description": "Determine if scores require attention",
+                "runAfter": {
+                  "updateAnalysisRecord": ["Succeeded"]
+                },
+                "expression": {
+                  "or": [
+                    {
+                      "less": [
+                        "@body('parseAnalysisResults')?['scores']?['accessibility']",
+                        70
+                      ]
+                    },
+                    {
+                      "less": [
+                        "@body('parseAnalysisResults')?['scores']?['usability']",
+                        70
+                      ]
+                    }
+                  ]
+                },
+                "ifTrue": {
+                  "actions": [
+                    {
+                      "id": "notifyDesignTeam",
+                      "type": "Office365",
+                      "name": "Notify Design Team",
+                      "description": "Send email notification about low scores",
+                      "configuration": {
+                        "To": ["design-team@yourcompany.com"],
+                        "Cc": ["@triggerOutputs()?['body/Author/Email']"],
+                        "Subject": "Wireframe Analysis Alert: Low Quality Scores",
+                        "Body": "@{concat('The wireframe \"', triggerOutputs()?['body/Name'], '\" has received low quality scores:<br><br>',\n'Accessibility Score: ', body('parseAnalysisResults')?['scores']?['accessibility'], '%<br>',\n'Usability Score: ', body('parseAnalysisResults')?['scores']?['usability'], '%<br><br>',\n'Please review the AI recommendations and consider improvements.<br><br>',\n'<a href=\"', triggerOutputs()?['body/ServerRedirectedEmbedUrl'], '\">View Wireframe</a><br>',\n'<a href=\"https://yourtenant.sharepoint.com/sites/DesigneticaWorkspace/Lists/WireframeAnalysisTracking/DispForm.aspx?ID=', body('createAnalysisRecord')?['ID'], '\">View Analysis Results</a>')}"
+                      }
+                    },
+
+                    {
+                      "id": "createImprovementTask",
+                      "type": "Planner",
+                      "name": "Create Improvement Task",
+                      "description": "Create a task in Planner for design improvements",
+                      "configuration": {
+                        "planId": "@parameters('DesignImprovementPlanId')",
+                        "bucketId": "@parameters('WireframeReviewBucketId')",
+                        "title": "Improve Wireframe: @{triggerOutputs()?['body/Name']}",
+                        "description": "@{concat('This wireframe needs improvement based on AI analysis:\\n\\n',\n'Accessibility Score: ', body('parseAnalysisResults')?['scores']?['accessibility'], '%\\n',\n'Usability Score: ', body('parseAnalysisResults')?['scores']?['usability'], '%\\n\\n',\n'AI Recommendations:\\n', join(body('parseAnalysisResults')?['recommendations'], '\\n- '))}",
+                        "dueDateTime": "@addDays(utcNow(), 7)",
+                        "assignments": {
+                          "@triggerOutputs()?['body/Author/Email']": {
+                            "@odata.type": "#microsoft.graph.plannerAssignment",
+                            "orderHint": " !"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "ifFalse": {
+                  "actions": [
+                    {
+                      "id": "notifySuccess",
+                      "type": "Office365",
+                      "name": "Notify Success",
+                      "description": "Send positive feedback about good scores",
+                      "configuration": {
+                        "To": ["@triggerOutputs()?['body/Author/Email']"],
+                        "Cc": ["design-team@yourcompany.com"],
+                        "Subject": "Great Wireframe Analysis Results!",
+                        "Body": "@{concat('Excellent work! Your wireframe \"', triggerOutputs()?['body/Name'], '\" scored well:<br><br>',\n'Accessibility Score: ', body('parseAnalysisResults')?['scores']?['accessibility'], '%<br>',\n'Usability Score: ', body('parseAnalysisResults')?['scores']?['usability'], '%<br><br>',\n'Total Components Detected: ', length(body('parseAnalysisResults')?['components']), '<br>',\n'Layout Type: ', body('parseAnalysisResults')?['layout']?['type'], '<br><br>',\n'<a href=\"', triggerOutputs()?['body/ServerRedirectedEmbedUrl'], '\">View Wireframe</a><br>',\n'<a href=\"https://yourtenant.sharepoint.com/sites/DesigneticaWorkspace/Lists/WireframeAnalysisTracking/DispForm.aspx?ID=', body('createAnalysisRecord')?['ID'], '\">View Analysis Results</a>')}"
+                      }
+                    }
+                  ]
+                }
+              },
+
+              {
+                "id": "postToTeams",
+                "type": "Teams",
+                "name": "Post to Design Team Channel",
+                "description": "Share analysis results in Teams channel",
+                "runAfter": {
+                  "checkScores": ["Succeeded"]
+                },
+                "configuration": {
+                  "teamId": "@parameters('DesignTeamId')",
+                  "channelId": "@parameters('WireframeChannelId')",
+                  "messageBody": "@{concat('🎨 **New Wireframe Analysis Complete**\\n\\n',\n'**File:** ', triggerOutputs()?['body/Name'], '\\n',\n'**Uploaded by:** ', triggerOutputs()?['body/Author/DisplayName'], '\\n',\n'**Components Detected:** ', length(body('parseAnalysisResults')?['components']), '\\n',\n'**Layout Type:** ', body('parseAnalysisResults')?['layout']?['type'], '\\n',\n'**Scores:**\\n',\n'- Accessibility: ', body('parseAnalysisResults')?['scores']?['accessibility'], '%\\n',\n'- Usability: ', body('parseAnalysisResults')?['scores']?['usability'], '%\\n\\n',\n'[View Wireframe](', triggerOutputs()?['body/ServerRedirectedEmbedUrl'], ') | [Analysis Details](https://yourtenant.sharepoint.com/sites/DesigneticaWorkspace/Lists/WireframeAnalysisTracking/DispForm.aspx?ID=', body('createAnalysisRecord')?['ID'], ')')}"
+                }
+              },
+
+              {
+                "id": "updatePowerBIDashboard",
+                "type": "HTTP",
+                "name": "Update Power BI Dashboard",
+                "description": "Send analysis data to Power BI for dashboard updates",
+                "runAfter": {
+                  "postToTeams": ["Succeeded"]
+                },
+                "configuration": {
+                  "method": "POST",
+                  "uri": "@parameters('PowerBIStreamingEndpoint')",
+                  "headers": {
+                    "Content-Type": "application/json"
+                  },
+                  "body": [
+                    {
+                      "analysisId": "@variables('analysisId')",
+                      "fileName": "@triggerOutputs()?['body/Name']",
+                      "uploadedBy": "@triggerOutputs()?['body/Author/Email']",
+                      "analysisDate": "@utcNow()",
+                      "componentCount": "@length(body('parseAnalysisResults')?['components'])",
+                      "accessibilityScore": "@body('parseAnalysisResults')?['scores']?['accessibility']",
+                      "usabilityScore": "@body('parseAnalysisResults')?['scores']?['usability']",
+                      "overallConfidence": "@body('parseAnalysisResults')?['confidence']",
+                      "layoutType": "@body('parseAnalysisResults')?['layout']?['type']",
+                      "recommendationCount": "@length(body('parseAnalysisResults')?['recommendations'])"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "ifFalse": {
+            "actions": [
+              {
+                "id": "notifyInvalidFormat",
+                "type": "Office365",
+                "name": "Notify Invalid Format",
+                "description": "Inform user about invalid file format",
+                "configuration": {
+                  "To": ["@triggerOutputs()?['body/Author/Email']"],
+                  "Subject": "Invalid Wireframe File Format",
+                  "Body": "@{concat('The file \"', triggerOutputs()?['body/Name'], '\" you uploaded is not a supported image format.\\n\\nSupported formats: PNG, JPEG, GIF\\n\\nPlease upload your wireframe in one of these formats for AI analysis.')}"
+                }
+              },
+
+              {
+                "id": "moveToErrorFolder",
+                "type": "SharePoint",
+                "name": "Move to Error Folder",
+                "description": "Move invalid file to error processing folder",
+                "configuration": {
+                  "site": "https://yourtenant.sharepoint.com/sites/DesigneticaWorkspace",
+                  "sourceLibrary": "Wireframe Uploads",
+                  "destinationLibrary": "Wireframe Uploads",
+                  "sourceFileId": "@triggerOutputs()?['body/Id']",
+                  "destinationPath": "/Wireframes/Errors"
+                }
+              }
+            ]
+          }
+        }
+      ],
+
+      "errorHandling": {
+        "scope": "Workflow",
+        "actions": [
+          {
+            "id": "handleError",
+            "type": "Compose",
+            "name": "Handle Workflow Error",
+            "inputs": {
+              "error": "@workflow()?['error']",
+              "analysisId": "@variables('analysisId')",
+              "fileName": "@triggerOutputs()?['body/Name']",
+              "timestamp": "@utcNow()"
+            }
+          },
+
+          {
+            "id": "logError",
+            "type": "SharePoint",
+            "name": "Log Error",
+            "runAfter": {
+              "handleError": ["Succeeded"]
+            },
+            "configuration": {
+              "site": "https://yourtenant.sharepoint.com/sites/DesigneticaWorkspace",
+              "list": "Error Log",
+              "item": {
+                "Title": "Wireframe Analysis Error",
+                "AnalysisId": "@variables('analysisId')",
+                "FileName": "@triggerOutputs()?['body/Name']",
+                "ErrorMessage": "@workflow()?['error']?['message']",
+                "ErrorDetails": "@string(outputs('handleError'))",
+                "Timestamp": "@utcNow()"
+              }
+            }
+          },
+
+          {
+            "id": "notifyError",
+            "type": "Office365",
+            "name": "Notify Error",
+            "runAfter": {
+              "logError": ["Succeeded"]
+            },
+            "configuration": {
+              "To": ["admin@yourcompany.com"],
+              "Cc": ["@triggerOutputs()?['body/Author/Email']"],
+              "Subject": "Wireframe Analysis Failed",
+              "Body": "@{concat('An error occurred while analyzing the wireframe \"', triggerOutputs()?['body/Name'], '\"\\n\\nError: ', workflow()?['error']?['message'], '\\n\\nPlease check the error log for more details.')}"
+            }
+          }
+        ]
+      },
+
+      "parameters": [
+        {
+          "name": "DesigneticaApiKey",
+          "type": "SecureString",
+          "description": "API key for Designetica AI Builder service"
+        },
+        {
+          "name": "DesigneticaAccessToken",
+          "type": "SecureString",
+          "description": "OAuth access token for Designetica service"
+        },
+        {
+          "name": "DesignTeamId",
+          "type": "String",
+          "description": "Microsoft Teams team ID for design team"
+        },
+        {
+          "name": "WireframeChannelId",
+          "type": "String",
+          "description": "Teams channel ID for wireframe discussions"
+        },
+        {
+          "name": "DesignImprovementPlanId",
+          "type": "String",
+          "description": "Planner plan ID for design improvement tasks"
+        },
+        {
+          "name": "WireframeReviewBucketId",
+          "type": "String",
+          "description": "Planner bucket ID for wireframe review tasks"
+        },
+        {
+          "name": "PowerBIStreamingEndpoint",
+          "type": "String",
+          "description": "Power BI streaming dataset endpoint URL"
+        }
+      ]
+    },
+
+    {
+      "name": "Wireframe Comparison Workflow",
+      "displayName": "Automated Wireframe Comparison",
+      "description": "Compare wireframes and generate improvement suggestions using AI Builder",
+      "version": "1.0",
+      "category": "Design Collaboration",
+
+      "trigger": {
+        "type": "PowerApps",
+        "name": "PowerApps trigger",
+        "description": "Triggered from Power Apps when user initiates comparison",
+        "inputs": [
+          {
+            "name": "wireframe1Id",
+            "type": "String",
+            "required": true
+          },
+          {
+            "name": "wireframe2Id",
+            "type": "String",
+            "required": true
+          },
+          {
+            "name": "comparisonType",
+            "type": "String",
+            "required": false,
+            "default": "comprehensive"
+          },
+          {
+            "name": "requestedBy",
+            "type": "String",
+            "required": true
+          }
+        ]
+      },
+
+      "actions": [
+        {
+          "id": "getWireframe1",
+          "type": "SharePoint",
+          "name": "Get First Wireframe",
+          "configuration": {
+            "site": "https://yourtenant.sharepoint.com/sites/DesigneticaWorkspace",
+            "library": "Wireframe Uploads",
+            "fileId": "@triggerBody()?['wireframe1Id']"
+          }
+        },
+
+        {
+          "id": "getWireframe2",
+          "type": "SharePoint",
+          "name": "Get Second Wireframe",
+          "configuration": {
+            "site": "https://yourtenant.sharepoint.com/sites/DesigneticaWorkspace",
+            "library": "Wireframe Uploads",
+            "fileId": "@triggerBody()?['wireframe2Id']"
+          }
+        },
+
+        {
+          "id": "compareWireframes",
+          "type": "HTTP",
+          "name": "Compare with AI Builder",
+          "runAfter": {
+            "getWireframe1": ["Succeeded"],
+            "getWireframe2": ["Succeeded"]
+          },
+          "configuration": {
+            "method": "POST",
+            "uri": "https://designetica-backend.azurewebsites.net/api/ai-builder/compare",
+            "headers": {
+              "Content-Type": "multipart/form-data"
+            },
+            "formData": {
+              "wireframe1": "@body('getWireframe1')",
+              "wireframe2": "@body('getWireframe2')",
+              "comparisonType": "@triggerBody()?['comparisonType']"
+            }
+          }
+        },
+
+        {
+          "id": "processComparisonResults",
+          "type": "Compose",
+          "name": "Process Comparison Results",
+          "runAfter": {
+            "compareWireframes": ["Succeeded"]
+          },
+          "inputs": {
+            "comparisonId": "@guid()",
+            "wireframe1": "@outputs('getWireframe1')?['body/Name']",
+            "wireframe2": "@outputs('getWireframe2')?['body/Name']",
+            "requestedBy": "@triggerBody()?['requestedBy']",
+            "comparisonType": "@triggerBody()?['comparisonType']",
+            "timestamp": "@utcNow()",
+            "results": "@body('compareWireframes')",
+            "overallSimilarity": "@body('compareWireframes')?['similarity']?['overall']"
+          }
+        },
+
+        {
+          "id": "saveComparisonResults",
+          "type": "SharePoint",
+          "name": "Save Comparison Results",
+          "runAfter": {
+            "processComparisonResults": ["Succeeded"]
+          },
+          "configuration": {
+            "site": "https://yourtenant.sharepoint.com/sites/DesigneticaWorkspace",
+            "list": "Wireframe Comparisons",
+            "item": {
+              "Title": "@{concat(outputs('getWireframe1')?['body/Name'], ' vs ', outputs('getWireframe2')?['body/Name'])}",
+              "ComparisonId": "@outputs('processComparisonResults')?['comparisonId']",
+              "Wireframe1": "@outputs('getWireframe1')?['body/Name']",
+              "Wireframe2": "@outputs('getWireframe2')?['body/Name']",
+              "RequestedBy": "@triggerBody()?['requestedBy']",
+              "ComparisonType": "@triggerBody()?['comparisonType']",
+              "OverallSimilarity": "@body('compareWireframes')?['similarity']?['overall']",
+              "LayoutSimilarity": "@body('compareWireframes')?['similarity']?['layout']",
+              "ComponentSimilarity": "@body('compareWireframes')?['similarity']?['components']",
+              "MajorDifferences": "@length(filter(body('compareWireframes')?['differences'], item('severity', 'high')))",
+              "Results": "@string(outputs('processComparisonResults'))",
+              "ComparisonTime": "@utcNow()"
+            }
+          }
+        },
+
+        {
+          "id": "respond",
+          "type": "PowerApps",
+          "name": "Respond to PowerApps",
+          "runAfter": {
+            "saveComparisonResults": ["Succeeded"]
+          },
+          "inputs": {
+            "comparisonId": "@outputs('processComparisonResults')?['comparisonId']",
+            "overallSimilarity": "@body('compareWireframes')?['similarity']?['overall']",
+            "recommendations": "@body('compareWireframes')?['recommendations']",
+            "differences": "@body('compareWireframes')?['differences']",
+            "status": "completed"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Daily Analytics Report",
+      "displayName": "Daily Wireframe Analytics Report",
+      "description": "Generate daily analytics report of wireframe activities and AI insights",
+      "version": "1.0",
+      "category": "Reporting",
+
+      "trigger": {
+        "type": "Recurrence",
+        "name": "Daily schedule",
+        "configuration": {
+          "frequency": "Day",
+          "interval": 1,
+          "startTime": "2024-01-01T08:00:00Z",
+          "timeZone": "UTC"
+        }
+      },
+
+      "actions": [
+        {
+          "id": "getYesterdayAnalyses",
+          "type": "SharePoint",
+          "name": "Get Yesterday's Analyses",
+          "configuration": {
+            "site": "https://yourtenant.sharepoint.com/sites/DesigneticaWorkspace",
+            "list": "Wireframe Analysis Tracking",
+            "filter": "CompletedTime ge '@{formatDateTime(addDays(utcNow(), -1), 'yyyy-MM-dd')}T00:00:00Z' and CompletedTime lt '@{formatDateTime(utcNow(), 'yyyy-MM-dd')}T00:00:00Z'"
+          }
+        },
+
+        {
+          "id": "calculateMetrics",
+          "type": "Compose",
+          "name": "Calculate Daily Metrics",
+          "runAfter": {
+            "getYesterdayAnalyses": ["Succeeded"]
+          },
+          "inputs": {
+            "totalAnalyses": "@length(body('getYesterdayAnalyses')?['value'])",
+            "averageAccessibilityScore": "@div(add(body('getYesterdayAnalyses')?['value']?['AccessibilityScore']), length(body('getYesterdayAnalyses')?['value']))",
+            "averageUsabilityScore": "@div(add(body('getYesterdayAnalyses')?['value']?['UsabilityScore']), length(body('getYesterdayAnalyses')?['value']))",
+            "totalComponents": "@add(body('getYesterdayAnalyses')?['value']?['ComponentCount'])",
+            "lowScoreAlerts": "@length(filter(body('getYesterdayAnalyses')?['value'], or(item('AccessibilityScore', 70), item('UsabilityScore', 70))))",
+            "topContributors": "@take(sort(body('getYesterdayAnalyses')?['value'], 'ComponentCount'), 5)"
+          }
+        },
+
+        {
+          "id": "generateReport",
+          "type": "Office365",
+          "name": "Send Daily Report",
+          "runAfter": {
+            "calculateMetrics": ["Succeeded"]
+          },
+          "configuration": {
+            "To": ["design-leadership@yourcompany.com"],
+            "Subject": "Daily Wireframe Analytics Report - @{formatDateTime(addDays(utcNow(), -1), 'MMM dd, yyyy')}",
+            "Body": "@{concat('<h2>Daily Wireframe Analytics Report</h2><p><strong>Date:</strong> ', formatDateTime(addDays(utcNow(), -1), 'MMM dd, yyyy'), '</p><h3>Summary Metrics</h3><ul><li><strong>Total Analyses:</strong> ', outputs('calculateMetrics')?['totalAnalyses'], '</li><li><strong>Average Accessibility Score:</strong> ', outputs('calculateMetrics')?['averageAccessibilityScore'], '%</li><li><strong>Average Usability Score:</strong> ', outputs('calculateMetrics')?['averageUsabilityScore'], '%</li><li><strong>Total Components Detected:</strong> ', outputs('calculateMetrics')?['totalComponents'], '</li><li><strong>Low Score Alerts:</strong> ', outputs('calculateMetrics')?['lowScoreAlerts'], '</li></ul><p><a href=\"https://yourtenant.sharepoint.com/sites/DesigneticaWorkspace\">View Full Dashboard</a></p>')}"
+          }
+        }
+      ]
+    }
+  ],
+
+  "deploymentInstructions": {
+    "prerequisites": [
+      "SharePoint site configured with required lists",
+      "AI Builder license and models trained",
+      "Power Automate premium license",
+      "Designetica custom connector deployed",
+      "Teams channels and Planner plans created"
+    ],
+
+    "steps": [
+      {
+        "step": 1,
+        "title": "Import Custom Connector",
+        "description": "Import the Designetica custom connector into your environment"
+      },
+      {
+        "step": 2,
+        "title": "Create SharePoint Lists",
+        "description": "Create the required SharePoint lists with specified columns"
+      },
+      {
+        "step": 3,
+        "title": "Configure Connections",
+        "description": "Set up connections for SharePoint, Office 365, Teams, and Planner"
+      },
+      {
+        "step": 4,
+        "title": "Import Workflows",
+        "description": "Import the Power Automate workflows from these templates"
+      },
+      {
+        "step": 5,
+        "title": "Configure Parameters",
+        "description": "Set all required parameters including API keys and IDs"
+      },
+      {
+        "step": 6,
+        "title": "Test Workflows",
+        "description": "Upload test wireframes to verify the automation works correctly"
+      }
+    ]
+  }
+}

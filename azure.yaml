@@ -7,11 +7,9 @@ metadata:
 services:
   frontend:
     project: .
-    dist: dist
     language: js
     host: staticwebapp
-    env:
-      NODE_ENV: production
+    dist: dist
   backend:
     project: backend
     language: js
@@ -23,4 +21,4 @@ infra:
   module: main
 
 pipeline:
-  provider: github-actions
+  provider: github

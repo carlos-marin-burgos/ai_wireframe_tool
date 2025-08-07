@@ -1,0 +1,312 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Designetica AI Builder Integration",
+    "description": "Connect Power Platform to Designetica's AI Builder wireframe analysis capabilities with comprehensive Azure Functions backend integration.",
+    "version": "1.0",
+    "contact": {
+      "name": "Designetica Support",
+      "email": "support@designetica.com"
+    }
+  },
+  "host": "localhost:7072",
+  "basePath": "/api",
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "securityDefinitions": {
+    "oauth2_auth": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+      "tokenUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+      "scopes": {
+        "https://graph.microsoft.com/.default": "Access Microsoft Graph"
+      }
+    }
+  },
+  "security": [
+    {
+      "oauth2_auth": ["https://graph.microsoft.com/.default"]
+    }
+  ],
+  "paths": {
+    "/ai-builder/health": {
+      "get": {
+        "summary": "Check AI Builder Health",
+        "description": "Verify that AI Builder integration and backend services are healthy and operational.",
+        "operationId": "CheckAIBuilderHealth",
+        "x-ms-visibility": "important",
+        "responses": {
+          "200": {
+            "description": "Health check successful",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Overall health status"
+                },
+                "aiBuilderService": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "AI Builder service status"
+                    },
+                    "initialized": {
+                      "type": "boolean",
+                      "description": "Whether AI Builder service is initialized"
+                    }
+                  }
+                },
+                "gptConnection": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "GPT connection status"
+                    },
+                    "configured": {
+                      "type": "boolean",
+                      "description": "Whether GPT is properly configured"
+                    }
+                  }
+                },
+                "powerPlatformEnvironment": {
+                  "type": "object",
+                  "properties": {
+                    "configured": {
+                      "type": "boolean",
+                      "description": "Whether Power Platform environment is configured"
+                    },
+                    "environmentId": {
+                      "type": "string",
+                      "description": "Power Platform environment ID"
+                    }
+                  }
+                },
+                "timestamp": {
+                  "type": "string",
+                  "description": "Health check timestamp"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/generate-wireframe": {
+      "post": {
+        "summary": "Generate Wireframe",
+        "description": "Generate wireframes using AI Builder integration and GPT-powered analysis for rapid prototyping.",
+        "operationId": "GenerateWireframe",
+        "x-ms-visibility": "important",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "description": "Description of the wireframe to generate",
+                  "title": "Wireframe Description"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": ["web", "mobile", "desktop"],
+                  "default": "web",
+                  "description": "Type of application interface",
+                  "title": "Interface Type"
+                },
+                "complexity": {
+                  "type": "string",
+                  "enum": ["simple", "moderate", "complex"],
+                  "default": "moderate",
+                  "description": "Complexity level of the wireframe",
+                  "title": "Complexity Level"
+                },
+                "includeNavigation": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Include navigation elements",
+                  "title": "Include Navigation"
+                },
+                "colorScheme": {
+                  "type": "string",
+                  "enum": ["light", "dark", "auto"],
+                  "default": "light",
+                  "description": "Color scheme preference",
+                  "title": "Color Scheme"
+                }
+              },
+              "required": ["description"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Wireframe generated successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "description": "Whether generation was successful"
+                },
+                "wireframeId": {
+                  "type": "string",
+                  "description": "Unique identifier for the generated wireframe"
+                },
+                "html": {
+                  "type": "string",
+                  "description": "Generated wireframe HTML content"
+                },
+                "css": {
+                  "type": "string",
+                  "description": "Generated wireframe CSS styles"
+                },
+                "components": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "Component type"
+                      },
+                      "properties": {
+                        "type": "object",
+                        "description": "Component properties"
+                      }
+                    }
+                  },
+                  "description": "List of components in the wireframe"
+                },
+                "aiBuilderData": {
+                  "type": "object",
+                  "properties": {
+                    "analysisId": {
+                      "type": "string",
+                      "description": "AI Builder analysis ID"
+                    },
+                    "confidence": {
+                      "type": "number",
+                      "description": "AI Builder confidence score"
+                    },
+                    "recommendations": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "AI Builder recommendations"
+                    }
+                  }
+                },
+                "timestamp": {
+                  "type": "string",
+                  "description": "Generation timestamp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Backend Health Check",
+        "description": "Check the overall health of the backend services and Azure Functions infrastructure.",
+        "operationId": "CheckBackendHealth",
+        "x-ms-visibility": "internal",
+        "responses": {
+          "200": {
+            "description": "Backend is healthy",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Health status"
+                },
+                "timestamp": {
+                  "type": "string",
+                  "description": "Health check timestamp"
+                },
+                "version": {
+                  "type": "string",
+                  "description": "Backend version"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "description": "Error message"
+        },
+        "details": {
+          "type": "string",
+          "description": "Detailed error information"
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Error timestamp"
+        },
+        "requestId": {
+          "type": "string",
+          "description": "Unique request identifier for troubleshooting"
+        }
+      },
+      "required": ["error"]
+    }
+  },
+  "x-ms-connector-metadata": [
+    {
+      "propertyName": "Website",
+      "propertyValue": "https://designetica.com"
+    },
+    {
+      "propertyName": "Privacy policy",
+      "propertyValue": "https://designetica.com/privacy"
+    },
+    {
+      "propertyName": "Categories",
+      "propertyValue": "AI;Design;Productivity"
+    }
+  ]
+}

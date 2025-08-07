@@ -51,6 +51,9 @@ var logAnalyticsName = take('${abbreviations.logAnalyticsWorkspace}-${environmen
 var applicationInsightsName = '${abbreviations.applicationInsights}-${environmentName}-${resourceToken}'
 var userAssignedIdentityName = '${abbreviations.userAssignedIdentity}-${environmentName}-${resourceToken}'
 var staticWebAppName = '${abbreviations.staticWebApp}-${environmentName}-${resourceToken}'
+var keyVaultName = take('${abbreviations.keyVault}-${environmentName}-${resourceToken}', 24)
+var functionAppName = '${abbreviations.functionApp}-${environmentName}-${resourceToken}'
+var appServicePlanName = '${abbreviations.appServicePlan}-${environmentName}-${resourceToken}'
 
 // Tags for all resources
 var tags = {
@@ -102,6 +105,29 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
     IngestionMode: 'LogAnalytics'
     publicNetworkAccessForIngestion: 'Enabled'
     publicNetworkAccessForQuery: 'Enabled'
+  }
+}
+
+// Key Vault for secure secrets management
+resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
+  name: keyVaultName
+  location: location
+  tags: tags
+  properties: {
+    sku: {
+      family: 'A'
+      name: 'standard'
+    }
+    tenantId: tenant().tenantId
+    enabledForDeployment: false
+    enabledForDiskEncryption: false
+    enabledForTemplateDeployment: true
+    enableSoftDelete: true
+    softDeleteRetentionInDays: 90
+    enablePurgeProtection: true
+    enableRbacAuthorization: true
+    publicNetworkAccess: 'Enabled'
+    accessPolicies: []
   }
 }
 
@@ -187,6 +213,131 @@ resource openAiModelDeployment 'Microsoft.CognitiveServices/accounts/deployments
   }
 ]
 
+// App Service Plan for Azure Functions (Premium)
+resource appServicePlan 'Microsoft.Web/serverfarms@2023-12-01' = {
+  name: appServicePlanName
+  location: location
+  tags: tags
+  sku: {
+    name: 'EP1'
+    tier: 'ElasticPremium'
+    size: 'EP1'
+    family: 'EP'
+    capacity: 1
+  }
+  kind: 'elastic'
+  properties: {
+    perSiteScaling: false
+    elasticScaleEnabled: true
+    maximumElasticWorkerCount: 20
+    isSpot: false
+    reserved: true
+    isXenon: false
+    hyperV: false
+    targetWorkerCount: 0
+    targetWorkerSizeId: 0
+    zoneRedundant: false
+  }
+}
+
+// Azure Functions App for AI Builder Integration
+resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
+  name: functionAppName
+  location: location
+  tags: union(tags, { 'azd-service-name': 'backend' })
+  kind: 'functionapp,linux'
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${userAssignedIdentity.id}': {}
+    }
+  }
+  properties: {
+    serverFarmId: appServicePlan.id
+    reserved: true
+    isXenon: false
+    hyperV: false
+    vnetRouteAllEnabled: false
+    vnetImagePullEnabled: false
+    vnetContentShareEnabled: false
+    siteConfig: {
+      numberOfWorkers: 1
+      linuxFxVersion: 'NODE|20'
+      acrUseManagedIdentityCreds: false
+      alwaysOn: true
+      http20Enabled: false
+      functionAppScaleLimit: 200
+      minimumElasticInstanceCount: 1
+      use32BitWorkerProcess: false
+      ftpsState: 'FtpsOnly'
+      appSettings: [
+        {
+          name: 'AzureWebJobsStorage__accountName'
+          value: storageAccount.name
+        }
+        {
+          name: 'FUNCTIONS_EXTENSION_VERSION'
+          value: '~4'
+        }
+        {
+          name: 'FUNCTIONS_WORKER_RUNTIME'
+          value: 'node'
+        }
+        {
+          name: 'WEBSITE_NODE_DEFAULT_VERSION'
+          value: '~20'
+        }
+        {
+          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+          value: applicationInsights.properties.ConnectionString
+        }
+        {
+          name: 'AZURE_CLIENT_ID'
+          value: userAssignedIdentity.properties.clientId
+        }
+        {
+          name: 'AZURE_OPENAI_ENDPOINT'
+          value: openAiAccount.properties.endpoint
+        }
+        {
+          name: 'AZURE_OPENAI_API_VERSION'
+          value: '2024-08-01-preview'
+        }
+        {
+          name: 'AZURE_OPENAI_DEPLOYMENT'
+          value: 'gpt-4o'
+        }
+        {
+          name: 'NODE_ENV'
+          value: 'production'
+        }
+        {
+          name: 'AI_BUILDER_ENVIRONMENT'
+          value: 'production'
+        }
+        {
+          name: 'POWER_PLATFORM_ENVIRONMENT'
+          value: 'production'
+        }
+      ]
+      cors: {
+        allowedOrigins: [
+          'https://make.powerapps.com'
+          'https://make.powerautomate.com'
+          'https://flow.microsoft.com'
+          'https://powerapps.microsoft.com'
+          'https://api.designetica.com'
+        ]
+        supportCredentials: false
+      }
+    }
+    httpsOnly: true
+    redundancyMode: 'None'
+    storageAccountRequired: false
+    keyVaultReferenceIdentity: userAssignedIdentity.id
+  }
+}
+
 // Note: Using Static Web App with integrated APIs instead of separate Function App
 // This provides better integration and simpler deployment
 
@@ -263,6 +414,20 @@ resource monitoringMetricsPublisherRoleAssignment 'Microsoft.Authorization/roleA
   }
 }
 
+// Key Vault Secrets User role assignment to managed identity
+resource keyVaultSecretsUserRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(keyVault.id, userAssignedIdentity.id, '4633458b-17de-408a-b874-0445c86b69e6')
+  scope: keyVault
+  properties: {
+    roleDefinitionId: subscriptionResourceId(
+      'Microsoft.Authorization/roleDefinitions',
+      '4633458b-17de-408a-b874-0445c86b69e6'
+    ) // Key Vault Secrets User
+    principalId: userAssignedIdentity.properties.principalId
+    principalType: 'ServicePrincipal'
+  }
+}
+
 // Note: Static Web App settings must be configured separately 
 // since the existing Static Web App is in a different resource group (rg-Designetica)
 // Configure these settings manually or through a separate deployment:
@@ -273,36 +438,35 @@ resource monitoringMetricsPublisherRoleAssignment 'Microsoft.Authorization/roleA
 // ========================================
 // Static Web App for Frontend with Integrated APIs
 // ========================================
-resource staticWebApp 'Microsoft.Web/staticSites@2024-04-01' = if (gitHubUserName != '') {
+resource staticWebApp 'Microsoft.Web/staticSites@2023-12-01' = {
   name: staticWebAppName
-  location: location
+  location: 'eastus2'
   tags: frontendTags
+  sku: {
+    name: 'Free'
+    tier: 'Free'
+  }
   properties: {
-    repositoryUrl: 'https://github.com/${gitHubUserName}/${repositoryName}'
+    repositoryUrl: 'https://github.com/carlos-marin-burgos/ai_wireframe_tool'
     branch: 'main'
-    stagingEnvironmentPolicy: 'Enabled'
-    allowConfigFileUpdates: true
-    provider: 'GitHub'
-    enterpriseGradeCdnStatus: 'Disabled'
     buildProperties: {
-      skipGithubActionWorkflowGeneration: false
       appLocation: '/'
-      apiLocation: 'backend'
       outputLocation: 'dist'
+      apiLocation: 'backend'
     }
   }
 }
 
 // Configure Static Web App application settings
-resource staticWebAppConfig 'Microsoft.Web/staticSites/config@2024-04-01' = if (gitHubUserName != '') {
+resource staticWebAppConfig 'Microsoft.Web/staticSites/config@2024-04-01' = {
   parent: staticWebApp
   name: 'appsettings'
   properties: {
     AZURE_OPENAI_ENDPOINT: openAiAccount.properties.endpoint
     AZURE_OPENAI_API_VERSION: '2024-08-01-preview'
-    AZURE_OPENAI_KEY: openAiAccount.listKeys().key1
     AZURE_CLIENT_ID: userAssignedIdentity.properties.clientId
     APPLICATIONINSIGHTS_CONNECTION_STRING: applicationInsights.properties.ConnectionString
+    FUNCTIONS_ENDPOINT: 'https://${functionApp.properties.defaultHostName}'
   }
 }
 
@@ -322,11 +486,16 @@ output AZURE_STORAGE_ACCOUNT_NAME string = storageAccount.name
 output AZURE_APPLICATION_INSIGHTS_NAME string = applicationInsights.name
 output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = logAnalyticsWorkspace.name
 
-// Static Web App outputs (only if created)
-output AZURE_STATIC_WEB_APP_NAME string = gitHubUserName != '' ? staticWebApp.name : 'not-created'
-output AZURE_STATIC_WEB_APP_URL string = gitHubUserName != ''
-  ? 'https://${staticWebApp!.properties.defaultHostname}'
-  : 'not-created'
-output AZURE_STATIC_WEB_APP_HOSTNAME string = gitHubUserName != ''
-  ? staticWebApp!.properties.defaultHostname
-  : 'not-created'
+// Function App outputs
+output AZURE_FUNCTION_APP_NAME string = functionApp.name
+output AZURE_FUNCTION_APP_URL string = 'https://${functionApp.properties.defaultHostName}'
+output AZURE_FUNCTION_APP_HOSTNAME string = functionApp.properties.defaultHostName
+
+// Key Vault outputs
+output AZURE_KEY_VAULT_NAME string = keyVault.name
+output AZURE_KEY_VAULT_URL string = keyVault.properties.vaultUri
+
+// Static Web App outputs
+output AZURE_STATIC_WEB_APP_NAME string = staticWebApp.name
+output AZURE_STATIC_WEB_APP_URL string = 'https://${staticWebApp.properties.defaultHostname}'
+output AZURE_STATIC_WEB_APP_HOSTNAME string = staticWebApp.properties.defaultHostname

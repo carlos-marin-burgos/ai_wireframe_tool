@@ -3,6 +3,7 @@
   "appServicePlan": "plan",
   "cognitiveServices": "cog",
   "functionApp": "func",
+  "keyVault": "kv",
   "logAnalyticsWorkspace": "log",
   "resourceGroup": "rg",
   "staticWebApp": "swa",

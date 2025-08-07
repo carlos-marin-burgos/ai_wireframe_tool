@@ -6,7 +6,7 @@
       "value": "${AZURE_ENV_NAME}"
     },
     "location": {
-      "value": "${AZURE_LOCATION=eastus}"
+      "value": "${AZURE_LOCATION=eastus2}"
     },
     "openAiLocation": {
       "value": "${AZURE_OPENAI_LOCATION=eastus}"
@@ -15,16 +15,10 @@
       "value": "${AZURE_OPENAI_SKU_NAME=S0}"
     },
     "gitHubUserName": {
-      "value": "${GITHUB_USERNAME=carlosUX}"
+      "value": "${GITHUB_USERNAME=carlos-marin-burgos}"
     },
     "repositoryName": {
-      "value": "${REPOSITORY_NAME=designetica}"
-    },
-    "repositoryUrl": {
-      "value": "${REPOSITORY_URL=}"
-    },
-    "branch": {
-      "value": "${BRANCH=main}"
+      "value": "${REPOSITORY_NAME=ai_wireframe_tool}"
     }
   }
 }
