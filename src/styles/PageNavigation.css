@@ -216,6 +216,32 @@
   align-items: center;
 }
 
+.breadcrumb-divider {
+  width: 1px;
+  height: 24px;
+  background: #e1e5e9;
+  margin: 0 12px;
+}
+
+.add-page-icon {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 640px) {
+  .add-pages-button .add-page-text {
+    display: none;
+  }
+  .add-pages-button {
+    padding: 8px;
+    width: 36px;
+    justify-content: center;
+  }
+  .breadcrumb-divider {
+    margin: 0 8px;
+  }
+}
+
 .breadcrumb-actions.left {
   margin-right: 12px;
 }

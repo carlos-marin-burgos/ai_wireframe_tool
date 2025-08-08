@@ -29,8 +29,21 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
 
     // Generate ordinal numbers for breadcrumb labels
     const getOrdinalLabel = (index: number): string => {
-        const ordinals = ['First Page', 'Second Page', 'Third Page', 'Fourth Page', 'Fifth Page', 'Sixth Page', 'Seventh Page', 'Eighth Page', 'Ninth Page', 'Tenth Page'];
-        return ordinals[index] || `Page ${index + 1}`;
+        const ordinals = [
+            'First Page',
+            'Second Page',
+            'Third Page',
+            'Fourth Page',
+            'Fifth Page',
+            'Sixth Page',
+            'Seventh Page',
+            'Eighth Page',
+            'Ninth Page',
+            'Tenth Page'
+        ];
+        // After the first 10, use compact form: Page 11, Page 12, etc.
+        if (index < ordinals.length) return ordinals[index];
+        return `Page ${index + 1}`;
     };
 
     if (!pages || pages.length === 0) {
@@ -58,13 +71,14 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                 </div>
                 {onAddPage && (
                     <div className="breadcrumb-actions right">
+                        <div className="breadcrumb-divider" aria-hidden="true" />
                         <button
                             className="add-pages-button secondary"
                             onClick={onAddPage}
                             title="Add a new page"
                             aria-label="Add Page"
                         >
-                            <FiPlus style={{ marginRight: 4 }} /> Add Page
+                            <FiPlus className="add-page-icon" /> <span className="add-page-text">Add Page</span>
                         </button>
                     </div>
                 )}
