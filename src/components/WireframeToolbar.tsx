@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { FiSave, FiPlus, FiCode, FiDownload, FiShare2, FiMonitor, FiFigma } from 'react-icons/fi';
-import { TbBoxModel2 } from 'react-icons/tb'; // Fluent UI style icon for component library
+import { getFluentIcon } from '../utils/fluentIconSvgs';
 import './WireframeToolbar.css';
 
 interface WireframeToolbarProps {
@@ -25,6 +24,14 @@ const WireframeToolbar: React.FC<WireframeToolbarProps> = ({
     onShareUrl
 }) => {
     const [showExportMenu, setShowExportMenu] = useState(false);
+
+    // Helper component for Fluent icons
+    const FluentIcon: React.FC<{ name: string; className?: string }> = ({ name, className = "" }) => (
+        <span 
+            className={`fluent-icon ${className}`}
+            dangerouslySetInnerHTML={{ __html: getFluentIcon(name) }}
+        />
+    );
     return (
         <div className="wireframe-toolbar">
             <div className="toolbar-left">
@@ -37,7 +44,7 @@ const WireframeToolbar: React.FC<WireframeToolbarProps> = ({
                     onClick={onAddPages}
                     title="Add More Pages"
                 >
-                    <FiPlus />
+                    <FluentIcon name="add" />
                     Add Pages
                 </button>
 
@@ -49,7 +56,7 @@ const WireframeToolbar: React.FC<WireframeToolbarProps> = ({
                     }}
                     title="Fluent Component Library"
                 >
-                    <TbBoxModel2 />
+                    <FluentIcon name="grid" />
                     Fluent Library
                 </button>
 
@@ -59,7 +66,7 @@ const WireframeToolbar: React.FC<WireframeToolbarProps> = ({
                         onClick={() => setShowExportMenu(!showExportMenu)}
                         title="Export Options"
                     >
-                        <FiDownload />
+                        <FluentIcon name="download" />
                         Export
                     </button>
 
@@ -73,7 +80,7 @@ const WireframeToolbar: React.FC<WireframeToolbarProps> = ({
                                 }}
                                 title="Download as HTML presentation (can be converted to PowerPoint)"
                             >
-                                <FiMonitor />
+                                <FluentIcon name="preview" />
                                 HTML Presentation
                             </button>
                             <button
@@ -83,7 +90,7 @@ const WireframeToolbar: React.FC<WireframeToolbarProps> = ({
                                     setShowExportMenu(false);
                                 }}
                             >
-                                <FiFigma />
+                                <FluentIcon name="design_ideas" />
                                 Figma
                             </button>
                             <button
@@ -93,7 +100,7 @@ const WireframeToolbar: React.FC<WireframeToolbarProps> = ({
                                     setShowExportMenu(false);
                                 }}
                             >
-                                <FiMonitor />
+                                <FluentIcon name="presentation" />
                                 Present
                             </button>
                             <button
