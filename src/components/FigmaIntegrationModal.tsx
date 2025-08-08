@@ -19,14 +19,16 @@ interface FigmaIntegrationModalProps {
     isOpen: boolean;
     onClose: () => void;
     onImport: (html: string, fileName: string) => void;
+    onExport: (format: 'figma-file' | 'figma-components') => void;
 }
 
 const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
     isOpen,
     onClose,
-    onImport
+    onImport,
+    onExport
 }) => {
-    const [activeTab, setActiveTab] = useState<'import' | 'sync'>('import');
+    const [activeTab, setActiveTab] = useState<'import' | 'export' | 'sync'>('import');
     const [isConnected, setIsConnected] = useState(false);
     const [accessToken, setAccessToken] = useState('');
     const [figmaUrl, setFigmaUrl] = useState('');
@@ -35,6 +37,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
     const [success, setSuccess] = useState<string | null>(null);
     const [frames, setFrames] = useState<FigmaFrame[]>([]);
     const [selectedFrames, setSelectedFrames] = useState<string[]>([]);
+    const [exportFormat, setExportFormat] = useState<'figma-file' | 'figma-components'>('figma-file');
 
     // Clear messages after 5 seconds
     useEffect(() => {
@@ -147,6 +150,12 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
         }
     }, [selectedFrames, frames, figmaUrl, onImport, onClose]);
 
+    const handleExport = useCallback(() => {
+        onExport(exportFormat);
+        setSuccess('Download started! Check your browser\'s download folder.');
+        setTimeout(() => onClose(), 2000);
+    }, [exportFormat, onExport, onClose]);
+
     const handleDisconnect = useCallback(() => {
         setIsConnected(false);
         setAccessToken('');
@@ -214,6 +223,13 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                         <FiUpload />
                         Import from Figma
                     </button>
+                    <button
+                        className={`figma-tab ${activeTab === 'export' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('export')}
+                    >
+                        <FiDownload />
+                        Export to Figma
+                    </button>
                 </div>
 
                 <div className="figma-modal-content">
@@ -269,29 +285,6 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                                             onChange={(e) => setFigmaUrl(e.target.value)}
                                             className="figma-input"
                                         />
-                                        <div className="figma-demo-options">
-                                            <button
-                                                className="figma-btn figma-btn-demo"
-                                                onClick={() => setFigmaUrl('https://www.figma.com/file/fKYVvgOyTKhJRGVOWLJWFK/Wireframe-Kit-(Community)')}
-                                            >
-                                                📋 Wireframe Kit
-                                            </button>
-                                            <button
-                                                className="figma-btn figma-btn-demo"
-                                                onClick={() => setFigmaUrl('https://www.figma.com/file/8qNcDzOXLj1hFtjHOW8OOc/Landing-Page-Wireframes-(Community)')}
-                                            >
-                                                🏠 Landing Pages
-                                            </button>
-                                            <button
-                                                className="figma-btn figma-btn-demo"
-                                                onClick={() => setFigmaUrl('https://www.figma.com/file/2VjGvMnKP0FQY4W9TQAjhJ/Mobile-App-Wireframes-(Community)')}
-                                            >
-                                                📱 Mobile Apps
-                                            </button>
-                                        </div>
-                                        <small className="figma-help-text">
-                                            💡 <strong>Tip:</strong> Use your own Figma files or create a simple test file in your Figma account for best results.
-                                        </small>
                                     </div>
 
                                     <button
@@ -360,6 +353,83 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                                     )}
                                 </div>
                             )}
+                        </div>
+                    )}
+
+                    {/* Export Tab */}
+                    {activeTab === 'export' && (
+                        <div className="figma-tab-content">
+                            <div className="figma-export-section">
+                                <h3>📤 Export Wireframe</h3>
+                                <p>Download your current wireframe in different formats for further use or sharing.</p>
+
+                                <div className="figma-input-group">
+                                    <label>Export Format</label>
+                                    <div className="figma-radio-group">
+                                        <label className="figma-radio-label">
+                                            <input
+                                                type="radio"
+                                                name="exportFormat"
+                                                value="figma-file"
+                                                checked={exportFormat === 'figma-file'}
+                                                onChange={(e) => setExportFormat(e.target.value as any)}
+                                            />
+                                            <span>
+                                                <strong>Standalone HTML File</strong>
+                                                <small>Complete webpage with styles and interactivity for sharing or presentation</small>
+                                            </span>
+                                        </label>
+                                        <label className="figma-radio-label">
+                                            <input
+                                                type="radio"
+                                                name="exportFormat"
+                                                value="figma-components"
+                                                checked={exportFormat === 'figma-components'}
+                                                onChange={(e) => setExportFormat(e.target.value as any)}
+                                            />
+                                            <span>
+                                                <strong>JSON Data Export</strong>
+                                                <small>Raw wireframe data with metadata for developers or future imports</small>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div className="export-info-box">
+                                    {exportFormat === 'figma-file' ? (
+                                        <div className="export-description">
+                                            <h4>📄 HTML Export</h4>
+                                            <p>Creates a complete, self-contained HTML file that you can:</p>
+                                            <ul>
+                                                <li>Open in any web browser</li>
+                                                <li>Share with clients or stakeholders</li>
+                                                <li>Use for presentations</li>
+                                                <li>Host on any web server</li>
+                                            </ul>
+                                        </div>
+                                    ) : (
+                                        <div className="export-description">
+                                            <h4>📊 JSON Export</h4>
+                                            <p>Exports wireframe data as structured JSON including:</p>
+                                            <ul>
+                                                <li>Raw HTML content</li>
+                                                <li>Design metadata (theme, colors)</li>
+                                                <li>Export timestamp</li>
+                                                <li>Original description</li>
+                                            </ul>
+                                        </div>
+                                    )}
+                                </div>
+
+                                <button
+                                    className="figma-btn figma-btn-primary"
+                                    onClick={handleExport}
+                                    disabled={isLoading}
+                                >
+                                    <FiDownload />
+                                    {exportFormat === 'figma-file' ? 'Download HTML File' : 'Download JSON Data'}
+                                </button>
+                            </div>
                         </div>
                     )}
                 </div>

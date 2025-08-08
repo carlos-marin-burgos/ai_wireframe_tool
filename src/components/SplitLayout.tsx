@@ -15,10 +15,8 @@ import DemoImageSelector from "./DemoImageSelector";
 import PageNavigation from "./PageNavigation";
 import HtmlCodeViewer from "./HtmlCodeViewer";
 import PresentationMode from "./PresentationMode";
-import ExportModal from "./ExportModal";
 
 import { exportToPowerPoint, generateShareUrl } from "../utils/powerpointExport";
-import wireframeExportService from "../services/wireframeExport";
 import {
   FiSend,
   FiLoader,
@@ -155,9 +153,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   // Component Library Modal state
   const [isComponentLibraryOpen, setIsComponentLibraryOpen] = useState(false);
-
-  // Export Modal state
-  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
   // Clear AI suggestions when SplitLayout loads
   useEffect(() => {
@@ -474,33 +469,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   const handleViewHtmlCode = useCallback(() => {
     setIsHtmlCodeViewerOpen(true);
   }, []);
-
-  // Export Modal handlers
-  const handleOpenExportModal = useCallback(() => {
-    setIsExportModalOpen(true);
-  }, []);
-
-  const handleExport = useCallback(async (format: 'html' | 'json') => {
-    try {
-      let result;
-      if (format === 'html') {
-        result = await wireframeExportService.exportAsHTML(htmlWireframe, {});
-      } else {
-        result = await wireframeExportService.exportAsJSON(htmlWireframe, {}, {});
-      }
-
-      if (result.success) {
-        console.log(`✅ Export successful: ${format.toUpperCase()}`);
-        addMessage('ai', `🎉 Wireframe exported as ${format.toUpperCase()} successfully! Your file has been downloaded.`);
-      } else {
-        console.error('Export failed:', result.error);
-        addMessage('ai', `❌ Export failed: ${result.error || 'Unknown error occurred'}`);
-      }
-    } catch (error) {
-      console.error('Export error:', error);
-      addMessage('ai', `❌ Export failed: ${error instanceof Error ? error.message : 'Unknown error occurred'}`);
-    }
-  }, [htmlWireframe, addMessage]);
 
   // Image Upload and Analysis handlers
   const handleImageUpload = useCallback((imageDataUrl: string) => {
@@ -912,9 +880,9 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
             <CompactToolbar
               onImportHtml={handleImportHtml}
               onFigmaIntegration={handleFigmaIntegration}
-              onExportModal={handleOpenExportModal}
               onSave={enhancedOnSave}
               onOpenLibrary={handleOpenLibrary}
+              onAddPages={handleAddPages}
               onViewHtmlCode={handleViewHtmlCode}
               onExportPowerPoint={handleExportPowerPoint}
               onPresentationMode={handlePresentationMode}
@@ -926,7 +894,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               pages={wireframePages}
               currentPageId={currentPageId}
               onPageSwitch={handlePageSwitch}
-              onAddPages={handleAddPages}
             />
             <div className="wireframe-container">
               {/* Status bar removed for cleaner presentation */}
@@ -1160,15 +1127,10 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         isOpen={isFigmaModalOpen}
         onClose={() => setIsFigmaModalOpen(false)}
         onImport={handleFigmaImport}
+        onExport={handleFigmaExport}
       />
 
-      {/* Export Modal */}
-      <ExportModal
-        isOpen={isExportModalOpen}
-        onClose={() => setIsExportModalOpen(false)}
-        onExport={handleExport}
-        hasWireframe={!!htmlWireframe && htmlWireframe.trim() !== ''}
-      />      {/* Component Library Modal */}
+      {/* Component Library Modal */}
       <ComponentLibraryModal
         isOpen={isComponentLibraryOpen}
         onClose={() => {

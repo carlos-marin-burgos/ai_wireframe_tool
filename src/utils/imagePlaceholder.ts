@@ -1,51 +1,102 @@
 /**
- * Image Placeholder Utility
- * Creates styled image placeholders following Fluent UI design patterns
+ * Image Placeholder Utilities
+ * Generates placeholder images for wireframes and components
  */
 
-export interface ImagePlaceholderConfig {
+export interface PlaceholderOptions {
   width?: number;
   height?: number;
-  text?: string;
   backgroundColor?: string;
   textColor?: string;
-  borderRadius?: string;
+  text?: string;
+  format?: "png" | "jpg" | "svg";
+  style?: "modern" | "classic" | "minimal";
+}
+
+export interface PlaceholderResult {
+  url: string;
+  width: number;
+  height: number;
+  alt: string;
 }
 
 /**
- * Generate a data URL for an SVG image placeholder
+ * Generate a placeholder image URL using various services
  */
-export function generateImagePlaceholder(config: ImagePlaceholderConfig = {}): string {
+export function generatePlaceholderImage(
+  options: PlaceholderOptions = {}
+): PlaceholderResult {
   const {
-    width = 200,
-    height = 150,
-    text = 'Image',
-    backgroundColor = '#f3f2f1',
-    textColor = '#605e5c',
-    borderRadius = '4px'
-  } = config;
+    width = 300,
+    height = 200,
+    backgroundColor = "#0078d4",
+    textColor = "#ffffff",
+    text = "Image",
+    format = "png",
+    style = "modern",
+  } = options;
+
+  // Remove # from hex colors for URL
+  const bgColor = backgroundColor.replace("#", "");
+  const txtColor = textColor.replace("#", "");
+
+  let url: string;
+
+  switch (style) {
+    case "modern":
+      // Using picsum for realistic placeholder images
+      url = `https://picsum.photos/${width}/${height}?blur=1&grayscale=1`;
+      break;
+
+    case "minimal":
+      // Using placeholder.com for clean, minimal placeholders
+      url = `https://via.placeholder.com/${width}x${height}/${bgColor}/${txtColor}?text=${encodeURIComponent(
+        text
+      )}`;
+      break;
+
+    case "classic":
+    default:
+      // Using placehold.co for better customization
+      url = `https://placehold.co/${width}x${height}/${bgColor}/${txtColor}/${format}?text=${encodeURIComponent(
+        text
+      )}`;
+      break;
+  }
+
+  return {
+    url,
+    width,
+    height,
+    alt: `Placeholder image: ${text} (${width}x${height})`,
+  };
+}
+
+/**
+ * Generate SVG placeholder for better control and performance
+ */
+export function generateSVGPlaceholder(
+  options: PlaceholderOptions = {}
+): string {
+  const {
+    width = 300,
+    height = 200,
+    backgroundColor = "#f3f4f6",
+    textColor = "#6b7280",
+    text = "Image",
+  } = options;
 
   const svg = `
-    <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-          <path d="M 20 0 L 0 0 0 20" fill="none" stroke="${backgroundColor}" stroke-width="1" opacity="0.3"/>
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill="${backgroundColor}" rx="${borderRadius}"/>
-      <rect width="100%" height="100%" fill="url(#grid)" opacity="0.1"/>
-      <g transform="translate(${width/2}, ${height/2})">
-        <!-- Camera icon -->
-        <g transform="translate(-12, -8)">
-          <rect x="2" y="4" width="20" height="14" rx="2" fill="none" stroke="${textColor}" stroke-width="1.5"/>
-          <circle cx="12" cy="11" r="3" fill="none" stroke="${textColor}" stroke-width="1.5"/>
-          <path d="M7 4V2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v2" fill="none" stroke="${textColor}" stroke-width="1.5"/>
-        </g>
-        <!-- Text -->
-        <text x="0" y="26" text-anchor="middle" fill="${textColor}" font-family="Segoe UI, system-ui, sans-serif" font-size="12" font-weight="400">
-          ${text}
-        </text>
-      </g>
+    <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100%" height="100%" fill="${backgroundColor}" stroke="#e5e7eb" stroke-width="1"/>
+      <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" 
+            font-family="system-ui, -apple-system, sans-serif" 
+            font-size="14" fill="${textColor}">
+        ${text}
+      </text>
+      <circle cx="50%" cy="35%" r="12" fill="${textColor}" opacity="0.3"/>
+      <rect x="40%" y="40%" width="20%" height="3" fill="${textColor}" opacity="0.2" rx="1"/>
+      <rect x="35%" y="45%" width="30%" height="2" fill="${textColor}" opacity="0.2" rx="1"/>
     </svg>
   `;
 
@@ -53,214 +104,287 @@ export function generateImagePlaceholder(config: ImagePlaceholderConfig = {}): s
 }
 
 /**
- * Generate inline CSS for image placeholders
+ * Generate placeholder for specific wireframe contexts
  */
-export function getImagePlaceholderCSS(): string {
-  return `
-    .image-placeholder {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: #f3f2f1;
-      border: 1px solid #e1dfdd;
-      border-radius: 4px;
-      color: #605e5c;
-      font-family: "Segoe UI", system-ui, sans-serif;
-      font-size: 12px;
-      font-weight: 400;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      box-sizing: border-box;
-    }
-    
-    .image-placeholder::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-image: 
-        linear-gradient(45deg, transparent 25%, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.1) 50%, transparent 50%, transparent 75%, rgba(255,255,255,0.1) 75%);
-      background-size: 20px 20px;
-      opacity: 0.3;
-    }
-    
-    .image-placeholder-icon {
-      width: 24px;
-      height: 24px;
-      margin-bottom: 4px;
-      opacity: 0.6;
-    }
-    
-    .image-placeholder-text {
-      display: block;
-      font-size: 12px;
-      line-height: 1.2;
-      z-index: 1;
-      position: relative;
-    }
-    
-    /* Specific sizes */
-    .image-placeholder-small {
-      width: 100px;
-      height: 75px;
-      min-height: 75px;
-    }
-    
-    .image-placeholder-medium {
-      width: 200px;
-      height: 150px;
-      min-height: 150px;
-    }
-    
-    .image-placeholder-large {
-      width: 300px;
-      height: 200px;
-      min-height: 200px;
-    }
-    
-    .image-placeholder-card {
-      width: 100%;
-      height: 120px;
-      min-height: 120px;
-    }
-    
-    .image-placeholder-avatar {
-      width: 40px;
-      height: 40px;
-      min-height: 40px;
-      border-radius: 50%;
-    }
-    
-    .image-placeholder-banner {
-      width: 100%;
-      height: 200px;
-      min-height: 200px;
-    }
-    
-    /* Responsive behavior */
-    @media (max-width: 768px) {
-      .image-placeholder-medium {
-        width: 150px;
-        height: 113px;
-        min-height: 113px;
-      }
-      
-      .image-placeholder-large {
-        width: 200px;
-        height: 150px;
-        min-height: 150px;
-      }
-    }
-  `;
+export function generateWireframePlaceholder(
+  type: "hero" | "card" | "avatar" | "icon" | "banner" | "thumbnail",
+  customOptions: Partial<PlaceholderOptions> = {}
+): PlaceholderResult {
+  const presets: Record<string, PlaceholderOptions> = {
+    hero: {
+      width: 800,
+      height: 400,
+      backgroundColor: "#f8fafc",
+      textColor: "#64748b",
+      text: "Hero Image",
+      style: "modern",
+    },
+    card: {
+      width: 300,
+      height: 200,
+      backgroundColor: "#f1f5f9",
+      textColor: "#475569",
+      text: "Card Image",
+      style: "minimal",
+    },
+    avatar: {
+      width: 64,
+      height: 64,
+      backgroundColor: "#e2e8f0",
+      textColor: "#475569",
+      text: "👤",
+      style: "minimal",
+    },
+    icon: {
+      width: 24,
+      height: 24,
+      backgroundColor: "#e2e8f0",
+      textColor: "#64748b",
+      text: "⭐",
+      style: "minimal",
+    },
+    banner: {
+      width: 1200,
+      height: 300,
+      backgroundColor: "#f8fafc",
+      textColor: "#64748b",
+      text: "Banner Image",
+      style: "modern",
+    },
+    thumbnail: {
+      width: 150,
+      height: 150,
+      backgroundColor: "#f1f5f9",
+      textColor: "#475569",
+      text: "Thumb",
+      style: "minimal",
+    },
+  };
+
+  const options = { ...presets[type], ...customOptions };
+  return generatePlaceholderImage(options);
 }
 
 /**
- * Replace broken images with styled placeholders in HTML content
+ * Generate multiple placeholder variations for A/B testing
  */
-export function replaceImagesWithPlaceholders(htmlContent: string): string {
-  // Replace img tags with broken/missing src attributes
-  return htmlContent
-    // Replace empty or missing src attributes
-    .replace(/<img([^>]*?)src=["']?["']?([^>]*?)>/gi, (match, beforeSrc, afterSrc) => {
-      const altMatch = match.match(/alt=["']([^"']*?)["']/i);
-      const altText = altMatch ? altMatch[1] : 'Image';
-      const placeholderText = altText || 'Image';
-      
-      // Extract width and height if available
-      const widthMatch = match.match(/width=["']?(\d+)["']?/i);
-      const heightMatch = match.match(/height=["']?(\d+)["']?/i);
-      const classMatch = match.match(/class=["']([^"']*?)["']/i);
-      
-      let placeholderClass = 'image-placeholder image-placeholder-medium';
-      let style = '';
-      
-      if (widthMatch && heightMatch) {
-        const width = parseInt(widthMatch[1]);
-        const height = parseInt(heightMatch[1]);
-        style = `width: ${width}px; height: ${height}px; min-height: ${height}px;`;
-        
-        // Choose appropriate size class
-        if (width <= 100) placeholderClass = 'image-placeholder image-placeholder-small';
-        else if (width <= 200) placeholderClass = 'image-placeholder image-placeholder-medium';
-        else placeholderClass = 'image-placeholder image-placeholder-large';
-      } else if (classMatch) {
-        const existingClasses = classMatch[1];
-        if (existingClasses.includes('avatar')) placeholderClass = 'image-placeholder image-placeholder-avatar';
-        else if (existingClasses.includes('banner')) placeholderClass = 'image-placeholder image-placeholder-banner';
-        else if (existingClasses.includes('card')) placeholderClass = 'image-placeholder image-placeholder-card';
-      }
-      
-      return `<div class="${placeholderClass}" ${style ? `style="${style}"` : ''}>
-        <div class="image-placeholder-content">
-          <svg class="image-placeholder-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
-          </svg>
-          <span class="image-placeholder-text">${placeholderText}</span>
-        </div>
-      </div>`;
-    })
-    // Replace images with placeholder.com or other generic placeholder services
-    .replace(/<img([^>]*?)src=["']https?:\/\/(?:via\.placeholder\.com|placeholder\.com|picsum\.photos|lorempixel\.com)[^"']*?["']([^>]*?)>/gi, (match) => {
-      const altMatch = match.match(/alt=["']([^"']*?)["']/i);
-      const altText = altMatch ? altMatch[1] : 'Image';
-      const placeholderText = altText || 'Image';
-      
-      const widthMatch = match.match(/width=["']?(\d+)["']?/i);
-      const heightMatch = match.match(/height=["']?(\d+)["']?/i);
-      
-      let placeholderClass = 'image-placeholder image-placeholder-medium';
-      let style = '';
-      
-      if (widthMatch && heightMatch) {
-        const width = parseInt(widthMatch[1]);
-        const height = parseInt(heightMatch[1]);
-        style = `width: ${width}px; height: ${height}px; min-height: ${height}px;`;
-        
-        if (width <= 100) placeholderClass = 'image-placeholder image-placeholder-small';
-        else if (width <= 200) placeholderClass = 'image-placeholder image-placeholder-medium';
-        else placeholderClass = 'image-placeholder image-placeholder-large';
-      }
-      
-      return `<div class="${placeholderClass}" ${style ? `style="${style}"` : ''}>
-        <div class="image-placeholder-content">
-          <svg class="image-placeholder-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
-          </svg>
-          <span class="image-placeholder-text">${placeholderText}</span>
-        </div>
-      </div>`;
+export function generatePlaceholderVariations(
+  baseOptions: PlaceholderOptions,
+  variations: number = 3
+): PlaceholderResult[] {
+  const colors = ["#0078d4", "#107c10", "#d83b01", "#5c2d91", "#ca5010"];
+  const texts = ["Image A", "Image B", "Image C", "Option 1", "Option 2"];
+
+  return Array.from({ length: variations }, (_, index) => {
+    return generatePlaceholderImage({
+      ...baseOptions,
+      backgroundColor: colors[index % colors.length],
+      text: texts[index % texts.length],
     });
+  });
 }
 
 /**
- * Generate a styled image placeholder HTML element
+ * Convert placeholder to data URL for embedding
  */
-export function createImagePlaceholder(options: {
-  text?: string;
-  width?: number;
-  height?: number;
-  className?: string;
-  type?: 'small' | 'medium' | 'large' | 'card' | 'avatar' | 'banner';
-}): string {
-  const { text = 'Image', width, height, className = '', type = 'medium' } = options;
-  
-  let placeholderClass = `image-placeholder image-placeholder-${type}`;
-  if (className) placeholderClass += ` ${className}`;
-  
-  let style = '';
-  if (width && height) {
-    style = `width: ${width}px; height: ${height}px; min-height: ${height}px;`;
+export async function placeholderToDataURL(
+  placeholderUrl: string
+): Promise<string> {
+  try {
+    const response = await fetch(placeholderUrl);
+    const blob = await response.blob();
+
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  } catch (error) {
+    console.error("Failed to convert placeholder to data URL:", error);
+    // Fallback to SVG placeholder
+    return generateSVGPlaceholder({ width: 300, height: 200, text: "Image" });
   }
-  
-  return `<div class="${placeholderClass}" ${style ? `style="${style}"` : ''}>
-    <div class="image-placeholder-content">
-      <svg class="image-placeholder-icon" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
-      </svg>
-      <span class="image-placeholder-text">${text}</span>
-    </div>
-  </div>`;
 }
+
+/**
+ * Utility to replace placeholder URLs in HTML content
+ */
+export function replacePlaceholdersInHTML(
+  html: string,
+  options: PlaceholderOptions = {}
+): string {
+  // Replace common placeholder patterns
+  const patterns = [
+    /https?:\/\/via\.placeholder\.com\/[^"\s]*/g,
+    /https?:\/\/placehold\.co\/[^"\s]*/g,
+    /https?:\/\/picsum\.photos\/[^"\s]*/g,
+    /src=["'][^"']*placeholder[^"']*["']/g,
+  ];
+
+  let updatedHTML = html;
+
+  patterns.forEach((pattern) => {
+    updatedHTML = updatedHTML.replace(pattern, (match) => {
+      // Extract dimensions if possible
+      const dimensionMatch = match.match(/(\d+)x?(\d+)?/);
+      const width = dimensionMatch
+        ? parseInt(dimensionMatch[1])
+        : options.width || 300;
+      const height = dimensionMatch
+        ? parseInt(dimensionMatch[2] || dimensionMatch[1])
+        : options.height || 200;
+
+      const placeholder = generatePlaceholderImage({
+        ...options,
+        width,
+        height,
+      });
+
+      return match.includes("src=")
+        ? `src="${placeholder.url}"`
+        : placeholder.url;
+    });
+  });
+
+  return updatedHTML;
+}
+
+/**
+ * Replace broken/missing image sources with proper placeholders
+ * Handles cases like: image1.jpg, article-image.png, hero-bg.jpg, etc.
+ */
+export function replaceBrokenImageSources(
+  html: string,
+  options: PlaceholderOptions = {}
+): string {
+  // Pattern to match image sources that are likely broken/missing
+  const brokenImagePatterns = [
+    // Match simple filenames like image1.jpg, photo.png, etc.
+    /src=["']([^"']*\.(jpg|jpeg|png|gif|webp|svg))["']/gi,
+    // Match relative paths like ./images/photo.jpg, images/hero.png
+    /src=["']([.\/]*[^"']*\/[^"']*\.(jpg|jpeg|png|gif|webp|svg))["']/gi,
+    // Match descriptive names like hero-image.jpg, article-photo.png
+    /src=["']([^"']*(?:image|photo|pic|hero|banner|card|thumb)[^"']*\.(jpg|jpeg|png|gif|webp|svg))["']/gi,
+  ];
+
+  let updatedHTML = html;
+
+  brokenImagePatterns.forEach((pattern) => {
+    updatedHTML = updatedHTML.replace(pattern, (match, imageSrc, extension) => {
+      // Extract alt text and class for context
+      const imgTagMatch = updatedHTML.match(
+        new RegExp(
+          `<img[^>]*src=["']${imageSrc.replace(
+            /[.*+?^${}()|[\]\\]/g,
+            "\\$&"
+          )}["'][^>]*>`,
+          "i"
+        )
+      );
+
+      if (!imgTagMatch) return match;
+
+      const imgTag = imgTagMatch[0];
+      const altMatch = imgTag.match(/alt=["']([^"']*)["']/i);
+      const classMatch = imgTag.match(/class=["']([^"']*)["']/i);
+
+      // Determine placeholder text from alt or filename
+      let placeholderText = "Image";
+      if (altMatch && altMatch[1]) {
+        placeholderText = altMatch[1];
+      } else {
+        // Extract meaningful text from filename
+        const filename = imageSrc.split("/").pop()?.split(".")[0] || "";
+        if (filename) {
+          placeholderText =
+            filename
+              .replace(/[-_]/g, " ")
+              .replace(/\b\w/g, (l) => l.toUpperCase())
+              .replace(/\d+/g, "")
+              .trim() || "Image";
+        }
+      }
+
+      // Determine placeholder type and dimensions from context
+      let placeholderType:
+        | "hero"
+        | "card"
+        | "avatar"
+        | "icon"
+        | "banner"
+        | "thumbnail" = "card";
+      let customOptions: Partial<PlaceholderOptions> = {};
+
+      if (classMatch) {
+        const classes = classMatch[1].toLowerCase();
+        if (classes.includes("hero")) {
+          placeholderType = "hero";
+        } else if (classes.includes("avatar") || classes.includes("profile")) {
+          placeholderType = "avatar";
+        } else if (classes.includes("icon")) {
+          placeholderType = "icon";
+        } else if (classes.includes("banner")) {
+          placeholderType = "banner";
+        } else if (classes.includes("thumb")) {
+          placeholderType = "thumbnail";
+        } else if (classes.includes("card")) {
+          placeholderType = "card";
+        }
+      }
+
+      // Check for width/height attributes or styles
+      const widthMatch = imgTag.match(
+        /(?:width=["'](\d+)["']|width:\s*(\d+)px)/i
+      );
+      const heightMatch = imgTag.match(
+        /(?:height=["'](\d+)["']|height:\s*(\d+)px)/i
+      );
+
+      if (widthMatch) {
+        customOptions.width = parseInt(widthMatch[1] || widthMatch[2]);
+      }
+      if (heightMatch) {
+        customOptions.height = parseInt(heightMatch[1] || heightMatch[2]);
+      }
+
+      // Generate appropriate placeholder
+      const placeholder = generateWireframePlaceholder(placeholderType, {
+        ...options,
+        ...customOptions,
+        text: placeholderText,
+      });
+
+      return `src="${placeholder.url}"`;
+    });
+  });
+
+  return updatedHTML;
+}
+
+/**
+ * Process HTML content to replace all types of placeholder and broken images
+ * This is the main function to call for wireframe processing
+ */
+export function processWireframeImages(
+  html: string,
+  options: PlaceholderOptions = {}
+): string {
+  // First replace existing placeholder services
+  let processedHTML = replacePlaceholdersInHTML(html, options);
+
+  // Then replace broken/missing image sources
+  processedHTML = replaceBrokenImageSources(processedHTML, options);
+
+  return processedHTML;
+}
+
+// Export commonly used presets
+export const PLACEHOLDER_PRESETS = {
+  HERO: { width: 800, height: 400, style: "modern" as const },
+  CARD: { width: 300, height: 200, style: "minimal" as const },
+  AVATAR: { width: 64, height: 64, style: "minimal" as const },
+  ICON: { width: 24, height: 24, style: "minimal" as const },
+  BANNER: { width: 1200, height: 300, style: "modern" as const },
+  THUMBNAIL: { width: 150, height: 150, style: "minimal" as const },
+} as const;

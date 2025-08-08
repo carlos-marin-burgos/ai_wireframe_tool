@@ -281,6 +281,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
         isOpen={isFigmaModalOpen}
         onClose={() => setIsFigmaModalOpen(false)}
         onImport={handleFigmaImport}
+        onExport={handleFigmaExport}
       />
 
       {/* GitHub Connect Modal */}

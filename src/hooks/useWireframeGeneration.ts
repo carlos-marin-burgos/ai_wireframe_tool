@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { API_CONFIG } from "../config/api";
 import { api } from "../utils/apiClient";
+import { processWireframeImages } from "../utils/imagePlaceholder";
 
 interface WireframeResponse {
   html: string;
@@ -157,8 +158,18 @@ export const useWireframeGeneration = () => {
             // Still wait a bit to avoid UI flashing
             await new Promise((resolve) => setTimeout(resolve, 500));
 
+            // Process cached HTML for any broken images
+            const processedCachedHtml = processWireframeImages(
+              ensureString(cached.html),
+              {
+                style: "modern",
+                backgroundColor: "#0078d4",
+                textColor: "#ffffff",
+              }
+            );
+
             return {
-              html: ensureString(cached.html),
+              html: processedCachedHtml,
               fallback: false,
               fromCache: true,
             };
@@ -243,17 +254,24 @@ export const useWireframeGeneration = () => {
           console.error("HTML content is empty after ensureString");
         }
 
+        // Process images: replace broken/missing image sources with proper placeholders
+        const processedHtml = processWireframeImages(htmlContent, {
+          style: "modern",
+          backgroundColor: "#0078d4",
+          textColor: "#ffffff",
+        });
+
         // Cache the successful result if not a fallback and content is valid
-        if (htmlContent && htmlContent.length > 0 && !data.fallback) {
+        if (processedHtml && processedHtml.length > 0 && !data.fallback) {
           wireframeCache[cacheKey] = {
-            html: htmlContent,
+            html: processedHtml,
             timestamp: Date.now(),
             processingTime: data.processingTime || 0,
           };
         }
 
         return {
-          html: htmlContent,
+          html: processedHtml,
           fallback: data.fallback || false,
           processingTime: data.processingTime || 0,
           fromCache: false,
@@ -280,9 +298,16 @@ export const useWireframeGeneration = () => {
             colorScheme: colorScheme || "primary",
           });
 
+          // Process fallback HTML for proper images
+          const processedFallbackHtml = processWireframeImages(fallbackHtml, {
+            style: "modern",
+            backgroundColor: "#0078d4",
+            textColor: "#ffffff",
+          });
+
           // Cache fallback result with shorter TTL
           wireframeCache[`fallback-${cacheKey}`] = {
-            html: fallbackHtml,
+            html: processedFallbackHtml,
             timestamp: Date.now(),
             processingTime: 0,
           };
@@ -292,7 +317,7 @@ export const useWireframeGeneration = () => {
           setFallback(true);
 
           return {
-            html: fallbackHtml,
+            html: processedFallbackHtml,
             fallback: true,
             processingTime: 0,
             fromCache: false,

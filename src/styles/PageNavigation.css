@@ -15,7 +15,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -165,19 +165,10 @@
 .breadcrumb-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.breadcrumb-items {
-  display: flex;
-  align-items: center;
   gap: 6px;
   flex-wrap: wrap;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .breadcrumb-item {
@@ -210,38 +201,7 @@
   color: #8a8886;
   font-size: 14px;
   margin: 0 2px;
-  -webkit-user-select: none;
   user-select: none;
-}
-
-.add-pages-nav-button {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: transparent;
-  color: #6b7280;
-  border: 1px solid #d1d5db;
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-  margin-left: auto;
-}
-
-.add-pages-nav-button:hover {
-  background: #f9fafb;
-  color: #374151;
-  border-color: #9ca3af;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.add-pages-nav-button svg {
-  width: 16px;
-  height: 16px;
 }
 
 /* Responsive breadcrumb */
@@ -249,15 +209,10 @@
   .page-navigation.breadcrumb-style {
     padding: 6px 16px;
   }
-
+  
   .breadcrumb-item {
     font-size: 13px;
     padding: 3px 6px;
-  }
-
-  .add-pages-nav-button {
-    font-size: 13px;
-    padding: 5px 10px;
   }
 }
 
@@ -265,24 +220,14 @@
   .breadcrumb-container {
     gap: 4px;
   }
-
+  
   .breadcrumb-item {
     font-size: 12px;
     padding: 2px 4px;
   }
-
+  
   .breadcrumb-separator {
     font-size: 12px;
     margin: 0 1px;
-  }
-
-  .add-pages-nav-button {
-    font-size: 12px;
-    padding: 4px 8px;
-    gap: 4px;
-  }
-
-  .add-pages-nav-button span {
-    display: none;
   }
 }
