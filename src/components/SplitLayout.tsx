@@ -877,16 +877,14 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       <div className="right-pane">
         {(htmlWireframe || wireframePages.length > 0) ? (
           <div className="wireframe-panel">
-            <CompactToolbar
-              onImportHtml={handleImportHtml}
+            <WireframeToolbar
               onFigmaIntegration={handleFigmaIntegration}
               onSave={enhancedOnSave}
               onOpenLibrary={handleOpenLibrary}
-              onAddPages={handleAddPages}
               onViewHtmlCode={handleViewHtmlCode}
-              onExportPowerPoint={handleExportPowerPoint}
               onPresentationMode={handlePresentationMode}
               onShareUrl={handleShareUrl}
+              onImportHtml={handleImportHtml}
             />
 
             {/* Always show PageNavigation when we have a wireframe */}
@@ -894,6 +892,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               pages={wireframePages}
               currentPageId={currentPageId}
               onPageSwitch={handlePageSwitch}
+              onAddPages={handleAddPages}
             />
             <div className="wireframe-container">
               {/* Status bar removed for cleaner presentation */}
