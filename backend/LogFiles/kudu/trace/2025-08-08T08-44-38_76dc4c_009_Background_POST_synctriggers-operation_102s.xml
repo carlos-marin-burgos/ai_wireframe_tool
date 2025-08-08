@@ -1,0 +1,38 @@
+<step title="BackgroundTrace" date="2025-08-08T08:44:38.955" instance="76dc4c" url="synctriggers-operation" method="POST" >
+  <step title="Cleanup Xml Logs" date="2025-08-08T08:44:39.002" /><!-- duration: 63ms -->
+  <step title="Updating shutdown sentinel last write time" date="2025-08-08T08:44:39.111" SemaphoreCount="6" /><!-- duration: 47ms -->
+  <step title="Delaying &apos;00:01:00&apos; for Functions site to restart." date="2025-08-08T08:44:39.189" /><!-- duration: 47ms -->
+  <step title="Begin HttpPost https://func-prod-fresh-u62277mynzfg4.azurewebsites.net/admin/host/synctriggers, x-ms-request-id: 33cf001f-f8c5-9743-9c5c-e33d1978d05c" date="2025-08-08T08:45:39.290" /><!-- duration: 47ms -->
+  <step title="End HttpPost, status: ServiceUnavailable" date="2025-08-08T08:46:17.417" /><!-- duration: 49ms -->
+  <step title="Begin HttpPost https://func-prod-fresh-u62277mynzfg4.azurewebsites.net/admin/host/synctriggers, x-ms-request-id: 33cf001f-f8c5-9743-9c5c-e33d1978d05c" date="2025-08-08T08:46:18.526" /><!-- duration: 47ms -->
+  <step title="End HttpPost, status: ServiceUnavailable" date="2025-08-08T08:46:18.667" /><!-- duration: 47ms -->
+  <step title="Begin HttpPost https://func-prod-fresh-u62277mynzfg4.azurewebsites.net/admin/host/synctriggers, x-ms-request-id: 33cf001f-f8c5-9743-9c5c-e33d1978d05c" date="2025-08-08T08:46:19.839" /><!-- duration: 47ms -->
+  <step title="End HttpPost, status: ServiceUnavailable" date="2025-08-08T08:46:19.995" /><!-- duration: 47ms -->
+  <step title="Syncing function triggers by calling the functions runtime site failed. System.Net.Http.HttpRequestException: Response status code does not indicate success: 503 (Service Unavailable).
+   at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode()
+   at Kudu.Core.Helpers.PostDeploymentHelper.&lt;PostAsync&gt;d__49.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Kudu.Core.Helpers.PostDeploymentHelper.&lt;&gt;c__DisplayClass38_0.&lt;&lt;TryFunctionsRuntimeSyncTriggers&gt;b__1&gt;d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Kudu.Core.Infrastructure.OperationManager.&lt;&gt;c__DisplayClass4_0.&lt;&lt;AttemptAsync&gt;b__0&gt;d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Kudu.Core.Infrastructure.OperationManager.&lt;AttemptAsync&gt;d__5`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Kudu.Core.Helpers.PostDeploymentHelper.&lt;TryFunctionsRuntimeSyncTriggers&gt;d__38.MoveNext()" date="2025-08-08T08:46:20.089" /><!-- duration: 47ms -->
+  <step title="Attempting to perform settriggers call directly." date="2025-08-08T08:46:20.183" /><!-- duration: 31ms -->
+  <step title="Syncing httpTrigger of generateWireframe" date="2025-08-08T08:46:20.448" /><!-- duration: 31ms -->
+  <step title="Skipping http of generateWireframe" date="2025-08-08T08:46:20.511" /><!-- duration: 47ms -->
+  <step title="Syncing httpTrigger of performance-stats" date="2025-08-08T08:46:20.651" /><!-- duration: 47ms -->
+  <step title="Skipping http of performance-stats" date="2025-08-08T08:46:20.730" /><!-- duration: 47ms -->
+  <step title="Begin HttpPost https://func-prod-fresh-u62277mynzfg4.scm.azurewebsites.net/operations/settriggers, x-ms-request-id: 33cf001f-f8c5-9743-9c5c-e33d1978d05c" date="2025-08-08T08:46:20.855" /><!-- duration: 47ms -->
+  <step title="End HttpPost, status: OK" date="2025-08-08T08:46:21.058" /><!-- duration: 31ms -->
+  <step title="Syncing 2 function triggers with payload size 320 bytes successful." date="2025-08-08T08:46:21.136" /><!-- duration: 31ms -->
+</step><!-- duration: 102259ms -->

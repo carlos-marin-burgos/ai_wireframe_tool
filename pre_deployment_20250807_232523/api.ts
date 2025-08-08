@@ -61,7 +61,7 @@ export const API_CONFIG = {
   // Get BASE_URL - use local server in development, Azure in production
   BASE_URL: isDevelopment
     ? `http://localhost:${PORTS.development.primary}`
-    : "https://func-prod-fresh-u62277mynzfg4.azurewebsites.net",
+    : "https://func-designetica-prod-rjsqzg4bs3fc6.azurewebsites.net",
 };
 
 // Health check to verify backend has AI capabilities

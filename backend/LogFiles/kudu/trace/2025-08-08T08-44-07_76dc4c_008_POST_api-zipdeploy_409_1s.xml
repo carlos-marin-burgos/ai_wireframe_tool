@@ -1,0 +1,9 @@
+<step title="Incoming Request" date="2025-08-08T08:44:07.792" instance="76dc4c" url="/api/zipdeploy?isAsync=true&amp;Deployer=az_cli_functions" method="POST" type="request" pid="2376,2,16" Cache-Control="no-cache" Content-Length="69099" Content-Type="application/octet-stream" Accept="*/*" Accept-Encoding="gzip, deflate" Authorization="Bas..." Host="func-prod-fresh-u62277mynzfg4.scm.azurewebsites.net" User-Agent="AZURECLI/2.75.0 (HOMEBREW)" x-ms-client-request-id="ce86c488-7433-11f0-92c5-ea6763969e0b" X-ARR-LOG-ID="ce86c488-7433-11f0-92c5-ea6763969e0b" CLIENT-IP="72.199.249.27:58717" X-SITE-DEPLOYMENT-ID="func-prod-fresh-u62277mynzfg4" WAS-DEFAULT-HOSTNAME="func-prod-fresh-u62277mynzfg4.scm.azurewebsites.net" X-Forwarded-Proto="https" X-AppService-Proto="https" X-Forwarded-TlsVersion="1.3" X-WAWS-Unencoded-URL="/api/zipdeploy?isAsync=true&amp;Deployer=az_cli_functions" >
+  <step title="Cleanup Xml Logs" date="2025-08-08T08:44:07.824" /><!-- duration: 78ms -->
+  <step title="ZipPushDeploy" date="2025-08-08T08:44:07.996" >
+    <step title="Functions App ZipDeploy. Extract zip. " date="2025-08-08T08:44:08.027" /><!-- duration: 47ms -->
+    <step title="Starting PushDeployAsync" date="2025-08-08T08:44:08.121" /><!-- duration: 31ms -->
+    <step title="Lock &apos;C:\home\site\locks\deployments.lock&apos; is currently held by &apos;Performing continuous deployment&apos; operation started at 2025-08-08T08:40:44.8533714Z." date="2025-08-08T08:44:08.308" /><!-- duration: 31ms -->
+  </step><!-- duration: 391ms -->
+  <step title="Outgoing response" date="2025-08-08T08:44:08.433" type="response" statusCode="409" statusText="Conflict" Server="Microsoft-IIS/10.0" x-ms-request-id="ce86c488-7433-11f0-92c5-ea6763969e0b" Content-Length="181" Cache-Control="no-cache" X-AspNet-Version="4.0.30319" Content-Type="text/plain; charset=utf-8" Pragma="no-cache" Expires="-1" /><!-- duration: 47ms -->
+</step><!-- duration: 766ms -->

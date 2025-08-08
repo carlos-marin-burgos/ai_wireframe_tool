@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Designetica UI Test Guide</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #0078d4;
+            text-align: center;
+        }
+
+        .status {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .test-step {
+            background: #f8f9fa;
+            border-left: 4px solid #0078d4;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .test-step h3 {
+            margin-top: 0;
+            color: #0078d4;
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .checklist li:before {
+            content: "☐";
+            position: absolute;
+            left: 0;
+            font-size: 18px;
+            color: #666;
+        }
+
+        .url {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .tip {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🎯 Designetica UI Test Guide</h1>
+
+        <div class="status">
+            ✅ Backend Status: ALL SYSTEMS OPERATIONAL<br>
+            🎨 Frontend: Running on localhost:5173<br>
+            🤖 AI Services: Active and responding
+        </div>
+
+        <div class="test-step">
+            <h3>🌟 Step 1: Access the Application</h3>
+            <div class="url">http://localhost:5173</div>
+            <ul class="checklist">
+                <li>Landing page loads with Designetica branding</li>
+                <li>Text input field is visible and functional</li>
+                <li>Generate button is clickable</li>
+                <li>Page has clean Microsoft Learn styling</li>
+            </ul>
+        </div>
+
+        <div class="test-step">
+            <h3>🚀 Step 2: Test Basic Wireframe Generation</h3>
+            <div class="tip">
+                <strong>Try this description:</strong><br>
+                "Create a modern dashboard with navigation header, statistics cards, and a data table"
+            </div>
+            <ul class="checklist">
+                <li>Enter description in the text field</li>
+                <li>Click "Generate Wireframe" button</li>
+                <li>Loading state appears (10-20 seconds)</li>
+                <li>Wireframe appears on the right side</li>
+                <li>HTML code is properly rendered</li>
+            </ul>
+        </div>
+
+        <div class="test-step">
+            <h3>💡 Step 3: Test AI Suggestions</h3>
+            <ul class="checklist">
+                <li>Start typing in the description field</li>
+                <li>AI suggestions appear below the input</li>
+                <li>Click on a suggestion</li>
+                <li>Description is automatically filled</li>
+                <li>Wireframe generates from the suggestion</li>
+            </ul>
+        </div>
+
+        <div class="test-step">
+            <h3>💾 Step 4: Test Save/Load Functionality</h3>
+            <ul class="checklist">
+                <li>Generate a wireframe</li>
+                <li>Click the "Save" button</li>
+                <li>Enter a name for your wireframe</li>
+                <li>Confirm the save</li>
+                <li>Click "Load" to see saved wireframes</li>
+                <li>Load a previously saved wireframe</li>
+            </ul>
+        </div>
+
+        <div class="test-step">
+            <h3>🎨 Step 5: Test Theme and Design Options</h3>
+            <ul class="checklist">
+                <li>Generated wireframes use Microsoft Learn theme</li>
+                <li>Proper typography and spacing</li>
+                <li>Consistent color scheme</li>
+                <li>Professional layout and structure</li>
+            </ul>
+        </div>
+
+        <div class="test-step">
+            <h3>📱 Step 6: Test Different Content Types</h3>
+            <div class="tip">
+                <strong>Try these descriptions:</strong><br>
+                • "E-commerce product page with hero image and shopping cart"<br>
+                • "Learning management system with course cards"<br>
+                • "Corporate website with team section and contact form"<br>
+                • "Mobile app landing page with feature highlights"
+            </div>
+            <ul class="checklist">
+                <li>Each generates unique wireframes</li>
+                <li>Appropriate components for content type</li>
+                <li>Good visual hierarchy</li>
+                <li>Responsive layout considerations</li>
+            </ul>
+        </div>
+
+        <div class="test-step">
+            <h3>⚡ Step 7: Test Performance</h3>
+            <ul class="checklist">
+                <li>Page loads quickly (under 3 seconds)</li>
+                <li>Wireframe generation completes in 10-20 seconds</li>
+                <li>No console errors in browser developer tools</li>
+                <li>Smooth transitions and interactions</li>
+                <li>Memory usage stays reasonable during use</li>
+            </ul>
+        </div>
+
+        <div class="test-step">
+            <h3>🔧 Step 8: Test Error Handling</h3>
+            <ul class="checklist">
+                <li>Empty description shows appropriate message</li>
+                <li>Network errors are handled gracefully</li>
+                <li>Invalid inputs don't break the application</li>
+                <li>User gets feedback for all actions</li>
+            </ul>
+        </div>
+
+        <p class="success">
+            🎉 If all items above work correctly, your Designetica application is fully functional and ready for
+            production use!
+        </p>
+
+        <div class="tip">
+            <strong>🚀 Next Steps:</strong><br>
+            • Share the application with team members for feedback<br>
+            • Consider adding more templates and themes<br>
+            • Monitor performance and usage analytics<br>
+            • Plan for scaling based on user adoption
+        </div>
+    </div>
+</body>
+
+</html>

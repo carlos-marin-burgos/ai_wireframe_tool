@@ -1,0 +1,15 @@
+<step title="Incoming Request" date="2025-08-08T08:44:42.562" instance="76dc4c" url="/api/zipdeploy?isAsync=true&amp;Deployer=az_cli_functions" method="POST" type="request" pid="2376,2,13" Cache-Control="no-cache" Content-Length="69099" Content-Type="application/octet-stream" Accept="*/*" Accept-Encoding="gzip, deflate" Authorization="Bas..." Host="func-prod-fresh-u62277mynzfg4.scm.azurewebsites.net" User-Agent="AZURECLI/2.75.0 (HOMEBREW)" x-ms-client-request-id="e4ee3ce2-7433-11f0-ac60-ea6763969e0b" X-ARR-LOG-ID="e4ee3ce2-7433-11f0-ac60-ea6763969e0b" CLIENT-IP="72.199.249.27:58891" X-SITE-DEPLOYMENT-ID="func-prod-fresh-u62277mynzfg4" WAS-DEFAULT-HOSTNAME="func-prod-fresh-u62277mynzfg4.scm.azurewebsites.net" X-Forwarded-Proto="https" X-AppService-Proto="https" X-Forwarded-TlsVersion="1.3" X-WAWS-Unencoded-URL="/api/zipdeploy?isAsync=true&amp;Deployer=az_cli_functions" >
+  <step title="ZipPushDeploy" date="2025-08-08T08:44:42.687" >
+    <step title="Functions App ZipDeploy. Extract zip. " date="2025-08-08T08:44:42.734" /><!-- duration: 31ms -->
+    <step title="Starting PushDeployAsync" date="2025-08-08T08:44:42.812" /><!-- duration: 47ms -->
+    <step title="Updating shutdown sentinel last write time" date="2025-08-08T08:44:42.922" SemaphoreCount="6" /><!-- duration: 47ms -->
+    <step title="LockFile &apos;C:\home\site\locks\deployments.lock&apos; acquired" date="2025-08-08T08:44:43.047" /><!-- duration: 47ms -->
+    <step title="Saving request content to C:\local\Temp\zipdeploy\0t2rdatb.zip" date="2025-08-08T08:44:43.140" >
+      <step title="Total 69,099 bytes written to C:\local\Temp\zipdeploy\0t2rdatb.zip" date="2025-08-08T08:44:43.172" /><!-- duration: 47ms -->
+    </step><!-- duration: 125ms -->
+    <step title="LockFile &apos;C:\home\site\locks\deployments.lock&apos; released" date="2025-08-08T08:44:43.312" /><!-- duration: 63ms -->
+    <step title="Starting FetchDeploy" date="2025-08-08T08:44:43.453" /><!-- duration: 47ms -->
+    <step title="Start deployment in the background" date="2025-08-08T08:44:43.547" /><!-- duration: 578ms -->
+  </step><!-- duration: 1484ms -->
+  <step title="Outgoing response" date="2025-08-08T08:44:44.203" type="response" statusCode="202" statusText="Accepted" Server="Microsoft-IIS/10.0" x-ms-request-id="e4ee3ce2-7433-11f0-ac60-ea6763969e0b" Retry-After="30" Cache-Control="private" X-AspNet-Version="4.0.30319" Location="https://func-prod-fresh-u62277mynzfg4.scm.azurewebsites.net/api/deployments/latest?deployer=az_cli_functions&amp;time=2025-08-08_08-44-44Z" /><!-- duration: 47ms -->
+</step><!-- duration: 1719ms -->

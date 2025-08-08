@@ -1,0 +1,146 @@
+<step title="BackgroundTrace" date="2025-08-08T08:23:36.653" instance="76dc4c" url="/api/zipdeploy" method="POST" >
+  <step title="Updating shutdown sentinel last write time" date="2025-08-08T08:23:36.731" SemaphoreCount="7" /><!-- duration: 31ms -->
+  <step title="LockFile &apos;C:\home\site\locks\deployments.lock&apos; acquired" date="2025-08-08T08:23:36.810" /><!-- duration: 47ms -->
+  <step title="Creating temporary deployment" date="2025-08-08T08:23:36.888" /><!-- duration: 250ms -->
+  <step title="Performing fetch based deployment" date="2025-08-08T08:23:37.169" >
+    <step title="Fetching changes." date="2025-08-08T08:23:37.591" /><!-- duration: 47ms -->
+    <step title="Starting LocalZipHandler" date="2025-08-08T08:23:37.685" /><!-- duration: 31ms -->
+    <step title="Cleaning up temp folders from previous zip deployments and extracting pushed zip file C:\local\Temp\zipdeploy\nlbff1vt.zip (10.94 MB) to C:\local\Temp\zipdeploy\extracted" date="2025-08-08T08:23:37.950" /><!-- duration: 47ms -->
+    <step title="Cleaning up temp folders from previous zip deployments and extracting pushed zip file C:\local\Temp\zipdeploy\nlbff1vt.zip (10.94 MB) to C:\local\Temp\zipdeploy\extracted" date="2025-08-08T08:23:38.044" >
+      <step title="Extracting 7548 entries to C:\local\Temp\zipdeploy\extracted directory" date="2025-08-08T08:23:38.138" >
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\ai\advanced-prompt-engine.js ..." date="2025-08-08T08:23:38.169" /><!-- duration: 47ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\ai\ai-context-manager.js ..." date="2025-08-08T08:23:38.263" /><!-- duration: 31ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\ai\ai-enhanced-wireframe-generator.js ..." date="2025-08-08T08:23:38.341" /><!-- duration: 31ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\ai\enhanced-ai-engine.js ..." date="2025-08-08T08:23:38.419" /><!-- duration: 47ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\ai\real-time-refinement-engine.js ..." date="2025-08-08T08:23:38.513" /><!-- duration: 47ms -->
+        <step title="Omitting extracting file traces ..." date="2025-08-08T08:23:38.607" /><!-- duration: 31ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\utils\analytics-logger.js ..." date="2025-08-08T08:23:46.263" /><!-- duration: 47ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\utils\api-validation.js ..." date="2025-08-08T08:23:46.341" /><!-- duration: 47ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\utils\performance-wireframe-generator.js ..." date="2025-08-08T08:23:46.419" /><!-- duration: 47ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\utils\secure-openai.js ..." date="2025-08-08T08:23:46.497" /><!-- duration: 109ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\utils\wireframe-generator.js ..." date="2025-08-08T08:23:46.638" /><!-- duration: 47ms -->
+      </step><!-- duration: 8578ms -->
+    </step><!-- duration: 8719ms -->
+    <step title="Before sending BuildRequestReceived status to /api/updatedeploystatus" date="2025-08-08T08:23:46.841" /><!-- duration: 47ms -->
+    <step title="DeploymentManager.Deploy(id:770ae1c4ea4344deb6de42887ac87bf4)" date="2025-08-08T08:23:46.919" >
+      <step title="Collecting changeset information" date="2025-08-08T08:23:47.013" /><!-- duration: 344ms -->
+      <step title="Updating submodules" date="2025-08-08T08:23:47.388" >
+        <step title="Updating submodules." date="2025-08-08T08:23:47.732" /><!-- duration: 47ms -->
+      </step><!-- duration: 422ms -->
+      <step title="Preparing deployment for commit id &apos;770ae1c4ea&apos;." date="2025-08-08T08:23:48.185" /><!-- duration: 47ms -->
+      <step title="Determining deployment builder" date="2025-08-08T08:23:48.607" >
+        <step title="Builder is BasicBuilder" date="2025-08-08T08:23:48.653" /><!-- duration: 47ms -->
+      </step><!-- duration: 125ms -->
+      <step title="Copying SSH keys" date="2025-08-08T08:23:48.872" /><!-- duration: 63ms -->
+      <step title="Building" date="2025-08-08T08:23:48.966" >
+        <step title="Generating deployment script." date="2025-08-08T08:23:49.341" /><!-- duration: 47ms -->
+        <step title="Generating deployment script" date="2025-08-08T08:23:49.419" >
+          <step title="Using the following command to generate deployment script: &apos;azure site deploymentscript -y --no-dot-deployment -r &quot;C:\local\Temp\zipdeploy\extracted&quot; -o &quot;C:\home\site\deployments\tools&quot; --basic --sitePath &quot;C:\local\Temp\zipdeploy\extracted&quot;&apos;." date="2025-08-08T08:23:49.560" /><!-- duration: 47ms -->
+          <step title="Executing external process" date="2025-08-08T08:23:49.669" type="process" path="starter.cmd" arguments="&quot;C:\Program Files (x86)\SiteExtensions\Kudu\2025.06.2.6\bin\node_modules\.bin\kuduscript.cmd&quot; -y --no-dot-deployment -r &quot;C:\local\Temp\zipdeploy\extracted&quot; -o &quot;C:\home\site\deployments\tools&quot; --basic --sitePath &quot;C:\local\Temp\zipdeploy\extracted&quot;" >
+            <step title="Generating deployment script for Web Site" date="2025-08-08T08:23:50.013" /><!-- duration: 47ms -->
+            <step title="Generated deployment script files" date="2025-08-08T08:23:50.138" /><!-- duration: 47ms -->
+          </step><!-- duration: 563ms -->
+          <step title="Saved cached version of the deployment script for command -y --no-dot-deployment -r &quot;C:\local\Temp\zipdeploy\extracted&quot; -o &quot;C:\home\site\deployments\tools&quot; --basic --sitePath &quot;C:\local\Temp\zipdeploy\extracted&quot;" date="2025-08-08T08:23:50.310" /><!-- duration: 31ms -->
+        </step><!-- duration: 969ms -->
+        <step title="Running deployment command..." date="2025-08-08T08:23:50.732" /><!-- duration: 47ms -->
+        <step title="Command: &quot;C:\home\site\deployments\tools\deploy.cmd&quot;" date="2025-08-08T08:23:50.872" /><!-- duration: 31ms -->
+        <step title="Executing external process" date="2025-08-08T08:23:50.950" type="process" path="starter.cmd" arguments="&quot;C:\home\site\deployments\tools\deploy.cmd&quot;" >
+          <step title="Handling Basic Web Site deployment." date="2025-08-08T08:23:51.767" /><!-- duration: 47ms -->
+          <step title="Creating app_offline.htm" date="2025-08-08T08:23:53.252" /><!-- duration: 47ms -->
+          <step title="KuduSync.NET from: &apos;C:\local\Temp\zipdeploy\extracted&apos; to: &apos;C:\home\site\wwwroot&apos;" date="2025-08-08T08:23:53.377" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;check_az_cli.sh&apos;" date="2025-08-08T08:23:53.502" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;debug-openai.cjs&apos;" date="2025-08-08T08:23:53.611" /><!-- duration: 78ms -->
+          <step title="Copying file: &apos;deployment.zip&apos;" date="2025-08-08T08:23:53.768" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;enable-ai-suggestions.js&apos;" date="2025-08-08T08:23:53.893" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;express-server.js&apos;" date="2025-08-08T08:23:54.002" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;host.json&apos;" date="2025-08-08T08:23:54.127" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;init-templates.js&apos;" date="2025-08-08T08:23:54.268" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;local.settings.json.example&apos;" date="2025-08-08T08:23:54.408" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;local.settings.json.template&apos;" date="2025-08-08T08:23:54.518" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;package.deploy.json&apos;" date="2025-08-08T08:23:54.627" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;package.json&apos;" date="2025-08-08T08:23:54.752" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;safe-start.sh&apos;" date="2025-08-08T08:23:54.877" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;server.js&apos;" date="2025-08-08T08:23:55.002" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;simple-server.cjs&apos;" date="2025-08-08T08:23:55.143" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;start.js&apos;" date="2025-08-08T08:23:55.252" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;template-manager.js&apos;" date="2025-08-08T08:23:55.361" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;types.js&apos;" date="2025-08-08T08:23:55.486" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;ai\advanced-prompt-engine.js&apos;" date="2025-08-08T08:23:55.596" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;ai\ai-context-manager.js&apos;" date="2025-08-08T08:23:55.721" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;ai\ai-enhanced-wireframe-generator.js&apos;" date="2025-08-08T08:23:55.846" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;ai\enhanced-ai-engine.js&apos;" date="2025-08-08T08:23:55.955" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;ai\real-time-refinement-engine.js&apos;" date="2025-08-08T08:23:56.080" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;aiBuilderHealth\function.json&apos;" date="2025-08-08T08:23:56.205" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;aiBuilderHealth\index.js&apos;" date="2025-08-08T08:23:56.314" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;aiBuilderIntegration\index.js&apos;" date="2025-08-08T08:23:56.439" /><!-- duration: 63ms -->
+          <step title="Copying file: &apos;analytics\function.json&apos;" date="2025-08-08T08:23:56.580" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;analytics\index.js&apos;" date="2025-08-08T08:23:56.689" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;analyzeUIImage\function.json&apos;" date="2025-08-08T08:23:56.814" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;analyzeUIImage\index.js&apos;" date="2025-08-08T08:23:56.939" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;components\AtlasComponentLibrary.js&apos;" date="2025-08-08T08:23:57.049" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;components\HeroGenerator.js&apos;" date="2025-08-08T08:23:57.174" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;components\microsoft-learn-card.html&apos;" date="2025-08-08T08:23:57.299" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;components\microsoftlearn-card-examples.js&apos;" date="2025-08-08T08:23:57.424" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;components\PageContinuation.js&apos;" date="2025-08-08T08:23:57.533" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;components\SiteHeaderGenerator-clean.js&apos;" date="2025-08-08T08:23:57.643" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;components\SiteHeaderGenerator-old.js&apos;" date="2025-08-08T08:23:57.752" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;components\SiteHeaderGenerator.js&apos;" date="2025-08-08T08:23:57.861" /><!-- duration: 63ms -->
+          <step title="Copying file: &apos;fast-suggestions\function.json&apos;" date="2025-08-08T08:23:58.002" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;fast-suggestions\index.js&apos;" date="2025-08-08T08:23:58.127" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;generateSuggestions\function.json&apos;" date="2025-08-08T08:23:58.236" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;generateSuggestions\index.js&apos;" date="2025-08-08T08:23:58.346" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;generateSuggestions\node_modules\.package-lock.json&apos;" date="2025-08-08T08:23:58.471" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;generateSuggestions\node_modules\.bin\openai&apos;" date="2025-08-08T08:23:58.596" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;generateSuggestions\node_modules\openai\api-promise.d.mts&apos;" date="2025-08-08T08:23:58.736" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;generateSuggestions\node_modules\openai\api-promise.d.mts.map&apos;" date="2025-08-08T08:23:58.846" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;generateSuggestions\node_modules\openai\api-promise.d.ts.map&apos;" date="2025-08-08T08:23:58.955" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;generateSuggestions\node_modules\openai\api-promise.js&apos;" date="2025-08-08T08:23:59.080" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;generateSuggestions\node_modules\openai\api-promise.mjs&apos;" date="2025-08-08T08:23:59.205" /><!-- duration: 31ms -->
+          <step title="Omitting next output lines..." date="2025-08-08T08:23:59.330" /><!-- duration: 31ms -->
+          <step title="Processed 356 files..." date="2025-08-08T08:24:15.163" /><!-- duration: 47ms -->
+          <step title="Processed 663 files..." date="2025-08-08T08:24:35.212" /><!-- duration: 63ms -->
+          <step title="Processed 958 files..." date="2025-08-08T08:24:55.231" /><!-- duration: 31ms -->
+          <step title="Processed 1264 files..." date="2025-08-08T08:25:15.215" /><!-- duration: 47ms -->
+          <step title="Processed 1573 files..." date="2025-08-08T08:25:35.278" /><!-- duration: 63ms -->
+          <step title="Processed 1881 files..." date="2025-08-08T08:25:55.341" /><!-- duration: 31ms -->
+          <step title="Processed 2186 files..." date="2025-08-08T08:26:15.325" /><!-- duration: 47ms -->
+          <step title="Processed 2485 files..." date="2025-08-08T08:26:35.388" /><!-- duration: 62ms -->
+          <step title="Processed 2763 files..." date="2025-08-08T08:26:55.405" /><!-- duration: 31ms -->
+          <step title="Processed 3054 files..." date="2025-08-08T08:27:15.437" /><!-- duration: 47ms -->
+          <step title="Processed 3350 files..." date="2025-08-08T08:27:35.468" /><!-- duration: 47ms -->
+          <step title="Processed 3634 files..." date="2025-08-08T08:27:55.546" /><!-- duration: 47ms -->
+          <step title="Processed 3844 files..." date="2025-08-08T08:28:15.562" /><!-- duration: 62ms -->
+          <step title="Processed 4060 files..." date="2025-08-08T08:28:35.598" /><!-- duration: 47ms -->
+          <step title="Processed 4265 files..." date="2025-08-08T08:28:55.618" /><!-- duration: 47ms -->
+          <step title="Processed 4458 files..." date="2025-08-08T08:29:15.684" /><!-- duration: 47ms -->
+          <step title="Processed 4666 files..." date="2025-08-08T08:29:35.684" /><!-- duration: 31ms -->
+          <step title="Processed 4850 files..." date="2025-08-08T08:29:55.653" /><!-- duration: 78ms -->
+          <step title="Processed 5026 files..." date="2025-08-08T08:30:15.748" /><!-- duration: 62ms -->
+          <step title="Processed 5233 files..." date="2025-08-08T08:30:35.828" /><!-- duration: 31ms -->
+          <step title="Processed 5432 files..." date="2025-08-08T08:30:55.929" /><!-- duration: 31ms -->
+          <step title="Processed 5633 files..." date="2025-08-08T08:31:15.976" /><!-- duration: 63ms -->
+          <step title="Processed 5816 files..." date="2025-08-08T08:31:36.025" /><!-- duration: 47ms -->
+          <step title="Processed 6007 files..." date="2025-08-08T08:31:56.104" /><!-- duration: 47ms -->
+          <step title="Processed 6181 files..." date="2025-08-08T08:32:16.158" /><!-- duration: 47ms -->
+          <step title="Processed 6376 files..." date="2025-08-08T08:32:36.243" /><!-- duration: 31ms -->
+          <step title="Processed 6572 files..." date="2025-08-08T08:32:56.276" /><!-- duration: 47ms -->
+          <step title="Processed 6764 files..." date="2025-08-08T08:33:16.280" /><!-- duration: 31ms -->
+          <step title="Processed 6943 files..." date="2025-08-08T08:33:36.348" /><!-- duration: 47ms -->
+          <step title="Processed 7118 files..." date="2025-08-08T08:33:56.386" /><!-- duration: 62ms -->
+          <step title="Processed 7292 files..." date="2025-08-08T08:34:16.421" /><!-- duration: 31ms -->
+          <step title="Processed 7444 files..." date="2025-08-08T08:34:36.420" /><!-- duration: 31ms -->
+          <step title="Finished successfully." date="2025-08-08T08:34:51.380" /><!-- duration: 31ms -->
+        </step><!-- duration: 660508ms -->
+        <step title="Running post deployment command(s)..." date="2025-08-08T08:34:51.927" /><!-- duration: 31ms -->
+        <step title="Triggering recycle (preview mode disabled)." date="2025-08-08T08:34:52.364" /><!-- duration: 31ms -->
+        <step title="Ignoring FS watcher based recycle request as this is a classic Windows app." date="2025-08-08T08:34:52.442" /><!-- duration: 31ms -->
+        <step title="Deployment successful. DEPLOYMENTINFO: deploymentPath = Functions App ZipDeploy. Extract zip. , deployer = ZipDeploy, os = windows, sku = Dynamic, language = node, siteName = func-prod-fresh-u62277mynzfg4, slotName = Production, siteHostName = func-prod-fresh-u62277mynzfg4.azurewebsites.net, deploymentStatus = Success" date="2025-08-08T08:34:52.849" /><!-- duration: 47ms -->
+      </step><!-- duration: 664648ms -->
+    </step><!-- duration: 666742ms -->
+    <step title="Cleaning up temp files" date="2025-08-08T08:34:53.708" /><!-- duration: 31ms -->
+    <step title="Begin HttpPost https://func-prod-fresh-u62277mynzfg4.scm.azurewebsites.net/operations/settriggers, x-ms-request-id: d5d871b7-3ada-d67f-105c-19ec6722c69c" date="2025-08-08T08:34:53.833" /><!-- duration: 47ms -->
+    <step title="End HttpPost, status: OK" date="2025-08-08T08:34:54.067" /><!-- duration: 47ms -->
+    <step title="Scheduling background sync triggers after delay" date="2025-08-08T08:34:54.146" /><!-- duration: 63ms -->
+  </step><!-- duration: 677195ms -->
+  <step title="LockFile &apos;C:\home\site\locks\deployments.lock&apos; released" date="2025-08-08T08:34:54.427" /><!-- duration: 31ms -->
+</step><!-- duration: 677898ms -->
