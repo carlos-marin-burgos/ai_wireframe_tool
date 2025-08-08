@@ -19,8 +19,6 @@ interface CompactToolbarProps {
     onExportPowerPoint?: () => void;
     onPresentationMode?: () => void;
     onShareUrl?: () => void;
-    onImportHtml?: () => void;
-    onExportWireframe?: () => void;
 }
 
 const CompactToolbar: React.FC<CompactToolbarProps> = ({
@@ -31,21 +29,11 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
     onViewHtmlCode,
     onExportPowerPoint,
     onPresentationMode,
-    onShareUrl,
-    onImportHtml
+    onShareUrl
 }) => {
     return (
         <div className="compact-toolbar">
             <div className="compact-toolbar-buttons">
-                <button
-                    className="compact-btn"
-                    onClick={onImportHtml}
-                    title="Import HTML"
-                    aria-label="Import HTML"
-                >
-                    <FiDownload />
-                </button>
-
                 <button
                     className="compact-btn"
                     onClick={onFigmaIntegration}

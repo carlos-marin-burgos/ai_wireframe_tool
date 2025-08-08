@@ -12,7 +12,8 @@
   justify-content: center;
   z-index: 10000;
   padding: 20px;
-  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont,
+    sans-serif;
 }
 
 .html-code-modal {
@@ -90,7 +91,7 @@
   overflow: auto;
   background: #1e1e1e;
   color: #d4d4d4;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
 }
 
 .html-code-block {
@@ -118,7 +119,7 @@
 
 /* Basic HTML syntax highlighting */
 .html-code-block code::before {
-  content: '';
+  content: "";
 }
 
 /* Footer */
@@ -249,4 +250,15 @@
 
 .html-code-content::-webkit-scrollbar-thumb:hover {
   background: #4c4c50;
+}
+
+.visually-hidden-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
 }

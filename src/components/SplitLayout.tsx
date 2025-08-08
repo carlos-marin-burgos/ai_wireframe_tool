@@ -877,7 +877,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         {(htmlWireframe || wireframePages.length > 0) ? (
           <div className="wireframe-panel">
             <CompactToolbar
-              onImportHtml={handleImportHtml}
               onFigmaIntegration={handleFigmaIntegration}
               onSave={enhancedOnSave}
               onOpenLibrary={handleOpenLibrary}
@@ -1158,11 +1157,9 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       <HtmlCodeViewer
         isOpen={isHtmlCodeViewerOpen}
         onClose={() => setIsHtmlCodeViewerOpen(false)}
-        htmlContent={currentPageId ? (pageContents[currentPageId] || htmlWireframe) : htmlWireframe}
-        title={currentPageId ?
-          `HTML Code - ${wireframePages.find(p => p.id === currentPageId)?.name || 'Unknown Page'}` :
-          'HTML Code - Main Wireframe'
-        }
+        htmlContent={htmlWireframe || ''}
+        title="Wireframe HTML"
+        onImportHtml={handleImportHtml}
       />
 
       {/* Presentation Mode */}
