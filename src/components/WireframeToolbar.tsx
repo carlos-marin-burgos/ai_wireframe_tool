@@ -27,7 +27,7 @@ const WireframeToolbar: React.FC<WireframeToolbarProps> = ({
 
     // Helper component for Fluent icons
     const FluentIcon: React.FC<{ name: string; className?: string }> = ({ name, className = "" }) => (
-        <span 
+        <span
             className={`fluent-icon ${className}`}
             dangerouslySetInnerHTML={{ __html: getFluentIcon(name) }}
         />
@@ -36,9 +36,6 @@ const WireframeToolbar: React.FC<WireframeToolbarProps> = ({
         <div className="wireframe-toolbar">
             <div className="toolbar-left">
                 <h3 className="toolbar-title">Wireframe Preview</h3>
-            </div>
-
-            <div className="toolbar-right">
                 <button
                     className="toolbar-btn"
                     onClick={onAddPages}
@@ -47,7 +44,9 @@ const WireframeToolbar: React.FC<WireframeToolbarProps> = ({
                     <FluentIcon name="add" />
                     Add Pages
                 </button>
+            </div>
 
+            <div className="toolbar-right">
                 <button
                     className="toolbar-btn"
                     onClick={() => {
@@ -110,7 +109,7 @@ const WireframeToolbar: React.FC<WireframeToolbarProps> = ({
                                     setShowExportMenu(false);
                                 }}
                             >
-                                <FiShare2 />
+                                <FluentIcon name="share" />
                                 Share URL
                             </button>
                         </div>
@@ -122,7 +121,7 @@ const WireframeToolbar: React.FC<WireframeToolbarProps> = ({
                     onClick={onViewHtmlCode}
                     title="View HTML Code"
                 >
-                    <FiCode />
+                    <FluentIcon name="code" />
                     HTML Code
                 </button>
 
@@ -131,7 +130,7 @@ const WireframeToolbar: React.FC<WireframeToolbarProps> = ({
                     onClick={onSave}
                     title="Save Wireframe"
                 >
-                    <FiSave />
+                    <FluentIcon name="save" />
                     Save
                 </button>
             </div>
