@@ -4,6 +4,8 @@
 
 A professional AI-powered wireframing tool that transforms natural language descriptions into functional wireframes using Microsoft Atlas Design system and Azure OpenAI.
 
+**Updated: August 8, 2025** - Fixed deployment configuration for correct Static Web App endpoint.
+
 ## 🚀 Features
 
 ### Core Capabilities
