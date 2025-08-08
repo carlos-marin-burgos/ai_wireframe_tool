@@ -36,6 +36,7 @@
     "emergency:rollback": "./safe-deploy.sh emergency"
   },
   "dependencies": {
+    "@fluentui/react-icons": "^2.0.307",
     "axios": "^1.11.0",
     "bootstrap": "^5.3.7",
     "concurrently": "^9.2.0",

@@ -7,7 +7,7 @@ import {
     FiMonitor,
     FiFigma
 } from 'react-icons/fi';
-import { TbBoxModel2 } from 'react-icons/tb';
+import { Library24Regular } from '@fluentui/react-icons';
 import './CompactToolbar.css';
 
 interface CompactToolbarProps {
@@ -63,7 +63,7 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
                     title="Open Component Library"
                     aria-label="Open Component Library"
                 >
-                    <TbBoxModel2 />
+                    <Library24Regular />
                 </button>
 
                 <button
