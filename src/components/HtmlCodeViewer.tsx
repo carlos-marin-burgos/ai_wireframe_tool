@@ -65,6 +65,7 @@ const HtmlCodeViewer: React.FC<HtmlCodeViewerProps> = ({
     };
 
     const formatHtml = (html: string) => {
+        // Simple HTML formatting for better readability
         return html
             .replace(/></g, '>\n<')
             .replace(/^\s*\n/gm, '')

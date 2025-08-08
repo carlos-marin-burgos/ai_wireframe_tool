@@ -892,7 +892,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               pages={wireframePages}
               currentPageId={currentPageId}
               onPageSwitch={handlePageSwitch}
-              onAddPages={handleAddPages}
+              onAddPage={handleAddPages}
             />
             <div className="wireframe-container">
               {/* Status bar removed for cleaner presentation */}
@@ -1159,7 +1159,10 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         onClose={() => setIsHtmlCodeViewerOpen(false)}
         htmlContent={htmlWireframe || ''}
         title="Wireframe HTML"
-        onImportHtml={handleImportHtml}
+        onImportHtml={(html) => {
+          setHtmlWireframe(html);
+          addMessage('ai', '✅ Imported HTML into current wireframe.');
+        }}
       />
 
       {/* Presentation Mode */}
