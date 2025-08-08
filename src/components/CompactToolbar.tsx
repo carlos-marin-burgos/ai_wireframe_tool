@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     FiSave,
-    FiPlus,
     FiCode,
     FiDownload,
     FiShare2,
     FiMonitor,
-    FiFigma,
-    FiUpload
+    FiFigma
 } from 'react-icons/fi';
 import { TbBoxModel2 } from 'react-icons/tb';
 import './CompactToolbar.css';
@@ -35,8 +33,6 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
     onShareUrl,
     onImportHtml
 }) => {
-    const [showExportMenu, setShowExportMenu] = useState(false);
-
     return (
         <div className="compact-toolbar">
             <div className="compact-toolbar-buttons">
@@ -46,16 +42,16 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
                     title="Import HTML"
                     aria-label="Import HTML"
                 >
-                    <FiUpload />
+                    <FiDownload />
                 </button>
 
                 <button
                     className="compact-btn"
-                    onClick={onAddPages}
-                    title="Add More Pages"
-                    aria-label="Add More Pages"
+                    onClick={onFigmaIntegration}
+                    title="Figma Integration"
+                    aria-label="Figma Integration"
                 >
-                    <FiPlus />
+                    <FiFigma />
                 </button>
 
                 <button
@@ -69,58 +65,6 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
                 >
                     <TbBoxModel2 />
                 </button>
-
-                <div className="compact-export-dropdown">
-                    <button
-                        className="compact-btn"
-                        onClick={() => setShowExportMenu(!showExportMenu)}
-                        title="Export Options"
-                        aria-label="Export Options"
-                    >
-                        <FiDownload />
-                    </button>
-
-                    {showExportMenu && (
-                        <div className="compact-export-menu">
-                            <button
-                                className="compact-export-option"
-                                onClick={() => {
-                                    onExportPowerPoint?.();
-                                    setShowExportMenu(false);
-                                }}
-                                title="Export as HTML Presentation"
-                                aria-label="Export as HTML Presentation"
-                            >
-                                <FiMonitor />
-                                <span className="compact-export-label">HTML Presentation</span>
-                            </button>
-                            <button
-                                className="compact-export-option"
-                                onClick={() => {
-                                    onFigmaIntegration?.();
-                                    setShowExportMenu(false);
-                                }}
-                                title="Export to Figma"
-                                aria-label="Export to Figma"
-                            >
-                                <FiFigma />
-                                <span className="compact-export-label">Figma</span>
-                            </button>
-                            <button
-                                className="compact-export-option"
-                                onClick={() => {
-                                    onPresentationMode?.();
-                                    setShowExportMenu(false);
-                                }}
-                                title="Presentation Mode"
-                                aria-label="Presentation Mode"
-                            >
-                                <FiMonitor />
-                                <span className="compact-export-label">Present</span>
-                            </button>
-                        </div>
-                    )}
-                </div>
 
                 <button
                     className="compact-btn"

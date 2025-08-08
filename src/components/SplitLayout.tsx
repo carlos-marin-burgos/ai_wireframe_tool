@@ -894,6 +894,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               pages={wireframePages}
               currentPageId={currentPageId}
               onPageSwitch={handlePageSwitch}
+              onAddPages={handleAddPages}
             />
             <div className="wireframe-container">
               {/* Status bar removed for cleaner presentation */}
