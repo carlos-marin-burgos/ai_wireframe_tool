@@ -882,9 +882,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               onFigmaIntegration={handleFigmaIntegration}
               onSave={enhancedOnSave}
               onOpenLibrary={handleOpenLibrary}
-              onAddPages={handleAddPages}
               onViewHtmlCode={handleViewHtmlCode}
-              onExportPowerPoint={handleExportPowerPoint}
               onPresentationMode={handlePresentationMode}
               onShareUrl={handleShareUrl}
             />
@@ -894,6 +892,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               pages={wireframePages}
               currentPageId={currentPageId}
               onPageSwitch={handlePageSwitch}
+              onAddPages={handleAddPages}
             />
             <div className="wireframe-container">
               {/* Status bar removed for cleaner presentation */}
