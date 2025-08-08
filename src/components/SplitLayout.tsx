@@ -882,9 +882,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               onOpenLibrary={handleOpenLibrary}
               onAddPages={handleAddPages}
               onViewHtmlCode={handleViewHtmlCode}
-              onExportPowerPoint={handleExportPowerPoint}
               onPresentationMode={handlePresentationMode}
-              onShareUrl={handleShareUrl}
             />
 
             {/* Always show PageNavigation when we have a wireframe */}

@@ -41,7 +41,6 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
         <div className="page-navigation breadcrumb-style">
             <div className="breadcrumb-bar">
                 <div className="breadcrumb-left">
-                    <span className="pages-label" aria-label="Pages section">Pages</span>
                     <div className="breadcrumb-container">
                         {pages.map((page, index) => (
                             <React.Fragment key={page.id}>
