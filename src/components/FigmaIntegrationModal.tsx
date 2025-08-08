@@ -269,6 +269,29 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                                             onChange={(e) => setFigmaUrl(e.target.value)}
                                             className="figma-input"
                                         />
+                                        <div className="figma-demo-options">
+                                            <button
+                                                className="figma-btn figma-btn-demo"
+                                                onClick={() => setFigmaUrl('https://www.figma.com/file/fKYVvgOyTKhJRGVOWLJWFK/Wireframe-Kit-(Community)')}
+                                            >
+                                                📋 Wireframe Kit
+                                            </button>
+                                            <button
+                                                className="figma-btn figma-btn-demo"
+                                                onClick={() => setFigmaUrl('https://www.figma.com/file/8qNcDzOXLj1hFtjHOW8OOc/Landing-Page-Wireframes-(Community)')}
+                                            >
+                                                🏠 Landing Pages
+                                            </button>
+                                            <button
+                                                className="figma-btn figma-btn-demo"
+                                                onClick={() => setFigmaUrl('https://www.figma.com/file/2VjGvMnKP0FQY4W9TQAjhJ/Mobile-App-Wireframes-(Community)')}
+                                            >
+                                                📱 Mobile Apps
+                                            </button>
+                                        </div>
+                                        <small className="figma-help-text">
+                                            💡 <strong>Tip:</strong> Use your own Figma files or create a simple test file in your Figma account for best results.
+                                        </small>
                                     </div>
 
                                     <button

@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import {
     FiSave,
-    FiPlus,
     FiCode,
     FiDownload,
     FiShare2,
     FiMonitor,
     FiFigma,
-    FiUpload,
-    FiFileText
+    FiUpload
 } from 'react-icons/fi';
 import { TbBoxModel2 } from 'react-icons/tb';
 import './CompactToolbar.css';
@@ -18,7 +16,6 @@ interface CompactToolbarProps {
     onExportModal?: () => void;
     onSave?: () => void;
     onOpenLibrary?: () => void;
-    onAddPages?: () => void;
     onViewHtmlCode?: () => void;
     onExportPowerPoint?: () => void;
     onPresentationMode?: () => void;
@@ -31,7 +28,6 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
     onExportModal,
     onSave,
     onOpenLibrary,
-    onAddPages,
     onViewHtmlCode,
     onExportPowerPoint,
     onPresentationMode,
@@ -52,20 +48,20 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
 
                 <button
                     className="compact-btn"
+                    onClick={onExportModal}
+                    title="Export Wireframe"
+                    aria-label="Export Wireframe"
+                >
+                    <FiDownload />
+                </button>
+
+                <button
+                    className="compact-btn"
                     onClick={onFigmaIntegration}
                     title="Import from Figma"
                     aria-label="Import from Figma"
                 >
                     <FiFigma />
-                </button>
-
-                <button
-                    className="compact-btn"
-                    onClick={onAddPages}
-                    title="Add More Pages"
-                    aria-label="Add More Pages"
-                >
-                    <FiPlus />
                 </button>
 
                 <button
@@ -78,15 +74,6 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
                     aria-label="Open Component Library"
                 >
                     <TbBoxModel2 />
-                </button>
-
-                <button
-                    className="compact-btn"
-                    onClick={onExportModal}
-                    title="Export Wireframe"
-                    aria-label="Export Wireframe"
-                >
-                    <FiFileText />
                 </button>
 
                 <button

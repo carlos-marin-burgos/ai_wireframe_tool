@@ -1,4 +1,5 @@
 import React from 'react';
+import { FiPlus } from 'react-icons/fi';
 import '../styles/PageNavigation.css';
 
 interface Page {
@@ -12,12 +13,14 @@ interface PageNavigationProps {
     pages: Page[];
     currentPageId: string | null;
     onPageSwitch: (pageId: string) => void;
+    onAddPages?: () => void;
 }
 
 const PageNavigation: React.FC<PageNavigationProps> = ({
     pages,
     currentPageId,
-    onPageSwitch
+    onPageSwitch,
+    onAddPages
 }) => {
     console.log('🔥 PageNavigation render with:', {
         pages: pages.map(p => ({ id: p.id, name: p.name })),
@@ -37,20 +40,32 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
     return (
         <div className="page-navigation breadcrumb-style">
             <div className="breadcrumb-container">
-                {pages.map((page, index) => (
-                    <React.Fragment key={page.id}>
-                        <button
-                            className={`breadcrumb-item ${currentPageId === page.id ? 'active' : ''}`}
-                            onClick={() => onPageSwitch(page.id)}
-                            title={`${page.name} - ${page.description}`}
-                        >
-                            {getOrdinalLabel(index)}
-                        </button>
-                        {(index < pages.length - 1) && (
-                            <span className="breadcrumb-separator">/</span>
-                        )}
-                    </React.Fragment>
-                ))}
+                <div className="breadcrumb-items">
+                    {pages.map((page, index) => (
+                        <React.Fragment key={page.id}>
+                            <button
+                                className={`breadcrumb-item ${currentPageId === page.id ? 'active' : ''}`}
+                                onClick={() => onPageSwitch(page.id)}
+                                title={`${page.name} - ${page.description}`}
+                            >
+                                {getOrdinalLabel(index)}
+                            </button>
+                            {(index < pages.length - 1) && (
+                                <span className="breadcrumb-separator">/</span>
+                            )}
+                        </React.Fragment>
+                    ))}
+                </div>
+                {onAddPages && (
+                    <button
+                        className="add-pages-nav-button"
+                        onClick={onAddPages}
+                        title="Add More Pages"
+                    >
+                        <FiPlus />
+                        <span>Add Pages</span>
+                    </button>
+                )}
             </div>
         </div>
     );
