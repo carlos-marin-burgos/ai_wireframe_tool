@@ -40,18 +40,6 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
     return (
         <div className="page-navigation breadcrumb-style">
             <div className="breadcrumb-bar">
-                {onAddPage && (
-                    <div className="breadcrumb-actions left">
-                        <button
-                            className="add-pages-button secondary add-page-left"
-                            onClick={onAddPage}
-                            title="Add a new page"
-                            aria-label="Add Page"
-                        >
-                            <FiPlus style={{ marginRight: 4 }} /> Add Page
-                        </button>
-                    </div>
-                )}
                 <div className="breadcrumb-container">
                     {pages.map((page, index) => (
                         <React.Fragment key={page.id}>
@@ -68,6 +56,18 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         </React.Fragment>
                     ))}
                 </div>
+                {onAddPage && (
+                    <div className="breadcrumb-actions right">
+                        <button
+                            className="add-pages-button secondary"
+                            onClick={onAddPage}
+                            title="Add a new page"
+                            aria-label="Add Page"
+                        >
+                            <FiPlus style={{ marginRight: 4 }} /> Add Page
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );
