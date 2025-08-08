@@ -2,48 +2,41 @@ import React, { useState } from 'react';
 import { getFluentIcon } from '../utils/fluentIconSvgs';
 import './WireframeToolbar.css';
 
+// Cache bust: Force browser refresh - v2.0
+
 interface WireframeToolbarProps {
     onFigmaIntegration?: () => void;
     onSave?: () => void;
     onOpenLibrary?: () => void;
-    onAddPages?: () => void;
     onViewHtmlCode?: () => void;
-    onExportPowerPoint?: () => void;
     onPresentationMode?: () => void;
     onShareUrl?: () => void;
+    onImportHtml?: () => void;
 }
 
 const WireframeToolbar: React.FC<WireframeToolbarProps> = ({
     onFigmaIntegration,
     onSave,
     onOpenLibrary,
-    onAddPages,
     onViewHtmlCode,
-    onExportPowerPoint,
     onPresentationMode,
-    onShareUrl
+    onShareUrl,
+    onImportHtml
 }) => {
-    const [showExportMenu, setShowExportMenu] = useState(false);
-
     // Helper component for Fluent icons
-    const FluentIcon: React.FC<{ name: string; className?: string }> = ({ name, className = "" }) => (
-        <span
-            className={`fluent-icon ${className}`}
-            dangerouslySetInnerHTML={{ __html: getFluentIcon(name) }}
-        />
-    );
+    const FluentIcon: React.FC<{ name: string; className?: string }> = ({ name, className = "" }) => {
+        console.log('🔧 FluentIcon rendering:', name, getFluentIcon(name) ? '✅ Found' : '❌ Missing');
+        return (
+            <span
+                className={`fluent-icon ${className}`}
+                dangerouslySetInnerHTML={{ __html: getFluentIcon(name) }}
+            />
+        );
+    };
     return (
         <div className="wireframe-toolbar">
             <div className="toolbar-left">
                 <h3 className="toolbar-title">Wireframe Preview</h3>
-                <button
-                    className="toolbar-btn"
-                    onClick={onAddPages}
-                    title="Add More Pages"
-                >
-                    <FluentIcon name="add" />
-                    Add Pages
-                </button>
             </div>
 
             <div className="toolbar-right">
@@ -55,74 +48,52 @@ const WireframeToolbar: React.FC<WireframeToolbarProps> = ({
                     }}
                     title="Fluent Component Library"
                 >
-                    <FluentIcon name="grid" />
+                    <FluentIcon name="library" />
                     Fluent Library
                 </button>
 
-                <div className="export-dropdown">
-                    <button
-                        className="toolbar-btn"
-                        onClick={() => setShowExportMenu(!showExportMenu)}
-                        title="Export Options"
-                    >
-                        <FluentIcon name="download" />
-                        Export
-                    </button>
-
-                    {showExportMenu && (
-                        <div className="export-menu">
-                            <button
-                                className="export-option"
-                                onClick={() => {
-                                    onExportPowerPoint?.();
-                                    setShowExportMenu(false);
-                                }}
-                                title="Download as HTML presentation (can be converted to PowerPoint)"
-                            >
-                                <FluentIcon name="preview" />
-                                HTML Presentation
-                            </button>
-                            <button
-                                className="export-option"
-                                onClick={() => {
-                                    onFigmaIntegration?.();
-                                    setShowExportMenu(false);
-                                }}
-                            >
-                                <FluentIcon name="design_ideas" />
-                                Figma
-                            </button>
-                            <button
-                                className="export-option"
-                                onClick={() => {
-                                    onPresentationMode?.();
-                                    setShowExportMenu(false);
-                                }}
-                            >
-                                <FluentIcon name="presentation" />
-                                Present
-                            </button>
-                            <button
-                                className="export-option"
-                                onClick={() => {
-                                    onShareUrl?.();
-                                    setShowExportMenu(false);
-                                }}
-                            >
-                                <FluentIcon name="share" />
-                                Share URL
-                            </button>
-                        </div>
-                    )}
-                </div>
+                <button
+                    className="toolbar-btn"
+                    onClick={onFigmaIntegration}
+                    title="Figma Integration"
+                >
+                    <FluentIcon name="design_ideas" />
+                    Figma
+                </button>
 
                 <button
                     className="toolbar-btn"
-                    onClick={onViewHtmlCode}
-                    title="View HTML Code"
+                    onClick={onPresentationMode}
+                    title="Presentation Mode"
+                >
+                    <FluentIcon name="presentation" />
+                    Present
+                </button>
+
+                <button
+                    className="toolbar-btn"
+                    onClick={() => {
+                        // Show dropdown for HTML Code and Import options
+                        const choice = window.confirm("Choose action:\nOK = View HTML Code\nCancel = Import HTML");
+                        if (choice) {
+                            onViewHtmlCode?.();
+                        } else {
+                            onImportHtml?.();
+                        }
+                    }}
+                    title="HTML Code / Import"
                 >
                     <FluentIcon name="code" />
                     HTML Code
+                </button>
+
+                <button
+                    className="toolbar-btn"
+                    onClick={onShareUrl}
+                    title="Share URL"
+                >
+                    <FluentIcon name="share" />
+                    Share URL
                 </button>
 
                 <button

@@ -209,7 +209,7 @@
   .page-navigation.breadcrumb-style {
     padding: 6px 16px;
   }
-  
+
   .breadcrumb-item {
     font-size: 13px;
     padding: 3px 6px;
@@ -220,14 +220,61 @@
   .breadcrumb-container {
     gap: 4px;
   }
-  
+
   .breadcrumb-item {
     font-size: 12px;
     padding: 2px 4px;
   }
-  
+
   .breadcrumb-separator {
     font-size: 12px;
     margin: 0 1px;
+  }
+}
+
+/* Add Pages Button in PageNavigation */
+.add-pages-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #0078d4;
+  border: 1px solid #0078d4;
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  margin-left: 4px;
+}
+
+.add-pages-btn:hover {
+  background: #005a9e;
+  border-color: #005a9e;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 120, 212, 0.3);
+}
+
+.add-pages-btn .fluent-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* Responsive design for add button */
+@media (max-width: 768px) {
+  .add-pages-btn {
+    font-size: 12px;
+    padding: 3px 6px;
+  }
+
+  .add-pages-btn .fluent-icon {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .add-pages-btn span:not(.fluent-icon) {
+    display: none; /* Hide "Add" text on very small screens */
   }
 }
