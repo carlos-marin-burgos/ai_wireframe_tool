@@ -1,5 +1,4 @@
 import React from 'react';
-import { getFluentIcon } from '../utils/fluentIconSvgs';
 import '../styles/PageNavigation.css';
 
 interface Page {
@@ -13,14 +12,12 @@ interface PageNavigationProps {
     pages: Page[];
     currentPageId: string | null;
     onPageSwitch: (pageId: string) => void;
-    onAddPages?: () => void;
 }
 
 const PageNavigation: React.FC<PageNavigationProps> = ({
     pages,
     currentPageId,
-    onPageSwitch,
-    onAddPages
+    onPageSwitch
 }) => {
     console.log('🔥 PageNavigation render with:', {
         pages: pages.map(p => ({ id: p.id, name: p.name })),
@@ -32,14 +29,6 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
         const ordinals = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth'];
         return ordinals[index] || `Page ${index + 1}`;
     };
-
-    // Helper component for Fluent icons
-    const FluentIcon: React.FC<{ name: string; className?: string }> = ({ name, className = "" }) => (
-        <span
-            className={`fluent-icon ${className}`}
-            dangerouslySetInnerHTML={{ __html: getFluentIcon(name) }}
-        />
-    );
 
     if (!pages || pages.length === 0) {
         return null; // Don't show navigation when no pages
@@ -62,21 +51,6 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         )}
                     </React.Fragment>
                 ))}
-
-                {/* Add Pages Button - Secondary position with plus icon */}
-                {onAddPages && (
-                    <>
-                        {pages.length > 0 && <span className="breadcrumb-separator">•</span>}
-                        <button
-                            className="add-pages-btn"
-                            onClick={onAddPages}
-                            title="Add More Pages"
-                        >
-                            <FluentIcon name="add" />
-                            Add
-                        </button>
-                    </>
-                )}
             </div>
         </div>
     );
