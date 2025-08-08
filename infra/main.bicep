@@ -13,7 +13,7 @@ param environmentName string = 'designetica'
 param location string = resourceGroup().location
 
 @description('Location for OpenAI resources')
-param openAiLocation string = 'eastus'
+param openAiLocation string = 'eastus2'
 
 @description('SKU name for the OpenAI service')
 param openAiSkuName string = 'S0'
@@ -285,11 +285,105 @@ resource monitoringMetricsPublisherRoleAssignment 'Microsoft.Authorization/roleA
 // - FUNCTIONS_ENDPOINT: 'https://{functionApp.properties.defaultHostName}'
 
 // ========================================
+// Function App for Backend APIs
+// ========================================
+var functionAppName = '${abbreviations.functionApp}-${environmentName}-${uniqueSuffix}'
+var hostingPlanName = '${abbreviations.appServicePlan}-${environmentName}-${uniqueSuffix}'
+
+resource hostingPlan 'Microsoft.Web/serverfarms@2023-12-01' = {
+  name: hostingPlanName
+  location: 'eastus2'
+  tags: tags
+  sku: {
+    name: 'Y1'
+    tier: 'Dynamic'
+  }
+  properties: {
+    reserved: false
+  }
+}
+
+resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
+  name: functionAppName
+  location: 'eastus2'
+  kind: 'functionapp'
+  tags: union(tags, {
+    'azd-service-name': 'backend'
+  })
+  properties: {
+    serverFarmId: hostingPlan.id
+    siteConfig: {
+      appSettings: [
+        {
+          name: 'AzureWebJobsStorage'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
+        }
+        {
+          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
+        }
+        {
+          name: 'WEBSITE_CONTENTSHARE'
+          value: toLower(functionAppName)
+        }
+        {
+          name: 'FUNCTIONS_EXTENSION_VERSION'
+          value: '~4'
+        }
+        {
+          name: 'WEBSITE_NODE_DEFAULT_VERSION'
+          value: '~20'
+        }
+        {
+          name: 'FUNCTIONS_WORKER_RUNTIME'
+          value: 'node'
+        }
+        {
+          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+          value: applicationInsights.properties.ConnectionString
+        }
+        {
+          name: 'AZURE_CLIENT_ID'
+          value: userAssignedIdentity.properties.clientId
+        }
+        {
+          name: 'AZURE_OPENAI_ENDPOINT'
+          value: openAiAccount.properties.endpoint
+        }
+        {
+          name: 'AZURE_OPENAI_API_VERSION'
+          value: '2024-08-01-preview'
+        }
+        {
+          name: 'AZURE_OPENAI_DEPLOYMENT'
+          value: 'gpt-4o'
+        }
+        {
+          name: 'AZURE_OPENAI_KEY'
+          value: openAiAccount.listKeys().key1
+        }
+        {
+          name: 'NODE_ENV'
+          value: 'production'
+        }
+      ]
+    }
+    httpsOnly: true
+  }
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${userAssignedIdentity.id}': {}
+    }
+  }
+}
+
+// ========================================
 // Static Web App for Frontend with Integrated APIs
 // ========================================
 resource staticWebApp 'Microsoft.Web/staticSites@2024-04-01' = if (gitHubUserName != '') {
   name: staticWebAppName
-  location: location
+  location: 'eastus2'
   tags: frontendTags
   sku: {
     name: 'Free'

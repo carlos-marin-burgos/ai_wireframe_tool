@@ -3,7 +3,8 @@
  * Provides structured logging for Application Insights with business intelligence metrics
  */
 
-const appInsights = require("applicationinsights");
+// Temporarily disabled to avoid dependency issues
+// const appInsights = require("applicationinsights");
 
 class AnalyticsLogger {
   constructor() {
