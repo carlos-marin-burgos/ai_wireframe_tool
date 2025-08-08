@@ -161,9 +161,8 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
     // Handle mouse up - Complete click or cleanup drag tracking
     const handleMouseUp = useCallback((event: React.MouseEvent) => {
         if (mouseDownElement && !hasMoved) {
-            // This was a simple click, not a drag
-            console.log('🎯 Simple click on:', mouseDownElement.tagName);
-            // Don't convert to absolute positioning
+            // This was a simple click, not a drag - DO NOTHING TO POSITIONING
+            console.log('🎯 Simple click detected on:', mouseDownElement.tagName, '- no positioning changes');
         }
 
         // Reset tracking
@@ -173,6 +172,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
 
         // Handle drag end if we were dragging
         if (isDragging) {
+            console.log('🎯 Ending drag operation');
             handleDragEnd();
         }
     }, [mouseDownElement, hasMoved, isDragging]);
@@ -196,23 +196,38 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
             setIsDragging(true);
             setSelectedElement(element);
 
-            // Ensure element has absolute positioning from the start
-            if (element.style.position !== 'absolute') {
-                const currentLeft = rect.left - containerRect.left;
-                const currentTop = rect.top - containerRect.top;
+            // ONLY convert to absolute positioning if it's not already positioned correctly
+            const isAlreadyAbsolute = element.style.position === 'absolute';
+
+            if (!isAlreadyAbsolute) {
+                // Store the original position before conversion
+                const computedStyle = window.getComputedStyle(element);
+                const originalRect = element.getBoundingClientRect();
+
+                // Calculate where it should be positioned
+                const currentLeft = originalRect.left - containerRect.left;
+                const currentTop = originalRect.top - containerRect.top;
 
                 // Make sure we don't set negative or invalid positions
                 const safeLeft = Math.max(0, currentLeft);
                 const safeTop = Math.max(0, currentTop);
 
+                // Set the position to match its current visual location
                 element.style.position = 'absolute';
                 element.style.left = `${safeLeft}px`;
                 element.style.top = `${safeTop}px`;
 
-                console.log('🎯 Converting to absolute:', { currentLeft, currentTop, safeLeft, safeTop });
-            }
+                // Preserve the element's original size
+                element.style.width = computedStyle.width;
+                element.style.height = computedStyle.height;
 
-            // Visual feedback
+                console.log('🎯 Converting to absolute:', {
+                    original: { left: originalRect.left, top: originalRect.top },
+                    container: { left: containerRect.left, top: containerRect.top },
+                    calculated: { left: currentLeft, top: currentTop },
+                    safe: { left: safeLeft, top: safeTop }
+                });
+            }            // Visual feedback
             element.style.zIndex = '1000';
             element.style.opacity = '0.7';
             element.style.cursor = 'grabbing';
@@ -244,7 +259,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         if (mouseDownElement && !isDragging) {
             const deltaX = Math.abs(event.clientX - mouseDownPos.x);
             const deltaY = Math.abs(event.clientY - mouseDownPos.y);
-            const threshold = 5; // pixels to start drag
+            const threshold = 15; // Increased threshold - needs more deliberate movement to start drag
 
             if (deltaX > threshold || deltaY > threshold) {
                 setHasMoved(true);
@@ -341,14 +356,6 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         });
 
         return insertionPoint;
-    };
-
-    // Helper function to snap to grid
-    const snapToGrid = (x: number, y: number, gridSize = 10) => {
-        return {
-            x: Math.round(x / gridSize) * gridSize,
-            y: Math.round(y / gridSize) * gridSize
-        };
     };
 
     // Handle drag end - Fixed cleanup with accessibility
@@ -634,68 +641,8 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         }
     }, [showLinkMenu]);
 
-    // Global mouse event listeners for drag functionality
-    useEffect(() => {
-        const handleGlobalMouseMove = (e: MouseEvent) => {
-            if (isDragging && draggedElement && containerRef.current) {
-                e.preventDefault();
-                const containerRect = containerRef.current.getBoundingClientRect();
-
-                // Calculate precise position with better bounds checking
-                const newX = e.clientX - containerRect.left - dragOffset.x;
-                const newY = e.clientY - containerRect.top - dragOffset.y;
-
-                // Get element dimensions for better boundary calculations
-                const elementRect = draggedElement.getBoundingClientRect();
-                const maxX = containerRect.width - elementRect.width;
-                const maxY = containerRect.height - elementRect.height;
-
-                // Constrain to container bounds with smooth movement
-                const constrainedX = Math.max(0, Math.min(maxX, newX));
-                const constrainedY = Math.max(0, Math.min(maxY, newY));
-
-                // Use transform instead of changing position properties to preserve layout
-                draggedElement.style.transform = `translate(${constrainedX}px, ${constrainedY}px)`;
-                draggedElement.style.position = 'absolute';
-                draggedElement.style.left = '0';
-                draggedElement.style.top = '0';
-            }
-        };
-
-        const handleGlobalMouseUp = () => {
-            if (isDragging && draggedElement) {
-                // Reset visual feedback more cleanly
-                draggedElement.style.zIndex = '';
-                draggedElement.style.opacity = '';
-                draggedElement.style.cursor = '';
-                draggedElement.style.transition = 'transform 0.2s ease-out';
-                draggedElement.removeAttribute('data-dragging');
-
-                // Store final position using data attributes for persistence
-                const finalTransform = draggedElement.style.transform;
-                if (finalTransform && finalTransform.includes('translate')) {
-                    draggedElement.setAttribute('data-position', finalTransform);
-                }
-
-                setIsDragging(false);
-                setDraggedElement(null);
-
-                if (containerRef.current && onUpdateHtml) {
-                    onUpdateHtml(containerRef.current.innerHTML);
-                }
-            }
-        };
-
-        if (isDragging) {
-            document.addEventListener('mousemove', handleGlobalMouseMove);
-            document.addEventListener('mouseup', handleGlobalMouseUp);
-
-            return () => {
-                document.removeEventListener('mousemove', handleGlobalMouseMove);
-                document.removeEventListener('mouseup', handleGlobalMouseUp);
-            };
-        }
-    }, [isDragging, draggedElement, dragOffset, onUpdateHtml]);
+    // DISABLED: Global mouse event listeners were causing position conflicts
+    // All drag functionality is now handled by local container mouse handlers
 
     // Add component mount/unmount logging
     useEffect(() => {

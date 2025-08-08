@@ -7,13 +7,15 @@ import {
     FiShare2,
     FiMonitor,
     FiFigma,
-    FiUpload
+    FiUpload,
+    FiFileText
 } from 'react-icons/fi';
 import { TbBoxModel2 } from 'react-icons/tb';
 import './CompactToolbar.css';
 
 interface CompactToolbarProps {
     onFigmaIntegration?: () => void;
+    onExportModal?: () => void;
     onSave?: () => void;
     onOpenLibrary?: () => void;
     onAddPages?: () => void;
@@ -26,6 +28,7 @@ interface CompactToolbarProps {
 
 const CompactToolbar: React.FC<CompactToolbarProps> = ({
     onFigmaIntegration,
+    onExportModal,
     onSave,
     onOpenLibrary,
     onAddPages,
@@ -35,8 +38,6 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
     onShareUrl,
     onImportHtml
 }) => {
-    const [showExportMenu, setShowExportMenu] = useState(false);
-
     return (
         <div className="compact-toolbar">
             <div className="compact-toolbar-buttons">
@@ -47,6 +48,15 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
                     aria-label="Import HTML"
                 >
                     <FiUpload />
+                </button>
+
+                <button
+                    className="compact-btn"
+                    onClick={onFigmaIntegration}
+                    title="Import from Figma"
+                    aria-label="Import from Figma"
+                >
+                    <FiFigma />
                 </button>
 
                 <button
@@ -70,57 +80,14 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
                     <TbBoxModel2 />
                 </button>
 
-                <div className="compact-export-dropdown">
-                    <button
-                        className="compact-btn"
-                        onClick={() => setShowExportMenu(!showExportMenu)}
-                        title="Export Options"
-                        aria-label="Export Options"
-                    >
-                        <FiDownload />
-                    </button>
-
-                    {showExportMenu && (
-                        <div className="compact-export-menu">
-                            <button
-                                className="compact-export-option"
-                                onClick={() => {
-                                    onExportPowerPoint?.();
-                                    setShowExportMenu(false);
-                                }}
-                                title="Export as HTML Presentation"
-                                aria-label="Export as HTML Presentation"
-                            >
-                                <FiMonitor />
-                                <span className="compact-export-label">HTML Presentation</span>
-                            </button>
-                            <button
-                                className="compact-export-option"
-                                onClick={() => {
-                                    onFigmaIntegration?.();
-                                    setShowExportMenu(false);
-                                }}
-                                title="Export to Figma"
-                                aria-label="Export to Figma"
-                            >
-                                <FiFigma />
-                                <span className="compact-export-label">Figma</span>
-                            </button>
-                            <button
-                                className="compact-export-option"
-                                onClick={() => {
-                                    onPresentationMode?.();
-                                    setShowExportMenu(false);
-                                }}
-                                title="Presentation Mode"
-                                aria-label="Presentation Mode"
-                            >
-                                <FiMonitor />
-                                <span className="compact-export-label">Present</span>
-                            </button>
-                        </div>
-                    )}
-                </div>
+                <button
+                    className="compact-btn"
+                    onClick={onExportModal}
+                    title="Export Wireframe"
+                    aria-label="Export Wireframe"
+                >
+                    <FiFileText />
+                </button>
 
                 <button
                     className="compact-btn"
@@ -133,20 +100,20 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
 
                 <button
                     className="compact-btn"
-                    onClick={onShareUrl}
-                    title="Share URL"
-                    aria-label="Share URL"
-                >
-                    <FiShare2 />
-                </button>
-
-                <button
-                    className="compact-btn"
                     onClick={onPresentationMode}
                     title="Presentation Mode"
                     aria-label="Presentation Mode"
                 >
                     <FiMonitor />
+                </button>
+
+                <button
+                    className="compact-btn"
+                    onClick={onShareUrl}
+                    title="Share URL"
+                    aria-label="Share URL"
+                >
+                    <FiShare2 />
                 </button>
 
                 <button

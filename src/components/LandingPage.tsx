@@ -130,7 +130,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
     <div className="landing-page">
       <div className="landing-container">
         <div className="landing-content">
-          <h1 className="main-heading">What will you design today?</h1>
+          <h1 className="main-heading">What will you <span className="design-word">design</span> today?</h1>
           <p className="main-subtitle">
             Sketch your vision, ship your wireframe - Designetica AI does the
             heavy lifting.
@@ -281,7 +281,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
         isOpen={isFigmaModalOpen}
         onClose={() => setIsFigmaModalOpen(false)}
         onImport={handleFigmaImport}
-        onExport={handleFigmaExport}
       />
 
       {/* GitHub Connect Modal */}

@@ -1310,8 +1310,7 @@ function generateAtlasCard(card) {
  */
 function getCardIconSrc(type) {
   const icons = {
-    course:
-      "course.png",
+    course: "course.png",
     product:
       "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iNCIgZmlsbD0iIzAwNzhkNCIvPgo8cGF0aCBkPSJNMjQgMTJMMzAgMThIMThMMjQgMTJaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMTggMThIMzBWMzZIMThWMThaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K",
     article:

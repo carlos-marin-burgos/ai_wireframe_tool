@@ -19,16 +19,14 @@ interface FigmaIntegrationModalProps {
     isOpen: boolean;
     onClose: () => void;
     onImport: (html: string, fileName: string) => void;
-    onExport: (format: 'figma-file' | 'figma-components') => void;
 }
 
 const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
     isOpen,
     onClose,
-    onImport,
-    onExport
+    onImport
 }) => {
-    const [activeTab, setActiveTab] = useState<'import' | 'export' | 'sync'>('import');
+    const [activeTab, setActiveTab] = useState<'import' | 'sync'>('import');
     const [isConnected, setIsConnected] = useState(false);
     const [accessToken, setAccessToken] = useState('');
     const [figmaUrl, setFigmaUrl] = useState('');
@@ -37,7 +35,6 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
     const [success, setSuccess] = useState<string | null>(null);
     const [frames, setFrames] = useState<FigmaFrame[]>([]);
     const [selectedFrames, setSelectedFrames] = useState<string[]>([]);
-    const [exportFormat, setExportFormat] = useState<'figma-file' | 'figma-components'>('figma-file');
 
     // Clear messages after 5 seconds
     useEffect(() => {
@@ -150,12 +147,6 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
         }
     }, [selectedFrames, frames, figmaUrl, onImport, onClose]);
 
-    const handleExport = useCallback(() => {
-        onExport(exportFormat);
-        setSuccess('Export initiated! Check your Figma workspace.');
-        onClose();
-    }, [exportFormat, onExport, onClose]);
-
     const handleDisconnect = useCallback(() => {
         setIsConnected(false);
         setAccessToken('');
@@ -222,13 +213,6 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                     >
                         <FiUpload />
                         Import from Figma
-                    </button>
-                    <button
-                        className={`figma-tab ${activeTab === 'export' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('export')}
-                    >
-                        <FiDownload />
-                        Export to Figma
                     </button>
                 </div>
 
@@ -353,51 +337,6 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                                     )}
                                 </div>
                             )}
-                        </div>
-                    )}
-
-                    {/* Export Tab */}
-                    {activeTab === 'export' && (
-                        <div className="figma-tab-content">
-                            <div className="figma-export-section">
-                                <h3>Export to Figma</h3>
-                                <p>Export your current wireframe to Figma.</p>
-
-                                <div className="figma-input-group">
-                                    <label>Export Format</label>
-                                    <div className="figma-radio-group">
-                                        <label className="figma-radio-label">
-                                            <input
-                                                type="radio"
-                                                name="exportFormat"
-                                                value="figma-file"
-                                                checked={exportFormat === 'figma-file'}
-                                                onChange={(e) => setExportFormat(e.target.value as any)}
-                                            />
-                                            <span>Complete Figma File</span>
-                                        </label>
-                                        <label className="figma-radio-label">
-                                            <input
-                                                type="radio"
-                                                name="exportFormat"
-                                                value="figma-components"
-                                                checked={exportFormat === 'figma-components'}
-                                                onChange={(e) => setExportFormat(e.target.value as any)}
-                                            />
-                                            <span>Component Library</span>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <button
-                                    className="figma-btn figma-btn-primary"
-                                    onClick={handleExport}
-                                    disabled={isLoading}
-                                >
-                                    <FiDownload />
-                                    Export to Figma
-                                </button>
-                            </div>
                         </div>
                     )}
                 </div>

@@ -324,8 +324,7 @@ function AppContent() {
     // Force a re-render to ensure the wireframe updates
     setForceUpdateKey(Date.now());
 
-    // Show toast notification with drag instructions
-    showToast(`✨ Added ${component.name}! Hover over components to see drag handles, then drag to reposition.`, 'success');
+    // Component added successfully (removed annoying toast notification)
   };
 
   // Handler for generating page content using AI
@@ -881,9 +880,54 @@ function AppContent() {
     showToast(`Figma design imported: ${fileName}`, 'success');
   };
 
-  const handleFigmaExport = (format: 'figma-file' | 'figma-components') => {
-    console.log('Exporting to Figma format:', format);
-    showToast(`Exported to ${format}`, 'success');
+  const handleFigmaExport = async (format: 'figma-file' | 'figma-components') => {
+    console.log('Exporting wireframe:', format);
+
+    if (!htmlWireframe || htmlWireframe.trim() === '') {
+      showToast('No wireframe to export. Please create a wireframe first.', 'error');
+      return;
+    }
+
+    try {
+      // Import the export service
+      const { wireframeExportService } = await import('./services/wireframeExport');
+
+      let result;
+
+      if (format === 'figma-file') {
+        // Export as standalone HTML file
+        result = await wireframeExportService.exportAsHTML(htmlWireframe, {
+          format: 'html',
+          filename: wireframeExportService.generateFilename('wireframe', 'html'),
+          includeStyles: true,
+          includeInteractivity: true
+        });
+      } else if (format === 'figma-components') {
+        // Export as JSON data for component library
+        result = await wireframeExportService.exportAsJSON(htmlWireframe, {
+          description: description,
+          theme: designTheme,
+          colorScheme: colorScheme,
+          exportedAt: new Date().toISOString()
+        }, {
+          format: 'figma-components',
+          filename: wireframeExportService.generateFilename('wireframe-components', 'json')
+        });
+      }
+
+      if (result?.success) {
+        showToast(
+          `✅ Wireframe exported successfully as ${result.filename}! 
+          ${result.size ? `(${Math.round(result.size / 1024)} KB)` : ''}`,
+          'success'
+        );
+      } else {
+        showToast(`❌ Export failed: ${result?.error || 'Unknown error'}`, 'error');
+      }
+    } catch (error) {
+      console.error('Export error:', error);
+      showToast('❌ Export failed. Please try again.', 'error');
+    }
   };
 
   // Demo wireframe handler
