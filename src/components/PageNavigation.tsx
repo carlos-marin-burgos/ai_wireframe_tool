@@ -1,4 +1,5 @@
 import React from 'react';
+import { FiPlus } from 'react-icons/fi';
 import '../styles/PageNavigation.css';
 
 interface Page {
@@ -12,12 +13,14 @@ interface PageNavigationProps {
     pages: Page[];
     currentPageId: string | null;
     onPageSwitch: (pageId: string) => void;
+    onAddPages?: () => void;
 }
 
 const PageNavigation: React.FC<PageNavigationProps> = ({
     pages,
     currentPageId,
-    onPageSwitch
+    onPageSwitch,
+    onAddPages
 }) => {
     console.log('🔥 PageNavigation render with:', {
         pages: pages.map(p => ({ id: p.id, name: p.name })),
@@ -51,6 +54,19 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         )}
                     </React.Fragment>
                 ))}
+
+                {/* Add Pages Button - positioned on the right */}
+                {onAddPages && (
+                    <button
+                        className="add-pages-btn secondary"
+                        onClick={onAddPages}
+                        title="Add More Pages"
+                        aria-label="Add More Pages"
+                    >
+                        <FiPlus />
+                        Add Pages
+                    </button>
+                )}
             </div>
         </div>
     );

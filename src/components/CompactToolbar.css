@@ -51,6 +51,13 @@
   box-shadow: 0 0 0 1px #0078d4;
 }
 
+/* Fluent icon styling */
+.compact-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
 /* Export dropdown */
 .compact-export-dropdown {
   position: relative;
