@@ -62,6 +62,36 @@
   color: #323130;
 }
 
+.library-selector {
+  display: flex;
+  gap: 8px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 4px;
+}
+
+.library-tab {
+  background: transparent;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #605e5c;
+}
+
+.library-tab:hover {
+  background: #e1e5e9;
+  color: #323130;
+}
+
+.library-tab.active {
+  background: #0078d4;
+  color: white;
+}
+
 .component-library-close {
   background: none;
   border: none;
