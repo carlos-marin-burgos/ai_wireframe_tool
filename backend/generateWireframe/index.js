@@ -11,6 +11,9 @@ const {
   getPerformanceStats,
 } = require("../utils/performance-wireframe-generator");
 
+// Import image placeholder utilities for fixing broken images
+const { fixWireframeImages } = require("../utils/imagePlaceholders");
+
 // Import Atlas Component Library - ONLY source for ALL components
 const AtlasComponentLibrary = require("../components/AtlasComponentLibrary");
 
@@ -2219,8 +2222,12 @@ module.exports = async function (context, req) {
       Pragma: "no-cache",
       Expires: "0",
     };
+
+    // Fix image placeholders before returning HTML
+    const processedHtml = fixWireframeImages(result.html);
+
     context.res.body = {
-      html: result.html,
+      html: processedHtml,
       fallback: result.source.includes("fallback"),
       correlationId,
       processingTimeMs: processingTime,
@@ -2261,10 +2268,11 @@ module.exports = async function (context, req) {
 
     // Emergency fallback
     const html = createSimpleFallback("Error fallback", "primary");
+    const processedFallbackHtml = fixWireframeImages(html);
 
     context.res.status = 200;
     context.res.body = {
-      html: html,
+      html: processedFallbackHtml,
       fallback: true,
       error: "Error occurred, using fallback",
       correlationId,

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FiMove, FiX, FiEdit3 } from 'react-icons/fi';
+import { fixWireframeImages } from '../utils/imagePlaceholders';
 import './InteractiveWireframe.css';
 
 interface WireframeComponent {
@@ -174,6 +175,9 @@ const InteractiveWireframe: React.FC<InteractiveWireframeProps> = ({
         cleaned = cleaned.replace(/^'''html\s*/gi, '');
         cleaned = cleaned.replace(/^```html\s*/gi, '');
         cleaned = cleaned.replace(/```\s*$/gi, '');
+
+        // Fix broken images with placeholders
+        cleaned = fixWireframeImages(cleaned);
 
         return cleaned.trim();
     }, [htmlContent]);

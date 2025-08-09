@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { fixWireframeImages } from '../utils/imagePlaceholders';
 import '../styles/LinkableWireframe.css';
 
 interface LinkableWireframeProps {
@@ -664,6 +665,9 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         cleaned = cleaned.replace(/^'''html\s*/gi, '');
         cleaned = cleaned.replace(/^```html\s*/gi, '');
         cleaned = cleaned.replace(/```\s*$/gi, '');
+
+        // Fix wireframe images with placeholder system
+        cleaned = fixWireframeImages(cleaned);
 
         return cleaned.trim();
     }, [htmlContent]);

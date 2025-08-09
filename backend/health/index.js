@@ -24,6 +24,12 @@ module.exports = async function (context, req) {
       return;
     }
 
+    // Check OpenAI configuration
+    const openaiConfigured = !!(
+      (process.env.AZURE_OPENAI_KEY || process.env.AZURE_OPENAI_API_KEY) &&
+      process.env.AZURE_OPENAI_ENDPOINT
+    );
+
     // Collect health metrics
     const healthData = {
       status: "OK",
@@ -38,14 +44,19 @@ module.exports = async function (context, req) {
         memoryUsage: process.memoryUsage(),
       },
       services: {
-        hasOpenAI: !!(
-          process.env.AZURE_OPENAI_KEY && process.env.AZURE_OPENAI_ENDPOINT
-        ),
+        hasOpenAI: openaiConfigured,
+        openaiStatus: openaiConfigured ? "configured" : "not_configured",
+        openaiEndpoint: process.env.AZURE_OPENAI_ENDPOINT,
+        openaiDeployment: process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o",
         hasAppInsights: !!process.env.APPLICATIONINSIGHTS_CONNECTION_STRING,
         functionsVersion: process.env.FUNCTIONS_EXTENSION_VERSION,
       },
       performance: {
         responseTimeMs: Date.now() - startTime,
+      },
+      links: {
+        detailedOpenAIHealth: "/api/openai-health",
+        dashboard: "/dashboard",
       },
     };
 
