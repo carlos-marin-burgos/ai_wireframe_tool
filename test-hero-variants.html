@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft Learn Hero Pattern Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .hero-test {
+            margin-bottom: 40px;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #0078d4;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Microsoft Learn Hero Pattern Variants Test</h1>
+
+    <div class="hero-test">
+        <h2>1. Testing Wayfinding Hero</h2>
+        <button onclick="testHero('wayfinding')">Generate Wayfinding Hero</button>
+        <div id="wayfinding-result"></div>
+    </div>
+
+    <div class="hero-test">
+        <h2>2. Testing Accent Hero</h2>
+        <button onclick="testHero('accent')">Generate Accent Hero</button>
+        <div id="accent-result"></div>
+    </div>
+
+    <div class="hero-test">
+        <h2>3. Testing Accent Hero with Details</h2>
+        <button onclick="testHero('accent-with-details')">Generate Accent Hero with Details</button>
+        <div id="accent-with-details-result"></div>
+    </div>
+
+    <script>
+        async function testHero(variant) {
+            const descriptions = {
+                'wayfinding': 'Create a wayfinding hero section for Microsoft Learn navigation',
+                'accent': 'Create an accent hero section with background image for product showcase',
+                'accent-with-details': 'Create an accent hero with floating details card for feature highlights'
+            };
+
+            try {
+                const response = await fetch('http://localhost:7072/api/generate-wireframe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ description: descriptions[variant] })
+                });
+
+                const result = await response.json();
+                const resultDiv = document.getElementById(`${variant}-result`);
+
+                if (result.html) {
+                    // Extract hero section from the generated HTML
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(result.html, 'text/html');
+                    const heroSection = doc.querySelector('.hero') || doc.querySelector('[class*="hero"]');
+
+                    if (heroSection) {
+                        resultDiv.innerHTML = `
+                            <h4>✅ Hero Pattern Generated:</h4>
+                            <div style="border: 1px solid #0078d4; padding: 10px; margin: 10px 0;">
+                                ${heroSection.outerHTML}
+                            </div>
+                            <details>
+                                <summary>View Full HTML</summary>
+                                <pre style="background: #f5f5f5; padding: 10px; font-size: 12px; overflow-x: auto;">${result.html.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+                            </details>
+                        `;
+                    } else {
+                        resultDiv.innerHTML = `<p style="color: orange;">⚠️ Hero pattern generated but not detected in structure</p>`;
+                    }
+                } else {
+                    resultDiv.innerHTML = `<p style="color: red;">❌ Failed to generate: ${result.error || 'Unknown error'}</p>`;
+                }
+            } catch (error) {
+                document.getElementById(`${variant}-result`).innerHTML =
+                    `<p style="color: red;">❌ Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+
+</html>

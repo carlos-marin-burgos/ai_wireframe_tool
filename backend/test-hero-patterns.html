@@ -1,0 +1,190 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft Learn Hero Patterns - Atlas Component Library</title>
+    
+      <style>
+        .atlas-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        /* Official Microsoft Learn Hero Styles */
+        .hero { position: relative; overflow: hidden; }
+        .hero-xs { min-height: 300px; }
+        .hero-image { min-height: 500px; }
+        .hero-content { position: relative; z-index: 2; }
+        .hero-details { position: absolute; right: 24px; top: 50%; transform: translateY(-50%); z-index: 3; }
+        .hero-details-card { background: white; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+        
+        /* Microsoft Learn Typography */
+        .font-size-sm { font-size: 14px; }
+        .font-size-lg { font-size: 20px; }
+        .font-size-h1 { font-size: 48px; }
+        .font-weight-semibold { font-weight: 600; }
+        .font-weight-bold { font-weight: 700; }
+        .letter-spacing-wide { letter-spacing: 0.1em; }
+        .text-transform-uppercase { text-transform: uppercase; }
+        .margin-block-sm { margin-block: 16px; }
+        .margin-top-md { margin-top: 32px; }
+        .margin-top-sm { margin-top: 12px; }
+        
+        /* Microsoft Learn Colors */
+        .background-color-primary { background-color: #0078d4; }
+        .color-primary-invert { color: white; }
+        .background-color-body-accent { background-color: #f8f9fa; }
+        .gradient-border-right { border-right: 4px solid #0078d4; }
+        
+        /* Microsoft Learn Buttons */
+        .button { display: inline-block; padding: 12px 32px; text-decoration: none; border-radius: 4px; font-weight: 600; transition: all 0.2s ease; cursor: pointer; }
+        .button-clear { background: transparent; }
+        .button.border { border: 2px solid currentColor; }
+        .button:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+          .hero-content { padding: 40px 16px !important; margin-left: 0 !important; max-width: 100% !important; }
+          .hero-details { position: static !important; transform: none !important; margin-top: 32px; right: auto !important; }
+          .font-size-h1 { font-size: 36px !important; }
+          .font-size-lg { font-size: 18px !important; }
+        }
+        
+        /* Legacy Atlas Styles */
+        .atlas-hero { background: #E8E6DF; padding: 60px 0; text-align: center; }
+        .atlas-button { background: #0078d4; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; }
+        .atlas-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 16px; }
+        .atlas-textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 16px; resize: vertical; }
+        .atlas-footer { background: #333; color: white; padding: 40px 0; text-align: center; }
+        .atlas-card { border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .atlas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+      </style>
+    
+</head>
+<body style="margin: 0; font-family: 'Segoe UI', sans-serif;">
+    <h1 style="text-align: center; padding: 20px; background: #f8f9fa; margin: 0; color: #323130;">
+        Microsoft Learn Hero Patterns
+    </h1>
+    
+    <div style="margin: 40px 0;">
+        <h2 style="text-align: center; color: #605e5c; margin: 20px 0;">1. Wayfinding Hero</h2>
+        
+      <section class="hero hero-xs background-color-primary color-primary-invert background-image-pattern background-size-200" 
+               style="background-color: #0078d4; color: white; padding: 80px 0; position: relative; overflow: hidden; background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMiIgZmlsbD0iIzAwNzhkNCIgZmlsbC1vcGFjaXR5PSIwLjEiLz4KPC9zdmc+'); background-size: 40px;">
+        <div class="hero-content" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2;">
+          <p class="letter-spacing-wide text-transform-uppercase font-size-sm" 
+             style="letter-spacing: 0.1em; text-transform: uppercase; font-size: 14px; margin: 0 0 16px 0; opacity: 0.9; font-weight: 600;">
+            MICROSOFT LEARN
+          </p>
+          <h1 class="font-size-h1 font-weight-semibold" 
+              style="font-size: 48px; font-weight: 600; margin: 0 0 16px 0; line-height: 1.2; max-width: 800px;">
+            Build your next great idea
+          </h1>
+          <p class="font-size-lg font-weight-semibold margin-block-sm" 
+             style="font-size: 20px; font-weight: 600; margin: 0 0 16px 0; line-height: 1.4; max-width: 600px; opacity: 0.95;">
+            Transform your vision into reality with comprehensive resources and tools.
+          </p>
+          <p style="font-size: 16px; margin: 0 0 32px 0; line-height: 1.6; max-width: 600px; opacity: 0.9;">
+            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+          </p>
+          <div class="buttons margin-top-md">
+            <a href="#" class="button border button-clear" 
+               style="display: inline-block; padding: 12px 32px; border: 2px solid rgba(255,255,255,0.8); 
+                      color: white; text-decoration: none; border-radius: 4px; font-weight: 600; 
+                      transition: all 0.2s ease; background: transparent;">
+              Get Started
+            </a>
+          </div>
+        </div>
+      </section>
+    
+    </div>
+    
+    <div style="margin: 40px 0;">
+        <h2 style="text-align: center; color: #605e5c; margin: 20px 0;">2. Accent Hero</h2>
+        
+      <section class="hero hero-image background-color-body-accent gradient-border-right gradient-border-body-accent"
+               style="background-color: #f8f9fa; border-right: 4px solid #0078d4; min-height: 500px; display: flex; align-items: center; position: relative; overflow: hidden; background-image: url('https://learn.microsoft.com/en-us/media/home-and-directory/home-hero_light.png'); background-size: cover; background-position: center;">
+        <div class="hero-content" style="max-width: 1200px; margin: 0 auto; padding: 60px 24px; position: relative; z-index: 2; background: rgba(255,255,255,0.95); border-radius: 8px; margin-left: 24px; max-width: 600px;">
+          <p class="letter-spacing-wide text-transform-uppercase font-size-sm" 
+             style="letter-spacing: 0.1em; text-transform: uppercase; font-size: 14px; margin: 0 0 16px 0; color: #605e5c; font-weight: 600;">
+            LEARN SOMETHING NEW
+          </p>
+          <h1 class="font-size-h1 font-weight-semibold" 
+              style="font-size: 48px; font-weight: 600; margin: 0 0 16px 0; line-height: 1.2; color: #323130;">
+            Master Modern Development
+          </h1>
+          <p class="font-size-lg font-weight-semibold margin-block-sm" 
+             style="font-size: 20px; font-weight: 600; margin: 0 0 16px 0; line-height: 1.4; color: #605e5c;">
+            Build applications with the latest technologies and best practices.
+          </p>
+          <p style="font-size: 16px; margin: 0 0 32px 0; line-height: 1.6; color: #605e5c;">
+            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+          </p>
+          <div class="buttons margin-top-md">
+            <a href="#" class="button border button-clear" 
+               style="display: inline-block; padding: 12px 32px; border: 2px solid #0078d4; 
+                      color: #0078d4; text-decoration: none; border-radius: 4px; font-weight: 600; 
+                      transition: all 0.2s ease; background: transparent;">
+              Start Learning
+            </a>
+          </div>
+        </div>
+      </section>
+    
+    </div>
+    
+    <div style="margin: 40px 0;">
+        <h2 style="text-align: center; color: #605e5c; margin: 20px 0;">3. Accent Hero with Details</h2>
+        
+      <section class="hero hero-image flex-direction-row-tablet border background-color-body-accent gradient-border-right gradient-border-body-accent"
+               style="background-color: #f8f9fa; border: 1px solid #e1dfdd; border-right: 4px solid #0078d4; 
+                      min-height: 500px; display: flex; align-items: center; position: relative; overflow: hidden; background-image: url('https://learn.microsoft.com/en-us/media/learn/plans/skilling_plan_hero.png'); background-size: cover; background-position: center;">
+        <div class="hero-content" style="padding: 60px 24px; position: relative; z-index: 2; background: rgba(255,255,255,0.95); border-radius: 8px; margin-left: 24px; max-width: 600px;">
+          <p class="letter-spacing-wide text-transform-uppercase font-size-sm" 
+             style="letter-spacing: 0.1em; text-transform: uppercase; font-size: 14px; margin: 0 0 16px 0; color: #605e5c; font-weight: 600;">
+            SKILL UP TODAY
+          </p>
+          <h1 class="font-size-h1 font-weight-semibold" 
+              style="font-size: 48px; font-weight: 600; margin: 0 0 16px 0; line-height: 1.2; color: #323130;">
+            Advanced Learning Paths
+          </h1>
+          <p class="font-size-lg font-weight-semibold margin-block-sm" 
+             style="font-size: 20px; font-weight: 600; margin: 0 0 16px 0; line-height: 1.4; color: #605e5c;">
+            Structured learning experiences designed for professionals.
+          </p>
+          <p style="font-size: 16px; margin: 0 0 32px 0; line-height: 1.6; color: #605e5c;">
+            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+          </p>
+          <div class="buttons margin-top-md">
+            <a href="#" class="button border button-clear" 
+               style="display: inline-block; padding: 12px 32px; border: 2px solid #0078d4; 
+                      color: #0078d4; text-decoration: none; border-radius: 4px; font-weight: 600; 
+                      transition: all 0.2s ease; background: transparent;">
+              Explore Paths
+            </a>
+          </div>
+        </div>
+        
+      <div class="hero-details" style="position: absolute; top: 50%; right: 24px; transform: translateY(-50%); z-index: 3;">
+        <div class="hero-details-card border border-radius-lg box-shadow-heavy padding-sm" 
+             style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; 
+                    box-shadow: 0 4px 16px rgba(0,0,0,0.1); padding: 24px; max-width: 300px;">
+          <p class="font-weight-bold" style="font-weight: 700; margin: 0 0 12px 0; color: #323130; font-size: 16px;">
+            Featured Content
+          </p>
+          <p class="margin-top-sm" style="margin: 0; font-size: 14px; color: #605e5c; line-height: 1.5;">
+            Access curated learning materials and hands-on exercises designed to accelerate your progress.
+          </p>
+        </div>
+      </div>
+    
+      </section>
+    
+    </div>
+    
+    <footer style="background: #323130; color: white; padding: 40px 0; text-align: center; margin-top: 60px;">
+        <p>✅ Official Microsoft Learn Hero Patterns Implemented in Atlas Component Library</p>
+        <p style="opacity: 0.8; font-size: 14px;">Following design.learn.microsoft.com/patterns/hero.html specifications</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft Learn Wayfinding Hero Section</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f3f2f1;
+            color: #323130;
+        }
+
+        /* Responsive Layout */
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Hero Section Styles */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            padding: 48px 0;
+            background-color: #ffffff;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero-content h1 {
+            font-size: 2rem;
+            margin-bottom: 16px;
+        }
+
+        .hero-content p {
+            font-size: 1rem;
+            margin-bottom: 32px;
+        }
+
+        .hero-content .search-bar {
+            display: flex;
+            align-items: center;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .search-bar input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .search-bar button {
+            padding: 12px 24px;
+            background-color: #0078d4;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .search-bar button:hover {
+            background-color: #005a9e;
+        }
+
+        .hero-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        /* Category Navigation */
+        .categories {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 48px;
+        }
+
+        .category-item {
+            flex: 1;
+            text-align: center;
+            padding: 24px;
+            background-color: #ffffff;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .category-item:hover {
+            background-color: #f3f2f1;
+        }
+
+        .category-item h3 {
+            font-size: 1.25rem;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                grid-template-columns: 1fr;
+            }
+
+            .categories {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .hero-content h1 {
+                font-size: 1.5rem;
+            }
+
+            .hero-content p {
+                font-size: 0.875rem;
+            }
+
+            .search-bar input[type="text"] {
+                font-size: 0.875rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div style="display: flex; align-items: center; padding: 12px 24px; background: white; border-bottom: 1px solid #e1e5e9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+        <!-- Microsoft logo -->
+        <a href="https://www.microsoft.com" aria-label="Microsoft" style="display: flex; align-items: center; margin-right: 16px; text-decoration: none;">
+          <svg aria-hidden="true" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;">
+            <path d="M11.5216 0.5H0V11.9067H11.5216V0.5Z" fill="#f25022" />
+            <path d="M24.2418 0.5H12.7202V11.9067H24.2418V0.5Z" fill="#7fba00" />
+            <path d="M11.5216 13.0933H0V24.5H11.5216V13.0933Z" fill="#00a4ef" />
+            <path d="M24.2418 13.0933H12.7202V24.5H24.2418V13.0933Z" fill="#ffb900" />
+          </svg>
+        </a>
+
+        <!-- Divider -->
+        <div style="width: 1px; height: 24px; background: #e1e5e9; margin-right: 16px;"></div>
+
+        <!-- Brand -->
+        <a href="#" style="color: #323130; text-decoration: none; font-weight: 600; font-size: 16px; margin-right: auto;">
+          <span>Microsoft Learn</span>
+        </a>
+
+        <!-- Navigation -->
+        <nav aria-label="site header navigation" style="display: flex; align-items: center; gap: 8px;">
+          <a href="#" style="color: #323130; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.2s; font-size: 14px;">Documentation</a>
+          <a href="#" style="color: #323130; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.2s; font-size: 14px;">Training</a>
+          <a href="#" style="color: #323130; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.2s; font-size: 14px;">Certifications</a>
+        </nav>
+    </div>
+
+    <div class="container">
+        
+      <section class="hero hero-xs background-color-primary color-primary-invert background-image-pattern background-size-200" 
+               style="--background-image-pattern: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMiIgZmlsbD0iIzAwNzhkNCIgZmlsbC1vcGFjaXR5PSIwLjEiLz4KPC9zdmc+');">
+        <div class="hero-content">
+          <p class="letter-spacing-wide text-transform-uppercase font-size-sm">
+            MICROSOFT LEARN
+          </p>
+          <h1 class="font-size-h1 font-weight-semibold">
+            Build your next great idea
+          </h1>
+          <p class="font-size-lg font-weight-semibold margin-block-sm">
+            Transform your vision into reality with Microsoft Learn's comprehensive resources and tools.
+          </p>
+          <p>
+            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+          </p>
+          <div class="buttons margin-top-md">
+            <button class="button border button-clear">
+              Get Started
+            </button>
+          </div>
+        </div>
+      </section>
+    
+
+        <div class="categories" aria-label="Course Categories">
+            <div class="category-item" role="navigation">
+                <h3>Featured Courses</h3>
+                <p>Explore the most popular and trending courses.</p>
+            </div>
+            <div class="category-item" role="navigation">
+                <h3>Certifications</h3>
+                <p>Become certified in industry-leading skills.</p>
+            </div>
+            <div class="category-item" role="navigation">
+                <h3>Discussion Forums</h3>
+                <p>Engage with peers and experts in the community.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

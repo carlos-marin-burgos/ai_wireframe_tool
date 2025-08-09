@@ -8,6 +8,128 @@ class AtlasComponentLibrary {
     this.baseStyles = `
       <style>
         .atlas-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        /* Official Microsoft Learn Hero Styles */
+        .hero { 
+          position: relative; 
+          overflow: hidden; 
+          padding: 80px 24px;
+        }
+        .hero-xs { 
+          min-height: 300px; 
+        }
+        .hero-image { 
+          min-height: 500px;
+          background-image: var(--hero-background-image-light);
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+        }
+        @media (prefers-color-scheme: dark) {
+          .hero-image {
+            background-image: var(--hero-background-image-dark);
+          }
+        }
+        .hero-content { 
+          position: relative; 
+          z-index: 2;
+          max-width: 600px;
+        }
+        .hero-details { 
+          position: absolute; 
+          right: 24px; 
+          top: 50%; 
+          transform: translateY(-50%); 
+          z-index: 3;
+        }
+        .hero-details-card { 
+          background: white; 
+          border-radius: 8px; 
+          box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+          padding: 24px;
+          max-width: 300px;
+        }
+        
+        /* Microsoft Learn Typography */
+        .font-size-sm { font-size: 14px; }
+        .font-size-lg { font-size: 20px; }
+        .font-size-h1 { font-size: 48px; line-height: 1.2; }
+        .font-weight-semibold { font-weight: 600; }
+        .font-weight-bold { font-weight: 700; }
+        .letter-spacing-wide { letter-spacing: 0.1em; }
+        .text-transform-uppercase { text-transform: uppercase; }
+        .margin-block-sm { margin-block: 16px; }
+        .margin-top-md { margin-top: 32px; }
+        .margin-top-sm { margin-top: 12px; }
+        
+        /* Microsoft Learn Colors */
+        .background-color-primary { 
+          background-color: #0078d4; 
+          background-image: var(--background-image-pattern);
+          background-size: 200px;
+          background-repeat: repeat;
+        }
+        .color-primary-invert { color: white; }
+        .background-color-body-accent { background-color: #f8f9fa; }
+        .gradient-border-right { border-right: 4px solid #0078d4; }
+        .gradient-border-body-accent { border-right: 4px solid #e1dfdd; }
+        .border { border: 1px solid #e1dfdd; }
+        .border-radius-lg { border-radius: 8px; }
+        .box-shadow-heavy { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+        .padding-sm { padding: 24px; }
+        .flex-direction-row-tablet { 
+          display: flex; 
+          align-items: center;
+          justify-content: space-between;
+        }
+        
+        /* Microsoft Learn Buttons */
+        .button { 
+          display: inline-block; 
+          padding: 12px 32px; 
+          text-decoration: none; 
+          border-radius: 4px; 
+          font-weight: 600; 
+          transition: all 0.2s ease; 
+          cursor: pointer;
+          border: none;
+          background: transparent;
+        }
+        .button-clear { background: transparent; }
+        .button.border { border: 2px solid currentColor; }
+        .button:hover { 
+          transform: translateY(-1px); 
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+          .hero { padding: 40px 16px !important; }
+          .hero-content { max-width: 100% !important; }
+          .hero-details { 
+            position: static !important; 
+            transform: none !important; 
+            margin-top: 32px; 
+            right: auto !important; 
+          }
+          .font-size-h1 { font-size: 36px !important; }
+          .font-size-lg { font-size: 18px !important; }
+          .flex-direction-row-tablet {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+          }
+        }
+        
+        /* Base Microsoft Learn Styles */
+        body { 
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; 
+          color: #323130; 
+          line-height: 1.6; 
+        }
+        p { margin: 0 0 16px 0; }
+        h1, h2, h3, h4, h5, h6 { margin: 0 0 16px 0; color: #323130; }
+        
+        /* Legacy Atlas Styles */
         .atlas-hero { background: #E8E6DF; padding: 60px 0; text-align: center; }
         .atlas-button { background: #0078d4; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; }
         .atlas-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 16px; }
@@ -98,17 +220,198 @@ class AtlasComponentLibrary {
   }
 
   generateHeroSection(options = {}) {
-    const title = options.title || "Welcome to Atlas";
-    const subtitle = options.subtitle || "Building beautiful web experiences";
-    const buttonText = options.buttonText || "Get Started";
+    const variant = options.variant || "wayfinding"; // wayfinding, accent, accent-with-details
+    const eyebrow = options.eyebrow || "MICROSOFT LEARN";
+    const title = options.title || "Build your next great idea";
+    const subtitle =
+      options.subtitle ||
+      "Transform your vision into reality with comprehensive resources and tools.";
+    const description =
+      options.description ||
+      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.";
+    const buttonText = options.buttonText || options.ctaText || "Get Started";
     const buttonHref = options.buttonHref || "#";
+    const backgroundImage = options.backgroundImage;
+    const backgroundPattern = options.backgroundPattern;
+    const detailsCard = options.detailsCard;
+
+    // Generate hero based on variant
+    switch (variant) {
+      case "accent":
+        return this.generateAccentHero(
+          eyebrow,
+          title,
+          subtitle,
+          description,
+          buttonText,
+          buttonHref,
+          backgroundImage
+        );
+
+      case "accent-with-details":
+        return this.generateAccentHeroWithDetails(
+          eyebrow,
+          title,
+          subtitle,
+          description,
+          buttonText,
+          buttonHref,
+          backgroundImage,
+          detailsCard
+        );
+
+      default: // wayfinding
+        return this.generateWayfindingHero(
+          eyebrow,
+          title,
+          subtitle,
+          description,
+          buttonText,
+          buttonHref,
+          backgroundPattern
+        );
+    }
+  }
+
+  generateWayfindingHero(
+    eyebrow,
+    title,
+    subtitle,
+    description,
+    buttonText,
+    buttonHref,
+    backgroundPattern
+  ) {
+    const patternUrl =
+      backgroundPattern ||
+      "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMiIgZmlsbD0iIzAwNzhkNCIgZmlsbC1vcGFjaXR5PSIwLjEiLz4KPC9zdmc+";
 
     return `
-      <section class="atlas-hero">
-        <div class="atlas-container">
-          <h1 style="font-size: 3rem; margin-bottom: 1rem; color: #333;">${title}</h1>
-          <p style="font-size: 1.25rem; margin-bottom: 2rem; color: #666;">${subtitle}</p>
-          <a href="${buttonHref}" class="atlas-button" style="text-decoration: none; display: inline-block;">${buttonText}</a>
+      <section class="hero hero-xs background-color-primary color-primary-invert background-image-pattern background-size-200" 
+               style="--background-image-pattern: url('${patternUrl}');">
+        <div class="hero-content">
+          <p class="letter-spacing-wide text-transform-uppercase font-size-sm">
+            ${eyebrow}
+          </p>
+          <h1 class="font-size-h1 font-weight-semibold">
+            ${title}
+          </h1>
+          <p class="font-size-lg font-weight-semibold margin-block-sm">
+            ${subtitle}
+          </p>
+          <p>
+            ${description}
+          </p>
+          <div class="buttons margin-top-md">
+            <button class="button border button-clear">
+              ${buttonText}
+            </button>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  generateAccentHero(
+    eyebrow,
+    title,
+    subtitle,
+    description,
+    buttonText,
+    buttonHref,
+    backgroundImage
+  ) {
+    const heroBackgroundImageLight =
+      backgroundImage ||
+      "https://learn.microsoft.com/en-us/media/home-and-directory/home-hero_light.png";
+    const heroBackgroundImageDark =
+      backgroundImage ||
+      "https://learn.microsoft.com/en-us/media/home-and-directory/home-hero_dark.png";
+
+    return `
+      <section class="hero hero-image background-color-body-accent gradient-border-right gradient-border-body-accent"
+               style="
+                 --hero-background-image-light: url('${heroBackgroundImageLight}');
+                 --hero-background-image-dark: url('${heroBackgroundImageDark}');
+               ">
+        <div class="hero-content">
+          <p class="letter-spacing-wide text-transform-uppercase font-size-sm">
+            ${eyebrow}
+          </p>
+          <h1 class="font-size-h1 font-weight-semibold">
+            ${title}
+          </h1>
+          <p class="font-size-lg font-weight-semibold margin-block-sm">
+            ${subtitle}
+          </p>
+          <p>
+            ${description}
+          </p>
+          <div class="buttons margin-top-md">
+            <button class="button border button-clear">
+              ${buttonText}
+            </button>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  generateAccentHeroWithDetails(
+    eyebrow,
+    title,
+    subtitle,
+    description,
+    buttonText,
+    buttonHref,
+    backgroundImage,
+    detailsTitle,
+    detailsContent
+  ) {
+    const heroBackgroundImageLight =
+      backgroundImage ||
+      "https://learn.microsoft.com/en-us/media/learn/plans/skilling_plan_hero.png?branch=main";
+    const heroBackgroundImageDark =
+      backgroundImage ||
+      "https://learn.microsoft.com/en-us/media/learn/plans/skilling_plan_hero.png?branch=main";
+
+    return `
+      <section class="hero hero-image flex-direction-row-tablet border background-color-body-accent gradient-border-right gradient-border-body-accent"
+               style="
+                 --hero-background-image-light: url('${heroBackgroundImageLight}');
+                 --hero-background-image-dark: url('${heroBackgroundImageDark}');
+               ">
+        <div class="hero-content">
+          <p class="letter-spacing-wide text-transform-uppercase font-size-sm">
+            ${eyebrow}
+          </p>
+          <h1 class="font-size-h1 font-weight-semibold">
+            ${title}
+          </h1>
+          <p class="font-size-lg font-weight-semibold margin-block-sm">
+            ${subtitle}
+          </p>
+          <p>
+            ${description}
+          </p>
+          <div class="buttons margin-top-md">
+            <button class="button border button-clear">
+              ${buttonText}
+            </button>
+          </div>
+        </div>
+        <div class="hero-details">
+          <div class="hero-details-card border border-radius-lg box-shadow-heavy padding-sm">
+            <p class="font-weight-bold">
+              ${detailsTitle || "Learn More"}
+            </p>
+            <p class="margin-top-sm">
+              ${
+                detailsContent ||
+                "Discover additional resources and tools to help you succeed in your learning journey."
+              }
+            </p>
+          </div>
         </div>
       </section>
     `;
