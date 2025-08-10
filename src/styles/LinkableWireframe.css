@@ -127,23 +127,26 @@
   transition: all 0.2s ease;
 }
 
-.linkable-wireframe [data-page-link]:hover {
+.linkable-wireframe [data-page-link][data-user-added="true"]:hover {
   transform: scale(1.02);
   box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
 }
 
-/* Highlight potentially linkable elements on hover */
-.linkable-wireframe button:hover,
-.linkable-wireframe a:hover,
-.linkable-wireframe [role="button"]:hover,
-.linkable-wireframe .button:hover,
-.linkable-wireframe .btn:hover,
-.linkable-wireframe .cta:hover,
-.linkable-wireframe .primary:hover,
-.linkable-wireframe .secondary:hover,
-.linkable-wireframe .card:hover,
-.linkable-wireframe .clickable:hover,
-.linkable-wireframe [style*="cursor: pointer"]:hover {
+/* Highlight potentially linkable elements on hover - only for user-added elements */
+.linkable-wireframe [data-user-added="true"] button:hover,
+.linkable-wireframe [data-user-added="true"] a:hover,
+.linkable-wireframe [data-user-added="true"][role="button"]:hover,
+.linkable-wireframe button[data-user-added="true"]:hover,
+.linkable-wireframe a[data-user-added="true"]:hover,
+.linkable-wireframe [role="button"][data-user-added="true"]:hover,
+.linkable-wireframe .button[data-user-added="true"]:hover,
+.linkable-wireframe .btn[data-user-added="true"]:hover,
+.linkable-wireframe .cta[data-user-added="true"]:hover,
+.linkable-wireframe .primary[data-user-added="true"]:hover,
+.linkable-wireframe .secondary[data-user-added="true"]:hover,
+.linkable-wireframe .card[data-user-added="true"]:hover,
+.linkable-wireframe .clickable[data-user-added="true"]:hover,
+.linkable-wireframe [style*="cursor: pointer"][data-user-added="true"]:hover {
   outline: 2px dashed rgba(0, 123, 255, 0.5);
   outline-offset: 2px;
 }
@@ -371,35 +374,26 @@
 .linkable-wireframe .form-group,
 .linkable-wireframe .hero-section,
 .linkable-wireframe .nav-section {
-  cursor: grab;
   transition: all 0.2s ease;
   position: relative;
 }
 
-/* Enhanced hover styles for draggable elements - only show on existing elements */
-.linkable-wireframe [data-draggable="true"]:hover,
-.linkable-wireframe .atlas-component:hover,
-.linkable-wireframe .component-container:hover,
-.linkable-wireframe .card:hover,
-.linkable-wireframe .button:hover,
-.linkable-wireframe .form-group:hover,
-.linkable-wireframe .hero-section:hover,
-.linkable-wireframe .nav-section:hover {
+/* Only show hover effects on user-added elements */
+.linkable-wireframe [data-user-added="true"]:hover {
+  cursor: grab;
   box-shadow: 0 1px 4px rgba(0, 123, 212, 0.15);
   transform: translateY(-1px);
   outline: 1px dashed rgba(0, 123, 212, 0.3);
   outline-offset: 1px;
 }
 
-/* Disable hover effects when delete button is present to avoid conflicts */
-.linkable-wireframe [data-draggable="true"]:has(.delete-btn):hover,
-.linkable-wireframe .atlas-component:has(.delete-btn):hover,
-.linkable-wireframe .component-container:has(.delete-btn):hover,
-.linkable-wireframe .card:has(.delete-btn):hover,
-.linkable-wireframe .button:has(.delete-btn):hover,
-.linkable-wireframe .form-group:has(.delete-btn):hover,
-.linkable-wireframe .hero-section:has(.delete-btn):hover,
-.linkable-wireframe .nav-section:has(.delete-btn):hover {
+/* Generated elements have no hover effects or cursor changes */
+.linkable-wireframe :not([data-user-added="true"]) {
+  cursor: default;
+}
+
+/* Enhanced hover effects for user-added elements with delete buttons */
+.linkable-wireframe [data-user-added="true"]:has(.delete-btn):hover {
   outline: 1px solid rgba(220, 53, 69, 0.3);
   outline-offset: 1px;
 }
@@ -683,4 +677,28 @@ body.dragging-active * {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Visual indicators for user-added elements - only on interaction */
+.linkable-wireframe [data-user-added="true"]:hover {
+  outline: 1px dashed rgba(40, 167, 69, 0.6);
+  outline-offset: 2px;
+  background-color: rgba(40, 167, 69, 0.05);
+}
+
+/* Only show delete buttons on user-added elements */
+.linkable-wireframe [data-user-added="true"] .delete-btn {
+  opacity: 1;
+}
+
+/* Hide delete buttons from generated elements */
+.linkable-wireframe :not([data-user-added="true"]) .delete-btn {
+  display: none !important;
+}
+
+/* Enhanced visual feedback for deletable elements */
+.linkable-wireframe [data-user-added="true"]:hover .delete-btn {
+  background: #dc3545;
+  border: 1px solid #dc3545;
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
 }

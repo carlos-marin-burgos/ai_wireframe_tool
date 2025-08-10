@@ -228,7 +228,10 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
                 element.style.width = computedStyle.width;
                 element.style.height = computedStyle.height;
 
-                console.log('🎯 Converting to absolute:', {
+                // Mark as user-modified since it's now being repositioned
+                element.setAttribute('data-user-added', 'true');
+
+                console.log('🎯 Converting to absolute and marking as user-added:', {
                     original: { left: originalRect.left, top: originalRect.top },
                     container: { left: containerRect.left, top: containerRect.top },
                     calculated: { left: currentLeft, top: currentTop },
@@ -420,21 +423,22 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
                 const currentContent = containerRef.current.innerHTML;
                 const hasContent = htmlContent && htmlContent.trim().length > 0;
 
+                // Mark the new content as user-added by adding data attribute
+                const markedData = draggedData.replace(/(<[^>]+)>/g, '$1 data-user-added="true">');
+
                 if (!hasContent) {
                     // For empty wireframes, set the content directly
                     console.log('🎯 Adding content to empty wireframe');
-                    onUpdateHtml(draggedData);
+                    onUpdateHtml(markedData);
                 } else {
                     // For existing content, append to the current content
-                    onUpdateHtml(currentContent + draggedData);
+                    onUpdateHtml(currentContent + markedData);
                 }
             }
         } catch (error) {
             console.error('Error handling drop:', error);
         }
-    }, [htmlContent, onUpdateHtml]);
-
-    // Keyboard movement for accessibility
+    }, [htmlContent, onUpdateHtml]);    // Keyboard movement for accessibility
     const moveElementWithKeyboard = useCallback((element: HTMLElement, direction: string) => {
         if (!containerRef.current) return;
 
@@ -547,11 +551,22 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         console.log('🗑️ Element deleted:', element.tagName, element.className);
     }, [onUpdateHtml]);
 
-    // Add delete button to element
+    // Add delete button to element - only for user-added controls
     const addDeleteButton = useCallback((element: HTMLElement) => {
         // Remove any existing delete button
         const existingBtn = element.querySelector('.delete-btn');
         if (existingBtn) return;
+
+        // Only add delete buttons to user-added elements or absolutely positioned elements
+        // Generated/original elements should not be deletable
+        const isUserAdded = element.hasAttribute('data-user-added') ||
+            element.style.position === 'absolute' ||
+            element.hasAttribute('data-draggable');
+
+        if (!isUserAdded) {
+            console.log('🚫 Skipping delete button for generated element:', element.tagName, element.className);
+            return;
+        }
 
         const deleteBtn = document.createElement('button');
         deleteBtn.className = 'delete-btn';
@@ -585,6 +600,8 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
 
         element.appendChild(deleteBtn);
         element.style.position = element.style.position || 'relative';
+
+        console.log('✅ Added delete button to user-added element:', element.tagName, element.className);
     }, [handleDeleteElement]);
 
     // Remove delete button from element
