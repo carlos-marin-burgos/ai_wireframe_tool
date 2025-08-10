@@ -4,6 +4,40 @@
   min-height: 400px;
   height: auto;
   overflow: hidden;
+  /* Ensure contained elements don't extend beyond boundaries */
+  box-sizing: border-box;
+}
+
+/* Prevent form elements and textboxes from extending beyond container */
+.linkable-wireframe .form-group,
+.linkable-wireframe input,
+.linkable-wireframe textarea,
+.linkable-wireframe select {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+/* Ensure dragged form elements stay within bounds */
+.linkable-wireframe .form-group[data-dragging="true"] {
+  max-width: calc(100% - 20px) !important;
+  margin-right: 10px;
+}
+
+/* Specific fixes for input and textarea elements during drag */
+.linkable-wireframe input[data-dragging="true"],
+.linkable-wireframe textarea[data-dragging="true"] {
+  max-width: calc(100% - 20px) !important;
+  box-sizing: border-box !important;
+  outline: none !important;
+  border: 1px solid rgba(0, 123, 212, 0.4) !important;
+}
+
+/* Prevent focus outlines during drag for all form elements */
+.linkable-wireframe [data-dragging="true"] input,
+.linkable-wireframe [data-dragging="true"] textarea,
+.linkable-wireframe [data-dragging="true"] select {
+  outline: none !important;
+  pointer-events: none !important;
 }
 
 /* Empty page state */
@@ -16,6 +50,37 @@
   border: 2px dashed #dee2e6;
   border-radius: 8px;
   margin: 20px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* Make empty page responsive to drag operations */
+.linkable-wireframe:not(:has([data-dragging="true"])) .empty-page:hover {
+  border-color: #007bff;
+  background: #f0f7ff;
+}
+
+/* Visual feedback when dragging over empty wireframe */
+.linkable-wireframe:has([data-dragging="true"]) .empty-page {
+  border-color: #28a745;
+  background: #f0fff4;
+  border-style: solid;
+}
+
+.linkable-wireframe:has([data-dragging="true"]) .empty-page::before {
+  content: "Drop component here";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(40, 167, 69, 0.9);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 14px;
+  z-index: 10;
+  pointer-events: none;
 }
 
 .empty-page-content {
@@ -23,6 +88,7 @@
   color: #6c757d;
   max-width: 400px;
   padding: 40px 20px;
+  pointer-events: none;
 }
 
 .empty-page-content h3 {
@@ -102,8 +168,6 @@
 /* Link menu styling */
 .link-menu {
   position: absolute;
-  left: var(--menu-x, 0);
-  top: var(--menu-y, 0);
   background: white;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -111,7 +175,6 @@
   z-index: 1000;
   min-width: 280px;
   max-width: 400px;
-  transform: translateX(-50%);
 }
 
 .link-menu-header {
@@ -261,7 +324,45 @@
   }
 }
 
-/* Drag and Drop Functionality */
+/* Delete button for components - keep within bounds */
+.delete-btn {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 18px;
+  height: 18px;
+  background: #dc3545;
+  color: white;
+  border: 1px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  line-height: 1;
+}
+
+.delete-btn:hover {
+  background: #c82333;
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.4);
+}
+
+.delete-btn:active {
+  transform: scale(0.95);
+}
+
+/* Hide delete button when dragging */
+[data-dragging="true"] .delete-btn {
+  display: none;
+}
+
+/* Ensure parent elements have proper positioning for delete button */
 .linkable-wireframe [data-draggable="true"],
 .linkable-wireframe .atlas-component,
 .linkable-wireframe .component-container,
@@ -275,6 +376,7 @@
   position: relative;
 }
 
+/* Enhanced hover styles for draggable elements - only show on existing elements */
 .linkable-wireframe [data-draggable="true"]:hover,
 .linkable-wireframe .atlas-component:hover,
 .linkable-wireframe .component-container:hover,
@@ -283,20 +385,34 @@
 .linkable-wireframe .form-group:hover,
 .linkable-wireframe .hero-section:hover,
 .linkable-wireframe .nav-section:hover {
-  box-shadow: 0 2px 8px rgba(0, 123, 212, 0.2);
+  box-shadow: 0 1px 4px rgba(0, 123, 212, 0.15);
   transform: translateY(-1px);
-  outline: 2px dashed rgba(0, 123, 212, 0.5);
-  outline-offset: 2px;
+  outline: 1px dashed rgba(0, 123, 212, 0.3);
+  outline-offset: 1px;
 }
 
-/* Enhanced dragging states */
+/* Disable hover effects when delete button is present to avoid conflicts */
+.linkable-wireframe [data-draggable="true"]:has(.delete-btn):hover,
+.linkable-wireframe .atlas-component:has(.delete-btn):hover,
+.linkable-wireframe .component-container:has(.delete-btn):hover,
+.linkable-wireframe .card:has(.delete-btn):hover,
+.linkable-wireframe .button:has(.delete-btn):hover,
+.linkable-wireframe .form-group:has(.delete-btn):hover,
+.linkable-wireframe .hero-section:has(.delete-btn):hover,
+.linkable-wireframe .nav-section:has(.delete-btn):hover {
+  outline: 1px solid rgba(220, 53, 69, 0.3);
+  outline-offset: 1px;
+}
+
+/* Enhanced dragging states - Subtle */
 .linkable-wireframe [data-dragging="true"] {
   cursor: grabbing !important;
-  box-shadow: 0 8px 24px rgba(0, 123, 212, 0.4) !important;
-  transform: scale(1.05) rotate(2deg) !important;
+  box-shadow: 0 4px 12px rgba(0, 123, 212, 0.25) !important;
+  transform: scale(1.02) !important;
   z-index: 1000 !important;
-  opacity: 0.9 !important;
+  opacity: 0.95 !important;
   transition: none !important;
+  border: 1px solid rgba(0, 123, 212, 0.4) !important;
 }
 
 /* Drop zone indicators */
@@ -457,11 +573,12 @@
   pointer-events: none;
 }
 
-/* Dragging element style improvements */
+/* Dragging element style improvements - Subtle */
 [data-dragging="true"] {
   transition: none !important;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
-  border: 2px solid rgba(0, 123, 255, 0.3) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12) !important;
+  border: 1px solid rgba(0, 123, 255, 0.4) !important;
+  outline: none !important;
 }
 
 /* Clean up the complex drag overlay styles */
@@ -559,4 +676,11 @@ body.dragging-active * {
     transform: scale(1);
     box-shadow: none;
   }
+}
+
+/* Fix button text wrapping - minimal targeted approach */
+.linkable-wireframe .button {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

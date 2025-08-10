@@ -31,6 +31,7 @@
 .navbar-right {
   display: flex;
   align-items: center;
+  gap: 1rem;
   position: relative;
   z-index: 1001;
 }
@@ -79,4 +80,29 @@
   font-family: "Orbitron", "Segoe UI Variable Display", "Segoe UI", system-ui,
     sans-serif;
   letter-spacing: -0.01em;
+  margin-left: 5px !important;
+}
+
+.logout-button {
+  background: transparent;
+  border: 1px solid #e1dfdd;
+  color: #605e5c;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-weight: 500;
+}
+
+.logout-button:hover {
+  background: #f3f2f1;
+  border-color: #d1d1d1;
+  color: #323130;
+}
+
+.logout-button:active {
+  background: #e1dfdd;
+  transform: translateY(1px);
 }

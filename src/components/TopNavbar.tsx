@@ -3,10 +3,12 @@ import './TopNavbar.css';
 
 interface TopNavbarProps {
     onLogoClick?: () => void;
+    onLogout?: () => void;
 }
 
 const TopNavbar: React.FC<TopNavbarProps> = ({
-    onLogoClick
+    onLogoClick,
+    onLogout
 }) => {
     return (
         <nav className="top-nav">
@@ -26,6 +28,13 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
                 </button>
             </div>
             <div className="navbar-right">
+                <button
+                    onClick={onLogout}
+                    className="logout-button"
+                    title="Logout"
+                >
+                    🔒 Logout
+                </button>
                 <img src="/cxsLogo.png" alt="CXS Logo" className="navbar-cxs-logo" />
             </div>
         </nav>

@@ -11,11 +11,13 @@ import TopNavbar from "./components/TopNavbar";
 import SaveDialog from "./components/SaveDialog";
 import LoadDialog from "./components/LoadDialog";
 import Toast from "./components/Toast";
+import PasswordProtection from "./components/PasswordProtection";
 import { API_CONFIG, getApiUrl } from "./config/api";
 // All API calls are now handled by the wireframe generation hook
 import { useWireframeGeneration } from './hooks/useWireframeGeneration';
 import { PerformanceTracker } from "./utils/performance";
 import { generateHeroHTML } from "./components/HeroGenerator";
+import { processWireframeForProduction } from './utils/wireframeProcessor';
 import { PerformanceMonitor, usePerformanceMonitor } from "./components/PerformanceMonitor";
 import { getInstantSuggestions, shouldUseAI } from "./utils/fastSuggestions";
 import { getCachedSuggestions, cacheSuggestions } from "./utils/suggestionCache";
@@ -34,7 +36,7 @@ interface ToastData {
   type: 'success' | 'info' | 'warning' | 'error';
 }
 
-function AppContent() {
+function AppContent({ onLogout }: { onLogout?: () => void }) {
   const [description, setDescription] = useState("");
   const [htmlWireframe, setHtmlWireframe] = useState("");
   const [savedWireframes, setSavedWireframes] = useState<SavedWireframe[]>([]);
@@ -188,7 +190,9 @@ function AppContent() {
 
     // Only set non-empty HTML
     if (safeHtml && safeHtml.length > 0) {
-      setHtmlWireframe(safeHtml);
+      // Process the wireframe to fix images and Microsoft branding
+      const processedHtml = processWireframeForProduction(safeHtml);
+      setHtmlWireframe(processedHtml);
     } else {
       setHtmlWireframe(""); // Set empty string
     }
@@ -654,23 +658,30 @@ function AppContent() {
   };
 
   const insertComponentIntoWireframe = (existingHtml: string, componentHtml: string) => {
-    // Find a good insertion point in the existing wireframe
+    // Find a good insertion point in the existing wireframe - preferably at the top
     const containerMatch = existingHtml.match(/<div[^>]*class="[^"]*wireframe-container[^"]*"[^>]*>/);
     if (containerMatch) {
-      const insertionPoint = existingHtml.indexOf('</div>', containerMatch.index! + containerMatch[0].length);
-      if (insertionPoint !== -1) {
-        return existingHtml.slice(0, insertionPoint) + componentHtml + existingHtml.slice(insertionPoint);
-      }
+      // Insert right after the opening wireframe-container div tag
+      const insertionPoint = containerMatch.index! + containerMatch[0].length;
+      return existingHtml.slice(0, insertionPoint) + componentHtml + existingHtml.slice(insertionPoint);
     }
 
-    // Fallback: append to the end of the body
-    const bodyEndIndex = existingHtml.lastIndexOf('</body>');
-    if (bodyEndIndex !== -1) {
-      return existingHtml.slice(0, bodyEndIndex) + componentHtml + existingHtml.slice(bodyEndIndex);
+    // Alternative: look for main content area
+    const mainMatch = existingHtml.match(/<main[^>]*>|<div[^>]*class="[^"]*main[^"]*"[^>]*>|<div[^>]*class="[^"]*content[^"]*"[^>]*>/);
+    if (mainMatch) {
+      const insertionPoint = mainMatch.index! + mainMatch[0].length;
+      return existingHtml.slice(0, insertionPoint) + componentHtml + existingHtml.slice(insertionPoint);
     }
 
-    // Final fallback: just append
-    return existingHtml + componentHtml;
+    // Look for body tag and insert right after it
+    const bodyMatch = existingHtml.match(/<body[^>]*>/);
+    if (bodyMatch) {
+      const insertionPoint = bodyMatch.index! + bodyMatch[0].length;
+      return existingHtml.slice(0, insertionPoint) + componentHtml + existingHtml.slice(insertionPoint);
+    }
+
+    // Final fallback: prepend to existing content
+    return componentHtml + existingHtml;
   };
 
   const createWireframeWithComponent = (componentHtml: string) => {
@@ -991,6 +1002,7 @@ function AppContent() {
       {/* Always show Designetica TopNavbar */}
       <TopNavbar
         onLogoClick={handleBackToLanding}
+        onLogout={onLogout}
       />
 
       {showLandingPage && !htmlWireframe ? (
@@ -1090,9 +1102,27 @@ function AppContent() {
   );
 }
 
-// Main App component  
+// Main App component with password protection
 function App() {
-  return <AppContent />;
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const handleAuthSuccess = () => {
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('designetica_authenticated');
+    localStorage.removeItem('designetica_auth_time');
+    setIsAuthenticated(false);
+  };
+
+  // If not authenticated, show password protection
+  if (!isAuthenticated) {
+    return <PasswordProtection onAuthSuccess={handleAuthSuccess} />;
+  }
+
+  // If authenticated, show the main application
+  return <AppContent onLogout={handleLogout} />;
 }
 
 export default App;

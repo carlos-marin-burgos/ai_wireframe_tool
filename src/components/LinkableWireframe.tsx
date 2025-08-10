@@ -106,6 +106,11 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
 
     // Check if an element is draggable (Atlas components or positioned elements)
     const isDraggableElement = useCallback((element: HTMLElement): boolean => {
+        // Don't allow direct dragging of input/textarea elements - only their containers
+        if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA' || element.tagName === 'SELECT') {
+            return false;
+        }
+
         // Check if it's an Atlas component or has specific draggable indicators
         const hasAtlasClass = element.classList.contains('atlas-component') ||
             element.classList.contains('component-container') ||
@@ -120,9 +125,10 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         const isPositioned = computedStyle.position === 'absolute' ||
             computedStyle.position === 'relative';
 
-        // Check if it's a significant container element
+        // Check if it's a significant container element (but not input elements)
         const isContainer = element.tagName.toLowerCase() === 'div' &&
-            (element.children.length > 0 || element.textContent?.trim());
+            (element.children.length > 0 || element.textContent?.trim()) &&
+            !element.closest('input, textarea, select');
 
         // Check if it has draggable data attribute
         const hasDraggableAttr = element.hasAttribute('data-draggable') ||
@@ -228,11 +234,13 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
                     calculated: { left: currentLeft, top: currentTop },
                     safe: { left: safeLeft, top: safeTop }
                 });
-            }            // Visual feedback
+            }            // Visual feedback - Subtle
             element.style.zIndex = '1000';
-            element.style.opacity = '0.7';
+            element.style.opacity = '0.95';
             element.style.cursor = 'grabbing';
             element.style.transform = 'scale(1.02)';
+            element.style.boxShadow = '0 4px 12px rgba(0, 123, 212, 0.25)';
+            element.style.border = '1px solid rgba(0, 123, 212, 0.4)';
             element.setAttribute('data-dragging', 'true');
 
             // Accessibility: Announce drag start
@@ -260,7 +268,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         if (mouseDownElement && !isDragging) {
             const deltaX = Math.abs(event.clientX - mouseDownPos.x);
             const deltaY = Math.abs(event.clientY - mouseDownPos.y);
-            const threshold = 15; // Increased threshold - needs more deliberate movement to start drag
+            const threshold = 25; // Increased threshold - needs more deliberate movement to start drag
 
             if (deltaX > threshold || deltaY > threshold) {
                 setHasMoved(true);
@@ -280,12 +288,14 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         const newX = event.clientX - containerRect.left - dragOffset.x;
         const newY = event.clientY - containerRect.top - dragOffset.y;
 
-        // Simple boundary constraints
-        const maxX = containerRect.width - draggedElement.offsetWidth;
-        const maxY = containerRect.height - draggedElement.offsetHeight;
+        // Simple boundary constraints with padding for borders/outlines
+        const elementRect = draggedElement.getBoundingClientRect();
+        const borderPadding = 10; // Extra space to account for borders and outlines
+        const maxX = containerRect.width - draggedElement.offsetWidth - borderPadding;
+        const maxY = containerRect.height - draggedElement.offsetHeight - borderPadding;
 
-        const boundedX = Math.max(0, Math.min(maxX, newX));
-        const boundedY = Math.max(0, Math.min(maxY, newY));
+        const boundedX = Math.max(borderPadding, Math.min(maxX, newX));
+        const boundedY = Math.max(borderPadding, Math.min(maxY, newY));
 
         // Update position smoothly
         draggedElement.style.position = 'absolute';
@@ -368,6 +378,8 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         draggedElement.style.opacity = '';
         draggedElement.style.cursor = '';
         draggedElement.style.transform = '';
+        draggedElement.style.boxShadow = '';
+        draggedElement.style.border = '';
         draggedElement.removeAttribute('data-dragging');
 
         // Accessibility: Announce drag end
@@ -385,6 +397,42 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
 
         console.log('🎯 Drag completed');
     }, [draggedElement, onUpdateHtml]);
+
+    // Handle external drag operations (for adding new components to empty wireframes)
+    const handleDragOver = useCallback((event: React.DragEvent) => {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'copy';
+
+        console.log('🎯 Drag over wireframe - ready to accept drop');
+    }, []);
+
+    const handleDrop = useCallback((event: React.DragEvent) => {
+        event.preventDefault();
+
+        try {
+            const draggedData = event.dataTransfer.getData('text/html') ||
+                event.dataTransfer.getData('text/plain');
+
+            if (draggedData && containerRef.current) {
+                console.log('🎯 Dropped data onto wireframe:', draggedData.substring(0, 100));
+
+                // Check if wireframe is empty by looking at the current HTML content
+                const currentContent = containerRef.current.innerHTML;
+                const hasContent = htmlContent && htmlContent.trim().length > 0;
+
+                if (!hasContent) {
+                    // For empty wireframes, set the content directly
+                    console.log('🎯 Adding content to empty wireframe');
+                    onUpdateHtml(draggedData);
+                } else {
+                    // For existing content, append to the current content
+                    onUpdateHtml(currentContent + draggedData);
+                }
+            }
+        } catch (error) {
+            console.error('Error handling drop:', error);
+        }
+    }, [htmlContent, onUpdateHtml]);
 
     // Keyboard movement for accessibility
     const moveElementWithKeyboard = useCallback((element: HTMLElement, direction: string) => {
@@ -482,10 +530,95 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
             // Update currentY for next element
             currentY += element.offsetHeight + spacing;
         });
-    };    // Handle click on linkable elements
+    };    // Handle element deletion
+    const handleDeleteElement = useCallback((element: HTMLElement) => {
+        if (!element || !containerRef.current) return;
+
+        // Remove any existing delete buttons first
+        const existingDeleteBtns = containerRef.current.querySelectorAll('.delete-btn');
+        existingDeleteBtns.forEach(btn => btn.remove());
+
+        // Remove the element
+        element.remove();
+
+        // Update the HTML
+        onUpdateHtml(containerRef.current.innerHTML);
+
+        console.log('🗑️ Element deleted:', element.tagName, element.className);
+    }, [onUpdateHtml]);
+
+    // Add delete button to element
+    const addDeleteButton = useCallback((element: HTMLElement) => {
+        // Remove any existing delete button
+        const existingBtn = element.querySelector('.delete-btn');
+        if (existingBtn) return;
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.innerHTML = '×';
+        deleteBtn.title = 'Delete this element';
+        deleteBtn.setAttribute('aria-label', 'Delete element');
+
+        deleteBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+
+            // Close any open link menus first
+            setShowLinkMenu(false);
+            setSelectedElement(null);
+
+            // Then delete the element
+            handleDeleteElement(element);
+        });
+
+        // Prevent any other mouse events on the delete button
+        deleteBtn.addEventListener('mousedown', (e) => {
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+        });
+
+        deleteBtn.addEventListener('mouseup', (e) => {
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+        });
+
+        element.appendChild(deleteBtn);
+        element.style.position = element.style.position || 'relative';
+    }, [handleDeleteElement]);
+
+    // Remove delete button from element
+    const removeDeleteButton = useCallback((element: HTMLElement) => {
+        const deleteBtn = element.querySelector('.delete-btn');
+        if (deleteBtn) {
+            deleteBtn.remove();
+        }
+    }, []);
+
+    // Combined mouse leave handler for container and elements
+    const handleCombinedMouseLeave = useCallback((e: React.MouseEvent) => {
+        // First handle the drag end logic (from the original container handler)
+        handleMouseUp(e);
+
+        // Then handle element-specific logic
+        const target = e.target as HTMLElement;
+
+        // Remove delete button from draggable elements (unless dragging)
+        if (isDraggableElement(target) && !isDragging) {
+            removeDeleteButton(target);
+        }
+    }, [handleMouseUp, isDraggableElement, isDragging, removeDeleteButton]);
+
+    // Handle click on linkable elements
     const handleElementClick = useCallback((event: MouseEvent) => {
         const target = event.target as HTMLElement;
         console.log('Element clicked:', target, 'Text:', target.textContent);
+
+        // Check if the clicked element is a delete button - if so, don't interfere
+        if (target.classList.contains('delete-btn') || target.closest('.delete-btn')) {
+            console.log('🗑️ Delete button clicked, ignoring for link handling');
+            return;
+        }
 
         // Check if the clicked element is a toolbar button - if so, don't interfere
         if (target.closest('.toolbar-btn') || target.classList.contains('toolbar-btn')) {
@@ -539,7 +672,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         }
     }, [isLinkableElement, availablePages, onNavigateToPage]);
 
-    // Set up click listeners
+    // Set up click listeners and mouse event handling
     useEffect(() => {
         const container = containerRef.current;
         if (!container) {
@@ -563,9 +696,31 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
             handleElementClick(event as MouseEvent);
         };
 
+        // Handle mouse enter for delete buttons
+        const handleMouseEnter = (event: Event) => {
+            const target = event.target as HTMLElement;
+
+            // Add delete button to draggable elements
+            if (isDraggableElement(target) && !target.classList.contains('delete-btn')) {
+                addDeleteButton(target);
+            }
+        };
+
+        // Handle mouse leave for delete buttons
+        const handleMouseLeave = (event: Event) => {
+            const target = event.target as HTMLElement;
+
+            // Remove delete button from draggable elements (unless dragging)
+            if (isDraggableElement(target) && !isDragging) {
+                removeDeleteButton(target);
+            }
+        };
+
         // Add both regular and capture listeners for better coverage
         container.addEventListener('click', handleElementClick);
         container.addEventListener('click', handleClickCapture, true);
+        container.addEventListener('mouseenter', handleMouseEnter, true);
+        container.addEventListener('mouseleave', handleMouseLeave, true);
 
         // Also try adding to document for debugging
         const documentClickHandler = (event: Event) => {
@@ -576,9 +731,11 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         return () => {
             container.removeEventListener('click', handleElementClick);
             container.removeEventListener('click', handleClickCapture, true);
+            container.removeEventListener('mouseenter', handleMouseEnter, true);
+            container.removeEventListener('mouseleave', handleMouseLeave, true);
             document.removeEventListener('click', documentClickHandler);
         };
-    }, [handleElementClick]);
+    }, [handleElementClick, isDraggableElement, addDeleteButton, removeDeleteButton, isDragging]);
 
     // Add link to element
     const handleAddLink = useCallback((pageId: string) => {
@@ -678,7 +835,71 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
             ref={containerRef}
             onMouseMove={handleMouseMoveTracking}
             onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
+            onMouseLeave={handleCombinedMouseLeave}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            onMouseDown={(e) => {
+                const target = e.target as HTMLElement;
+
+                // Don't interfere with delete button clicks
+                if (target.classList.contains('delete-btn') || target.closest('.delete-btn')) {
+                    return;
+                }
+
+                // Check if it's a right-click for context menu (links)
+                if (e.button === 2 && isLinkableElement(target)) {
+                    handleElementClick(e.nativeEvent);
+                    return;
+                }
+
+                // Check if it's draggable for left-click - START TRACKING, don't drag yet
+                if (e.button === 0 && isDraggableElement(target)) {
+                    handleMouseDown(e, target);
+                }
+            }}
+            onMouseEnter={(e) => {
+                const target = e.target as HTMLElement;
+
+                // Only add delete button to draggable elements, not delete buttons themselves
+                if (isDraggableElement(target) &&
+                    !target.classList.contains('delete-btn') &&
+                    !target.closest('.delete-btn')) {
+                    addDeleteButton(target);
+                }
+            }}
+            onKeyDown={(e) => {
+                const target = e.target as HTMLElement;
+
+                // Keyboard accessibility for dragging
+                if (isDraggableElement(target)) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        // For now, just focus the element - could extend with keyboard dragging
+                        target.focus();
+                        console.log('🎯 Element selected via keyboard:', target.tagName);
+                    }
+
+                    // Arrow key movement for accessibility
+                    if (selectedElement === target && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                        e.preventDefault();
+                        moveElementWithKeyboard(target, e.key);
+                    }
+
+                    // Delete key to delete element
+                    if (e.key === 'Delete' || e.key === 'Backspace') {
+                        e.preventDefault();
+                        // Close any open link menus first
+                        setShowLinkMenu(false);
+                        setSelectedElement(null);
+                        handleDeleteElement(target);
+                    }
+                }
+
+                // Escape to cancel any drag operation
+                if (e.key === 'Escape' && isDragging) {
+                    handleDragEnd();
+                }
+            }}
             role="application"
             aria-label="Wireframe editor - drag and drop elements to rearrange them"
         >
@@ -692,44 +913,6 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
             {(cleanHtmlContent && cleanHtmlContent.length > 0) ? (
                 <div
                     dangerouslySetInnerHTML={{ __html: cleanHtmlContent }}
-                    onMouseDown={(e) => {
-                        const target = e.target as HTMLElement;
-
-                        // Check if it's a right-click for context menu (links)
-                        if (e.button === 2 && isLinkableElement(target)) {
-                            handleElementClick(e.nativeEvent);
-                            return;
-                        }
-
-                        // Check if it's draggable for left-click - START TRACKING, don't drag yet
-                        if (e.button === 0 && isDraggableElement(target)) {
-                            handleMouseDown(e, target);
-                        }
-                    }}
-                    onKeyDown={(e) => {
-                        const target = e.target as HTMLElement;
-
-                        // Keyboard accessibility for dragging
-                        if (isDraggableElement(target)) {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                                e.preventDefault();
-                                // For now, just focus the element - could extend with keyboard dragging
-                                target.focus();
-                                console.log('🎯 Element selected via keyboard:', target.tagName);
-                            }
-
-                            // Arrow key movement for accessibility
-                            if (selectedElement === target && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
-                                e.preventDefault();
-                                moveElementWithKeyboard(target, e.key);
-                            }
-                        }
-
-                        // Escape to cancel any drag operation
-                        if (e.key === 'Escape' && isDragging) {
-                            handleDragEnd();
-                        }
-                    }}
                 />
             ) : (
                 <div className="empty-page">
@@ -745,9 +928,10 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
                 <div
                     className="link-menu"
                     style={{
-                        '--menu-x': `${linkMenuPosition.x}px`,
-                        '--menu-y': `${linkMenuPosition.y}px`
-                    } as React.CSSProperties}
+                        left: `${linkMenuPosition.x}px`,
+                        top: `${linkMenuPosition.y}px`,
+                        transform: 'translateX(-50%)'
+                    }}
                 >
                     <div className="link-menu-header">
                         <h4>Link to Page</h4>

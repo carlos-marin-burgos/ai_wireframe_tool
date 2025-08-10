@@ -8,33 +8,37 @@ const PLACEHOLDER_SERVICES = {
   picsum: (width: number, height: number) =>
     `https://picsum.photos/${width}/${height}`,
   placeholder: (width: number, height: number, text?: string) =>
-    `https://via.placeholder.com/${width}x${height}/f3f2f1/323130?text=${encodeURIComponent(
+    `https://placehold.co/${width}x${height}/f3f2f1/323130?text=${encodeURIComponent(
       text || "Image"
     )}`,
-  dummyimage: (width: number, height: number) =>
-    `https://dummyimage.com/${width}x${height}/f3f2f1/323130`,
+  dummyimage: (width: number, height: number, text?: string) =>
+    `https://dummyimage.com/${width}x${height}/f3f2f1/323130&text=${encodeURIComponent(
+      text || "Image"
+    )}`,
 };
 
 // Microsoft Learn themed placeholders
 const MS_LEARN_PLACEHOLDERS = {
   primary: (width: number, height: number, text?: string) =>
-    `https://via.placeholder.com/${width}x${height}/0078d4/ffffff?text=${encodeURIComponent(
+    `https://placehold.co/${width}x${height}/0078d4/ffffff?text=${encodeURIComponent(
       text || "Image"
     )}`,
   secondary: (width: number, height: number, text?: string) =>
-    `https://via.placeholder.com/${width}x${height}/106ebe/ffffff?text=${encodeURIComponent(
+    `https://placehold.co/${width}x${height}/106ebe/ffffff?text=${encodeURIComponent(
       text || "Image"
     )}`,
   neutral: (width: number, height: number, text?: string) =>
-    `https://via.placeholder.com/${width}x${height}/f3f2f1/323130?text=${encodeURIComponent(
+    `https://placehold.co/${width}x${height}/f3f2f1/323130?text=${encodeURIComponent(
       text || "Image"
     )}`,
   avatar: (size: number) =>
-    `https://via.placeholder.com/${size}x${size}/ca5010/ffffff?text=👤`,
+    `https://placehold.co/${size}x${size}/ca5010/ffffff?text=👤`,
   icon: (size: number, text?: string) =>
-    `https://via.placeholder.com/${size}x${size}/605e5c/ffffff?text=${encodeURIComponent(
+    `https://placehold.co/${size}x${size}/605e5c/ffffff?text=${encodeURIComponent(
       text || "🔲"
     )}`,
+  microsoftLogo: (size: number = 24) => `/windowsLogo.png`,
+  mslearnLogo: (size: number = 120) => `/mslearn-logo.png`,
 };
 
 // Common image dimensions for different use cases
@@ -140,6 +144,24 @@ export function generatePlaceholderUrl(
   className: string = "",
   theme: "primary" | "secondary" | "neutral" = "neutral"
 ): string {
+  // Check for specific image types first
+  if (
+    alt.toLowerCase().includes("microsoft logo") ||
+    alt.toLowerCase().includes("windows logo") ||
+    src.toLowerCase().includes("microsoft") ||
+    src.toLowerCase().includes("windows")
+  ) {
+    return MS_LEARN_PLACEHOLDERS.microsoftLogo();
+  }
+
+  if (
+    alt.toLowerCase().includes("ms learn") ||
+    alt.toLowerCase().includes("microsoft learn") ||
+    src.toLowerCase().includes("mslearn")
+  ) {
+    return MS_LEARN_PLACEHOLDERS.mslearnLogo();
+  }
+
   const dimensions = getImageDimensions(src, alt, className);
   const placeholderText = alt || extractTextFromSrc(src) || "Image";
 
@@ -172,20 +194,29 @@ export function processImagePlaceholders(html: string): string {
   const imgRegex = /<img([^>]*?)src=["']([^"']*?)["']([^>]*?)>/gi;
 
   return html.replace(imgRegex, (match, beforeSrc, src, afterSrc) => {
-    // Skip if it's already a placeholder URL
+    // Skip if it's already a good placeholder URL or local asset
     if (
-      src.includes("placeholder.com") ||
+      src.includes("placehold.co") ||
       src.includes("picsum.photos") ||
-      src.includes("dummyimage.com")
+      src.includes("dummyimage.com") ||
+      src.startsWith("/windowsLogo.png") ||
+      src.startsWith("/mslearn-logo.png") ||
+      src.startsWith("/cxsLogo.png")
     ) {
       return match;
     }
 
-    // Skip if it's a data URL or absolute URL with proper protocol
+    // Fix broken via.placeholder.com URLs by replacing with placehold.co
+    if (src.includes("via.placeholder.com")) {
+      const fixedSrc = src.replace("via.placeholder.com", "placehold.co");
+      return `<img${beforeSrc}src="${fixedSrc}"${afterSrc}>`;
+    }
+
+    // Skip if it's a data URL or working absolute URL
     if (
       src.startsWith("data:") ||
-      src.startsWith("http://") ||
-      src.startsWith("https://")
+      ((src.startsWith("http://") || src.startsWith("https://")) &&
+        !src.includes("via.placeholder.com"))
     ) {
       return match;
     }
@@ -226,11 +257,10 @@ export function addImageErrorHandling(html: string): string {
     const height = heightMatch ? heightMatch[1] : "200";
     const alt = altMatch ? altMatch[1] : "Image";
 
-    const fallbackUrl = MS_LEARN_PLACEHOLDERS.neutral(
-      parseInt(width),
-      parseInt(height),
+    // Use more reliable fallback URL
+    const fallbackUrl = `https://placehold.co/${width}x${height}/f3f2f1/323130?text=${encodeURIComponent(
       alt
-    );
+    )}`;
 
     const onerrorHandler = `onerror="this.src='${fallbackUrl}'; this.onerror=null;"`;
 
@@ -253,3 +283,17 @@ export function fixWireframeImages(html: string): string {
 
 // Export default placeholders for direct use
 export { MS_LEARN_PLACEHOLDERS, IMAGE_DIMENSIONS };
+
+// Export specific placeholder generators
+export const createMicrosoftLogo = () => MS_LEARN_PLACEHOLDERS.microsoftLogo();
+export const createMSLearnLogo = () => MS_LEARN_PLACEHOLDERS.mslearnLogo();
+export const createPrimaryPlaceholder = (
+  width: number,
+  height: number,
+  text?: string
+) => MS_LEARN_PLACEHOLDERS.primary(width, height, text);
+export const createNeutralPlaceholder = (
+  width: number,
+  height: number,
+  text?: string
+) => MS_LEARN_PLACEHOLDERS.neutral(width, height, text);

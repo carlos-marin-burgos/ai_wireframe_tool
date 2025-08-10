@@ -724,7 +724,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         <!-- Regular Image -->
         <div>
             <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #323130;">Regular Image</h4>
-            <img src="https://via.placeholder.com/200x150/0078d4/ffffff?text=Image" 
+            <img src="https://placehold.co/200x150/0078d4/ffffff?text=Image" 
                  alt="Example image" 
                  style="width: 100%; height: 150px; object-fit: cover; border-radius: 4px; border: 1px solid #edebe9;" />
         </div>
@@ -732,7 +732,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         <!-- Circular Image -->
         <div>
             <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #323130;">Circular Image</h4>
-            <img src="https://via.placeholder.com/150x150/ca5010/ffffff?text=Avatar" 
+            <img src="https://placehold.co/150x150/ca5010/ffffff?text=Avatar" 
                  alt="Avatar image" 
                  style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 1px solid #edebe9;" />
         </div>
@@ -750,7 +750,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         <div>
             <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #323130;">Image with Caption</h4>
             <figure style="margin: 0;">
-                <img src="https://via.placeholder.com/200x120/038387/ffffff?text=Graph" 
+                <img src="https://placehold.co/200x120/038387/ffffff?text=Graph" 
                      alt="Chart visualization" 
                      style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px; border: 1px solid #edebe9;" />
                 <figcaption style="margin-top: 8px; font-size: 13px; color: #605e5c; text-align: center;">Data visualization chart</figcaption>
@@ -1267,7 +1267,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     <div style="background: white; border: 1px solid #edebe9; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 24px; max-width: 320px; overflow: hidden;">
         <!-- Card Preview Section -->
         <div style="position: relative; height: 180px; background: linear-gradient(135deg, #0078d4, #106ebe); overflow: hidden;">
-            <img src="https://via.placeholder.com/320x180/0078d4/ffffff?text=Preview+Image" 
+            <img src="https://placehold.co/320x180/0078d4/ffffff?text=Preview+Image" 
                  alt="Preview" 
                  style="width: 100%; height: 100%; object-fit: cover;" />
             
@@ -1302,7 +1302,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     <div style="background: white; border: 1px solid #edebe9; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 24px; max-width: 320px; overflow: hidden;">
         <!-- Video Preview Section -->
         <div style="position: relative; height: 180px; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-            <div style="position: absolute; inset: 0; background: url('https://via.placeholder.com/320x180/000000/ffffff?text=Video+Thumbnail') center/cover;"></div>
+            <div style="position: absolute; inset: 0; background: url('https://placehold.co/320x180/000000/ffffff?text=Video+Thumbnail') center/cover;"></div>
             
             <!-- Play Button -->
             <button style="position: relative; z-index: 2; width: 60px; height: 60px; border-radius: 50%; background: rgba(255, 255, 255, 0.9); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; backdrop-filter: blur(4px);">
