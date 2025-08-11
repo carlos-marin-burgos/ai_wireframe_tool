@@ -1,0 +1,420 @@
+
+Azure Functions Core Tools
+Core Tools Version:       4.1.0+7ff2567e43c1ae7471cea7394452c1447661e175 (64-bit)
+Function Runtime Version: 4.1040.300.25317
+
+Warning: unable to verify all settings from local.settings.json and function.json files.
+[2025-08-11T20:39:46.472Z] Building host: version spec: , startup suppressed: 'False', configuration suppressed: 'False', startup operation id: '85a6f8c4-97f4-4fa3-9037-af6b6a1754af'
+[2025-08-11T20:39:46.527Z] Reading host configuration file '/Users/carlosmarinburgos/designetica/backend/host.json'
+[2025-08-11T20:39:46.528Z] Host configuration file read:
+[2025-08-11T20:39:46.528Z] {
+[2025-08-11T20:39:46.528Z]   "version": "2.0",
+[2025-08-11T20:39:46.528Z]   "functionTimeout": "00:05:00",
+[2025-08-11T20:39:46.528Z]   "logging": {
+[2025-08-11T20:39:46.528Z]     "applicationInsights": {
+[2025-08-11T20:39:46.528Z]       "samplingSettings": {
+[2025-08-11T20:39:46.528Z]         "isEnabled": true,
+[2025-08-11T20:39:46.528Z]         "excludedTypes": "Request"
+[2025-08-11T20:39:46.528Z]       }
+[2025-08-11T20:39:46.528Z]     },
+[2025-08-11T20:39:46.528Z]     "logLevel": {
+[2025-08-11T20:39:46.528Z]       "default": "Information",
+[2025-08-11T20:39:46.528Z]       "Host.Results": "Information",
+[2025-08-11T20:39:46.528Z]       "Function": "Information"
+[2025-08-11T20:39:46.528Z]     }
+[2025-08-11T20:39:46.528Z]   },
+[2025-08-11T20:39:46.528Z]   "extensionBundle": {
+[2025-08-11T20:39:46.528Z]     "id": "Microsoft.Azure.Functions.ExtensionBundle",
+[2025-08-11T20:39:46.528Z]     "version": "[4.*, 5.0.0)"
+[2025-08-11T20:39:46.528Z]   },
+[2025-08-11T20:39:46.528Z]   "watchDirectories": [
+[2025-08-11T20:39:46.528Z]     "Shared"
+[2025-08-11T20:39:46.528Z]   ]
+[2025-08-11T20:39:46.528Z] }
+[2025-08-11T20:39:46.535Z] Looking for extension bundle Microsoft.Azure.Functions.ExtensionBundle at /Users/carlosmarinburgos/.azure-functions-core-tools/Functions/ExtensionBundles/Microsoft.Azure.Functions.ExtensionBundle
+[2025-08-11T20:39:46.536Z] Applying platform release channel configuration LATEST. Bundle version 4.24.2 will be used
+[2025-08-11T20:39:46.536Z] Found a matching extension bundle at /Users/carlosmarinburgos/.azure-functions-core-tools/Functions/ExtensionBundles/Microsoft.Azure.Functions.ExtensionBundle/4.24.2
+[2025-08-11T20:39:46.587Z] Loading functions metadata
+[2025-08-11T20:39:46.588Z] Worker indexing is enabled
+[2025-08-11T20:39:46.589Z] Fetching metadata for workerRuntime: node
+[2025-08-11T20:39:46.589Z] Reading functions metadata (Worker)
+[2025-08-11T20:39:46.719Z] Worker c71d1cf0-dae7-41b6-95d4-14fe80632a3c connecting on 127.0.0.1:50667
+[2025-08-11T20:39:48.816Z] Worker c71d1cf0-dae7-41b6-95d4-14fe80632a3c received WorkerInitRequest
+[2025-08-11T20:39:48.853Z] Worker c71d1cf0-dae7-41b6-95d4-14fe80632a3c received FunctionsMetadataRequest
+[2025-08-11T20:39:48.857Z] Reading functions metadata (Host)
+[2025-08-11T20:39:49.017Z] 13 functions found (Host)
+[2025-08-11T20:39:49.027Z] 13 functions loaded
+[2025-08-11T20:39:49.028Z] Looking for extension bundle Microsoft.Azure.Functions.ExtensionBundle at /Users/carlosmarinburgos/.azure-functions-core-tools/Functions/ExtensionBundles/Microsoft.Azure.Functions.ExtensionBundle
+[2025-08-11T20:39:49.028Z] Applying platform release channel configuration LATEST. Bundle version 4.24.2 will be used
+[2025-08-11T20:39:49.028Z] Found a matching extension bundle at /Users/carlosmarinburgos/.azure-functions-core-tools/Functions/ExtensionBundles/Microsoft.Azure.Functions.ExtensionBundle/4.24.2
+[2025-08-11T20:39:49.028Z] Fetching information on versions of extension bundle Microsoft.Azure.Functions.ExtensionBundle available on https://cdn.functions.azure.com/public/ExtensionBundles/Microsoft.Azure.Functions.ExtensionBundle/index.json
+[2025-08-11T20:39:49.142Z] Applying platform release channel configuration LATEST. Bundle version 4.24.2 will be used
+[2025-08-11T20:39:49.142Z] Skipping bundle download since it already exists at path /Users/carlosmarinburgos/.azure-functions-core-tools/Functions/ExtensionBundles/Microsoft.Azure.Functions.ExtensionBundle/4.24.2
+[2025-08-11T20:39:49.144Z] Loading extension bundle from /Users/carlosmarinburgos/.azure-functions-core-tools/Functions/ExtensionBundles/Microsoft.Azure.Functions.ExtensionBundle/4.24.2/bin
+[2025-08-11T20:39:49.144Z] Script Startup resetting load context with base path: '/Users/carlosmarinburgos/.azure-functions-core-tools/Functions/ExtensionBundles/Microsoft.Azure.Functions.ExtensionBundle/4.24.2/bin'.
+[2025-08-11T20:39:49.213Z] Reading host configuration file '/Users/carlosmarinburgos/designetica/backend/host.json'
+[2025-08-11T20:39:49.213Z] Host configuration file read:
+[2025-08-11T20:39:49.213Z] {
+[2025-08-11T20:39:49.213Z]   "version": "2.0",
+[2025-08-11T20:39:49.213Z]   "functionTimeout": "00:05:00",
+[2025-08-11T20:39:49.214Z]   "logging": {
+[2025-08-11T20:39:49.214Z]     "applicationInsights": {
+[2025-08-11T20:39:49.214Z]       "samplingSettings": {
+[2025-08-11T20:39:49.214Z]         "isEnabled": true,
+[2025-08-11T20:39:49.214Z]         "excludedTypes": "Request"
+[2025-08-11T20:39:49.214Z]       }
+[2025-08-11T20:39:49.214Z]     },
+[2025-08-11T20:39:49.214Z]     "logLevel": {
+[2025-08-11T20:39:49.214Z]       "default": "Information",
+[2025-08-11T20:39:49.214Z]       "Host.Results": "Information",
+[2025-08-11T20:39:49.214Z]       "Function": "Information"
+[2025-08-11T20:39:49.214Z]     }
+[2025-08-11T20:39:49.214Z]   },
+[2025-08-11T20:39:49.214Z]   "extensionBundle": {
+[2025-08-11T20:39:49.214Z]     "id": "Microsoft.Azure.Functions.ExtensionBundle",
+[2025-08-11T20:39:49.214Z]     "version": "[4.*, 5.0.0)"
+[2025-08-11T20:39:49.214Z]   },
+[2025-08-11T20:39:49.214Z]   "watchDirectories": [
+[2025-08-11T20:39:49.214Z]     "Shared"
+[2025-08-11T20:39:49.214Z]   ]
+[2025-08-11T20:39:49.214Z] }
+[2025-08-11T20:39:49.257Z] Starting host metrics provider.
+[2025-08-11T20:39:49.329Z] Initializing Warmup Extension.
+[2025-08-11T20:39:49.354Z] Initializing Host. OperationId: '85a6f8c4-97f4-4fa3-9037-af6b6a1754af'.
+[2025-08-11T20:39:49.356Z] Host initialization: ConsecutiveErrors=0, StartupCount=1, OperationId=85a6f8c4-97f4-4fa3-9037-af6b6a1754af
+[2025-08-11T20:39:49.366Z] LoggerFilterOptions
+[2025-08-11T20:39:49.366Z] {
+[2025-08-11T20:39:49.366Z]   "MinLevel": "None",
+[2025-08-11T20:39:49.366Z]   "Rules": [
+[2025-08-11T20:39:49.366Z]     {
+[2025-08-11T20:39:49.366Z]       "ProviderName": null,
+[2025-08-11T20:39:49.366Z]       "CategoryName": "Microsoft.Hosting.Lifetime",
+[2025-08-11T20:39:49.366Z]       "LogLevel": "None",
+[2025-08-11T20:39:49.366Z]       "Filter": null
+[2025-08-11T20:39:49.366Z]     },
+[2025-08-11T20:39:49.366Z]     {
+[2025-08-11T20:39:49.366Z]       "ProviderName": "Azure.Functions.Cli.Diagnostics.ColoredConsoleLoggerProvider",
+[2025-08-11T20:39:49.366Z]       "CategoryName": null,
+[2025-08-11T20:39:49.366Z]       "LogLevel": "None",
+[2025-08-11T20:39:49.366Z]       "Filter": null
+[2025-08-11T20:39:49.366Z]     },
+[2025-08-11T20:39:49.366Z]     {
+[2025-08-11T20:39:49.366Z]       "ProviderName": "Azure.Functions.Cli.Diagnostics.ColoredConsoleLoggerProvider",
+[2025-08-11T20:39:49.366Z]       "CategoryName": null,
+[2025-08-11T20:39:49.366Z]       "LogLevel": null,
+[2025-08-11T20:39:49.366Z]       "Filter": "<AddFilter>b__0"
+[2025-08-11T20:39:49.366Z]     },
+[2025-08-11T20:39:49.366Z]     {
+[2025-08-11T20:39:49.366Z]       "ProviderName": null,
+[2025-08-11T20:39:49.366Z]       "CategoryName": null,
+[2025-08-11T20:39:49.366Z]       "LogLevel": null,
+[2025-08-11T20:39:49.366Z]       "Filter": "<AddFilter>b__0"
+[2025-08-11T20:39:49.366Z]     },
+[2025-08-11T20:39:49.366Z]     {
+[2025-08-11T20:39:49.366Z]       "ProviderName": null,
+[2025-08-11T20:39:49.366Z]       "CategoryName": null,
+[2025-08-11T20:39:49.366Z]       "LogLevel": null,
+[2025-08-11T20:39:49.366Z]       "Filter": "<AddFilter>b__0"
+[2025-08-11T20:39:49.366Z]     },
+[2025-08-11T20:39:49.366Z]     {
+[2025-08-11T20:39:49.366Z]       "ProviderName": null,
+[2025-08-11T20:39:49.366Z]       "CategoryName": "Host.Results",
+[2025-08-11T20:39:49.366Z]       "LogLevel": "Information",
+[2025-08-11T20:39:49.366Z]       "Filter": null
+[2025-08-11T20:39:49.366Z]     },
+[2025-08-11T20:39:49.366Z]     {
+[2025-08-11T20:39:49.366Z]       "ProviderName": null,
+[2025-08-11T20:39:49.366Z]       "CategoryName": "Function",
+[2025-08-11T20:39:49.366Z]       "LogLevel": "Information",
+[2025-08-11T20:39:49.366Z]       "Filter": null
+[2025-08-11T20:39:49.366Z]     },
+[2025-08-11T20:39:49.366Z]     {
+[2025-08-11T20:39:49.366Z]       "ProviderName": null,
+[2025-08-11T20:39:49.366Z]       "CategoryName": null,
+[2025-08-11T20:39:49.366Z]       "LogLevel": "Information",
+[2025-08-11T20:39:49.366Z]       "Filter": null
+[2025-08-11T20:39:49.366Z]     },
+[2025-08-11T20:39:49.366Z]     {
+[2025-08-11T20:39:49.366Z]       "ProviderName": "Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider",
+[2025-08-11T20:39:49.366Z]       "CategoryName": null,
+[2025-08-11T20:39:49.366Z]       "LogLevel": "None",
+[2025-08-11T20:39:49.366Z]       "Filter": null
+[2025-08-11T20:39:49.366Z]     },
+[2025-08-11T20:39:49.366Z]     {
+[2025-08-11T20:39:49.366Z]       "ProviderName": "Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider",
+[2025-08-11T20:39:49.366Z]       "CategoryName": null,
+[2025-08-11T20:39:49.366Z]       "LogLevel": null,
+[2025-08-11T20:39:49.366Z]       "Filter": "<AddFilter>b__0"
+[2025-08-11T20:39:49.366Z]     },
+[2025-08-11T20:39:49.366Z]     {
+[2025-08-11T20:39:49.366Z]       "ProviderName": "Azure.Functions.Cli.Diagnostics.ColoredConsoleLoggerProvider",
+[2025-08-11T20:39:49.366Z]       "CategoryName": null,
+[2025-08-11T20:39:49.366Z]       "LogLevel": null,
+[2025-08-11T20:39:49.366Z]       "Filter": "<AddFilter>b__0"
+[2025-08-11T20:39:49.366Z]     }
+[2025-08-11T20:39:49.366Z]   ]
+[2025-08-11T20:39:49.366Z] }
+[2025-08-11T20:39:49.366Z] LoggerFilterOptions
+[2025-08-11T20:39:49.366Z] {
+[2025-08-11T20:39:49.366Z]   "MinLevel": "None",
+[2025-08-11T20:39:49.367Z]   "Rules": [
+[2025-08-11T20:39:49.367Z]     {
+[2025-08-11T20:39:49.367Z]       "ProviderName": null,
+[2025-08-11T20:39:49.367Z]       "CategoryName": "Microsoft.Hosting.Lifetime",
+[2025-08-11T20:39:49.367Z]       "LogLevel": "None",
+[2025-08-11T20:39:49.367Z]       "Filter": null
+[2025-08-11T20:39:49.367Z]     },
+[2025-08-11T20:39:49.367Z]     {
+[2025-08-11T20:39:49.367Z]       "ProviderName": "Azure.Functions.Cli.Diagnostics.ColoredConsoleLoggerProvider",
+[2025-08-11T20:39:49.367Z]       "CategoryName": null,
+[2025-08-11T20:39:49.367Z]       "LogLevel": "None",
+[2025-08-11T20:39:49.367Z]       "Filter": null
+[2025-08-11T20:39:49.367Z]     },
+[2025-08-11T20:39:49.367Z]     {
+[2025-08-11T20:39:49.367Z]       "ProviderName": "Azure.Functions.Cli.Diagnostics.ColoredConsoleLoggerProvider",
+[2025-08-11T20:39:49.367Z]       "CategoryName": null,
+[2025-08-11T20:39:49.367Z]       "LogLevel": null,
+[2025-08-11T20:39:49.367Z]       "Filter": "<AddFilter>b__0"
+[2025-08-11T20:39:49.367Z]     },
+[2025-08-11T20:39:49.367Z]     {
+[2025-08-11T20:39:49.367Z]       "ProviderName": null,
+[2025-08-11T20:39:49.367Z]       "CategoryName": null,
+[2025-08-11T20:39:49.367Z]       "LogLevel": null,
+[2025-08-11T20:39:49.367Z]       "Filter": "<AddFilter>b__0"
+[2025-08-11T20:39:49.367Z]     },
+[2025-08-11T20:39:49.367Z]     {
+[2025-08-11T20:39:49.367Z]       "ProviderName": null,
+[2025-08-11T20:39:49.367Z]       "CategoryName": null,
+[2025-08-11T20:39:49.367Z]       "LogLevel": null,
+[2025-08-11T20:39:49.367Z]       "Filter": "<AddFilter>b__0"
+[2025-08-11T20:39:49.367Z]     },
+[2025-08-11T20:39:49.367Z]     {
+[2025-08-11T20:39:49.367Z]       "ProviderName": null,
+[2025-08-11T20:39:49.367Z]       "CategoryName": "Host.Results",
+[2025-08-11T20:39:49.367Z]       "LogLevel": "Information",
+[2025-08-11T20:39:49.367Z]       "Filter": null
+[2025-08-11T20:39:49.367Z]     },
+[2025-08-11T20:39:49.367Z]     {
+[2025-08-11T20:39:49.367Z]       "ProviderName": null,
+[2025-08-11T20:39:49.367Z]       "CategoryName": "Function",
+[2025-08-11T20:39:49.367Z]       "LogLevel": "Information",
+[2025-08-11T20:39:49.367Z]       "Filter": null
+[2025-08-11T20:39:49.367Z]     },
+[2025-08-11T20:39:49.367Z]     {
+[2025-08-11T20:39:49.367Z]       "ProviderName": null,
+[2025-08-11T20:39:49.367Z]       "CategoryName": null,
+[2025-08-11T20:39:49.367Z]       "LogLevel": "Information",
+[2025-08-11T20:39:49.367Z]       "Filter": null
+[2025-08-11T20:39:49.367Z]     },
+[2025-08-11T20:39:49.367Z]     {
+[2025-08-11T20:39:49.367Z]       "ProviderName": "Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider",
+[2025-08-11T20:39:49.367Z]       "CategoryName": null,
+[2025-08-11T20:39:49.367Z]       "LogLevel": "None",
+[2025-08-11T20:39:49.367Z]       "Filter": null
+[2025-08-11T20:39:49.367Z]     },
+[2025-08-11T20:39:49.367Z]     {
+[2025-08-11T20:39:49.367Z]       "ProviderName": "Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider",
+[2025-08-11T20:39:49.367Z]       "CategoryName": null,
+[2025-08-11T20:39:49.367Z]       "LogLevel": null,
+[2025-08-11T20:39:49.367Z]       "Filter": "<AddFilter>b__0"
+[2025-08-11T20:39:49.367Z]     },
+[2025-08-11T20:39:49.367Z]     {
+[2025-08-11T20:39:49.367Z]       "ProviderName": "Azure.Functions.Cli.Diagnostics.ColoredConsoleLoggerProvider",
+[2025-08-11T20:39:49.367Z]       "CategoryName": null,
+[2025-08-11T20:39:49.367Z]       "LogLevel": null,
+[2025-08-11T20:39:49.367Z]       "Filter": "<AddFilter>b__0"
+[2025-08-11T20:39:49.367Z]     }
+[2025-08-11T20:39:49.367Z]   ]
+[2025-08-11T20:39:49.367Z] }
+[2025-08-11T20:39:49.367Z] FunctionResultAggregatorOptions
+[2025-08-11T20:39:49.367Z] {
+[2025-08-11T20:39:49.367Z]   "BatchSize": 1000,
+[2025-08-11T20:39:49.367Z]   "FlushTimeout": "00:00:30",
+[2025-08-11T20:39:49.367Z]   "IsEnabled": true
+[2025-08-11T20:39:49.367Z] }
+[2025-08-11T20:39:49.367Z] ConcurrencyOptions
+[2025-08-11T20:39:49.367Z] {
+[2025-08-11T20:39:49.367Z]   "DynamicConcurrencyEnabled": false,
+[2025-08-11T20:39:49.367Z]   "MaximumFunctionConcurrency": 500,
+[2025-08-11T20:39:49.367Z]   "CPUThreshold": 0.8,
+[2025-08-11T20:39:49.367Z]   "SnapshotPersistenceEnabled": true
+[2025-08-11T20:39:49.367Z] }
+[2025-08-11T20:39:49.367Z] SingletonOptions
+[2025-08-11T20:39:49.367Z] {
+[2025-08-11T20:39:49.367Z]   "LockPeriod": "00:00:15",
+[2025-08-11T20:39:49.367Z]   "ListenerLockPeriod": "00:00:15",
+[2025-08-11T20:39:49.367Z]   "LockAcquisitionTimeout": "10675199.02:48:05.4775807",
+[2025-08-11T20:39:49.367Z]   "LockAcquisitionPollingInterval": "00:00:05",
+[2025-08-11T20:39:49.367Z]   "ListenerLockRecoveryPollingInterval": "00:01:00"
+[2025-08-11T20:39:49.367Z] }
+[2025-08-11T20:39:49.367Z] ScaleOptions
+[2025-08-11T20:39:49.367Z] {
+[2025-08-11T20:39:49.367Z]   "ScaleMetricsMaxAge": "00:02:00",
+[2025-08-11T20:39:49.367Z]   "ScaleMetricsSampleInterval": "00:00:10",
+[2025-08-11T20:39:49.367Z]   "MetricsPurgeEnabled": true,
+[2025-08-11T20:39:49.367Z]   "IsTargetScalingEnabled": true,
+[2025-08-11T20:39:49.367Z]   "IsRuntimeScalingEnabled": false
+[2025-08-11T20:39:49.367Z] }
+[2025-08-11T20:39:49.368Z] Starting JobHost
+[2025-08-11T20:39:49.369Z] Starting Host (HostId=carlossmacbookpro-1492551428, InstanceId=a6cc1f76-104c-4532-93e2-a6ec698ba9e9, Version=4.1040.300.25317, ProcessId=1573, AppDomainId=1, InDebugMode=False, InDiagnosticMode=False, FunctionsExtensionVersion=(null))
+[2025-08-11T20:39:49.371Z] Loading functions metadata
+[2025-08-11T20:39:49.371Z] Worker indexing is enabled
+[2025-08-11T20:39:49.371Z] Fetching metadata for workerRuntime: node
+[2025-08-11T20:39:49.371Z] Reading functions metadata (Worker)
+[2025-08-11T20:39:49.371Z] Reading functions metadata (Host)
+[2025-08-11T20:39:49.515Z] 13 functions found (Host)
+[2025-08-11T20:39:49.517Z] Reading functions metadata (Custom)
+[2025-08-11T20:39:49.521Z] 0 functions found (Custom)
+[2025-08-11T20:39:49.522Z] 13 functions loaded
+[2025-08-11T20:39:49.538Z] Generating 13 job function(s)
+[2025-08-11T20:39:49.538Z] Worker process started and initialized.
+[2025-08-11T20:39:49.561Z] Found the following functions:
+[2025-08-11T20:39:49.561Z] Host.Functions.aiBuilderHealth
+[2025-08-11T20:39:49.561Z] Host.Functions.analytics
+[2025-08-11T20:39:49.561Z] Host.Functions.analyzeUIImage
+[2025-08-11T20:39:49.561Z] Host.Functions.fast-suggestions
+[2025-08-11T20:39:49.561Z] Host.Functions.generateSuggestions
+[2025-08-11T20:39:49.561Z] Host.Functions.generateWireframe
+[2025-08-11T20:39:49.561Z] Host.Functions.get-template
+[2025-08-11T20:39:49.561Z] Host.Functions.health
+[2025-08-11T20:39:49.561Z] Host.Functions.healthCheck
+[2025-08-11T20:39:49.561Z] Host.Functions.openai-health
+[2025-08-11T20:39:49.561Z] Host.Functions.performance-stats
+[2025-08-11T20:39:49.561Z] Host.Functions.testFunction
+[2025-08-11T20:39:49.561Z] Host.Functions.testSimple
+[2025-08-11T20:39:49.561Z] 
+[2025-08-11T20:39:49.564Z] HttpOptions
+[2025-08-11T20:39:49.564Z] {
+[2025-08-11T20:39:49.564Z]   "DynamicThrottlesEnabled": false,
+[2025-08-11T20:39:49.564Z]   "EnableChunkedRequestBinding": false,
+[2025-08-11T20:39:49.564Z]   "MaxConcurrentRequests": -1,
+[2025-08-11T20:39:49.564Z]   "MaxOutstandingRequests": -1,
+[2025-08-11T20:39:49.564Z]   "RoutePrefix": "api"
+[2025-08-11T20:39:49.564Z] }
+[2025-08-11T20:39:49.565Z] Initializing function HTTP routes
+[2025-08-11T20:39:49.565Z] Mapped function route 'api/ai-builder/health' [get] to 'aiBuilderHealth'
+[2025-08-11T20:39:49.565Z] Mapped function route 'api/analytics' [get,options] to 'analytics'
+[2025-08-11T20:39:49.565Z] Mapped function route 'api/analyzeUIImage' [post,options] to 'analyzeUIImage'
+[2025-08-11T20:39:49.565Z] Mapped function route 'api/fast-suggestions' [get,post,options] to 'fast-suggestions'
+[2025-08-11T20:39:49.565Z] Mapped function route 'api/generate-suggestions' [get,post,options] to 'generateSuggestions'
+[2025-08-11T20:39:49.565Z] Mapped function route 'api/generate-html-wireframe' [post] to 'generateWireframe'
+[2025-08-11T20:39:49.565Z] Mapped function route 'api/get-template' [post,options] to 'get-template'
+[2025-08-11T20:39:49.565Z] Mapped function route 'api/health' [get] to 'health'
+[2025-08-11T20:39:49.565Z] Mapped function route 'api/healthCheck' [get] to 'healthCheck'
+[2025-08-11T20:39:49.565Z] Mapped function route 'api/openai-health' [get,options] to 'openai-health'
+[2025-08-11T20:39:49.565Z] Mapped function route 'api/performance-stats' [get] to 'performance-stats'
+[2025-08-11T20:39:49.565Z] Mapped function route 'api/test-wireframe' [get,post,options] to 'testFunction'
+[2025-08-11T20:39:49.565Z] Mapped function route 'api/test-simple' [get,post] to 'testSimple'
+[2025-08-11T20:39:49.565Z] 
+[2025-08-11T20:39:49.567Z] Host initialized (195ms)
+[2025-08-11T20:39:49.568Z] Host started (198ms)
+[2025-08-11T20:39:49.568Z] Job host started
+[2025-08-11T20:39:49.570Z] The 'wireframeAnalyze' function is in error: Error reading JObject from JsonReader. Path '', line 0, position 0.
+[2025-08-11T20:39:49.570Z] The 'frontend' function is in error: Error reading JObject from JsonReader. Path '', line 0, position 0.
+[2025-08-11T20:39:49.570Z] The 'wireframeGenerate' function is in error: Error reading JObject from JsonReader. Path '', line 0, position 0.
+[2025-08-11T20:39:49.585Z] 🔧 Initializing OpenAI for image analysis...
+[2025-08-11T20:39:49.585Z] ✅ OpenAI initialized for image analysis
+[2025-08-11T20:39:49.585Z] 🔑 Using endpoint: https://cog-designetica-vdlmicyosd4ua.openai.azure.com
+[2025-08-11T20:39:49.585Z] 🎯 Using deployment: gpt-4o
+[2025-08-11T20:39:49.589Z] 📁 AZURE_OPENAI_KEY already set, skipping local.settings.json
+[2025-08-11T20:39:49.589Z] 🔍 Current env vars:
+[2025-08-11T20:39:49.589Z]   AZURE_OPENAI_KEY: CnGZHVd6QV...
+[2025-08-11T20:39:49.589Z]   AZURE_OPENAI_ENDPOINT: https://cog-designetica-vdlmicyosd4ua.openai.azure.com/
+[2025-08-11T20:39:49.589Z] 🔍 DEBUG OpenAI Config:
+[2025-08-11T20:39:49.589Z]   Endpoint: https://cog-designetica-vdlmicyosd4ua.openai.azure.com
+[2025-08-11T20:39:49.589Z]   Deployment: gpt-4o
+[2025-08-11T20:39:49.590Z]   API Version: 2024-08-01-preview
+[2025-08-11T20:39:49.590Z]   API Key starts with: CnGZHVd6QV...
+[2025-08-11T20:39:49.590Z]   Base URL: https://cog-designetica-vdlmicyosd4ua.openai.azure.com/openai/deployments/gpt-4o
+[2025-08-11T20:39:49.590Z] ✅ OpenAI client initialized successfully
+[2025-08-11T20:39:49.590Z] 🔑 Using endpoint: https://cog-designetica-vdlmicyosd4ua.openai.azure.com
+[2025-08-11T20:39:49.590Z] 🎯 Using deployment: gpt-4o
+[2025-08-11T20:39:49.590Z] Worker c71d1cf0-dae7-41b6-95d4-14fe80632a3c received FunctionLoadRequest
+[2025-08-11T20:39:49.590Z] Worker c71d1cf0-dae7-41b6-95d4-14fe80632a3c received FunctionLoadRequest
+[2025-08-11T20:39:49.594Z] Worker c71d1cf0-dae7-41b6-95d4-14fe80632a3c received FunctionLoadRequest
+[2025-08-11T20:39:49.594Z] Worker c71d1cf0-dae7-41b6-95d4-14fe80632a3c received FunctionLoadRequest
+[2025-08-11T20:39:49.594Z] Worker c71d1cf0-dae7-41b6-95d4-14fe80632a3c received FunctionLoadRequest
+[2025-08-11T20:39:49.595Z] Worker c71d1cf0-dae7-41b6-95d4-14fe80632a3c received FunctionLoadRequest
+[2025-08-11T20:39:49.595Z] Worker c71d1cf0-dae7-41b6-95d4-14fe80632a3c received FunctionLoadRequest
+[2025-08-11T20:39:49.595Z] Worker c71d1cf0-dae7-41b6-95d4-14fe80632a3c received FunctionLoadRequest
+[2025-08-11T20:39:49.595Z] Worker c71d1cf0-dae7-41b6-95d4-14fe80632a3c received FunctionLoadRequest
+[2025-08-11T20:39:49.595Z] Worker c71d1cf0-dae7-41b6-95d4-14fe80632a3c received FunctionLoadRequest
+[2025-08-11T20:39:49.595Z] Worker c71d1cf0-dae7-41b6-95d4-14fe80632a3c received FunctionLoadRequest
+[2025-08-11T20:39:49.595Z] Worker c71d1cf0-dae7-41b6-95d4-14fe80632a3c received FunctionLoadRequest
+[2025-08-11T20:39:49.595Z] Worker c71d1cf0-dae7-41b6-95d4-14fe80632a3c received FunctionLoadRequest
+
+Functions:
+
+	aiBuilderHealth: [GET] http://localhost:7072/api/ai-builder/health
+
+	analytics: [GET,OPTIONS] http://localhost:7072/api/analytics
+
+	analyzeUIImage: [POST,OPTIONS] http://localhost:7072/api/analyzeUIImage
+
+	fast-suggestions: [GET,POST,OPTIONS] http://localhost:7072/api/fast-suggestions
+
+	generateSuggestions: [GET,POST,OPTIONS] http://localhost:7072/api/generate-suggestions
+
+	generateWireframe: [POST] http://localhost:7072/api/generate-html-wireframe
+
+	get-template: [POST,OPTIONS] http://localhost:7072/api/get-template
+
+	health: [GET] http://localhost:7072/api/health
+
+	healthCheck: [GET] http://localhost:7072/api/healthCheck
+
+	openai-health: [GET,OPTIONS] http://localhost:7072/api/openai-health
+
+	performance-stats: [GET] http://localhost:7072/api/performance-stats
+
+	testFunction: [GET,POST,OPTIONS] http://localhost:7072/api/test-wireframe
+
+	testSimple: [GET,POST] http://localhost:7072/api/test-simple
+
+For detailed output, run func with --verbose flag.
+[2025-08-11T20:39:50.550Z] Executing HTTP request: {
+[2025-08-11T20:39:50.550Z]   "requestId": "f03f62b5-0527-4f34-a66e-3d03979a77ad",
+[2025-08-11T20:39:50.550Z]   "method": "GET",
+[2025-08-11T20:39:50.550Z]   "userAgent": "curl/8.7.1",
+[2025-08-11T20:39:50.550Z]   "uri": "/api/health"
+[2025-08-11T20:39:50.550Z] }
+[2025-08-11T20:39:50.619Z] Executing 'Functions.health' (Reason='This function was programmatically called via the host APIs.', Id=850e3a11-081b-4a1e-8d96-91093bc44079)
+[2025-08-11T20:39:50.645Z] Worker c71d1cf0-dae7-41b6-95d4-14fe80632a3c received FunctionInvocationRequest with invocationId 850e3a11-081b-4a1e-8d96-91093bc44079
+[2025-08-11T20:39:50.676Z] Executed 'Functions.health' (Succeeded, Id=850e3a11-081b-4a1e-8d96-91093bc44079, Duration=65ms)
+[2025-08-11T20:39:50.690Z] Executed HTTP request: {
+[2025-08-11T20:39:50.690Z]   "requestId": "f03f62b5-0527-4f34-a66e-3d03979a77ad",
+[2025-08-11T20:39:50.690Z]   "identities": "",
+[2025-08-11T20:39:50.691Z]   "status": "200",
+[2025-08-11T20:39:50.691Z]   "duration": "134"
+[2025-08-11T20:39:50.691Z] }
+[2025-08-11T20:39:52.091Z] Executing HTTP request: {
+[2025-08-11T20:39:52.092Z]   "requestId": "3deab538-44a2-47b0-9c9e-41446424d3cc",
+[2025-08-11T20:39:52.092Z]   "method": "GET",
+[2025-08-11T20:39:52.092Z]   "userAgent": "node",
+[2025-08-11T20:39:52.092Z]   "uri": "/api/health"
+[2025-08-11T20:39:52.092Z] }
+[2025-08-11T20:39:52.094Z] Executing 'Functions.health' (Reason='This function was programmatically called via the host APIs.', Id=0a54f2d2-070d-4582-b739-a55cdc231229)
+[2025-08-11T20:39:52.101Z] Worker c71d1cf0-dae7-41b6-95d4-14fe80632a3c received FunctionInvocationRequest with invocationId 0a54f2d2-070d-4582-b739-a55cdc231229
+[2025-08-11T20:39:52.102Z] Executed 'Functions.health' (Succeeded, Id=0a54f2d2-070d-4582-b739-a55cdc231229, Duration=8ms)
+[2025-08-11T20:39:52.104Z] Executed HTTP request: {
+[2025-08-11T20:39:52.104Z]   "requestId": "3deab538-44a2-47b0-9c9e-41446424d3cc",
+[2025-08-11T20:39:52.104Z]   "identities": "",
+[2025-08-11T20:39:52.104Z]   "status": "200",
+[2025-08-11T20:39:52.104Z]   "duration": "12"
+[2025-08-11T20:39:52.104Z] }
+[2025-08-11T20:39:52.117Z] Executing HTTP request: {
+[2025-08-11T20:39:52.117Z]   "requestId": "24ab7f70-3ae2-4842-adea-567697cc2f0d",
+[2025-08-11T20:39:52.117Z]   "method": "POST",
+[2025-08-11T20:39:52.117Z]   "userAgent": "node",
+[2025-08-11T20:39:52.117Z]   "uri": "/api/generate-html-wireframe"
+[2025-08-11T20:39:52.117Z] }
+[2025-08-11T20:39:52.123Z] Executing 'Functions.generateWireframe' (Reason='This function was programmatically called via the host APIs.', Id=86321350-cc25-4972-bd2e-419f53b5bf99)
+[2025-08-11T20:39:52.183Z] Worker c71d1cf0-dae7-41b6-95d4-14fe80632a3c received FunctionInvocationRequest with invocationId 86321350-cc25-4972-bd2e-419f53b5bf99
+[2025-08-11T20:39:54.374Z] Host lock lease acquired by instance ID '00000000000000000000000049CADE8B'.
+[2025-08-11T20:39:56.257Z] Executed 'Functions.generateWireframe' (Succeeded, Id=86321350-cc25-4972-bd2e-419f53b5bf99, Duration=4138ms)
+[2025-08-11T20:39:56.259Z] Executed HTTP request: {
+[2025-08-11T20:39:56.259Z]   "requestId": "24ab7f70-3ae2-4842-adea-567697cc2f0d",
+[2025-08-11T20:39:56.259Z]   "identities": "",
+[2025-08-11T20:39:56.259Z]   "status": "200",
+[2025-08-11T20:39:56.259Z]   "duration": "4142"
+[2025-08-11T20:39:56.259Z] }
