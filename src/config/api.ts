@@ -49,7 +49,7 @@ export const API_CONFIG = {
   ],
 
   ENDPOINTS: {
-    GENERATE_WIREFRAME: "/api/generate-html-wireframe", // Updated to match backend server
+    GENERATE_WIREFRAME: "/api/generate-wireframe", // Using working endpoint
     GENERATE_SUGGESTIONS: "/api/generate-suggestions", // Updated to match backend server
     GET_TEMPLATE: "/api/get-template",
     HEALTH: "/api/health",
@@ -72,7 +72,7 @@ export const verifyBackendAI = async (baseUrl: string): Promise<boolean> => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-    const response = await fetch(`${baseUrl}/api/generate-html-wireframe`, {
+    const response = await fetch(`${baseUrl}/api/generate-wireframe`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
