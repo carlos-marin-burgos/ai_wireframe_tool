@@ -112,6 +112,12 @@ async function fetchWithRetry(
 
       // Check if the response is ok (status in the range 200-299)
       if (!response.ok) {
+        // For 503 Service Unavailable (AI service down), return the error response as JSON
+        // instead of throwing immediately so we can show the proper error message
+        if (response.status === 503) {
+          return response; // Let the caller handle the 503 response
+        }
+
         throw new ApiError(
           response.status,
           `HTTP error! status: ${response.status}`
@@ -168,6 +174,18 @@ export async function apiRequest<T>(
 
   try {
     const response = await fetchWithRetry(url, mergedOptions, retryConfig);
+
+    // Handle 503 Service Unavailable responses specially
+    if (response.status === 503) {
+      const errorData = await response.json();
+      throw new ApiError(
+        503,
+        errorData.message ||
+          errorData.error ||
+          "Service temporarily unavailable"
+      );
+    }
+
     return await response.json();
   } catch (error) {
     if (error instanceof ApiError) {
@@ -185,6 +203,8 @@ export async function apiRequest<T>(
           throw new Error("Too Many Requests: Please try again later");
         case 500:
           throw new Error("Server Error: Something went wrong on our end");
+        case 503:
+          throw new Error(error.message); // Use the message from the server
         default:
           throw new Error(`API Error: ${error.message}`);
       }

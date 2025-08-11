@@ -64,18 +64,6 @@ const EnhancedMessage: React.FC<EnhancedMessageProps> = ({
             <div className="message-container">
                 {/* Header with avatar and name */}
                 <div className="message-header">
-                    <div className="message-persona">
-                        <div className="message-avatar">
-                            {message.type === 'user' ? (
-                                <FiUser className="avatar-icon user-avatar-icon" />
-                            ) : (
-                                <div className="ai-avatar-container">
-                                    <div className="ai-gradient-bg"></div>
-                                    <div className="ai-icon-shape"></div>
-                                </div>
-                            )}
-                        </div>
-                    </div>
                     <div className="message-meta">
                         <span className="message-time">
                             {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

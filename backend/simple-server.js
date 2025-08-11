@@ -235,7 +235,7 @@ app.post("/api/generate-html-wireframe", async (req, res) => {
   }
 
   try {
-    // STEP 1: Always try AI generation first - this is the primary path
+    // STEP 1: Always try AI generation first - this is the only path
     console.log("🧠 Attempting AI-powered wireframe generation...");
     const aiGeneratedHtml = await generateWireframeWithAI(
       description,
@@ -258,23 +258,20 @@ app.post("/api/generate-html-wireframe", async (req, res) => {
       });
     }
 
-    // STEP 2: If AI fails, use intelligent fallback
-    console.log("⚠️ AI generation failed, using intelligent fallback...");
-    const fallbackHtml = createFallbackWireframe(
-      description,
-      designTheme,
-      colorScheme
-    );
-
-    res.json({
-      html: fallbackHtml,
-      fallback: true,
-      cached: false,
-      theme: designTheme,
-      colorScheme: colorScheme,
-      generatedBy: "IntelligentFallback",
+    // STEP 2: If AI fails, return error message instead of fallback
+    console.log("❌ AI generation failed - no fallback available");
+    return res.status(503).json({
+      error: "AI Wireframe Service Temporarily Unavailable",
+      message:
+        "The AI wireframe generation service is currently down. Please try again in a few minutes.",
+      suggestions: [
+        "Wait a few minutes and try again",
+        "Check if your internet connection is stable",
+        "Contact support if the issue persists",
+      ],
+      retryAfter: 60,
       timestamp: new Date().toISOString(),
-      message: "AI generation unavailable, using intelligent fallback",
+      serviceStatus: "down",
     });
   } catch (error) {
     console.error("❌ Error in wireframe generation:", error);
@@ -299,22 +296,41 @@ app.post("/api/generate-html-wireframe", async (req, res) => {
       });
     }
 
-    // STEP 3: Emergency fallback for any errors
-    const emergencyHtml = generateEmergencyFallback(
-      description,
-      designTheme,
-      colorScheme
-    );
+    // Handle connection errors (like DNS resolution failures)
+    if (error.cause && error.cause.code === "ENOTFOUND") {
+      console.log(
+        "🔌 DNS resolution failed - Azure OpenAI endpoint not reachable"
+      );
+      return res.status(503).json({
+        error: "AI Service Connection Failed",
+        message:
+          "Unable to connect to the Azure OpenAI service. The service may be down or misconfigured.",
+        suggestions: [
+          "Try again in a few minutes",
+          "Check if the Azure OpenAI service is properly configured",
+          "Contact your administrator if the issue persists",
+        ],
+        retryAfter: 300, // 5 minutes
+        timestamp: new Date().toISOString(),
+        serviceStatus: "unreachable",
+      });
+    }
 
-    res.status(500).json({
-      html: emergencyHtml,
-      fallback: true,
-      cached: false,
-      theme: designTheme,
-      colorScheme: colorScheme,
-      generatedBy: "EmergencyFallback",
-      error: error.message,
+    // Handle other API errors
+    console.log("💥 General AI service error occurred");
+    return res.status(503).json({
+      error: "AI Wireframe Service Error",
+      message:
+        "The AI wireframe generation service encountered an error. Please try again later.",
+      suggestions: [
+        "Wait a few minutes and try again",
+        "Try a simpler description",
+        "Contact support if the issue persists",
+      ],
+      retryAfter: 120,
       timestamp: new Date().toISOString(),
+      serviceStatus: "error",
+      errorDetails: error.message,
     });
   }
 });

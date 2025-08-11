@@ -69,11 +69,7 @@ function createFallbackWireframe(
       console.log(
         `🤖 No template match - using AI-generated wireframe for: ${validDesc}`
       );
-      return createInlineFallbackTemplate(
-        generateCleanTitle(validDesc),
-        theme,
-        primaryColor
-      );
+      return createInlineFallbackTemplate(validDesc, theme, primaryColor);
     }
 
     // Try to render the selected template
@@ -96,11 +92,7 @@ function createFallbackWireframe(
   // Fallback to AI-generated inline template for non-Microsoft Learn themes or if template loading fails
   console.log(`🔄 Using AI-generated inline wireframe for theme: ${theme}`);
 
-  return createInlineFallbackTemplate(
-    generateCleanTitle(validDesc),
-    theme,
-    primaryColor
-  );
+  return createInlineFallbackTemplate(validDesc, theme, primaryColor);
 }
 
 /**
@@ -251,7 +243,9 @@ function extractForms(desc) {
   if (
     desc.includes("form") ||
     desc.includes("input") ||
-    desc.includes("field")
+    desc.includes("field") ||
+    desc.includes("textbox") ||
+    desc.includes("text box")
   ) {
     const fields = [];
 
@@ -270,6 +264,36 @@ function extractForms(desc) {
       fields.push({ type: "text", label: "Address", required: false });
     if (desc.includes("company"))
       fields.push({ type: "text", label: "Company", required: false });
+
+    // Extract specific textbox counts
+    const textboxMatch = desc.match(
+      /(\d+|one|two|three|four|five|six)\s+(textbox|text\s*box)/i
+    );
+    if (textboxMatch) {
+      const numberWords = {
+        one: 1,
+        two: 2,
+        three: 3,
+        four: 4,
+        five: 5,
+        six: 6,
+      };
+      const count =
+        numberWords[textboxMatch[1].toLowerCase()] ||
+        parseInt(textboxMatch[1]) ||
+        2;
+
+      // Clear existing default fields if we have specific textbox count
+      if (fields.length === 0) {
+        for (let i = 0; i < count; i++) {
+          fields.push({
+            type: "text",
+            label: i === 0 ? "Input " + (i + 1) : "Input " + (i + 1),
+            required: false,
+          });
+        }
+      }
+    }
 
     // If no specific fields mentioned, create a default contact form
     if (fields.length === 0) {
@@ -1574,4 +1598,5 @@ module.exports = {
   createInlineFallbackTemplate,
   createMicrosoftLearnTopNav,
   getMicrosoftLearnTopNavCSS,
+  analyzeDescription,
 };
