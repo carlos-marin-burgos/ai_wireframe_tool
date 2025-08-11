@@ -25,7 +25,7 @@ console.log("🚀 Starting SIMPLE UNIFIED SERVER");
 function startAzureFunctions() {
   console.log("📦 Starting Azure Functions...");
 
-  azureFunctions = spawn("func", ["start", "--port", "7071"], {
+  azureFunctions = spawn("func", ["start", "--port", "7072"], {
     cwd: join(__dirname, "backend"),
     stdio: "pipe",
   });
@@ -33,7 +33,7 @@ function startAzureFunctions() {
   azureFunctions.stdout.on("data", (data) => {
     const output = data.toString();
     if (output.includes("Host started") || output.includes("Functions:")) {
-      console.log("✅ Azure Functions ready on port 7071");
+      console.log("✅ Azure Functions ready on port 7072");
     }
   });
 
@@ -46,7 +46,7 @@ function startAzureFunctions() {
 async function proxyToAzureFunctions(req, res, url) {
   try {
     const fetch = (await import("node-fetch")).default;
-    const azureUrl = `http://localhost:7071${url}`;
+    const azureUrl = `http://localhost:7072${url}`;
 
     let body = "";
     if (req.method === "POST") {
