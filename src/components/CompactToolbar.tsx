@@ -15,6 +15,9 @@ interface CompactToolbarProps {
     onAddPages?: () => void;
     onViewHtmlCode?: () => void;
     onPresentationMode?: () => void;
+    onImportHtml?: () => void;
+    onExportPowerPoint?: () => void | Promise<void>;
+    onShareUrl?: () => void | Promise<void>;
 }
 
 const CompactToolbar: React.FC<CompactToolbarProps> = ({
@@ -22,11 +25,24 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
     onSave,
     onOpenLibrary,
     onViewHtmlCode,
-    onPresentationMode
+    onPresentationMode,
+    onImportHtml,
+    onExportPowerPoint,
+    onShareUrl,
 }) => {
     return (
         <div className="compact-toolbar">
             <div className="compact-toolbar-buttons">
+                {onImportHtml && (
+                    <button
+                        className="compact-btn"
+                        onClick={onImportHtml}
+                        title="Import HTML"
+                        aria-label="Import HTML"
+                    >
+                        <Code24Regular />
+                    </button>
+                )}
                 <button
                     className="compact-btn"
                     onClick={() => {
@@ -74,6 +90,28 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
                 >
                     <Save24Regular />
                 </button>
+
+                {onExportPowerPoint && (
+                    <button
+                        className="compact-btn"
+                        onClick={onExportPowerPoint}
+                        title="Export to PowerPoint"
+                        aria-label="Export to PowerPoint"
+                    >
+                        <ShareScreenStart24Regular />
+                    </button>
+                )}
+
+                {onShareUrl && (
+                    <button
+                        className="compact-btn"
+                        onClick={onShareUrl}
+                        title="Share URL"
+                        aria-label="Share URL"
+                    >
+                        <ShareScreenStart24Regular />
+                    </button>
+                )}
             </div>
         </div>
     );

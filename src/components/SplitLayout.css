@@ -756,9 +756,94 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   overflow: hidden;
 }
 
+/* Limit height so the suggestions panel doesn't take over the screen */
+.ai-suggestions-inline.ai-suggestions-dynamic {
+  max-height: 140px; /* slightly smaller to fit with input */
+  /* Scroll on the outer container so the whole block gets a scrollbar */
+  overflow-y: auto;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: auto 1fr; /* label + scrollable list */
+}
+
+/* Make only the pills container scroll inside the dynamic suggestions */
+.ai-suggestions-inline.ai-suggestions-dynamic .ai-suggestions-buttons {
+  /* Let content flow; outer container handles scrolling */
+  overflow-y: visible;
+  padding-right: 2px; /* room for scrollbar */
+}
+
+/* When loading, scroll the placeholder list instead of the whole block */
+.ai-suggestions-inline.ai-suggestions-dynamic .ai-suggestions-placeholder {
+  /* Let content flow; outer container handles scrolling */
+  overflow-y: visible;
+}
+
+@media (max-width: 480px) {
+  .ai-suggestions-inline.ai-suggestions-dynamic {
+    max-height: 110px;
+  }
+  .ai-suggestions-inline.ai-suggestions-dynamic .ai-suggestions-placeholder {
+    overflow-y: auto; /* ensure placeholder list scrolls on small screens */
+  }
+}
+
+.ai-suggestions-inline.ai-suggestions-dynamic::-webkit-scrollbar {
+  width: 8px;
+}
+.ai-suggestions-inline.ai-suggestions-dynamic::-webkit-scrollbar-track {
+  background: transparent;
+}
+.ai-suggestions-inline.ai-suggestions-dynamic::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 8px;
+}
+.ai-suggestions-inline.ai-suggestions-dynamic::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Match scrollbar styling on the inner scroll area */
+/* Scrollbar styling applies on the outer dynamic container (which now scrolls) */
+
 .ai-suggestions-dynamic {
   background: #fff4ce;
   border-color: #ffb900;
+}
+
+/* New label-free suggestions panel */
+.ai-suggestions-panel {
+  background: #fff4ce; /* match dynamic styling */
+  border: 1px solid #ffb900;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 10px;
+  max-height: 140px;
+  overflow-y: auto; /* scroll just this panel */
+  box-sizing: border-box;
+}
+
+/* Simple stack container for label + panel */
+.ai-suggestions-container {
+  margin-top: 12px;
+}
+.ai-suggestions-panel::-webkit-scrollbar {
+  width: 8px;
+}
+.ai-suggestions-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+.ai-suggestions-panel::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 8px;
+}
+.ai-suggestions-panel::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+@media (max-width: 480px) {
+  .ai-suggestions-panel {
+    max-height: 110px;
+  }
 }
 
 .ai-suggestions-label {
@@ -770,7 +855,7 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-bottom: 8px;
+  margin-bottom: 4px; /* small separation without stealing height */
   font-family: "Segoe UI", sans-serif;
 }
 
@@ -783,6 +868,33 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  grid-row: 2;
+}
+
+/* Placeholder layout to avoid jumpiness while suggestions load */
+.ai-suggestions-placeholder {
+  display: flex;
+  gap: 8px;
+  grid-row: 2;
+}
+
+.ai-suggestions-placeholder .skeleton-pill {
+  height: 28px;
+  width: 160px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #eee 25%, #f5f5f5 37%, #eee 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.2s ease-in-out infinite;
+  border: 1px solid #e5e7eb;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
 }
 
 .ai-suggestion-pill {
@@ -2266,10 +2378,15 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 }
 
 /* Simple chat input style */
+.chat-input-wrapper {
+  position: relative; /* Anchor the absolute-positioned send button to this wrapper */
+}
+
 .chat-input {
   width: 100%;
   min-height: 120px;
-  padding: 16px 20px;
+  /* Leave room for the send button on the right (40px) + gaps */
+  padding: 16px 64px 16px 20px;
   border: 1px solid #d1d1d1;
   border-radius: 8px;
   font-size: 14px;
@@ -2361,4 +2478,20 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   background: #c23201;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(216, 59, 1, 0.3);
+}
+
+/* Left pane chat layout: keep bubbles visible */
+.chat-messages {
+  flex: 1; /* take remaining height */
+  overflow-y: auto; /* scroll bubbles */
+  padding: 12px 16px; /* breathing room */
+}
+
+.chat-input-container {
+  flex: 0 0 auto; /* fixed at bottom */
+  padding: 12px 16px;
+  border-top: 1px solid #eee;
+  background: #ffffff;
+  max-height: 45vh; /* keep room for messages */
+  overflow: hidden; /* contain internal scroll areas */
 }

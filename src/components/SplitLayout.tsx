@@ -98,6 +98,10 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   const chatMessagesRef = useRef<HTMLDivElement>(null);
   // Ref to track if initial message has been added
   const initialMessageAddedRef = useRef(false);
+  // Debounce timer for AI suggestions on typing
+  const debounceTimerRef = useRef<number | null>(null);
+  // Track input focus to stabilize suggestions container
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   // Conversation history state
   const [conversationHistory, setConversationHistory] = useState<Array<{
@@ -158,6 +162,30 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     console.log('🧹 SplitLayout mounted - clearing AI suggestions');
     setShowAiSuggestions(false);
   }, [setShowAiSuggestions]); // Include dependency for proper function reference
+
+  // Debounced AI suggestion trigger on typing (mirror LandingPage behavior)
+  useEffect(() => {
+    if (!onGenerateAiSuggestions) return;
+
+    // Clear existing timer
+    if (debounceTimerRef.current) {
+      window.clearTimeout(debounceTimerRef.current);
+    }
+
+    // Only react when user has started typing
+    if (description.length > 0) {
+      const delay = description.length <= 3 ? 100 : 200;
+      debounceTimerRef.current = window.setTimeout(() => {
+        onGenerateAiSuggestions(description);
+      }, delay);
+    }
+
+    return () => {
+      if (debounceTimerRef.current) {
+        window.clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, [description, onGenerateAiSuggestions, setShowAiSuggestions]);
 
   // Add message to conversation
   const addMessage = useCallback((type: 'user' | 'ai', content: string) => {
@@ -768,12 +796,13 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                 onChange={(e) => {
                   const value = e.target.value;
                   setDescription(value);
-
-                  // Hide suggestions when content becomes too short
+                  // Hide suggestions if content becomes too short
                   if (value.length <= 2) {
                     setShowAiSuggestions(false);
                   }
                 }}
+                onFocus={() => setIsInputFocused(true)}
+                onBlur={() => setIsInputFocused(false)}
                 onClick={() => {
                   // Generate AI suggestions when textarea is clicked
                   if (description.length > 2) {
@@ -809,31 +838,40 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
             </div>
           </form>
 
-          {/* AI Suggestions */}
-          {showAiSuggestions && aiSuggestions.length > 0 && (
-            <div className="ai-suggestions-inline ai-suggestions-dynamic">
+          {/* AI Suggestions: label outside a dedicated scrollable panel */}
+          {showAiSuggestions && (aiSuggestions.length > 0 || (suggestionLoading && isInputFocused)) && (
+            <div className="ai-suggestions-container">
               <div className="ai-suggestions-label">
                 <FiCpu className="ai-icon" />
                 <span>AI Suggestions:</span>
                 {suggestionLoading && <span className="loading-dot">●</span>}
               </div>
-              <div className="ai-suggestions-buttons">
-                {aiSuggestions.map((suggestion, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    className="ai-suggestion-pill ai-suggestion-button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setDescription(suggestion);
-                      onAiSuggestionClick(suggestion);
-                    }}
-                  >
-                    <span className="ai-badge">AI</span>
-                    {suggestion}
-                  </button>
-                ))}
+              <div className="ai-suggestions-panel" aria-label="AI suggestions">
+                {aiSuggestions.length > 0 ? (
+                  <div className="ai-suggestions-buttons">
+                    {aiSuggestions.map((suggestion, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        className="ai-suggestion-pill ai-suggestion-button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setDescription(suggestion);
+                          onAiSuggestionClick(suggestion);
+                        }}
+                      >
+                        <span className="ai-badge">AI</span>
+                        {suggestion}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="ai-suggestions-placeholder">
+                    <div className="skeleton-pill" />
+                    <div className="skeleton-pill" />
+                  </div>
+                )}
               </div>
             </div>
           )}
