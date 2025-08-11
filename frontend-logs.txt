@@ -16,3 +16,6 @@
 3:51:40 PM [vite] (client) page reload monitor-analytics.html
 3:51:56 PM [vite] (client) page reload public/monitor-analytics.html
 3:51:56 PM [vite] (client) page reload monitor-analytics.html
+3:58:02 PM [vite] (client) page reload debug-frontend-api.html
+3:58:02 PM [vite] (client) page reload debug-frontend-api.html
+3:58:16 PM [vite] (client) page reload debug-frontend-api.html
