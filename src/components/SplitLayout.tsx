@@ -877,12 +877,15 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         {(htmlWireframe || wireframePages.length > 0) ? (
           <div className="wireframe-panel">
             <CompactToolbar
+              onImportHtml={handleImportHtml}
               onFigmaIntegration={handleFigmaIntegration}
               onSave={enhancedOnSave}
               onOpenLibrary={handleOpenLibrary}
               onAddPages={handleAddPages}
               onViewHtmlCode={handleViewHtmlCode}
+              onExportPowerPoint={handleExportPowerPoint}
               onPresentationMode={handlePresentationMode}
+              onShareUrl={handleShareUrl}
             />
 
             {/* Always show PageNavigation when we have a wireframe */}
@@ -890,7 +893,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               pages={wireframePages}
               currentPageId={currentPageId}
               onPageSwitch={handlePageSwitch}
-              onAddPage={handleAddPages}
             />
             <div className="wireframe-container">
               {/* Status bar removed for cleaner presentation */}
@@ -1155,12 +1157,11 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       <HtmlCodeViewer
         isOpen={isHtmlCodeViewerOpen}
         onClose={() => setIsHtmlCodeViewerOpen(false)}
-        htmlContent={htmlWireframe || ''}
-        title="Wireframe HTML"
-        onImportHtml={(html) => {
-          setHtmlWireframe(html);
-          addMessage('ai', '✅ Imported HTML into current wireframe.');
-        }}
+        htmlContent={currentPageId ? (pageContents[currentPageId] || htmlWireframe) : htmlWireframe}
+        title={currentPageId ?
+          `HTML Code - ${wireframePages.find(p => p.id === currentPageId)?.name || 'Unknown Page'}` :
+          'HTML Code - Main Wireframe'
+        }
       />
 
       {/* Presentation Mode */}
