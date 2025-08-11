@@ -49,8 +49,20 @@
 
 .compact-btn:focus {
   outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+}
+
+.compact-btn.enhanced-active {
+  background: #0078d4;
+  color: white;
   border-color: #0078d4;
-  box-shadow: 0 0 0 1px #0078d4;
+  box-shadow: 0 2px 4px rgba(0, 120, 212, 0.2);
+}
+
+.compact-btn.enhanced-active:hover {
+  background: #106ebe;
+  border-color: #106ebe;
+  color: white;
 }
 
 /* Export dropdown */

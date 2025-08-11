@@ -10,6 +10,8 @@ interface CompactToolbarProps {
     onShareUrl?: () => void;
     onPresentationMode?: () => void;
     onSave?: () => void;
+    onToggleEnhancedDrag?: () => void;
+    enhancedDragEnabled?: boolean;
 }
 
 const CompactToolbar: React.FC<CompactToolbarProps> = ({
@@ -19,7 +21,9 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
     onViewHtmlCode,
     onShareUrl,
     onPresentationMode,
-    onSave
+    onSave,
+    onToggleEnhancedDrag,
+    enhancedDragEnabled = false
 }) => {
     const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
 
@@ -90,6 +94,16 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
                 >
                     <FiMonitor />
                 </button>
+                {onToggleEnhancedDrag && (
+                    <button
+                        className={`compact-btn ${enhancedDragEnabled ? 'enhanced-active' : ''}`}
+                        onClick={onToggleEnhancedDrag}
+                        onMouseEnter={(e) => showTooltip(e, enhancedDragEnabled ? "Disable Enhanced Drag" : "Enable Enhanced Drag")}
+                        onMouseLeave={hideTooltip}
+                    >
+                        <FiGrid />
+                    </button>
+                )}
                 <button
                     className="compact-btn"
                     onClick={onSave}

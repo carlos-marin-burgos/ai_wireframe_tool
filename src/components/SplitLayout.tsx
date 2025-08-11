@@ -8,6 +8,9 @@ import SaveWireframeModal, { SavedWireframe } from "./SaveWireframeModal";
 import FigmaIntegrationModal from "./FigmaIntegrationModal";
 import ComponentLibraryModal from "./ComponentLibraryModal";
 import LinkableWireframe from "./LinkableWireframe";
+import EnhancedDragWireframe from "./EnhancedDragWireframe";
+import DragPalette from "./DragPalette";
+import DragToolbar from "./DragToolbar";
 import EnhancedMessage from "./EnhancedMessage";
 import ImageUploadZone from "./ImageUploadZone";
 import DemoImageSelector from "./DemoImageSelector";
@@ -156,6 +159,15 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   // Component Library Modal state
   const [isComponentLibraryOpen, setIsComponentLibraryOpen] = useState(false);
+
+  // Enhanced Drag & Drop state
+  const [isDragPaletteVisible, setIsDragPaletteVisible] = useState(false);
+  const [selectedElement, setSelectedElement] = useState<HTMLElement | null>(null);
+  const [enableSnapGuides, setEnableSnapGuides] = useState(true);
+  const [enableGridSnap, setEnableGridSnap] = useState(false);
+  const [gridSize, setGridSize] = useState(8);
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [useEnhancedDrag, setUseEnhancedDrag] = useState(true);
 
   // Clear AI suggestions when SplitLayout loads
   useEffect(() => {
@@ -494,6 +506,101 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   // HTML Code viewer handler
   const handleViewHtmlCode = useCallback(() => {
     setIsHtmlCodeViewerOpen(true);
+  }, []);
+
+  // Enhanced Drag & Drop handlers
+  const handleDragPaletteToggle = useCallback(() => {
+    setIsDragPaletteVisible(prev => !prev);
+  }, []);
+
+  const handleDragStart = useCallback((component: any) => {
+    console.log('🎯 Started dragging component:', component.name);
+  }, []);
+
+  const handleDragToolbarAction = useCallback((action: string, data?: any) => {
+    if (!selectedElement) return;
+
+    switch (action) {
+      case 'align':
+        if (data === 'left') {
+          selectedElement.style.left = '0px';
+        } else if (data === 'center') {
+          const container = selectedElement.parentElement;
+          if (container) {
+            const containerWidth = container.offsetWidth;
+            const elementWidth = selectedElement.offsetWidth;
+            selectedElement.style.left = `${(containerWidth - elementWidth) / 2}px`;
+          }
+        } else if (data === 'right') {
+          const container = selectedElement.parentElement;
+          if (container) {
+            const containerWidth = container.offsetWidth;
+            const elementWidth = selectedElement.offsetWidth;
+            selectedElement.style.left = `${containerWidth - elementWidth}px`;
+          }
+        }
+        break;
+
+      case 'layer':
+        const currentZIndex = parseInt(selectedElement.style.zIndex) || 1;
+        if (data === 'front') {
+          selectedElement.style.zIndex = `${currentZIndex + 1}`;
+        } else if (data === 'back') {
+          selectedElement.style.zIndex = `${Math.max(0, currentZIndex - 1)}`;
+        }
+        break;
+
+      case 'duplicate':
+        const clone = selectedElement.cloneNode(true) as HTMLElement;
+        clone.style.left = `${parseInt(selectedElement.style.left) + 20}px`;
+        clone.style.top = `${parseInt(selectedElement.style.top) + 20}px`;
+        selectedElement.parentElement?.appendChild(clone);
+        break;
+
+      case 'delete':
+        selectedElement.remove();
+        setSelectedElement(null);
+        break;
+
+      case 'move':
+        if (data?.x !== undefined) selectedElement.style.left = `${data.x}px`;
+        if (data?.y !== undefined) selectedElement.style.top = `${data.y}px`;
+        break;
+
+      case 'resize':
+        if (data?.width !== undefined) selectedElement.style.width = `${data.width}px`;
+        if (data?.height !== undefined) selectedElement.style.height = `${data.height}px`;
+        break;
+
+      default:
+        console.log('Unknown drag toolbar action:', action, data);
+    }
+
+    // Update the HTML content after any action
+    const currentContent = currentPageId ? pageContents[currentPageId] : htmlWireframe;
+    if (selectedElement.parentElement) {
+      const updatedHtml = selectedElement.parentElement.innerHTML;
+      if (currentPageId) {
+        setPageContents(prev => ({
+          ...prev,
+          [currentPageId]: updatedHtml
+        }));
+      } else if (setHtmlWireframe) {
+        setHtmlWireframe(updatedHtml);
+      }
+    }
+  }, [selectedElement, currentPageId, pageContents, htmlWireframe, setHtmlWireframe]);
+
+  const handleGridToggle = useCallback(() => {
+    setEnableGridSnap(prev => !prev);
+  }, []);
+
+  const handleGridSizeChange = useCallback((size: number) => {
+    setGridSize(size);
+  }, []);
+
+  const handleZoomChange = useCallback((zoom: number) => {
+    setZoomLevel(zoom);
   }, []);
 
   // Image Upload and Analysis handlers
@@ -883,6 +990,8 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               onViewHtmlCode={handleViewHtmlCode}
               onPresentationMode={handlePresentationMode}
               onShareUrl={handleShareUrl}
+              onToggleEnhancedDrag={() => setUseEnhancedDrag(prev => !prev)}
+              enhancedDragEnabled={useEnhancedDrag}
             />
 
             {/* Always show PageNavigation when we have a wireframe */}
@@ -894,27 +1003,68 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
             />
             <div className="wireframe-container">
               {/* Status bar removed for cleaner presentation */}
-              <div className="wireframe-content">
-                <LinkableWireframe
-                  htmlContent={currentPageId ? (pageContents[currentPageId] || htmlWireframe) : htmlWireframe}
-                  onUpdateHtml={(newHtml) => {
-                    // Update the current page content
-                    if (currentPageId) {
-                      setPageContents(prev => ({
-                        ...prev,
-                        [currentPageId]: newHtml
-                      }));
-                    }
-                    // Also update the main htmlWireframe if it's the first page or no current page
-                    if (!currentPageId || wireframePages.length === 0) {
-                      // You would call your main update function here
-                      // For now, we'll just store it locally
-                    }
-                  }}
-                  onNavigateToPage={handlePageSwitch}
-                  availablePages={wireframePages}
-                />
+              <div className="wireframe-content" style={{ transform: `scale(${zoomLevel})`, transformOrigin: 'top left' }}>
+                {useEnhancedDrag ? (
+                  <EnhancedDragWireframe
+                    htmlContent={currentPageId ? (pageContents[currentPageId] || htmlWireframe) : htmlWireframe}
+                    onUpdateHtml={(newHtml) => {
+                      // Update the current page content
+                      if (currentPageId) {
+                        setPageContents(prev => ({
+                          ...prev,
+                          [currentPageId]: newHtml
+                        }));
+                      }
+                      // Also update the main htmlWireframe if it's the first page or no current page
+                      if (!currentPageId || wireframePages.length === 0) {
+                        // You would call your main update function here
+                        // For now, we'll just store it locally
+                      }
+                    }}
+                    enableSnapGuides={enableSnapGuides}
+                    enableGridSnap={enableGridSnap}
+                    gridSize={gridSize}
+                  />
+                ) : (
+                  <LinkableWireframe
+                    htmlContent={currentPageId ? (pageContents[currentPageId] || htmlWireframe) : htmlWireframe}
+                    onUpdateHtml={(newHtml) => {
+                      // Update the current page content
+                      if (currentPageId) {
+                        setPageContents(prev => ({
+                          ...prev,
+                          [currentPageId]: newHtml
+                        }));
+                      }
+                      // Also update the main htmlWireframe if it's the first page or no current page
+                      if (!currentPageId || wireframePages.length === 0) {
+                        // You would call your main update function here
+                        // For now, we'll just store it locally
+                      }
+                    }}
+                    onNavigateToPage={handlePageSwitch}
+                    availablePages={wireframePages}
+                  />
+                )}
               </div>
+
+              {/* Enhanced Drag Tools */}
+              <DragPalette
+                isVisible={isDragPaletteVisible}
+                onToggle={handleDragPaletteToggle}
+                onDragStart={handleDragStart}
+              />
+
+              <DragToolbar
+                selectedElement={selectedElement}
+                onAction={handleDragToolbarAction}
+                enableGrid={enableGridSnap}
+                gridSize={gridSize}
+                zoom={zoomLevel}
+                onToggleGrid={handleGridToggle}
+                onGridSizeChange={handleGridSizeChange}
+                onZoomChange={handleZoomChange}
+              />
             </div>
           </div>
         ) : (

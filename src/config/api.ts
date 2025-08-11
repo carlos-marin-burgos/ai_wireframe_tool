@@ -58,10 +58,12 @@ export const API_CONFIG = {
   // Port configuration
   PORTS,
 
-  // Get BASE_URL - use local server in development, Azure in production
-  BASE_URL: isDevelopment
-    ? `http://localhost:7072`
-    : "https://func-designetica-vdlmicyosd4ua.azurewebsites.net",
+  // Get BASE_URL - use environment variable if available, then fallback logic
+  BASE_URL:
+    import.meta.env.VITE_BACKEND_BASE_URL ||
+    (isDevelopment
+      ? `http://localhost:7072`
+      : "https://func-designetica-vdlmicyosd4ua.azurewebsites.net"),
 };
 
 // Health check to verify backend has AI capabilities

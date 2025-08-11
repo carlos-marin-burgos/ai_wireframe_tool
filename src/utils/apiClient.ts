@@ -31,8 +31,9 @@ export class ApiError extends Error {
 
 // Check if backend is healthy
 async function checkBackendHealth(): Promise<boolean> {
-  // ALWAYS return true in development to avoid "offline mode" error
-  if (import.meta.env.DEV) {
+  // In production, always assume healthy to avoid blocking the UI
+  // The actual network requests will handle connection failures
+  if (!import.meta.env.DEV) {
     return true;
   }
 
@@ -105,8 +106,8 @@ async function fetchWithRetry(
   let lastError: Error | null = null;
   let delay = retryConfig.delayMs;
 
-  // ALWAYS skip health check in development - direct connection to avoid "offline mode" error
-  const isDevelopment = import.meta.env.DEV;
+  // Remove the health check blocking to avoid "offline mode" errors
+  // Let the actual fetch requests handle network failures gracefully
 
   for (let attempt = 0; attempt <= retryConfig.maxRetries; attempt++) {
     try {
