@@ -255,7 +255,8 @@
   align-self: stretch;
   padding: var(--microsoft-spacing-m) var(--microsoft-spacing-l);
   background: #ffffff;
-  border-radius: var(--microsoft-spacing-s);
+  border-radius: 16px;
+  border-bottom-left-radius: 4px;
   word-wrap: break-word;
   box-shadow: var(--microsoft-shadow-s);
   border: 1px solid var(--microsoft-neutral-grey-200);
@@ -264,7 +265,8 @@
 /* User message styling */
 .enhanced-message.user-message.microsoft-chat-style .message-body {
   background: #eaefff;
-  border-radius: var(--microsoft-spacing-s);
+  border-radius: 16px;
+  border-bottom-left-radius: 4px;
   text-align: left;
 }
 

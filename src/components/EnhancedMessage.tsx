@@ -75,16 +75,6 @@ const EnhancedMessage: React.FC<EnhancedMessageProps> = ({
                                 </div>
                             )}
                         </div>
-                        <div className="message-sender-info">
-                            <span className="message-sender">
-                                {message.type === 'user' ? 'You' : 'Designetica AI'}
-                            </span>
-                            {message.type === 'ai' && (
-                                <div className="ai-disclaimer">
-                                    <span className="disclaimer-text">AI-generated content may be incorrect</span>
-                                </div>
-                            )}
-                        </div>
                     </div>
                     <div className="message-meta">
                         <span className="message-time">
