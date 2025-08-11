@@ -94,6 +94,14 @@
   background: #fafafa;
 }
 
+.wireframe-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
 .wireframe-content {
   width: 100%;
   height: calc(100% - 40px); /* Account for container padding */
@@ -1293,6 +1301,10 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
     min-height: 0;
     max-height: none;
     overflow: visible;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    box-shadow: none;
   }
 
   .right-pane {
@@ -1300,6 +1312,20 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
     width: 100%;
     height: auto;
     min-height: 70vh;
+    padding-top: 10px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .wireframe-panel {
+    position: relative;
+    overflow: visible;
+  }
+
+  /* Ensure wireframe container takes full width */
+  .wireframe-container {
+    padding: 10px;
+    position: relative;
   }
 
   .tab-content {

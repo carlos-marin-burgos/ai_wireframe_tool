@@ -7,9 +7,11 @@
   border-bottom: 1px solid #e1dfdd;
   padding: 8px 12px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-  position: sticky;
+  position: relative; /* Changed from sticky to relative */
   top: 0;
-  z-index: 200; /* Higher than PageNavigation (100) */
+  z-index: 50; /* Reduced z-index */
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .compact-toolbar-buttons {
@@ -139,9 +141,26 @@
 }
 
 /* Responsive adjustments */
+@media (max-width: 991px) {
+  .compact-toolbar {
+    position: relative;
+    top: auto;
+    z-index: 10;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 6px 8px;
+  }
+}
+
 @media (max-width: 768px) {
   .compact-toolbar {
     padding: 6px 8px;
+    position: relative;
+    top: auto;
+    z-index: 10;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .compact-toolbar-buttons {
