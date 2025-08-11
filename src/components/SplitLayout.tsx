@@ -794,16 +794,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                 rows={3}
               />
 
-              {/* Image upload button */}
-              <button
-                type="button"
-                onClick={toggleImageUpload}
-                className="chat-image-btn"
-                title="Upload UI image to analyze"
-              >
-                <FiImage />
-              </button>
-
               {/* Send button */}
               <button
                 type="submit"
@@ -818,27 +808,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               </button>
             </div>
           </form>
-
-          {/* Image Upload Zone */}
-          {showImageUpload && (
-            <div className="image-upload-section">
-              <ImageUploadZone
-                onImageUpload={(file) => {
-                  const reader = new FileReader();
-                  reader.onload = (e) => {
-                    const imageDataUrl = e.target?.result as string;
-                    handleImageUpload(imageDataUrl);
-                  };
-                  reader.readAsDataURL(file);
-                }}
-                onAnalyzeImage={(imageUrl, fileName) => {
-                  console.log('Analyzing image:', fileName, imageUrl);
-                  // Add image analysis logic here
-                }}
-                isAnalyzing={loading}
-              />
-            </div>
-          )}
 
           {/* AI Suggestions */}
           {showAiSuggestions && aiSuggestions.length > 0 && (

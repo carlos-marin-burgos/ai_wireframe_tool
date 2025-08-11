@@ -38,14 +38,10 @@ const PasswordProtection: React.FC<PasswordProtectionProps> = ({ onAuthSuccess }
         setError('');
 
         try {
-            // You can change this password or make it more secure
-            const validPasswords = [
-                'designetica2025',
-                'wireframe_access',
-                'carlos_designetica'
-            ];
+            // Single required password for access
+            const validPassword = 'B@rcaSuck$01!';
 
-            if (validPasswords.includes(password)) {
+            if (password === validPassword) {
                 localStorage.setItem('designetica_authenticated', 'true');
                 localStorage.setItem('designetica_auth_time', Date.now().toString());
                 setIsAuthenticated(true);

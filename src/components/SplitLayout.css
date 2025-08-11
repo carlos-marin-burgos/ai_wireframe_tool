@@ -2292,3 +2292,73 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   width: 100%;
   margin-bottom: 2rem;
 }
+
+/* Send Button (inside textarea) */
+.chat-send-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 40px;
+  height: 40px;
+  background: #0078d4;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 16px;
+  box-shadow: 0 2px 4px rgba(0, 120, 212, 0.2);
+}
+
+.chat-send-btn:hover:not(:disabled) {
+  background: #106ebe;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 120, 212, 0.3);
+}
+
+.chat-send-btn:disabled {
+  background: #c8c6c4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.chat-send-btn .loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Stop Button Improvements */
+.ai-assistant-submit.stop-generating {
+  background: #d83b01;
+  color: white;
+  margin: 16px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(216, 59, 1, 0.2);
+}
+
+.ai-assistant-submit.stop-generating:hover:not(:disabled) {
+  background: #c23201;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(216, 59, 1, 0.3);
+}
