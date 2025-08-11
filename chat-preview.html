@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Designetica Chat Preview - Microsoft Fluent Design</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+            color: #242424;
+        }
+
+        .preview-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            padding: 16px;
+            border-bottom: 1px solid #e1e1e1;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 64px;
+            box-sizing: border-box;
+        }
+
+        .chat-header-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chat-header-icon {
+            width: 24px;
+            height: 24px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-header-icon .icon-gradient {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #FF4B23 -1.31%, #D82DD3 100.6%);
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-header-icon .icon-shape {
+            width: 12px;
+            height: 12px;
+            background: #ffffff;
+            border-radius: 2px;
+        }
+
+        .chat-header-title-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .chat-header-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #242424;
+            margin: 0;
+            font-family: "Segoe UI", sans-serif;
+            line-height: 22px;
+        }
+
+        .chat-header-subtitle {
+            font-size: 10px;
+            color: #616161;
+            margin: 0;
+            font-family: "Segoe UI", sans-serif;
+            line-height: 14px;
+            background: #EBEBEB;
+            padding: 2px 8px;
+            border-radius: 4px;
+            align-self: flex-start;
+        }
+
+        .chat-preview {
+            padding: 16px;
+            height: 400px;
+            overflow-y: auto;
+            background: #f5f5f5;
+        }
+
+        .message-demo {
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-demo.user {
+            align-items: flex-end;
+        }
+
+        .message-demo.ai {
+            align-items: flex-start;
+        }
+
+        .message-content {
+            max-width: 250px;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 20px;
+        }
+
+        .message-demo.user .message-content {
+            background: #eaefff;
+            color: #242424;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-demo.ai .message-content {
+            background: #ffffff;
+            color: #242424;
+            border: 1px solid #e1e1e1;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+        }
+
+        .title {
+            text-align: center;
+            color: #242424;
+            margin-bottom: 20px;
+        }
+
+        .description {
+            text-align: center;
+            color: #616161;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="title">Designetica Chat - Microsoft Fluent Design</h1>
+    <p class="description">
+        Updated chat interface with Microsoft Fluent Design System styling, featuring enhanced messaging,
+        gradient icons, and improved user experience.
+    </p>
+
+    <div class="preview-container">
+        <div class="chat-header">
+            <div class="chat-header-left">
+                <div class="chat-header-icon">
+                    <div class="icon-gradient">
+                        <div class="icon-shape"></div>
+                    </div>
+                </div>
+                <div class="chat-header-title-group">
+                    <h2 class="chat-header-title">Designetica AI</h2>
+                    <p class="chat-header-subtitle">AI-generated content may be incorrect</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-preview">
+            <div class="message-demo ai">
+                <div class="message-content">
+                    👋 Hello! I'm your AI wireframe assistant. Describe what you'd like to create and I'll generate a
+                    wireframe for you.
+                </div>
+            </div>
+
+            <div class="message-demo user">
+                <div class="message-content">
+                    Can you create a modern e-commerce product page with a clean design?
+                </div>
+            </div>
+
+            <div class="message-demo ai">
+                <div class="message-content">
+                    ✅ I'll create a modern e-commerce product page for you! This will include a hero image section,
+                    product details, pricing, and an add-to-cart button with a clean, professional layout.
+                </div>
+            </div>
+
+            <div class="message-demo user">
+                <div class="message-content">
+                    Perfect! Can you also add a reviews section?
+                </div>
+            </div>
+
+            <div class="message-demo ai">
+                <div class="message-content">
+                    Absolutely! I'll add a customer reviews section with star ratings, review summaries, and individual
+                    review cards. This will help build trust and provide social proof for potential customers.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

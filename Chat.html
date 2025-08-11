@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask Learn Agent Test</title>
+    <link rel="stylesheet" href="src/components/EnhancedMessage.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            overflow: hidden;
+        }
+
+        /* AGENT */
+        .agent {
+            position: relative;
+            width: 320px;
+            height: 1080px;
+
+            /* Chat pane */
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0px 0px 16px;
+
+            position: absolute;
+            width: 320px;
+            height: 1080px;
+            left: 0px;
+            top: 0px;
+
+            background: #F5F5F5;
+            border-left: 1px solid #E0E0E0;
+        }
+
+        /* Sidecar header */
+        .sidecar-header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            gap: 176px;
+
+            width: 320px;
+            height: 64px;
+
+            background: #F5F5F5;
+
+            flex: none;
+            order: 0;
+            flex-grow: 0;
+        }
+
+        /* Title */
+        .title {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 0px;
+            gap: 8px;
+
+            margin: 0 auto;
+            width: 103px;
+            height: 24px;
+
+            flex: none;
+            order: 0;
+            flex-grow: 0;
+        }
+
+        /* ask-learn-fill-gradient */
+        .ask-learn-icon {
+            width: 24px;
+            height: 24px;
+            position: relative;
+            flex: none;
+            order: 0;
+            flex-grow: 0;
+        }
+
+        /* Group 2018774910 */
+        .icon-group {
+            position: absolute;
+            left: 1.67%;
+            right: 1.67%;
+            top: 10.48%;
+            bottom: 10.47%;
+        }
+
+        /* speech bubble */
+        .speech-bubble {
+            position: absolute;
+            width: 23.2px;
+            height: 18.97px;
+            left: 0.4px;
+            top: 2.52px;
+        }
+
+        /* Vector */
+        .vector {
+            position: absolute;
+            left: 1.67%;
+            right: 1.67%;
+            top: 10.48%;
+            bottom: 10.47%;
+
+            background: linear-gradient(180deg, #FF4B23 -1.31%, #D82DD3 100.6%);
+        }
+
+        /* Shape */
+        .shape {
+            position: absolute;
+            width: 11.94px;
+            height: 11.93px;
+            left: calc(50% - 11.94px/2 - 0px);
+            top: calc(50% - 11.93px/2 + 0px);
+
+            background: #FFFFFF;
+        }
+
+        /* Title + Preview label */
+        .title-label {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 0px;
+            gap: 4px;
+
+            width: 71px;
+            height: 24px;
+
+            flex: none;
+            order: 1;
+            flex-grow: 0;
+        }
+
+        /* Title */
+        .title-text {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            padding: 0px 0px 2px;
+            gap: 10px;
+
+            width: 71px;
+            height: 24px;
+
+            flex: none;
+            order: 0;
+            flex-grow: 0;
+        }
+
+        /* Ask Learn */
+        .ask-learn-text {
+            width: 71px;
+            height: 22px;
+
+            font-family: 'Segoe UI';
+            font-style: normal;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 22px;
+
+            color: #242424;
+
+            flex: none;
+            order: 0;
+            flex-grow: 0;
+        }
+
+        /* Copilot actions */
+        .copilot-actions {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            align-items: flex-start;
+            padding: 0px;
+
+            margin: 0 auto;
+            width: 128px;
+            height: 32px;
+
+            flex: none;
+            order: 1;
+            flex-grow: 0;
+        }
+
+        /* Button */
+        .action-button {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding: 6px;
+
+            width: 32px;
+            height: 32px;
+
+            border-radius: 4px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+
+            flex: none;
+            flex-grow: 0;
+        }
+
+        .action-button:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Icon */
+        .action-icon {
+            width: 20px;
+            height: 20px;
+
+            flex: none;
+            order: 0;
+            flex-grow: 0;
+        }
+
+        /* Shape */
+        .icon-shape {
+            position: absolute;
+            background: #424242;
+        }
+
+        /* Content area */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 16px 12px;
+            gap: 12px;
+
+            width: 320px;
+            height: 878px;
+
+            flex: none;
+            order: 1;
+            align-self: stretch;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        /* User Message */
+        .user-message-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: flex-end;
+            padding: 0px 0px 0px 32px;
+            gap: 2px;
+
+            width: 288px;
+            min-height: 116px;
+
+            flex: none;
+            order: 0;
+            flex-grow: 0;
+        }
+
+        /* Prompt */
+        .user-prompt {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding: 8px 16px;
+
+            width: 256px;
+            min-height: 40px;
+
+            background: #EAEFFF;
+            border-radius: 6px;
+
+            flex: none;
+            order: 1;
+            flex-grow: 0;
+        }
+
+        /* Content */
+        .user-content {
+            width: 224px;
+            min-height: 24px;
+
+            font-family: 'Segoe UI';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+
+            color: #242424;
+
+            flex: none;
+            order: 0;
+            flex-grow: 1;
+        }
+
+        /* Copilot Message */
+        .copilot-message-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 0px;
+            gap: 8px;
+
+            width: 288px;
+            min-height: 100px;
+
+            flex: none;
+            flex-grow: 0;
+            margin-bottom: 16px;
+        }
+
+        /* Header */
+        .copilot-header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 0px;
+            gap: 8px;
+
+            width: 288px;
+            height: 20px;
+
+            flex: none;
+            order: 0;
+            align-self: stretch;
+            flex-grow: 0;
+        }
+
+        /* Persona */
+        .persona {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 0px;
+            gap: 8px;
+
+            width: 90px;
+            height: 20px;
+
+            flex: none;
+            order: 0;
+            flex-grow: 0;
+        }
+
+        /* ask-learn-fill-gradient */
+        .copilot-icon {
+            width: 20px;
+            height: 20px;
+            position: relative;
+
+            flex: none;
+            order: 0;
+            flex-grow: 0;
+        }
+
+        /* Title */
+        .copilot-title {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 1px 0px 3px;
+
+            width: 62px;
+            height: 20px;
+
+            flex: none;
+            order: 1;
+            align-self: stretch;
+            flex-grow: 0;
+        }
+
+        /* Text (Primary content) */
+        .copilot-title-text {
+            width: 62px;
+            height: 20px;
+
+            font-family: 'Segoe UI';
+            font-style: normal;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 20px;
+            display: flex;
+            align-items: center;
+
+            color: #242424;
+
+            flex: none;
+            order: 0;
+            flex-grow: 0;
+        }
+
+        /* Disclaimer */
+        .disclaimer {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding: 0px 4px;
+
+            width: 184px;
+            min-width: 20px;
+            height: 20px;
+
+            background: #EBEBEB;
+            border-radius: 4px;
+
+            flex: none;
+            order: 1;
+            flex-grow: 0;
+        }
+
+        /* Text offset */
+        .disclaimer-text-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0px 2px 0.5px;
+
+            width: 176px;
+            height: 14px;
+
+            flex: none;
+            order: 1;
+            flex-grow: 0;
+        }
+
+        /* Badge */
+        .disclaimer-text {
+            width: 172px;
+            height: 14px;
+
+            font-family: 'Segoe UI';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 10px;
+            line-height: 14px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+
+            color: #616161;
+
+            flex: none;
+            order: 0;
+            flex-grow: 0;
+        }
+
+        /* Response */
+        .copilot-response {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 0px;
+            gap: 12px;
+
+            width: 288px;
+            min-height: 52px;
+
+            flex: none;
+            order: 1;
+            align-self: stretch;
+            flex-grow: 0;
+        }
+
+        /* Body */
+        .copilot-body {
+            width: 288px;
+            min-height: 52px;
+
+            font-family: 'Segoe UI';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+
+            color: #242424;
+
+            flex: none;
+            order: 0;
+            align-self: stretch;
+            flex-grow: 0;
+        }
+
+        /* Input */
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 0px 16px;
+
+            width: 320px;
+            height: 122px;
+
+            flex: none;
+            order: 2;
+            align-self: stretch;
+            flex-grow: 0;
+        }
+
+        /* Input */
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 0px 0px;
+            gap: 8px;
+
+            width: 288px;
+            height: 122px;
+
+            flex: none;
+            order: 0;
+            align-self: stretch;
+            flex-grow: 0;
+        }
+
+        /* ChatInput */
+        .chat-input {
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 8px 8px 6px;
+            gap: 8px;
+
+            width: 288px;
+            height: 78px;
+
+            background: #FFFFFF;
+            border: 1px solid #D1D1D1;
+            border-radius: 6px;
+
+            flex: none;
+            order: 1;
+            align-self: stretch;
+            flex-grow: 0;
+        }
+
+        /* Input */
+        .text-input-container {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            padding: 4px 4px 0px;
+
+            width: 272px;
+            height: 24px;
+
+            flex: none;
+            order: 0;
+            align-self: stretch;
+            flex-grow: 0;
+        }
+
+        /* Text Input */
+        .text-input-field {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            padding: 0px;
+
+            width: 264px;
+            height: 20px;
+
+            flex: none;
+            order: 0;
+            flex-grow: 1;
+        }
+
+        /* Placeholder */
+        .placeholder {
+            width: 264px;
+            height: 20px;
+
+            font-family: 'Segoe UI';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+
+            color: #707070;
+            border: none;
+            outline: none;
+            background: transparent;
+
+            flex: none;
+            order: 0;
+            flex-grow: 1;
+        }
+
+        /* Footer */
+        .input-footer {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 0px;
+
+            width: 272px;
+            height: 32px;
+
+            flex: none;
+            order: 1;
+            align-self: stretch;
+            flex-grow: 0;
+        }
+
+        /* Buttons */
+        .input-buttons {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0px;
+
+            width: 272px;
+            height: 32px;
+
+            flex: none;
+            order: 2;
+            align-self: stretch;
+            flex-grow: 0;
+        }
+
+        /* Count */
+        .count-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 4px;
+            gap: 6px;
+
+            margin: 0 auto;
+            width: 34px;
+            height: 22px;
+
+            border-radius: 4px;
+
+            flex: none;
+            order: 0;
+            flex-grow: 0;
+        }
+
+        /* # */
+        .count-text {
+            width: 26px;
+            height: 14px;
+
+            font-family: 'Segoe UI';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 10px;
+            line-height: 14px;
+            text-align: right;
+
+            color: #707070;
+
+            flex: none;
+            order: 0;
+            flex-grow: 0;
+        }
+
+        /* Input Actions */
+        .input-actions {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0px;
+
+            margin: 0 auto;
+            width: 64px;
+            height: 32px;
+
+            flex: none;
+            order: 1;
+            flex-grow: 0;
+        }
+
+        /* Mic & Send buttons */
+        .mic-button,
+        .send-button {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding: 6px;
+
+            width: 32px;
+            height: 32px;
+
+            border-radius: 4px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+
+            flex: none;
+            flex-grow: 0;
+        }
+
+        .mic-button:hover,
+        .send-button:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Icon containers */
+        .mic-icon,
+        .send-icon {
+            width: 20px;
+            height: 20px;
+
+            flex: none;
+            order: 0;
+            flex-grow: 0;
+        }
+
+        /* Icon shapes */
+        .mic-shape {
+            position: absolute;
+            width: 11px;
+            height: 16px;
+            left: calc(50% - 11px/2);
+            top: calc(50% - 16px/2 - 0px);
+
+            background: #424242;
+        }
+
+        .send-shape {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            left: calc(50% - 16px/2 + 0px);
+            top: calc(50% - 16px/2 + 0px);
+
+            background: #424242;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="agent">
+        <!-- Sidecar header -->
+        <div class="sidecar-header">
+            <div class="title">
+                <div class="ask-learn-icon">
+                    <div class="icon-group">
+                        <div class="speech-bubble">
+                            <div class="vector"></div>
+                            <div class="shape"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="title-label">
+                    <div class="title-text">
+                        <div class="ask-learn-text">Ask Learn</div>
+                    </div>
+                </div>
+            </div>
+            <div class="copilot-actions">
+                <button class="action-button">
+                    <div class="action-icon">
+                        <div class="icon-shape"
+                            style="width: 12.5px; height: 2.5px; left: calc(50% - 12.5px/2); top: calc(50% - 2.5px/2);">
+                        </div>
+                    </div>
+                </button>
+                <button class="action-button">
+                    <div class="action-icon">
+                        <div class="icon-shape"
+                            style="width: 16px; height: 16px; left: calc(50% - 16px/2); top: calc(50% - 16px/2 + 0px);">
+                        </div>
+                    </div>
+                </button>
+                <button class="action-button">
+                    <div class="action-icon">
+                        <div class="icon-shape"
+                            style="width: 16px; height: 12px; left: calc(50% - 16px/2); top: calc(50% - 12px/2);"></div>
+                    </div>
+                </button>
+                <button class="action-button">
+                    <div class="action-icon">
+                        <div class="icon-shape"
+                            style="width: 12px; height: 12px; left: calc(50% - 12px/2); top: calc(50% - 12px/2);"></div>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Content area -->
+        <div class="content-area">
+            <!-- User Message -->
+            <div class="user-message-container">
+                <div class="user-prompt">
+                    <div class="user-content">
+                        Hello! Can you help me understand how Azure Functions work with serverless architecture?
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copilot Message -->
+            <div class="copilot-message-container">
+                <div class="copilot-header">
+                    <div class="persona">
+                        <div class="copilot-icon">
+                            <div class="icon-group">
+                                <div class="speech-bubble">
+                                    <div class="vector"></div>
+                                    <div class="shape"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="copilot-title">
+                            <div class="copilot-title-text">Ask Learn</div>
+                        </div>
+                    </div>
+                    <div class="disclaimer">
+                        <div class="disclaimer-text-container">
+                            <div class="disclaimer-text">AI-generated content may be incorrect</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="copilot-response">
+                    <div class="copilot-body">
+                        Azure Functions is a serverless compute service that lets you run code on-demand without having
+                        to explicitly provision or manage infrastructure. Here are the key concepts:
+
+                        **Serverless Architecture Benefits:**
+                        • Pay only for execution time
+                        • Automatic scaling based on demand
+                        • No server management required
+                        • Event-driven execution model
+
+                        **Common Use Cases:**
+                        • HTTP APIs and webhooks
+                        • Timer-based processing
+                        • Data processing pipelines
+                        • Integration between services
+
+                        Would you like me to explain any specific aspect in more detail?
+                    </div>
+                </div>
+            </div>
+
+            <!-- Another User Message -->
+            <div class="user-message-container">
+                <div class="user-prompt">
+                    <div class="user-content">
+                        That's helpful! Can you show me a simple example of an HTTP trigger function?
+                    </div>
+                </div>
+            </div>
+
+            <!-- Another Copilot Message -->
+            <div class="copilot-message-container">
+                <div class="copilot-header">
+                    <div class="persona">
+                        <div class="copilot-icon">
+                            <div class="icon-group">
+                                <div class="speech-bubble">
+                                    <div class="vector"></div>
+                                    <div class="shape"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="copilot-title">
+                            <div class="copilot-title-text">Ask Learn</div>
+                        </div>
+                    </div>
+                    <div class="disclaimer">
+                        <div class="disclaimer-text-container">
+                            <div class="disclaimer-text">AI-generated content may be incorrect</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="copilot-response">
+                    <div class="copilot-body">
+                        Here's a simple HTTP trigger Azure Function example in C#:
+
+                        ```csharp
+                        [FunctionName("HttpExample")]
+                        public static async Task&lt;IActionResult&gt; Run(
+                        [HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req,
+                        ILogger log)
+                        {
+                        log.LogInformation("C# HTTP trigger function processed a request.");
+
+                        string name = req.Query["name"];
+
+                        return new OkObjectResult($"Hello, {name}!");
+                        }
+                        ```
+
+                        This function responds to both GET and POST requests and returns a personalized greeting.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input section -->
+        <div class="input-section">
+            <div class="input-container">
+                <div class="chat-input">
+                    <div class="text-input-container">
+                        <div class="text-input-field">
+                            <input type="text" class="placeholder" placeholder="Ask me anything..." />
+                        </div>
+                    </div>
+                    <div class="input-footer">
+                        <div class="input-buttons">
+                            <div class="count-container">
+                                <div class="count-text">0/4000</div>
+                            </div>
+                            <div class="input-actions">
+                                <button class="mic-button">
+                                    <div class="mic-icon">
+                                        <div class="mic-shape"></div>
+                                    </div>
+                                </button>
+                                <button class="send-button">
+                                    <div class="send-icon">
+                                        <div class="send-shape"></div>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -3,7 +3,11 @@ import {
     FiUser,
     FiCpu,
     FiCheck,
-    FiClock
+    FiClock,
+    FiCopy,
+    FiThumbsUp,
+    FiThumbsDown,
+    FiMoreHorizontal
 } from 'react-icons/fi';
 import './EnhancedMessage.css';
 
@@ -19,12 +23,16 @@ interface EnhancedMessageProps {
     message: Message;
     onReact?: (messageId: string, reaction: string) => void;
     reactions?: Array<{ emoji: string; count: number; userReacted: boolean }>;
+    onCopy?: (content: string) => void;
+    onEdit?: (messageId: string) => void;
 }
 
 const EnhancedMessage: React.FC<EnhancedMessageProps> = ({
     message,
     onReact,
-    reactions = []
+    reactions = [],
+    onCopy,
+    onEdit
 }) => {
 
     const getStatusIcon = () => {
@@ -42,34 +50,78 @@ const EnhancedMessage: React.FC<EnhancedMessageProps> = ({
         }
     };
 
-    return (
-        <div className={`enhanced-message ${message.type}-message`}>
-            <div className="message-avatar">
-                {message.type === 'user' ? (
-                    <FiUser className="avatar-icon" />
-                ) : (
-                    <FiCpu className="avatar-icon ai-avatar" />
-                )}
-            </div>
+    const handleCopy = () => {
+        if (onCopy) {
+            onCopy(message.content);
+        } else {
+            navigator.clipboard.writeText(message.content);
+        }
+    };
 
-            <div className="message-body">
+    return (
+        <div className={`enhanced-message ${message.type}-message microsoft-chat-style`}>
+            {/* Message container with Microsoft styling */}
+            <div className="message-container">
+                {/* Header with avatar and name */}
                 <div className="message-header">
-                    <span className="message-sender">
-                        {message.type === 'user' ? 'You' : 'AI Assistant'}
-                    </span>
-                    <span className="message-time">
-                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </span>
-                    {getStatusIcon()}
+                    <div className="message-persona">
+                        <div className="message-avatar">
+                            {message.type === 'user' ? (
+                                <FiUser className="avatar-icon user-avatar-icon" />
+                            ) : (
+                                <div className="ai-avatar-container">
+                                    <div className="ai-gradient-bg"></div>
+                                    <div className="ai-icon-shape"></div>
+                                </div>
+                            )}
+                        </div>
+                        <div className="message-sender-info">
+                            <span className="message-sender">
+                                {message.type === 'user' ? 'You' : 'Designetica AI'}
+                            </span>
+                            {message.type === 'ai' && (
+                                <div className="ai-disclaimer">
+                                    <span className="disclaimer-text">AI-generated content may be incorrect</span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    <div className="message-meta">
+                        <span className="message-time">
+                            {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                        {getStatusIcon()}
+                    </div>
                 </div>
 
-                <div className="message-content-wrapper">
-                    <div className="message-content">
+                {/* Message content */}
+                <div className="message-response">
+                    <div className="message-body">
                         {message.content}
                     </div>
                 </div>
 
-                {/* Simple Reactions */}
+                {/* Actions and reactions */}
+                <div className="message-actions">
+                    <button className="action-btn copy-btn" onClick={handleCopy} title="Copy message">
+                        <FiCopy />
+                    </button>
+                    {message.type === 'ai' && (
+                        <>
+                            <button className="action-btn thumbs-up-btn" onClick={() => onReact?.(message.id, '👍')} title="Good response">
+                                <FiThumbsUp />
+                            </button>
+                            <button className="action-btn thumbs-down-btn" onClick={() => onReact?.(message.id, '👎')} title="Poor response">
+                                <FiThumbsDown />
+                            </button>
+                        </>
+                    )}
+                    <button className="action-btn more-btn" title="More options">
+                        <FiMoreHorizontal />
+                    </button>
+                </div>
+
+                {/* Reactions */}
                 {reactions.length > 0 && (
                     <div className="message-reactions">
                         {reactions.map((reaction, index) => (
