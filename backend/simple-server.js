@@ -190,6 +190,142 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "healthy", timestamp: new Date().toISOString() });
 });
 
+// Azure OpenAI monitoring status endpoint
+app.get("/api/azure-openai-status", async (req, res) => {
+  try {
+    const fs = require("fs");
+    const path = require("path");
+
+    // Try to read the Azure OpenAI monitor log
+    const logFile = path.join(__dirname, "azure-openai-monitor.log");
+    let status = {
+      isHealthy: false,
+      lastCheck: new Date().toISOString(),
+      error: "Monitor log not found",
+      consecutiveFailures: 0,
+    };
+
+    if (fs.existsSync(logFile)) {
+      // Read last few lines of log file to determine status
+      const logContent = fs.readFileSync(logFile, "utf8");
+      const lines = logContent
+        .trim()
+        .split("\n")
+        .filter((line) => line.trim());
+
+      if (lines.length > 0) {
+        const lastLine = lines[lines.length - 1];
+        const timestamp = lastLine.match(/\[([\d-T:.Z]+)\]/)?.[1];
+
+        // Check if there are recent health check failures
+        const recentLines = lines.slice(-10); // Last 10 entries
+        const failures = recentLines.filter((line) =>
+          line.includes("Health check failed")
+        );
+        const alerts = recentLines.filter((line) =>
+          line.includes("ALERT: SERVICE_DOWN")
+        );
+
+        status = {
+          isHealthy: failures.length === 0 || alerts.length === 0,
+          lastCheck: timestamp || new Date().toISOString(),
+          error:
+            failures.length > 0
+              ? "Recent health check failures detected"
+              : null,
+          consecutiveFailures: failures.length,
+          recentFailures: failures.length,
+          totalLogEntries: lines.length,
+        };
+      }
+    }
+
+    // Also check if Azure OpenAI client is initialized
+    const clientStatus = {
+      clientInitialized: openai !== null,
+      endpoint: process.env.AZURE_OPENAI_ENDPOINT ? "configured" : "missing",
+      apiKey: process.env.AZURE_OPENAI_KEY ? "configured" : "missing",
+      deployment: process.env.AZURE_OPENAI_DEPLOYMENT
+        ? "configured"
+        : "missing",
+    };
+
+    res.json({
+      ...status,
+      client: clientStatus,
+      systemCheck: {
+        timestamp: new Date().toISOString(),
+        nodeVersion: process.version,
+        uptime: process.uptime(),
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      isHealthy: false,
+      error: `Failed to check Azure OpenAI status: ${error.message}`,
+      lastCheck: new Date().toISOString(),
+    });
+  }
+});
+
+// Azure OpenAI monitoring logs endpoint
+app.get("/api/azure-openai-logs", (req, res) => {
+  try {
+    const fs = require("fs");
+    const path = require("path");
+
+    const logFile = path.join(__dirname, "azure-openai-monitor.log");
+
+    if (!fs.existsSync(logFile)) {
+      return res.json({
+        logs: [],
+        message: "No monitoring logs found",
+      });
+    }
+
+    const logContent = fs.readFileSync(logFile, "utf8");
+    const lines = logContent
+      .trim()
+      .split("\n")
+      .filter((line) => line.trim());
+
+    // Parse log entries
+    const logs = lines
+      .slice(-50)
+      .map((line) => {
+        // Last 50 entries
+        const timestampMatch = line.match(/\[([\d-T:.Z]+)\]/);
+        const timestamp = timestampMatch ? timestampMatch[1] : null;
+
+        let level = "info";
+        if (line.includes("ALERT:") || line.includes("failed")) level = "error";
+        else if (line.includes("WARNING") || line.includes("⚠️"))
+          level = "warning";
+        else if (line.includes("✅") || line.includes("recovered"))
+          level = "success";
+
+        return {
+          timestamp,
+          level,
+          message: line.replace(/\[[\d-T:.Z]+\]\s*/, ""), // Remove timestamp from message
+          raw: line,
+        };
+      })
+      .reverse(); // Most recent first
+
+    res.json({
+      logs,
+      total: lines.length,
+      lastUpdate: logs.length > 0 ? logs[0].timestamp : null,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: `Failed to read monitoring logs: ${error.message}`,
+      logs: [],
+    });
+  }
+});
+
 // Rate limiting tracking
 let lastRequestTime = 0;
 let rateLimitRetryAfter = 0;
