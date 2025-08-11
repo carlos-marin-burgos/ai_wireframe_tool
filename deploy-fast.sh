@@ -82,6 +82,12 @@ log_success "Pre-flight checks completed"
 # Step 1: Fast frontend build
 log "🏗️ Building frontend (optimized)..."
 {
+    # Ensure analytics dashboard is in public directory
+    if [ -f "monitor-analytics.html" ]; then
+        cp monitor-analytics.html public/monitor-analytics.html
+        log_info "Analytics dashboard copied to public directory"
+    fi
+    
     # Use npm ci for faster, reliable installs
     if [ -f "package-lock.json" ]; then
         npm ci --silent
