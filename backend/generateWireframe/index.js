@@ -1,24 +1,280 @@
-// Smart wireframe generator with AI-FIRST approach and OpenAI integration
-const crypto = require("crypto");
-const path = require("path");
+const { OpenAI } = require("openai");
 
-// Import enhanced analytics logging for Power BI Dashboard
-const analyticsLogger = require("../utils/analytics-logger");
+// Initialize OpenAI client
+let openai = null;
 
-// Import performance optimizations
-const {
-  generateOptimizedWireframe,
-  getPerformanceStats,
-} = require("../utils/performance-wireframe-generator");
+function initializeOpenAI() {
+  try {
+    if (process.env.AZURE_OPENAI_KEY && process.env.AZURE_OPENAI_ENDPOINT) {
+      const endpoint = process.env.AZURE_OPENAI_ENDPOINT.replace(/\/$/, "");
+      const deployment = process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o";
+      const apiVersion =
+        process.env.AZURE_OPENAI_API_VERSION || "2024-08-01-preview";
 
-// Import image placeholder utilities for fixing broken images
-const { fixWireframeImages } = require("../utils/imagePlaceholders");
+      openai = new OpenAI({
+        apiKey: process.env.AZURE_OPENAI_KEY,
+        baseURL: `${endpoint}/openai/deployments/${deployment}`,
+        defaultQuery: { "api-version": apiVersion },
+        defaultHeaders: {
+          "api-key": process.env.AZURE_OPENAI_KEY,
+        },
+      });
 
-// Import Atlas Component Library - ONLY source for ALL components
-const AtlasComponentLibrary = require("../components/AtlasComponentLibrary");
+      console.log("✅ OpenAI client initialized successfully");
+      return true;
+    }
+    console.log("⚠️ OpenAI environment variables not found");
+    return false;
+  } catch (error) {
+    console.error("❌ Failed to initialize OpenAI client:", error);
+    return false;
+  }
+}
 
-// Initialize Atlas Component Library
-const atlasLibrary = new AtlasComponentLibrary();
+// Initialize on startup
+initializeOpenAI();
+
+// Simple fallback wireframe generator
+function createSimpleWireframe(description) {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft Learn - ${description}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            background: #f3f2f1; 
+            color: #171717; 
+            line-height: 1.5; 
+        }
+        .header { 
+            background: #0078d4; 
+            color: white; 
+            padding: 16px 24px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+        }
+        .logo { font-size: 20px; font-weight: 600; }
+        .nav { display: flex; gap: 24px; }
+        .nav a { color: white; text-decoration: none; }
+        .main { 
+            max-width: 1200px; 
+            margin: 40px auto; 
+            padding: 0 24px; 
+        }
+        .hero { 
+            background: #E8E6DF; 
+            color: #161616; 
+            padding: 60px 40px; 
+            border-radius: 8px; 
+            margin-bottom: 40px; 
+            text-align: center; 
+        }
+        .hero h1 { 
+            font-size: 32px; 
+            margin-bottom: 16px; 
+            font-weight: 600; 
+        }
+        .hero p { font-size: 18px; margin-bottom: 24px; }
+        .btn { 
+            background: #0078d4; 
+            color: white; 
+            padding: 12px 24px; 
+            border: none; 
+            border-radius: 4px; 
+            font-size: 16px; 
+            cursor: pointer; 
+            text-decoration: none; 
+            display: inline-block; 
+        }
+        .content { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 24px; 
+        }
+        .card { 
+            background: white; 
+            padding: 24px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+            border: 1px solid #e1dfdd; 
+        }
+        .card h3 { color: #0078d4; margin-bottom: 12px; }
+        .footer { 
+            background: #ffffff; 
+            border-top: 1px solid #e1dfdd; 
+            padding: 40px 24px; 
+            margin-top: 60px; 
+            text-align: center; 
+            color: #737373; 
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">Microsoft Learn</div>
+        <nav class="nav">
+            <a href="#">Browse</a>
+            <a href="#">Certifications</a>
+            <a href="#">Documentation</a>
+            <a href="#">Community</a>
+        </nav>
+    </header>
+    
+    <main class="main">
+        <section class="hero">
+            <h1>${description}</h1>
+            <p>Learn, build, and grow with Microsoft technologies.</p>
+            <a href="#" class="btn">Get Started</a>
+        </section>
+        
+        <div class="content">
+            <div class="card">
+                <h3>Interactive Learning</h3>
+                <p>Hands-on modules that teach through doing. Practice with real code and see immediate results.</p>
+            </div>
+            <div class="card">
+                <h3>Expert Guidance</h3>
+                <p>Learn from Microsoft experts and industry professionals with step-by-step guidance.</p>
+            </div>
+            <div class="card">
+                <h3>Earn Recognition</h3>
+                <p>Complete learning paths and earn badges to showcase your skills to the world.</p>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <p>© Microsoft Learn - AI Wireframe Generator</p>
+    </footer>
+</body>
+</html>`;
+}
+
+// Generate wireframe with OpenAI
+async function generateWireframeWithAI(description, theme = "microsoftlearn") {
+  if (!openai) {
+    console.log("OpenAI not available, using fallback");
+    return null;
+  }
+
+  try {
+    const prompt = `Create a complete HTML wireframe for Microsoft Learn platform based on: "${description}"
+
+Requirements:
+- Use Microsoft Learn design (Segoe UI font, #0078d4 primary color)
+- Include responsive layout with header, main content, and footer
+- Use semantic HTML and proper accessibility
+- Include inline CSS styling
+- Make it professional and clean
+
+Generate ONLY the HTML code (starting with <!DOCTYPE html>).`;
+
+    const response = await openai.chat.completions.create({
+      model: process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are an expert UI/UX designer creating HTML wireframes for Microsoft Learn platform.",
+        },
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      max_tokens: 3000,
+      temperature: 0.7,
+    });
+
+    if (response?.choices?.[0]?.message?.content) {
+      let html = response.choices[0].message.content.trim();
+
+      // Clean up markdown formatting
+      if (html.startsWith("```html")) {
+        html = html.replace(/^```html\n?/, "").replace(/\n?```$/, "");
+      } else if (html.startsWith("```")) {
+        html = html.replace(/^```[a-zA-Z]*\n?/, "").replace(/\n?```$/, "");
+      }
+
+      return html;
+    }
+
+    return null;
+  } catch (error) {
+    console.error("AI generation failed:", error.message);
+    return null;
+  }
+}
+
+module.exports = async function (context, req) {
+  try {
+    // Set CORS headers
+    context.res = {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Content-Type": "text/html",
+      },
+    };
+
+    // Handle OPTIONS request
+    if (req.method === "OPTIONS") {
+      context.res.status = 200;
+      context.res.body = "";
+      return;
+    }
+
+    // Validate request
+    if (req.method !== "POST") {
+      context.res.status = 405;
+      context.res.body = JSON.stringify({ error: "Method not allowed" });
+      return;
+    }
+
+    const {
+      description,
+      designTheme = "microsoftlearn",
+      colorScheme = "primary",
+    } = req.body || {};
+
+    if (
+      !description ||
+      typeof description !== "string" ||
+      description.trim().length < 3
+    ) {
+      context.res.status = 400;
+      context.res.body = JSON.stringify({ error: "Invalid description" });
+      return;
+    }
+
+    console.log(`Generating wireframe for: "${description}"`);
+
+    // Try AI generation first
+    let html = await generateWireframeWithAI(description, designTheme);
+
+    // Use fallback if AI fails
+    if (!html) {
+      console.log("Using fallback wireframe generator");
+      html = createSimpleWireframe(description);
+    }
+
+    context.res.status = 200;
+    context.res.body = html;
+  } catch (error) {
+    console.error("Function error:", error);
+    context.res.status = 500;
+    context.res.body = JSON.stringify({
+      error: "Internal server error",
+      message: error.message,
+    });
+  }
+};
 
 // CRITICAL: Verify OpenAI configuration immediately
 function verifyOpenAIConfiguration() {

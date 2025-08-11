@@ -49,8 +49,8 @@ export const API_CONFIG = {
   ],
 
   ENDPOINTS: {
-    GENERATE_WIREFRAME: "/api/generate-wireframe", // Azure Functions endpoint
-    GENERATE_SUGGESTIONS: "/api/fast-suggestions", // Updated to use fast suggestions
+    GENERATE_WIREFRAME: "/api/generate-html-wireframe", // Updated to match backend server
+    GENERATE_SUGGESTIONS: "/api/generate-suggestions", // Updated to match backend server
     GET_TEMPLATE: "/api/get-template",
     HEALTH: "/api/health",
   },
@@ -61,7 +61,7 @@ export const API_CONFIG = {
   // Get BASE_URL - use local server in development, Azure in production
   BASE_URL: isDevelopment
     ? `http://localhost:${PORTS.development.primary}`
-    : "https://func-prod-fresh-u62277mynzfg4.azurewebsites.net",
+    : "https://func-designetica-vdlmicyosd4ua.azurewebsites.net",
 };
 
 // Health check to verify backend has AI capabilities

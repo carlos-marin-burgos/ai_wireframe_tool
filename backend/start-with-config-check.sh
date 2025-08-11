@@ -22,9 +22,9 @@ NODE_ENV=development
 FRONTEND_URL=http://localhost:5173
 
 # Azure OpenAI Configuration - Enabled
-AZURE_OPENAI_KEY=66db9d9ce0ba4fdf854a48e3f5bf1d73
-AZURE_OPENAI_ENDPOINT=https://cog-35kjosu4rfnkc.openai.azure.com/
-AZURE_OPENAI_DEPLOYMENT=designetica-gpt4o
+AZURE_OPENAI_KEY=CnGZHVd6QVM4mHigBcWm7tQ2yqoGIHiImCozLODvVXBAG2QVUWp1JQQJ99BHACYeBjFXJ3w3AAABACOGFPTI
+AZURE_OPENAI_ENDPOINT=https://cog-designetica-vdlmicyosd4ua.openai.azure.com/
+AZURE_OPENAI_DEPLOYMENT=gpt-4o
 
 # Development Note: Using AI-powered suggestions from Azure OpenAI with gpt-4o model
 EOF
@@ -34,7 +34,7 @@ fi
 
 # Verify configuration
 echo "🔧 Verifying Azure OpenAI configuration..."
-if grep -q "AZURE_OPENAI_KEY=66db9d9ce0ba4fdf854a48e3f5bf1d73" .env; then
+if grep -q "AZURE_OPENAI_KEY=CnGZHVd6QVM4mHigBcWm7tQ2yqoGIHiImCozLODvVXBAG2QVUWp1JQQJ99BHACYeBjFXJ3w3AAABACOGFPTI" .env; then
     echo "✅ Azure OpenAI configuration looks good!"
 else
     echo "⚠️  Azure OpenAI configuration may need updating"

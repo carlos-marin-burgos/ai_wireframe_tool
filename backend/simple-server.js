@@ -18,9 +18,10 @@ require("dotenv").config();
 let openai = null;
 try {
   if (process.env.AZURE_OPENAI_KEY && process.env.AZURE_OPENAI_ENDPOINT) {
+    const endpoint = process.env.AZURE_OPENAI_ENDPOINT.replace(/\/$/, "");
     openai = new OpenAI({
       apiKey: process.env.AZURE_OPENAI_KEY,
-      baseURL: `${process.env.AZURE_OPENAI_ENDPOINT}/openai/deployments/${process.env.AZURE_OPENAI_DEPLOYMENT}`,
+      baseURL: `${endpoint}/openai/deployments/${process.env.AZURE_OPENAI_DEPLOYMENT}`,
       defaultQuery: { "api-version": "2024-02-15-preview" },
       defaultHeaders: {
         "api-key": process.env.AZURE_OPENAI_KEY,
