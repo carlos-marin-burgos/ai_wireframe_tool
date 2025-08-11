@@ -2,16 +2,10 @@
   "name": "designetica-backend",
   "version": "1.0.0",
   "description": "Azure Functions App - Production Deployment",
-  "main": "index.js",
   "scripts": {
     "start": "func start"
   },
-  "keywords": [
-    "azure",
-    "openai",
-    "wireframe",
-    "generator"
-  ],
+  "keywords": ["azure", "openai", "wireframe", "generator"],
   "author": "Designetica Team",
   "license": "ISC",
   "dependencies": {
