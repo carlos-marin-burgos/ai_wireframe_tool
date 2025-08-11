@@ -5,11 +5,77 @@ let openai = null;
 
 function initializeOpenAI() {
   try {
+    // Load local.settings.json values if in development
+    if (!process.env.AZURE_OPENAI_KEY) {
+      const fs = require("fs");
+      const path = require("path");
+      try {
+        const localSettingsPath = path.join(
+          __dirname,
+          "..",
+          "local.settings.json"
+        );
+        const localSettings = JSON.parse(
+          fs.readFileSync(localSettingsPath, "utf8")
+        );
+
+        console.log("📁 Loading local.settings.json...");
+
+        // Set environment variables from local.settings.json
+        Object.keys(localSettings.Values).forEach((key) => {
+          if (!process.env[key]) {
+            process.env[key] = localSettings.Values[key];
+            console.log(
+              `  Set ${key}: ${localSettings.Values[key]?.substring(0, 10)}...`
+            );
+          } else {
+            console.log(
+              `  Skipped ${key} (already set): ${process.env[key]?.substring(
+                0,
+                10
+              )}...`
+            );
+          }
+        });
+
+        console.log("📁 Loaded local.settings.json for generateWireframe");
+      } catch (error) {
+        console.error("⚠️ Could not load local.settings.json:", error.message);
+      }
+    } else {
+      console.log(
+        "📁 AZURE_OPENAI_KEY already set, skipping local.settings.json"
+      );
+      console.log("🔍 Current env vars:");
+      console.log(
+        `  AZURE_OPENAI_KEY: ${process.env.AZURE_OPENAI_KEY?.substring(
+          0,
+          10
+        )}...`
+      );
+      console.log(
+        `  AZURE_OPENAI_ENDPOINT: ${process.env.AZURE_OPENAI_ENDPOINT}`
+      );
+    }
     if (process.env.AZURE_OPENAI_KEY && process.env.AZURE_OPENAI_ENDPOINT) {
       const endpoint = process.env.AZURE_OPENAI_ENDPOINT.replace(/\/$/, "");
       const deployment = process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o";
       const apiVersion =
         process.env.AZURE_OPENAI_API_VERSION || "2024-08-01-preview";
+
+      // DEBUG: Log the actual values being used
+      console.log("🔍 DEBUG OpenAI Config:");
+      console.log("  Endpoint:", endpoint);
+      console.log("  Deployment:", deployment);
+      console.log("  API Version:", apiVersion);
+      console.log(
+        "  API Key starts with:",
+        process.env.AZURE_OPENAI_KEY?.substring(0, 10) + "..."
+      );
+      console.log(
+        "  Base URL:",
+        `${endpoint}/openai/deployments/${deployment}`
+      );
 
       openai = new OpenAI({
         apiKey: process.env.AZURE_OPENAI_KEY,
@@ -21,6 +87,8 @@ function initializeOpenAI() {
       });
 
       console.log("✅ OpenAI client initialized successfully");
+      console.log("🔑 Using endpoint:", endpoint);
+      console.log("🎯 Using deployment:", deployment);
       return true;
     }
     console.log("⚠️ OpenAI environment variables not found");
@@ -106,15 +174,19 @@ module.exports = async function (context, req) {
 
     // ONLY AI generation - NO FALLBACKS!
     if (!openai) {
-      context.res.status = 503;
-      context.res.body = JSON.stringify({
-        success: false,
-        error: "AI_SERVICE_UNAVAILABLE",
-        message:
-          "AI service is not available. Please check the service status and try again.",
-        timestamp: new Date().toISOString(),
-      });
-      return;
+      // Try to reinitialize OpenAI
+      const initialized = initializeOpenAI();
+      if (!initialized) {
+        context.res.status = 503;
+        context.res.body = JSON.stringify({
+          success: false,
+          error: "AI_SERVICE_UNAVAILABLE",
+          message:
+            "AI service is not available. Please check the service status and try again.",
+          timestamp: new Date().toISOString(),
+        });
+        return;
+      }
     }
 
     try {
