@@ -182,6 +182,15 @@ export const useWireframeGeneration = () => {
           timestamp: Date.now(),
         });
 
+        // Call the API using our new client
+        console.log("🚀 Making API call with:", {
+          description,
+          theme,
+          colorScheme,
+          fastMode: shouldUseFastMode,
+          timestamp: Date.now(),
+        });
+
         const data = await api.post<WireframeResponse>(
           API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME + `?t=${Date.now()}`, // Add timestamp to force cache bust
           { description, theme, colorScheme, fastMode: shouldUseFastMode },
