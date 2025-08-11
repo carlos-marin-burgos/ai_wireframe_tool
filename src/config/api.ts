@@ -60,7 +60,7 @@ export const API_CONFIG = {
 
   // Get BASE_URL - use local server in development, Azure in production
   BASE_URL: isDevelopment
-    ? `http://localhost:${PORTS.development.primary}`
+    ? `http://localhost:7072`
     : "https://func-designetica-vdlmicyosd4ua.azurewebsites.net",
 };
 
