@@ -336,8 +336,8 @@ const EnhancedDragWireframe: React.FC<EnhancedDragWireframeProps> = ({
                     handleMouseDown(e, target);
                 }
             }}
-            dangerouslySetInnerHTML={{ __html: htmlContent }}
         >
+            <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
             {renderGrid()}
             {renderSnapGuides()}
         </div>

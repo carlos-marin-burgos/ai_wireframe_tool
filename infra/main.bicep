@@ -367,6 +367,18 @@ resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
           value: 'production'
         }
       ]
+      cors: {
+        allowedOrigins: [
+          'https://brave-island-04ba9f70f.2.azurestaticapps.net'
+          'https://make.powerapps.com'
+          'https://make.powerautomate.com'
+          'https://flow.microsoft.com'
+          'https://powerapps.microsoft.com'
+          'http://localhost:5173'
+          'https://localhost:5173'
+        ]
+        supportCredentials: false
+      }
     }
     httpsOnly: true
   }

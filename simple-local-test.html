@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Simple Local Test</title>
+</head>
+
+<body>
+    <h1>🧪 Local Backend Test</h1>
+    <input type="text" id="description" placeholder="Enter wireframe description" style="width: 300px; padding: 10px;">
+    <button onclick="testLocal()" style="padding: 10px 20px; margin-left: 10px;">Test Local API</button>
+    <div id="status" style="margin-top: 20px; font-weight: bold;"></div>
+    <div id="result" style="margin-top: 20px;"></div>
+
+    <script>
+        async function testLocal() {
+            const description = document.getElementById('description').value;
+            const statusDiv = document.getElementById('status');
+            const resultDiv = document.getElementById('result');
+
+            if (!description.trim()) {
+                statusDiv.innerHTML = '❌ Please enter a description';
+                return;
+            }
+
+            statusDiv.innerHTML = '⏳ Testing local API...';
+            resultDiv.innerHTML = '';
+
+            try {
+                console.log('Making request to:', 'http://localhost:7072/api/generate-html-wireframe');
+                console.log('With description:', description);
+
+                const response = await fetch('http://localhost:7072/api/generate-html-wireframe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        description: description
+                    })
+                });
+
+                console.log('Response status:', response.status);
+                console.log('Response headers:', [...response.headers.entries()]);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('Response data:', data);
+
+                statusDiv.innerHTML = '✅ SUCCESS!';
+                resultDiv.innerHTML = `
+                    <h3>Success!</h3>
+                    <p><strong>Source:</strong> ${data.source}</p>
+                    <p><strong>AI Generated:</strong> ${data.aiGenerated}</p>
+                    <p><strong>Processing Time:</strong> ${data.processingTimeMs}ms</p>
+                    <p><strong>HTML Length:</strong> ${data.html ? data.html.length : 'No HTML'} characters</p>
+                    <details>
+                        <summary>Generated HTML</summary>
+                        <pre style="background: #f5f5f5; padding: 10px; overflow: auto; max-height: 400px;">${data.html ? data.html.substring(0, 1000) + '...' : 'No HTML'}</pre>
+                    </details>
+                `;
+
+            } catch (error) {
+                console.error('Error:', error);
+                statusDiv.innerHTML = '❌ FAILED!';
+                resultDiv.innerHTML = `
+                    <h3>Error:</h3>
+                    <p><strong>Message:</strong> ${error.message}</p>
+                    <p><strong>Type:</strong> ${error.constructor.name}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+
+</html>

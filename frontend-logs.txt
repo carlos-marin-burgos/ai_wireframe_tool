@@ -1,21 +1,5 @@
 
-  VITE v6.3.5  ready in 289 ms
+  VITE v6.3.5  ready in 436 ms
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: http://192.168.1.81:5173/
-3:24:12 PM [vite] .env changed, restarting server...
-3:24:12 PM [vite] server restarted.
-3:26:56 PM [vite] (client) page reload production-test.html
-3:26:56 PM [vite] (client) page reload production-test.html
-3:27:56 PM [vite] (client) page reload production-test.html
-3:46:40 PM [vite] (client) hmr update /src/App.tsx
-3:46:49 PM [vite] (client) hmr update /src/App.tsx
-3:50:29 PM [vite] (client) page reload public/monitor-analytics.html
-3:50:40 PM [vite] (client) page reload public/monitor-analytics.html
-3:51:34 PM [vite] (client) page reload monitor-analytics.html
-3:51:40 PM [vite] (client) page reload monitor-analytics.html
-3:51:56 PM [vite] (client) page reload public/monitor-analytics.html
-3:51:56 PM [vite] (client) page reload monitor-analytics.html
-3:58:02 PM [vite] (client) page reload debug-frontend-api.html
-3:58:02 PM [vite] (client) page reload debug-frontend-api.html
-3:58:16 PM [vite] (client) page reload debug-frontend-api.html
