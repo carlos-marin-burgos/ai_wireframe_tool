@@ -748,6 +748,21 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     <div className="split-layout">
       {/* Left: Chat Interface */}
       <div className="left-pane">
+        {/* Chat Header */}
+        <div className="chat-header">
+          <div className="chat-header-left">
+            <div className="chat-header-icon">
+              <div className="icon-gradient">
+                <div className="icon-shape"></div>
+              </div>
+            </div>
+            <div className="chat-header-title-group">
+              <h2 className="chat-header-title">Designetica AI</h2>
+              <p className="chat-header-subtitle">AI-generated content may be incorrect</p>
+            </div>
+          </div>
+        </div>
+
         {/* Chat Messages Area */}
         <div className="chat-messages" ref={chatMessagesRef}>
           {conversationHistory.length === 0 && !loading && (
