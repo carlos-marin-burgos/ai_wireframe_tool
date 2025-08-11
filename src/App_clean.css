@@ -51,7 +51,6 @@ body {
   box-shadow: 0 2px 20px rgba(58, 89, 209, 0.1);
 }
 
-
 .nav-title {
   font-size: 1.2rem;
   font-weight: 600;
@@ -460,7 +459,7 @@ body {
   border-radius: 12px;
 }
 
-.ai-suggestions-inline.compact {
+.compact {
   margin-top: 0.75rem;
   padding: 0.875rem;
 }

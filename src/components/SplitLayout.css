@@ -812,12 +812,12 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 
 /* New label-free suggestions panel */
 .ai-suggestions-panel {
-  background: #fff4ce; /* match dynamic styling */
-  border: 1px solid #ffb900;
+  background: #fafafa; /* match dynamic styling */
+  border: 1px solid #ccc;
   border-radius: 8px;
   padding: 10px 12px;
   margin-top: 10px;
-  max-height: 140px;
+  max-height: 240px;
   overflow-y: auto; /* scroll just this panel */
   box-sizing: border-box;
 }

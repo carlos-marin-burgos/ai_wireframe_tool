@@ -405,14 +405,23 @@
   );
   border: 1px solid rgba(61, 144, 215, 0.1);
   border-radius: 12px;
-  max-height: 220px;
-  overflow-y: auto;
+  max-height: 140px; /* smaller height */
+  overflow: hidden; /* keep label fixed */
+  display: grid;
+  grid-template-rows: auto 1fr; /* label + scrollable list */
+}
+
+/* Ensure Landing page overrides SplitLayout defaults when both classes are present */
+.landing-page .ai-suggestions-inline.ai-suggestions-dynamic {
+  max-height: 140px; /* requested height */
+  overflow-y: auto; /* scroll the outer panel */
+  display: block; /* override any grid/flex from other sheets */
 }
 
 .ai-suggestions-inline.compact {
   margin-top: 0.75rem;
   padding: 0.875rem;
-  max-height: 200px;
+  max-height: 120px; /* smaller height for compact variant */
 }
 
 .ai-suggestions-label {
@@ -435,6 +444,40 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  overflow-y: auto; /* scroll only the pills list */
+  min-height: 0; /* allow to shrink in grid */
+  padding-right: 2px; /* room for scrollbar */
+}
+
+/* Landing page specific: make the dynamic panel scroll with custom scrollbar */
+.landing-page .ai-suggestions-inline.ai-suggestions-dynamic {
+  max-height: 250px !important; /* force override */
+  overflow-y: auto !important; /* scroll the outer panel */
+  display: block !important; /* override any grid/flex */
+}
+
+.landing-page
+  .ai-suggestions-inline.ai-suggestions-dynamic
+  .ai-suggestions-buttons {
+  overflow-y: visible; /* prevent nested scrollbars */
+}
+
+/* Custom scrollbar for the dynamic panel on landing page */
+.landing-page .ai-suggestions-inline.ai-suggestions-dynamic::-webkit-scrollbar {
+  width: 8px;
+}
+.landing-page
+  .ai-suggestions-inline.ai-suggestions-dynamic::-webkit-scrollbar-track {
+  background: transparent;
+}
+.landing-page
+  .ai-suggestions-inline.ai-suggestions-dynamic::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 8px;
+}
+.landing-page
+  .ai-suggestions-inline.ai-suggestions-dynamic::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
 }
 
 .ai-suggestion-pill {
@@ -604,7 +647,10 @@
 
   .ai-suggestions-inline {
     padding: 0.75rem;
-    max-height: 180px;
+    max-height: 110px; /* default for non-dynamic use on mobile */
+  }
+  .landing-page .ai-suggestions-inline.ai-suggestions-dynamic {
+    max-height: 140px; /* keep 140px on mobile as requested */
   }
 
   .ai-suggestion-pill {
