@@ -552,11 +552,13 @@ const AddPagesModal: React.FC<AddPagesModalProps> = ({
                                                         {page.name}
                                                         {!isExistingPage && <span className="new-badge">NEW</span>}
                                                     </h4>
-                                                    <span
-                                                        className={`page-type-badge page-type-${page.type}`}
-                                                    >
-                                                        {pageTypeLabels[page.type]}
-                                                    </span>
+                                                    {!isExistingPage && (
+                                                        <span
+                                                            className={`page-type-badge page-type-${page.type}`}
+                                                        >
+                                                            {pageTypeLabels[page.type]}
+                                                        </span>
+                                                    )}
                                                 </div>
 
                                                 <div className="page-actions">
@@ -579,6 +581,19 @@ const AddPagesModal: React.FC<AddPagesModalProps> = ({
 
                                             {page.description && (
                                                 <p className="page-description">{page.description}</p>
+                                            )}
+
+                                            {/* Wireframe Preview for existing pages */}
+                                            {isExistingPage && page.htmlContent && (
+                                                <div className="page-preview">
+                                                    <div className="preview-label">Current Wireframe:</div>
+                                                    <div className="preview-container">
+                                                        <div
+                                                            className="wireframe-mini-preview"
+                                                            dangerouslySetInnerHTML={{ __html: page.htmlContent }}
+                                                        />
+                                                    </div>
+                                                </div>
                                             )}
                                         </div>
                                     );

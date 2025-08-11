@@ -640,3 +640,48 @@ For detailed output, run func with --verbose flag.
 [2025-08-11T21:32:32.209Z]   "status": "200",
 [2025-08-11T21:32:32.209Z]   "duration": "8446"
 [2025-08-11T21:32:32.209Z] }
+[2025-08-11T21:36:01.308Z] Executing HTTP request: {
+[2025-08-11T21:36:01.308Z]   "requestId": "8c102bf1-c745-4756-9eb5-2ccb0d809e4b",
+[2025-08-11T21:36:01.308Z]   "method": "POST",
+[2025-08-11T21:36:01.308Z]   "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0",
+[2025-08-11T21:36:01.308Z]   "uri": "/api/generate-suggestions"
+[2025-08-11T21:36:01.308Z] }
+[2025-08-11T21:36:01.316Z] Executing 'Functions.generateSuggestions' (Reason='This function was programmatically called via the host APIs.', Id=cb7b52c1-4bce-4c4c-afea-aeac31c60a54)
+[2025-08-11T21:36:01.331Z] Worker 8809cff8-1a8f-4ea0-8061-e06575fba37f received FunctionInvocationRequest with invocationId cb7b52c1-4bce-4c4c-afea-aeac31c60a54
+[2025-08-11T21:36:01.331Z] Executed 'Functions.generateSuggestions' (Succeeded, Id=cb7b52c1-4bce-4c4c-afea-aeac31c60a54, Duration=17ms)
+[2025-08-11T21:36:01.332Z] Executed HTTP request: {
+[2025-08-11T21:36:01.332Z]   "requestId": "8c102bf1-c745-4756-9eb5-2ccb0d809e4b",
+[2025-08-11T21:36:01.332Z]   "identities": "",
+[2025-08-11T21:36:01.332Z]   "status": "200",
+[2025-08-11T21:36:01.332Z]   "duration": "27"
+[2025-08-11T21:36:01.332Z] }
+[2025-08-11T21:36:02.371Z] Executing HTTP request: {
+[2025-08-11T21:36:02.371Z]   "requestId": "89efe604-58ab-409a-88b0-e965212a356d",
+[2025-08-11T21:36:02.371Z]   "method": "POST",
+[2025-08-11T21:36:02.371Z]   "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0",
+[2025-08-11T21:36:02.372Z]   "uri": "/api/generate-html-wireframe"
+[2025-08-11T21:36:02.372Z] }
+[2025-08-11T21:36:02.374Z] Executing 'Functions.generateWireframe' (Reason='This function was programmatically called via the host APIs.', Id=da3be211-c77c-44d0-81a1-0cd1df5d4780)
+[2025-08-11T21:36:02.399Z] Worker 8809cff8-1a8f-4ea0-8061-e06575fba37f received FunctionInvocationRequest with invocationId da3be211-c77c-44d0-81a1-0cd1df5d4780
+[2025-08-11T21:36:11.693Z] Executed 'Functions.generateWireframe' (Succeeded, Id=da3be211-c77c-44d0-81a1-0cd1df5d4780, Duration=9320ms)
+[2025-08-11T21:36:11.696Z] Executed HTTP request: {
+[2025-08-11T21:36:11.696Z]   "requestId": "89efe604-58ab-409a-88b0-e965212a356d",
+[2025-08-11T21:36:11.697Z]   "identities": "",
+[2025-08-11T21:36:11.697Z]   "status": "200",
+[2025-08-11T21:36:11.697Z]   "duration": "9325"
+[2025-08-11T21:36:11.697Z] }
+[2025-08-11T21:47:45.042Z] Executing HTTP request: {
+[2025-08-11T21:47:45.043Z]   "requestId": "4edae93a-751a-4e87-a1a3-de1a7aecff8b",
+[2025-08-11T21:47:45.043Z]   "method": "POST",
+[2025-08-11T21:47:45.043Z]   "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0",
+[2025-08-11T21:47:45.043Z]   "uri": "/api/generate-html-wireframe"
+[2025-08-11T21:47:45.043Z] }
+[2025-08-11T21:47:45.057Z] Executing 'Functions.generateWireframe' (Reason='This function was programmatically called via the host APIs.', Id=0a219ef0-e551-45b4-89c9-c2f38fd6ba67)
+[2025-08-11T21:47:45.103Z] Worker 8809cff8-1a8f-4ea0-8061-e06575fba37f received FunctionInvocationRequest with invocationId 0a219ef0-e551-45b4-89c9-c2f38fd6ba67
+[2025-08-11T21:47:50.778Z] Executed 'Functions.generateWireframe' (Succeeded, Id=0a219ef0-e551-45b4-89c9-c2f38fd6ba67, Duration=5728ms)
+[2025-08-11T21:47:50.781Z] Executed HTTP request: {
+[2025-08-11T21:47:50.781Z]   "requestId": "4edae93a-751a-4e87-a1a3-de1a7aecff8b",
+[2025-08-11T21:47:50.781Z]   "identities": "",
+[2025-08-11T21:47:50.781Z]   "status": "200",
+[2025-08-11T21:47:50.781Z]   "duration": "5740"
+[2025-08-11T21:47:50.781Z] }

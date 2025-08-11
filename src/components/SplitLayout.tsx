@@ -198,28 +198,27 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     setConversationHistory(prev => [...prev, newMessage]);
   }, []);
 
-  // Auto-create "Home" page when wireframe content is first generated
+  // Auto-create "First Page" page when wireframe content is first generated
   useEffect(() => {
-    console.log('🔥 useEffect for Home page:', {
-      htmlWireframe: !!htmlWireframe,
-      htmlWireframeLength: htmlWireframe?.length,
+    console.log('🔥 useEffect for First Page:', {
+      hasWireframe: !!htmlWireframe,
       wireframePagesLength: wireframePages.length
     });
 
-    // If we have wireframe content but no pages, create a "Home" page
+    // If we have wireframe content but no pages, create a "First Page" page
     if (htmlWireframe && wireframePages.length === 0) {
-      console.log('🔥 Creating Home page automatically');
+      console.log('🔥 Creating First Page automatically');
       const homePage = {
         id: 'home-page',
-        name: 'Home',
-        description: 'Main landing page',
+        name: 'First Page',
+        description: 'First Page',
         type: 'page' as const
       };
 
       setWireframePages([homePage]);
       setCurrentPageId(homePage.id);
 
-      // Store the current wireframe content for the Home page
+      // Store the current wireframe content for the First Page
       setPageContents(prev => ({
         ...prev,
         [homePage.id]: htmlWireframe
@@ -396,7 +395,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                   Generate Content
                 </button>
                 <button style="background: #f3f2f1; color: #323130; border: 1px solid #e1dfdd; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-weight: 600; transition: background-color 0.2s ease;">
-                  Copy from Home
+                  Copy from First Page
                 </button>
               </div>
             </div>
@@ -891,6 +890,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               pages={wireframePages}
               currentPageId={currentPageId}
               onPageSwitch={handlePageSwitch}
+              onAddPage={handleAddPages}
             />
             <div className="wireframe-container">
               {/* Status bar removed for cleaner presentation */}
@@ -1078,7 +1078,10 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         isOpen={isAddPagesModalOpen}
         onClose={() => setIsAddPagesModalOpen(false)}
         onAddPages={handleAddPagesToWireframe}
-        existingPages={wireframePages}
+        existingPages={wireframePages.map(page => ({
+          ...page,
+          htmlContent: pageContents[page.id] || page.htmlContent || htmlWireframe
+        }))}
         onGeneratePageContent={onGeneratePageContent}
       />
 

@@ -79,26 +79,6 @@ const EnhancedMessage: React.FC<EnhancedMessageProps> = ({
                     </div>
                 </div>
 
-                {/* Actions and reactions */}
-                <div className="message-actions">
-                    <button className="action-btn copy-btn" onClick={handleCopy} title="Copy message">
-                        <FiCopy />
-                    </button>
-                    {message.type === 'ai' && (
-                        <>
-                            <button className="action-btn thumbs-up-btn" onClick={() => onReact?.(message.id, '👍')} title="Good response">
-                                <FiThumbsUp />
-                            </button>
-                            <button className="action-btn thumbs-down-btn" onClick={() => onReact?.(message.id, '👎')} title="Poor response">
-                                <FiThumbsDown />
-                            </button>
-                        </>
-                    )}
-                    <button className="action-btn more-btn" title="More options">
-                        <FiMoreHorizontal />
-                    </button>
-                </div>
-
                 {/* Reactions */}
                 {reactions.length > 0 && (
                     <div className="message-reactions">
