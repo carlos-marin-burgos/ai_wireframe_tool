@@ -1,119 +1,138 @@
-import React from 'react';
-import {
-    Save24Regular,
-    Code24Regular,
-    Desktop24Regular,
-    Grid24Filled,
-    ShareScreenStart24Regular
-} from '@fluentui/react-icons';
+import React, { useState, useRef, useEffect } from 'react';
+import { FiUpload, FiFigma, FiCode, FiShare2, FiMonitor, FiSave, FiGrid } from 'react-icons/fi';
 import './CompactToolbar.css';
 
 interface CompactToolbarProps {
-    onFigmaIntegration?: () => void;
-    onSave?: () => void;
-    onOpenLibrary?: () => void;
-    onAddPages?: () => void;
-    onViewHtmlCode?: () => void;
-    onPresentationMode?: () => void;
     onImportHtml?: () => void;
-    onExportPowerPoint?: () => void | Promise<void>;
-    onShareUrl?: () => void | Promise<void>;
+    onFigmaIntegration?: () => void;
+    onOpenLibrary?: () => void;
+    onViewHtmlCode?: () => void;
+    onShareUrl?: () => void;
+    onPresentationMode?: () => void;
+    onSave?: () => void;
 }
 
 const CompactToolbar: React.FC<CompactToolbarProps> = ({
+    onImportHtml,
     onFigmaIntegration,
-    onSave,
     onOpenLibrary,
     onViewHtmlCode,
-    onPresentationMode,
-    onImportHtml,
-    onExportPowerPoint,
     onShareUrl,
+    onPresentationMode,
+    onSave
 }) => {
+    const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
+
+    const showTooltip = (e: React.MouseEvent<HTMLButtonElement>, text: string) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        setTooltip({
+            text,
+            x: rect.left + rect.width / 2,
+            y: rect.bottom + 8
+        });
+    };
+
+    const hideTooltip = () => {
+        setTooltip(null);
+    };
+
     return (
-        <div className="compact-toolbar">
-            <div className="compact-toolbar-buttons">
-                {onImportHtml && (
-                    <button
-                        className="compact-btn"
-                        onClick={onImportHtml}
-                        title="Import HTML"
-                        aria-label="Import HTML"
-                    >
-                        <Code24Regular />
-                    </button>
-                )}
+        <>
+            <div className="compact-toolbar">
                 <button
                     className="compact-btn"
-                    onClick={() => {
-                        console.log('🔧 DEBUG: Fluent Component Library button clicked in CompactToolbar');
-                        onOpenLibrary?.();
-                    }}
-                    title="Open Component Library"
-                    aria-label="Open Component Library"
+                    onClick={onImportHtml}
+                    onMouseEnter={(e) => showTooltip(e, "Import HTML")}
+                    onMouseLeave={hideTooltip}
                 >
-                    <Grid24Filled />
+                    <FiUpload />
                 </button>
-
                 <button
                     className="compact-btn"
                     onClick={onFigmaIntegration}
-                    title="Export to Figma"
-                    aria-label="Export to Figma"
+                    onMouseEnter={(e) => showTooltip(e, "Figma Integration")}
+                    onMouseLeave={hideTooltip}
                 >
-                    <ShareScreenStart24Regular />
+                    <FiFigma />
                 </button>
-
+                <button
+                    className="compact-btn"
+                    onClick={() => {
+                        console.log('🔧 DEBUG: Component Library button clicked');
+                        onOpenLibrary?.();
+                    }}
+                    onMouseEnter={(e) => showTooltip(e, "Component Library")}
+                    onMouseLeave={hideTooltip}
+                >
+                    <FiGrid />
+                </button>
                 <button
                     className="compact-btn"
                     onClick={onViewHtmlCode}
-                    title="View HTML Code"
-                    aria-label="View HTML Code"
+                    onMouseEnter={(e) => showTooltip(e, "View HTML")}
+                    onMouseLeave={hideTooltip}
                 >
-                    <Code24Regular />
+                    <FiCode />
                 </button>
-
+                <button
+                    className="compact-btn"
+                    onClick={onShareUrl}
+                    onMouseEnter={(e) => showTooltip(e, "Share URL")}
+                    onMouseLeave={hideTooltip}
+                >
+                    <FiShare2 />
+                </button>
                 <button
                     className="compact-btn"
                     onClick={onPresentationMode}
-                    title="Presentation Mode"
-                    aria-label="Presentation Mode"
+                    onMouseEnter={(e) => showTooltip(e, "Presentation Mode")}
+                    onMouseLeave={hideTooltip}
                 >
-                    <Desktop24Regular />
+                    <FiMonitor />
                 </button>
-
                 <button
                     className="compact-btn"
                     onClick={onSave}
-                    title="Save Wireframe"
-                    aria-label="Save Wireframe"
+                    onMouseEnter={(e) => showTooltip(e, "Save")}
+                    onMouseLeave={hideTooltip}
                 >
-                    <Save24Regular />
+                    <FiSave />
                 </button>
-
-                {onExportPowerPoint && (
-                    <button
-                        className="compact-btn"
-                        onClick={onExportPowerPoint}
-                        title="Export to PowerPoint"
-                        aria-label="Export to PowerPoint"
-                    >
-                        <ShareScreenStart24Regular />
-                    </button>
-                )}
-
-                {onShareUrl && (
-                    <button
-                        className="compact-btn"
-                        onClick={onShareUrl}
-                        title="Share URL"
-                        aria-label="Share URL"
-                    >
-                        <ShareScreenStart24Regular />
-                    </button>
-                )}
             </div>
-        </div>
+
+            {tooltip && (
+                <div
+                    className="custom-tooltip"
+                    style={{
+                        position: 'fixed',
+                        left: tooltip.x,
+                        top: tooltip.y,
+                        transform: 'translateX(-50%)',
+                        zIndex: 10002,
+                        background: '#323130',
+                        color: 'white',
+                        padding: '6px 8px',
+                        borderRadius: '4px',
+                        fontSize: '12px',
+                        whiteSpace: 'nowrap',
+                        pointerEvents: 'none',
+                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
+                    }}
+                >
+                    {tooltip.text}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: '-4px',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            border: '4px solid transparent',
+                            borderBottomColor: '#323130'
+                        }}
+                    />
+                </div>
+            )}
+        </>
     );
 };
 

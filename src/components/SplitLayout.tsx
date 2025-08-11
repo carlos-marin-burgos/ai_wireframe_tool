@@ -15,7 +15,7 @@ import PageNavigation from "./PageNavigation";
 import HtmlCodeViewer from "./HtmlCodeViewer";
 import PresentationMode from "./PresentationMode";
 
-import { exportToPowerPoint, generateShareUrl } from "../utils/powerpointExport";
+import { generateShareUrl } from "../utils/powerpointExport";
 import {
   FiSend,
   FiLoader,
@@ -588,28 +588,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   }, []);
 
   // Export handlers
-  const handleExportPowerPoint = useCallback(async () => {
-    try {
-      // Prepare wireframe data for export
-      const wireframeData = {
-        name: `Wireframe ${new Date().toLocaleDateString()}`,
-        description: 'Generated wireframe design',
-        pages: wireframePages.length > 0 ? wireframePages : [{
-          id: 'main',
-          name: 'Main Page',
-          description: 'Main wireframe page',
-          type: 'page' as const
-        }],
-        pageContents: wireframePages.length > 0 ? pageContents : {
-          main: htmlWireframe || '<p>No content available</p>'
-        }
-      };
-
-      await exportToPowerPoint(wireframeData);
-    } catch (error) {
-      console.error('PowerPoint export failed:', error);
-    }
-  }, [wireframePages, pageContents, htmlWireframe]);
 
 
 
@@ -903,9 +881,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               onFigmaIntegration={handleFigmaIntegration}
               onSave={enhancedOnSave}
               onOpenLibrary={handleOpenLibrary}
-              onAddPages={handleAddPages}
               onViewHtmlCode={handleViewHtmlCode}
-              onExportPowerPoint={handleExportPowerPoint}
               onPresentationMode={handlePresentationMode}
               onShareUrl={handleShareUrl}
             />

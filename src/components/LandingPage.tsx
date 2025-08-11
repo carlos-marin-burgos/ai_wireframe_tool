@@ -70,6 +70,23 @@ const LandingPage: React.FC<LandingPageProps> = ({
   // Modal states
   const [isFigmaModalOpen, setIsFigmaModalOpen] = useState(false);
   const [isGitHubModalOpen, setIsGitHubModalOpen] = useState(false);
+  const [githubStatus, setGithubStatus] = useState<{ connected: boolean; login?: string; error?: string }>({ connected: false });
+
+  const startGitHubOAuth = async () => {
+    setGithubStatus(s => ({ connected: s.connected, login: s.login }));
+    try {
+      const { startGitHubAuth } = await import('../services/githubAuth');
+      const result = await startGitHubAuth();
+      if (result.status === 'success') {
+        setGithubStatus({ connected: true, login: result.login || 'unknown' });
+        if (result.token) sessionStorage.setItem('github_token', result.token);
+      } else {
+        setGithubStatus({ connected: false, error: result.error || 'Authentication failed' });
+      }
+    } catch (e: any) {
+      setGithubStatus({ connected: false, error: e.message });
+    }
+  };
 
   // Debounce timer for AI suggestions
   const debounceTimerRef = useRef<number | null>(null);
@@ -326,10 +343,15 @@ const LandingPage: React.FC<LandingPageProps> = ({
               </div>
 
               <div className="modal-actions">
-                <button className="btn-primary github-connect-btn">
+                <button className="btn-primary github-connect-btn" type="button" onClick={() => { if (!githubStatus.connected) startGitHubOAuth(); }}>
                   <FiGithub />
-                  Connect with GitHub
+                  {githubStatus.connected ? `Connected: ${githubStatus.login}` : 'Connect with GitHub'}
                 </button>
+                {githubStatus.error && (
+                  <div className="error" style={{ marginTop: '8px' }}>
+                    {githubStatus.error}
+                  </div>
+                )}
                 <button
                   className="btn-secondary"
                   onClick={() => setIsGitHubModalOpen(false)}
