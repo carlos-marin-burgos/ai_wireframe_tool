@@ -17,8 +17,11 @@ const COLOR_SCHEMES = {
     main: "#0078d4",
     secondary: "#106ebe",
     bg: "#ffffff",
+    surface: "#f8f9fa",
     text: "#323130",
+    textSecondary: "#605e5c",
     border: "#e1e5e9",
+    accent: "#0078d4",
     headerBg: "#ffffff",
     headerText: "#000000",
   },
@@ -177,7 +180,7 @@ const generateLandingPage = (
 ): string => {
   const colors =
     COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] ||
-    COLOR_SCHEMES.primary;
+    COLOR_SCHEMES.microsoftLearn;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -287,7 +290,7 @@ const generateDashboard = (
 ): string => {
   const colors =
     COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] ||
-    COLOR_SCHEMES.primary;
+    COLOR_SCHEMES.microsoftLearn;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -485,7 +488,7 @@ const generateForm = (
 ): string => {
   const colors =
     COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] ||
-    COLOR_SCHEMES.primary;
+    COLOR_SCHEMES.microsoftLearn;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -658,7 +661,7 @@ const generateContent = (
 ): string => {
   const colors =
     COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] ||
-    COLOR_SCHEMES.primary;
+    COLOR_SCHEMES.microsoftLearn;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -857,7 +860,7 @@ const generateGeneric = (
 ): string => {
   const colors =
     COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] ||
-    COLOR_SCHEMES.primary;
+    COLOR_SCHEMES.microsoftLearn;
 
   return `<!DOCTYPE html>
 <html lang="en">
