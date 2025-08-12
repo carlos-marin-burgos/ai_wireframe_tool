@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>API Endpoint Test</title>
+</head>
+
+<body>
+    <h1>API Endpoint Test</h1>
+    <button onclick="testGenerateWireframe()">Test /api/generate-wireframe</button>
+    <button onclick="testGenerateHtmlWireframe()">Test /api/generate-html-wireframe</button>
+    <div id="results"></div>
+
+    <script>
+        async function testEndpoint(endpoint, label) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML += `<h3>Testing ${label}</h3>`;
+
+            try {
+                console.log(`Testing ${endpoint}`);
+                const response = await fetch(`http://localhost:7072${endpoint}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        description: 'test wireframe',
+                        theme: 'microsoftlearn',
+                        colorScheme: 'primary'
+                    })
+                });
+
+                console.log(`Response status: ${response.status}`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                resultsDiv.innerHTML += `<p style="color: green;">✅ ${label} SUCCESS - Got ${data.html ? 'HTML' : 'No HTML'}</p>`;
+                console.log(`${label} success:`, data);
+            } catch (error) {
+                resultsDiv.innerHTML += `<p style="color: red;">❌ ${label} FAILED: ${error.message}</p>`;
+                console.error(`${label} failed:`, error);
+            }
+        }
+
+        function testGenerateWireframe() {
+            testEndpoint('/api/generate-wireframe', '/api/generate-wireframe');
+        }
+
+        function testGenerateHtmlWireframe() {
+            testEndpoint('/api/generate-html-wireframe', '/api/generate-html-wireframe');
+        }
+    </script>
+</body>
+
+</html>

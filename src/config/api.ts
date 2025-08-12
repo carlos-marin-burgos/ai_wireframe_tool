@@ -49,8 +49,9 @@ export const API_CONFIG = {
   ],
 
   ENDPOINTS: {
-    GENERATE_WIREFRAME: "/api/generate-wireframe", // Using working endpoint
-    GENERATE_SUGGESTIONS: "/api/generate-suggestions", // Updated to match backend server
+    // NUCLEAR OPTION: Single endpoint that works no matter what
+    GENERATE_WIREFRAME: "/api/generate-wireframe",
+    GENERATE_SUGGESTIONS: "/api/generate-suggestions",
     GET_TEMPLATE: "/api/get-template",
     HEALTH: "/api/health",
   },
