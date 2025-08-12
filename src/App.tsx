@@ -371,11 +371,12 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           // Single element - add draggable attributes to it
           const element = bodyChildren[0] as HTMLElement;
           element.setAttribute('data-draggable', 'true');
+          element.setAttribute('data-user-added', 'true');
           element.classList.add('atlas-component');
           html = element.outerHTML;
         } else {
           // Multiple elements - wrap in a draggable container
-          html = `<div class="atlas-component component-container" data-draggable="true" style="display: inline-block; margin: 8px;">${html}</div>`;
+          html = `<div class="atlas-component component-container" data-draggable="true" data-user-added="true" style="display: inline-block; margin: 8px;">${html}</div>`;
         }
       }
 
@@ -473,7 +474,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
       // Atlas Button Components
       case 'atlas-button-primary':
-        return `<button class="button button-primary button-lg atlas-component" data-draggable="true" style="margin: 10px; padding: 12px 24px; background: #0078d4; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Primary Button'}</button>`;
+        return `<button class="button button-primary button-lg atlas-component" data-draggable="true" data-user-added="true" style="margin: 10px; padding: 12px 24px; background: #0078d4; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Primary Button'}</button>`;
 
       case 'atlas-button-primary-filled':
         return `<button class="button button-primary-filled" style="margin: 10px; padding: 12px 24px; background: #0078d4; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Primary Filled Button'}</button>`;
@@ -637,7 +638,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
         </div>`;
 
       case 'atlas-card':
-        return `<div class="card atlas-component" data-draggable="true" style="margin: 10px; padding: 20px; border: 1px solid #e1dfdd; border-radius: 8px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        return `<div class="card atlas-component" data-draggable="true" data-user-added="true" style="margin: 10px; padding: 20px; border: 1px solid #e1dfdd; border-radius: 8px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
           <h4 style="margin: 0 0 10px 0; color: #323130;">💳 Card Title</h4>
           <p style="margin: 0; color: #605e5c;">Card content goes here. This is a Microsoft Learn styled card component.</p>
         </div>`;

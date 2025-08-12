@@ -712,6 +712,22 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
     const handleDragEnd = useCallback(() => {
         if (!draggedElement || !containerRef.current) return;
 
+        // Apply snap position if there's a nearest snap point
+        if (nearestSnapPoint) {
+            const elementRect = draggedElement.getBoundingClientRect();
+            const containerRect = containerRef.current.getBoundingClientRect();
+
+            // Calculate the snapped position relative to container
+            const snapX = nearestSnapPoint.x - elementRect.width / 2;
+            const snapY = nearestSnapPoint.y - elementRect.height / 2;
+
+            // Apply the snap position using absolute positioning
+            draggedElement.style.position = 'absolute';
+            draggedElement.style.left = `${snapX}px`;
+            draggedElement.style.top = `${snapY}px`;
+            draggedElement.style.margin = '0'; // Remove any margins that might interfere
+        }
+
         // Clean reset of visual feedback with smooth transitions
         draggedElement.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
         draggedElement.style.zIndex = '';
@@ -800,7 +816,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         }
 
         // Fancy drag completed
-    }, [draggedElement, onUpdateHtml, dragGhost, createParticleEffect, smartAutoArrange]);
+    }, [draggedElement, onUpdateHtml, dragGhost, createParticleEffect, smartAutoArrange, nearestSnapPoint]);
 
     // Handle external drag operations (for adding new components to empty wireframes)
     const handleDragOver = useCallback((event: React.DragEvent) => {

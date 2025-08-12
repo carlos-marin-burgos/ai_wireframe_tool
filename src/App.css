@@ -42,6 +42,36 @@ body {
   transition: all 0.2s ease;
 }
 
+/* Visual indicator for user-added (draggable) components */
+.atlas-component[data-user-added="true"] {
+  border: 2px dashed transparent;
+  transition: all 0.2s ease;
+}
+
+.atlas-component[data-user-added="true"]:hover {
+  box-shadow: 0 2px 8px rgba(0, 123, 212, 0.2);
+  transform: translateY(-1px);
+  border-color: rgba(0, 123, 212, 0.3);
+}
+
+.atlas-component[data-user-added="true"]:hover::after {
+  content: "⋮⋮ Drag to move";
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #0078d4;
+  color: white;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  line-height: 1;
+  pointer-events: none;
+  opacity: 0.9;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
 .atlas-component:hover {
   box-shadow: 0 2px 8px rgba(0, 123, 212, 0.2);
   transform: translateY(-1px);
