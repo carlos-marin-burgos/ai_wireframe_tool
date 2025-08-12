@@ -7,7 +7,8 @@ import AddPagesModal from "./AddPagesModal";
 import SaveWireframeModal, { SavedWireframe } from "./SaveWireframeModal";
 import FigmaIntegrationModal from "./FigmaIntegrationModal";
 import ComponentLibraryModal from "./ComponentLibraryModal";
-import LinkableWireframe from "./LinkableWireframe";
+import SimpleDragDrop from "./SimpleDragDrop";
+import MouseDragDrop from "./MouseDragDrop";
 import EnhancedMessage from "./EnhancedMessage";
 import ImageUploadZone from "./ImageUploadZone";
 import DemoImageSelector from "./DemoImageSelector";
@@ -949,7 +950,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
             <div className="wireframe-container">
               {/* Status bar removed for cleaner presentation */}
               <div className="wireframe-content">
-                <LinkableWireframe
+                <MouseDragDrop
                   htmlContent={currentPageId ? (pageContents[currentPageId] || htmlWireframe) : htmlWireframe}
                   onUpdateHtml={(newHtml) => {
                     // Update the current page content

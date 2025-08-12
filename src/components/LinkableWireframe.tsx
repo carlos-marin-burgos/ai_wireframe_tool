@@ -132,27 +132,50 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
 
     // Check if an element is draggable (only user-added elements should be draggable)
     const isDraggableElement = useCallback((element: HTMLElement): boolean => {
-        // CRITICAL: Only elements marked as user-added should be draggable
-        // Generated wireframe content should NOT be draggable
-        if (!element.hasAttribute('data-user-added')) {
-            return false;
-        }
-
-        // Don't allow direct dragging of input/textarea elements - only their containers
+        // Don't allow direct dragging of input/textarea/select elements - only their containers
         if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA' || element.tagName === 'SELECT') {
             return false;
         }
 
-        // Check if it's an Atlas component or has specific draggable indicators
-        const hasAtlasClass = element.classList.contains('atlas-component') ||
-            element.classList.contains('component-container') ||
-            element.classList.contains('card') ||
-            element.classList.contains('button') ||
-            element.classList.contains('form-group') ||
-            element.classList.contains('hero-section') ||
-            element.classList.contains('nav-section');
+        // CRITICAL: Only allow dragging within the wireframe container
+        if (!containerRef.current?.contains(element)) {
+            return false;
+        }
 
-        // Check if it has absolute positioning (likely a placed component)
+        // Exclude toolbar, header, and UI elements
+        if (element.closest('.toolbar') ||
+            element.closest('.component-library-modal') ||
+            element.closest('header') ||
+            element.closest('.docs-header') ||
+            element.closest('.fallback-notice') ||
+            element.closest('.action-buttons') ||
+            element.classList.contains('delete-btn')) {
+            return false;
+        }
+
+        // Check if it's a user-added Atlas component
+        const isUserAdded = element.hasAttribute('data-user-added');
+
+        // Check if it's a wireframe control that should be draggable (more restrictive)
+        const isWireframeControl = element.classList.contains('form-group') ||
+            element.classList.contains('form-submit') ||
+            element.classList.contains('card') ||
+            element.classList.contains('hero-section') ||
+            element.classList.contains('nav-section') ||
+            // Only allow buttons that are form submit buttons or have specific classes
+            (element.tagName === 'BUTTON' &&
+                (element.classList.contains('form-submit') ||
+                    (element as HTMLButtonElement).type === 'submit' ||
+                    element.closest('.form-container')));
+
+        // Check if it's an Atlas component
+        const hasAtlasClass = element.classList.contains('atlas-component') ||
+            element.classList.contains('component-container');
+
+        // Allow dragging if it's either user-added OR a wireframe control
+        if (!isUserAdded && !isWireframeControl && !hasAtlasClass) {
+            return false;
+        }        // Check if it has absolute positioning (likely a placed component)
         const computedStyle = window.getComputedStyle(element);
         const isPositioned = computedStyle.position === 'absolute' ||
             computedStyle.position === 'relative';
@@ -166,7 +189,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         const hasDraggableAttr = element.hasAttribute('data-draggable') ||
             element.getAttribute('draggable') === 'true';
 
-        const isDraggable = Boolean(hasAtlasClass || isPositioned || isContainer || hasDraggableAttr);
+        const isDraggable = Boolean(isUserAdded || isWireframeControl || hasAtlasClass || isPositioned || isContainer || hasDraggableAttr);
 
         // Add accessibility attributes for draggable elements
         if (isDraggable) {
@@ -234,7 +257,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
 
     // Find nearest snap point for magnetic effect
     const findNearestSnapPoint = useCallback((x: number, y: number, snapPoints: Array<{ x: number; y: number; type: string }>) => {
-        const snapDistance = 15; // Pixels to trigger snap
+        const snapDistance = 30; // Increased from 15 to 30 pixels to trigger snap more easily
         let nearest = null;
         let minDistance = snapDistance;
 
@@ -484,6 +507,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
 
             // Generate snap points for this drag session
             const points = generateSnapPoints(containerRef.current, element);
+            console.log('📍 Generated snap points:', points.length, 'points'); // Debug log
             setSnapPoints(points);
 
             // Create ripple effect at drag start position
@@ -607,6 +631,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
             newY = newY + (nearest.y - draggedElement.offsetHeight / 2 - newY) * snapStrength;
 
             setNearestSnapPoint(nearest);
+            console.log('🎯 Snap point detected:', nearest, 'Type:', nearest.type); // Debug log
 
             // Create snap particle effect
             if (Math.abs(newX + draggedElement.offsetWidth / 2 - nearest.x) < 5) {
@@ -1403,16 +1428,27 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
 
             {/* Snap point indicators */}
             {isDragging && nearestSnapPoint && (
-                <div
-                    className="snap-indicator"
-                    style={{
-                        left: `${nearestSnapPoint.x}px`,
-                        top: `${nearestSnapPoint.y}px`,
-                        transform: 'translate(-50%, -50%)'
-                    }}
-                >
-                    <div className={`snap-point snap-${nearestSnapPoint.type}`}></div>
-                </div>
+                <>
+                    {/* Large snap preview area */}
+                    <div
+                        className="snap-preview-area"
+                        style={{
+                            left: `${nearestSnapPoint.x}px`,
+                            top: `${nearestSnapPoint.y}px`,
+                        }}
+                    />
+                    {/* Precise snap indicator */}
+                    <div
+                        className="snap-indicator"
+                        style={{
+                            left: `${nearestSnapPoint.x}px`,
+                            top: `${nearestSnapPoint.y}px`,
+                            transform: 'translate(-50%, -50%)'
+                        }}
+                    >
+                        <div className={`snap-point snap-${nearestSnapPoint.type}`}></div>
+                    </div>
+                </>
             )}
 
             {/* Particle effects */}

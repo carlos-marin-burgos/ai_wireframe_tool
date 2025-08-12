@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Drag and Drop Canvas Test</title>
+    <style>
+        .canvas-container {
+            width: 90%;
+            height: 500px;
+            border: 2px dashed #ccc;
+            margin: 20px auto;
+            position: relative;
+            background: #f9f9f9;
+        }
+
+        .draggable-item {
+            position: absolute;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: grab;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+
+        .draggable-item:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .draggable-item.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+            transform: rotate(5deg);
+        }
+
+        .canvas-container.drop-active {
+            border-color: #007bff;
+            background: #e3f2fd;
+        }
+
+        .form-element {
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 4px;
+            min-width: 200px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-element input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin: 5px 0;
+            box-sizing: border-box;
+        }
+
+        .instructions {
+            text-align: center;
+            margin: 20px;
+            padding: 20px;
+            background: #f0f7ff;
+            border-radius: 8px;
+            border: 1px solid #007bff;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 style="text-align: center;">Simple Drag and Drop Canvas</h1>
+
+    <div class="instructions">
+        <h3>🎯 How to Test Drag and Drop</h3>
+        <p>1. Hover over any element to see the drag cursor</p>
+        <p>2. Click and drag elements to move them around the canvas</p>
+        <p>3. Elements will snap to their new positions when dropped</p>
+    </div>
+
+    <div class="canvas-container" id="canvas">
+        <!-- Pre-placed draggable elements -->
+        <div class="draggable-item" style="top: 20px; left: 20px;" draggable="true">
+            🔘 Button 1
+        </div>
+
+        <div class="draggable-item" style="top: 20px; left: 200px;" draggable="true">
+            🔘 Button 2
+        </div>
+
+        <div class="form-element" style="top: 80px; left: 20px;" draggable="true">
+            <label>📝 Contact Form</label>
+            <input type="text" placeholder="Enter your name" readonly>
+            <input type="email" placeholder="Enter your email" readonly>
+        </div>
+
+        <div class="draggable-item" style="top: 200px; left: 20px;" draggable="true">
+            ✅ Submit
+        </div>
+
+        <div class="form-element" style="top: 250px; left: 300px;" draggable="true">
+            <label>💬 Feedback</label>
+            <input type="text" placeholder="Your feedback" readonly>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin: 20px;">
+        <button onclick="addNewElement()"
+            style="padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">
+            ➕ Add New Element
+        </button>
+        <button onclick="clearCanvas()"
+            style="padding: 10px 20px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px;">
+            🗑️ Clear Canvas
+        </button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        let draggedElement = null;
+        let elementCounter = 3;
+
+        // Handle drag start
+        canvas.addEventListener('dragstart', (e) => {
+            if (e.target.draggable) {
+                draggedElement = e.target;
+                e.target.classList.add('dragging');
+
+                // Set drag data
+                e.dataTransfer.setData('text/html', e.target.outerHTML);
+                e.dataTransfer.effectAllowed = 'move';
+
+                console.log('🎯 Drag started:', e.target.textContent);
+            }
+        });
+
+        // Handle drag end
+        canvas.addEventListener('dragend', (e) => {
+            if (e.target.classList.contains('dragging')) {
+                e.target.classList.remove('dragging');
+                canvas.classList.remove('drop-active');
+                console.log('🏁 Drag ended:', e.target.textContent);
+            }
+        });
+
+        // Handle drag over
+        canvas.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            canvas.classList.add('drop-active');
+        });
+
+        // Handle drag leave
+        canvas.addEventListener('dragleave', (e) => {
+            if (!canvas.contains(e.relatedTarget)) {
+                canvas.classList.remove('drop-active');
+            }
+        });
+
+        // Handle drop
+        canvas.addEventListener('drop', (e) => {
+            e.preventDefault();
+            canvas.classList.remove('drop-active');
+
+            if (!draggedElement) return;
+
+            // Calculate drop position relative to canvas
+            const canvasRect = canvas.getBoundingClientRect();
+            const dropX = e.clientX - canvasRect.left;
+            const dropY = e.clientY - canvasRect.top;
+
+            // Get element dimensions for centering
+            const elementRect = draggedElement.getBoundingClientRect();
+            const centerOffsetX = elementRect.width / 2;
+            const centerOffsetY = elementRect.height / 2;
+
+            // Position the element at the drop location (centered on cursor)
+            const newX = Math.max(0, Math.min(canvasRect.width - elementRect.width, dropX - centerOffsetX));
+            const newY = Math.max(0, Math.min(canvasRect.height - elementRect.height, dropY - centerOffsetY));
+
+            draggedElement.style.left = newX + 'px';
+            draggedElement.style.top = newY + 'px';
+
+            console.log('📍 Dropped at:', Math.round(newX), Math.round(newY));
+
+            // Reset dragged element
+            draggedElement = null;
+        });
+
+        // Add new element function
+        function addNewElement() {
+            elementCounter++;
+            const newElement = document.createElement('div');
+            newElement.className = 'draggable-item';
+            newElement.draggable = true;
+            newElement.style.top = '50px';
+            newElement.style.left = '50px';
+            newElement.textContent = `🆕 Element ${elementCounter}`;
+
+            canvas.appendChild(newElement);
+            console.log('➕ Added new element:', newElement.textContent);
+        }
+
+        // Clear canvas function
+        function clearCanvas() {
+            if (confirm('Are you sure you want to clear all elements?')) {
+                canvas.innerHTML = '';
+                elementCounter = 0;
+                console.log('🗑️ Canvas cleared');
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -741,25 +741,26 @@ body.dragging-active * {
 }
 
 .snap-point {
-  width: 12px;
-  height: 12px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   animation: snapPulse 0.8s ease-in-out infinite;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.8);
 }
 
 .snap-point.snap-grid {
-  background: rgba(0, 123, 255, 0.6);
-  border: 2px solid rgba(0, 123, 255, 0.8);
+  background: rgba(0, 123, 255, 0.8);
+  border: 3px solid rgba(0, 123, 255, 1);
 }
 
 .snap-point.snap-element {
-  background: rgba(40, 167, 69, 0.6);
-  border: 2px solid rgba(40, 167, 69, 0.8);
+  background: rgba(40, 167, 69, 0.8);
+  border: 3px solid rgba(40, 167, 69, 1);
 }
 
 .snap-point.snap-edge {
-  background: rgba(255, 193, 7, 0.6);
-  border: 2px solid rgba(255, 193, 7, 0.8);
+  background: rgba(255, 193, 7, 0.8);
+  border: 3px solid rgba(255, 193, 7, 1);
 }
 
 @keyframes snapPulse {
@@ -769,8 +770,34 @@ body.dragging-active * {
     opacity: 0.8;
   }
   50% {
-    transform: scale(1.5);
+    transform: scale(1.8);
     opacity: 1;
+  }
+}
+
+/* Enhanced snap preview with larger area */
+.snap-preview-area {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 2px dashed #28a745;
+  background: rgba(40, 167, 69, 0.15);
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 999;
+  animation: snapAreaPulse 1s ease-in-out infinite;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes snapAreaPulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0.9;
   }
 }
 

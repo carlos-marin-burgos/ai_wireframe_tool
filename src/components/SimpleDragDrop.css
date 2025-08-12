@@ -1,0 +1,242 @@
+/* Simple Drag and Drop Styles */
+.simple-drag-drop {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 250px); /* Ensure good height */
+  height: auto;
+  padding: 20px;
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  box-sizing: border-box;
+  overflow: visible; /* Allow elements to extend if needed */
+}
+
+/* Drop zone active state */
+.simple-drag-drop.drop-zone-active {
+  border-color: #007bff;
+  background: #f0f7ff;
+  border-style: solid;
+}
+
+/* Drop indicator */
+.drop-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 123, 255, 0.9);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+  z-index: 1000;
+  pointer-events: none;
+  animation: dropIndicatorPulse 1s ease-in-out infinite;
+}
+
+@keyframes dropIndicatorPulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.05);
+    opacity: 1;
+  }
+}
+
+/* Empty page state */
+.empty-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  margin: 20px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.empty-page-content {
+  text-align: center;
+  color: #6c757d;
+  max-width: 400px;
+  padding: 40px 20px;
+  pointer-events: none;
+}
+
+.empty-page-content h3 {
+  margin: 0 0 16px 0;
+  color: #495057;
+  font-size: 24px;
+}
+
+.empty-page-content p {
+  margin: 8px 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Draggable element styles */
+.simple-drag-drop [draggable="true"] {
+  cursor: grab;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.simple-drag-drop [draggable="true"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+  outline: 2px dashed rgba(0, 123, 255, 0.4);
+  outline-offset: 2px;
+}
+
+.simple-drag-drop [draggable="true"]:hover::after {
+  content: "⋮⋮ Drag to move";
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #007bff;
+  color: white;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  line-height: 1;
+  pointer-events: none;
+  opacity: 0.9;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+/* Dragging state */
+.simple-drag-drop .dragging {
+  opacity: 0.5;
+  transform: rotate(5deg) scale(0.95);
+  z-index: 1000;
+  cursor: grabbing;
+}
+
+/* User-added elements styling */
+.simple-drag-drop [data-user-added="true"] {
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.simple-drag-drop [data-user-added="true"]:hover {
+  border-color: rgba(0, 123, 255, 0.3);
+  background-color: rgba(0, 123, 255, 0.05);
+}
+
+/* Form elements styling */
+.simple-drag-drop .form-group,
+.simple-drag-drop .form-submit {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+}
+
+.simple-drag-drop .form-group input,
+.simple-drag-drop .form-group textarea,
+.simple-drag-drop .form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.simple-drag-drop .form-submit button,
+.simple-drag-drop button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.simple-drag-drop .form-submit button:hover,
+.simple-drag-drop button:hover {
+  background: #0056b3;
+}
+
+/* Card elements */
+.simple-drag-drop .card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Hero and nav sections */
+.simple-drag-drop .hero-section,
+.simple-drag-drop .nav-section {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 15px;
+  margin: 10px 0;
+}
+
+/* Ensure positioned elements stay within bounds */
+.simple-drag-drop [style*="position: absolute"] {
+  max-width: calc(100% - 40px);
+  word-wrap: break-word;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .simple-drag-drop {
+    padding: 15px;
+  }
+
+  .simple-drag-drop [style*="position: absolute"] {
+    max-width: calc(100% - 30px);
+    font-size: 14px;
+  }
+
+  .drop-indicator {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+}
+
+/* Accessibility improvements */
+.simple-drag-drop [draggable="true"]:focus {
+  outline: 3px solid #007bff;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .simple-drag-drop [draggable="true"]:hover {
+    outline: 3px solid ButtonText;
+    background: Highlight;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .simple-drag-drop [draggable="true"],
+  .drop-indicator {
+    transition: none;
+    animation: none;
+  }
+
+  .simple-drag-drop .dragging {
+    transform: none;
+  }
+}

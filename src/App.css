@@ -92,6 +92,44 @@ body {
   opacity: 0.8;
 }
 
+/* Wireframe controls draggable styling - Only within wireframe container */
+.linkable-wireframe .form-group:hover,
+.linkable-wireframe .form-submit:hover,
+.linkable-wireframe button:not([data-user-added]):not(.delete-btn):hover,
+.linkable-wireframe .card:not([data-user-added]):hover,
+.linkable-wireframe .hero-section:hover,
+.linkable-wireframe .nav-section:hover {
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+  transform: translateY(-1px);
+  border: 2px dashed rgba(40, 167, 69, 0.4) !important;
+  transition: all 0.2s ease;
+  position: relative;
+  cursor: move;
+}
+
+.linkable-wireframe .form-group:hover::after,
+.linkable-wireframe .form-submit:hover::after,
+.linkable-wireframe button:not([data-user-added]):not(.delete-btn):hover::after,
+.linkable-wireframe .card:not([data-user-added]):hover::after,
+.linkable-wireframe .hero-section:hover::after,
+.linkable-wireframe .nav-section:hover::after {
+  content: "↔️ Drag to rearrange";
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #28a745;
+  color: white;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  line-height: 1;
+  pointer-events: none;
+  opacity: 0.9;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
 .atlas-component[data-dragging="true"] {
   cursor: grabbing !important;
   box-shadow: 0 4px 16px rgba(0, 123, 212, 0.3) !important;

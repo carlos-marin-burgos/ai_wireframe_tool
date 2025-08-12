@@ -1,0 +1,268 @@
+/* Mouse-based Drag and Drop Styles */
+.mouse-drag-drop {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 250px);
+  height: auto;
+  padding: 20px;
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  box-sizing: border-box;
+  overflow: visible;
+  transition: all 0.2s ease;
+}
+
+/* Active dragging state */
+.mouse-drag-drop.dragging-active {
+  border-color: #007bff;
+  background: #f0f7ff;
+  border-style: solid;
+}
+
+/* Subtle drag cursor indicator */
+.mouse-drag-drop.dragging-active::after {
+  content: "🖱️ Dragging...";
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(0, 123, 255, 0.9);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  z-index: 1000;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+/* Draggable elements */
+.mouse-drag-drop [data-draggable="true"] {
+  cursor: grab !important;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.mouse-drag-drop [data-draggable="true"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+  outline: 2px dashed rgba(0, 123, 255, 0.4);
+  outline-offset: 2px;
+}
+
+.mouse-drag-drop [data-draggable="true"]:hover::after {
+  content: "🖱️ Click & drag to move";
+  position: fixed;
+  top: auto;
+  bottom: auto;
+  left: auto;
+  right: auto;
+  transform: none;
+  background: #007bff;
+  color: white;
+  font-size: 11px;
+  padding: 6px 12px;
+  border-radius: 16px;
+  line-height: 1.2;
+  pointer-events: none;
+  opacity: 0.95;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+  z-index: 1000;
+  margin-top: -35px;
+  margin-left: 10px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* Element being dragged - only during active drag */
+.mouse-drag-drop.dragging-active .being-dragged {
+  opacity: 0.3;
+  transform: scale(0.98);
+  border: 2px dashed rgba(0, 123, 255, 0.5);
+}
+
+/* Ensure elements are solid when not being dragged */
+.mouse-drag-drop [data-draggable="true"]:not(.being-dragged) {
+  opacity: 1;
+}
+
+/* Ghost element */
+.drag-ghost {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+  border: 2px solid rgba(0, 123, 255, 0.8) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Empty page state */
+.empty-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  margin: 20px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.empty-page-content {
+  text-align: center;
+  color: #6c757d;
+  max-width: 400px;
+  padding: 40px 20px;
+  pointer-events: none;
+}
+
+.empty-page-content h3 {
+  margin: 0 0 16px 0;
+  color: #495057;
+  font-size: 24px;
+}
+
+.empty-page-content p {
+  margin: 8px 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Form elements styling */
+.mouse-drag-drop .form-group,
+.mouse-drag-drop .form-submit {
+  margin: 10px 0;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mouse-drag-drop .form-group input,
+.mouse-drag-drop .form-group textarea,
+.mouse-drag-drop .form-group select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.mouse-drag-drop .form-submit button,
+.mouse-drag-drop button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  min-width: 80px;
+}
+
+.mouse-drag-drop .form-submit button:hover,
+.mouse-drag-drop button:hover {
+  background: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+}
+
+/* Card elements */
+.mouse-drag-drop .card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Hero and nav sections */
+.mouse-drag-drop .hero-section,
+.mouse-drag-drop .nav-section {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 20px;
+  margin: 15px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* User-added elements */
+.mouse-drag-drop [data-user-added="true"] {
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.mouse-drag-drop [data-user-added="true"]:hover {
+  border-color: rgba(0, 123, 255, 0.3);
+  background-color: rgba(0, 123, 255, 0.05);
+}
+
+/* Ensure positioned elements stay within bounds */
+.mouse-drag-drop [style*="position: absolute"] {
+  max-width: calc(100% - 40px);
+  word-wrap: break-word;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .mouse-drag-drop {
+    padding: 15px;
+  }
+
+  .mouse-drag-drop [style*="position: absolute"] {
+    max-width: calc(100% - 30px);
+    font-size: 14px;
+  }
+
+  .drag-instruction {
+    font-size: 12px;
+    padding: 10px 20px;
+  }
+
+  .mouse-drag-drop [data-draggable="true"]:hover::after {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+}
+
+/* Accessibility improvements */
+.mouse-drag-drop [data-draggable="true"]:focus {
+  outline: 3px solid #007bff;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .mouse-drag-drop [data-draggable="true"]:hover {
+    outline: 3px solid ButtonText;
+    background: Highlight;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .mouse-drag-drop [data-draggable="true"],
+  .drag-instruction,
+  .mouse-drag-drop .being-dragged {
+    transition: none;
+    animation: none;
+    transform: none;
+  }
+}
+
+/* Prevent text selection during drag */
+.mouse-drag-drop.dragging-active * {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}

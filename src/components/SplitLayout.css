@@ -217,9 +217,9 @@
 /* Wireframe container styles */
 .wireframe-container {
   flex: 1;
-  overflow: auto;
+  overflow: visible; /* Allow content to expand */
   padding: 20px;
-  height: calc(100% - 60px); /* Subtract exact toolbar height */
+  height: calc(100vh - 120px); /* Full height minus nav and margins */
   background: #fafafa;
 }
 
@@ -228,12 +228,12 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
-  overflow: hidden;
+  overflow: visible; /* Allow content to expand */
 }
 
 .wireframe-content {
   width: 100%;
-  height: calc(100% - 40px); /* Account for container padding */
+  height: 100%;
   min-height: calc(100vh - 200px); /* Ensure it fills available space */
   background-color: white;
   border: 1px solid #ddd;
