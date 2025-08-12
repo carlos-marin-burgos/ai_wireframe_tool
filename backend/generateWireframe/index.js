@@ -115,14 +115,14 @@ async function generateWithAI(description) {
 
 Requirements:
 - ALWAYS start with the official Microsoft Learn site header as the FIRST element in the body
-- Use Microsoft Learn design system with header background #E8E6DF and black text #000000
+- Use Microsoft Learn design system with header background #ffffff and black text #000000
 - Include Segoe UI font family
 - Make it responsive and accessible
 - Include the exact components requested in the description
 - Use semantic HTML and modern CSS
 
 MICROSOFT LEARN HEADER TEMPLATE (ALWAYS INCLUDE FIRST):
-<header style="background: #E8E6DF; color: #000000; padding: 12px 24px; border-bottom: 1px solid #e5e5e5; font-family: 'Segoe UI', system-ui, sans-serif;">
+<header style="background: #ffffff; color: #000000; padding: 12px 24px; border-bottom: 1px solid #e5e5e5; font-family: 'Segoe UI', system-ui, sans-serif;">
   <div style="display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto;">
     <div style="display: flex; align-items: center;">
       <svg aria-hidden="true" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; margin-right: 16px;">
@@ -143,9 +143,9 @@ MICROSOFT LEARN HEADER TEMPLATE (ALWAYS INCLUDE FIRST):
 </header>
 
 COLOR GUIDELINES:
-- Header background: #E8E6DF with black text (#000000)
+- Header background: #ffffff with black text (#000000)
 - Primary buttons: #0078d4 (keep blue for buttons and links)
-- Hero/banner sections: #E8E6DF background
+- Hero/banner sections: #ffffff background
 
 Generate ONLY the HTML code (starting with <!DOCTYPE html>).`;
 

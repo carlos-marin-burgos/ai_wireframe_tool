@@ -13,16 +13,13 @@ interface FallbackWireframeOptions {
 
 // Color scheme definitions
 const COLOR_SCHEMES = {
-  primary: {
+  microsoftLearn: {
     main: "#0078d4",
     secondary: "#106ebe",
     bg: "#ffffff",
-    surface: "#f8f9fa",
-    text: "#171717",
-    textSecondary: "#605e5c",
-    border: "#e1dfdd",
-    accent: "#0078d4",
-    headerBg: "#E8E6DF",
+    text: "#323130",
+    border: "#e1e5e9",
+    headerBg: "#ffffff",
     headerText: "#000000",
   },
   secondary: {
@@ -34,7 +31,7 @@ const COLOR_SCHEMES = {
     textSecondary: "#605e5c",
     border: "#e1dfdd",
     accent: "#8b5dae",
-    headerBg: "#E8E6DF",
+    headerBg: "#ffffff",
     headerText: "#000000",
   },
   success: {
@@ -46,7 +43,7 @@ const COLOR_SCHEMES = {
     textSecondary: "#605e5c",
     border: "#e1dfdd",
     accent: "#107c10",
-    headerBg: "#E8E6DF",
+    headerBg: "#ffffff",
     headerText: "#000000",
   },
 };
@@ -62,7 +59,7 @@ const getBaseCSS = (colors: any) => `
   }
   .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
   .header { 
-    background: ${colors.headerBg || "#E8E6DF"}; 
+    background: ${colors.headerBg || "#ffffff"}; 
     padding: 16px 0; 
     border-bottom: 1px solid ${colors.border}; 
     position: relative; 
@@ -141,7 +138,7 @@ const getBaseCSS = (colors: any) => `
 
 // Microsoft Learn Header Template
 const getMicrosoftLearnHeader = (colors: any) => `
-  <header style="background: ${colors.headerBg || "#E8E6DF"}; color: ${
+  <header style="background: ${colors.headerBg || "#ffffff"}; color: ${
   colors.headerText || "#000000"
 }; padding: 12px 24px; border-bottom: 1px solid #e5e5e5; font-family: 'Segoe UI', system-ui, sans-serif;">
     <div style="display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto;">
@@ -191,7 +188,7 @@ const generateLandingPage = (
     <style>
         ${getBaseCSS(colors)}
         .hero { 
-            background: ${colors.headerBg || "#E8E6DF"}; 
+            background: ${colors.headerBg || "#ffffff"}; 
             padding: 80px 0; 
             text-align: center; 
         }

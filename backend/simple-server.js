@@ -618,8 +618,8 @@ async function generateWireframeWithAI(
         bg: "#ffffff",
         text: "#323130",
         border: "#e5e5e5",
-        banner: "#E8E6DF",
-        headerBg: "#E8E6DF",
+        banner: "#ffffff",
+        headerBg: "#ffffff",
         headerText: "#000000",
       },
       success: {
@@ -706,7 +706,7 @@ REQUIREMENTS:
 11. MAKE it look polished and production-ready
 
 MICROSOFT LEARN HEADER TEMPLATE (ALWAYS INCLUDE FIRST):
-<header style="background: #E8E6DF; color: #000000; padding: 12px 24px; border-bottom: 1px solid #e5e5e5; font-family: 'Segoe UI', system-ui, sans-serif;">
+<header style="background: #ffffff; color: #000000; padding: 12px 24px; border-bottom: 1px solid #e5e5e5; font-family: 'Segoe UI', system-ui, sans-serif;">
   <div style="display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto;">
     <div style="display: flex; align-items: center;">
       <svg aria-hidden="true" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; margin-right: 16px;">
@@ -727,21 +727,21 @@ MICROSOFT LEARN HEADER TEMPLATE (ALWAYS INCLUDE FIRST):
 
 COLOR USAGE GUIDELINES:
 - Use PRIMARY COLOR (#0078d4) for buttons, links, and interactive elements
-- Use HEADER BACKGROUND (#E8E6DF) with BLACK TEXT (#000000) for all page headers and hero sections
-- Use BANNER/HERO BACKGROUND (#E8E6DF) for large background sections, hero areas, and banners
+- Use HEADER BACKGROUND (#ffffff) with BLACK TEXT (#000000) for all page headers and hero sections
+- Use BANNER/HERO BACKGROUND (#ffffff) for large background sections, hero areas, and banners
 - Keep button backgrounds blue (#0078d4) - do not change button colors
-- For headers and hero sections, always use background: #E8E6DF with color: #000000
+- For headers and hero sections, always use background: #ffffff with color: #000000
 
 MICROSOFT LEARN HEADER REQUIREMENTS:
 - ALWAYS include the official Microsoft Learn site header as the FIRST element in the body
-- Header background MUST be #E8E6DF with black text (#000000)
+- Header background MUST be #ffffff with black text (#000000)
 - Include Microsoft logo, "Microsoft Learn" branding, and navigation
-- Use the exact structure: <header style="background: #E8E6DF; color: #000000; padding: 12px 24px; border-bottom: 1px solid #e5e5e5;">
+- Use the exact structure: <header style="background: #ffffff; color: #000000; padding: 12px 24px; border-bottom: 1px solid #e5e5e5;">
 - Include proper navigation items: Documentation, Training, Certifications
 
 HERO SECTION DESIGN REQUIREMENTS:
-- Use exact Microsoft Learn Accent Hero pattern with background-color-body-accent (#E8E6DF)
-- Header background MUST be #E8E6DF with black text color (#000000)
+- Use exact Microsoft Learn Accent Hero pattern with background-color-body-accent (#ffffff)
+- Header background MUST be #ffffff with black text color (#000000)
 - Implement hero-image class structure: section.hero.hero-image
 - Background images: Use CSS custom properties --hero-background-image-light and --hero-background-image-dark
 - Gradient border: Add gradient-border-right gradient-border-body-accent

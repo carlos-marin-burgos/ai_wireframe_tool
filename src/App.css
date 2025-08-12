@@ -304,8 +304,8 @@ body {
   background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
   border: none;
   border-radius: 12px;
-  width: 48px;
-  height: 48px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;

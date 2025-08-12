@@ -493,6 +493,164 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             })
         },
 
+        // Microsoft Learn Hero Size Variants
+        {
+            id: 'hero-xs',
+            name: 'Microsoft Learn Hero - Extra Small',
+            description: 'Compact hero with minimal height for subtle emphasis',
+            category: 'Sections',
+            library: 'FluentUI',
+            htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #ffffff; padding: 32px 24px; border-bottom: 1px solid #e1e5e9;">
+    <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+        <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 12px; color: #605e5c; margin-bottom: 8px; font-weight: 600;">MICROSOFT LEARN</p>
+        <h2 style="font-size: 28px; font-weight: 600; color: #323130; margin-bottom: 12px;">Extra small hero</h2>
+        <p style="font-size: 16px; color: #605e5c; max-width: 600px; margin: 0 auto;">Perfect for subtle emphasis without overwhelming the page content.</p>
+    </div>
+</section>`
+        },
+        {
+            id: 'hero-sm',
+            name: 'Microsoft Learn Hero - Small',
+            description: 'Small hero with balanced spacing for moderate emphasis',
+            category: 'Sections',
+            library: 'FluentUI',
+            htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #0078d4; color: white; padding: 48px 24px; border-bottom: 1px solid #e1e5e9;">
+    <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+        <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 12px; color: rgba(255,255,255,0.8); margin-bottom: 12px; font-weight: 600;">MICROSOFT LEARN</p>
+        <h2 style="font-size: 36px; font-weight: 600; color: white; margin-bottom: 16px;">Small hero section</h2>
+        <p style="font-size: 18px; color: rgba(255,255,255,0.9); max-width: 700px; margin: 0 auto;">Ideal for section introductions and moderate content emphasis with comfortable spacing.</p>
+    </div>
+</section>`
+        },
+        {
+            id: 'hero-default',
+            name: 'Microsoft Learn Hero - Default',
+            description: 'Standard hero with optimal spacing for most use cases',
+            category: 'Sections',
+            library: 'FluentUI',
+            htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #d13438; color: white; padding: 64px 24px; border-bottom: 1px solid #e1e5e9;">
+    <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+        <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 14px; color: rgba(255,255,255,0.9); margin-bottom: 16px; font-weight: 600;">MICROSOFT LEARN</p>
+        <h2 style="font-size: 48px; font-weight: 600; color: white; margin-bottom: 20px; line-height: 1.2;">Default hero section</h2>
+        <p style="font-size: 20px; color: rgba(255,255,255,0.95); max-width: 800px; margin: 0 auto 24px; line-height: 1.5;">The standard hero provides optimal spacing and visual hierarchy for most landing pages and section introductions.</p>
+        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+            <button style="background: white; color: #d13438; border: none; padding: 12px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Get Started</button>
+            <button style="background: transparent; color: white; border: 2px solid white; padding: 10px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Learn More</button>
+        </div>
+    </div>
+</section>`
+        },
+        {
+            id: 'hero-lg',
+            name: 'Microsoft Learn Hero - Large',
+            description: 'Large hero with generous spacing for maximum impact',
+            category: 'Sections',
+            library: 'FluentUI',
+            htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #8b5dae; color: white; padding: 96px 24px; border-bottom: 1px solid #e1e5e9;">
+    <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+        <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 14px; color: rgba(255,255,255,0.9); margin-bottom: 20px; font-weight: 600;">MICROSOFT LEARN</p>
+        <h1 style="font-size: 64px; font-weight: 700; color: white; margin-bottom: 24px; line-height: 1.1;">Large hero section</h1>
+        <p style="font-size: 24px; font-weight: 500; color: rgba(255,255,255,0.95); max-width: 900px; margin: 0 auto 32px; line-height: 1.4;">Perfect for landing pages and major announcements that demand attention and create lasting impressions.</p>
+        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+            <button style="background: white; color: #8b5dae; border: none; padding: 16px 32px; border-radius: 6px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">Get Started</button>
+            <button style="background: transparent; color: white; border: 2px solid white; padding: 14px 32px; border-radius: 6px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Explore Features</button>
+        </div>
+    </div>
+</section>`
+        },
+        {
+            id: 'hero-with-image',
+            name: 'Microsoft Learn Hero - With Side Image',
+            description: 'Hero with side-positioned image for visual storytelling',
+            category: 'Sections',
+            library: 'FluentUI',
+            htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #ffffff; padding: 64px 24px; border-bottom: 1px solid #e1e5e9; position: relative; overflow: hidden;">
+    <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 400px; gap: 64px; align-items: center;">
+        <div>
+            <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 14px; color: #605e5c; margin-bottom: 16px; font-weight: 600;">MICROSOFT LEARN</p>
+            <h2 style="font-size: 48px; font-weight: 600; color: #323130; margin-bottom: 20px; line-height: 1.2;">Hero with visual storytelling</h2>
+            <p style="font-size: 20px; color: #605e5c; margin-bottom: 24px; line-height: 1.5;">Combine compelling content with supporting visuals to create engaging and memorable experiences for your users.</p>
+            <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                <button style="background: #0078d4; color: white; border: none; padding: 12px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Get Started</button>
+                <button style="background: transparent; color: #0078d4; border: 2px solid #0078d4; padding: 10px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Learn More</button>
+            </div>
+        </div>
+        <div style="background: linear-gradient(135deg, #0078d4, #106ebe); border-radius: 12px; height: 300px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; font-weight: 500;">
+            📊 Visual Content
+        </div>
+    </div>
+    <style>
+        @media (max-width: 768px) {
+            section > div { grid-template-columns: 1fr !important; }
+            section > div > div:last-child { display: none !important; }
+        }
+    </style>
+</section>`
+        },
+        {
+            id: 'hero-with-details',
+            name: 'Microsoft Learn Hero - With Details Card',
+            description: 'Hero with overlay details card for additional content',
+            category: 'Sections',
+            library: 'FluentUI',
+            htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); padding: 64px 24px; border-bottom: 1px solid #e1e5e9; position: relative;">
+    <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 320px; gap: 48px; align-items: start;">
+        <div>
+            <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 14px; color: #605e5c; margin-bottom: 16px; font-weight: 600;">MICROSOFT LEARN</p>
+            <h2 style="font-size: 48px; font-weight: 600; color: #323130; margin-bottom: 20px; line-height: 1.2;">Hero with rich details</h2>
+            <p style="font-size: 20px; color: #605e5c; margin-bottom: 24px; line-height: 1.5;">Perfect for complex offerings that need additional context or supporting information displayed prominently.</p>
+            <button style="background: #0078d4; color: white; border: none; padding: 12px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Get Started</button>
+        </div>
+        <div style="background: white; border: 1px solid #e1e5e9; border-radius: 8px; padding: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+            <h3 style="font-size: 18px; font-weight: 600; color: #323130; margin-bottom: 12px;">Key Features</h3>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="display: flex; align-items: center; margin-bottom: 8px; color: #605e5c; font-size: 14px;">
+                    <span style="width: 6px; height: 6px; background: #0078d4; border-radius: 50%; margin-right: 12px;"></span>
+                    Comprehensive learning paths
+                </li>
+                <li style="display: flex; align-items: center; margin-bottom: 8px; color: #605e5c; font-size: 14px;">
+                    <span style="width: 6px; height: 6px; background: #0078d4; border-radius: 50%; margin-right: 12px;"></span>
+                    Hands-on labs and exercises
+                </li>
+                <li style="display: flex; align-items: center; margin-bottom: 8px; color: #605e5c; font-size: 14px;">
+                    <span style="width: 6px; height: 6px; background: #0078d4; border-radius: 50%; margin-right: 12px;"></span>
+                    Industry-recognized certifications
+                </li>
+                <li style="display: flex; align-items: center; color: #605e5c; font-size: 14px;">
+                    <span style="width: 6px; height: 6px; background: #0078d4; border-radius: 50%; margin-right: 12px;"></span>
+                    Expert-led content
+                </li>
+            </ul>
+        </div>
+    </div>
+    <style>
+        @media (max-width: 768px) {
+            section > div { grid-template-columns: 1fr !important; }
+        }
+    </style>
+</section>`
+        },
+        {
+            id: 'hero-full-media',
+            name: 'Microsoft Learn Hero - Full Media Background',
+            description: 'Hero with full-screen media background for maximum impact',
+            category: 'Sections',
+            library: 'FluentUI',
+            htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; position: relative; padding: 120px 24px; min-height: 500px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0078d4 0%, #106ebe 50%, #005a9e 100%); z-index: 1;"></div>
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 2;"></div>
+    <div style="max-width: 900px; text-align: center; position: relative; z-index: 3; color: white;">
+        <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 14px; color: rgba(255,255,255,0.9); margin-bottom: 20px; font-weight: 600;">MICROSOFT LEARN</p>
+        <h1 style="font-size: 56px; font-weight: 700; color: white; margin-bottom: 24px; line-height: 1.1; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">Full media hero experience</h1>
+        <p style="font-size: 22px; color: rgba(255,255,255,0.95); margin-bottom: 32px; line-height: 1.4; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">Create immersive experiences with full-screen media backgrounds that capture attention and convey your brand's visual story.</p>
+        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+            <button style="background: white; color: #0078d4; border: none; padding: 16px 32px; border-radius: 6px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 16px rgba(0,0,0,0.2);">Get Started</button>
+            <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid white; padding: 14px 32px; border-radius: 6px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.2s; backdrop-filter: blur(10px);">Watch Demo</button>
+        </div>
+    </div>
+</section>`
+        },
+
         // FluentUI ProgressBar Component
         {
             id: 'fluentui-progressbar',
