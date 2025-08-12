@@ -6,6 +6,20 @@
   overflow: hidden;
   /* Ensure contained elements don't extend beyond boundaries */
   box-sizing: border-box;
+  /* Prevent any unwanted hover/click effects on the container itself */
+  transform: none !important;
+  transition: none !important;
+}
+
+/* Prevent any hover/click scaling on the wireframe container */
+.linkable-wireframe:hover {
+  transform: none !important;
+  scale: none !important;
+}
+
+.linkable-wireframe:active {
+  transform: none !important;
+  scale: none !important;
 }
 
 /* Prevent form elements and textboxes from extending beyond container */
@@ -390,6 +404,17 @@
 /* Generated elements have no hover effects or cursor changes */
 .linkable-wireframe :not([data-user-added="true"]) {
   cursor: default;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* Ensure generated elements don't scale or transform on any interaction */
+.linkable-wireframe :not([data-user-added="true"]):hover,
+.linkable-wireframe :not([data-user-added="true"]):active,
+.linkable-wireframe :not([data-user-added="true"]):focus {
+  transform: none !important;
+  scale: none !important;
+  transition: none !important;
 }
 
 /* Enhanced hover effects for user-added elements with delete buttons */
@@ -1055,11 +1080,121 @@ body.dragging-active * {
   text-overflow: ellipsis;
 }
 
+/* Style all buttons in wireframe regardless of class */
+.linkable-wireframe button,
+.linkable-wireframe .button,
+.linkable-wireframe [role="button"] {
+  display: inline-block;
+  padding: 8px 16px;
+  margin: 2px;
+  background: #007bff;
+  color: white;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 60px;
+  min-height: 32px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Ensure text buttons and input buttons are styled */
+.linkable-wireframe input[type="button"],
+.linkable-wireframe input[type="submit"],
+.linkable-wireframe input[type="reset"] {
+  display: inline-block;
+  padding: 8px 16px;
+  margin: 2px;
+  background: #007bff;
+  color: white;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 60px;
+  min-height: 32px;
+  box-sizing: border-box;
+}
+
+/* Button hover effects */
+.linkable-wireframe button:hover,
+.linkable-wireframe .button:hover,
+.linkable-wireframe [role="button"]:hover,
+.linkable-wireframe input[type="button"]:hover,
+.linkable-wireframe input[type="submit"]:hover,
+.linkable-wireframe input[type="reset"]:hover {
+  background: #0056b3;
+  border-color: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 123, 212, 0.2);
+}
+
+/* Button focus effects */
+.linkable-wireframe button:focus,
+.linkable-wireframe .button:focus,
+.linkable-wireframe [role="button"]:focus,
+.linkable-wireframe input[type="button"]:focus,
+.linkable-wireframe input[type="submit"]:focus,
+.linkable-wireframe input[type="reset"]:focus {
+  outline: 2px solid #80bdff;
+  outline-offset: 2px;
+}
+
+/* Secondary button style */
+.linkable-wireframe button.btn-secondary,
+.linkable-wireframe .button.btn-secondary {
+  background: #6c757d;
+  border-color: #6c757d;
+}
+
+.linkable-wireframe button.btn-secondary:hover,
+.linkable-wireframe .button.btn-secondary:hover {
+  background: #545b62;
+  border-color: #545b62;
+}
+
+/* Success button style */
+.linkable-wireframe button.btn-success,
+.linkable-wireframe .button.btn-success {
+  background: #28a745;
+  border-color: #28a745;
+}
+
+.linkable-wireframe button.btn-success:hover,
+.linkable-wireframe .button.btn-success:hover {
+  background: #218838;
+  border-color: #218838;
+}
+
 /* Visual indicators for user-added elements - only on interaction */
 .linkable-wireframe [data-user-added="true"]:hover {
   outline: 1px dashed rgba(40, 167, 69, 0.6);
   outline-offset: 2px;
   background-color: rgba(40, 167, 69, 0.05);
+}
+
+/* Ensure user-added buttons maintain their original styling while showing interaction indicators */
+.linkable-wireframe button[data-user-added="true"]:hover,
+.linkable-wireframe .button[data-user-added="true"]:hover,
+.linkable-wireframe [role="button"][data-user-added="true"]:hover {
+  /* Keep original button background and maintain drag indicators */
+  background: #0056b3; /* Maintain button hover color */
+  border-color: #0056b3;
+  box-shadow: 0 2px 6px rgba(0, 123, 212, 0.3), 0 0 0 2px rgba(40, 167, 69, 0.3);
+  outline: 1px dashed rgba(40, 167, 69, 0.6);
+  outline-offset: 2px;
+  transform: translateY(-1px);
+  cursor: grab;
 }
 
 /* Only show delete buttons on user-added elements */
@@ -1077,4 +1212,34 @@ body.dragging-active * {
   background: #dc3545;
   border: 1px solid #dc3545;
   box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
+}
+
+/* Additional safety rules to prevent unwanted scaling/transforms */
+.linkable-wireframe > *:not([data-user-added="true"]) {
+  transform: none !important;
+  transition: transform 0s !important;
+}
+
+/* Ensure the main content area doesn't have unwanted effects */
+.linkable-wireframe > div:not([data-user-added="true"]),
+.linkable-wireframe > section:not([data-user-added="true"]),
+.linkable-wireframe > article:not([data-user-added="true"]) {
+  transform: none !important;
+  transition: none !important;
+}
+
+/* ULTIMATE SAFETY: Prevent ALL scale/rotate transforms on generated content */
+.linkable-wireframe *:not([data-user-added="true"]) {
+  transform: none !important;
+  scale: none !important;
+  rotate: none !important;
+}
+
+.linkable-wireframe *:not([data-user-added="true"]):hover,
+.linkable-wireframe *:not([data-user-added="true"]):active,
+.linkable-wireframe *:not([data-user-added="true"]):focus {
+  transform: none !important;
+  scale: none !important;
+  rotate: none !important;
+  transition: none !important;
 }

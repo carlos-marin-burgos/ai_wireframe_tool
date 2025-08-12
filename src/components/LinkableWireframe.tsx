@@ -48,6 +48,46 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
     const [mouseDownPos, setMouseDownPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
     const [hasMoved, setHasMoved] = useState(false);
 
+    // Cleanup on unmount
+    useEffect(() => {
+        return () => {
+            // Clean up any remaining drag ghosts
+            if (containerRef.current) {
+                const ghosts = containerRef.current.querySelectorAll('.drag-ghost');
+                ghosts.forEach(ghost => ghost.remove());
+            }
+        };
+    }, []);
+
+    // Periodic cleanup to prevent lingering hover/scale effects
+    useEffect(() => {
+        const cleanupInterval = setInterval(() => {
+            if (containerRef.current && !isDragging) {
+                const allElements = containerRef.current.querySelectorAll('*');
+                allElements.forEach((el) => {
+                    const element = el as HTMLElement;
+                    // Clean up non-user-added elements that might have problematic transforms
+                    if (!element.hasAttribute('data-user-added')) {
+                        // Remove any scale or rotate transforms from generated content
+                        if (element.style.transform &&
+                            (element.style.transform.includes('scale') ||
+                                element.style.transform.includes('rotate'))) {
+                            const transforms = element.style.transform.split(') ').filter(t =>
+                                t.includes('translate') && !t.includes('scale') && !t.includes('rotate')
+                            );
+                            element.style.transform = transforms.length > 0 ? transforms.join(') ') + ')' : '';
+                        }
+                        // Remove problematic CSS classes
+                        element.classList.remove('fancy-dragging');
+                        element.removeAttribute('data-dragging');
+                    }
+                });
+            }
+        }, 1000); // Run every second
+
+        return () => clearInterval(cleanupInterval);
+    }, [isDragging]);
+
     // Track content changes
 
     // Component initialization
@@ -85,24 +125,19 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
             hasActionText;
 
         // Debug logging
-        if (element.textContent && element.textContent.trim()) {
-            console.log(`Checking element: "${element.textContent.trim()}"`, {
-                tagName,
-                hasLinkAttribute,
-                hasButtonClass,
-                looksClickable,
-                hasActionText,
-                isLinkable,
-                classList: Array.from(element.classList),
-                cursor: computedStyle.cursor
-            });
-        }
+        // Skip debug output for better performance
 
         return isLinkable;
     }, []);
 
-    // Check if an element is draggable (Atlas components or positioned elements)
+    // Check if an element is draggable (only user-added elements should be draggable)
     const isDraggableElement = useCallback((element: HTMLElement): boolean => {
+        // CRITICAL: Only elements marked as user-added should be draggable
+        // Generated wireframe content should NOT be draggable
+        if (!element.hasAttribute('data-user-added')) {
+            return false;
+        }
+
         // Don't allow direct dragging of input/textarea elements - only their containers
         if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA' || element.tagName === 'SELECT') {
             return false;
@@ -406,14 +441,14 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         setHasMoved(false);
         setSelectedElement(element);
 
-        console.log('🎯 Mouse down on:', element.tagName, element.className);
+        // Mouse down handling
     }, [isDraggableElement]);
 
     // Handle mouse up - Complete click or cleanup drag tracking
     const handleMouseUp = useCallback((event: React.MouseEvent) => {
         if (mouseDownElement && !hasMoved) {
             // This was a simple click, not a drag - DO NOTHING TO POSITIONING
-            console.log('🎯 Simple click detected on:', mouseDownElement.tagName, '- no positioning changes');
+            // Simple click handling
         }
 
         // Reset tracking
@@ -423,7 +458,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
 
         // Handle drag end if we were dragging
         if (isDragging) {
-            console.log('🎯 Ending drag operation');
+            // End drag operation
             handleDragEnd();
         }
     }, [mouseDownElement, hasMoved, isDragging]);
@@ -454,7 +489,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
             // Create ripple effect at drag start position
             createRippleEffect(event.clientX - containerRect.left, event.clientY - containerRect.top);
 
-                    // Remove any existing ghost elements first
+            // Remove any existing ghost elements first
             const existingGhosts = containerRef.current.querySelectorAll('.drag-ghost');
             existingGhosts.forEach(ghost => ghost.remove());
 
@@ -498,12 +533,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
                 // Mark as user-modified since it's now being repositioned
                 element.setAttribute('data-user-added', 'true');
 
-                console.log('🎯 Converting to absolute and marking as user-added:', {
-                    original: { left: originalRect.left, top: originalRect.top },
-                    container: { left: containerRect.left, top: containerRect.top },
-                    calculated: { left: currentLeft, top: currentTop },
-                    safe: { left: safeLeft, top: safeTop }
-                });
+                // Converting to absolute positioning
             }
 
             // Enhanced visual feedback with fancy animations
@@ -526,7 +556,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
             element.setAttribute('aria-grabbed', 'true');
             element.setAttribute('aria-describedby', 'drag-instructions');
 
-            console.log('✨ Fancy drag started:', element.tagName, element.className);
+            // Fancy drag started
         }
     }, [generateSnapPoints, createRippleEffect]);
 
@@ -693,6 +723,35 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         draggedElement.removeAttribute('data-dragging');
         draggedElement.classList.remove('fancy-dragging');
 
+        // COMPREHENSIVE CLEANUP: Remove any problematic attributes/styles from ALL elements
+        const allElements = containerRef.current.querySelectorAll('*');
+        allElements.forEach((el) => {
+            const element = el as HTMLElement;
+            // Remove any lingering drag-related attributes
+            element.removeAttribute('data-dragging');
+            element.classList.remove('fancy-dragging');
+
+            // Remove any problematic transforms that might cause scaling issues
+            if (element.style.transform &&
+                (element.style.transform.includes('scale') ||
+                    element.style.transform.includes('rotate')) &&
+                !element.hasAttribute('data-user-added')) {
+                element.style.transform = '';
+            }
+
+            // Ensure generated elements don't have hover-related transforms
+            if (!element.hasAttribute('data-user-added')) {
+                element.style.transition = '';
+                if (element.style.transform && element.style.transform.includes('translate')) {
+                    // Keep position-related transforms but remove scale/rotate
+                    const transforms = element.style.transform.split(') ').filter(t =>
+                        t.includes('translate') && !t.includes('scale') && !t.includes('rotate')
+                    );
+                    element.style.transform = transforms.length > 0 ? transforms.join(') ') + ')' : '';
+                }
+            }
+        });
+
         // Remove drag ghost immediately
         if (dragGhost && dragGhost.parentElement) {
             dragGhost.parentElement.removeChild(dragGhost);
@@ -740,7 +799,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
             onUpdateHtml(containerRef.current.innerHTML);
         }
 
-        console.log('✨ Fancy drag completed with auto-arrangement');
+        // Fancy drag completed
     }, [draggedElement, onUpdateHtml, dragGhost, createParticleEffect, smartAutoArrange]);
 
     // Handle external drag operations (for adding new components to empty wireframes)
@@ -748,7 +807,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         event.preventDefault();
         event.dataTransfer.dropEffect = 'copy';
 
-        console.log('🎯 Drag over wireframe - ready to accept drop');
+        // Drag over handling
     }, []);
 
     const handleDrop = useCallback((event: React.DragEvent) => {
@@ -759,7 +818,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
                 event.dataTransfer.getData('text/plain');
 
             if (draggedData && containerRef.current) {
-                console.log('🎯 Dropped data onto wireframe:', draggedData.substring(0, 100));
+                // Process dropped data
 
                 // Create ripple effect at drop position
                 const containerRect = containerRef.current.getBoundingClientRect();
@@ -771,12 +830,32 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
                 const currentContent = containerRef.current.innerHTML;
                 const hasContent = htmlContent && htmlContent.trim().length > 0;
 
-                // Mark the new content as user-added by adding data attribute
-                const markedData = draggedData.replace(/(<[^>]+)>/g, '$1 data-user-added="true">');
+                // Mark only the top-level dropped content as user-added, not all nested elements
+                // First wrap the content in a container if it's not already wrapped
+                let wrappedData = draggedData.trim();
+
+                // Check if the content is already wrapped in a single top-level element
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = wrappedData;
+
+                if (tempDiv.children.length === 1) {
+                    // Single element - mark it as user-added
+                    const element = tempDiv.children[0] as HTMLElement;
+                    element.setAttribute('data-user-added', 'true');
+                    wrappedData = element.outerHTML;
+                } else if (tempDiv.children.length > 1) {
+                    // Multiple elements - wrap them in a container div
+                    wrappedData = `<div data-user-added="true">${wrappedData}</div>`;
+                } else {
+                    // Text content or single text node - wrap in a container
+                    wrappedData = `<div data-user-added="true">${wrappedData}</div>`;
+                }
+
+                const markedData = wrappedData;
 
                 if (!hasContent) {
                     // For empty wireframes, set the content directly
-                    console.log('🎯 Adding content to empty wireframe');
+                    // Adding content to empty wireframe
                     onUpdateHtml(markedData);
                 } else {
                     // For existing content, append to the current content
@@ -840,7 +919,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
             onUpdateHtml(containerRef.current.innerHTML);
         }
 
-        console.log(`🎯 Keyboard moved element ${direction}: ${newLeft}, ${newTop}`);
+        // Keyboard element movement
     }, [onUpdateHtml]);    // Auto-arrange elements to prevent overlaps
     const autoArrangeElements = (container: HTMLElement) => {
         const elements = Array.from(container.children)
@@ -904,7 +983,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         // Update the HTML
         onUpdateHtml(containerRef.current.innerHTML);
 
-        console.log('🗑️ Element deleted:', element.tagName, element.className);
+        // Element deleted
     }, [onUpdateHtml]);
 
     // Add delete button to element - only for user-added controls
@@ -920,7 +999,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
             element.hasAttribute('data-draggable');
 
         if (!isUserAdded) {
-            console.log('🚫 Skipping delete button for generated element:', element.tagName, element.className);
+            // Skip delete button for generated elements
             return;
         }
 
@@ -957,7 +1036,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         element.appendChild(deleteBtn);
         element.style.position = element.style.position || 'relative';
 
-        console.log('✅ Added delete button to user-added element:', element.tagName, element.className);
+        // Delete button added
     }, [handleDeleteElement]);
 
     // Remove delete button from element
@@ -980,22 +1059,38 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         if (isDraggableElement(target) && !isDragging) {
             removeDeleteButton(target);
         }
+
+        // ADDITIONAL SAFETY: Clean up any problematic hover effects from ALL elements
+        if (containerRef.current) {
+            const allElements = containerRef.current.querySelectorAll('*');
+            allElements.forEach((el) => {
+                const element = el as HTMLElement;
+                // Reset any problematic transforms on non-user-added elements
+                if (!element.hasAttribute('data-user-added') && element.style.transform) {
+                    // Keep only translate transforms for positioning, remove scale/rotate
+                    const transforms = element.style.transform.split(') ').filter(t =>
+                        t.includes('translate') && !t.includes('scale') && !t.includes('rotate')
+                    );
+                    element.style.transform = transforms.length > 0 ? transforms.join(') ') + ')' : '';
+                }
+            });
+        }
     }, [handleMouseUp, isDraggableElement, isDragging, removeDeleteButton]);
 
     // Handle click on linkable elements
     const handleElementClick = useCallback((event: MouseEvent) => {
         const target = event.target as HTMLElement;
-        console.log('Element clicked:', target, 'Text:', target.textContent);
+        // Element click handling
 
         // Check if the clicked element is a delete button - if so, don't interfere
         if (target.classList.contains('delete-btn') || target.closest('.delete-btn')) {
-            console.log('🗑️ Delete button clicked, ignoring for link handling');
+            // Delete button clicked
             return;
         }
 
         // Check if the clicked element is a toolbar button - if so, don't interfere
         if (target.closest('.toolbar-btn') || target.classList.contains('toolbar-btn')) {
-            console.log('🔧 Toolbar button clicked, allowing event to proceed');
+            // Toolbar button clicked
             return; // Don't prevent toolbar button clicks
         }
 
@@ -1003,7 +1098,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         let linkableElement = target;
         let depth = 0;
         while (linkableElement && depth < 5) {
-            console.log(`Checking element at depth ${depth}:`, linkableElement, 'Is linkable:', isLinkableElement(linkableElement));
+            // Check element for linkability
             if (isLinkableElement(linkableElement)) {
                 break;
             }
@@ -1012,18 +1107,18 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
         }
 
         if (!linkableElement || !isLinkableElement(linkableElement)) {
-            console.log('No linkable element found');
+            // No linkable element found
             setShowLinkMenu(false);
             setSelectedElement(null);
             return;
         }
 
-        console.log('Found linkable element:', linkableElement);
+        // Found linkable element
 
         // Check if element already has a page link
         const existingLink = linkableElement.getAttribute('data-page-link');
         if (existingLink && availablePages.find(p => p.id === existingLink)) {
-            console.log('Navigating to existing link:', existingLink);
+            // Navigating to existing link
             // Navigate to existing link
             event.preventDefault();
             onNavigateToPage(existingLink);
@@ -1049,20 +1144,20 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
     useEffect(() => {
         const container = containerRef.current;
         if (!container) {
-            console.log('❌ No container ref found');
+            // No container ref found
             return;
         }
 
-        console.log('✅ Setting up click listeners on container:', container);
+        // Setting up click listeners on container
 
         // Use capture phase to ensure we catch all clicks
         const handleClickCapture = (event: Event) => {
             const target = event.target as HTMLElement;
-            console.log('🎯 Click captured!', target);
+            // Click captured
 
             // Check if the clicked element is a toolbar button - if so, don't interfere
             if (target.closest('.toolbar-btn') || target.classList.contains('toolbar-btn')) {
-                console.log('🔧 Toolbar button clicked in capture, allowing event to proceed');
+                // Toolbar button clicked
                 return; // Don't handle toolbar button clicks
             }
 
@@ -1097,7 +1192,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
 
         // Also try adding to document for debugging
         const documentClickHandler = (event: Event) => {
-            console.log('📄 Document click:', event.target);
+            // Document click handling
         };
         document.addEventListener('click', documentClickHandler);
 
@@ -1177,10 +1272,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
 
     // Add component mount/unmount logging
     useEffect(() => {
-        console.log('🚀 LinkableWireframe component mounted');
-        return () => {
-            console.log('💀 LinkableWireframe component unmounted');
-        };
+        // Component lifecycle
     }, []);
 
     // Clean HTML content before rendering
@@ -1249,7 +1341,7 @@ const LinkableWireframe: React.FC<LinkableWireframeProps> = ({
                         e.preventDefault();
                         // For now, just focus the element - could extend with keyboard dragging
                         target.focus();
-                        console.log('🎯 Element selected via keyboard:', target.tagName);
+                        // Element selected via keyboard
                     }
 
                     // Arrow key movement for accessibility
