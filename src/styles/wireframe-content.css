@@ -5,13 +5,15 @@
 */
 
 .wireframe-content {
-  font-family: "Segoe UI Variable Text", "Segoe UI", -apple-system, system-ui, sans-serif;
+  font-family: "Segoe UI Variable Text", "Segoe UI", -apple-system, system-ui,
+    sans-serif;
   line-height: 1.5;
   color: #212121;
   display: grid;
   grid-template-rows: auto 1fr;
   min-height: 100%;
   padding: 24px;
+  padding-bottom: 40px; /* Add extra bottom padding to prevent cut-off */
   background-color: white;
 }
 
@@ -37,17 +39,20 @@
 
 /* Microsoft Learn Specific Styling */
 .microsoftlearn-theme {
-  font-family: "Segoe UI Variable Text", "Segoe UI", -apple-system, system-ui, sans-serif !important;
+  font-family: "Segoe UI Variable Text", "Segoe UI", -apple-system, system-ui,
+    sans-serif !important;
   background-color: #ffffff !important;
   color: #212121 !important;
 }
 
 /* Microsoft Learn Cards */
 .microsoftlearn-theme .ms-learn-card {
-  font-family: "Segoe UI Variable Text", "Segoe UI", -apple-system, system-ui, sans-serif !important;
+  font-family: "Segoe UI Variable Text", "Segoe UI", -apple-system, system-ui,
+    sans-serif !important;
   border: 1px solid #eaeaea !important;
   border-radius: 6px !important;
-  box-shadow: 0 1.6px 3.6px 0 rgba(0,0,0,0.132), 0 0.3px 0.9px 0 rgba(0,0,0,0.108) !important;
+  box-shadow: 0 1.6px 3.6px 0 rgba(0, 0, 0, 0.132),
+    0 0.3px 0.9px 0 rgba(0, 0, 0, 0.108) !important;
   background-color: #ffffff !important;
   display: flex !important;
   flex-direction: column !important;
@@ -58,7 +63,8 @@
 }
 
 .microsoftlearn-theme .ms-learn-card:hover {
-  box-shadow: 0 6.4px 14.4px 0 rgba(0,0,0,0.132), 0 1.2px 3.6px 0 rgba(0,0,0,0.108) !important;
+  box-shadow: 0 6.4px 14.4px 0 rgba(0, 0, 0, 0.132),
+    0 1.2px 3.6px 0 rgba(0, 0, 0, 0.108) !important;
   transform: translateY(-1px) !important;
 }
 

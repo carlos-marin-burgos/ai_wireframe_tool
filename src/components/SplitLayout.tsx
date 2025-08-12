@@ -6,6 +6,7 @@ import CompactToolbar from "./CompactToolbar";
 import AddPagesModal from "./AddPagesModal";
 import SaveWireframeModal, { SavedWireframe } from "./SaveWireframeModal";
 import FigmaIntegrationModal from "./FigmaIntegrationModal";
+import DownloadModal from "./DownloadModal";
 import ComponentLibraryModal from "./ComponentLibraryModal";
 import SimpleDragDrop from "./SimpleDragDrop";
 import MouseDragDrop from "./MouseDragDrop";
@@ -68,6 +69,8 @@ interface SplitLayoutProps {
   onAddComponent?: (component: any) => void;
   // Page content generation handler
   onGeneratePageContent?: (description: string, pageType: string) => Promise<string>;
+  // Figma export handler
+  onFigmaExport?: (format: 'figma-file' | 'figma-components') => void;
 }
 
 const SplitLayout: React.FC<SplitLayoutProps> = ({
@@ -93,6 +96,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   colorScheme,
   onAddComponent,
   onGeneratePageContent,
+  onFigmaExport,
 }) => {
   // Create ref for textarea autofocus
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -160,6 +164,9 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   // Component Library Modal state
   const [isComponentLibraryOpen, setIsComponentLibraryOpen] = useState(false);
+
+  // Download Modal state
+  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
 
   // Function to validate chat input - check if it's only numbers
   const validateChatInput = (input: string): boolean => {
@@ -517,6 +524,27 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     addMessage('ai', `Wireframe exported to Figma as ${format} successfully! You can now access it in your Figma workspace.`);
     setIsFigmaModalOpen(false);
   }, [addMessage]);
+
+  // Download wireframe handler
+  const handleDownloadWireframe = useCallback(() => {
+    setIsDownloadModalOpen(true);
+  }, []);
+
+  const handleDownloadModalDownload = useCallback((format: 'html' | 'json') => {
+    // Call the parent's figma export handler with the appropriate format
+    // This reuses the existing export functionality
+    const figmaFormat = format === 'html' ? 'figma-file' : 'figma-components';
+    onFigmaExport?.(figmaFormat);
+    addMessage('ai', `🎉 ${format.toUpperCase()} download started! Check your browser's Downloads folder.`);
+  }, [onFigmaExport, addMessage]);
+
+  // HTML import handler for HtmlCodeViewer
+  const handleHtmlImport = useCallback((htmlContent: string) => {
+    if (htmlContent && setHtmlWireframe) {
+      setHtmlWireframe(htmlContent);
+      addMessage('ai', `✅ Successfully imported HTML content! The wireframe is ready for editing.`);
+    }
+  }, [setHtmlWireframe, addMessage]);
 
   // HTML Code viewer handler
   const handleViewHtmlCode = useCallback(() => {
@@ -931,13 +959,13 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         {(htmlWireframe || wireframePages.length > 0) ? (
           <div className="wireframe-panel">
             <CompactToolbar
-              onImportHtml={handleImportHtml}
               onFigmaIntegration={handleFigmaIntegration}
               onSave={enhancedOnSave}
               onOpenLibrary={handleOpenLibrary}
               onViewHtmlCode={handleViewHtmlCode}
               onPresentationMode={handlePresentationMode}
               onShareUrl={handleShareUrl}
+              onDownloadWireframe={handleDownloadWireframe}
             />
 
             {/* Always show PageNavigation when we have a wireframe */}
@@ -1185,6 +1213,14 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         onExport={handleFigmaExport}
       />
 
+      {/* Download Modal */}
+      <DownloadModal
+        isOpen={isDownloadModalOpen}
+        onClose={() => setIsDownloadModalOpen(false)}
+        onDownload={handleDownloadModalDownload}
+        wireframeTitle={description || 'Wireframe'}
+      />
+
       {/* Component Library Modal */}
       <ComponentLibraryModal
         isOpen={isComponentLibraryOpen}
@@ -1218,6 +1254,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
           `HTML Code - ${wireframePages.find(p => p.id === currentPageId)?.name || 'Unknown Page'}` :
           'HTML Code - Main Wireframe'
         }
+        onImportHtml={handleHtmlImport}
       />
 
       {/* Presentation Mode */}

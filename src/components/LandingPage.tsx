@@ -317,10 +317,10 @@ const LandingPage: React.FC<LandingPageProps> = ({
                     console.log('🔗 Figma pill clicked on landing page!');
                     setIsFigmaModalOpen(true);
                   }}
-                  title="Import designs from Figma"
+                  title="Connect with Figma - Import designs or export wireframes"
                 >
                   <FiFigma className="pill-icon" />
-                  <span>Import from Figma</span>
+                  <span>Figma Integration</span>
                 </button>
 
                 <button

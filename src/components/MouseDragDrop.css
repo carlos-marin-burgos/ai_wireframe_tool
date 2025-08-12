@@ -2,9 +2,10 @@
 .mouse-drag-drop {
   position: relative;
   width: 100%;
-  min-height: calc(100vh - 250px);
+  min-height: calc(100vh - 300px); /* Reduced height to allow bottom spacing */
   height: auto;
   padding: 20px;
+  margin-bottom: 10px; /* Added bottom margin to prevent cut-off */
   background: #f8f9fa;
   border: 2px dashed #dee2e6;
   border-radius: 8px;

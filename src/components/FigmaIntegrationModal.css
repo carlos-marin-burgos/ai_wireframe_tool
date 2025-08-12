@@ -49,6 +49,28 @@
   color: #3b82f6;
 }
 
+/* Tab Description Styling */
+.tab-description {
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border-left: 4px solid #3b82f6;
+}
+
+.tab-description h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.tab-description p {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.5;
+}
+
 .figma-modal-close {
   background: none;
   border: none;

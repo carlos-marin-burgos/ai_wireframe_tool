@@ -1,25 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FiUpload, FiFigma, FiCode, FiShare2, FiMonitor, FiSave, FiGrid } from 'react-icons/fi';
+import { FiUpload, FiFigma, FiCode, FiShare2, FiMonitor, FiSave, FiGrid, FiDownload } from 'react-icons/fi';
 import './CompactToolbar.css';
 
 interface CompactToolbarProps {
-    onImportHtml?: () => void;
     onFigmaIntegration?: () => void;
     onOpenLibrary?: () => void;
     onViewHtmlCode?: () => void;
     onShareUrl?: () => void;
     onPresentationMode?: () => void;
     onSave?: () => void;
+    onDownloadWireframe?: () => void;
 }
 
 const CompactToolbar: React.FC<CompactToolbarProps> = ({
-    onImportHtml,
     onFigmaIntegration,
     onOpenLibrary,
     onViewHtmlCode,
     onShareUrl,
     onPresentationMode,
-    onSave
+    onSave,
+    onDownloadWireframe
 }) => {
     const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
 
@@ -39,14 +39,6 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
     return (
         <>
             <div className="compact-toolbar">
-                <button
-                    className="compact-btn"
-                    onClick={onImportHtml}
-                    onMouseEnter={(e) => showTooltip(e, "Import HTML")}
-                    onMouseLeave={hideTooltip}
-                >
-                    <FiUpload />
-                </button>
                 <button
                     className="compact-btn"
                     onClick={onFigmaIntegration}
@@ -69,7 +61,7 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
                 <button
                     className="compact-btn"
                     onClick={onViewHtmlCode}
-                    onMouseEnter={(e) => showTooltip(e, "View HTML")}
+                    onMouseEnter={(e) => showTooltip(e, "View & Import HTML")}
                     onMouseLeave={hideTooltip}
                 >
                     <FiCode />
@@ -89,6 +81,14 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
                     onMouseLeave={hideTooltip}
                 >
                     <FiMonitor />
+                </button>
+                <button
+                    className="compact-btn"
+                    onClick={onDownloadWireframe}
+                    onMouseEnter={(e) => showTooltip(e, "Download Wireframe")}
+                    onMouseLeave={hideTooltip}
+                >
+                    <FiDownload />
                 </button>
                 <button
                     className="compact-btn"

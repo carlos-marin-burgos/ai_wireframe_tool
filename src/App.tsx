@@ -1068,6 +1068,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           onBackToLanding={handleBackToLanding}
           onAddComponent={handleAddComponent}
           onGeneratePageContent={handleGeneratePageContent}
+          onFigmaExport={handleFigmaExport}
         />
       )}
 

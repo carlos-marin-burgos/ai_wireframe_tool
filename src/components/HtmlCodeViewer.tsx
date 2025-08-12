@@ -81,7 +81,7 @@ const HtmlCodeViewer: React.FC<HtmlCodeViewerProps> = ({
                 <div className="html-code-header">
                     <div className="header-left">
                         <h2>{title}</h2>
-                        <p>Copy, import, or download the HTML for your wireframe</p>
+                        <p>View, copy, import, or download the HTML for your wireframe</p>
                     </div>
                     <div className="header-right">
                         {onImportHtml && (
