@@ -546,13 +546,13 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Large hero with generous spacing for maximum impact',
             category: 'Sections',
             library: 'FluentUI',
-            htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #8b5dae; color: white; padding: 96px 24px; border-bottom: 1px solid #e1e5e9;">
+            htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #107c10; color: white; padding: 96px 24px; border-bottom: 1px solid #e1e5e9;">
     <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
         <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 14px; color: rgba(255,255,255,0.9); margin-bottom: 20px; font-weight: 600;">MICROSOFT LEARN</p>
         <h1 style="font-size: 64px; font-weight: 700; color: white; margin-bottom: 24px; line-height: 1.1;">Large hero section</h1>
         <p style="font-size: 24px; font-weight: 500; color: rgba(255,255,255,0.95); max-width: 900px; margin: 0 auto 32px; line-height: 1.4;">Perfect for landing pages and major announcements that demand attention and create lasting impressions.</p>
         <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-            <button style="background: white; color: #8b5dae; border: none; padding: 16px 32px; border-radius: 6px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">Get Started</button>
+            <button style="background: white; color: #107c10; border: none; padding: 16px 32px; border-radius: 6px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">Get Started</button>
             <button style="background: transparent; color: white; border: 2px solid white; padding: 14px 32px; border-radius: 6px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Explore Features</button>
         </div>
     </div>
@@ -648,6 +648,175 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid white; padding: 14px 32px; border-radius: 6px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.2s; backdrop-filter: blur(10px);">Watch Demo</button>
         </div>
     </div>
+</section>`
+        },
+        {
+            id: 'hero-learn-details',
+            name: 'Microsoft Learn Hero - Images with Details (Official)',
+            description: 'Exact implementation of Microsoft Learn "Hero images with details" component',
+            category: 'Sections',
+            library: 'FluentUI',
+            htmlCode: `<section style="
+                font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+                background: #f8f9fa;
+                border: 1px solid #e1e5e9;
+                background-image: linear-gradient(to right, transparent 50%, rgba(0,120,212,0.08) 100%);
+                border-right: 4px solid rgba(0,120,212,0.2);
+                display: flex;
+                flex-direction: row;
+                align-items: stretch;
+                min-height: 320px;
+                overflow: hidden;
+            ">
+    <!-- Hero content section -->
+    <div style="
+        flex: 1;
+        padding: 48px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    ">
+        <p style="
+            letter-spacing: 0.5px; 
+            text-transform: uppercase; 
+            font-size: 12px; 
+            color: #605e5c; 
+            margin-bottom: 16px; 
+            font-weight: 600;
+        ">MICROSOFT LEARN</p>
+        <h2 style="
+            font-size: 48px; 
+            font-weight: 600; 
+            color: #323130; 
+            margin-bottom: 20px; 
+            line-height: 1.2;
+        ">Hero with images and details</h2>
+        <p style="
+            font-size: 18px; 
+            color: #605e5c; 
+            margin-bottom: 24px; 
+            line-height: 1.5;
+            max-width: 500px;
+        ">This component variant overlays a container on the opposite side of the hero content. It can be used to accommodate more content within the hero section if necessary.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <button style="
+                background: #0078d4; 
+                color: white; 
+                border: none; 
+                padding: 12px 24px; 
+                border-radius: 4px; 
+                font-size: 16px; 
+                font-weight: 600; 
+                cursor: pointer; 
+                transition: all 0.2s;
+            ">Get Started</button>
+            <button style="
+                background: transparent; 
+                color: #0078d4; 
+                border: 2px solid #0078d4; 
+                padding: 10px 24px; 
+                border-radius: 4px; 
+                font-size: 16px; 
+                font-weight: 600; 
+                cursor: pointer; 
+                transition: all 0.2s;
+            ">Learn More</button>
+        </div>
+    </div>
+    
+    <!-- Hero details section -->
+    <div style="
+        width: 400px;
+        padding: 48px 32px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+    ">
+        <!-- Background decorative element representing hero image -->
+        <div style="
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            bottom: 20px;
+            left: 20px;
+            background: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 300\"><rect width=\"400\" height=\"300\" fill=\"%23f0f8ff\"/><circle cx=\"100\" cy=\"80\" r=\"20\" fill=\"%230078d4\" opacity=\"0.3\"/><circle cx=\"300\" cy=\"220\" r=\"30\" fill=\"%23106ebe\" opacity=\"0.2\"/><rect x=\"50\" y=\"150\" width=\"80\" height=\"40\" rx=\"8\" fill=\"%23005a9e\" opacity=\"0.1\"/><rect x=\"250\" y=\"100\" width=\"100\" height=\"60\" rx=\"12\" fill=\"%230078d4\" opacity=\"0.15\"/></svg>') center/cover;
+            border-radius: 8px;
+            opacity: 0.6;
+        "></div>
+        
+        <!-- Details card -->
+        <div style="
+            background: white;
+            border: 1px solid #e1e5e9;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            position: relative;
+            z-index: 2;
+        ">
+            <h3 style="
+                font-size: 18px; 
+                font-weight: 600; 
+                color: #323130; 
+                margin-bottom: 16px;
+            ">Learning Path Details</h3>
+            <p style="
+                font-size: 14px; 
+                color: #605e5c; 
+                margin-bottom: 20px; 
+                line-height: 1.4;
+            ">This component variant overlays a container on the opposite side of the hero content. It can be used to accommodate more content within the hero section if necessary.</p>
+            
+            <!-- Progress indicators -->
+            <div style="margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 12px; color: #605e5c; font-weight: 500;">Modules Completed</span>
+                    <span style="font-size: 12px; color: #0078d4; font-weight: 600;">3 of 5</span>
+                </div>
+                <div style="width: 100%; height: 4px; background-color: #f3f2f1; border-radius: 2px; overflow: hidden;">
+                    <div style="width: 60%; height: 100%; background: linear-gradient(90deg, #0078d4, #106ebe); border-radius: 2px;"></div>
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 12px; color: #605e5c; font-weight: 500;">Time Investment</span>
+                    <span style="font-size: 12px; color: #107c10; font-weight: 600;">2.5 hrs</span>
+                </div>
+                <div style="width: 100%; height: 4px; background-color: #f3f2f1; border-radius: 2px; overflow: hidden;">
+                    <div style="width: 45%; height: 100%; background: linear-gradient(90deg, #107c10, #0e6e0e); border-radius: 2px;"></div>
+                </div>
+            </div>
+            
+            <!-- Action button -->
+            <button style="
+                width: 100%;
+                background: #f8f9fa;
+                color: #0078d4;
+                border: 1px solid #e1e5e9;
+                padding: 12px 16px;
+                border-radius: 6px;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s;
+            ">Continue Learning</button>
+        </div>
+    </div>
+    
+    <style>
+        @media (max-width: 768px) {
+            section { 
+                flex-direction: column !important; 
+                min-height: auto !important;
+            }
+            section > div:last-child { 
+                width: 100% !important; 
+                padding: 32px 24px !important;
+            }
+        }
+    </style>
 </section>`
         },
 
