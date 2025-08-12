@@ -130,21 +130,21 @@ const LandingPage: React.FC<LandingPageProps> = ({
   // Wrapper for description change with real-time validation
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
-    
+
     // Call the parent's onChange handler
     onDescriptionChange(e);
-    
+
     // Clear validation error in real-time as user types valid input
     if (validationError && value.trim()) {
       const trimmedInput = value.trim();
       const onlyNumbersRegex = /^[\d\s.,]+$/;
-      
+
       // If the input is no longer number-only, clear the error
       if (!onlyNumbersRegex.test(trimmedInput)) {
         setValidationError(null);
       }
     }
-    
+
     // Also clear error if input becomes empty
     if (!value.trim()) {
       setValidationError(null);

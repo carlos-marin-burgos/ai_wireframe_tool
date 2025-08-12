@@ -4392,6 +4392,823 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         </div>
     </details>
 </div>`
+        },
+
+        // Table - Data table layouts
+        {
+            id: 'atlas-table',
+            name: 'Table',
+            description: 'Data table layouts with Microsoft Learn styling',
+            category: 'Data Display',
+            library: 'Atlas',
+            htmlCode: `<div style="margin: 16px 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
+    <table style="
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border: 1px solid #e1e5e9;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    ">
+        <thead>
+            <tr style="background: #f8f9fa; border-bottom: 2px solid #e1e5e9;">
+                <th style="
+                    padding: 12px 16px;
+                    text-align: left;
+                    font-weight: 600;
+                    color: #323130;
+                    font-size: 14px;
+                    border-right: 1px solid #e1e5e9;
+                ">Name</th>
+                <th style="
+                    padding: 12px 16px;
+                    text-align: left;
+                    font-weight: 600;
+                    color: #323130;
+                    font-size: 14px;
+                    border-right: 1px solid #e1e5e9;
+                ">Status</th>
+                <th style="
+                    padding: 12px 16px;
+                    text-align: left;
+                    font-weight: 600;
+                    color: #323130;
+                    font-size: 14px;
+                    border-right: 1px solid #e1e5e9;
+                ">Category</th>
+                <th style="
+                    padding: 12px 16px;
+                    text-align: left;
+                    font-weight: 600;
+                    color: #323130;
+                    font-size: 14px;
+                ">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="border-bottom: 1px solid #e1e5e9; transition: background-color 0.2s ease;" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='white'">
+                <td style="padding: 12px 16px; color: #323130; font-size: 14px; border-right: 1px solid #e1e5e9;">
+                    <strong>Azure Fundamentals</strong>
+                </td>
+                <td style="padding: 12px 16px; border-right: 1px solid #e1e5e9;">
+                    <span style="
+                        background: #dff6dd;
+                        color: #107c10;
+                        padding: 4px 8px;
+                        border-radius: 12px;
+                        font-size: 12px;
+                        font-weight: 500;
+                    ">Active</span>
+                </td>
+                <td style="padding: 12px 16px; color: #605e5c; font-size: 14px; border-right: 1px solid #e1e5e9;">Fundamentals</td>
+                <td style="padding: 12px 16px;">
+                    <button style="
+                        background: #0078d4;
+                        color: white;
+                        border: none;
+                        padding: 6px 12px;
+                        border-radius: 4px;
+                        font-size: 12px;
+                        cursor: pointer;
+                        margin-right: 8px;
+                    ">Edit</button>
+                    <button style="
+                        background: white;
+                        color: #605e5c;
+                        border: 1px solid #c8c6c4;
+                        padding: 6px 12px;
+                        border-radius: 4px;
+                        font-size: 12px;
+                        cursor: pointer;
+                    ">View</button>
+                </td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e1e5e9; transition: background-color 0.2s ease;" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='white'">
+                <td style="padding: 12px 16px; color: #323130; font-size: 14px; border-right: 1px solid #e1e5e9;">
+                    <strong>Data Analytics</strong>
+                </td>
+                <td style="padding: 12px 16px; border-right: 1px solid #e1e5e9;">
+                    <span style="
+                        background: #fff4ce;
+                        color: #8a6914;
+                        padding: 4px 8px;
+                        border-radius: 12px;
+                        font-size: 12px;
+                        font-weight: 500;
+                    ">Pending</span>
+                </td>
+                <td style="padding: 12px 16px; color: #605e5c; font-size: 14px; border-right: 1px solid #e1e5e9;">Associate</td>
+                <td style="padding: 12px 16px;">
+                    <button style="
+                        background: #0078d4;
+                        color: white;
+                        border: none;
+                        padding: 6px 12px;
+                        border-radius: 4px;
+                        font-size: 12px;
+                        cursor: pointer;
+                        margin-right: 8px;
+                    ">Edit</button>
+                    <button style="
+                        background: white;
+                        color: #605e5c;
+                        border: 1px solid #c8c6c4;
+                        padding: 6px 12px;
+                        border-radius: 4px;
+                        font-size: 12px;
+                        cursor: pointer;
+                    ">View</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>`
+        },
+
+        // Tag - Content tags and labels
+        {
+            id: 'atlas-tag',
+            name: 'Tag',
+            description: 'Content tags and labels with Microsoft Learn styling',
+            category: 'Data Display',
+            library: 'Atlas',
+            htmlCode: `<div style="margin: 16px 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
+    <!-- Tag Examples -->
+    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+        <!-- Primary Tags -->
+        <span style="
+            background: #0078d4;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        ">
+            Azure
+        </span>
+        
+        <span style="
+            background: #107c10;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        ">
+            ✓ Certified
+        </span>
+        
+        <!-- Secondary Tags -->
+        <span style="
+            background: #f3f2f1;
+            color: #323130;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid #c8c6c4;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        ">
+            Fundamentals
+        </span>
+        
+        <span style="
+            background: #fff4ce;
+            color: #8a6914;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        ">
+            ⏰ In Progress
+        </span>
+        
+        <!-- Error/Warning Tags -->
+        <span style="
+            background: #fde7e9;
+            color: #d13438;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        ">
+            ⚠ Expired
+        </span>
+    </div>
+    
+    <!-- Removable Tags -->
+    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <span style="
+            background: #f3f2f1;
+            color: #323130;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid #c8c6c4;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        ">
+            Machine Learning
+            <button style="
+                background: none;
+                border: none;
+                color: #605e5c;
+                font-size: 14px;
+                cursor: pointer;
+                padding: 0;
+                width: 16px;
+                height: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                transition: background-color 0.2s ease;
+            " onmouseover="this.style.backgroundColor='#e1dfdd'" onmouseout="this.style.backgroundColor='transparent'">×</button>
+        </span>
+        
+        <span style="
+            background: #f3f2f1;
+            color: #323130;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid #c8c6c4;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        ">
+            Data Science
+            <button style="
+                background: none;
+                border: none;
+                color: #605e5c;
+                font-size: 14px;
+                cursor: pointer;
+                padding: 0;
+                width: 16px;
+                height: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                transition: background-color 0.2s ease;
+            " onmouseover="this.style.backgroundColor='#e1dfdd'" onmouseout="this.style.backgroundColor='transparent'">×</button>
+        </span>
+    </div>
+</div>`
+        },
+
+        // Textarea - Multi-line text inputs
+        {
+            id: 'atlas-textarea',
+            name: 'Textarea',
+            description: 'Multi-line text inputs with Microsoft Learn styling',
+            category: 'Forms',
+            library: 'Atlas',
+            htmlCode: `<div style="margin: 16px 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
+    <!-- Basic Textarea -->
+    <div style="margin-bottom: 16px;">
+        <label style="
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+            color: #323130;
+            font-size: 14px;
+        ">Description</label>
+        <textarea 
+            placeholder="Enter your description here..."
+            style="
+                width: 100%;
+                min-height: 80px;
+                padding: 8px 12px;
+                border: 1px solid #c8c6c4;
+                border-radius: 4px;
+                font-family: inherit;
+                font-size: 14px;
+                color: #323130;
+                background: white;
+                resize: vertical;
+                transition: border-color 0.2s ease, box-shadow 0.2s ease;
+                box-sizing: border-box;
+            "
+            onfocus="this.style.borderColor='#0078d4'; this.style.boxShadow='0 0 0 1px #0078d4'"
+            onblur="this.style.borderColor='#c8c6c4'; this.style.boxShadow='none'"
+        ></textarea>
+    </div>
+    
+    <!-- Textarea with Helper Text -->
+    <div style="margin-bottom: 16px;">
+        <label style="
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+            color: #323130;
+            font-size: 14px;
+        ">Comments</label>
+        <textarea 
+            placeholder="Share your thoughts..."
+            style="
+                width: 100%;
+                min-height: 100px;
+                padding: 8px 12px;
+                border: 1px solid #c8c6c4;
+                border-radius: 4px;
+                font-family: inherit;
+                font-size: 14px;
+                color: #323130;
+                background: white;
+                resize: vertical;
+                transition: border-color 0.2s ease, box-shadow 0.2s ease;
+                box-sizing: border-box;
+            "
+            onfocus="this.style.borderColor='#0078d4'; this.style.boxShadow='0 0 0 1px #0078d4'"
+            onblur="this.style.borderColor='#c8c6c4'; this.style.boxShadow='none'"
+        ></textarea>
+        <div style="
+            margin-top: 4px;
+            font-size: 12px;
+            color: #605e5c;
+            display: flex;
+            justify-content: space-between;
+        ">
+            <span>Be specific and constructive in your feedback</span>
+            <span>0/500</span>
+        </div>
+    </div>
+    
+    <!-- Required Textarea -->
+    <div style="margin-bottom: 16px;">
+        <label style="
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+            color: #323130;
+            font-size: 14px;
+        ">
+            Feedback 
+            <span style="color: #d13438;">*</span>
+        </label>
+        <textarea 
+            placeholder="This field is required..."
+            required
+            style="
+                width: 100%;
+                min-height: 80px;
+                padding: 8px 12px;
+                border: 1px solid #c8c6c4;
+                border-radius: 4px;
+                font-family: inherit;
+                font-size: 14px;
+                color: #323130;
+                background: white;
+                resize: vertical;
+                transition: border-color 0.2s ease, box-shadow 0.2s ease;
+                box-sizing: border-box;
+            "
+            onfocus="this.style.borderColor='#0078d4'; this.style.boxShadow='0 0 0 1px #0078d4'"
+            onblur="this.style.borderColor='#c8c6c4'; this.style.boxShadow='none'"
+        ></textarea>
+    </div>
+    
+    <!-- Disabled Textarea -->
+    <div>
+        <label style="
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+            color: #a19f9d;
+            font-size: 14px;
+        ">Read-only Content</label>
+        <textarea 
+            disabled
+            style="
+                width: 100%;
+                min-height: 60px;
+                padding: 8px 12px;
+                border: 1px solid #e1dfdd;
+                border-radius: 4px;
+                font-family: inherit;
+                font-size: 14px;
+                color: #a19f9d;
+                background: #f3f2f1;
+                resize: vertical;
+                box-sizing: border-box;
+                cursor: not-allowed;
+            "
+        >This content cannot be edited.</textarea>
+    </div>
+</div>`
+        },
+
+        // Timeline - Timeline displays
+        {
+            id: 'atlas-timeline',
+            name: 'Timeline',
+            description: 'Timeline displays with Microsoft Learn styling',
+            category: 'Data Display',
+            library: 'Atlas',
+            htmlCode: `<div style="margin: 16px 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
+    <div style="position: relative; padding-left: 32px;">
+        <!-- Timeline line -->
+        <div style="
+            position: absolute;
+            left: 12px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e1e5e9;
+        "></div>
+        
+        <!-- Timeline Item 1 -->
+        <div style="position: relative; margin-bottom: 24px;">
+            <div style="
+                position: absolute;
+                left: -26px;
+                top: 2px;
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background: #0078d4;
+                border: 2px solid white;
+                box-shadow: 0 0 0 2px #0078d4;
+            "></div>
+            <div style="
+                background: white;
+                padding: 16px;
+                border-radius: 8px;
+                border: 1px solid #e1e5e9;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            ">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                    <h4 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">
+                        Azure Fundamentals Completed
+                    </h4>
+                    <span style="
+                        background: #dff6dd;
+                        color: #107c10;
+                        padding: 4px 8px;
+                        border-radius: 12px;
+                        font-size: 12px;
+                        font-weight: 500;
+                        white-space: nowrap;
+                    ">Completed</span>
+                </div>
+                <p style="margin: 0 0 8px 0; color: #605e5c; font-size: 14px; line-height: 1.5;">
+                    Successfully completed the Azure Fundamentals certification exam (AZ-900) with a score of 85%.
+                </p>
+                <div style="color: #8a8886; font-size: 12px;">
+                    March 15, 2024 • 2:30 PM
+                </div>
+            </div>
+        </div>
+        
+        <!-- Timeline Item 2 -->
+        <div style="position: relative; margin-bottom: 24px;">
+            <div style="
+                position: absolute;
+                left: -26px;
+                top: 2px;
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background: #fff4ce;
+                border: 2px solid white;
+                box-shadow: 0 0 0 2px #f7630c;
+            "></div>
+            <div style="
+                background: white;
+                padding: 16px;
+                border-radius: 8px;
+                border: 1px solid #e1e5e9;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            ">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                    <h4 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">
+                        Data Analytics Path Started
+                    </h4>
+                    <span style="
+                        background: #fff4ce;
+                        color: #8a6914;
+                        padding: 4px 8px;
+                        border-radius: 12px;
+                        font-size: 12px;
+                        font-weight: 500;
+                        white-space: nowrap;
+                    ">In Progress</span>
+                </div>
+                <p style="margin: 0 0 8px 0; color: #605e5c; font-size: 14px; line-height: 1.5;">
+                    Enrolled in the Azure Data Analytics learning path. Currently working on module 3 of 8.
+                </p>
+                <div style="color: #8a8886; font-size: 12px;">
+                    March 18, 2024 • 9:15 AM
+                </div>
+            </div>
+        </div>
+        
+        <!-- Timeline Item 3 -->
+        <div style="position: relative; margin-bottom: 24px;">
+            <div style="
+                position: absolute;
+                left: -26px;
+                top: 2px;
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background: #f3f2f1;
+                border: 2px solid white;
+                box-shadow: 0 0 0 2px #c8c6c4;
+            "></div>
+            <div style="
+                background: white;
+                padding: 16px;
+                border-radius: 8px;
+                border: 1px solid #e1e5e9;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            ">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                    <h4 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">
+                        AI Engineer Associate Scheduled
+                    </h4>
+                    <span style="
+                        background: #f3f2f1;
+                        color: #605e5c;
+                        padding: 4px 8px;
+                        border-radius: 12px;
+                        font-size: 12px;
+                        font-weight: 500;
+                        white-space: nowrap;
+                    ">Upcoming</span>
+                </div>
+                <p style="margin: 0 0 8px 0; color: #605e5c; font-size: 14px; line-height: 1.5;">
+                    Scheduled to take the AI Engineer Associate certification exam (AI-102) next month.
+                </p>
+                <div style="color: #8a8886; font-size: 12px;">
+                    Scheduled for April 20, 2024 • 10:00 AM
+                </div>
+            </div>
+        </div>
+    </div>
+</div>`
+        },
+
+        // Toggle - Toggle switches
+        {
+            id: 'atlas-toggle',
+            name: 'Toggle',
+            description: 'Toggle switches with Microsoft Learn styling',
+            category: 'Forms',
+            library: 'Atlas',
+            htmlCode: `<div style="margin: 16px 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
+    <!-- Basic Toggle -->
+    <div style="margin-bottom: 24px;">
+        <label style="
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            gap: 12px;
+        ">
+            <div style="position: relative;">
+                <input 
+                    type="checkbox" 
+                    style="
+                        appearance: none;
+                        width: 44px;
+                        height: 24px;
+                        background: #c8c6c4;
+                        border-radius: 12px;
+                        transition: background-color 0.2s ease;
+                        cursor: pointer;
+                        outline: none;
+                    "
+                    onchange="
+                        this.style.background = this.checked ? '#0078d4' : '#c8c6c4';
+                        this.nextElementSibling.style.transform = this.checked ? 'translateX(20px)' : 'translateX(0)';
+                        this.nextElementSibling.style.background = this.checked ? 'white' : 'white';
+                    "
+                />
+                <div style="
+                    position: absolute;
+                    top: 2px;
+                    left: 2px;
+                    width: 20px;
+                    height: 20px;
+                    background: white;
+                    border-radius: 50%;
+                    transition: transform 0.2s ease;
+                    pointer-events: none;
+                "></div>
+            </div>
+            <span style="color: #323130; font-size: 14px; font-weight: 500;">
+                Enable notifications
+            </span>
+        </label>
+    </div>
+    
+    <!-- Toggle with Description -->
+    <div style="margin-bottom: 24px;">
+        <label style="
+            display: flex;
+            align-items: flex-start;
+            cursor: pointer;
+            gap: 12px;
+        ">
+            <div style="position: relative; margin-top: 2px;">
+                <input 
+                    type="checkbox" 
+                    checked
+                    style="
+                        appearance: none;
+                        width: 44px;
+                        height: 24px;
+                        background: #0078d4;
+                        border-radius: 12px;
+                        transition: background-color 0.2s ease;
+                        cursor: pointer;
+                        outline: none;
+                    "
+                    onchange="
+                        this.style.background = this.checked ? '#0078d4' : '#c8c6c4';
+                        this.nextElementSibling.style.transform = this.checked ? 'translateX(20px)' : 'translateX(0)';
+                    "
+                />
+                <div style="
+                    position: absolute;
+                    top: 2px;
+                    left: 22px;
+                    width: 20px;
+                    height: 20px;
+                    background: white;
+                    border-radius: 50%;
+                    transition: transform 0.2s ease;
+                    pointer-events: none;
+                "></div>
+            </div>
+            <div>
+                <div style="color: #323130; font-size: 14px; font-weight: 500; margin-bottom: 4px;">
+                    Auto-save progress
+                </div>
+                <div style="color: #605e5c; font-size: 12px; line-height: 1.4;">
+                    Automatically save your learning progress as you complete modules
+                </div>
+            </div>
+        </label>
+    </div>
+    
+    <!-- Disabled Toggle -->
+    <div style="margin-bottom: 24px;">
+        <label style="
+            display: flex;
+            align-items: center;
+            cursor: not-allowed;
+            gap: 12px;
+            opacity: 0.6;
+        ">
+            <div style="position: relative;">
+                <input 
+                    type="checkbox" 
+                    disabled
+                    style="
+                        appearance: none;
+                        width: 44px;
+                        height: 24px;
+                        background: #f3f2f1;
+                        border-radius: 12px;
+                        cursor: not-allowed;
+                        outline: none;
+                    "
+                />
+                <div style="
+                    position: absolute;
+                    top: 2px;
+                    left: 2px;
+                    width: 20px;
+                    height: 20px;
+                    background: #c8c6c4;
+                    border-radius: 50%;
+                    pointer-events: none;
+                "></div>
+            </div>
+            <span style="color: #a19f9d; font-size: 14px; font-weight: 500;">
+                Premium features (Requires subscription)
+            </span>
+        </label>
+    </div>
+    
+    <!-- Toggle Group -->
+    <div style="
+        background: #f8f9fa;
+        padding: 16px;
+        border-radius: 8px;
+        border: 1px solid #e1e5e9;
+    ">
+        <h4 style="margin: 0 0 16px 0; color: #323130; font-size: 16px; font-weight: 600;">
+            Learning Preferences
+        </h4>
+        
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+            <label style="
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                gap: 12px;
+            ">
+                <div style="position: relative;">
+                    <input 
+                        type="checkbox" 
+                        checked
+                        style="
+                            appearance: none;
+                            width: 44px;
+                            height: 24px;
+                            background: #0078d4;
+                            border-radius: 12px;
+                            transition: background-color 0.2s ease;
+                            cursor: pointer;
+                            outline: none;
+                        "
+                        onchange="
+                            this.style.background = this.checked ? '#0078d4' : '#c8c6c4';
+                            this.nextElementSibling.style.transform = this.checked ? 'translateX(20px)' : 'translateX(0)';
+                        "
+                    />
+                    <div style="
+                        position: absolute;
+                        top: 2px;
+                        left: 22px;
+                        width: 20px;
+                        height: 20px;
+                        background: white;
+                        border-radius: 50%;
+                        transition: transform 0.2s ease;
+                        pointer-events: none;
+                    "></div>
+                </div>
+                <span style="color: #323130; font-size: 14px; font-weight: 500;">
+                    Email reminders
+                </span>
+            </label>
+            
+            <label style="
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                gap: 12px;
+            ">
+                <div style="position: relative;">
+                    <input 
+                        type="checkbox" 
+                        style="
+                            appearance: none;
+                            width: 44px;
+                            height: 24px;
+                            background: #c8c6c4;
+                            border-radius: 12px;
+                            transition: background-color 0.2s ease;
+                            cursor: pointer;
+                            outline: none;
+                        "
+                        onchange="
+                            this.style.background = this.checked ? '#0078d4' : '#c8c6c4';
+                            this.nextElementSibling.style.transform = this.checked ? 'translateX(20px)' : 'translateX(0)';
+                        "
+                    />
+                    <div style="
+                        position: absolute;
+                        top: 2px;
+                        left: 2px;
+                        width: 20px;
+                        height: 20px;
+                        background: white;
+                        border-radius: 50%;
+                        transition: transform 0.2s ease;
+                        pointer-events: none;
+                    "></div>
+                </div>
+                <span style="color: #323130; font-size: 14px; font-weight: 500;">
+                    Dark mode
+                </span>
+            </label>
+        </div>
+    </div>
+</div>`
         }
     ];
 

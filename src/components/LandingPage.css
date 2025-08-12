@@ -413,7 +413,7 @@
 
 /* Ensure Landing page overrides SplitLayout defaults when both classes are present */
 .landing-page .ai-suggestions-inline.ai-suggestions-dynamic {
-  max-height: 140px; /* requested height */
+  max-height: 180px; /* requested height */
   overflow-y: auto; /* scroll the outer panel */
   display: block; /* override any grid/flex from other sheets */
 }
@@ -451,7 +451,7 @@
 
 /* Landing page specific: make the dynamic panel scroll with custom scrollbar */
 .landing-page .ai-suggestions-inline.ai-suggestions-dynamic {
-  max-height: 250px !important; /* force override */
+  max-height: 180px !important; /* force override */
   overflow-y: auto !important; /* scroll the outer panel */
   display: block !important; /* override any grid/flex */
 }
@@ -650,7 +650,7 @@
     max-height: 110px; /* default for non-dynamic use on mobile */
   }
   .landing-page .ai-suggestions-inline.ai-suggestions-dynamic {
-    max-height: 140px; /* keep 140px on mobile as requested */
+    max-height: 830px; /* keep 140px on mobile as requested */
   }
 
   .ai-suggestion-pill {
