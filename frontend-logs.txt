@@ -1,5 +1,5 @@
 
-  VITE v6.3.5  ready in 436 ms
+  VITE v6.3.5  ready in 143 ms
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: http://192.168.1.81:5173/
