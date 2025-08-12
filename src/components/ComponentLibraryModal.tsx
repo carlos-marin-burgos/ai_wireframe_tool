@@ -5250,32 +5250,34 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                             <p className="library-instructions">Click components to add them to your wireframe</p>
                         </div>
                     </div>
-                    <div className="library-selector">
+                    <div className="header-right-section">
+                        <div className="library-selector">
+                            <button
+                                onClick={() => {
+                                    setSelectedLibrary('FluentUI');
+                                    setSelectedCategory('All');
+                                }}
+                                className={`library-tab ${selectedLibrary === 'FluentUI' ? 'active' : ''}`}
+                            >
+                                Fluent UI
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setSelectedLibrary('Atlas');
+                                    setSelectedCategory('All');
+                                }}
+                                className={`library-tab ${selectedLibrary === 'Atlas' ? 'active' : ''}`}
+                            >
+                                Atlas
+                            </button>
+                        </div>
                         <button
-                            onClick={() => {
-                                setSelectedLibrary('FluentUI');
-                                setSelectedCategory('All');
-                            }}
-                            className={`library-tab ${selectedLibrary === 'FluentUI' ? 'active' : ''}`}
+                            onClick={onClose}
+                            className="component-library-close"
                         >
-                            Fluent UI
-                        </button>
-                        <button
-                            onClick={() => {
-                                setSelectedLibrary('Atlas');
-                                setSelectedCategory('All');
-                            }}
-                            className={`library-tab ${selectedLibrary === 'Atlas' ? 'active' : ''}`}
-                        >
-                            Atlas
+                            ×
                         </button>
                     </div>
-                    <button
-                        onClick={onClose}
-                        className="component-library-close"
-                    >
-                        ×
-                    </button>
                 </div>
 
                 <div className="component-library-content">

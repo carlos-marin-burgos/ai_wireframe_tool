@@ -54,12 +54,13 @@
 
 .mouse-drag-drop [data-draggable="true"]:hover::after {
   content: "🖱️ Click & drag to move";
-  position: fixed;
-  top: auto;
-  bottom: auto;
-  left: auto;
-  right: auto;
-  transform: none;
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  margin: 0 auto 8px auto;
+  width: max-content;
+  max-width: 200px;
   background: #007bff;
   color: white;
   font-size: 11px;
@@ -69,12 +70,32 @@
   pointer-events: none;
   opacity: 0.95;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
   z-index: 1000;
-  margin-top: -35px;
-  margin-left: 10px;
   font-weight: 500;
   letter-spacing: 0.3px;
+  text-align: center;
+}
+
+/* Alternative positioning for elements near the top */
+.mouse-drag-drop [data-draggable="true"][style*="top: 0"],
+.mouse-drag-drop [data-draggable="true"][style*="top: 1"],
+.mouse-drag-drop [data-draggable="true"][style*="top: 2"]:hover::after {
+  bottom: auto;
+  top: 100%;
+  margin: 8px auto 0 auto;
+}
+
+/* Responsive tooltips for smaller screens */
+@media (max-width: 768px) {
+  .mouse-drag-drop [data-draggable="true"]:hover::after {
+    content: "🖱️ Drag";
+    font-size: 10px;
+    padding: 4px 8px;
+    max-width: 60px;
+  }
 }
 
 /* Element being dragged - only during active drag */

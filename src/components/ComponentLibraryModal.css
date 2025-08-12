@@ -16,8 +16,8 @@
 .component-library-modal {
   background: white;
   border-radius: 12px;
-  width: 90%;
-  max-width: 900px;
+  width: 95%;
+  max-width: 1200px;
   max-height: 80vh;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
@@ -60,6 +60,12 @@
 .component-library-title h2 {
   margin: 0;
   color: #323130;
+}
+
+.header-right-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .library-selector {
@@ -279,6 +285,13 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .component-library-modal {
+    width: 90%;
+    max-width: 1000px;
+  }
+}
+
 @media (max-width: 768px) {
   .component-library-modal {
     width: 95%;
