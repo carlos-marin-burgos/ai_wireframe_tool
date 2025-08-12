@@ -43,7 +43,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Official Microsoft Learn site header with logo and brand',
             category: 'Navigation',
             library: 'FluentUI',
-            htmlCode: `<div style="display: flex; align-items: center; padding: 12px 24px; background: white; border-bottom: 1px solid #e1e5e9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+            htmlCode: `<div style="display: flex; align-items: center; padding: 12px 24px; background: #E8E6DF; border-bottom: 1px solid #e1e5e9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
     <!-- Microsoft logo -->
     <a href="https://www.microsoft.com" aria-label="Microsoft" style="display: flex; align-items: center; margin-right: 16px; text-decoration: none;">
         <svg aria-hidden="true" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;">
@@ -58,15 +58,15 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     <div style="width: 1px; height: 24px; background: #e1e5e9; margin-right: 16px;"></div>
 
     <!-- Brand -->
-    <a href="#" style="color: #323130; text-decoration: none; font-weight: 600; font-size: 16px; margin-right: auto;">
+    <a href="#" style="color: #000000; text-decoration: none; font-weight: 600; font-size: 16px; margin-right: auto;">
         <span>Microsoft Learn</span>
     </a>
 
     <!-- Navigation -->
     <nav aria-label="site header navigation" style="display: flex; align-items: center; gap: 8px;">
-        <a href="#" style="color: #323130; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.2s; font-size: 14px;">Documentation</a>
-        <a href="#" style="color: #323130; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.2s; font-size: 14px;">Training</a>
-        <a href="#" style="color: #323130; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.2s; font-size: 14px;">Certifications</a>
+        <a href="#" style="color: #000000; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.2s; font-size: 14px;">Documentation</a>
+        <a href="#" style="color: #000000; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.2s; font-size: 14px;">Training</a>
+        <a href="#" style="color: #000000; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.2s; font-size: 14px;">Certifications</a>
     </nav>
 </div>`
         },
@@ -76,9 +76,9 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Microsoft Learn header with centered logo layout',
             category: 'Navigation',
             library: 'FluentUI',
-            htmlCode: `<div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; background: white; border-bottom: 1px solid #e1e5e9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+            htmlCode: `<div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; background: #E8E6DF; border-bottom: 1px solid #e1e5e9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
     <!-- Brand -->
-    <a href="#" style="color: #323130; text-decoration: none; font-weight: 600; font-size: 16px;">
+    <a href="#" style="color: #000000; text-decoration: none; font-weight: 600; font-size: 16px;">
         <span>Microsoft Learn</span>
     </a>
 
@@ -103,7 +103,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Full Microsoft Learn header with comprehensive navigation',
             category: 'Navigation',
             library: 'FluentUI',
-            htmlCode: `<div style="background: white; border-bottom: 1px solid #e1e5e9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+            htmlCode: `<div style="background: #E8E6DF; border-bottom: 1px solid #e1e5e9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
     <!-- Main header -->
     <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 24px;">
         <!-- Left section -->
@@ -122,14 +122,14 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             <div style="width: 1px; height: 24px; background: #e1e5e9; margin-right: 16px;"></div>
 
             <!-- Brand -->
-            <a href="#" style="color: #323130; text-decoration: none; font-weight: 600; font-size: 16px;">
+            <a href="#" style="color: #000000; text-decoration: none; font-weight: 600; font-size: 16px;">
                 <span>Microsoft Learn</span>
             </a>
         </div>
 
         <!-- Right section -->
         <div style="display: flex; align-items: center; gap: 16px;">
-            <button style="background: none; border: none; color: #323130; cursor: pointer; padding: 8px; border-radius: 4px; font-size: 14px;">🔍 Search</button>
+            <button style="background: none; border: none; color: #000000; cursor: pointer; padding: 8px; border-radius: 4px; font-size: 14px;">🔍 Search</button>
             <a href="#" style="color: #0078d4; text-decoration: none; font-size: 14px; padding: 6px 12px; border: 1px solid #0078d4; border-radius: 4px;">Sign in</a>
         </div>
     </div>
@@ -137,11 +137,11 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     <!-- Secondary navigation -->
     <div style="padding: 0 24px; border-top: 1px solid #f3f2f1;">
         <nav style="display: flex; gap: 32px; padding: 12px 0;">
-            <a href="#" style="color: #323130; text-decoration: none; font-size: 14px; padding: 8px 0; border-bottom: 2px solid transparent; transition: border-color 0.2s;">Browse</a>
-            <a href="#" style="color: #323130; text-decoration: none; font-size: 14px; padding: 8px 0; border-bottom: 2px solid transparent; transition: border-color 0.2s;">Learning Paths</a>
-            <a href="#" style="color: #323130; text-decoration: none; font-size: 14px; padding: 8px 0; border-bottom: 2px solid transparent; transition: border-color 0.2s;">Modules</a>
-            <a href="#" style="color: #323130; text-decoration: none; font-size: 14px; padding: 8px 0; border-bottom: 2px solid #0078d4;">Certifications</a>
-            <a href="#" style="color: #323130; text-decoration: none; font-size: 14px; padding: 8px 0; border-bottom: 2px solid transparent; transition: border-color 0.2s;">Q&A</a>
+            <a href="#" style="color: #000000; text-decoration: none; font-size: 14px; padding: 8px 0; border-bottom: 2px solid transparent; transition: border-color 0.2s;">Browse</a>
+            <a href="#" style="color: #000000; text-decoration: none; font-size: 14px; padding: 8px 0; border-bottom: 2px solid transparent; transition: border-color 0.2s;">Learning Paths</a>
+            <a href="#" style="color: #000000; text-decoration: none; font-size: 14px; padding: 8px 0; border-bottom: 2px solid transparent; transition: border-color 0.2s;">Modules</a>
+            <a href="#" style="color: #000000; text-decoration: none; font-size: 14px; padding: 8px 0; border-bottom: 2px solid #0078d4;">Certifications</a>
+            <a href="#" style="color: #000000; text-decoration: none; font-size: 14px; padding: 8px 0; border-bottom: 2px solid transparent; transition: border-color 0.2s;">Q&A</a>
         </nav>
     </div>
 </div>`

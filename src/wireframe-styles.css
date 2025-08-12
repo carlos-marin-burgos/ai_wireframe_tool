@@ -473,7 +473,7 @@
 /* Site Header - Microsoft Learn Style */
 .ms-header,
 .microsoft-learn-header {
-  background: #ffffff;
+  background: #e8e6df;
   border-bottom: 1px solid #e5e5e5;
   padding: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -524,7 +524,7 @@
 .microsoft-learn-header .ms-logo {
   font-size: 18px;
   font-weight: 600;
-  color: #323130;
+  color: #000000;
 }
 
 .ms-header--dark .ms-header-title,
@@ -557,7 +557,7 @@
 .ms-nav-link,
 .microsoft-learn-header .main-nav a {
   text-decoration: none;
-  color: #323130;
+  color: #000000;
   font-size: 14px;
   font-weight: 500;
   padding: 8px 12px;
@@ -569,7 +569,7 @@
 .ms-nav-link:hover,
 .microsoft-learn-header .main-nav a:hover {
   background: #f3f2f1;
-  color: #f2cc60;
+  color: #000000;
 }
 
 .ms-header--dark .ms-nav-link,

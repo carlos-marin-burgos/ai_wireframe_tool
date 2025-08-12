@@ -114,11 +114,38 @@ async function generateWithAI(description) {
   const prompt = `Create a complete HTML wireframe for Microsoft Learn platform based on: "${description}"
 
 Requirements:
-- Use Microsoft Learn design system (Blues: #0078d4, #005a9e; Grays: #f3f2f1, #605e5c)
+- ALWAYS start with the official Microsoft Learn site header as the FIRST element in the body
+- Use Microsoft Learn design system with header background #E8E6DF and black text #000000
 - Include Segoe UI font family
 - Make it responsive and accessible
 - Include the exact components requested in the description
 - Use semantic HTML and modern CSS
+
+MICROSOFT LEARN HEADER TEMPLATE (ALWAYS INCLUDE FIRST):
+<header style="background: #E8E6DF; color: #000000; padding: 12px 24px; border-bottom: 1px solid #e5e5e5; font-family: 'Segoe UI', system-ui, sans-serif;">
+  <div style="display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto;">
+    <div style="display: flex; align-items: center;">
+      <svg aria-hidden="true" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; margin-right: 16px;">
+        <path d="M11.5216 0.5H0V11.9067H11.5216V0.5Z" fill="#f25022" />
+        <path d="M24.2418 0.5H12.7202V11.9067H24.2418V0.5Z" fill="#7fba00" />
+        <path d="M11.5216 13.0933H0V24.5H11.5216V13.0933Z" fill="#00a4ef" />
+        <path d="M24.2418 13.0933H12.7202V24.5H24.2418V13.0933Z" fill="#ffb900" />
+      </svg>
+      <div style="width: 1px; height: 24px; background: #e1e5e9; margin-right: 16px;"></div>
+      <span style="font-weight: 600; font-size: 16px; color: #000000;">Microsoft Learn</span>
+    </div>
+    <nav style="display: flex; gap: 24px;">
+      <a href="#" style="color: #000000; text-decoration: none; font-size: 14px;">Documentation</a>
+      <a href="#" style="color: #000000; text-decoration: none; font-size: 14px;">Training</a>
+      <a href="#" style="color: #000000; text-decoration: none; font-size: 14px;">Certifications</a>
+    </nav>
+  </div>
+</header>
+
+COLOR GUIDELINES:
+- Header background: #E8E6DF with black text (#000000)
+- Primary buttons: #0078d4 (keep blue for buttons and links)
+- Hero/banner sections: #E8E6DF background
 
 Generate ONLY the HTML code (starting with <!DOCTYPE html>).`;
 

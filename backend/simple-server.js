@@ -619,6 +619,8 @@ async function generateWireframeWithAI(
         text: "#323130",
         border: "#e5e5e5",
         banner: "#E8E6DF",
+        headerBg: "#E8E6DF",
+        headerText: "#000000",
       },
       success: {
         main: "#107c10",
@@ -692,24 +694,54 @@ MODERN WEB DESIGN:
 
 REQUIREMENTS:
 1. ANALYZE the user's request carefully and understand exactly what they want
-2. CREATE the exact interface they described (forms, textboxes, buttons, layouts, etc.)
-3. GENERATE complete HTML with inline CSS (no external dependencies)
-4. INCLUDE proper semantic structure (header, main, nav, sections, etc.)
-5. MAKE it responsive and production-ready
-6. ADD interactive elements where appropriate (hover states, focus styles)
-7. USE the specified color scheme throughout
-8. ENSURE accessibility (proper labels, contrast, semantic HTML)
-9. INCLUDE realistic placeholder content that matches the context
-10. MAKE it look polished and production-ready
+2. START with the official Microsoft Learn site header as the FIRST element in the body
+3. CREATE the exact interface they described (forms, textboxes, buttons, layouts, etc.)
+4. GENERATE complete HTML with inline CSS (no external dependencies)
+5. INCLUDE proper semantic structure (header, main, nav, sections, etc.)
+6. MAKE it responsive and production-ready
+7. ADD interactive elements where appropriate (hover states, focus styles)
+8. USE the specified color scheme throughout
+9. ENSURE accessibility (proper labels, contrast, semantic HTML)
+10. INCLUDE realistic placeholder content that matches the context
+11. MAKE it look polished and production-ready
+
+MICROSOFT LEARN HEADER TEMPLATE (ALWAYS INCLUDE FIRST):
+<header style="background: #E8E6DF; color: #000000; padding: 12px 24px; border-bottom: 1px solid #e5e5e5; font-family: 'Segoe UI', system-ui, sans-serif;">
+  <div style="display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto;">
+    <div style="display: flex; align-items: center;">
+      <svg aria-hidden="true" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; margin-right: 16px;">
+        <path d="M11.5216 0.5H0V11.9067H11.5216V0.5Z" fill="#f25022" />
+        <path d="M24.2418 0.5H12.7202V11.9067H24.2418V0.5Z" fill="#7fba00" />
+        <path d="M11.5216 13.0933H0V24.5H11.5216V13.0933Z" fill="#00a4ef" />
+        <path d="M24.2418 13.0933H12.7202V24.5H24.2418V13.0933Z" fill="#ffb900" />
+      </svg>
+      <span style="font-weight: 600; font-size: 16px; color: #000000;">Microsoft Learn</span>
+    </div>
+    <nav style="display: flex; gap: 24px;">
+      <a href="#" style="color: #000000; text-decoration: none; font-size: 14px;">Documentation</a>
+      <a href="#" style="color: #000000; text-decoration: none; font-size: 14px;">Training</a>
+      <a href="#" style="color: #000000; text-decoration: none; font-size: 14px;">Certifications</a>
+    </nav>
+  </div>
+</header>
 
 COLOR USAGE GUIDELINES:
 - Use PRIMARY COLOR (#0078d4) for buttons, links, and interactive elements
+- Use HEADER BACKGROUND (#E8E6DF) with BLACK TEXT (#000000) for all page headers and hero sections
 - Use BANNER/HERO BACKGROUND (#E8E6DF) for large background sections, hero areas, and banners
 - Keep button backgrounds blue (#0078d4) - do not change button colors
-- Use banner background color only for large sections, not for buttons or small elements
+- For headers and hero sections, always use background: #E8E6DF with color: #000000
+
+MICROSOFT LEARN HEADER REQUIREMENTS:
+- ALWAYS include the official Microsoft Learn site header as the FIRST element in the body
+- Header background MUST be #E8E6DF with black text (#000000)
+- Include Microsoft logo, "Microsoft Learn" branding, and navigation
+- Use the exact structure: <header style="background: #E8E6DF; color: #000000; padding: 12px 24px; border-bottom: 1px solid #e5e5e5;">
+- Include proper navigation items: Documentation, Training, Certifications
 
 HERO SECTION DESIGN REQUIREMENTS:
 - Use exact Microsoft Learn Accent Hero pattern with background-color-body-accent (#E8E6DF)
+- Header background MUST be #E8E6DF with black text color (#000000)
 - Implement hero-image class structure: section.hero.hero-image
 - Background images: Use CSS custom properties --hero-background-image-light and --hero-background-image-dark
 - Gradient border: Add gradient-border-right gradient-border-body-accent
