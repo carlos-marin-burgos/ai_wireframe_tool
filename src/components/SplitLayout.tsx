@@ -139,6 +139,9 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   const [isUpdatingWireframe, setIsUpdatingWireframe] = useState(false);
   const [wireframeToUpdate, setWireframeToUpdate] = useState<SavedWireframe | undefined>();
 
+  // Validation state for chat input
+  const [chatValidationError, setChatValidationError] = useState<string | null>(null);
+
   // Component Library Modal removed - using direct AI generation instead
 
   // Enhanced chat state
@@ -157,6 +160,23 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   // Component Library Modal state
   const [isComponentLibraryOpen, setIsComponentLibraryOpen] = useState(false);
 
+  // Function to validate chat input - check if it's only numbers
+  const validateChatInput = (input: string): boolean => {
+    const trimmedInput = input.trim();
+
+    // Check if the input is only numbers (including spaces and basic punctuation)
+    const onlyNumbersRegex = /^[\d\s.,]+$/;
+
+    if (onlyNumbersRegex.test(trimmedInput) && trimmedInput.length > 0) {
+      setChatValidationError("Please provide a descriptive text, not just numbers. For example: 'contact form with name and email fields' instead of just '2'.");
+      return false;
+    }
+
+    // Clear validation error if input is valid
+    setChatValidationError(null);
+    return true;
+  };
+
   // Clear AI suggestions when SplitLayout loads
   useEffect(() => {
     console.log('🧹 SplitLayout mounted - clearing AI suggestions');
@@ -174,10 +194,16 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
     // Only react when user has started typing
     if (description.length > 0) {
-      const delay = description.length <= 3 ? 100 : 200;
-      debounceTimerRef.current = window.setTimeout(() => {
-        onGenerateAiSuggestions(description);
-      }, delay);
+      // Don't generate suggestions for number-only inputs
+      const trimmedInput = description.trim();
+      const onlyNumbersRegex = /^[\d\s.,]+$/;
+
+      if (!onlyNumbersRegex.test(trimmedInput)) {
+        const delay = description.length <= 3 ? 100 : 200;
+        debounceTimerRef.current = window.setTimeout(() => {
+          onGenerateAiSuggestions(description);
+        }, delay);
+      }
     }
 
     return () => {
@@ -650,6 +676,11 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     e.preventDefault();
     console.log('🚀 Direct AI generation called!', { description: description.trim(), loading });
 
+    // Validate the input before proceeding
+    if (!validateChatInput(description)) {
+      return; // Stop submission if validation fails
+    }
+
     if (description.trim() && !loading) {
       // Close image upload zone when starting generation for cleaner UI
       if (showImageUpload) {
@@ -675,7 +706,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         loading
       });
     }
-  }, [description, loading, setDescription, conversationHistory.length, showImageUpload, setShowImageUpload, addMessage]);
+  }, [description, loading, setDescription, conversationHistory.length, showImageUpload, setShowImageUpload, addMessage, validateChatInput]);
 
   // Scroll to bottom of chat
   const scrollToBottom = () => {
@@ -773,6 +804,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         {/* Simple Chat Input Area */}
         <div className="chat-input-container">
           {error && <div className="error error-margin">{error}</div>}
+          {chatValidationError && <div className="input-info-alert">{chatValidationError}</div>}
 
           <form onSubmit={enhancedHandleSubmit} className="chat-form">
             <div className="chat-input-wrapper">
@@ -782,9 +814,31 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                 onChange={(e) => {
                   const value = e.target.value;
                   setDescription(value);
-                  // Hide suggestions if content becomes too short
+
+                  // Check if input is valid and clear validation error if needed
+                  if (value.trim()) {
+                    const trimmedInput = value.trim();
+                    const onlyNumbersRegex = /^[\d\s.,]+$/;
+
+                    // Clear validation error if input becomes valid
+                    if (!onlyNumbersRegex.test(trimmedInput)) {
+                      setChatValidationError(null);
+                    }
+                  } else {
+                    // Clear validation error if input is empty
+                    setChatValidationError(null);
+                  }
+
+                  // Hide suggestions if content becomes too short or is number-only
                   if (value.length <= 2) {
                     setShowAiSuggestions(false);
+                  } else {
+                    // Don't show suggestions for number-only inputs
+                    const trimmedInput = value.trim();
+                    const onlyNumbersRegex = /^[\d\s.,]+$/;
+                    if (onlyNumbersRegex.test(trimmedInput)) {
+                      setShowAiSuggestions(false);
+                    }
                   }
                 }}
                 onFocus={() => setIsInputFocused(true)}
@@ -792,10 +846,16 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                 onClick={() => {
                   // Generate AI suggestions when textarea is clicked
                   if (description.length > 2) {
-                    if (onGenerateAiSuggestions) {
-                      onGenerateAiSuggestions(description);
+                    // Don't generate suggestions for number-only inputs
+                    const trimmedInput = description.trim();
+                    const onlyNumbersRegex = /^[\d\s.,]+$/;
+
+                    if (!onlyNumbersRegex.test(trimmedInput)) {
+                      if (onGenerateAiSuggestions) {
+                        onGenerateAiSuggestions(description);
+                      }
+                      setShowAiSuggestions(true);
                     }
-                    setShowAiSuggestions(true);
                   }
                 }}
                 onKeyDown={(e) => {

@@ -67,6 +67,9 @@ const LandingPage: React.FC<LandingPageProps> = ({
   // State for image upload modal
   const [showImageUpload, setShowImageUpload] = useState(false);
 
+  // State for validation error
+  const [validationError, setValidationError] = useState<string | null>(null);
+
   // Modal states
   const [isFigmaModalOpen, setIsFigmaModalOpen] = useState(false);
   const [isGitHubModalOpen, setIsGitHubModalOpen] = useState(false);
@@ -91,6 +94,63 @@ const LandingPage: React.FC<LandingPageProps> = ({
   // Debounce timer for AI suggestions
   const debounceTimerRef = useRef<number | null>(null);
 
+  // Function to validate input - check if it's only numbers
+  const validateInput = (input: string): boolean => {
+    const trimmedInput = input.trim();
+
+    // Check if the input is only numbers (including spaces and basic punctuation)
+    const onlyNumbersRegex = /^[\d\s.,]+$/;
+
+    if (onlyNumbersRegex.test(trimmedInput) && trimmedInput.length > 0) {
+      setValidationError("Please provide a descriptive text, not just numbers. For example: 'contact form with name and email fields' instead of just '2'.");
+      return false;
+    }
+
+    // Clear validation error if input is valid
+    setValidationError(null);
+    return true;
+  };
+
+  // Wrapper for form submission with validation
+  const handleFormSubmit = (e: React.FormEvent, overrideDescription?: string) => {
+    e.preventDefault();
+
+    // Use override description if provided, otherwise use current description
+    const inputToValidate = overrideDescription || description;
+
+    // Validate the input before proceeding
+    if (!validateInput(inputToValidate)) {
+      return; // Stop submission if validation fails
+    }
+
+    // Call the original onSubmit if validation passes
+    onSubmit(e, overrideDescription);
+  };
+
+  // Wrapper for description change with real-time validation
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    
+    // Call the parent's onChange handler
+    onDescriptionChange(e);
+    
+    // Clear validation error in real-time as user types valid input
+    if (validationError && value.trim()) {
+      const trimmedInput = value.trim();
+      const onlyNumbersRegex = /^[\d\s.,]+$/;
+      
+      // If the input is no longer number-only, clear the error
+      if (!onlyNumbersRegex.test(trimmedInput)) {
+        setValidationError(null);
+      }
+    }
+    
+    // Also clear error if input becomes empty
+    if (!value.trim()) {
+      setValidationError(null);
+    }
+  };
+
   // Focus the textarea on component mount
   useEffect(() => {
     if (textareaRef.current) {
@@ -101,6 +161,15 @@ const LandingPage: React.FC<LandingPageProps> = ({
   // Debounced AI suggestion trigger
   useEffect(() => {
     if (onGenerateAiSuggestions && description.length > 0) {
+      // Check if the current input is valid before generating suggestions
+      const trimmedInput = description.trim();
+      const onlyNumbersRegex = /^[\d\s.,]+$/;
+
+      // Don't generate suggestions for number-only inputs
+      if (onlyNumbersRegex.test(trimmedInput)) {
+        return;
+      }
+
       // Clear existing timer
       if (debounceTimerRef.current) {
         window.clearTimeout(debounceTimerRef.current);
@@ -154,6 +223,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
           </p>
 
           {error && <div className="error error-center">{error}</div>}
+          {validationError && <div className="input-info-alert">{validationError}</div>}
           {savedWireframesCount > 0 && (
             <div className="action-buttons-center">
               <button
@@ -166,19 +236,20 @@ const LandingPage: React.FC<LandingPageProps> = ({
             </div>
           )}
 
-          <form onSubmit={onSubmit} className="main-form">
+          <form onSubmit={handleFormSubmit} className="main-form">
             <div className="input-container">
               {/* Text Input with Upload Button */}
               <div className="textarea-container">
                 <textarea
                   ref={textareaRef}
                   value={description}
-                  onChange={onDescriptionChange}
+                  onChange={handleDescriptionChange}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
                       e.preventDefault();
                       if (description.trim() && !loading) {
-                        onSubmit(e);
+                        // Use validation wrapper for Enter key submission
+                        handleFormSubmit(e);
                       }
                     }
                   }}
@@ -348,7 +419,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
                   {githubStatus.connected ? `Connected: ${githubStatus.login}` : 'Connect with GitHub'}
                 </button>
                 {githubStatus.error && (
-                  <div className="error" style={{ marginTop: '8px' }}>
+                  <div className="error github-error">
                     {githubStatus.error}
                   </div>
                 )}

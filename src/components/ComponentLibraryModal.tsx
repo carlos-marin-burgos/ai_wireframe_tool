@@ -446,8 +446,8 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             id: 'hero-section',
             name: 'Microsoft Learn Accent Hero',
             description: 'Microsoft Learn hero section with accent background',
-            category: 'Sections',
-            library: 'FluentUI',
+            category: 'Hero',
+            library: 'Atlas',
             htmlCode: generateHeroHTML({
                 title: "Build your next great idea",
                 summary: "Transform your vision into reality with Microsoft Learn's comprehensive resources and tools.",
@@ -464,7 +464,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             name: 'Fluent Hero - Azure',
             description: 'Microsoft Azure themed hero section',
             category: 'Fluent',
-            library: 'FluentUI',
+            library: 'Atlas',
             htmlCode: generateHeroHTML({
                 title: "Build and deploy with Azure",
                 summary: "Create scalable applications with Microsoft Azure cloud services and tools.",
@@ -481,7 +481,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             name: 'Fluent Hero - AI',
             description: 'AI and machine learning themed hero section',
             category: 'Fluent',
-            library: 'FluentUI',
+            library: 'Atlas',
             htmlCode: generateHeroHTML({
                 title: "Accelerate innovation with AI",
                 summary: "Transform your business with artificial intelligence and machine learning solutions.",
@@ -498,8 +498,8 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             id: 'hero-xs',
             name: 'Microsoft Learn Hero - Extra Small',
             description: 'Compact hero with minimal height for subtle emphasis',
-            category: 'Sections',
-            library: 'FluentUI',
+            category: 'Hero',
+            library: 'Atlas',
             htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #ffffff; padding: 32px 24px; border-bottom: 1px solid #e1e5e9;">
     <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
         <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 12px; color: #605e5c; margin-bottom: 8px; font-weight: 600;">MICROSOFT LEARN</p>
@@ -512,8 +512,8 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             id: 'hero-sm',
             name: 'Microsoft Learn Hero - Small',
             description: 'Small hero with balanced spacing for moderate emphasis',
-            category: 'Sections',
-            library: 'FluentUI',
+            category: 'Hero',
+            library: 'Atlas',
             htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #0078d4; color: white; padding: 48px 24px; border-bottom: 1px solid #e1e5e9;">
     <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
         <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 12px; color: rgba(255,255,255,0.8); margin-bottom: 12px; font-weight: 600;">MICROSOFT LEARN</p>
@@ -526,8 +526,8 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             id: 'hero-default',
             name: 'Microsoft Learn Hero - Default',
             description: 'Standard hero with optimal spacing for most use cases',
-            category: 'Sections',
-            library: 'FluentUI',
+            category: 'Hero',
+            library: 'Atlas',
             htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #d13438; color: white; padding: 64px 24px; border-bottom: 1px solid #e1e5e9;">
     <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
         <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 14px; color: rgba(255,255,255,0.9); margin-bottom: 16px; font-weight: 600;">MICROSOFT LEARN</p>
@@ -544,8 +544,8 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             id: 'hero-lg',
             name: 'Microsoft Learn Hero - Large',
             description: 'Large hero with generous spacing for maximum impact',
-            category: 'Sections',
-            library: 'FluentUI',
+            category: 'Hero',
+            library: 'Atlas',
             htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #107c10; color: white; padding: 96px 24px; border-bottom: 1px solid #e1e5e9;">
     <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
         <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 14px; color: rgba(255,255,255,0.9); margin-bottom: 20px; font-weight: 600;">MICROSOFT LEARN</p>
@@ -562,8 +562,8 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             id: 'hero-with-image',
             name: 'Microsoft Learn Hero - With Side Image',
             description: 'Hero with side-positioned image for visual storytelling',
-            category: 'Sections',
-            library: 'FluentUI',
+            category: 'Hero',
+            library: 'Atlas',
             htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #ffffff; padding: 64px 24px; border-bottom: 1px solid #e1e5e9; position: relative; overflow: hidden;">
     <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 400px; gap: 64px; align-items: center;">
         <div>
@@ -591,8 +591,8 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             id: 'hero-with-details',
             name: 'Microsoft Learn Hero - With Details Card',
             description: 'Hero with overlay details card for additional content',
-            category: 'Sections',
-            library: 'FluentUI',
+            category: 'Hero',
+            library: 'Atlas',
             htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); padding: 64px 24px; border-bottom: 1px solid #e1e5e9; position: relative;">
     <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 320px; gap: 48px; align-items: start;">
         <div>
@@ -634,8 +634,8 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             id: 'hero-full-media',
             name: 'Microsoft Learn Hero - Full Media Background',
             description: 'Hero with full-screen media background for maximum impact',
-            category: 'Sections',
-            library: 'FluentUI',
+            category: 'Hero',
+            library: 'Atlas',
             htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; position: relative; padding: 120px 24px; min-height: 500px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0078d4 0%, #106ebe 50%, #005a9e 100%); z-index: 1;"></div>
     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 2;"></div>
@@ -654,119 +654,29 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             id: 'hero-learn-details',
             name: 'Microsoft Learn Hero - Images with Details (Official)',
             description: 'Exact implementation of Microsoft Learn "Hero images with details" component',
-            category: 'Sections',
-            library: 'FluentUI',
-            htmlCode: `<section style="
-                font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-                background: #f8f9fa;
-                border: 1px solid #e1e5e9;
-                background-image: linear-gradient(to right, transparent 50%, rgba(0,120,212,0.08) 100%);
-                border-right: 4px solid rgba(0,120,212,0.2);
-                display: flex;
-                flex-direction: row;
-                align-items: stretch;
-                min-height: 320px;
-                overflow: hidden;
-            ">
+            category: 'Hero',
+            library: 'Atlas',
+            htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #f8f9fa; border: 1px solid #e1e5e9; background-image: linear-gradient(to right, transparent 50%, rgba(0,120,212,0.08) 100%); border-right: 4px solid rgba(0,120,212,0.2); display: flex; flex-direction: row; align-items: stretch; min-height: 320px; overflow: hidden;">
     <!-- Hero content section -->
-    <div style="
-        flex: 1;
-        padding: 48px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    ">
-        <p style="
-            letter-spacing: 0.5px; 
-            text-transform: uppercase; 
-            font-size: 12px; 
-            color: #605e5c; 
-            margin-bottom: 16px; 
-            font-weight: 600;
-        ">MICROSOFT LEARN</p>
-        <h2 style="
-            font-size: 48px; 
-            font-weight: 600; 
-            color: #323130; 
-            margin-bottom: 20px; 
-            line-height: 1.2;
-        ">Hero with images and details</h2>
-        <p style="
-            font-size: 18px; 
-            color: #605e5c; 
-            margin-bottom: 24px; 
-            line-height: 1.5;
-            max-width: 500px;
-        ">This component variant overlays a container on the opposite side of the hero content. It can be used to accommodate more content within the hero section if necessary.</p>
+    <div style="flex: 1; padding: 48px; display: flex; flex-direction: column; justify-content: center;">
+        <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 12px; color: #605e5c; margin-bottom: 16px; font-weight: 600;">MICROSOFT LEARN</p>
+        <h2 style="font-size: 48px; font-weight: 600; color: #323130; margin-bottom: 20px; line-height: 1.2;">Hero with images and details</h2>
+        <p style="font-size: 18px; color: #605e5c; margin-bottom: 24px; line-height: 1.5; max-width: 500px;">This component variant overlays a container on the opposite side of the hero content. It can be used to accommodate more content within the hero section if necessary.</p>
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-            <button style="
-                background: #0078d4; 
-                color: white; 
-                border: none; 
-                padding: 12px 24px; 
-                border-radius: 4px; 
-                font-size: 16px; 
-                font-weight: 600; 
-                cursor: pointer; 
-                transition: all 0.2s;
-            ">Get Started</button>
-            <button style="
-                background: transparent; 
-                color: #0078d4; 
-                border: 2px solid #0078d4; 
-                padding: 10px 24px; 
-                border-radius: 4px; 
-                font-size: 16px; 
-                font-weight: 600; 
-                cursor: pointer; 
-                transition: all 0.2s;
-            ">Learn More</button>
+            <button style="background: #0078d4; color: white; border: none; padding: 12px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Get Started</button>
+            <button style="background: transparent; color: #0078d4; border: 2px solid #0078d4; padding: 10px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Learn More</button>
         </div>
     </div>
     
     <!-- Hero details section -->
-    <div style="
-        width: 400px;
-        padding: 48px 32px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        position: relative;
-    ">
+    <div style="width: 400px; padding: 48px 32px; display: flex; flex-direction: column; justify-content: center; position: relative;">
         <!-- Background decorative element representing hero image -->
-        <div style="
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            bottom: 20px;
-            left: 20px;
-            background: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 300\"><rect width=\"400\" height=\"300\" fill=\"%23f0f8ff\"/><circle cx=\"100\" cy=\"80\" r=\"20\" fill=\"%230078d4\" opacity=\"0.3\"/><circle cx=\"300\" cy=\"220\" r=\"30\" fill=\"%23106ebe\" opacity=\"0.2\"/><rect x=\"50\" y=\"150\" width=\"80\" height=\"40\" rx=\"8\" fill=\"%23005a9e\" opacity=\"0.1\"/><rect x=\"250\" y=\"100\" width=\"100\" height=\"60\" rx=\"12\" fill=\"%230078d4\" opacity=\"0.15\"/></svg>') center/cover;
-            border-radius: 8px;
-            opacity: 0.6;
-        "></div>
+        <div style="position: absolute; top: 20px; right: 20px; bottom: 20px; left: 20px; background: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 300\"><rect width=\"400\" height=\"300\" fill=\"%23f0f8ff\"/><circle cx=\"100\" cy=\"80\" r=\"20\" fill=\"%230078d4\" opacity=\"0.3\"/><circle cx=\"300\" cy=\"220\" r=\"30\" fill=\"%23106ebe\" opacity=\"0.2\"/><rect x=\"50\" y=\"150\" width=\"80\" height=\"40\" rx=\"8\" fill=\"%23005a9e\" opacity=\"0.1\"/><rect x=\"250\" y=\"100\" width=\"100\" height=\"60\" rx=\"12\" fill=\"%230078d4\" opacity=\"0.15\"/></svg>') center/cover; border-radius: 8px; opacity: 0.6;"></div>
         
         <!-- Details card -->
-        <div style="
-            background: white;
-            border: 1px solid #e1e5e9;
-            border-radius: 12px;
-            padding: 32px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-            position: relative;
-            z-index: 2;
-        ">
-            <h3 style="
-                font-size: 18px; 
-                font-weight: 600; 
-                color: #323130; 
-                margin-bottom: 16px;
-            ">Learning Path Details</h3>
-            <p style="
-                font-size: 14px; 
-                color: #605e5c; 
-                margin-bottom: 20px; 
-                line-height: 1.4;
-            ">This component variant overlays a container on the opposite side of the hero content. It can be used to accommodate more content within the hero section if necessary.</p>
+        <div style="background: white; border: 1px solid #e1e5e9; border-radius: 12px; padding: 32px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; z-index: 2;">
+            <h3 style="font-size: 18px; font-weight: 600; color: #323130; margin-bottom: 16px;">Learning Path Details</h3>
+            <p style="font-size: 14px; color: #605e5c; margin-bottom: 20px; line-height: 1.4;">This component variant overlays a container on the opposite side of the hero content. It can be used to accommodate more content within the hero section if necessary.</p>
             
             <!-- Progress indicators -->
             <div style="margin-bottom: 16px;">
@@ -790,31 +700,14 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             </div>
             
             <!-- Action button -->
-            <button style="
-                width: 100%;
-                background: #f8f9fa;
-                color: #0078d4;
-                border: 1px solid #e1e5e9;
-                padding: 12px 16px;
-                border-radius: 6px;
-                font-size: 14px;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.2s;
-            ">Continue Learning</button>
+            <button style="width: 100%; background: #f8f9fa; color: #0078d4; border: 1px solid #e1e5e9; padding: 12px 16px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Continue Learning</button>
         </div>
     </div>
     
     <style>
         @media (max-width: 768px) {
-            section { 
-                flex-direction: column !important; 
-                min-height: auto !important;
-            }
-            section > div:last-child { 
-                width: 100% !important; 
-                padding: 32px 24px !important;
-            }
+            section { flex-direction: column !important; min-height: auto !important; }
+            section > div:last-child { width: 100% !important; padding: 32px 24px !important; }
         }
     </style>
 </section>`
@@ -2226,7 +2119,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             id: 'atlas-hero-section',
             name: 'Atlas Hero Section',
             description: 'Bold hero section with Atlas design language',
-            category: 'Sections',
+            category: 'Hero',
             library: 'Atlas',
             htmlCode: `<section style="
                 background: linear-gradient(135deg, #0072CE 0%, #005A9E 100%); 
@@ -2272,6 +2165,2233 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                     </button>
                 </div>
             </section>`
+        },
+        // Microsoft Learn Accordion Components
+        {
+            id: 'ms-learn-accordion-basic',
+            name: 'Microsoft Learn Accordion',
+            description: 'Basic accordion using Microsoft Learn design with details element',
+            category: 'Accordion',
+            library: 'Atlas',
+            htmlCode: `<details class="accordion" style="border: 1px solid #E1DFDD; border-radius: 4px; margin-bottom: 8px; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
+    <summary style="
+        padding: 16px 20px; 
+        cursor: pointer; 
+        list-style: none; 
+        background: #F8F8F8; 
+        border-bottom: 1px solid #E1DFDD; 
+        font-weight: 600; 
+        color: #323130;
+        user-select: none;
+        position: relative;
+    " onmouseover="this.style.background='#F3F2F1'" onmouseout="this.style.background='#F8F8F8'">
+        Accordion Header
+        <span style="
+            position: absolute; 
+            right: 20px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            transition: transform 0.2s ease;
+        ">▼</span>
+    </summary>
+    <div style="padding: 20px; background: white; color: #323130; line-height: 1.5;">
+        <p style="margin: 0;">This is the accordion content. It can contain any HTML elements like text, images, links, or other components.</p>
+    </div>
+</details>`
+        },
+        {
+            id: 'ms-learn-accordion-grouped',
+            name: 'Microsoft Learn Accordion Group',
+            description: 'Grouped accordion items with only one open at a time',
+            category: 'Accordion',
+            library: 'Atlas',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
+    <details class="accordion" name="faq-group" style="border: 1px solid #E1DFDD; border-radius: 4px 4px 0 0; margin-bottom: 0;">
+        <summary style="
+            padding: 16px 20px; 
+            cursor: pointer; 
+            list-style: none; 
+            background: #F8F8F8; 
+            border-bottom: 1px solid #E1DFDD; 
+            font-weight: 600; 
+            color: #323130;
+            user-select: none;
+            position: relative;
+        " onmouseover="this.style.background='#F3F2F1'" onmouseout="this.style.background='#F8F8F8'">
+            What is Microsoft Learn?
+            <span style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); transition: transform 0.2s ease;">▼</span>
+        </summary>
+        <div style="padding: 20px; background: white; color: #323130; line-height: 1.5;">
+            <p style="margin: 0;">Microsoft Learn is a free online training platform that provides interactive learning paths and modules for Microsoft products and services.</p>
+        </div>
+    </details>
+    
+    <details class="accordion" name="faq-group" style="border: 1px solid #E1DFDD; border-top: none; margin-bottom: 0;">
+        <summary style="
+            padding: 16px 20px; 
+            cursor: pointer; 
+            list-style: none; 
+            background: #F8F8F8; 
+            border-bottom: 1px solid #E1DFDD; 
+            font-weight: 600; 
+            color: #323130;
+            user-select: none;
+            position: relative;
+        " onmouseover="this.style.background='#F3F2F1'" onmouseout="this.style.background='#F8F8F8'">
+            How do I get started?
+            <span style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); transition: transform 0.2s ease;">▼</span>
+        </summary>
+        <div style="padding: 20px; background: white; color: #323130; line-height: 1.5;">
+            <p style="margin: 0;">Simply browse the available learning paths, choose one that matches your interests, and start learning at your own pace.</p>
+        </div>
+    </details>
+    
+    <details class="accordion" name="faq-group" style="border: 1px solid #E1DFDD; border-top: none; border-radius: 0 0 4px 4px;">
+        <summary style="
+            padding: 16px 20px; 
+            cursor: pointer; 
+            list-style: none; 
+            background: #F8F8F8; 
+            font-weight: 600; 
+            color: #323130;
+            user-select: none;
+            position: relative;
+        " onmouseover="this.style.background='#F3F2F1'" onmouseout="this.style.background='#F8F8F8'">
+            Is Microsoft Learn free?
+            <span style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); transition: transform 0.2s ease;">▼</span>
+        </summary>
+        <div style="padding: 20px; background: white; color: #323130; line-height: 1.5;">
+            <p style="margin: 0;">Yes, Microsoft Learn is completely free to use. You can access all learning materials, hands-on labs, and earn achievements at no cost.</p>
+        </div>
+    </details>
+</div>`
+        },
+        {
+            id: 'ms-learn-accordion-large',
+            name: 'Microsoft Learn Large Accordion',
+            description: 'Large size accordion variant with enhanced padding',
+            category: 'Accordion',
+            library: 'Atlas',
+            htmlCode: `<details class="accordion accordion-lg" style="border: 1px solid #E1DFDD; border-radius: 6px; margin-bottom: 12px; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
+    <summary style="
+        padding: 24px 28px; 
+        cursor: pointer; 
+        list-style: none; 
+        background: #F8F8F8; 
+        border-bottom: 1px solid #E1DFDD; 
+        font-weight: 600; 
+        color: #323130;
+        user-select: none;
+        position: relative;
+        font-size: 18px;
+    " onmouseover="this.style.background='#F3F2F1'" onmouseout="this.style.background='#F8F8F8'">
+        Large Accordion Header
+        <span style="
+            position: absolute; 
+            right: 28px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            transition: transform 0.2s ease;
+            font-size: 16px;
+        ">▼</span>
+    </summary>
+    <div style="padding: 28px; background: white; color: #323130; line-height: 1.6; font-size: 16px;">
+        <p style="margin: 0 0 16px 0;">This is a large accordion with enhanced spacing and typography. Perfect for important content that needs more emphasis.</p>
+        <p style="margin: 0;">The larger size provides better readability and a more prominent visual presence on the page.</p>
+    </div>
+</details>`
+        },
+        // Microsoft Learn Badge Components
+        {
+            id: 'ms-learn-badge-basic',
+            name: 'Microsoft Learn Badge',
+            description: 'Basic badge component with Microsoft Learn styling',
+            category: 'Badge',
+            library: 'Atlas',
+            htmlCode: `<span class="badge" style="
+    display: inline-block;
+    padding: 4px 8px;
+    background: #F3F2F1;
+    color: #323130;
+    border: 1px solid #C8C6C4;
+    border-radius: 2px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+">Badge</span>`
+        },
+        {
+            id: 'ms-learn-badge-sizes',
+            name: 'Microsoft Learn Badge Sizes',
+            description: 'Different badge sizes: small, default, large, and extra large',
+            category: 'Badge',
+            library: 'Atlas',
+            htmlCode: `<div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
+    <span class="badge badge-sm" style="
+        display: inline-block;
+        padding: 2px 6px;
+        background: #F3F2F1;
+        color: #323130;
+        border: 1px solid #C8C6C4;
+        border-radius: 2px;
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    ">Small</span>
+    
+    <span class="badge" style="
+        display: inline-block;
+        padding: 4px 8px;
+        background: #F3F2F1;
+        color: #323130;
+        border: 1px solid #C8C6C4;
+        border-radius: 2px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    ">Default</span>
+    
+    <span class="badge badge-lg" style="
+        display: inline-block;
+        padding: 6px 12px;
+        background: #F3F2F1;
+        color: #323130;
+        border: 1px solid #C8C6C4;
+        border-radius: 2px;
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    ">Large</span>
+    
+    <span class="badge badge-xl" style="
+        display: inline-block;
+        padding: 8px 16px;
+        background: #F3F2F1;
+        color: #323130;
+        border: 1px solid #C8C6C4;
+        border-radius: 2px;
+        font-size: 16px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    ">Extra Large</span>
+</div>`
+        },
+        {
+            id: 'ms-learn-badge-semantic',
+            name: 'Microsoft Learn Semantic Badges',
+            description: 'Semantic color variants: primary, info, danger, warning, success',
+            category: 'Badge',
+            library: 'Atlas',
+            htmlCode: `<div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
+    <span class="badge badge-primary" style="
+        display: inline-block;
+        padding: 4px 8px;
+        background: #0078D4;
+        color: white;
+        border: 1px solid #0078D4;
+        border-radius: 2px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    ">Primary</span>
+    
+    <span class="badge badge-info" style="
+        display: inline-block;
+        padding: 4px 8px;
+        background: #00BCF2;
+        color: white;
+        border: 1px solid #00BCF2;
+        border-radius: 2px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    ">Info</span>
+    
+    <span class="badge badge-danger" style="
+        display: inline-block;
+        padding: 4px 8px;
+        background: #D83B01;
+        color: white;
+        border: 1px solid #D83B01;
+        border-radius: 2px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    ">Danger</span>
+    
+    <span class="badge badge-warning" style="
+        display: inline-block;
+        padding: 4px 8px;
+        background: #FFB900;
+        color: #323130;
+        border: 1px solid #FFB900;
+        border-radius: 2px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    ">Warning</span>
+    
+    <span class="badge badge-success" style="
+        display: inline-block;
+        padding: 4px 8px;
+        background: #107C10;
+        color: white;
+        border: 1px solid #107C10;
+        border-radius: 2px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    ">Success</span>
+</div>`
+        },
+        {
+            id: 'ms-learn-badge-with-icon',
+            name: 'Microsoft Learn Badge with Icon',
+            description: 'Badge with icon and text following Microsoft Learn patterns',
+            category: 'Badge',
+            library: 'Atlas',
+            htmlCode: `<div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
+    <span class="badge badge-primary" style="
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 8px;
+        background: #0078D4;
+        color: white;
+        border: 1px solid #0078D4;
+        border-radius: 2px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    ">
+        <span class="icon" aria-hidden="true" style="width: 12px; height: 12px; display: flex; align-items: center; justify-content: center;">
+            <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+                <path d="M10 3C6.13401 3 3 6.13401 3 10C3 13.866 6.13401 17 10 17C13.866 17 17 13.866 17 10C17 6.13401 13.866 3 10 3ZM8.5 13.5L5 10L6.41 8.59L8.5 10.67L13.59 5.58L15 7L8.5 13.5Z"/>
+            </svg>
+        </span>
+        <span>Verified</span>
+    </span>
+    
+    <span class="badge badge-warning" style="
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 8px;
+        background: #FFB900;
+        color: #323130;
+        border: 1px solid #FFB900;
+        border-radius: 2px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    ">
+        <span class="icon" aria-hidden="true" style="width: 12px; height: 12px; display: flex; align-items: center; justify-content: center;">
+            <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+                <path d="M10 2L2 18H18L10 2ZM10 6L14 14H6L10 6ZM9 11H11V9H9V11ZM9 13H11V15H9V13Z"/>
+            </svg>
+        </span>
+        <span>Beta</span>
+    </span>
+    
+    <span class="badge badge-success" style="
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 8px;
+        background: #107C10;
+        color: white;
+        border: 1px solid #107C10;
+        border-radius: 2px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    ">
+        <span class="icon" aria-hidden="true" style="width: 12px; height: 12px; display: flex; align-items: center; justify-content: center;">
+            <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+                <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM8 15L3 10L4.41 8.59L8 12.17L15.59 4.58L17 6L8 15Z"/>
+            </svg>
+        </span>
+        <span>New</span>
+    </span>
+</div>`
+        },
+        // Microsoft Learn Banner Components
+        {
+            id: 'ms-learn-banner-basic',
+            name: 'Microsoft Learn Banner',
+            description: 'Basic banner component for site-wide notifications',
+            category: 'Banner',
+            library: 'Atlas',
+            htmlCode: `<div class="banner" style="
+    background: #F3F2F1;
+    border-bottom: 1px solid #E1DFDD;
+    padding: 12px 24px;
+    text-align: center;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+">
+    <div class="banner-content" style="max-width: 1200px; margin: 0 auto;">
+        <p style="
+            margin: 0;
+            color: #323130;
+            font-size: 14px;
+            line-height: 1.4;
+        ">
+            A banner about something happening in the world 
+            <a href="#" style="color: #0078D4; text-decoration: none; font-weight: 600;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Learn more</a>
+        </p>
+    </div>
+</div>`
+        },
+        {
+            id: 'ms-learn-banner-loading',
+            name: 'Microsoft Learn Loading Banner',
+            description: 'Loading banner to indicate pending operations',
+            category: 'Banner',
+            library: 'Atlas',
+            htmlCode: `<div class="banner is-loading" style="
+    background: #0078D4;
+    color: white;
+    border-bottom: 1px solid #106EBE;
+    padding: 12px 24px;
+    text-align: center;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    position: relative;
+    overflow: hidden;
+">
+    <div class="banner-content" style="max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 12px;">
+        <div style="
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-left-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        "></div>
+        <p style="
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.4;
+            font-weight: 500;
+        ">Loading content...</p>
+    </div>
+    
+    <style>
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</div>`
+        },
+        {
+            id: 'ms-learn-banner-dismissible',
+            name: 'Microsoft Learn Dismissible Banner',
+            description: 'Banner with dismiss button using Microsoft Learn patterns',
+            category: 'Banner',
+            library: 'Atlas',
+            htmlCode: `<div class="banner banner-dismissable" id="example-banner-id" style="
+    background: #FFF4CE;
+    border-bottom: 1px solid #DEECF9;
+    padding: 12px 24px;
+    text-align: center;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    position: relative;
+">
+    <div class="banner-content" style="max-width: 1200px; margin: 0 auto; padding-right: 40px;">
+        <p style="
+            margin: 0;
+            color: #323130;
+            font-size: 14px;
+            line-height: 1.4;
+        ">
+            Important update: New Microsoft Learn features are now available. 
+            <a href="#" style="color: #0078D4; text-decoration: none; font-weight: 600;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Explore now</a>
+        </p>
+    </div>
+    <button type="button" class="banner-dismiss" onclick="this.parentElement.style.display='none'" style="
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+        color: #605E5C;
+        border-radius: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    " onmouseover="this.style.background='rgba(0, 0, 0, 0.1)'" onmouseout="this.style.background='none'">
+        <span style="position: absolute; left: -9999px;">Dismiss banner</span>
+        <span class="icon" aria-hidden="true" style="width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 12px; height: 12px;">
+                <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"/>
+            </svg>
+        </span>
+    </button>
+</div>`,
+        },
+        // Microsoft Learn Gradient Card Components
+        {
+            id: 'ms-learn-gradient-card',
+            name: 'Microsoft Learn Gradient Card',
+            description: 'Card with gradient border for emphasis and visual appeal',
+            category: 'Card',
+            library: 'Atlas',
+            htmlCode: `<div class="gradient-card" style="
+    position: relative;
+    background: white;
+    border-radius: 8px;
+    padding: 24px;
+    margin: 16px 0;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    overflow: hidden;
+">
+    <div style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, #0078D4 0%, #00BCF2 50%, #40E0D0 100%);
+        border-radius: 8px;
+        z-index: -1;
+        margin: -2px;
+    "></div>
+    <div class="gradient-card-content" style="
+        position: relative;
+        background: white;
+        border-radius: 6px;
+        padding: 20px;
+        z-index: 1;
+    ">
+        <h3 style="margin: 0 0 12px 0; color: #323130; font-size: 18px; font-weight: 600;">Featured Content</h3>
+        <p style="margin: 0 0 16px 0; color: #605E5C; line-height: 1.5;">This gradient card draws extra attention to important content with its colorful border treatment.</p>
+        <a href="#" style="color: #0078D4; text-decoration: none; font-weight: 600;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Learn more →</a>
+    </div>
+</div>`
+        },
+        {
+            id: 'ms-learn-gradient-card-minimal',
+            name: 'Microsoft Learn Minimal Gradient Card',
+            description: 'Subtle gradient card with Microsoft Learn styling',
+            category: 'Card',
+            library: 'Atlas',
+            htmlCode: `<div class="gradient-card" style="
+    background: linear-gradient(135deg, #F8F8F8 0%, #FFFFFF 100%);
+    border: 1px solid #E1DFDD;
+    border-radius: 6px;
+    padding: 20px;
+    margin: 12px 0;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    transition: all 0.2s ease;
+" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.1)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+    <div class="gradient-card-content">
+        <h4 style="margin: 0 0 8px 0; color: #323130; font-size: 16px; font-weight: 600;">Subtle Gradient Card</h4>
+        <p style="margin: 0; color: #605E5C; line-height: 1.4; font-size: 14px;">A more subtle approach to gradient cards with gentle background transitions.</p>
+    </div>
+</div>`
+        },
+        // Microsoft Learn Gradient Components
+        {
+            id: 'ms-learn-gradient-text',
+            name: 'Microsoft Learn Gradient Text',
+            description: 'Text with gradient color effects for emphasis',
+            category: 'Typography',
+            library: 'Atlas',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; padding: 20px;">
+    <h2 style="
+        font-size: 28px; 
+        font-weight: 700; 
+        margin: 0 0 16px 0; 
+        color: #323130;
+    ">
+        A muted gradient from 
+        <span class="gradient-text-purple-blue" style="
+            background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        ">purple to blue</span>
+    </h2>
+    
+    <h2 style="
+        font-size: 28px; 
+        font-weight: 700; 
+        margin: 0 0 16px 0; 
+        color: #323130;
+    ">
+        A vivid gradient from 
+        <span class="gradient-text-vivid" style="
+            background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #45B7D1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        ">multiple colors</span>
+    </h2>
+    
+    <p style="margin: 0; color: #605E5C; line-height: 1.5;">
+        Use gradient text to highlight specific words or phrases within your content for better visual hierarchy.
+    </p>
+</div>`
+        },
+        {
+            id: 'ms-learn-gradient-borders',
+            name: 'Microsoft Learn Gradient Borders',
+            description: 'Elements with gradient border effects for blending',
+            category: 'Layout',
+            library: 'Atlas',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
+    <div style="display: flex; margin-bottom: 16px;">
+        <div class="gradient-border-right" style="
+            background: linear-gradient(to right, #0078D4, transparent);
+            padding: 20px;
+            flex: 1;
+            color: white;
+            background-color: #0078D4;
+        ">
+            A right gradient is applied with a background color.
+        </div>
+        <div style="
+            background: #F8F8F8;
+            padding: 20px;
+            flex: 1;
+            color: #323130;
+        ">
+            A background color is applied.
+        </div>
+    </div>
+    
+    <div style="margin-bottom: 16px;">
+        <div class="gradient-border-bottom" style="
+            background: linear-gradient(to bottom, #F3F2F1, transparent);
+            padding: 20px;
+            border-bottom: 1px solid transparent;
+            background-color: #F3F2F1;
+            color: #323130;
+        ">
+            A bottom gradient is applied.
+        </div>
+        <div style="
+            background: #FFFFFF;
+            padding: 20px;
+            color: #323130;
+        ">
+            A background color is applied
+        </div>
+    </div>
+</div>`
+        },
+        // Microsoft Learn Icon Components
+        {
+            id: 'ms-learn-icon-basic',
+            name: 'Microsoft Learn Icon',
+            description: 'Basic icon component with proper spacing and sizing',
+            category: 'Icon',
+            library: 'Atlas',
+            htmlCode: `<div style="display: flex; gap: 16px; align-items: center; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
+    <button style="
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        background: #0078D4;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    " onmouseover="this.style.backgroundColor='#106EBE'" onmouseout="this.style.backgroundColor='#0078D4'">
+        <span>Submit</span>
+        <span class="icon" style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 1em;
+            height: 1em;
+        ">
+            <svg viewBox="0 0 16 16" fill="currentColor" style="width: 100%; height: 100%;">
+                <path d="M8.5 3.5a.5.5 0 0 0-1 0V9H1.5a.5.5 0 0 0 0 1H7.5v5.5a.5.5 0 0 0 1 0V10h5.5a.5.5 0 0 0 0-1H8.5V3.5z"/>
+            </svg>
+        </span>
+    </button>
+    
+    <button style="
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        background: #F3F2F1;
+        color: #323130;
+        border: 1px solid #C8C6C4;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    " onmouseover="this.style.backgroundColor='#EDEBE9'" onmouseout="this.style.backgroundColor='#F3F2F1'">
+        <span class="icon" style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 1em;
+            height: 1em;
+        ">
+            <svg viewBox="0 0 16 16" fill="currentColor" style="width: 100%; height: 100%;">
+                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+            </svg>
+        </span>
+        <span>Delete</span>
+    </button>
+</div>`
+        },
+        {
+            id: 'ms-learn-icon-sizes',
+            name: 'Microsoft Learn Icon Sizes',
+            description: 'Icons with different sizes that scale with text',
+            category: 'Icon',
+            library: 'Atlas',
+            htmlCode: `<div style="display: flex; flex-direction: column; gap: 16px; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
+    <button style="
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        background: #0078D4;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+    ">
+        <span>Small Button</span>
+        <span class="icon" style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 1em;
+            height: 1em;
+        ">
+            <svg viewBox="0 0 16 16" fill="currentColor" style="width: 100%; height: 100%;">
+                <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+            </svg>
+        </span>
+    </button>
+    
+    <button style="
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        background: #0078D4;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+    ">
+        <span>Default Button</span>
+        <span class="icon" style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 1em;
+            height: 1em;
+        ">
+            <svg viewBox="0 0 16 16" fill="currentColor" style="width: 100%; height: 100%;">
+                <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+            </svg>
+        </span>
+    </button>
+    
+    <button style="
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 16px 24px;
+        background: #0078D4;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+    ">
+        <span>Large Button</span>
+        <span class="icon" style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 1em;
+            height: 1em;
+        ">
+            <svg viewBox="0 0 16 16" fill="currentColor" style="width: 100%; height: 100%;">
+                <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+            </svg>
+        </span>
+    </button>
+</div>`
+        },
+        {
+            id: 'ms-learn-icon-svg',
+            name: 'Microsoft Learn SVG Icons',
+            description: 'SVG icons with Microsoft Learn styling and compatibility',
+            category: 'Icon',
+            library: 'Atlas',
+            htmlCode: `<div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
+    <button style="
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        background: #107C10;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+    ">
+        <span>Success</span>
+        <svg class="icon" style="width: 1em; height: 1em;" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.236 4.53L7.53 10.91a.75.75 0 00-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+        </svg>
+    </button>
+    
+    <button style="
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        background: #D83B01;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+    ">
+        <span>Error</span>
+        <svg class="icon" style="width: 1em; height: 1em;" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+        </svg>
+    </button>
+    
+    <button style="
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        background: #00BCF2;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+    ">
+        <span>Info</span>
+        <svg class="icon" style="width: 1em; height: 1em;" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd"/>
+        </svg>
+    </button>
+</div>`
+        },
+        // Microsoft Learn Image Components
+        {
+            id: 'ms-learn-image-basic',
+            name: 'Microsoft Learn Image',
+            description: 'Basic responsive image component with Microsoft Learn styling',
+            category: 'Media',
+            library: 'Atlas',
+            htmlCode: `<div style="max-width: 400px; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
+    <div class="image" style="
+        width: 100%;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border: 1px solid #E1DFDD;
+    ">
+        <img src="https://via.placeholder.com/400x200/0078D4/FFFFFF?text=Microsoft+Learn" alt="Microsoft Learn placeholder" style="
+            width: 100%;
+            height: auto;
+            display: block;
+        " />
+    </div>
+    <div style="margin-top: 12px;">
+        <h4 style="margin: 0 0 8px 0; color: #323130; font-size: 16px; font-weight: 600;">Learning Resource</h4>
+        <p style="margin: 0; color: #605E5C; font-size: 14px; line-height: 1.4;">This image component provides proper responsive behavior and accessibility features.</p>
+    </div>
+</div>`
+        },
+        {
+            id: 'ms-learn-image-sizes',
+            name: 'Microsoft Learn Image Sizes',
+            description: 'Various image sizes following Microsoft Learn specifications',
+            category: 'Media',
+            library: 'Atlas',
+            htmlCode: `<div style="display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
+    <div class="image image-32x32" style="
+        width: 32px;
+        height: 32px;
+        border-radius: 4px;
+        overflow: hidden;
+        border: 1px solid #E1DFDD;
+        flex-shrink: 0;
+    ">
+        <img src="https://via.placeholder.com/32x32/0078D4/FFFFFF?text=32" alt="32x32 image" style="width: 100%; height: 100%; object-fit: cover;" />
+    </div>
+    
+    <div class="image image-48x48" style="
+        width: 48px;
+        height: 48px;
+        border-radius: 6px;
+        overflow: hidden;
+        border: 1px solid #E1DFDD;
+        flex-shrink: 0;
+    ">
+        <img src="https://via.placeholder.com/48x48/107C10/FFFFFF?text=48" alt="48x48 image" style="width: 100%; height: 100%; object-fit: cover;" />
+    </div>
+    
+    <div class="image image-64x64" style="
+        width: 64px;
+        height: 64px;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid #E1DFDD;
+        flex-shrink: 0;
+    ">
+        <img src="https://via.placeholder.com/64x64/D83B01/FFFFFF?text=64" alt="64x64 image" style="width: 100%; height: 100%; object-fit: cover;" />
+    </div>
+    
+    <div class="image image-96x96" style="
+        width: 96px;
+        height: 96px;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #E1DFDD;
+        flex-shrink: 0;
+    ">
+        <img src="https://via.placeholder.com/96x96/FFB900/000000?text=96" alt="96x96 image" style="width: 100%; height: 100%; object-fit: cover;" />
+    </div>
+    
+    <div class="image image-128x128" style="
+        width: 128px;
+        height: 128px;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid #E1DFDD;
+        flex-shrink: 0;
+    ">
+        <img src="https://via.placeholder.com/128x128/00BCF2/FFFFFF?text=128" alt="128x128 image" style="width: 100%; height: 100%; object-fit: cover;" />
+    </div>
+</div>`
+        },
+        {
+            id: 'ms-learn-image-responsive',
+            name: 'Microsoft Learn Responsive Image',
+            description: 'Responsive image with different sizes for different screen sizes',
+            category: 'Media',
+            library: 'Atlas',
+            htmlCode: `<div style="max-width: 600px; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
+    <div class="image" style="
+        width: 100%;
+        aspect-ratio: 16/9;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border: 1px solid #E1DFDD;
+        position: relative;
+    ">
+        <img src="https://via.placeholder.com/600x338/0078D4/FFFFFF?text=Responsive+Image" alt="Responsive image example" style="
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        " />
+        <div style="
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            color: white;
+            padding: 24px 20px 16px;
+        ">
+            <h3 style="margin: 0 0 8px 0; font-size: 20px; font-weight: 600;">Responsive Design</h3>
+            <p style="margin: 0; font-size: 14px; opacity: 0.9;">This image adapts to different screen sizes while maintaining its aspect ratio.</p>
+        </div>
+    </div>
+    
+    <style>
+        @media (max-width: 768px) {
+            .image {
+                aspect-ratio: 4/3 !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .image {
+                aspect-ratio: 1/1 !important;
+            }
+        }
+    </style>
+</div>`
+        },
+
+        // NEW ATLAS COMPONENTS - Layout Components
+        {
+            id: 'ms-learn-layout-single',
+            name: 'Microsoft Learn Single Layout',
+            description: 'Single-column layout with centered content container',
+            category: 'Layout',
+            library: 'Atlas',
+            htmlCode: `<div class="layout layout-single" style="
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    background: #ffffff;
+    min-height: 400px;
+">
+    <div class="layout-content" style="
+        text-align: center;
+        padding: 40px 0;
+        border: 2px dashed #e1e5e9;
+        border-radius: 8px;
+        background: #fafafa;
+    ">
+        <h2 style="margin: 0 0 16px 0; color: #323130; font-size: 24px; font-weight: 600;">Single Column Layout</h2>
+        <p style="margin: 0; color: #605e5c; font-size: 16px; line-height: 1.5;">
+            This layout provides a centered single column that works well for articles, documentation, and focused content.
+        </p>
+    </div>
+</div>`
+        },
+        {
+            id: 'ms-learn-layout-holy-grail',
+            name: 'Microsoft Learn Holy Grail Layout',
+            description: 'Classic holy grail layout with header, footer, main content, and two sidebars',
+            category: 'Layout',
+            library: 'Atlas',
+            htmlCode: `<div class="layout layout-holy-grail" style="
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    display: grid;
+    grid-template-areas: 
+        'header header header'
+        'left main right'
+        'footer footer footer';
+    grid-template-columns: 200px 1fr 200px;
+    grid-template-rows: auto 1fr auto;
+    min-height: 500px;
+    gap: 16px;
+    padding: 16px;
+    background: #f8f9fa;
+">
+    <div class="layout-header" style="
+        grid-area: header;
+        background: #0078d4;
+        color: white;
+        padding: 16px 20px;
+        border-radius: 4px;
+        font-weight: 600;
+        text-align: center;
+    ">Header</div>
+    
+    <div class="layout-sidebar-left" style="
+        grid-area: left;
+        background: #ffffff;
+        border: 1px solid #e1e5e9;
+        border-radius: 4px;
+        padding: 16px;
+        color: #323130;
+    ">
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600;">Left Sidebar</h4>
+        <p style="margin: 0; font-size: 13px; color: #605e5c;">Navigation or secondary content</p>
+    </div>
+    
+    <div class="layout-main" style="
+        grid-area: main;
+        background: #ffffff;
+        border: 1px solid #e1e5e9;
+        border-radius: 4px;
+        padding: 24px;
+        color: #323130;
+    ">
+        <h3 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 600;">Main Content Area</h3>
+        <p style="margin: 0; color: #605e5c; line-height: 1.5;">
+            This is the primary content area of the holy grail layout. It expands to fill available space while maintaining fixed-width sidebars.
+        </p>
+    </div>
+    
+    <div class="layout-sidebar-right" style="
+        grid-area: right;
+        background: #ffffff;
+        border: 1px solid #e1e5e9;
+        border-radius: 4px;
+        padding: 16px;
+        color: #323130;
+    ">
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600;">Right Sidebar</h4>
+        <p style="margin: 0; font-size: 13px; color: #605e5c;">Widgets or related content</p>
+    </div>
+    
+    <div class="layout-footer" style="
+        grid-area: footer;
+        background: #323130;
+        color: white;
+        padding: 16px 20px;
+        border-radius: 4px;
+        text-align: center;
+        font-size: 14px;
+    ">Footer</div>
+    
+    <style>
+        @media (max-width: 768px) {
+            .layout-holy-grail {
+                grid-template-areas: 
+                    'header'
+                    'main'
+                    'left'
+                    'right'
+                    'footer' !important;
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
+</div>`
+        },
+        {
+            id: 'ms-learn-layout-sidecar',
+            name: 'Microsoft Learn Sidecar Layout',
+            description: 'Two-column layout with main content and sidebar',
+            category: 'Layout',
+            library: 'Atlas',
+            htmlCode: `<div class="layout layout-sidecar-right" style="
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    background: #ffffff;
+    min-height: 400px;
+">
+    <div class="layout-main" style="
+        background: #ffffff;
+        border: 1px solid #e1e5e9;
+        border-radius: 8px;
+        padding: 32px;
+        color: #323130;
+    ">
+        <h2 style="margin: 0 0 20px 0; font-size: 28px; font-weight: 600;">Main Content</h2>
+        <p style="margin: 0 0 16px 0; color: #605e5c; line-height: 1.6; font-size: 16px;">
+            This sidecar layout provides a main content area alongside a complementary sidebar. Perfect for articles with related information, documentation with navigation, or any content that benefits from additional context.
+        </p>
+        <p style="margin: 0; color: #605e5c; line-height: 1.6; font-size: 16px;">
+            The layout automatically adapts to smaller screens by stacking the sidebar below the main content.
+        </p>
+    </div>
+    
+    <div class="layout-sidebar" style="
+        background: #f8f9fa;
+        border: 1px solid #e1e5e9;
+        border-radius: 8px;
+        padding: 24px;
+        color: #323130;
+    ">
+        <h3 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 600;">Related Content</h3>
+        <div style="margin-bottom: 20px;">
+            <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #323130;">Quick Links</h4>
+            <ul style="margin: 0; padding-left: 16px; color: #605e5c; font-size: 14px;">
+                <li style="margin-bottom: 4px;"><a href="#" style="color: #0078d4; text-decoration: none;">Getting Started</a></li>
+                <li style="margin-bottom: 4px;"><a href="#" style="color: #0078d4; text-decoration: none;">Best Practices</a></li>
+                <li><a href="#" style="color: #0078d4; text-decoration: none;">Advanced Topics</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #323130;">Resources</h4>
+            <p style="margin: 0; color: #605e5c; font-size: 13px; line-height: 1.4;">
+                Additional resources and documentation links can be placed here for easy access.
+            </p>
+        </div>
+    </div>
+    
+    <style>
+        @media (max-width: 768px) {
+            .layout-sidecar-right {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
+</div>`
+        },
+
+        // Link Button Components
+        {
+            id: 'ms-learn-link-button-basic',
+            name: 'Microsoft Learn Link Button',
+            description: 'Button-styled links with Microsoft Learn design patterns',
+            category: 'Forms',
+            library: 'Atlas',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+    <a href="#" class="link-button" style="
+        display: inline-block;
+        padding: 12px 24px;
+        background: #0078d4;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 600;
+        text-align: center;
+        transition: background-color 0.2s ease;
+        border: none;
+        cursor: pointer;
+    " onmouseover="this.style.backgroundColor='#106ebe'" onmouseout="this.style.backgroundColor='#0078d4'">
+        Primary Link Button
+    </a>
+    
+    <a href="#" class="link-button link-button-secondary" style="
+        display: inline-block;
+        padding: 10px 22px;
+        background: transparent;
+        color: #0078d4;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 600;
+        text-align: center;
+        transition: all 0.2s ease;
+        border: 2px solid #0078d4;
+        cursor: pointer;
+    " onmouseover="this.style.backgroundColor='#0078d4'; this.style.color='white'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#0078d4'">
+        Secondary Link
+    </a>
+    
+    <a href="#" class="link-button link-button-ghost" style="
+        display: inline-block;
+        padding: 12px 24px;
+        background: transparent;
+        color: #0078d4;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 600;
+        text-align: center;
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+    " onmouseover="this.style.backgroundColor='rgba(0, 120, 212, 0.1)'" onmouseout="this.style.backgroundColor='transparent'">
+        Ghost Link Button
+    </a>
+</div>`
+        },
+
+        // Markdown Components
+        {
+            id: 'ms-learn-markdown-content',
+            name: 'Microsoft Learn Markdown Content',
+            description: 'Styled markdown content with Microsoft Learn typography',
+            category: 'Content',
+            library: 'Atlas',
+            htmlCode: `<div class="markdown" style="
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    max-width: 800px;
+    padding: 32px;
+    background: #ffffff;
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    color: #323130;
+    line-height: 1.6;
+">
+    <h1 style="
+        font-size: 32px;
+        font-weight: 600;
+        color: #323130;
+        margin: 0 0 24px 0;
+        line-height: 1.2;
+        border-bottom: 1px solid #e1e5e9;
+        padding-bottom: 16px;
+    ">Getting Started with Microsoft Learn</h1>
+    
+    <h2 style="
+        font-size: 24px;
+        font-weight: 600;
+        color: #323130;
+        margin: 32px 0 16px 0;
+        line-height: 1.3;
+    ">Introduction</h2>
+    
+    <p style="margin: 0 0 16px 0; color: #323130; font-size: 16px;">
+        Microsoft Learn provides interactive learning experiences that help you build skills with Microsoft products. This comprehensive platform offers:
+    </p>
+    
+    <ul style="margin: 0 0 16px 0; padding-left: 24px; color: #323130;">
+        <li style="margin-bottom: 8px;">Hands-on learning modules</li>
+        <li style="margin-bottom: 8px;">Interactive coding exercises</li>
+        <li style="margin-bottom: 8px;">Industry-recognized certifications</li>
+        <li>Progress tracking and achievements</li>
+    </ul>
+    
+    <h3 style="
+        font-size: 20px;
+        font-weight: 600;
+        color: #323130;
+        margin: 24px 0 12px 0;
+        line-height: 1.3;
+    ">Key Features</h3>
+    
+    <ol style="margin: 0 0 16px 0; padding-left: 24px; color: #323130;">
+        <li style="margin-bottom: 8px;"><strong>Self-paced learning</strong> - Learn at your own speed</li>
+        <li style="margin-bottom: 8px;"><strong>Practical exercises</strong> - Apply what you learn immediately</li>
+        <li><strong>Community support</strong> - Connect with other learners</li>
+    </ol>
+    
+    <blockquote style="
+        margin: 24px 0;
+        padding: 16px 20px;
+        background: #f8f9fa;
+        border-left: 4px solid #0078d4;
+        color: #605e5c;
+        font-style: italic;
+    ">
+        "Microsoft Learn has transformed how we approach technical training in our organization."
+    </blockquote>
+    
+    <p style="margin: 0; color: #323130; font-size: 16px;">
+        Ready to get started? Explore our <a href="#" style="color: #0078d4; text-decoration: none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">learning paths</a> and begin your journey today. You can also check out our <code style="
+            background: #f3f2f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 14px;
+            color: #d13438;
+        ">inline code examples</code> throughout the documentation.
+    </p>
+</div>`
+        },
+
+        // Media Components
+        {
+            id: 'ms-learn-media-basic',
+            name: 'Microsoft Learn Media',
+            description: 'Media component with left-aligned image and flexible content',
+            category: 'Media',
+            library: 'Atlas',
+            htmlCode: `<div class="media" style="
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    display: flex;
+    gap: 16px;
+    padding: 20px;
+    background: #ffffff;
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    max-width: 600px;
+">
+    <div class="media-left" style="flex-shrink: 0;">
+        <img src="https://via.placeholder.com/80x80/0078d4/ffffff?text=MS" alt="Microsoft Learn" style="
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid #e1e5e9;
+        " />
+    </div>
+    
+    <div class="media-content" style="flex: 1; min-width: 0;">
+        <h3 style="
+            margin: 0 0 8px 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #323130;
+            line-height: 1.3;
+        ">Microsoft Azure Fundamentals</h3>
+        
+        <p style="
+            margin: 0 0 12px 0;
+            color: #605e5c;
+            font-size: 14px;
+            line-height: 1.5;
+        ">
+            Learn cloud computing concepts, core Azure services, security, privacy, compliance, and trust. This learning path prepares you for the AZ-900 certification exam.
+        </p>
+        
+        <div style="display: flex; gap: 12px; align-items: center; font-size: 13px; color: #605e5c;">
+            <span>⏱️ 4-6 hours</span>
+            <span>•</span>
+            <span>📊 Beginner</span>
+            <span>•</span>
+            <span style="
+                background: #e1f5fe;
+                color: #0078d4;
+                padding: 2px 8px;
+                border-radius: 12px;
+                font-weight: 600;
+                font-size: 11px;
+            ">FREE</span>
+        </div>
+    </div>
+</div>`
+        },
+
+        // Message Components
+        {
+            id: 'ms-learn-message-basic',
+            name: 'Microsoft Learn Message',
+            description: 'Chat-style message with persona integration and sizing options',
+            category: 'Communication',
+            library: 'Atlas',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; max-width: 600px;">
+    <div class="message" style="
+        display: flex;
+        gap: 12px;
+        padding: 16px;
+        background: #ffffff;
+        border: 1px solid #e1e5e9;
+        border-radius: 8px;
+        margin-bottom: 12px;
+    ">
+        <div class="message-avatar" style="flex-shrink: 0;">
+            <div style="
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #0078d4, #106ebe);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-weight: 600;
+                font-size: 16px;
+            ">AI</div>
+        </div>
+        
+        <div class="message-content" style="flex: 1; min-width: 0;">
+            <div class="message-header" style="
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin-bottom: 8px;
+            ">
+                <span style="
+                    font-weight: 600;
+                    color: #323130;
+                    font-size: 14px;
+                ">Learning Assistant</span>
+                <span style="
+                    font-size: 12px;
+                    color: #605e5c;
+                ">2 minutes ago</span>
+            </div>
+            
+            <div class="message-body" style="
+                color: #323130;
+                font-size: 14px;
+                line-height: 1.5;
+                margin-bottom: 12px;
+            ">
+                Welcome to Microsoft Learn! I'm here to help you find the right learning path for your goals. What technology would you like to explore today?
+            </div>
+            
+            <div class="message-actions" style="
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+            ">
+                <button style="
+                    padding: 6px 12px;
+                    background: #f3f2f1;
+                    color: #323130;
+                    border: 1px solid #c8c6c4;
+                    border-radius: 16px;
+                    font-size: 12px;
+                    cursor: pointer;
+                    transition: background-color 0.2s ease;
+                " onmouseover="this.style.backgroundColor='#edebe9'" onmouseout="this.style.backgroundColor='#f3f2f1'">
+                    Azure
+                </button>
+                <button style="
+                    padding: 6px 12px;
+                    background: #f3f2f1;
+                    color: #323130;
+                    border: 1px solid #c8c6c4;
+                    border-radius: 16px;
+                    font-size: 12px;
+                    cursor: pointer;
+                    transition: background-color 0.2s ease;
+                " onmouseover="this.style.backgroundColor='#edebe9'" onmouseout="this.style.backgroundColor='#f3f2f1'">
+                    Microsoft 365
+                </button>
+                <button style="
+                    padding: 6px 12px;
+                    background: #f3f2f1;
+                    color: #323130;
+                    border: 1px solid #c8c6c4;
+                    border-radius: 16px;
+                    font-size: 12px;
+                    cursor: pointer;
+                    transition: background-color 0.2s ease;
+                " onmouseover="this.style.backgroundColor='#edebe9'" onmouseout="this.style.backgroundColor='#f3f2f1'">
+                    Power Platform
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- User Message -->
+    <div class="message message-sender" style="
+        display: flex;
+        gap: 12px;
+        padding: 16px;
+        background: #f8f9fa;
+        border: 1px solid #e1e5e9;
+        border-radius: 8px;
+        flex-direction: row-reverse;
+    ">
+        <div class="message-avatar" style="flex-shrink: 0;">
+            <div style="
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background: #323130;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-weight: 600;
+                font-size: 16px;
+            ">U</div>
+        </div>
+        
+        <div class="message-content" style="flex: 1; min-width: 0; text-align: right;">
+            <div class="message-header" style="
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin-bottom: 8px;
+                justify-content: flex-end;
+            ">
+                <span style="
+                    font-size: 12px;
+                    color: #605e5c;
+                ">Just now</span>
+                <span style="
+                    font-weight: 600;
+                    color: #323130;
+                    font-size: 14px;
+                ">You</span>
+            </div>
+            
+            <div class="message-body" style="
+                color: #323130;
+                font-size: 14px;
+                line-height: 1.5;
+            ">
+                I'm interested in learning Azure. Can you recommend a good starting point?
+            </div>
+        </div>
+    </div>
+</div>`
+        },
+
+        // Notification Components
+        {
+            id: 'ms-learn-notification-basic',
+            name: 'Microsoft Learn Notification',
+            description: 'Colored notification blocks with semantic variants',
+            category: 'Communication',
+            library: 'Atlas',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; display: flex; flex-direction: column; gap: 12px; max-width: 500px;">
+    <!-- Success Notification -->
+    <div class="notification notification-success" style="
+        padding: 16px 20px;
+        background: #f3f9fd;
+        border: 1px solid #c7e0f4;
+        border-left: 4px solid #107c10;
+        border-radius: 4px;
+        color: #323130;
+        position: relative;
+    ">
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="
+                width: 20px;
+                height: 20px;
+                flex-shrink: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #107c10;
+                font-size: 16px;
+                margin-top: 2px;
+            ">✓</div>
+            <div style="flex: 1;">
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 14px;">Learning path completed!</div>
+                <div style="font-size: 14px; color: #605e5c; line-height: 1.4;">
+                    Congratulations! You've successfully completed the Azure Fundamentals learning path.
+                </div>
+            </div>
+            <button onclick="this.parentElement.parentElement.style.display='none'" style="
+                background: none;
+                border: none;
+                color: #605e5c;
+                cursor: pointer;
+                font-size: 16px;
+                padding: 0;
+                width: 20px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            ">×</button>
+        </div>
+    </div>
+    
+    <!-- Info Notification -->
+    <div class="notification notification-info" style="
+        padding: 16px 20px;
+        background: #f3f9fd;
+        border: 1px solid #c7e0f4;
+        border-left: 4px solid #0078d4;
+        border-radius: 4px;
+        color: #323130;
+        position: relative;
+    ">
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="
+                width: 20px;
+                height: 20px;
+                flex-shrink: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #0078d4;
+                font-size: 16px;
+                margin-top: 2px;
+            ">ℹ</div>
+            <div style="flex: 1;">
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 14px;">New content available</div>
+                <div style="font-size: 14px; color: #605e5c; line-height: 1.4;">
+                    Check out the latest modules in the AI and Machine Learning learning path.
+                </div>
+            </div>
+            <button onclick="this.parentElement.parentElement.style.display='none'" style="
+                background: none;
+                border: none;
+                color: #605e5c;
+                cursor: pointer;
+                font-size: 16px;
+                padding: 0;
+                width: 20px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            ">×</button>
+        </div>
+    </div>
+    
+    <!-- Warning Notification -->
+    <div class="notification notification-warning" style="
+        padding: 16px 20px;
+        background: #fff9f5;
+        border: 1px solid #fdcfb4;
+        border-left: 4px solid #ffb900;
+        border-radius: 4px;
+        color: #323130;
+        position: relative;
+    ">
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="
+                width: 20px;
+                height: 20px;
+                flex-shrink: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #ff8c00;
+                font-size: 16px;
+                margin-top: 2px;
+            ">⚠</div>
+            <div style="flex: 1;">
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 14px;">Certification deadline approaching</div>
+                <div style="font-size: 14px; color: #605e5c; line-height: 1.4;">
+                    Your Azure certification expires in 30 days. Schedule your renewal exam soon.
+                </div>
+            </div>
+            <button onclick="this.parentElement.parentElement.style.display='none'" style="
+                background: none;
+                border: none;
+                color: #605e5c;
+                cursor: pointer;
+                font-size: 16px;
+                padding: 0;
+                width: 20px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            ">×</button>
+        </div>
+    </div>
+    
+    <!-- Danger Notification -->
+    <div class="notification notification-danger" style="
+        padding: 16px 20px;
+        background: #fdf6f6;
+        border: 1px solid #f1bbbb;
+        border-left: 4px solid #d13438;
+        border-radius: 4px;
+        color: #323130;
+        position: relative;
+    ">
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="
+                width: 20px;
+                height: 20px;
+                flex-shrink: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #d13438;
+                font-size: 16px;
+                margin-top: 2px;
+            ">⚠</div>
+            <div style="flex: 1;">
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 14px;">Action required</div>
+                <div style="font-size: 14px; color: #605e5c; line-height: 1.4;">
+                    Your account verification is incomplete. Please verify your email address to continue.
+                </div>
+            </div>
+            <button onclick="this.parentElement.parentElement.style.display='none'" style="
+                background: none;
+                border: none;
+                color: #605e5c;
+                cursor: pointer;
+                font-size: 16px;
+                padding: 0;
+                width: 20px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            ">×</button>
+        </div>
+    </div>
+</div>`
+        },
+
+        // Pagination Components
+        {
+            id: 'ms-learn-pagination-basic',
+            name: 'Microsoft Learn Pagination',
+            description: 'Page navigation with previous/next buttons and numbered pages',
+            category: 'Navigation',
+            library: 'Atlas',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
+    <nav class="pagination" role="navigation" aria-label="Page navigation" style="
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        padding: 20px 0;
+    ">
+        <button class="pagination-prev" disabled style="
+            padding: 8px 12px;
+            background: #f3f2f1;
+            color: #a19f9d;
+            border: 1px solid #c8c6c4;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: not-allowed;
+            font-family: inherit;
+        ">← Previous</button>
+        
+        <div class="pagination-pages" style="display: flex; gap: 4px; margin: 0 8px;">
+            <button class="pagination-page current" style="
+                width: 36px;
+                height: 36px;
+                background: #0078d4;
+                color: white;
+                border: 1px solid #0078d4;
+                border-radius: 4px;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                font-family: inherit;
+            ">1</button>
+            
+            <button class="pagination-page" style="
+                width: 36px;
+                height: 36px;
+                background: #ffffff;
+                color: #323130;
+                border: 1px solid #c8c6c4;
+                border-radius: 4px;
+                font-size: 14px;
+                cursor: pointer;
+                font-family: inherit;
+                transition: background-color 0.2s ease;
+            " onmouseover="this.style.backgroundColor='#f3f2f1'" onmouseout="this.style.backgroundColor='#ffffff'">2</button>
+            
+            <button class="pagination-page" style="
+                width: 36px;
+                height: 36px;
+                background: #ffffff;
+                color: #323130;
+                border: 1px solid #c8c6c4;
+                border-radius: 4px;
+                font-size: 14px;
+                cursor: pointer;
+                font-family: inherit;
+                transition: background-color 0.2s ease;
+            " onmouseover="this.style.backgroundColor='#f3f2f1'" onmouseout="this.style.backgroundColor='#ffffff'">3</button>
+            
+            <span class="pagination-ellipsis" style="
+                width: 36px;
+                height: 36px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #605e5c;
+                font-size: 14px;
+            ">…</span>
+            
+            <button class="pagination-page" style="
+                width: 36px;
+                height: 36px;
+                background: #ffffff;
+                color: #323130;
+                border: 1px solid #c8c6c4;
+                border-radius: 4px;
+                font-size: 14px;
+                cursor: pointer;
+                font-family: inherit;
+                transition: background-color 0.2s ease;
+            " onmouseover="this.style.backgroundColor='#f3f2f1'" onmouseout="this.style.backgroundColor='#ffffff'">10</button>
+        </div>
+        
+        <button class="pagination-next" style="
+            padding: 8px 12px;
+            background: #ffffff;
+            color: #323130;
+            border: 1px solid #c8c6c4;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background-color 0.2s ease;
+        " onmouseover="this.style.backgroundColor='#f3f2f1'" onmouseout="this.style.backgroundColor='#ffffff'">Next →</button>
+    </nav>
+    
+    <div class="pagination-info" style="
+        text-align: center;
+        color: #605e5c;
+        font-size: 14px;
+        margin-top: 8px;
+    ">
+        Showing page 1 of 10 (95 total items)
+    </div>
+</div>`
+        },
+
+        // Persona Components
+        {
+            id: 'ms-learn-persona-basic',
+            name: 'Microsoft Learn Persona',
+            description: 'User representation with avatar and details in multiple sizes',
+            category: 'User',
+            library: 'Atlas',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; display: flex; flex-direction: column; gap: 24px;">
+    <!-- Large Persona -->
+    <div class="persona persona-lg" style="
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 20px;
+        background: #ffffff;
+        border: 1px solid #e1e5e9;
+        border-radius: 8px;
+    ">
+        <div class="persona-avatar" style="
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0078d4, #106ebe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            font-weight: 600;
+            flex-shrink: 0;
+            position: relative;
+        ">
+            SM
+            <div style="
+                position: absolute;
+                bottom: 2px;
+                right: 2px;
+                width: 16px;
+                height: 16px;
+                background: #107c10;
+                border: 2px solid #ffffff;
+                border-radius: 50%;
+            "></div>
+        </div>
+        
+        <div class="persona-details" style="flex: 1;">
+            <h3 style="
+                margin: 0 0 4px 0;
+                font-size: 20px;
+                font-weight: 600;
+                color: #323130;
+            ">Sarah Miller</h3>
+            <p style="
+                margin: 0 0 8px 0;
+                font-size: 16px;
+                color: #605e5c;
+            ">Cloud Solutions Architect</p>
+            <div style="
+                display: flex;
+                gap: 12px;
+                align-items: center;
+                font-size: 14px;
+                color: #605e5c;
+            ">
+                <span>📍 Seattle, WA</span>
+                <span>•</span>
+                <span>📧 sarah.miller@company.com</span>
+            </div>
+        </div>
+        
+        <div class="persona-actions" style="display: flex; gap: 8px;">
+            <button style="
+                padding: 8px 16px;
+                background: #0078d4;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                font-family: inherit;
+            ">Message</button>
+            <button style="
+                padding: 8px 16px;
+                background: #f3f2f1;
+                color: #323130;
+                border: 1px solid #c8c6c4;
+                border-radius: 4px;
+                font-size: 14px;
+                cursor: pointer;
+                font-family: inherit;
+            ">View Profile</button>
+        </div>
+    </div>
+    
+    <!-- Default Persona -->
+    <div class="persona" style="
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        background: #f8f9fa;
+        border: 1px solid #e1e5e9;
+        border-radius: 6px;
+    ">
+        <div class="persona-avatar" style="
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ca5010, #a4400e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            flex-shrink: 0;
+        ">JD</div>
+        
+        <div class="persona-details" style="flex: 1;">
+            <h4 style="
+                margin: 0 0 2px 0;
+                font-size: 16px;
+                font-weight: 600;
+                color: #323130;
+            ">John Doe</h4>
+            <p style="
+                margin: 0;
+                font-size: 14px;
+                color: #605e5c;
+            ">Software Developer • Online 5 min ago</p>
+        </div>
+    </div>
+    
+    <!-- Small Persona -->
+    <div class="persona persona-sm" style="
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px;
+        background: #ffffff;
+        border-radius: 4px;
+    ">
+        <div class="persona-avatar" style="
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #038387, #026c70);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            flex-shrink: 0;
+        ">AB</div>
+        
+        <div class="persona-details">
+            <span style="
+                font-size: 14px;
+                font-weight: 600;
+                color: #323130;
+            ">Alice Brown</span>
+        </div>
+    </div>
+</div>`
+        },
+
+        // Popover Components
+        {
+            id: 'ms-learn-popover-basic',
+            name: 'Microsoft Learn Popover',
+            description: 'Popup content overlays with dynamic positioning and caret',
+            category: 'User',
+            library: 'Atlas',
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; padding: 40px; position: relative;">
+    <h3 style="margin: 0 0 20px 0; color: #323130;">Popover Examples</h3>
+    
+    <!-- Basic Popover -->
+    <details class="popover margin-xs" style="
+        position: relative;
+        display: inline-block;
+        margin-right: 24px;
+        margin-bottom: 16px;
+    ">
+        <summary class="link-button" style="
+            background: none;
+            border: none;
+            color: #0078d4;
+            cursor: pointer;
+            padding: 8px 12px;
+            font-size: 14px;
+            text-decoration: underline;
+            font-family: inherit;
+        ">Click for details</summary>
+        
+        <div class="popover-content" style="
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 8px;
+            background: white;
+            border: 1px solid #c8c6c4;
+            border-radius: 6px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.14), 0 0px 4px rgba(0, 0, 0, 0.12);
+            padding: 16px;
+            min-width: 200px;
+            max-width: 300px;
+            z-index: 1000;
+        ">
+            <p style="margin: 0 0 12px 0; color: #323130; font-size: 14px; line-height: 1.4;">
+                It can be a paragraph of text.
+            </p>
+            <p style="margin: 0 0 8px 0; color: #323130; font-size: 14px; font-weight: 600;">Or a list:</p>
+            <ul style="margin: 0 0 12px 0; padding-left: 16px;">
+                <li><a href="#" style="color: #0078d4; text-decoration: none;">List item</a></li>
+                <li><a href="#" style="color: #0078d4; text-decoration: none;">List item</a></li>
+                <li><a href="#" style="color: #0078d4; text-decoration: none;">List item</a></li>
+            </ul>
+            <p style="margin: 0; color: #323130; font-size: 14px; line-height: 1.4;">
+                Or basically anything else you can think of.
+            </p>
+        </div>
+    </details>
+    
+    <!-- Popover with Caret -->
+    <details class="popover popover-caret margin-xs" style="
+        position: relative;
+        display: inline-block;
+        margin-right: 24px;
+        margin-bottom: 16px;
+    ">
+        <summary class="button" style="
+            background: #0078d4;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: inherit;
+        ">Popover with Caret</summary>
+        
+        <div class="popover-content" style="
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 8px;
+            background: white;
+            border: 1px solid #c8c6c4;
+            border-radius: 6px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.14), 0 0px 4px rgba(0, 0, 0, 0.12);
+            padding: 16px;
+            min-width: 250px;
+            max-width: 350px;
+            z-index: 1000;
+        ">
+            <!-- Caret -->
+            <div style="
+                position: absolute;
+                top: -6px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 0;
+                height: 0;
+                border-left: 6px solid transparent;
+                border-right: 6px solid transparent;
+                border-bottom: 6px solid white;
+                z-index: 1001;
+            "></div>
+            <div style="
+                position: absolute;
+                top: -7px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 0;
+                height: 0;
+                border-left: 7px solid transparent;
+                border-right: 7px solid transparent;
+                border-bottom: 7px solid #c8c6c4;
+                z-index: 1000;
+            "></div>
+            
+            <p style="margin: 0; color: #323130; font-size: 14px; line-height: 1.5;">
+                Popover content will be centered by default, but will adjust positioning dynamically to prevent overflow.
+            </p>
+        </div>
+    </details>
+    
+    <!-- Styled Button Popover -->
+    <details class="popover margin-xs" style="
+        position: relative;
+        display: inline-block;
+        margin-bottom: 16px;
+    ">
+        <summary class="button border" style="
+            background: white;
+            color: #323130;
+            border: 1px solid #c8c6c4;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        ">
+            <span class="icon color-primary" style="
+                width: 16px;
+                height: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #0078d4;
+            ">
+                <svg class="fill-current-color" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" style="width: 100%; height: 100%;" fill="currentColor">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+            </span>
+            <span>Options</span>
+        </summary>
+        
+        <div class="popover-content" style="
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 8px;
+            background: white;
+            border: 1px solid #c8c6c4;
+            border-radius: 6px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.14), 0 0px 4px rgba(0, 0, 0, 0.12);
+            padding: 8px 0;
+            min-width: 160px;
+            z-index: 1000;
+        ">
+            <div style="
+                padding: 8px 16px;
+                color: #323130;
+                cursor: pointer;
+                font-size: 14px;
+                transition: background-color 0.2s ease;
+            " onmouseover="this.style.backgroundColor='#f3f2f1'" onmouseout="this.style.backgroundColor='transparent'">
+                Edit item
+            </div>
+            <div style="
+                padding: 8px 16px;
+                color: #323130;
+                cursor: pointer;
+                font-size: 14px;
+                transition: background-color 0.2s ease;
+            " onmouseover="this.style.backgroundColor='#f3f2f1'" onmouseout="this.style.backgroundColor='transparent'">
+                Share item
+            </div>
+            <div style="height: 1px; background: #e1e5e9; margin: 4px 0;"></div>
+            <div style="
+                padding: 8px 16px;
+                color: #d13438;
+                cursor: pointer;
+                font-size: 14px;
+                transition: background-color 0.2s ease;
+            " onmouseover="this.style.backgroundColor='#fdf6f6'" onmouseout="this.style.backgroundColor='transparent'">
+                Delete item
+            </div>
+        </div>
+    </details>
+</div>`
         }
     ];
 

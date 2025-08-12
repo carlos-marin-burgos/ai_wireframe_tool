@@ -973,3 +973,45 @@
 .btn-secondary:hover {
   background: #e1dfdd;
 }
+
+/* Input Info Alert Styles */
+.input-info-alert {
+  padding: 12px 16px;
+  background: #f3f9fd;
+  border: 1px solid #c7e0f4;
+  border-left: 4px solid #0078d4;
+  border-radius: 4px;
+  color: #323130;
+  font-size: 14px;
+  margin: 8px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, system-ui,
+    sans-serif;
+}
+
+.input-info-alert .alert-icon {
+  color: #0078d4;
+  font-size: 16px;
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+
+.input-info-alert .alert-content {
+  flex: 1;
+}
+
+.input-info-alert .alert-title {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.input-info-alert .alert-description {
+  color: #605e5c;
+  line-height: 1.4;
+}
+
+.github-error {
+  margin-top: 8px;
+}
