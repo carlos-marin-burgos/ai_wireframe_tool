@@ -43,7 +43,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Official Microsoft Learn site header with logo and brand',
             category: 'Navigation',
             library: 'FluentUI',
-            htmlCode: `<div style="display: flex; align-items: center; padding: 12px 24px; background: #E8E6DF; border-bottom: 1px solid #e1e5e9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+            htmlCode: `<div style="display: flex; align-items: center; padding: 12px 24px; background: white; border-bottom: 1px solid #e1e5e9; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
     <!-- Microsoft logo -->
     <a href="https://www.microsoft.com" aria-label="Microsoft" style="display: flex; align-items: center; margin-right: 16px; text-decoration: none;">
         <svg aria-hidden="true" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;">
@@ -58,7 +58,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     <div style="width: 1px; height: 24px; background: #e1e5e9; margin-right: 16px;"></div>
 
     <!-- Brand -->
-    <a href="#" style="color: #000000; text-decoration: none; font-weight: 600; font-size: 16px; margin-right: auto;">
+    <a href="#" style="color: #323130; text-decoration: none; font-weight: 600; font-size: 16px; margin-right: auto;">
         <span>Microsoft Learn</span>
     </a>
 
@@ -76,9 +76,9 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Microsoft Learn header with centered logo layout',
             category: 'Navigation',
             library: 'FluentUI',
-            htmlCode: `<div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; background: #E8E6DF; border-bottom: 1px solid #e1e5e9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+            htmlCode: `<div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; background: white; border-bottom: 1px solid #e1e5e9; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
     <!-- Brand -->
-    <a href="#" style="color: #000000; text-decoration: none; font-weight: 600; font-size: 16px;">
+    <a href="#" style="color: #323130; text-decoration: none; font-weight: 600; font-size: 16px;">
         <span>Microsoft Learn</span>
     </a>
 
@@ -103,7 +103,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Full Microsoft Learn header with comprehensive navigation',
             category: 'Navigation',
             library: 'FluentUI',
-            htmlCode: `<div style="background: #E8E6DF; border-bottom: 1px solid #e1e5e9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+            htmlCode: `<div style="background: white; border-bottom: 1px solid #e1e5e9; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
     <!-- Main header -->
     <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 24px;">
         <!-- Left section -->
@@ -122,7 +122,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             <div style="width: 1px; height: 24px; background: #e1e5e9; margin-right: 16px;"></div>
 
             <!-- Brand -->
-            <a href="#" style="color: #000000; text-decoration: none; font-weight: 600; font-size: 16px;">
+            <a href="#" style="color: #323130; text-decoration: none; font-weight: 600; font-size: 16px;">
                 <span>Microsoft Learn</span>
             </a>
         </div>
@@ -500,7 +500,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Progress indicator showing completion status',
             category: 'Data Display',
             library: 'FluentUI',
-            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; padding: 20px; background: white;">
     <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Progress Bar Example</h3>
     
     <!-- Determinate Progress Bar -->
@@ -535,7 +535,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Contextual overlay for additional information',
             category: 'Overlays',
             library: 'FluentUI',
-            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white; position: relative;">
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; padding: 20px; background: white; position: relative;">
     <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Popover Example</h3>
     
     <!-- Trigger Button -->
@@ -564,7 +564,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'User profile representation with avatar and details',
             category: 'Data Display',
             library: 'FluentUI',
-            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; padding: 20px; background: white;">
     <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Persona Examples</h3>
     
     <!-- Large Persona -->
@@ -609,7 +609,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Navigation component with hierarchical structure',
             category: 'Navigation',
             library: 'FluentUI',
-            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; background: white; border-right: 1px solid #edebe9; width: 280px; height: 400px; padding: 16px 0;">
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: white; border-right: 1px solid #edebe9; width: 280px; height: 400px; padding: 16px 0;">
     <div style="padding: 0 16px 16px 16px; border-bottom: 1px solid #edebe9; margin-bottom: 8px;">
         <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #323130;">Navigation</h3>
     </div>
@@ -665,7 +665,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Notification messages for different states',
             category: 'Feedback',
             library: 'FluentUI',
-            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; padding: 20px; background: white;">
     <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">MessageBar Examples</h3>
     
     <!-- Success Message -->
@@ -717,7 +717,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Responsive image component with different shapes',
             category: 'Media',
             library: 'FluentUI',
-            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; padding: 20px; background: white;">
     <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Image Examples</h3>
     
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px;">
@@ -767,7 +767,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Modal dialog for important user interactions',
             category: 'Overlays',
             library: 'FluentUI',
-            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white; position: relative;">
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; padding: 20px; background: white; position: relative;">
     <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Dialog Example</h3>
     
     <!-- Trigger Button -->
@@ -826,7 +826,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Data table with sorting and selection capabilities',
             category: 'Data Display',
             library: 'FluentUI',
-            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; padding: 20px; background: white;">
     <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Data Grid Example</h3>
     
     <!-- Data Grid Container -->
@@ -921,7 +921,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Dropdown with search and selection capabilities',
             category: 'Forms',
             library: 'FluentUI',
-            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; padding: 20px; background: white;">
     <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">ComboBox Examples</h3>
     
     <!-- Basic ComboBox -->
@@ -991,7 +991,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Checkbox input with various states and styles',
             category: 'Forms',
             library: 'FluentUI',
-            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; padding: 20px; background: white;">
     <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Checkbox Examples</h3>
     
     <!-- Basic Checkboxes -->
@@ -1069,7 +1069,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Card footer with actions and information',
             category: 'Cards',
             library: 'FluentUI',
-            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; padding: 20px; background: white;">
     <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Card Footer Examples</h3>
     
     <!-- Card with Action Footer -->
@@ -1146,7 +1146,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Card header with title, avatar, and actions',
             category: 'Cards',
             library: 'FluentUI',
-            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; padding: 20px; background: white;">
     <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Card Header Examples</h3>
     
     <!-- Card with Simple Header -->
@@ -1260,7 +1260,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Card preview with media and content preview',
             category: 'Cards',
             library: 'FluentUI',
-            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; padding: 20px; background: white;">
     <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Card Preview Examples</h3>
     
     <!-- Image Preview Card -->
@@ -1390,7 +1390,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Buttons with primary and secondary text content',
             category: 'Buttons',
             library: 'FluentUI',
-            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; padding: 20px; background: white;">
     <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Compound Button Examples</h3>
     
     <!-- Primary Compound Buttons -->
@@ -1525,7 +1525,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Button with dropdown menu options',
             category: 'Buttons',
             library: 'FluentUI',
-            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
+            htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; padding: 20px; background: white;">
     <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Menu Button Examples</h3>
     
     <!-- Primary Menu Button -->
@@ -1773,7 +1773,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                 border-radius: 2px; 
                 font-size: 14px; 
                 font-weight: 600; 
-                font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+                font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
                 cursor: pointer;
                 transition: all 0.2s ease;
                 text-transform: uppercase;
@@ -1796,7 +1796,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                 border-radius: 2px; 
                 font-size: 14px; 
                 font-weight: 600; 
-                font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+                font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
                 cursor: pointer;
                 transition: all 0.2s ease;
                 text-transform: uppercase;
@@ -1817,7 +1817,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                 border-radius: 4px; 
                 padding: 24px; 
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+                font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
                 max-width: 350px;
             ">
                 <div style="display: flex; align-items: center; margin-bottom: 16px;">
@@ -1842,7 +1842,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                 background: white; 
                 border-bottom: 2px solid #0072CE; 
                 padding: 16px 24px; 
-                font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+                font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             ">
                 <div style="display: flex; align-items: center; justify-content: space-between;">
@@ -1867,7 +1867,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Form input field with Atlas styling',
             category: 'Forms',
             library: 'Atlas',
-            htmlCode: `<div style="margin-bottom: 16px; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;">
+            htmlCode: `<div style="margin-bottom: 16px; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;">
                 <label style="
                     display: block; 
                     margin-bottom: 8px; 
@@ -1906,7 +1906,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                 color: white; 
                 padding: 80px 24px; 
                 text-align: center;
-                font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+                font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
             ">
                 <div style="max-width: 800px; margin: 0 auto;">
                     <h1 style="

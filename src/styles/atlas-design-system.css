@@ -35,8 +35,8 @@
   --atlas-color-neutral-160: #11100f;
 
   /* Typography */
-  --atlas-font-family: "Segoe UI Variable Text", "Segoe UI", -apple-system,
-    system-ui, sans-serif;
+  --atlas-font-family: "Segoe UI Variable Text", "Segoe UI", system-ui,
+    -apple-system, sans-serif;
   --atlas-font-size-caption: 12px;
   --atlas-font-size-body: 14px;
   --atlas-font-size-body-large: 16px;
