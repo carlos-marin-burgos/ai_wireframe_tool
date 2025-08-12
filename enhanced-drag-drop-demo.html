@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Drag & Drop Wireframe Demo</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .demo-header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .demo-header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .demo-header p {
+            margin: 0;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .demo-content {
+            padding: 40px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 5px solid #4facfe;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card h3 {
+            margin: 0 0 15px 0;
+            color: #2c3e50;
+            font-size: 1.3rem;
+        }
+
+        .feature-card ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #5a6c7d;
+            line-height: 1.6;
+        }
+
+        .feature-card li {
+            margin-bottom: 8px;
+        }
+
+        .demo-buttons {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .demo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .video-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .video-placeholder {
+            background: #e9ecef;
+            border: 2px dashed #6c757d;
+            border-radius: 8px;
+            padding: 60px 20px;
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+
+        .changelog {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .changelog h3 {
+            color: #856404;
+            margin: 0 0 15px 0;
+        }
+
+        .changelog ul {
+            margin: 0;
+            color: #856404;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1>✨ Enhanced Drag & Drop Wireframe</h1>
+            <p>Fancy animations, smart rearrangement, and magnetic snap points</p>
+        </div>
+
+        <div class="demo-content">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>🎨 Fancy Visual Effects</h3>
+                    <ul>
+                        <li>Particle effects on drag/drop/snap</li>
+                        <li>Smooth scaling and rotation animations</li>
+                        <li>Pulsing glow effects during drag</li>
+                        <li>Ripple effects on interactions</li>
+                        <li>Enhanced hover states with transitions</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🧲 Magnetic Snap Points</h3>
+                    <ul>
+                        <li>Grid-based snap points every 20px</li>
+                        <li>Element edge and center alignment</li>
+                        <li>Container edge magnetic areas</li>
+                        <li>Visual indicators for snap targets</li>
+                        <li>Smooth interpolation to snap points</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🤖 Smart Auto-Arrangement</h3>
+                    <ul>
+                        <li>Priority-based element sorting</li>
+                        <li>Buttons prioritized over cards</li>
+                        <li>Optimal spacing calculations</li>
+                        <li>Collision detection and resolution</li>
+                        <li>Staggered animation timing</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🎯 Enhanced Interactions</h3>
+                    <ul>
+                        <li>Drag ghost elements for preview</li>
+                        <li>Overlap detection with smart pushing</li>
+                        <li>Enhanced delete buttons with animations</li>
+                        <li>Improved accessibility support</li>
+                        <li>Real-time visual feedback</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="changelog">
+                <h3>🆕 Recent Enhancements</h3>
+                <ul>
+                    <li><strong>Particle Effects:</strong> Success, drag, and snap particles with different animations
+                    </li>
+                    <li><strong>Magnetic Snapping:</strong> Elements automatically snap to nearby grid points and other
+                        elements</li>
+                    <li><strong>Smart Rearrangement:</strong> New elements trigger intelligent auto-arrangement of
+                        existing controls</li>
+                    <li><strong>Enhanced Animations:</strong> Smooth CSS transitions with cubic-bezier easing</li>
+                    <li><strong>Improved UX:</strong> Better visual feedback and reduced cognitive load</li>
+                </ul>
+            </div>
+
+            <div class="demo-buttons">
+                <a href="http://localhost:5173" class="demo-btn">🚀 Try the Enhanced Wireframe Tool</a>
+                <button onclick="generateTestWireframe()" class="demo-btn">🎮 Generate Test Wireframe</button>
+            </div>
+
+            <div class="video-section">
+                <h3>📹 Demo Video</h3>
+                <div class="video-placeholder">
+                    <p>🎬 Demo video coming soon!</p>
+                    <p>Try the live demo above to experience the enhanced drag & drop features</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateTestWireframe() {
+            alert('🚀 Opening the main application to generate a test wireframe with multiple elements for you to test the enhanced drag & drop features!');
+            window.open('http://localhost:5173', '_blank');
+        }
+
+        // Add some interactive elements
+        document.addEventListener('DOMContentLoaded', function () {
+            const cards = document.querySelectorAll('.feature-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.style.animation = 'fadeInUp 0.6s ease-out forwards';
+            });
+        });
+
+        // Add CSS animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            
+            .feature-card {
+                opacity: 0;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+
+</html>
