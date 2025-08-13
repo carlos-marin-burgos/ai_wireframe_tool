@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import "./SplitLayout.css";
 import SuggestionSourceIndicator from "./SuggestionSourceIndicator";
 import LoadingOverlay from "./LoadingOverlay";
-import CompactToolbar from "./CompactToolbar";
 import AddPagesModal from "./AddPagesModal";
 import SaveWireframeModal, { SavedWireframe } from "./SaveWireframeModal";
 import FigmaIntegrationModal from "./FigmaIntegrationModal";
@@ -73,6 +72,12 @@ interface SplitLayoutProps {
   onGeneratePageContent?: (description: string, pageType: string) => Promise<string>;
   // Figma export handler
   onFigmaExport?: (format: 'figma-file' | 'figma-components') => void;
+  // Toolbar function references for header toolbar
+  onFigmaIntegration?: React.MutableRefObject<(() => void) | null>;
+  onViewHtmlCode?: React.MutableRefObject<(() => void) | null>;
+  onDownloadWireframe?: React.MutableRefObject<(() => void) | null>;
+  onPresentationMode?: React.MutableRefObject<(() => void) | null>;
+  onShareUrl?: React.MutableRefObject<(() => void) | null>;
 }
 
 const SplitLayout: React.FC<SplitLayoutProps> = ({
@@ -99,6 +104,11 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   onAddComponent,
   onGeneratePageContent,
   onFigmaExport,
+  onFigmaIntegration,
+  onViewHtmlCode,
+  onDownloadWireframe,
+  onPresentationMode,
+  onShareUrl,
 }) => {
   // Create ref for textarea autofocus
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -172,6 +182,9 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   // Left Panel Collapse state
   const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);
+
+  // Edit Mode state
+  const [editMode, setEditMode] = useState(false);
 
   // Function to validate chat input - check if it's only numbers
   const validateChatInput = (input: string): boolean => {
@@ -687,6 +700,37 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     setIsPresentationModeOpen(true);
   }, []);
 
+  // Set toolbar function refs for header toolbar access
+  useEffect(() => {
+    if (onFigmaIntegration) {
+      onFigmaIntegration.current = handleFigmaIntegration;
+    }
+  }, [onFigmaIntegration, handleFigmaIntegration]);
+
+  useEffect(() => {
+    if (onViewHtmlCode) {
+      onViewHtmlCode.current = handleViewHtmlCode;
+    }
+  }, [onViewHtmlCode, handleViewHtmlCode]);
+
+  useEffect(() => {
+    if (onDownloadWireframe) {
+      onDownloadWireframe.current = handleDownloadWireframe;
+    }
+  }, [onDownloadWireframe, handleDownloadWireframe]);
+
+  useEffect(() => {
+    if (onPresentationMode) {
+      onPresentationMode.current = handlePresentationMode;
+    }
+  }, [onPresentationMode, handlePresentationMode]);
+
+  useEffect(() => {
+    if (onShareUrl) {
+      onShareUrl.current = handleShareUrl;
+    }
+  }, [onShareUrl, handleShareUrl]);
+
   // Toggle left panel collapse
   const handleToggleLeftPanel = useCallback(() => {
     setIsLeftPanelCollapsed(prev => !prev);
@@ -804,15 +848,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
       {/* Left: Chat Interface */}
       <div className={`left-pane ${isLeftPanelCollapsed ? 'collapsed' : ''}`}>
-        {/* Chat Header */}
-        <div className="chat-header">
-          <div className="chat-header-left">
-            <div className="chat-header-title-group">
-              <h2 className="chat-header-title">Designetica AI</h2>
-              <p className="chat-header-subtitle">AI-generated content may be incorrect</p>
-            </div>
-          </div>
-        </div>
         {/* Chat Messages Area */}
         <div className="chat-messages" ref={chatMessagesRef}>
           {conversationHistory.length === 0 && !loading && (
@@ -977,22 +1012,16 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       <div className={`right-pane ${isLeftPanelCollapsed ? 'expanded' : ''}`}>
         {(htmlWireframe || wireframePages.length > 0) ? (
           <div className="wireframe-panel">
-            <CompactToolbar
-              onFigmaIntegration={handleFigmaIntegration}
-              onSave={enhancedOnSave}
-              onOpenLibrary={handleOpenLibrary}
-              onViewHtmlCode={handleViewHtmlCode}
-              onPresentationMode={handlePresentationMode}
-              onShareUrl={handleShareUrl}
-              onDownloadWireframe={handleDownloadWireframe}
-            />
-
             {/* Always show PageNavigation when we have a wireframe */}
             <PageNavigation
               pages={wireframePages}
               currentPageId={currentPageId}
               onPageSwitch={handlePageSwitch}
               onAddPage={handleAddPages}
+              onOpenLibrary={handleOpenLibrary}
+              onSave={enhancedOnSave}
+              editMode={editMode}
+              onEditModeChange={setEditMode}
             />
             <div className="wireframe-container">
               {/* Status bar removed for cleaner presentation */}
@@ -1015,6 +1044,8 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                   }}
                   onNavigateToPage={handlePageSwitch}
                   availablePages={wireframePages}
+                  editMode={editMode}
+                  onEditModeChange={setEditMode}
                 />
               </div>
             </div>

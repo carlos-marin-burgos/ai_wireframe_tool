@@ -12,6 +12,8 @@ interface MouseDragDropProps {
         description: string;
         type: 'page' | 'modal' | 'component';
     }>;
+    editMode?: boolean;
+    onEditModeChange?: (editMode: boolean) => void;
 }
 
 interface DragState {
@@ -28,7 +30,9 @@ const MouseDragDrop: React.FC<MouseDragDropProps> = ({
     htmlContent,
     onUpdateHtml,
     onNavigateToPage,
-    availablePages
+    availablePages,
+    editMode: externalEditMode,
+    onEditModeChange
 }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const dragStateRef = useRef<DragState>({
@@ -40,8 +44,25 @@ const MouseDragDrop: React.FC<MouseDragDropProps> = ({
         offsetY: 0
     });
 
-    const [editMode, setEditMode] = useState(false);
+    const [editMode, setEditMode] = useState(externalEditMode ?? false);
     const editModeManuallySetRef = useRef(false);
+    const dragTimerRef = useRef<number | null>(null);
+    const [editingElement, setEditingElement] = useState<HTMLElement | null>(null);
+    const [editingText, setEditingText] = useState<string>('');
+
+    // Sync external edit mode with internal state (only when external mode changes)
+    React.useEffect(() => {
+        if (externalEditMode !== undefined && externalEditMode !== editMode) {
+            setEditMode(externalEditMode);
+        }
+    }, [externalEditMode]); // Removed editMode from dependencies to prevent circular updates
+
+    // Notify parent of edit mode changes (only when internal mode changes and differs from external)
+    React.useEffect(() => {
+        if (onEditModeChange && editMode !== externalEditMode) {
+            onEditModeChange(editMode);
+        }
+    }, [editMode]); // Removed externalEditMode and onEditModeChange from dependencies
 
     // Clean HTML content
     const cleanHtmlContent = React.useMemo(() => {
@@ -94,7 +115,7 @@ const MouseDragDrop: React.FC<MouseDragDropProps> = ({
             setEditMode(true);
             showEditModeNotification();
         }
-    }, [cleanHtmlContent, editMode]);
+    }, [cleanHtmlContent]); // Removed editMode from dependencies to prevent infinite loops
 
     const showEditModeNotification = useCallback(() => {
         const notification = document.createElement('div');
@@ -127,6 +148,155 @@ const MouseDragDrop: React.FC<MouseDragDropProps> = ({
         document.body.appendChild(notification);
         setTimeout(() => notification.remove(), 5000);
     }, []);
+
+    // Inline text editing functions
+    const startInlineEdit = useCallback((element: HTMLElement) => {
+        if (!editMode) return;
+
+        // Find editable text content
+        let textContent = '';
+        if (element.tagName === 'BUTTON') {
+            textContent = element.textContent || '';
+        } else if (element.tagName === 'INPUT') {
+            textContent = (element as HTMLInputElement).placeholder || (element as HTMLInputElement).value || '';
+        } else if (element.tagName === 'LABEL') {
+            textContent = element.textContent || '';
+        } else {
+            // For other elements, try to find the main text content
+            const textNodes = Array.from(element.childNodes).filter(node => node.nodeType === Node.TEXT_NODE);
+            if (textNodes.length > 0) {
+                textContent = textNodes[0].textContent || '';
+            } else {
+                textContent = element.textContent || '';
+            }
+        }
+
+        setEditingElement(element);
+        setEditingText(textContent.trim());
+
+        // Add editing highlight
+        element.classList.add('inline-editing');
+
+        // Create and show text input overlay
+        const rect = element.getBoundingClientRect();
+        const containerRect = containerRef.current?.getBoundingClientRect();
+
+        if (containerRect) {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = textContent.trim();
+            input.className = 'inline-edit-input';
+            input.style.cssText = `
+                position: absolute;
+                left: ${rect.left - containerRect.left}px;
+                top: ${rect.top - containerRect.top}px;
+                width: ${rect.width}px;
+                height: ${rect.height}px;
+                font-size: ${window.getComputedStyle(element).fontSize};
+                font-family: ${window.getComputedStyle(element).fontFamily};
+                font-weight: ${window.getComputedStyle(element).fontWeight};
+                color: ${window.getComputedStyle(element).color};
+                background: white;
+                border: 2px solid #007bff;
+                border-radius: 4px;
+                padding: ${window.getComputedStyle(element).padding};
+                text-align: ${window.getComputedStyle(element).textAlign};
+                z-index: 10000;
+                box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2);
+            `;
+
+            // Add to container
+            containerRef.current.appendChild(input);
+
+            // Focus and select all text
+            input.focus();
+            input.select();
+
+            // Handle input changes
+            const handleInputChange = (e: Event) => {
+                setEditingText((e.target as HTMLInputElement).value);
+            };
+
+            // Handle key presses
+            const handleKeyPress = (e: KeyboardEvent) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    saveInlineEdit();
+                    input.remove();
+                } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    cancelInlineEdit();
+                    input.remove();
+                }
+            };
+
+            // Handle click outside
+            const handleClickOutside = (e: MouseEvent) => {
+                if (!input.contains(e.target as Node)) {
+                    saveInlineEdit();
+                    input.remove();
+                    document.removeEventListener('click', handleClickOutside);
+                }
+            };
+
+            input.addEventListener('input', handleInputChange);
+            input.addEventListener('keydown', handleKeyPress);
+            setTimeout(() => {
+                document.addEventListener('click', handleClickOutside);
+            }, 100); // Small delay to prevent immediate closing
+        }
+
+        console.log('📝 Starting inline edit for:', element.tagName, 'Text:', textContent);
+    }, [editMode]);
+
+    const saveInlineEdit = useCallback(() => {
+        if (!editingElement || !containerRef.current) return;
+
+        const newText = editingText.trim();
+        if (newText === '') return;
+
+        // Update the element's text content based on its type
+        if (editingElement.tagName === 'BUTTON') {
+            editingElement.textContent = newText;
+        } else if (editingElement.tagName === 'INPUT') {
+            const input = editingElement as HTMLInputElement;
+            if (input.type === 'submit' || input.type === 'button') {
+                input.value = newText;
+            } else {
+                input.placeholder = newText;
+            }
+        } else if (editingElement.tagName === 'LABEL') {
+            editingElement.textContent = newText;
+        } else {
+            // For other elements, replace the text content
+            const textNodes = Array.from(editingElement.childNodes).filter(node => node.nodeType === Node.TEXT_NODE);
+            if (textNodes.length > 0) {
+                textNodes[0].textContent = newText;
+            } else {
+                editingElement.textContent = newText;
+            }
+        }
+
+        // Remove editing highlight
+        editingElement.classList.remove('inline-editing');
+
+        // Update the HTML content
+        onUpdateHtml(containerRef.current.innerHTML);
+
+        // Clear editing state
+        setEditingElement(null);
+        setEditingText('');
+
+        console.log('💾 Saved inline edit:', newText);
+    }, [editingElement, editingText, onUpdateHtml]);
+
+    const cancelInlineEdit = useCallback(() => {
+        if (editingElement) {
+            editingElement.classList.remove('inline-editing');
+        }
+        setEditingElement(null);
+        setEditingText('');
+    }, [editingElement]);
 
     // Apply automatic spacing to all wireframe components
     const applyAutomaticSpacing = useCallback(() => {
@@ -334,7 +504,15 @@ const MouseDragDrop: React.FC<MouseDragDropProps> = ({
 
         if (!draggableElement || !containerRef.current) return;
 
-        e.preventDefault();
+        // Don't prevent default for potential text editing elements to allow double-click
+        const isTextElement = target.tagName === 'BUTTON' ||
+            target.tagName === 'INPUT' ||
+            target.tagName === 'LABEL' ||
+            target.contentEditable === 'true';
+
+        if (!isTextElement) {
+            e.preventDefault();
+        }
 
         const rect = draggableElement.getBoundingClientRect();
         const containerRect = containerRef.current.getBoundingClientRect();
@@ -485,7 +663,55 @@ const MouseDragDrop: React.FC<MouseDragDropProps> = ({
         };
     }, [onUpdateHtml]);
 
-    // Auto-arrange components (can be triggered programmatically)
+    // Handle double-click to start inline editing
+    const handleDoubleClick = useCallback((e: React.MouseEvent) => {
+        console.log('🖱️ Double-click detected!', { editMode });
+
+        // Only allow double-click editing in edit mode
+        if (!editMode) {
+            console.log('❌ Edit mode is off, ignoring double-click');
+            return;
+        }
+
+        const target = e.target as HTMLElement;
+        console.log('🎯 Double-click target:', target.tagName, target);
+
+        // Check if the clicked element or its parent is editable
+        let editableElement = target;
+
+        // Look up the DOM tree to find an editable element (don't require data-draggable for inline editing)
+        while (editableElement && editableElement !== containerRef.current) {
+            console.log('🔍 Checking element:', editableElement.tagName, editableElement);
+            if (editableElement.tagName === 'BUTTON' ||
+                editableElement.tagName === 'INPUT' ||
+                editableElement.tagName === 'LABEL' ||
+                editableElement.tagName === 'A' ||
+                editableElement.tagName === 'SPAN' ||
+                editableElement.tagName === 'P' ||
+                editableElement.tagName === 'H1' ||
+                editableElement.tagName === 'H2' ||
+                editableElement.tagName === 'H3' ||
+                editableElement.tagName === 'H4' ||
+                editableElement.tagName === 'H5' ||
+                editableElement.tagName === 'H6' ||
+                editableElement.contentEditable === 'true' ||
+                editableElement.hasAttribute('data-editable')) {
+                console.log('✅ Found editable element:', editableElement.tagName);
+                break;
+            }
+            editableElement = editableElement.parentElement as HTMLElement;
+        }
+
+        // If we found an editable element, start inline editing
+        if (editableElement && editableElement !== containerRef.current) {
+            console.log('🚀 Starting inline edit for:', editableElement.tagName);
+            e.preventDefault();
+            e.stopPropagation();
+            startInlineEdit(editableElement);
+        } else {
+            console.log('❌ No editable element found');
+        }
+    }, [editMode, startInlineEdit]);    // Auto-arrange components (can be triggered programmatically)
     const autoArrangeComponents = useCallback(() => {
         if (!containerRef.current) return;
 
@@ -783,6 +1009,7 @@ const MouseDragDrop: React.FC<MouseDragDropProps> = ({
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
+            onDoubleClick={handleDoubleClick}
             role="application"
             aria-label="Wireframe editor - drag and drop elements to rearrange"
         >

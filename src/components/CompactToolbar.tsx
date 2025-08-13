@@ -4,21 +4,17 @@ import './CompactToolbar.css';
 
 interface CompactToolbarProps {
     onFigmaIntegration?: () => void;
-    onOpenLibrary?: () => void;
     onViewHtmlCode?: () => void;
     onShareUrl?: () => void;
     onPresentationMode?: () => void;
-    onSave?: () => void;
     onDownloadWireframe?: () => void;
 }
 
 const CompactToolbar: React.FC<CompactToolbarProps> = ({
     onFigmaIntegration,
-    onOpenLibrary,
     onViewHtmlCode,
     onShareUrl,
     onPresentationMode,
-    onSave,
     onDownloadWireframe
 }) => {
     const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
@@ -46,17 +42,6 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
                     onMouseLeave={hideTooltip}
                 >
                     <FiFigma />
-                </button>
-                <button
-                    className="compact-btn"
-                    onClick={() => {
-                        console.log('🔧 DEBUG: Component Library button clicked');
-                        onOpenLibrary?.();
-                    }}
-                    onMouseEnter={(e) => showTooltip(e, "Component Library")}
-                    onMouseLeave={hideTooltip}
-                >
-                    <FiGrid />
                 </button>
                 <button
                     className="compact-btn"
@@ -89,14 +74,6 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
                     onMouseLeave={hideTooltip}
                 >
                     <FiDownload />
-                </button>
-                <button
-                    className="compact-btn"
-                    onClick={onSave}
-                    onMouseEnter={(e) => showTooltip(e, "Save")}
-                    onMouseLeave={hideTooltip}
-                >
-                    <FiSave />
                 </button>
             </div>
 

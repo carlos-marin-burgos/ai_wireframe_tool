@@ -1,8 +1,8 @@
 import React from 'react';
 import { FiLogOut, FiFigma, FiCode, FiShare2, FiMonitor, FiDownload, FiSave } from 'react-icons/fi';
-import './TopNavbar.css';
+import './TopNavbarApp.css';
 
-interface TopNavbarProps {
+interface TopNavbarAppProps {
     onLogoClick?: () => void;
     onLogout?: () => void;
     // Toolbar actions
@@ -14,7 +14,7 @@ interface TopNavbarProps {
     onDownloadWireframe?: () => void;
 }
 
-const TopNavbar: React.FC<TopNavbarProps> = ({
+const TopNavbarApp: React.FC<TopNavbarAppProps> = ({
     onLogoClick,
     onLogout,
     onSave,
@@ -25,12 +25,12 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
     onDownloadWireframe
 }) => {
     return (
-        <nav className="top-nav">
+        <nav className="top-nav-app">
             <div className="navbar-left">
                 <button
                     onClick={onLogoClick}
                     className="navbar-logo-button"
-                    title="Back to Home"
+                    title="Designetica"
                 >
                     <svg width="20" height="20" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M11.5216 0.5H0V11.9067H11.5216V0.5Z" fill="#F26522" />
@@ -40,9 +40,12 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
                     </svg>
                     <span className="navbar-logo-text">Designetica</span>
                 </button>
+                <div className="separator-bar"></div>
+                <img src="/cxsLogo.png" alt="CXS" className="navbar-cxs-logo" />
             </div>
+
             <div className="navbar-right">
-                {/* Moved Toolbar */}
+                {/* Toolbar */}
                 <div className="navbar-toolbar">
                     <button
                         className="navbar-toolbar-btn save-btn"
@@ -88,7 +91,6 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
                     </button>
                 </div>
 
-                {/* Logout and Logo */}
                 <button
                     onClick={onLogout}
                     className="navbar-toolbar-btn logout-btn"
@@ -96,10 +98,9 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
                 >
                     <FiLogOut />
                 </button>
-                <img src="/cxsLogo.png" alt="CXS Logo" className="navbar-cxs-logo" />
             </div>
         </nav>
     );
 };
 
-export default TopNavbar;
+export default TopNavbarApp;

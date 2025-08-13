@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import "./wireframe-styles.css";
 import "./styles/microsoftlearn-card.css";
@@ -7,7 +7,8 @@ import "./styles/suggestion-performance.css";
 import "./styles/atlas-design-system.css";
 import LandingPage from "./components/LandingPage";
 import SplitLayout from "./components/SplitLayout";
-import TopNavbar from "./components/TopNavbar";
+import TopNavbarApp from "./components/TopNavbarApp";
+import TopNavbarLanding from "./components/TopNavbarLanding";
 import SaveDialog from "./components/SaveDialog";
 import LoadDialog from "./components/LoadDialog";
 import Toast from "./components/Toast";
@@ -55,6 +56,54 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   const [isAnalyzingImage, setIsAnalyzingImage] = useState(false);
   const [toasts, setToasts] = useState<ToastData[]>([]);
   const [fastMode, setFastMode] = useState(false);
+
+  // Toolbar function refs
+  const figmaIntegrationRef = useRef<(() => void) | null>(null);
+  const viewHtmlCodeRef = useRef<(() => void) | null>(null);
+  const downloadWireframeRef = useRef<(() => void) | null>(null);
+  const presentationModeRef = useRef<(() => void) | null>(null);
+  const shareUrlRef = useRef<(() => void) | null>(null);
+
+  // Toolbar handler functions for header
+  const handleToolbarFigma = () => {
+    if (figmaIntegrationRef.current) {
+      figmaIntegrationRef.current();
+    } else {
+      console.log('Figma integration function not available');
+    }
+  };
+
+  const handleToolbarHtmlCode = () => {
+    if (viewHtmlCodeRef.current) {
+      viewHtmlCodeRef.current();
+    } else {
+      console.log('HTML code viewer function not available');
+    }
+  };
+
+  const handleToolbarDownload = () => {
+    if (downloadWireframeRef.current) {
+      downloadWireframeRef.current();
+    } else {
+      console.log('Download wireframe function not available');
+    }
+  };
+
+  const handleToolbarPresentation = () => {
+    if (presentationModeRef.current) {
+      presentationModeRef.current();
+    } else {
+      console.log('Presentation mode function not available');
+    }
+  };
+
+  const handleToolbarShare = () => {
+    if (shareUrlRef.current) {
+      shareUrlRef.current();
+    } else {
+      console.log('Share URL function not available');
+    }
+  };
 
   // Performance monitoring
   const performanceMonitor = usePerformanceMonitor();
@@ -998,13 +1047,28 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
       console.error('Error generating demo wireframe:', error);
       showToast('Failed to generate demo wireframe', 'error');
     }
-  }; return (
-    <div className={`app-content with-navbar`}>
-      {/* Always show Designetica TopNavbar */}
-      <TopNavbar
-        onLogoClick={handleBackToLanding}
-        onLogout={onLogout}
-      />
+  };
+
+  return (
+    <div className={`app-content`}>
+      {/* Conditional TopNavbar based on landing page state */}
+      {showLandingPage && !htmlWireframe ? (
+        <TopNavbarLanding
+          onLogoClick={handleBackToLanding}
+          onLogout={onLogout}
+        />
+      ) : (
+        <TopNavbarApp
+          onLogoClick={handleBackToLanding}
+          onLogout={onLogout}
+          onSave={() => setShowSaveDialog(true)}
+          onFigmaIntegration={handleToolbarFigma}
+          onViewHtmlCode={handleToolbarHtmlCode}
+          onShareUrl={handleToolbarShare}
+          onPresentationMode={handleToolbarPresentation}
+          onDownloadWireframe={handleToolbarDownload}
+        />
+      )}
 
       {showLandingPage && !htmlWireframe ? (
         <LandingPage
@@ -1069,6 +1133,11 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           onAddComponent={handleAddComponent}
           onGeneratePageContent={handleGeneratePageContent}
           onFigmaExport={handleFigmaExport}
+          onFigmaIntegration={figmaIntegrationRef}
+          onViewHtmlCode={viewHtmlCodeRef}
+          onDownloadWireframe={downloadWireframeRef}
+          onPresentationMode={presentationModeRef}
+          onShareUrl={shareUrlRef}
         />
       )}
 

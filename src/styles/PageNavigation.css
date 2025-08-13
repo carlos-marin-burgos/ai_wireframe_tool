@@ -283,3 +283,92 @@
     margin: 0 1px;
   }
 }
+
+/* New Icon Toolbar Styles */
+.page-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.toolbar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  position: relative;
+}
+
+.toolbar-btn:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+  color: #111827;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.toolbar-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Save button special styling */
+.toolbar-btn.save-btn {
+  background: #0078d4;
+  border-color: #0078d4;
+  color: #ffffff;
+}
+
+.toolbar-btn.save-btn:hover {
+  background: #106ebe;
+  border-color: #106ebe;
+  color: #ffffff;
+}
+
+/* Edit mode toggle */
+.toolbar-btn.edit-toggle.active {
+  background: #0078d4;
+  border-color: #0078d4;
+  color: #ffffff;
+}
+
+.toolbar-btn.edit-toggle.active:hover {
+  background: #106ebe;
+  border-color: #106ebe;
+  color: #ffffff;
+}
+
+/* Responsive toolbar */
+@media (max-width: 768px) {
+  .toolbar-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+
+  .page-toolbar {
+    gap: 2px;
+  }
+}
+
+@media (max-width: 480px) {
+  .breadcrumb-bar {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .page-toolbar {
+    justify-content: center;
+    gap: 8px;
+  }
+}

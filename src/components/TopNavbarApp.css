@@ -1,0 +1,166 @@
+/* TopNavbar for App - Blended with page content */
+.top-nav-app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: transparent;
+  border-bottom: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 1000;
+  box-shadow: none;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.navbar-logo-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.navbar-logo-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.navbar-logo-text {
+  font-family: "Orbitron", "Segoe UI", -apple-system, BlinkMacSystemFont,
+    sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #323130;
+  letter-spacing: -0.02em;
+}
+
+.separator-bar {
+  width: 1px;
+  height: 24px;
+  background-color: #d2d0ce;
+  margin: 0 8px;
+}
+
+.navbar-cxs-logo {
+  height: 24px;
+  width: auto;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.navbar-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navbar-toolbar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #605e5c;
+  font-size: 18px;
+}
+
+.navbar-toolbar-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #323130;
+  transform: scale(1.05);
+}
+
+.navbar-toolbar-btn:active {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(0.95);
+}
+
+/* Save button special styling */
+.navbar-toolbar-btn.save-btn {
+  color: #0078d4;
+  background: rgba(0, 120, 212, 0.1);
+}
+
+.navbar-toolbar-btn.save-btn:hover {
+  background: rgba(0, 120, 212, 0.2);
+  color: #106ebe;
+  transform: scale(1.05);
+}
+
+/* Logout button styling */
+.navbar-toolbar-btn.logout-btn {
+  color: #ffffff;
+  background: rgba(209, 52, 56, 0.8);
+  margin-left: 8px;
+  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.navbar-toolbar-btn.logout-btn:hover {
+  background: rgba(209, 52, 56, 0.9);
+  color: #ffffff;
+  transform: scale(1.05);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Microsoft Fluent Design focus styles */
+.navbar-toolbar-btn:focus {
+  outline: 2px solid #0078d4;
+  outline-offset: 2px;
+  border-color: transparent;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .top-nav-app {
+    padding: 0 16px;
+  }
+
+  .navbar-logo-text {
+    font-size: 18px;
+  }
+
+  .navbar-toolbar {
+    gap: 4px;
+    padding: 0 8px;
+  }
+
+  .navbar-toolbar-btn {
+    width: 32px;
+    height: 32px;
+  }
+}

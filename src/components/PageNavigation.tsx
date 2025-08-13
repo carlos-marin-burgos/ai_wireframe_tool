@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiPlus } from 'react-icons/fi';
+import { FiPlus, FiGrid, FiSave, FiEdit3, FiEye } from 'react-icons/fi';
 import '../styles/PageNavigation.css';
 
 interface Page {
@@ -13,14 +13,22 @@ interface PageNavigationProps {
     pages: Page[];
     currentPageId: string | null;
     onPageSwitch: (pageId: string) => void;
-    onAddPage?: () => void; // optional inline add handler
+    onAddPage?: () => void;
+    onOpenLibrary?: () => void;
+    onSave?: () => void;
+    editMode?: boolean;
+    onEditModeChange?: (editMode: boolean) => void;
 }
 
 const PageNavigation: React.FC<PageNavigationProps> = ({
     pages,
     currentPageId,
     onPageSwitch,
-    onAddPage
+    onAddPage,
+    onOpenLibrary,
+    onSave,
+    editMode = false,
+    onEditModeChange
 }) => {
     console.log('🔥 PageNavigation render with:', {
         pages: pages.map(p => ({ id: p.id, name: p.name })),
@@ -34,7 +42,36 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
     };
 
     if (!pages || pages.length === 0) {
-        return null; // Don't show navigation when no pages
+        return (
+            <div className="page-navigation breadcrumb-style">
+                <div className="breadcrumb-bar">
+                    <div className="breadcrumb-left">
+                        <span className="no-pages-message">No pages yet</span>
+                    </div>
+
+                    {/* Show minimal toolbar even when no pages */}
+                    <div className="page-toolbar">
+                        <button
+                            className="toolbar-btn"
+                            onClick={onAddPage}
+                            title="Add new page"
+                            aria-label="Add Page"
+                        >
+                            <FiPlus />
+                        </button>
+
+                        <button
+                            className="toolbar-btn"
+                            onClick={onOpenLibrary}
+                            title="Component Library"
+                            aria-label="Component Library"
+                        >
+                            <FiGrid />
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     return (
@@ -58,18 +95,36 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         ))}
                     </div>
                 </div>
-                {onAddPage && (
-                    <div className="breadcrumb-actions right">
-                        <button
-                            className="add-pages-button secondary"
-                            onClick={onAddPage}
-                            title="Add a new page"
-                            aria-label="Add Page"
-                        >
-                            <FiPlus style={{ marginRight: 4 }} /> Add Page
-                        </button>
-                    </div>
-                )}
+
+                {/* New Icon Toolbar */}
+                <div className="page-toolbar">
+                    <button
+                        className="toolbar-btn"
+                        onClick={onAddPage}
+                        title="Add new page"
+                        aria-label="Add Page"
+                    >
+                        <FiPlus />
+                    </button>
+
+                    <button
+                        className="toolbar-btn"
+                        onClick={onOpenLibrary}
+                        title="Component Library"
+                        aria-label="Component Library"
+                    >
+                        <FiGrid />
+                    </button>
+
+                    <button
+                        className={`toolbar-btn edit-toggle ${editMode ? 'active' : ''}`}
+                        onClick={() => onEditModeChange?.(!editMode)}
+                        title={editMode ? "Exit edit mode" : "Enter edit mode"}
+                        aria-label={editMode ? "Exit edit mode" : "Enter edit mode"}
+                    >
+                        {editMode ? <FiEye /> : <FiEdit3 />}
+                    </button>
+                </div>
             </div>
         </div>
     );

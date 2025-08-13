@@ -684,3 +684,107 @@
   animation: pulseInsertionZone 1.5s ease-in-out infinite;
   box-shadow: 0 2px 8px rgba(0, 123, 255, 0.4);
 }
+
+/* Inline Editing Styles */
+.edit-mode .mouse-drag-drop button,
+.edit-mode .mouse-drag-drop input,
+.edit-mode .mouse-drag-drop label,
+.edit-mode .mouse-drag-drop a,
+.edit-mode .mouse-drag-drop span,
+.edit-mode .mouse-drag-drop p,
+.edit-mode .mouse-drag-drop h1,
+.edit-mode .mouse-drag-drop h2,
+.edit-mode .mouse-drag-drop h3,
+.edit-mode .mouse-drag-drop h4,
+.edit-mode .mouse-drag-drop h5,
+.edit-mode .mouse-drag-drop h6 {
+  cursor: text !important;
+  position: relative;
+}
+
+.edit-mode .mouse-drag-drop button:hover,
+.edit-mode .mouse-drag-drop input:hover,
+.edit-mode .mouse-drag-drop label:hover,
+.edit-mode .mouse-drag-drop a:hover,
+.edit-mode .mouse-drag-drop span:hover,
+.edit-mode .mouse-drag-drop p:hover,
+.edit-mode .mouse-drag-drop h1:hover,
+.edit-mode .mouse-drag-drop h2:hover,
+.edit-mode .mouse-drag-drop h3:hover,
+.edit-mode .mouse-drag-drop h4:hover,
+.edit-mode .mouse-drag-drop h5:hover,
+.edit-mode .mouse-drag-drop h6:hover {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+  background-color: rgba(0, 123, 255, 0.05);
+}
+
+.inline-editing {
+  outline: 2px solid #007bff !important;
+  outline-offset: 2px;
+  background-color: rgba(0, 123, 255, 0.1) !important;
+  box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2) !important;
+  cursor: text !important;
+}
+
+.inline-editing:focus {
+  outline: 2px solid #0056b3 !important;
+  box-shadow: 0 0 0 4px rgba(0, 86, 179, 0.3) !important;
+}
+
+/* Editing hint tooltip */
+.edit-mode .mouse-drag-drop button::after,
+.edit-mode .mouse-drag-drop input::after,
+.edit-mode .mouse-drag-drop label::after,
+.edit-mode .mouse-drag-drop a::after,
+.edit-mode .mouse-drag-drop span::after,
+.edit-mode .mouse-drag-drop p::after,
+.edit-mode .mouse-drag-drop h1::after,
+.edit-mode .mouse-drag-drop h2::after,
+.edit-mode .mouse-drag-drop h3::after,
+.edit-mode .mouse-drag-drop h4::after,
+.edit-mode .mouse-drag-drop h5::after,
+.edit-mode .mouse-drag-drop h6::after {
+  content: "Double-click to edit";
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 1003;
+}
+
+.edit-mode .mouse-drag-drop button:hover::after,
+.edit-mode .mouse-drag-drop input:hover::after,
+.edit-mode .mouse-drag-drop label:hover::after,
+.edit-mode .mouse-drag-drop a:hover::after,
+.edit-mode .mouse-drag-drop span:hover::after,
+.edit-mode .mouse-drag-drop p:hover::after,
+.edit-mode .mouse-drag-drop h1:hover::after,
+.edit-mode .mouse-drag-drop h2:hover::after,
+.edit-mode .mouse-drag-drop h3:hover::after,
+.edit-mode .mouse-drag-drop h4:hover::after,
+.edit-mode .mouse-drag-drop h5:hover::after,
+.edit-mode .mouse-drag-drop h6:hover::after {
+  opacity: 1;
+}
+
+/* Inline edit input styling */
+.inline-edit-input {
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  color: inherit !important;
+  text-align: inherit !important;
+  outline: none !important;
+  margin: 0 !important;
+  line-height: inherit !important;
+}
