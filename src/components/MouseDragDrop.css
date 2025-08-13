@@ -2,7 +2,7 @@
 .mouse-drag-drop {
   position: relative;
   width: 100%;
-  min-height: calc(100vh - 300px); /* Reduced height to allow bottom spacing */
+  min-height: 100%; /* Fill the container completely */
   height: auto;
   padding: 20px;
   margin-bottom: 10px; /* Added bottom margin to prevent cut-off */

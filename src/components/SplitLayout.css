@@ -219,23 +219,14 @@
   flex: 1;
   overflow: visible; /* Allow content to expand */
   padding: 20px;
-  padding-bottom: 0px; /* Add extra bottom padding to prevent cut-off */
-  height: calc(100vh - 120px); /* Full height minus nav and margins */
+  padding-bottom: 20px; /* Add extra bottom padding to prevent cut-off */
+  height: 100%; /* Fill the available flex space completely */
   background: #fafafa;
-}
-
-.wireframe-panel {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-  overflow: visible; /* Allow content to expand */
 }
 
 .wireframe-content {
   width: 100%;
   height: 100%;
-  min-height: calc(100vh - 200px); /* Ensure it fills available space */
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -245,9 +236,7 @@
 }
 
 .wireframe-panel {
-  height: calc(
-    100vh - 160px
-  ); /* Full viewport minus nav and extra bottom margin */
+  height: calc(100% - 100px); /* Reduced bottom margin for better balance */
   width: calc(100% - 60px); /* Account for margins with extra right margin */
   background: #ffffff;
   border-radius: 8px;
@@ -255,7 +244,7 @@
   overflow: auto; /* Changed from hidden to auto to prevent cut-off */
   display: flex;
   flex-direction: column;
-  margin: 20px 40px 40px 20px; /* Added extra bottom margin */
+  margin: 20px 40px 80px 20px; /* Reduced bottom margin from 100px to 80px */
 }
 
 /* AI Assistant main container - Microsoft Learn style */
@@ -1456,9 +1445,12 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 
   /* Ensure wireframe container takes full width */
   .wireframe-container {
+    flex: 1; /* Maintain flex behavior on mobile */
+    height: 100%; /* Maintain full height on mobile */
     padding: 10px;
-    padding-bottom: 30px; /* Add extra bottom padding for mobile */
+    padding-bottom: 0px; /* Add extra bottom padding for mobile */
     position: relative;
+    background: #fafafa; /* Maintain background consistency */
   }
 
   .tab-content {

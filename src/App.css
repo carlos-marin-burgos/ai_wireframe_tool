@@ -862,7 +862,7 @@ body {
   overflow: hidden;
   box-shadow: none; /* Remove shadow for subtlety */
   min-height: 500px;
-  margin-bottom: 40px; /* Add bottom margin to prevent cut-off */
+  margin-bottom: 0px; /* Add bottom margin to prevent cut-off */
   display: flex;
   flex-direction: column;
 }
