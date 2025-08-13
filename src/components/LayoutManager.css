@@ -1,0 +1,297 @@
+/* Layout Manager Styles */
+.layout-manager {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Edit Mode Controls */
+.edit-mode-controls {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: linear-gradient(135deg, #0078d4, #005a9e);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  margin-bottom: 10px;
+}
+
+.control-panel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.auto-arrange-btn,
+.reset-layout-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.auto-arrange-btn:hover,
+.reset-layout-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.edit-mode-indicator {
+  margin-left: auto;
+  background: rgba(16, 124, 16, 0.9);
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Wireframe Content States */
+.wireframe-content.view-mode {
+  pointer-events: auto;
+  user-select: auto;
+}
+
+.wireframe-content.edit-mode {
+  pointer-events: none; /* Disable interactions with original content in edit mode */
+  user-select: none;
+  position: relative;
+}
+
+.wireframe-content.edit-mode::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 120, 212, 0.05);
+  pointer-events: none;
+  border-radius: 4px;
+}
+
+/* Component Overlay */
+.component-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.draggable-overlay {
+  pointer-events: auto;
+  transition: all 0.15s ease;
+  border-radius: 4px;
+  position: absolute;
+  left: var(--comp-x, 0);
+  top: var(--comp-y, 0);
+  width: var(--comp-width, 200px);
+  height: var(--comp-height, 40px);
+  z-index: var(--comp-z, 1);
+  cursor: grab;
+}
+
+.draggable-overlay.generated {
+  border: 2px dashed #0078d4;
+  background-color: rgba(0, 120, 212, 0.1);
+}
+
+.draggable-overlay.added {
+  border: 2px solid #107c10;
+  background-color: rgba(16, 124, 16, 0.1);
+}
+
+.draggable-overlay:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.draggable-overlay.dragging {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  z-index: 1000;
+  cursor: grabbing;
+}
+
+.draggable-overlay:not(.dragging) {
+  cursor: grab;
+}
+
+/* Component Labels */
+.component-label {
+  position: absolute;
+  top: -25px;
+  left: 0;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.draggable-overlay:hover .component-label,
+.draggable-overlay.dragging .component-label {
+  opacity: 1;
+}
+
+/* Snap Guides */
+.snap-guides {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.snap-line {
+  position: absolute;
+  background: #ff6b35;
+  opacity: 0.8;
+  animation: snapPulse 1s ease-in-out infinite;
+}
+
+.snap-line.vertical {
+  width: 2px;
+  height: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.snap-line.horizontal {
+  height: 2px;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@keyframes snapPulse {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* Edit Mode Notification */
+.edit-mode-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #107c10, #0b5394);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  z-index: 10000;
+  animation: slideInNotification 0.3s ease-out;
+  max-width: 280px;
+}
+
+.notification-content {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+@keyframes slideInNotification {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .control-panel {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .auto-arrange-btn,
+  .reset-layout-btn {
+    justify-content: center;
+  }
+
+  .edit-mode-indicator {
+    margin-left: 0;
+    text-align: center;
+  }
+
+  .edit-mode-notification {
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+}
+
+/* Animation States */
+.layout-manager.transitioning .draggable-overlay {
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Accessibility */
+.draggable-overlay:focus {
+  outline: 2px solid #005a9e;
+  outline-offset: 2px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .draggable-overlay.generated {
+    border-color: #000;
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+
+  .draggable-overlay.added {
+    border-color: #000;
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+
+  .component-label {
+    background: #000;
+    color: #fff;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .draggable-overlay,
+  .auto-arrange-btn,
+  .reset-layout-btn,
+  .component-label,
+  .snap-line {
+    transition: none;
+    animation: none;
+  }
+}

@@ -14,6 +14,187 @@
   transition: all 0.2s ease;
 }
 
+/* Edit Mode Controls */
+.edit-mode-controls {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: linear-gradient(135deg, #0078d4, #005a9e);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  margin: -20px -20px 10px -20px;
+}
+
+.control-panel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.auto-arrange-btn,
+.reset-layout-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.auto-arrange-btn:hover,
+.reset-layout-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.edit-mode-indicator {
+  margin-left: auto;
+  background: rgba(16, 124, 16, 0.9);
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Mode-specific styling */
+.mouse-drag-drop.view-mode {
+  border-color: #dee2e6;
+}
+
+.mouse-drag-drop.edit-mode {
+  border-color: #0078d4;
+  background: #f0f7ff;
+}
+
+.mouse-drag-drop.edit-mode::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 120, 212, 0.03);
+  pointer-events: none;
+  border-radius: 6px;
+}
+
+/* Enhanced component highlighting in edit mode */
+.mouse-drag-drop.edit-mode .form-group,
+.mouse-drag-drop.edit-mode .form-submit,
+.mouse-drag-drop.edit-mode .card,
+.mouse-drag-drop.edit-mode .hero-section,
+.mouse-drag-drop.edit-mode .nav-section,
+.mouse-drag-drop.edit-mode [data-user-added="true"] {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.mouse-drag-drop.edit-mode .form-group:hover,
+.mouse-drag-drop.edit-mode .form-submit:hover,
+.mouse-drag-drop.edit-mode .card:hover,
+.mouse-drag-drop.edit-mode .hero-section:hover,
+.mouse-drag-drop.edit-mode .nav-section:hover,
+.mouse-drag-drop.edit-mode [data-user-added="true"]:hover {
+  outline: 2px dashed #0078d4;
+  outline-offset: 2px;
+  background-color: rgba(0, 120, 212, 0.05);
+  cursor: grab;
+}
+
+.mouse-drag-drop.edit-mode .form-group:hover::before,
+.mouse-drag-drop.edit-mode .form-submit:hover::before,
+.mouse-drag-drop.edit-mode .card:hover::before,
+.mouse-drag-drop.edit-mode .hero-section:hover::before,
+.mouse-drag-drop.edit-mode .nav-section:hover::before,
+.mouse-drag-drop.edit-mode [data-user-added="true"]:hover::before {
+  content: "🤖 AI Generated - Click & drag to move";
+  position: absolute;
+  top: -25px;
+  left: 0;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 1001;
+}
+
+.mouse-drag-drop.edit-mode [data-user-added="true"]:hover::before {
+  content: "📚 Library Component - Click & drag to move";
+}
+
+/* Edit Mode Notification */
+.edit-mode-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #107c10, #0b5394);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  z-index: 10000;
+  animation: slideInNotification 0.3s ease-out;
+  max-width: 280px;
+}
+
+.notification-content {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+@keyframes slideInNotification {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive Design for Edit Controls */
+@media (max-width: 768px) {
+  .control-panel {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .auto-arrange-btn,
+  .reset-layout-btn {
+    justify-content: center;
+  }
+
+  .edit-mode-indicator {
+    margin-left: 0;
+    text-align: center;
+  }
+
+  .edit-mode-notification {
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+}
+
 /* Active dragging state */
 .mouse-drag-drop.dragging-active {
   border-color: #007bff;
@@ -287,4 +468,62 @@
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+}
+
+/* Auto-arrange animation effects */
+.mouse-drag-drop [data-draggable="true"],
+.mouse-drag-drop [data-user-added="true"],
+.mouse-drag-drop .form-group,
+.mouse-drag-drop .form-submit,
+.mouse-drag-drop .card,
+.mouse-drag-drop .hero-section,
+.mouse-drag-drop .nav-section,
+.mouse-drag-drop button:not(.control-panel button) {
+  transition: transform 0.3s ease, outline 0.2s ease, margin-bottom 0.3s ease !important;
+}
+
+/* Success notification for auto-arrange */
+.arrange-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #107c10, #0b5394);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  z-index: 10000;
+  animation: slideInNotification 0.3s ease-out;
+  max-width: 280px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.arrange-notification .notification-content {
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Enhanced auto-arrange visual feedback */
+.auto-arranging {
+  outline: 2px solid #0078d4 !important;
+  outline-offset: 2px !important;
+  transition: transform 0.3s ease, outline 0.2s ease !important;
+}
+
+/* Pulse effect for components being arranged */
+@keyframes arrangeHighlight {
+  0% {
+    outline-color: #0078d4;
+  }
+  50% {
+    outline-color: #107c10;
+  }
+  100% {
+    outline-color: #0078d4;
+  }
+}
+
+.auto-arranging {
+  animation: arrangeHighlight 0.5s ease !important;
 }
