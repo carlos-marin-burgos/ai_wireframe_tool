@@ -41,6 +41,7 @@ const MouseDragDrop: React.FC<MouseDragDropProps> = ({
     });
 
     const [editMode, setEditMode] = useState(false);
+    const editModeManuallySetRef = useRef(false);
 
     // Clean HTML content
     const cleanHtmlContent = React.useMemo(() => {
@@ -62,7 +63,8 @@ const MouseDragDrop: React.FC<MouseDragDropProps> = ({
     useEffect(() => {
         if (!containerRef.current) return;
 
-        const elements = containerRef.current.querySelectorAll('.form-group, .form-submit, .card, .hero-section, .nav-section, button:not(.control-panel button), [data-user-added="true"]');
+        // Only make user-added components draggable, not original wireframe elements
+        const elements = containerRef.current.querySelectorAll('[data-user-added="true"]');
 
         elements.forEach((element) => {
             const el = element as HTMLElement;
@@ -75,12 +77,20 @@ const MouseDragDrop: React.FC<MouseDragDropProps> = ({
             }
         });
 
+        // Also ensure original wireframe elements are NOT draggable
+        const originalElements = containerRef.current.querySelectorAll('.form-group, .form-submit, .card, .hero-section, .nav-section, button:not([data-user-added="true"]):not(.control-panel button)');
+        originalElements.forEach((element) => {
+            const el = element as HTMLElement;
+            el.removeAttribute('data-draggable');
+            el.style.cursor = 'default';
+        });
+
         // Apply automatic spacing to all wireframe components
         applyAutomaticSpacing();
 
-        // Auto-activate edit mode if user-added components exist
+        // Auto-activate edit mode if user-added components exist (but don't override manual setting)
         const userAddedElements = containerRef.current.querySelectorAll('[data-user-added="true"]');
-        if (userAddedElements.length > 0 && !editMode) {
+        if (userAddedElements.length > 0 && !editMode && !editModeManuallySetRef.current) {
             setEditMode(true);
             showEditModeNotification();
         }
@@ -431,17 +441,23 @@ const MouseDragDrop: React.FC<MouseDragDropProps> = ({
                     // Insert element at the specified position
                     insertElementAt(dragState.dragElement, dragState.insertAfter!);
 
-                    // Apply automatic spacing after insertion
+                    // After insertion, rearrange all components to ensure proper flow
                     setTimeout(() => {
-                        applyAutomaticSpacing();
+                        // Apply smart rearrangement to all components after insertion
+                        smartRearrangeAfterInsertion(dragState.dragElement);
 
-                        // Update HTML content after insertion and spacing are complete
+                        // Then apply automatic spacing
                         setTimeout(() => {
-                            if (containerRef.current) {
-                                onUpdateHtml(containerRef.current.innerHTML);
-                            }
-                        }, 200);
-                    }, 100);
+                            applyAutomaticSpacing();
+
+                            // Update HTML content after insertion and spacing are complete
+                            setTimeout(() => {
+                                if (containerRef.current) {
+                                    onUpdateHtml(containerRef.current.innerHTML);
+                                }
+                            }, 200);
+                        }, 100);
+                    }, 50);
                 } else {
                     // Trigger smart rearrangement to make space for the dropped element
                     smartRearrangeComponents(dragState.dragElement);
@@ -568,6 +584,40 @@ const MouseDragDrop: React.FC<MouseDragDropProps> = ({
         });
 
         console.log('🔄 Components rearranged into natural flow');
+    }, []);
+
+    // Smart rearrangement specifically for insertions between components
+    const smartRearrangeAfterInsertion = useCallback((insertedElement: HTMLElement) => {
+        if (!containerRef.current) return;
+
+        // Get all draggable elements (user-added components)
+        const allElements = Array.from(containerRef.current.querySelectorAll('[data-draggable="true"]')) as HTMLElement[];
+
+        if (allElements.length <= 1) return; // Nothing to rearrange
+
+        console.log('🔄 Rearranging components after insertion');
+
+        // Reset all positioning to allow natural flow
+        allElements.forEach(el => {
+            if (el !== insertedElement) {
+                el.style.position = 'relative';
+                el.style.left = '';
+                el.style.top = '';
+                el.style.transform = '';
+                el.style.transition = 'all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)';
+                el.style.marginBottom = '15px';
+            }
+        });
+
+        // Ensure the inserted element flows naturally
+        insertedElement.style.position = 'relative';
+        insertedElement.style.left = '';
+        insertedElement.style.top = '';
+        insertedElement.style.transform = '';
+        insertedElement.style.transition = 'all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)';
+        insertedElement.style.marginBottom = '15px';
+
+        console.log('✅ Components rearranged for natural flow');
     }, []);
 
     // Smart rearrangement: move other components to make space for the dragged element
@@ -742,7 +792,13 @@ const MouseDragDrop: React.FC<MouseDragDropProps> = ({
                     <input
                         type="checkbox"
                         checked={editMode}
-                        onChange={(e) => setEditMode(e.target.checked)}
+                        onChange={(e) => {
+                            setEditMode(e.target.checked);
+                            // Mark that edit mode was manually set
+                            if (containerRef.current) {
+                                containerRef.current.setAttribute('data-edit-mode-manually-set', 'true');
+                            }
+                        }}
                         className="edit-mode-checkbox"
                     />
                     <span className="edit-mode-slider"></span>

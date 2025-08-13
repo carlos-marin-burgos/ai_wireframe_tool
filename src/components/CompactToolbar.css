@@ -5,7 +5,7 @@
   justify-content: flex-end; /* Move buttons to the right */
   background: #ffffff;
   border-bottom: 1px solid #e1dfdd;
-  padding: 8px 12px;
+  padding: 6px 12px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
   position: relative; /* Changed from sticky to relative */
   top: 0;

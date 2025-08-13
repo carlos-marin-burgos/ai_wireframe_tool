@@ -192,7 +192,7 @@
   flex: 1;
   margin-left: 380px;
   padding: 0;
-  padding-top: 30px;
+  padding-top: 10px;
   background: radial-gradient(
       circle at 20% 80%,
       rgba(255, 255, 255, 0.15) 0%,
@@ -214,12 +214,69 @@
   scroll-behavior: smooth;
 }
 
+/* Panel Toggle Button */
+.panel-toggle-btn {
+  position: fixed;
+  top: 50%;
+  left: 380px;
+  transform: translateY(-50%);
+  z-index: 1000;
+  background: #ffffff;
+  border: 1px solid #e1e5e9;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+.panel-toggle-btn:hover {
+  background: #f8f9fa;
+  border-color: #d1d5db;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.panel-toggle-btn svg {
+  width: 16px;
+  height: 16px;
+  color: #605e5c;
+}
+
+/* Collapsed Left Panel Styles */
+.split-layout.left-panel-collapsed .left-pane {
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.split-layout.left-panel-collapsed .panel-toggle-btn {
+  left: 20px;
+}
+
+.split-layout.left-panel-collapsed .right-pane {
+  margin-left: 0;
+  width: 100%;
+}
+
+/* Smooth transitions for panel collapse */
+.left-pane {
+  transition: all 0.3s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+.right-pane {
+  transition: all 0.3s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
 /* Wireframe container styles */
 .wireframe-container {
   flex: 1;
   overflow: visible; /* Allow content to expand */
-  padding: 20px;
-  padding-bottom: 20px; /* Add extra bottom padding to prevent cut-off */
+  padding: 15px;
+  padding-bottom: 15px; /* Reduced padding for more wireframe space */
   height: 100%; /* Fill the available flex space completely */
   background: #fafafa;
 }
@@ -230,13 +287,13 @@
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 20px;
+  padding: 15px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   overflow: auto;
 }
 
 .wireframe-panel {
-  height: calc(100% - 100px); /* Reduced bottom margin for better balance */
+  height: calc(100% - 80px); /* Reduced from 100px for more wireframe space */
   width: calc(100% - 60px); /* Account for margins with extra right margin */
   background: #ffffff;
   border-radius: 8px;
@@ -244,7 +301,7 @@
   overflow: auto; /* Changed from hidden to auto to prevent cut-off */
   display: flex;
   flex-direction: column;
-  margin: 20px 40px 80px 20px; /* Reduced bottom margin from 100px to 80px */
+  margin: 10px 40px 70px 20px; /* Reduced top margin from 20px to 10px and bottom from 80px to 70px */
 }
 
 /* AI Assistant main container - Microsoft Learn style */
@@ -1406,6 +1463,15 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
     margin-left: 340px;
     width: calc(100% - 340px);
   }
+
+  /* Adjust toggle button for smaller left panel */
+  .panel-toggle-btn {
+    left: 340px;
+  }
+
+  .split-layout.left-panel-collapsed .panel-toggle-btn {
+    left: 20px;
+  }
 }
 
 @media (max-width: 991px) {
@@ -1441,6 +1507,11 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   .wireframe-panel {
     position: relative;
     overflow: visible;
+  }
+
+  /* Hide toggle button on mobile since panels stack */
+  .panel-toggle-btn {
+    display: none;
   }
 
   /* Ensure wireframe container takes full width */

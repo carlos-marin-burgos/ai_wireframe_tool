@@ -25,6 +25,8 @@ import {
   FiCpu,
   FiImage,
   FiLink,
+  FiChevronLeft,
+  FiChevronRight,
 } from 'react-icons/fi';
 import { TbBoxModel2 } from 'react-icons/tb'; // Fluent UI style icon for component library
 
@@ -167,6 +169,9 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   // Download Modal state
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+
+  // Left Panel Collapse state
+  const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);
 
   // Function to validate chat input - check if it's only numbers
   const validateChatInput = (input: string): boolean => {
@@ -682,6 +687,11 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     setIsPresentationModeOpen(true);
   }, []);
 
+  // Toggle left panel collapse
+  const handleToggleLeftPanel = useCallback(() => {
+    setIsLeftPanelCollapsed(prev => !prev);
+  }, []);
+
   // Load saved wireframes from localStorage on component mount
   useEffect(() => {
     const saved = localStorage.getItem('designetica_saved_wireframes');
@@ -782,9 +792,18 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   }, [description, addMessage, setDescription]);
 
   return (
-    <div className="split-layout">
+    <div className={`split-layout ${isLeftPanelCollapsed ? 'left-panel-collapsed' : ''}`}>
+      {/* Panel Toggle Button */}
+      <button
+        className="panel-toggle-btn"
+        onClick={handleToggleLeftPanel}
+        title={isLeftPanelCollapsed ? 'Expand panel' : 'Collapse panel'}
+      >
+        {isLeftPanelCollapsed ? <FiChevronRight /> : <FiChevronLeft />}
+      </button>
+
       {/* Left: Chat Interface */}
-      <div className="left-pane">
+      <div className={`left-pane ${isLeftPanelCollapsed ? 'collapsed' : ''}`}>
         {/* Chat Header */}
         <div className="chat-header">
           <div className="chat-header-left">
@@ -955,7 +974,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       </div>
 
       {/* Right: AI Assistant Interface */}
-      <div className="right-pane">
+      <div className={`right-pane ${isLeftPanelCollapsed ? 'expanded' : ''}`}>
         {(htmlWireframe || wireframePages.length > 0) ? (
           <div className="wireframe-panel">
             <CompactToolbar

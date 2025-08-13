@@ -315,21 +315,21 @@
   backdrop-filter: blur(10px);
 }
 
-/* Draggable elements */
-.mouse-drag-drop [data-draggable="true"] {
+/* Draggable elements - ONLY USER-ADDED COMPONENTS */
+.mouse-drag-drop [data-draggable="true"][data-user-added="true"] {
   cursor: grab !important;
   transition: all 0.2s ease;
   position: relative;
 }
 
-.mouse-drag-drop [data-draggable="true"]:hover {
+.mouse-drag-drop [data-draggable="true"][data-user-added="true"]:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
   outline: 2px dashed rgba(0, 123, 255, 0.4);
   outline-offset: 2px;
 }
 
-.mouse-drag-drop [data-draggable="true"]:hover::after {
+.mouse-drag-drop [data-draggable="true"][data-user-added="true"]:hover::after {
   content: "🖱️ Click & drag to move";
   position: absolute;
   bottom: 100%;
@@ -357,9 +357,12 @@
 }
 
 /* Alternative positioning for elements near the top */
-.mouse-drag-drop [data-draggable="true"][style*="top: 0"],
-.mouse-drag-drop [data-draggable="true"][style*="top: 1"],
-.mouse-drag-drop [data-draggable="true"][style*="top: 2"]:hover::after {
+.mouse-drag-drop
+  [data-draggable="true"][data-user-added="true"][style*="top: 0"],
+.mouse-drag-drop
+  [data-draggable="true"][data-user-added="true"][style*="top: 1"],
+.mouse-drag-drop
+  [data-draggable="true"][data-user-added="true"][style*="top: 2"]:hover::after {
   bottom: auto;
   top: 100%;
   margin: 8px auto 0 auto;
@@ -367,12 +370,41 @@
 
 /* Responsive tooltips for smaller screens */
 @media (max-width: 768px) {
-  .mouse-drag-drop [data-draggable="true"]:hover::after {
+  .mouse-drag-drop
+    [data-draggable="true"][data-user-added="true"]:hover::after {
     content: "🖱️ Drag";
     font-size: 10px;
     padding: 4px 8px;
     max-width: 60px;
   }
+}
+
+/* Ensure original wireframe elements are NOT draggable */
+.mouse-drag-drop .form-group:not([data-user-added="true"]),
+.mouse-drag-drop .form-submit:not([data-user-added="true"]),
+.mouse-drag-drop .card:not([data-user-added="true"]),
+.mouse-drag-drop .hero-section:not([data-user-added="true"]),
+.mouse-drag-drop .nav-section:not([data-user-added="true"]),
+.mouse-drag-drop
+  button:not([data-user-added="true"]):not(.control-panel button):not(
+    .edit-mode-checkbox
+  ) {
+  cursor: default !important;
+  pointer-events: auto;
+}
+
+.mouse-drag-drop .form-group:not([data-user-added="true"]):hover,
+.mouse-drag-drop .form-submit:not([data-user-added="true"]):hover,
+.mouse-drag-drop .card:not([data-user-added="true"]):hover,
+.mouse-drag-drop .hero-section:not([data-user-added="true"]):hover,
+.mouse-drag-drop .nav-section:not([data-user-added="true"]):hover,
+.mouse-drag-drop
+  button:not([data-user-added="true"]):not(.control-panel button):not(
+    .edit-mode-checkbox
+  ):hover {
+  transform: none !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 /* Element being dragged - only during active drag */
