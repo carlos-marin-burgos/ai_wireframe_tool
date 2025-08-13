@@ -1013,28 +1013,6 @@ const MouseDragDrop: React.FC<MouseDragDropProps> = ({
             role="application"
             aria-label="Wireframe editor - drag and drop elements to rearrange"
         >
-            {/* Edit Mode Toggle */}
-            <div className="edit-mode-toggle-container">
-                <label className="edit-mode-toggle">
-                    <input
-                        type="checkbox"
-                        checked={editMode}
-                        onChange={(e) => {
-                            setEditMode(e.target.checked);
-                            // Mark that edit mode was manually set
-                            if (containerRef.current) {
-                                containerRef.current.setAttribute('data-edit-mode-manually-set', 'true');
-                            }
-                        }}
-                        className="edit-mode-checkbox"
-                    />
-                    <span className="edit-mode-slider"></span>
-                    <span className="edit-mode-label">
-                        {editMode ? '🎯 Edit Mode' : '👁️ View Mode'}
-                    </span>
-                </label>
-            </div>
-
             {/* Content */}
             {(cleanHtmlContent && cleanHtmlContent.length > 0) ? (
                 <div dangerouslySetInnerHTML={{ __html: cleanHtmlContent }} />

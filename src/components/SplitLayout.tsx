@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import "./SplitLayout.css";
 import SuggestionSourceIndicator from "./SuggestionSourceIndicator";
 import LoadingOverlay from "./LoadingOverlay";
@@ -51,6 +51,7 @@ interface SplitLayoutProps {
   setHtmlWireframe: (html: string) => void;
   // New props for content header
   onSave: () => void;
+  onEnhancedSave?: React.MutableRefObject<(() => void) | null>; // Enhanced save for TopNavbar
   onMultiStep: () => void;
   // Design system props (Microsoft Learn theme only)
   designTheme: string;
@@ -77,7 +78,6 @@ interface SplitLayoutProps {
   onViewHtmlCode?: React.MutableRefObject<(() => void) | null>;
   onDownloadWireframe?: React.MutableRefObject<(() => void) | null>;
   onPresentationMode?: React.MutableRefObject<(() => void) | null>;
-  onShareUrl?: React.MutableRefObject<(() => void) | null>;
 }
 
 const SplitLayout: React.FC<SplitLayoutProps> = ({
@@ -101,6 +101,8 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   onAiSuggestionClick,
   designTheme,
   colorScheme,
+  onSave,
+  onEnhancedSave,
   onAddComponent,
   onGeneratePageContent,
   onFigmaExport,
@@ -108,7 +110,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   onViewHtmlCode,
   onDownloadWireframe,
   onPresentationMode,
-  onShareUrl,
 }) => {
   // Create ref for textarea autofocus
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -663,38 +664,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
 
 
-  const handleShareUrl = useCallback(async () => {
-    try {
-      // Prepare wireframe data for sharing
-      const wireframeData = {
-        name: `Wireframe ${new Date().toLocaleDateString()}`,
-        description: 'Generated wireframe design',
-        pages: wireframePages.length > 0 ? wireframePages : [{
-          id: 'main',
-          name: 'Main Page',
-          description: 'Main wireframe page',
-          type: 'page' as const
-        }],
-        pageContents: wireframePages.length > 0 ? pageContents : {
-          main: htmlWireframe || '<p>No content available</p>'
-        }
-      };
-
-      const contentToShare = htmlWireframe || '<p>No wireframe content available</p>';
-      const result = await generateShareUrl(contentToShare, wireframeData.name);
-
-      if (result.success) {
-        // Show success message with toast notification
-        console.log('✅ Share URL generated:', result.shareUrl);
-        console.log('Share URL copied to clipboard!');
-      } else {
-        console.error('Failed to generate share URL:', result.message);
-      }
-    } catch (error) {
-      console.error('Share URL generation failed:', error);
-    }
-  }, [wireframePages, pageContents, htmlWireframe]);
-
   // Presentation Mode handler
   const handlePresentationMode = useCallback(() => {
     setIsPresentationModeOpen(true);
@@ -725,12 +694,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     }
   }, [onPresentationMode, handlePresentationMode]);
 
-  useEffect(() => {
-    if (onShareUrl) {
-      onShareUrl.current = handleShareUrl;
-    }
-  }, [onShareUrl, handleShareUrl]);
-
   // Toggle left panel collapse
   const handleToggleLeftPanel = useCallback(() => {
     setIsLeftPanelCollapsed(prev => !prev);
@@ -753,6 +716,13 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   const enhancedOnSave = useCallback(() => {
     handleOpenEnhancedSave();
   }, [handleOpenEnhancedSave]);
+
+  // Expose enhanced save to parent via ref
+  useEffect(() => {
+    if (onEnhancedSave) {
+      onEnhancedSave.current = enhancedOnSave;
+    }
+  }, [onEnhancedSave, enhancedOnSave]);
 
   // Direct AI generation with Microsoft Learn components - no modal
   const enhancedHandleSubmit = useCallback((e: React.FormEvent) => {

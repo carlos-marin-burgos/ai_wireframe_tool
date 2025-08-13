@@ -54,7 +54,7 @@
 .separator-bar {
   width: 1px;
   height: 24px;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: #d2d0ce;
   margin: 0 8px;
 }
 
@@ -71,23 +71,31 @@
 }
 
 .navbar-logout-btn {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #374151;
-  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  color: #323130;
+  padding: 10px 20px;
   border-radius: 12px;
   cursor: pointer;
   font-family: "Segoe UI", sans-serif;
   font-weight: 500;
+  font-size: 14px;
   transition: all 0.3s ease;
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 
 .navbar-logout-btn:hover {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(0, 0, 0, 0.3);
   transform: translateY(-1px);
+  color: #000000;
+}
+
+.navbar-logout-btn:active {
+  transform: translateY(0);
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(0, 0, 0, 0.25);
 }
 
 /* Responsive */

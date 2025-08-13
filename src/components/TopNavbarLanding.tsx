@@ -26,9 +26,10 @@ const TopNavbarLanding: React.FC<TopNavbarLandingProps> = ({
                     </svg>
                     <span className="navbar-logo-text">Designetica</span>
                 </button>
+                <div className="separator-bar"></div>
+                <img src="/cxsLogo.png" alt="CXS" className="navbar-cxs-logo" />
             </div>
             <div className="navbar-right">
-                <img src="/cxsLogo.png" alt="CXS" className="navbar-cxs-logo" />
                 <button
                     onClick={onLogout}
                     className="navbar-logout-btn"
@@ -36,6 +37,7 @@ const TopNavbarLanding: React.FC<TopNavbarLandingProps> = ({
                 >
                     Logout
                 </button>
+
             </div>
         </nav>
     );

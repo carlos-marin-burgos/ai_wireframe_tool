@@ -68,6 +68,15 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         >
                             <FiGrid />
                         </button>
+
+                        <button
+                            className="toolbar-btn"
+                            onClick={onSave}
+                            title="Save wireframe"
+                            aria-label="Save"
+                        >
+                            <FiSave />
+                        </button>
                     </div>
                 </div>
             </div>
@@ -123,6 +132,15 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         aria-label={editMode ? "Exit edit mode" : "Enter edit mode"}
                     >
                         {editMode ? <FiEye /> : <FiEdit3 />}
+                    </button>
+
+                    <button
+                        className="toolbar-btn"
+                        onClick={onSave}
+                        title="Save wireframe"
+                        aria-label="Save"
+                    >
+                        <FiSave />
                     </button>
                 </div>
             </div>

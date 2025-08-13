@@ -62,7 +62,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   const viewHtmlCodeRef = useRef<(() => void) | null>(null);
   const downloadWireframeRef = useRef<(() => void) | null>(null);
   const presentationModeRef = useRef<(() => void) | null>(null);
-  const shareUrlRef = useRef<(() => void) | null>(null);
+  const enhancedSaveRef = useRef<(() => void) | null>(null);
 
   // Toolbar handler functions for header
   const handleToolbarFigma = () => {
@@ -97,11 +97,11 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     }
   };
 
-  const handleToolbarShare = () => {
-    if (shareUrlRef.current) {
-      shareUrlRef.current();
+  const handleEnhancedSave = () => {
+    if (enhancedSaveRef.current) {
+      enhancedSaveRef.current();
     } else {
-      console.log('Share URL function not available');
+      console.log('Enhanced save function not available');
     }
   };
 
@@ -1061,10 +1061,8 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
         <TopNavbarApp
           onLogoClick={handleBackToLanding}
           onLogout={onLogout}
-          onSave={() => setShowSaveDialog(true)}
           onFigmaIntegration={handleToolbarFigma}
           onViewHtmlCode={handleToolbarHtmlCode}
-          onShareUrl={handleToolbarShare}
           onPresentationMode={handleToolbarPresentation}
           onDownloadWireframe={handleToolbarDownload}
         />
@@ -1122,6 +1120,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           htmlWireframe={htmlWireframe}
           setHtmlWireframe={setHtmlWireframe}
           onSave={() => setShowSaveDialog(true)}
+          onEnhancedSave={enhancedSaveRef}
           onMultiStep={handleMultiStep}
           designTheme={designTheme}
           colorScheme={colorScheme}
@@ -1137,7 +1136,6 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           onViewHtmlCode={viewHtmlCodeRef}
           onDownloadWireframe={downloadWireframeRef}
           onPresentationMode={presentationModeRef}
-          onShareUrl={shareUrlRef}
         />
       )}
 
