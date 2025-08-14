@@ -8,6 +8,7 @@ interface CompactToolbarProps {
     onShareUrl?: () => void;
     onPresentationMode?: () => void;
     onDownloadWireframe?: () => void;
+    onSave?: () => void;
 }
 
 const CompactToolbar: React.FC<CompactToolbarProps> = ({
@@ -15,7 +16,8 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
     onViewHtmlCode,
     onShareUrl,
     onPresentationMode,
-    onDownloadWireframe
+    onDownloadWireframe,
+    onSave
 }) => {
     const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
 
@@ -40,6 +42,7 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
                     onClick={onFigmaIntegration}
                     onMouseEnter={(e) => showTooltip(e, "Figma Integration")}
                     onMouseLeave={hideTooltip}
+                    aria-label="Figma Integration"
                 >
                     <FiFigma />
                 </button>
@@ -48,6 +51,7 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
                     onClick={onViewHtmlCode}
                     onMouseEnter={(e) => showTooltip(e, "View & Import HTML")}
                     onMouseLeave={hideTooltip}
+                    aria-label="View & Import HTML"
                 >
                     <FiCode />
                 </button>
@@ -56,6 +60,7 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
                     onClick={onShareUrl}
                     onMouseEnter={(e) => showTooltip(e, "Share URL")}
                     onMouseLeave={hideTooltip}
+                    aria-label="Share URL"
                 >
                     <FiShare2 />
                 </button>
@@ -64,6 +69,7 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
                     onClick={onPresentationMode}
                     onMouseEnter={(e) => showTooltip(e, "Presentation Mode")}
                     onMouseLeave={hideTooltip}
+                    aria-label="Presentation Mode"
                 >
                     <FiMonitor />
                 </button>
@@ -72,41 +78,25 @@ const CompactToolbar: React.FC<CompactToolbarProps> = ({
                     onClick={onDownloadWireframe}
                     onMouseEnter={(e) => showTooltip(e, "Download Wireframe")}
                     onMouseLeave={hideTooltip}
+                    aria-label="Download Wireframe"
                 >
                     <FiDownload />
                 </button>
             </div>
 
             {tooltip && (
-                <div
-                    className="custom-tooltip"
-                    style={{
-                        position: 'fixed',
-                        left: tooltip.x,
-                        top: tooltip.y,
-                        transform: 'translateX(-50%)',
-                        zIndex: 10002,
-                        background: '#323130',
-                        color: 'white',
-                        padding: '6px 8px',
-                        borderRadius: '4px',
-                        fontSize: '12px',
-                        whiteSpace: 'nowrap',
-                        pointerEvents: 'none',
-                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
-                    }}
-                >
-                    {tooltip.text}
+                <div className="black-tooltip-container">
                     <div
-                        style={{
-                            position: 'absolute',
-                            top: '-4px',
-                            left: '50%',
-                            transform: 'translateX(-50%)',
-                            border: '4px solid transparent',
-                            borderBottomColor: '#323130'
+                        className="black-tooltip"
+                        ref={(el) => {
+                            if (el) {
+                                el.style.left = `${tooltip.x}px`;
+                                el.style.top = `${tooltip.y}px`;
+                            }
                         }}
-                    />
+                    >
+                        {tooltip.text}
+                    </div>
                 </div>
             )}
         </>

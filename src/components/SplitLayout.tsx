@@ -184,9 +184,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   // Left Panel Collapse state
   const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);
 
-  // Edit Mode state
-  const [editMode, setEditMode] = useState(false);
-
   // Function to validate chat input - check if it's only numbers
   const validateChatInput = (input: string): boolean => {
     const trimmedInput = input.trim();
@@ -990,8 +987,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               onAddPage={handleAddPages}
               onOpenLibrary={handleOpenLibrary}
               onSave={enhancedOnSave}
-              editMode={editMode}
-              onEditModeChange={setEditMode}
             />
             <div className="wireframe-container">
               {/* Status bar removed for cleaner presentation */}
@@ -1014,8 +1009,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                   }}
                   onNavigateToPage={handlePageSwitch}
                   availablePages={wireframePages}
-                  editMode={editMode}
-                  onEditModeChange={setEditMode}
                 />
               </div>
             </div>

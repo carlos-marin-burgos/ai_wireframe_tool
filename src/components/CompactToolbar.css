@@ -65,6 +65,36 @@
   color: white;
 }
 
+/* Edit toggle button */
+.compact-btn.edit-toggle {
+  transition: all 0.3s ease;
+}
+
+.compact-btn.edit-toggle:not(.active) {
+  background: #f0f9ff;
+  color: #0078d4;
+  border-color: #cce7ff;
+}
+
+.compact-btn.edit-toggle:not(.active):hover {
+  background: #dbeafe;
+  color: #106ebe;
+  border-color: #93c5fd;
+}
+
+.compact-btn.edit-toggle.active {
+  background: #dc2626;
+  color: white;
+  border-color: #dc2626;
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+}
+
+.compact-btn.edit-toggle.active:hover {
+  background: #b91c1c;
+  border-color: #b91c1c;
+  color: white;
+}
+
 /* Export dropdown */
 .compact-export-dropdown {
   position: relative;
@@ -114,6 +144,80 @@
 }
 
 /* Removed CSS-based tooltips - now using JavaScript tooltips for better z-index control */
+
+/* Custom tooltip styles - Updated to black background */
+.black-tooltip-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10000;
+}
+
+.black-tooltip {
+  position: fixed;
+  background: #000000;
+  color: #ffffff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transform: translateX(-50%);
+  animation: tooltipFadeIn 0.2s ease-out;
+}
+
+.black-tooltip::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid #000000;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Legacy custom tooltip styles - kept for backward compatibility */
+.custom-tooltip {
+  position: fixed;
+  z-index: 10002;
+  background: #323130;
+  color: white;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transform: translateX(-50%);
+}
+
+.custom-tooltip-arrow {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-bottom-color: #323130;
+}
 
 /* Responsive adjustments */
 @media (max-width: 991px) {

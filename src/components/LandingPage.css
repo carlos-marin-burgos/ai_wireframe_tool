@@ -301,7 +301,7 @@
 .main-input {
   width: 100%;
   min-height: 120px;
-  padding: 1rem;
+  padding: 1rem; /* Back to original padding */
   padding-right: 55px; /* Reduced from 85px since we removed the image upload button */
   border: 1px solid #e5e7eb;
   border-radius: 12px;
@@ -719,7 +719,7 @@
 
 /* Integration Pills Container */
 .integration-pills-container {
-  margin-top: 1rem;
+  margin-top: 1.5rem; /* Increased spacing between textarea and buttons */
   display: flex;
   justify-content: center;
   gap: 12px;
@@ -1014,4 +1014,236 @@
 
 .github-error {
   margin-top: 8px;
+}
+
+/* AI Disclaimer Styles - Updated */
+.ai-disclaimer {
+  text-align: center;
+  margin: 24px 0 16px 0; /* Reduced margins */
+  background: transparent !important; /* Force no background */
+}
+
+.ai-disclaimer p {
+  font-size: 11px; /* Smaller font */
+  color: #999; /* Lighter color */
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Recent and Favorites Section - GitHub Spark Style */
+.recent-favorites-section {
+  width: 100%;
+  max-width: 500px; /* Keep narrower as requested */
+  margin: 20px auto 0 auto; /* Center the section */
+}
+
+.section-tabs.github-style {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 16px;
+  background: none;
+  border: none;
+}
+
+.tab-btn.github-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  background: none;
+  border: none;
+  color: #656d76;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: color 0.2s ease;
+}
+
+.tab-btn.github-tab:hover {
+  color: #24292f;
+}
+
+.recent-favorites-section .tab-btn.github-tab.active {
+  color: #24292f !important;
+  border-bottom-color: #fd8c73 !important;
+  border-radius: 0 !important;
+  background: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.tab-icon {
+  flex-shrink: 0;
+}
+
+.projects-container.github-container {
+  background: white;
+  border: 1px solid #d1d9e0;
+  border-radius: 0;
+  margin-top: 0;
+}
+
+.project-item.github-item {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #d1d9e0;
+  transition: background-color 0.1s ease;
+  cursor: pointer;
+}
+
+.project-item.github-item:last-child {
+  border-bottom: none;
+}
+
+.project-item.github-item:hover {
+  background-color: #f6f8fa;
+}
+
+.project-icon {
+  margin-right: 12px;
+  color: #656d76;
+  flex-shrink: 0;
+}
+
+.project-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.project-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #24292f;
+  margin-bottom: 2px;
+  line-height: 1.25;
+}
+
+.project-meta {
+  font-size: 12px;
+  color: #656d76;
+  line-height: 1.33;
+}
+
+.project-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 12px;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  color: #656d76;
+  cursor: pointer;
+  border-radius: 0;
+  transition: all 0.1s ease;
+}
+
+.action-btn:hover {
+  background-color: #f3f4f6;
+  color: #24292f;
+}
+
+.action-btn.star-btn:hover {
+  color: #f59e0b;
+}
+
+.section-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #d1d9e0;
+  background: transparent;
+}
+
+.tab-btn {
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  color: #656d76;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.tab-btn:hover {
+  color: #24292f;
+  background: transparent;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  min-height: 160px;
+}
+
+.project-card {
+  background: #ffffff;
+  border: 1px solid #d1d9e0;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.project-card:hover {
+  border-color: #ccc;
+}
+
+.project-card.empty-state {
+  cursor: default;
+  border-style: dashed;
+  background: #fafafa;
+}
+
+.project-card.empty-state:hover {
+  border-color: #e5e5e5;
+  box-shadow: none;
+}
+
+.empty-icon {
+  font-size: 32px;
+  color: #999;
+  margin-bottom: 12px;
+}
+
+.project-card p {
+  margin: 0 0 4px 0;
+  font-weight: 500;
+  color: #333;
+}
+
+.project-card span {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .recent-favorites-section {
+    margin-top: 16px;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .tab-btn {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
 }

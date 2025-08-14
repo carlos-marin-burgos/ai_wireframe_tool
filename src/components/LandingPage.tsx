@@ -75,6 +75,9 @@ const LandingPage: React.FC<LandingPageProps> = ({
   const [isGitHubModalOpen, setIsGitHubModalOpen] = useState(false);
   const [githubStatus, setGithubStatus] = useState<{ connected: boolean; login?: string; error?: string }>({ connected: false });
 
+  // Recent/Favorites tab state
+  const [activeTab, setActiveTab] = useState<'recent' | 'favorites'>('recent');
+
   const startGitHubOAuth = async () => {
     setGithubStatus(s => ({ connected: s.connected, login: s.login }));
     try {
@@ -98,10 +101,15 @@ const LandingPage: React.FC<LandingPageProps> = ({
   const validateInput = (input: string): boolean => {
     const trimmedInput = input.trim();
 
+    // Check if input is empty - just return false without showing error
+    if (trimmedInput.length === 0) {
+      return false;
+    }
+
     // Check if the input is only numbers (including spaces and basic punctuation)
     const onlyNumbersRegex = /^[\d\s.,]+$/;
 
-    if (onlyNumbersRegex.test(trimmedInput) && trimmedInput.length > 0) {
+    if (onlyNumbersRegex.test(trimmedInput)) {
       setValidationError("Please provide a descriptive text, not just numbers. For example: 'contact form with name and email fields' instead of just '2'.");
       return false;
     }
@@ -255,7 +263,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
                   }}
                   placeholder="How can Designetica help you today? (e.g., 'Create a Microsoft Learn certification dashboard with Azure exam tracking and study progress')"
                   rows={4}
-                  required
                   className="app-textarea main-input"
                 />
 
@@ -283,7 +290,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
                 )}
               </div>
 
-              {showAiSuggestions && aiSuggestions.length > 0 && (
+              {showAiSuggestions && !loading && aiSuggestions.length > 0 && (
                 <div className="ai-suggestions-inline ai-suggestions-dynamic">
                   <div className="ai-suggestions-label">
                     <FiCpu className="ai-icon" />
@@ -345,6 +352,83 @@ const LandingPage: React.FC<LandingPageProps> = ({
                   <FiGithub className="pill-icon" />
                   <span>Connect GitHub</span>
                 </button>
+              </div>
+
+              {/* AI Disclaimer */}
+              <div className="ai-disclaimer">
+                <p>Designetica uses AI. Check for mistakes.</p>
+              </div>
+
+              {/* Recent and Favorites Section */}
+              <div className="recent-favorites-section">
+                <div className="section-tabs github-style">
+                  <button
+                    className={`tab-btn github-tab ${activeTab === 'recent' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('recent')}
+                  >
+                    <svg className="tab-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                      <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm7-3.25v2.992l2.028.812a.75.75 0 0 1-.557 1.392l-2.5-1A.751.751 0 0 1 7 8.25v-3.5a.75.75 0 0 1 1.5 0Z"></path>
+                    </svg>
+                    Recent
+                  </button>
+                  <button
+                    className={`tab-btn github-tab ${activeTab === 'favorites' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('favorites')}
+                  >
+                    <svg className="tab-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                      <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
+                    </svg>
+                    Favorites
+                  </button>
+                </div>
+                <div className="projects-container github-container">
+                  <div className="project-item github-item">
+                    <div className="project-icon">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8Z"></path>
+                      </svg>
+                    </div>
+                    <div className="project-details">
+                      <div className="project-name">Family Calendar Organizer</div>
+                      <div className="project-meta">Last updated 3 hours ago</div>
+                    </div>
+                    <div className="project-actions">
+                      <button className="action-btn star-btn" aria-label="Star">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                          <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
+                        </svg>
+                      </button>
+                      <button className="action-btn menu-btn" aria-label="More options">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                          <path d="M8 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM1.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm13 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div className="project-item github-item">
+                    <div className="project-icon">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8Z"></path>
+                      </svg>
+                    </div>
+                    <div className="project-details">
+                      <div className="project-name">MealPrep Planner</div>
+                      <div className="project-meta">Last updated last week</div>
+                    </div>
+                    <div className="project-actions">
+                      <button className="action-btn star-btn" aria-label="Star">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                          <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
+                        </svg>
+                      </button>
+                      <button className="action-btn menu-btn" aria-label="More options">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                          <path d="M8 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM1.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm13 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </form>

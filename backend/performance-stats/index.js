@@ -21,44 +21,36 @@ module.exports = async function (context, req) {
       return;
     }
 
-    // Mock performance data for now
+    // Performance data in the format expected by the frontend
     const performanceData = {
+      success: true,
       timestamp: new Date().toISOString(),
-      system: {
-        nodeVersion: process.version,
-        platform: process.platform,
-        uptime: process.uptime(),
-        memoryUsage: process.memoryUsage(),
-      },
-      wireframeGeneration: {
+      performance: {
         totalRequests: 150,
+        cacheHits: 120,
+        aiCalls: 30,
         averageResponseTime: 2500,
-        successRate: 0.95,
-        errorRate: 0.05,
+        fastModeUsage: 75,
+        cacheHitRate: 0.8,
+        aiUsageRate: 0.2,
+        fastModeRate: 0.5,
+        cacheStats: {
+          size: 50,
+          maxSize: 100,
+          ttl: 3600,
+        },
       },
-      resourceUsage: {
-        cpuUsage: 45,
-        memoryUsage: 65,
-        diskUsage: 30,
-      },
-      apiEndpoints: [
+      recommendations: [
         {
-          endpoint: "/api/generate-wireframe",
-          requests: 120,
-          averageResponseTime: 2800,
-          successRate: 0.96,
+          type: "performance",
+          message: "Cache hit rate is good at 80%",
+          impact: "positive",
         },
         {
-          endpoint: "/api/health",
-          requests: 25,
-          averageResponseTime: 150,
-          successRate: 0.99,
-        },
-        {
-          endpoint: "/api/performance-stats",
-          requests: 5,
-          averageResponseTime: 200,
-          successRate: 1.0,
+          type: "optimization",
+          message:
+            "Consider increasing fast mode usage for better response times",
+          impact: "medium",
         },
       ],
     };
