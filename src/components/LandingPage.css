@@ -719,7 +719,7 @@
 
 /* Integration Pills Container */
 .integration-pills-container {
-  margin-top: 1.5rem; /* Increased spacing between textarea and buttons */
+  margin-top: 1rem; /* Increased spacing between textarea and buttons */
   display: flex;
   justify-content: center;
   gap: 12px;
@@ -1019,14 +1019,14 @@
 /* AI Disclaimer Styles - Updated */
 .ai-disclaimer {
   text-align: center;
-  margin: 24px 0 16px 0; /* Reduced margins */
+  margin: 24px 0 20px 0; /* Reduced margins */
   background: transparent !important; /* Force no background */
 }
 
 .ai-disclaimer p {
   font-size: 11px; /* Smaller font */
   color: #999; /* Lighter color */
-  margin: 0;
+  margin-top: 15px;
   font-weight: 400;
 }
 
@@ -1034,7 +1034,7 @@
 .recent-favorites-section {
   width: 100%;
   max-width: 500px; /* Keep narrower as requested */
-  margin: 20px auto 0 auto; /* Center the section */
+  margin: 60px auto 0 auto; /* Center the section */
 }
 
 .section-tabs.github-style {

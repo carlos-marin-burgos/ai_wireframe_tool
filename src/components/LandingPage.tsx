@@ -389,7 +389,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
                       </svg>
                     </div>
                     <div className="project-details">
-                      <div className="project-name">Family Calendar Organizer</div>
+                      <div className="project-name">Azure Certification Dashboard</div>
                       <div className="project-meta">Last updated 3 hours ago</div>
                     </div>
                     <div className="project-actions">
@@ -412,7 +412,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
                       </svg>
                     </div>
                     <div className="project-details">
-                      <div className="project-name">MealPrep Planner</div>
+                      <div className="project-name">Microsoft 365 Admin Portal</div>
                       <div className="project-meta">Last updated last week</div>
                     </div>
                     <div className="project-actions">

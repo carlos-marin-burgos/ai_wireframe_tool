@@ -307,7 +307,7 @@ body {
 .textarea-container {
   position: relative;
   width: 100%;
-  margin-bottom: 2rem;
+  margin-bottom: 0rem;
 }
 
 .app-textarea {
