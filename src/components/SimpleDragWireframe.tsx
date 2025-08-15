@@ -16,7 +16,7 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
     const dragulaRef = useRef<any>(null);
 
     useEffect(() => {
-        if (!containerRef.current || !htmlContent) return;
+        if (!containerRef.current) return;
 
         // Clean up previous dragula instance
         if (dragulaRef.current) {
@@ -26,35 +26,27 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
         // Parse and display the HTML content
         containerRef.current.innerHTML = htmlContent;
 
-        // Wait for DOM to settle, then initialize dragula
-        setTimeout(() => {
-            if (!containerRef.current) return;
+        // Ensure all elements are visible (remove any transparency)
+        const allElements = Array.from(containerRef.current.querySelectorAll('*')) as HTMLElement[];
+        allElements.forEach(el => {
+            el.style.opacity = '1';
+        });
 
-            // Find all direct children that can be dragged
-            const children = Array.from(containerRef.current.children);
-            console.log('Draggable elements found:', children.length);
-
-            if (children.length > 0) {
-                // Initialize dragula with specific moves function
-                dragulaRef.current = dragula([containerRef.current], {
-                    moves: function (el, source, handle, sibling) {
-                        // Allow dragging of direct children only
-                        return el.parentNode === containerRef.current;
-                    }
-                });
-
-                // Update content when items are moved
-                dragulaRef.current.on('drop', (el: any, target: any, source: any, sibling: any) => {
-                    if (containerRef.current && onUpdateContent) {
-                        const newContent = containerRef.current.innerHTML;
-                        onUpdateContent(newContent);
-                        console.log('Drag completed, content updated!');
-                    }
-                });
-
-                console.log('Dragula initialized successfully!');
+        // Initialize dragula on the container itself
+        dragulaRef.current = dragula([containerRef.current], {
+            moves: function (el, source, handle, sibling) {
+                return true; // Allow all elements to be moved
             }
-        }, 100);
+        });
+
+        // Update content when items are moved
+        dragulaRef.current.on('drop', () => {
+            if (containerRef.current && onUpdateContent) {
+                const newContent = containerRef.current.innerHTML;
+                onUpdateContent(newContent);
+                console.log('Drag completed, content updated!');
+            }
+        });
 
         return () => {
             if (dragulaRef.current) {

@@ -9,38 +9,105 @@
   padding: 20px;
 }
 
-/* Make direct children draggable - like CodePen */
+/* Make ALL elements in the container visible and draggable */
 .dragula-container > * {
-  cursor: move;
-  margin: 8px 0;
-  padding: 8px;
-  border: 1px dashed transparent;
-  border-radius: 4px;
-  transition: border-color 0.2s ease;
+  opacity: 1 !important;
+  background: #f8f9fa !important;
+  border: 2px dashed #dee2e6 !important;
+  padding: 10px !important;
+  margin: 5px !important;
+  cursor: move !important;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
 .dragula-container > *:hover {
-  border-color: #0078d4;
+  border-color: #0078d4 !important;
+  background: #e7f3ff !important;
 }
 
-/* Dragula styles */
-.gu-mirror {
+/* Drag icon on hover */
+.dragula-container > *:hover::before {
+  content: "⋮⋮";
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%) rotate(90deg);
+  font-size: 16px;
+  color: #0078d4;
+  font-weight: bold;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Bootstrap column styling */
+.dragula-container .col,
+.dragula-container [class*="col-"] {
+  padding: 8px;
+  border: 2px dashed #dee2e6;
+  border-radius: 6px;
+  margin: 4px 0;
+  background: #f8f9fa;
+  min-height: 100px;
+  transition: all 0.2s ease;
+}
+
+.dragula-container .col:hover,
+.dragula-container [class*="col-"]:hover {
+  border-color: #0078d4;
+  background: #e7f3ff;
+}
+
+/* Dragula specific styles - prevent ALL transparency */
+.simple-drag-wireframe .gu-mirror {
   position: fixed !important;
   margin: 0 !important;
   z-index: 9999 !important;
-  opacity: 0.8;
-  transform: rotate(5deg);
+  opacity: 1 !important;
+  background: white !important;
+  border: 2px solid #0078d4 !important;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.gu-hide {
+.simple-drag-wireframe .gu-hide {
   display: none !important;
 }
 
-.gu-transit {
+.simple-drag-wireframe .gu-unselectable {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+
+.simple-drag-wireframe .gu-transit {
+  opacity: 1 !important;
+  background: #f0f8ff !important;
+  border: 2px dashed #0078d4 !important;
+}
+
+/* Force ALL elements to be visible */
+.simple-drag-wireframe * {
   opacity: 1 !important;
 }
 
-/* Force all elements to stay visible */
-.simple-drag-wireframe * {
+.simple-drag-wireframe .dragula-container * {
   opacity: 1 !important;
+}
+
+/* Drop zone highlighting */
+.dragula-container .row {
+  min-height: 80px;
+  padding: 10px;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  background: white;
+}
+
+.dragula-container .row.gu-over {
+  background: #e7f3ff !important;
+  border-color: #0078d4 !important;
 }
