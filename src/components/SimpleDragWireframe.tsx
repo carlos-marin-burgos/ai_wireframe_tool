@@ -36,6 +36,10 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
         dragulaRef.current = dragula([containerRef.current], {
             moves: function (el, source, handle, sibling) {
                 return true; // Allow all elements to be moved
+            },
+            accepts: function (el, target, source, sibling) {
+                // Only allow dropping directly into the main container
+                return target === containerRef.current;
             }
         });
 

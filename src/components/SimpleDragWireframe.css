@@ -111,3 +111,14 @@
   background: #e7f3ff !important;
   border-color: #0078d4 !important;
 }
+
+/* Force buttons to be fully opaque */
+.simple-drag-wireframe .btn,
+.simple-drag-wireframe button,
+.simple-drag-wireframe input[type="button"],
+.simple-drag-wireframe input[type="submit"] {
+  opacity: 1 !important;
+  visibility: visible !important;
+  background-color: #007bff !important; /* Example color */
+  color: white !important;
+}
