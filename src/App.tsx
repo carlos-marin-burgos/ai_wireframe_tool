@@ -242,6 +242,19 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
       // Process the wireframe to fix images and Microsoft branding
       const processedHtml = processWireframeForProduction(safeHtml);
       setHtmlWireframe(processedHtml);
+
+      // Add to recents
+      try {
+        const addToRecents = (window as any).addToRecents;
+        if (addToRecents && description) {
+          const recentName = description.length > 50 ?
+            description.substring(0, 47) + "..." :
+            description;
+          addToRecents(recentName, "Wireframe created", processedHtml);
+        }
+      } catch (error) {
+        console.log("Could not add to recents:", error);
+      }
     } else {
       setHtmlWireframe(""); // Set empty string
     }

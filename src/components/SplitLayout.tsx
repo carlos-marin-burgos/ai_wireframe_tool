@@ -464,6 +464,33 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     setIsAddPagesModalOpen(true);
   }, []);
 
+  const handleAddToFavorites = useCallback(() => {
+    if (!currentPageId) return;
+
+    const currentPage = wireframePages.find(p => p.id === currentPageId);
+    if (!currentPage) return;
+
+    // Get current content for the page
+    const currentContent = pageContents[currentPageId] || htmlWireframe;
+
+    // Create favorite item
+    const favoriteItem = {
+      id: `favorite-${Date.now()}`,
+      name: currentPage.name,
+      htmlContent: currentContent,
+      type: currentPage.type,
+      createdAt: new Date().toISOString()
+    };
+
+    // Save to localStorage
+    const existingFavorites = JSON.parse(localStorage.getItem('designetica_favorites') || '[]');
+    existingFavorites.push(favoriteItem);
+    localStorage.setItem('designetica_favorites', JSON.stringify(existingFavorites));
+
+    // Show confirmation message
+    addMessage('ai', `⭐ Added "${currentPage.name}" to favorites! You can find it in the favorites tab on the landing page.`);
+  }, [currentPageId, wireframePages, pageContents, htmlWireframe, addMessage]);
+
   // Enhanced chat handlers
   const handleMessageReact = useCallback((messageId: string, emoji: string) => {
     setMessageReactions(prev => {
@@ -615,6 +642,16 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
       setSavedWireframes(prev => [...prev, newWireframe]);
       addMessage('ai', `💾 Wireframe "${wireframeData.name}" saved successfully! You can access it from the library.`);
+
+      // Add saved wireframe to recents
+      try {
+        const addToRecents = (window as any).addToRecents;
+        if (addToRecents) {
+          addToRecents(wireframeData.name, wireframeData.description || "Saved wireframe", wireframeData.html);
+        }
+      } catch (error) {
+        console.log("Could not add saved wireframe to recents:", error);
+      }
     }
 
     // In a real app, you would also save to backend/localStorage
@@ -957,6 +994,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               onAddPage={handleAddPages}
               onOpenLibrary={handleOpenLibrary}
               onSave={enhancedOnSave}
+              onAddToFavorites={handleAddToFavorites}
             />
 
             <div className="wireframe-container">

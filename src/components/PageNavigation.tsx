@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiPlus, FiGrid, FiSave } from 'react-icons/fi';
+import { FiPlus, FiGrid, FiSave, FiStar } from 'react-icons/fi';
 import '../styles/PageNavigation.css';
 
 interface Page {
@@ -16,6 +16,7 @@ interface PageNavigationProps {
     onAddPage?: () => void;
     onOpenLibrary?: () => void;
     onSave?: () => void;
+    onAddToFavorites?: () => void;
 }
 
 const PageNavigation: React.FC<PageNavigationProps> = ({
@@ -24,7 +25,8 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
     onPageSwitch,
     onAddPage,
     onOpenLibrary,
-    onSave
+    onSave,
+    onAddToFavorites
 }) => {
     const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
 
@@ -84,6 +86,16 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
 
                         <button
                             className="toolbar-btn"
+                            onClick={onAddToFavorites}
+                            onMouseEnter={(e) => showTooltip(e, "Add to favorites")}
+                            onMouseLeave={hideTooltip}
+                            aria-label="Add to Favorites"
+                        >
+                            <FiStar />
+                        </button>
+
+                        <button
+                            className="toolbar-btn"
                             onClick={onSave}
                             onMouseEnter={(e) => showTooltip(e, "Save wireframe")}
                             onMouseLeave={hideTooltip}
@@ -139,6 +151,16 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         aria-label="Component Library"
                     >
                         <FiGrid />
+                    </button>
+
+                    <button
+                        className="toolbar-btn"
+                        onClick={onAddToFavorites}
+                        onMouseEnter={(e) => showTooltip(e, "Add to favorites")}
+                        onMouseLeave={hideTooltip}
+                        aria-label="Add to Favorites"
+                    >
+                        <FiStar />
                     </button>
 
                     <button

@@ -1,8 +1,9 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import "./LandingPage.css";
 import Footer from './Footer';
 import ImageUploadModal from './ImageUploadModal';
 import FigmaIntegrationModal from './FigmaIntegrationModal';
+import DeleteConfirmationModal from './DeleteConfirmationModal';
 
 interface LandingPageProps {
   error: string | null;
@@ -37,6 +38,7 @@ import {
   FiFigma,
   FiZap,
   FiGithub,
+  FiTrash,
 } from "react-icons/fi";
 
 const LandingPage: React.FC<LandingPageProps> = ({
@@ -62,6 +64,9 @@ const LandingPage: React.FC<LandingPageProps> = ({
   // Create ref for textarea autofocus
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  // Ref for projects container to handle scroll indicators
+  const projectsContainerRef = useRef<HTMLDivElement>(null);
+
   // State for image upload modal
   const [showImageUpload, setShowImageUpload] = useState(false);
 
@@ -75,6 +80,129 @@ const LandingPage: React.FC<LandingPageProps> = ({
 
   // Recent/Favorites tab state
   const [activeTab, setActiveTab] = useState<'recent' | 'favorites'>('recent');
+  const [favorites, setFavorites] = useState<any[]>([]);
+  const [recents, setRecents] = useState<any[]>([]);
+
+  // Delete modal state
+  const [deleteModal, setDeleteModal] = useState<{
+    isOpen: boolean;
+    itemName: string;
+    itemType: 'favorite' | 'recent';
+    onConfirm: () => void;
+  }>({
+    isOpen: false,
+    itemName: '',
+    itemType: 'favorite',
+    onConfirm: () => { }
+  });
+
+  // Load favorites and recents from localStorage
+  useEffect(() => {
+    const loadFavorites = () => {
+      const savedFavorites = JSON.parse(localStorage.getItem('designetica_favorites') || '[]');
+      setFavorites(savedFavorites);
+    };
+
+    const loadRecents = () => {
+      const savedRecents = JSON.parse(localStorage.getItem('designetica_recents') || '[]');
+      setRecents(savedRecents);
+    };
+
+    loadFavorites();
+    loadRecents();
+
+    // Listen for favorites and recents updates
+    const handleStorageChange = () => {
+      loadFavorites();
+      loadRecents();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
+  // Delete favorite function
+  const handleDeleteFavorite = (favoriteId: string) => {
+    const favoriteToDelete = favorites.find(fav => fav.id === favoriteId);
+    const favoriteName = favoriteToDelete?.name || 'this favorite';
+
+    setDeleteModal({
+      isOpen: true,
+      itemName: favoriteName,
+      itemType: 'favorite',
+      onConfirm: () => {
+        const updatedFavorites = favorites.filter(fav => fav.id !== favoriteId);
+        setFavorites(updatedFavorites);
+        localStorage.setItem('designetica_favorites', JSON.stringify(updatedFavorites));
+      }
+    });
+  };
+
+  // Delete recent function
+  const handleDeleteRecent = (recentId: string) => {
+    const recentToDelete = recents.find(rec => rec.id === recentId);
+    const recentName = recentToDelete?.name || 'this recent project';
+
+    setDeleteModal({
+      isOpen: true,
+      itemName: recentName,
+      itemType: 'recent',
+      onConfirm: () => {
+        const updatedRecents = recents.filter(rec => rec.id !== recentId);
+        setRecents(updatedRecents);
+        localStorage.setItem('designetica_recents', JSON.stringify(updatedRecents));
+      }
+    });
+  };  // Add to favorites from recent section
+  const handleAddRecentToFavorites = (projectName: string, projectMeta: string) => {
+    const newFavorite = {
+      id: Date.now().toString(),
+      name: projectName,
+      htmlContent: '',
+      type: 'recent',
+      createdAt: new Date().toISOString()
+    };
+
+    const currentFavorites = JSON.parse(localStorage.getItem('designetica_favorites') || '[]');
+    const updatedFavorites = [...currentFavorites, newFavorite];
+
+    setFavorites(updatedFavorites);
+    localStorage.setItem('designetica_favorites', JSON.stringify(updatedFavorites));
+
+    alert(`"${projectName}" has been added to your favorites!`);
+  };
+
+  // Add to recents utility function (can be called from parent)
+  const addToRecents = useCallback((name: string, description: string, htmlContent?: string) => {
+    const newRecent = {
+      id: Date.now().toString(),
+      name,
+      description,
+      htmlContent: htmlContent || '',
+      type: 'wireframe',
+      createdAt: new Date().toISOString()
+    };
+
+    const currentRecents = JSON.parse(localStorage.getItem('designetica_recents') || '[]');
+
+    // Avoid duplicates by checking if a recent with the same name exists
+    const existingIndex = currentRecents.findIndex((recent: any) => recent.name === name);
+    if (existingIndex !== -1) {
+      currentRecents.splice(existingIndex, 1); // Remove existing
+    }
+
+    // Add to beginning of array (most recent first)
+    const updatedRecents = [newRecent, ...currentRecents].slice(0, 10); // Keep only last 10
+
+    setRecents(updatedRecents);
+    localStorage.setItem('designetica_recents', JSON.stringify(updatedRecents));
+  }, []);
+
+  // Expose addToRecents function to parent
+  useEffect(() => {
+    // Make the function available globally if needed
+    (window as any).addToRecents = addToRecents;
+  }, [addToRecents]);
 
   const startGitHubOAuth = async () => {
     setGithubStatus(s => ({ connected: s.connected, login: s.login }));
@@ -163,6 +291,38 @@ const LandingPage: React.FC<LandingPageProps> = ({
       textareaRef.current.focus();
     }
   }, []);
+
+  // Handle scroll indicator for projects container
+  useEffect(() => {
+    const container = projectsContainerRef.current;
+    if (!container) return;
+
+    const updateScrollIndicator = () => {
+      const isScrollable = container.scrollHeight > container.clientHeight;
+      const isScrolledToBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 5;
+
+      if (isScrollable && !isScrolledToBottom) {
+        container.style.setProperty('--scroll-indicator-opacity', '1');
+      } else {
+        container.style.setProperty('--scroll-indicator-opacity', '0');
+      }
+    };
+
+    // Initial check
+    updateScrollIndicator();
+
+    // Listen for scroll events
+    container.addEventListener('scroll', updateScrollIndicator);
+
+    // Listen for content changes
+    const observer = new ResizeObserver(updateScrollIndicator);
+    observer.observe(container);
+
+    return () => {
+      container.removeEventListener('scroll', updateScrollIndicator);
+      observer.disconnect();
+    };
+  }, [favorites, recents, activeTab]);
 
   // Debounced AI suggestion trigger
   useEffect(() => {
@@ -379,66 +539,87 @@ const LandingPage: React.FC<LandingPageProps> = ({
                     Favorites
                   </button>
                 </div>
-                <div className="projects-container github-container">
+                <div className="projects-container github-container" ref={projectsContainerRef}>
                   {activeTab === 'recent' ? (
-                    <>
-                      <div className="project-item github-item">
-                        <div className="project-icon">
-                          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                            <path d="M8 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8Z"></path>
+                    recents.length > 0 ? (
+                      recents.map((recent) => (
+                        <div key={recent.id} className="project-item github-item">
+                          <div className="project-icon">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                              <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm7-3.25v2.992l2.028.812a.75.75 0 0 1-.557 1.392l-2.5-1A.751.751 0 0 1 7 8.25v-3.5a.75.75 0 0 1 1.5 0Z"></path>
+                            </svg>
+                          </div>
+                          <div className="project-details">
+                            <div className="project-name">{recent.name}</div>
+                            <div className="project-meta">{recent.description || `Created ${new Date(recent.createdAt).toLocaleDateString()}`}</div>
+                          </div>
+                          <div className="project-actions">
+                            <button
+                              className="action-btn star-btn"
+                              aria-label="Favorite this"
+                              title="Favorite this"
+                              onClick={() => handleAddRecentToFavorites(recent.name, recent.description || `Created ${new Date(recent.createdAt).toLocaleDateString()}`)}
+                            >
+                              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
+                              </svg>
+                            </button>
+                            <button
+                              className="action-btn delete-btn"
+                              aria-label="Delete recent"
+                              onClick={() => handleDeleteRecent(recent.id)}
+                            >
+                              <FiTrash size={16} />
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="empty-state">
+                        <div className="empty-state-content">
+                          <svg className="empty-icon" width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm7-3.25v2.992l2.028.812a.75.75 0 0 1-.557 1.392l-2.5-1A.751.751 0 0 1 7 8.25v-3.5a.75.75 0 0 1 1.5 0Z"></path>
                           </svg>
-                        </div>
-                        <div className="project-details">
-                          <div className="project-name">Azure Certification Dashboard</div>
-                          <div className="project-meta">Last updated 3 hours ago</div>
-                        </div>
-                        <div className="project-actions">
-                          <button className="action-btn star-btn" aria-label="Star">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                              <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
-                            </svg>
-                          </button>
-                          <button className="action-btn menu-btn" aria-label="More options">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                              <path d="M8 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM1.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm13 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path>
-                            </svg>
-                          </button>
+                          <p className="empty-message">No recent projects</p>
+                          <p className="empty-description">Start creating wireframes to see your recent work here</p>
                         </div>
                       </div>
-                      <div className="project-item github-item">
-                        <div className="project-icon">
-                          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                            <path d="M8 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8Z"></path>
-                          </svg>
-                        </div>
-                        <div className="project-details">
-                          <div className="project-name">Microsoft 365 Admin Portal</div>
-                          <div className="project-meta">Last updated last week</div>
-                        </div>
-                        <div className="project-actions">
-                          <button className="action-btn star-btn" aria-label="Star">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                              <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
-                            </svg>
-                          </button>
-                          <button className="action-btn menu-btn" aria-label="More options">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                              <path d="M8 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM1.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm13 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path>
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                    </>
+                    )
                   ) : (
-                    <div className="empty-state">
-                      <div className="empty-state-content">
-                        <svg className="empty-icon" width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
-                          <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
-                        </svg>
-                        <p className="empty-message">No favorites</p>
-                        <p className="empty-description">Star projects to add them to your favorites</p>
+                    favorites.length > 0 ? (
+                      favorites.map((favorite) => (
+                        <div key={favorite.id} className="project-item github-item">
+                          <div className="project-icon favorite">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                              <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
+                            </svg>
+                          </div>
+                          <div className="project-details">
+                            <div className="project-name">{favorite.name}</div>
+                            <div className="project-meta">{`Added ${new Date(favorite.createdAt).toLocaleDateString()}`}</div>
+                          </div>
+                          <div className="project-actions">
+                            <button
+                              className="action-btn delete-btn"
+                              aria-label="Delete favorite"
+                              onClick={() => handleDeleteFavorite(favorite.id)}
+                            >
+                              <FiTrash size={16} />
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="empty-state">
+                        <div className="empty-state-content">
+                          <svg className="empty-icon" width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
+                          </svg>
+                          <p className="empty-message">No favorites</p>
+                          <p className="empty-description">Star projects to add them to your favorites</p>
+                        </div>
                       </div>
-                    </div>
+                    )
                   )}
                 </div>
               </div>
@@ -529,6 +710,15 @@ const LandingPage: React.FC<LandingPageProps> = ({
           </div>
         </div>
       )}
+
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmationModal
+        isOpen={deleteModal.isOpen}
+        onClose={() => setDeleteModal(prev => ({ ...prev, isOpen: false }))}
+        onConfirm={deleteModal.onConfirm}
+        itemName={deleteModal.itemName}
+        itemType={deleteModal.itemType}
+      />
 
       <Footer />
     </div>

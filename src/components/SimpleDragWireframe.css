@@ -6,7 +6,7 @@
 
 .dragula-container {
   min-height: 400px;
-  padding: 20px;
+  padding: 5px 20px 20px;
 }
 
 /* Make ALL elements in the container visible and draggable */
@@ -15,7 +15,7 @@
   background: #f8f9fa !important;
   border: 2px dashed #dee2e6 !important;
   padding: 10px !important;
-  margin: 5px !important;
+  margin: 10px !important;
   cursor: move !important;
   border-radius: 6px;
   transition: all 0.2s ease;

@@ -1034,7 +1034,7 @@
 .recent-favorites-section {
   width: 100%;
   max-width: 500px; /* Keep narrower as requested */
-  margin: 60px auto 0 auto; /* Center the section */
+  margin: 32px auto 24px auto; /* Reduced top margin, added bottom margin */
 }
 
 .section-tabs.github-style {
@@ -1082,15 +1082,59 @@
   border: 1px solid #d1d9e0;
   border-radius: 0;
   margin-top: 0;
+  height: 280px; /* Fixed height matching empty state */
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: hidden; /* Hide horizontal scrolling */
+  position: relative;
+  --scroll-indicator-opacity: 0;
+}
+
+/* Scroll indicator shadow */
+.projects-container.github-container::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.06));
+  pointer-events: none;
+  opacity: var(--scroll-indicator-opacity);
+  transition: opacity 0.2s ease;
+}
+
+/* Custom scrollbar styling */
+.projects-container.github-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.projects-container.github-container::-webkit-scrollbar-track {
+  background: #f6f8fa;
+}
+
+.projects-container.github-container::-webkit-scrollbar-thumb {
+  background: #d1d9e0;
+  border-radius: 4px;
+}
+
+.projects-container.github-container::-webkit-scrollbar-thumb:hover {
+  background: #b1b8c0;
 }
 
 .project-item.github-item {
   display: flex;
   text-align: left;
-  padding: 16px;
-  border-bottom: 1px solid #d1d9e0;
-  transition: background-color 0.1s ease;
+  padding: 12px 16px; /* Reduced from 16px to 12px vertically */
+  border-bottom: 1px solid #e1e4e8; /* More visible border */
+  border-left: 3px solid transparent; /* Invisible left border by default */
+  transition: all 0.1s ease;
   cursor: pointer;
+  background-color: #ffffff; /* Explicit white background */
+}
+
+/* Alternating background colors for better separation */
+.project-item.github-item:nth-child(even) {
+  background-color: #f8f9fa; /* Subtle gray for even items */
 }
 
 .project-item.github-item:last-child {
@@ -1098,7 +1142,8 @@
 }
 
 .project-item.github-item:hover {
-  background-color: #f6f8fa;
+  background-color: #f0f3f6; /* Darker hover state for both odd and even */
+  border-left-color: #0969da; /* Blue left accent on hover */
 }
 
 .project-icon {
@@ -1154,6 +1199,19 @@
 
 .action-btn.star-btn:hover {
   color: #f59e0b;
+}
+
+.project-icon.favorite {
+  color: #f59e0b;
+}
+
+.action-btn.delete-btn {
+  color: #dc3545;
+}
+
+.action-btn.delete-btn:hover {
+  background-color: #fef2f2;
+  color: #dc2626;
 }
 
 .section-tabs {
@@ -1280,4 +1338,50 @@
   color: #656d76;
   margin: 0;
   line-height: 1.4;
+}
+
+/* Dark mode scrollbar support */
+[data-theme="dark"]
+  .projects-container.github-container::-webkit-scrollbar-track {
+  background: #21262d;
+}
+
+[data-theme="dark"]
+  .projects-container.github-container::-webkit-scrollbar-thumb {
+  background: #484f58;
+}
+
+[data-theme="dark"]
+  .projects-container.github-container::-webkit-scrollbar-thumb:hover {
+  background: #656c76;
+}
+
+/* Dark mode scroll indicator */
+[data-theme="dark"] .projects-container.github-container::after {
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 255, 255, 0.08)
+  );
+}
+
+/* Dark mode project items */
+[data-theme="dark"] .project-item.github-item {
+  background-color: #21262d; /* Dark background for odd items */
+  border-bottom-color: #30363d; /* Dark border */
+}
+
+[data-theme="dark"] .project-item.github-item:nth-child(even) {
+  background-color: #161b22; /* Darker background for even items */
+}
+
+[data-theme="dark"] .project-item.github-item:hover {
+  background-color: #30363d; /* Dark hover state */
+  border-left-color: #58a6ff; /* Blue left accent on hover in dark mode */
+}
+
+/* Dark mode container */
+[data-theme="dark"] .projects-container.github-container {
+  background: #0d1117;
+  border-color: #30363d;
 }
