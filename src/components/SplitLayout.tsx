@@ -15,6 +15,7 @@ import HtmlCodeViewer from "./HtmlCodeViewer";
 import PresentationMode from "./PresentationMode";
 
 import { generateShareUrl } from "../utils/powerpointExport";
+import { generateWireframeName } from "../utils/wireframeNaming";
 import {
   FiSend,
   FiLoader,
@@ -179,7 +180,12 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
 
   // Left panel collapse state
-  const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);  // Function to validate chat input - check if it's only numbers
+  const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);
+
+  // Wireframe name state
+  const [wireframeName, setWireframeName] = useState<string | null>(null);
+
+  // Function to validate chat input - check if it's only numbers
   const validateChatInput = (input: string): boolean => {
     const trimmedInput = input.trim();
 
@@ -613,6 +619,19 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     setWireframeToUpdate(undefined);
   }, []);
 
+  // Generate intelligent wireframe name based on content
+  const generateAndSetWireframeName = useCallback(() => {
+    const currentContent = currentPageId && pageContents[currentPageId]
+      ? pageContents[currentPageId]
+      : htmlWireframe;
+
+    if (currentContent) {
+      const intelligentName = generateWireframeName(currentContent);
+      setWireframeName(intelligentName);
+      console.log('🧠 Generated intelligent wireframe name:', intelligentName);
+    }
+  }, [currentPageId, pageContents, htmlWireframe]);
+
   const handleSaveWireframe = useCallback(async (
     wireframeData: Omit<SavedWireframe, 'id' | 'createdAt' | 'updatedAt'>
   ) => {
@@ -643,22 +662,58 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       setSavedWireframes(prev => [...prev, newWireframe]);
       addMessage('ai', `💾 Wireframe "${wireframeData.name}" saved successfully! You can access it from the library.`);
 
-      // Add saved wireframe to recents
-      try {
-        const addToRecents = (window as any).addToRecents;
-        if (addToRecents) {
-          addToRecents(wireframeData.name, wireframeData.description || "Saved wireframe", wireframeData.html);
-        }
-      } catch (error) {
-        console.log("Could not add saved wireframe to recents:", error);
+      // Add saved wireframe to recents - moved outside of try-catch for better reliability
+      const addToRecents = (window as any).addToRecents;
+      if (addToRecents && typeof addToRecents === 'function') {
+        addToRecents(wireframeData.name, wireframeData.description || "Saved wireframe", wireframeData.html);
+        console.log(`✅ Added "${wireframeData.name}" to recents`);
+
+        // Also dispatch a custom event to ensure UI updates
+        window.dispatchEvent(new CustomEvent('wireframeSaved', {
+          detail: {
+            name: wireframeData.name,
+            description: wireframeData.description || "Saved wireframe",
+            html: wireframeData.html
+          }
+        }));
+      } else {
+        console.warn("addToRecents function not available on window object");
       }
     }
 
-    // In a real app, you would also save to backend/localStorage
-    localStorage.setItem('designetica_saved_wireframes', JSON.stringify(savedWireframes));
-
     setIsEnhancedSaveModalOpen(false);
   }, [isUpdatingWireframe, wireframeToUpdate, savedWireframes, addMessage]);
+
+  // Update localStorage whenever savedWireframes changes
+  useEffect(() => {
+    localStorage.setItem('designetica_saved_wireframes', JSON.stringify(savedWireframes));
+  }, [savedWireframes]);
+
+  // Generate intelligent wireframe name when content changes
+  useEffect(() => {
+    if (htmlWireframe && htmlWireframe.trim() && !wireframeName) {
+      // Only generate name for the first time when content is created
+      generateAndSetWireframeName();
+    }
+  }, [htmlWireframe, wireframeName, generateAndSetWireframeName]);
+
+  // Regenerate name when switching pages or when significant content changes
+  useEffect(() => {
+    if ((htmlWireframe || (currentPageId && pageContents[currentPageId])) && wireframeName) {
+      // Regenerate name when page content changes significantly
+      const currentContent = currentPageId && pageContents[currentPageId]
+        ? pageContents[currentPageId]
+        : htmlWireframe;
+
+      if (currentContent && currentContent.length > 500) { // Only for substantial content
+        const newName = generateWireframeName(currentContent);
+        if (newName !== wireframeName) {
+          setWireframeName(newName);
+          console.log('🔄 Updated wireframe name to:', newName);
+        }
+      }
+    }
+  }, [currentPageId, pageContents, htmlWireframe, wireframeName]);
 
   const handleOpenLibrary = useCallback(() => {
     setIsComponentLibraryOpen(true);
@@ -986,6 +1041,13 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       <div className={`right-pane ${isLeftPanelCollapsed ? 'expanded' : ''}`}>
         {(htmlWireframe || wireframePages.length > 0) ? (
           <div className="wireframe-panel">
+            {/* Intelligent Wireframe Name Display */}
+            {wireframeName && (
+              <div className="wireframe-name-header">
+                <h3 className="wireframe-title">{wireframeName}</h3>
+              </div>
+            )}
+
             {/* Always show PageNavigation when we have a wireframe */}
             <PageNavigation
               pages={wireframePages}

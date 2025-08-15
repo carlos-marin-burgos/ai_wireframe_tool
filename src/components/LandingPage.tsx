@@ -24,6 +24,7 @@ interface LandingPageProps {
   isAnalyzingImage?: boolean;
   onFigmaImport?: (html: string, fileName: string) => void;
   onFigmaExport?: (format: 'figma-file' | 'figma-components') => void;
+  onOpenWireframe?: (html: string, description: string) => void;
 }
 
 import {
@@ -60,6 +61,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
   isAnalyzingImage = false,
   onFigmaImport,
   onFigmaExport,
+  onOpenWireframe,
 }) => {
   // Create ref for textarea autofocus
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -153,12 +155,21 @@ const LandingPage: React.FC<LandingPageProps> = ({
         localStorage.setItem('designetica_recents', JSON.stringify(updatedRecents));
       }
     });
+  };
+
+  // Open wireframe from recent or favorites
+  const handleOpenWireframe = (item: any) => {
+    if (onOpenWireframe && item.htmlContent) {
+      onOpenWireframe(item.htmlContent, item.description || item.name);
+    } else {
+      console.warn('Cannot open wireframe: missing HTML content or onOpenWireframe handler');
+    }
   };  // Add to favorites from recent section
-  const handleAddRecentToFavorites = (projectName: string, projectMeta: string) => {
+  const handleAddRecentToFavorites = (projectName: string, projectMeta: string, htmlContent?: string) => {
     const newFavorite = {
       id: Date.now().toString(),
       name: projectName,
-      htmlContent: '',
+      htmlContent: htmlContent || '',
       type: 'recent',
       createdAt: new Date().toISOString()
     };
@@ -202,6 +213,18 @@ const LandingPage: React.FC<LandingPageProps> = ({
   useEffect(() => {
     // Make the function available globally if needed
     (window as any).addToRecents = addToRecents;
+
+    // Listen for wireframe save events to update UI
+    const handleWireframeSaved = (event: CustomEvent) => {
+      const { name, description, html } = event.detail;
+      addToRecents(name, description, html);
+    };
+
+    window.addEventListener('wireframeSaved', handleWireframeSaved as EventListener);
+
+    return () => {
+      window.removeEventListener('wireframeSaved', handleWireframeSaved as EventListener);
+    };
   }, [addToRecents]);
 
   const startGitHubOAuth = async () => {
@@ -543,7 +566,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
                   {activeTab === 'recent' ? (
                     recents.length > 0 ? (
                       recents.map((recent) => (
-                        <div key={recent.id} className="project-item github-item">
+                        <div key={recent.id} className="project-item github-item" onClick={() => handleOpenWireframe(recent)}>
                           <div className="project-icon">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                               <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm7-3.25v2.992l2.028.812a.75.75 0 0 1-.557 1.392l-2.5-1A.751.751 0 0 1 7 8.25v-3.5a.75.75 0 0 1 1.5 0Z"></path>
@@ -553,12 +576,12 @@ const LandingPage: React.FC<LandingPageProps> = ({
                             <div className="project-name">{recent.name}</div>
                             <div className="project-meta">{recent.description || `Created ${new Date(recent.createdAt).toLocaleDateString()}`}</div>
                           </div>
-                          <div className="project-actions">
+                          <div className="project-actions" onClick={(e) => e.stopPropagation()}>
                             <button
                               className="action-btn star-btn"
                               aria-label="Favorite this"
                               title="Favorite this"
-                              onClick={() => handleAddRecentToFavorites(recent.name, recent.description || `Created ${new Date(recent.createdAt).toLocaleDateString()}`)}
+                              onClick={() => handleAddRecentToFavorites(recent.name, recent.description || `Created ${new Date(recent.createdAt).toLocaleDateString()}`, recent.htmlContent)}
                             >
                               <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                                 <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
@@ -588,7 +611,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
                   ) : (
                     favorites.length > 0 ? (
                       favorites.map((favorite) => (
-                        <div key={favorite.id} className="project-item github-item">
+                        <div key={favorite.id} className="project-item github-item" onClick={() => handleOpenWireframe(favorite)}>
                           <div className="project-icon favorite">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                               <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
@@ -598,7 +621,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
                             <div className="project-name">{favorite.name}</div>
                             <div className="project-meta">{`Added ${new Date(favorite.createdAt).toLocaleDateString()}`}</div>
                           </div>
-                          <div className="project-actions">
+                          <div className="project-actions" onClick={(e) => e.stopPropagation()}>
                             <button
                               className="action-btn delete-btn"
                               aria-label="Delete favorite"

@@ -199,6 +199,13 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     console.log('Wireframe Loaded!', `"${wireframe.name}" has been loaded.`);
   };
 
+  // Function to open wireframe from recent/favorites
+  const openWireframe = (html: string, description: string) => {
+    handleWireframeGenerated(html);
+    setDescription(description);
+    console.log('Wireframe opened from recent/favorites');
+  };
+
   const deleteWireframe = (id: string) => {
     const wireframe = savedWireframes.find(w => w.id === id);
     const updated = savedWireframes.filter((w) => w.id !== id);
@@ -1084,6 +1091,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           isAnalyzingImage={isAnalyzingImage}
           onFigmaImport={handleFigmaImport}
           onFigmaExport={handleFigmaExport}
+          onOpenWireframe={openWireframe}
         />
       ) : (
         <SplitLayout

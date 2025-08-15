@@ -349,6 +349,42 @@
   margin: 30px 40px 70px 20px; /* Increased top margin from 10px to 30px for better spacing */
 }
 
+/* Wireframe Name Header */
+.wireframe-name-header {
+  padding: 12px 16px 8px;
+  border-bottom: 1px solid #e9ecef;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 8px 8px 0 0;
+}
+
+.wireframe-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+  text-align: center;
+  letter-spacing: 0.3px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark mode support for wireframe name */
+[data-theme="dark"] .wireframe-name-header {
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  border-bottom-color: #4a5568;
+}
+
+[data-theme="dark"] .wireframe-title {
+  color: #e2e8f0;
+  background: linear-gradient(135deg, #90cdf4 0%, #b794f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 /* AI Assistant main container - Microsoft Learn style */
 .ai-assistant-container {
   display: flex;
