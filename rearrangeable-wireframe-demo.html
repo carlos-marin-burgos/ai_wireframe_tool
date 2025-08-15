@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Rearrangeable Wireframe Demo - Designetica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #f8f9fa;
+            line-height: 1.6;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .demo-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 120, 212, 0.3);
+        }
+
+        .demo-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .demo-header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 4px solid;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .feature-card.drag-drop {
+            border-left-color: #0078d4;
+        }
+
+        .feature-card.grid-system {
+            border-left-color: #107c10;
+        }
+
+        .feature-card.component-library {
+            border-left-color: #d83b01;
+        }
+
+        .feature-card.responsive {
+            border-left-color: #5c2d91;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: #323130;
+        }
+
+        .feature-card p {
+            color: #605e5c;
+            line-height: 1.6;
+        }
+
+        .demo-section {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .demo-section h2 {
+            color: #323130;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .demo-wireframe {
+            border: 2px dashed #e1dfdd;
+            border-radius: 8px;
+            padding: 20px;
+            background: #fafbfc;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .demo-row {
+            display: flex;
+            gap: 20px;
+            min-height: 100px;
+            background: white;
+            border-radius: 6px;
+            padding: 16px;
+            border: 1px solid #e1dfdd;
+            transition: all 0.3s ease;
+        }
+
+        .demo-row:hover {
+            border-color: #0078d4;
+            box-shadow: 0 2px 8px rgba(0, 120, 212, 0.1);
+        }
+
+        .demo-block {
+            background: #f3f2f1;
+            border: 1px solid #e1dfdd;
+            border-radius: 4px;
+            padding: 16px;
+            text-align: center;
+            cursor: grab;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .demo-block:hover {
+            background: #edebe9;
+            border-color: #0078d4;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-block:active {
+            cursor: grabbing;
+            transform: scale(1.02) rotate(2deg);
+        }
+
+        .demo-block.col-3 {
+            flex: 0 0 25%;
+        }
+
+        .demo-block.col-4 {
+            flex: 0 0 33.333%;
+        }
+
+        .demo-block.col-6 {
+            flex: 0 0 50%;
+        }
+
+        .demo-block.col-8 {
+            flex: 0 0 66.666%;
+        }
+
+        .demo-block.col-12 {
+            flex: 0 0 100%;
+        }
+
+        .block-content {
+            color: #323130;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .block-type {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: #0078d4;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .instructions {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 30px;
+            border-left: 4px solid #0078d4;
+        }
+
+        .instructions h3 {
+            color: #323130;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .instructions ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .instructions li {
+            padding: 8px 0;
+            color: #605e5c;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .instructions li::before {
+            content: "✨";
+            font-size: 16px;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+            color: white;
+            text-align: center;
+            padding: 50px 30px;
+            border-radius: 12px;
+            margin-top: 40px;
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 16px;
+        }
+
+        .cta-section p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            background: white;
+            color: #0078d4;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .demo-container {
+                padding: 16px;
+            }
+
+            .demo-header h1 {
+                font-size: 2rem;
+            }
+
+            .demo-header p {
+                font-size: 1rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .demo-section {
+                padding: 24px;
+            }
+
+            .demo-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .demo-block.col-3,
+            .demo-block.col-4,
+            .demo-block.col-6,
+            .demo-block.col-8,
+            .demo-block.col-12 {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="demo-container">
+        <!-- Header -->
+        <div class="demo-header">
+            <h1>🎯 Rearrangeable Wireframe System</h1>
+            <p>Revolutionary drag-and-drop Bootstrap grid interface inspired by the CodePen you shared!</p>
+        </div>
+
+        <!-- Feature Overview -->
+        <div class="feature-grid">
+            <div class="feature-card drag-drop">
+                <span class="feature-icon">🖱️</span>
+                <h3>Drag & Drop Magic</h3>
+                <p>Effortlessly rearrange wireframe components by dragging them between grid positions, just like the
+                    CodePen example you loved!</p>
+            </div>
+
+            <div class="feature-card grid-system">
+                <span class="feature-icon">📐</span>
+                <h3>Bootstrap Grid System</h3>
+                <p>Built on Bootstrap's powerful 12-column grid with visual indicators and snap-to-grid functionality
+                    for perfect layouts.</p>
+            </div>
+
+            <div class="feature-card component-library">
+                <span class="feature-icon">🧩</span>
+                <h3>Component Integration</h3>
+                <p>Seamlessly add components from your existing library and rearrange them alongside generated wireframe
+                    elements.</p>
+            </div>
+
+            <div class="feature-card responsive">
+                <span class="feature-icon">📱</span>
+                <h3>Responsive & Resizable</h3>
+                <p>Components can be resized and the entire system adapts beautifully to different screen sizes and
+                    devices.</p>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions">
+            <h3>🚀 How It Works</h3>
+            <ul>
+                <li>Click the "Rearrange" mode button to activate drag-and-drop functionality</li>
+                <li>Drag any component to move it to a different position in the grid</li>
+                <li>Drop components into visual drop zones that appear during dragging</li>
+                <li>Resize components by dragging the handles on their edges</li>
+                <li>Add new components from the library and position them anywhere</li>
+                <li>Switch between Preview, Rearrange, and Split View modes</li>
+            </ul>
+        </div>
+
+        <!-- Live Demo Wireframe -->
+        <div class="demo-section">
+            <h2>🎪 Interactive Demo (Try dragging these!)</h2>
+            <div class="demo-wireframe">
+                <div class="demo-row">
+                    <div class="demo-block col-3">
+                        <span class="block-type">NAV</span>
+                        <div class="block-content">Navigation Menu</div>
+                    </div>
+                    <div class="demo-block col-6">
+                        <span class="block-type">HERO</span>
+                        <div class="block-content">Hero Section</div>
+                    </div>
+                    <div class="demo-block col-3">
+                        <span class="block-type">CTA</span>
+                        <div class="block-content">Call to Action</div>
+                    </div>
+                </div>
+
+                <div class="demo-row">
+                    <div class="demo-block col-4">
+                        <span class="block-type">CARD</span>
+                        <div class="block-content">Feature Card 1</div>
+                    </div>
+                    <div class="demo-block col-4">
+                        <span class="block-type">CARD</span>
+                        <div class="block-content">Feature Card 2</div>
+                    </div>
+                    <div class="demo-block col-4">
+                        <span class="block-type">CARD</span>
+                        <div class="block-content">Feature Card 3</div>
+                    </div>
+                </div>
+
+                <div class="demo-row">
+                    <div class="demo-block col-8">
+                        <span class="block-type">FORM</span>
+                        <div class="block-content">Contact Form</div>
+                    </div>
+                    <div class="demo-block col-4">
+                        <span class="block-type">INFO</span>
+                        <div class="block-content">Sidebar Info</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technical Features -->
+        <div class="demo-section">
+            <h2>⚡ Technical Capabilities</h2>
+            <div class="feature-grid">
+                <div style="grid-column: 1 / -1;">
+                    <ul style="columns: 2; gap: 40px; list-style: none; padding: 0;">
+                        <li
+                            style="break-inside: avoid; padding: 12px 0; display: flex; align-items: center; gap: 12px;">
+                            <span style="color: #0078d4; font-weight: bold;">✅</span>
+                            Bootstrap Grid Integration
+                        </li>
+                        <li
+                            style="break-inside: avoid; padding: 12px 0; display: flex; align-items: center; gap: 12px;">
+                            <span style="color: #0078d4; font-weight: bold;">✅</span>
+                            Dragula.js-inspired Drag & Drop
+                        </li>
+                        <li
+                            style="break-inside: avoid; padding: 12px 0; display: flex; align-items: center; gap: 12px;">
+                            <span style="color: #0078d4; font-weight: bold;">✅</span>
+                            jQuery UI-style Resizing
+                        </li>
+                        <li
+                            style="break-inside: avoid; padding: 12px 0; display: flex; align-items: center; gap: 12px;">
+                            <span style="color: #0078d4; font-weight: bold;">✅</span>
+                            Visual Drop Zone Indicators
+                        </li>
+                        <li
+                            style="break-inside: avoid; padding: 12px 0; display: flex; align-items: center; gap: 12px;">
+                            <span style="color: #0078d4; font-weight: bold;">✅</span>
+                            Component Library Integration
+                        </li>
+                        <li
+                            style="break-inside: avoid; padding: 12px 0; display: flex; align-items: center; gap: 12px;">
+                            <span style="color: #0078d4; font-weight: bold;">✅</span>
+                            Real-time HTML Generation
+                        </li>
+                        <li
+                            style="break-inside: avoid; padding: 12px 0; display: flex; align-items: center; gap: 12px;">
+                            <span style="color: #0078d4; font-weight: bold;">✅</span>
+                            Multiple View Modes
+                        </li>
+                        <li
+                            style="break-inside: avoid; padding: 12px 0; display: flex; align-items: center; gap: 12px;">
+                            <span style="color: #0078d4; font-weight: bold;">✅</span>
+                            Mobile-Responsive Design
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Integration Guide -->
+        <div class="demo-section">
+            <h2>🔧 Integration in Your Wireframe Generator</h2>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #107c10;">
+                <h3 style="color: #323130; margin-bottom: 16px;">Ready to Use!</h3>
+                <p style="color: #605e5c; margin-bottom: 16px;">
+                    I've created three new components that integrate seamlessly with your existing wireframe system:
+                </p>
+                <ul style="color: #605e5c; padding-left: 20px;">
+                    <li><strong>RearrangeableWireframe.tsx</strong> - The main drag-and-drop component</li>
+                    <li><strong>EnhancedWireframeRenderer.tsx</strong> - Integration wrapper with mode switching</li>
+                    <li><strong>Comprehensive CSS files</strong> - Complete styling with animations and responsive
+                        design</li>
+                </ul>
+                <p style="color: #605e5c; margin-top: 16px;">
+                    Simply replace your current InteractiveWireframe with EnhancedWireframeRenderer to get all the new
+                    functionality!
+                </p>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="cta-section">
+            <h2>Ready to Transform Your Wireframing?</h2>
+            <p>This rearrangeable system will revolutionize how users interact with your generated wireframes!</p>
+            <a href="#" class="cta-button"
+                onclick="alert('Integration files are ready! Check the new components in your src/components folder.')">
+                🚀 View Integration Files
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Simple drag simulation for demo
+        document.addEventListener('DOMContentLoaded', function () {
+            const blocks = document.querySelectorAll('.demo-block');
+
+            blocks.forEach(block => {
+                let isDragging = false;
+                let startPos = { x: 0, y: 0 };
+                let currentPos = { x: 0, y: 0 };
+
+                block.addEventListener('mousedown', function (e) {
+                    isDragging = true;
+                    startPos = { x: e.clientX, y: e.clientY };
+                    block.style.zIndex = '1000';
+                    block.style.transform = 'scale(1.05) rotate(2deg)';
+                    block.style.boxShadow = '0 8px 20px rgba(0,0,0,0.2)';
+                    document.body.style.cursor = 'grabbing';
+                });
+
+                document.addEventListener('mousemove', function (e) {
+                    if (!isDragging) return;
+
+                    currentPos = {
+                        x: e.clientX - startPos.x,
+                        y: e.clientY - startPos.y
+                    };
+
+                    block.style.transform = `translate(${currentPos.x}px, ${currentPos.y}px) scale(1.05) rotate(2deg)`;
+                });
+
+                document.addEventListener('mouseup', function () {
+                    if (!isDragging) return;
+
+                    isDragging = false;
+                    block.style.zIndex = '';
+                    block.style.transform = '';
+                    block.style.boxShadow = '';
+                    document.body.style.cursor = '';
+
+                    // Simple "snap back" effect
+                    setTimeout(() => {
+                        block.style.transition = 'all 0.3s ease';
+                        block.style.transform = 'scale(1.02)';
+                        setTimeout(() => {
+                            block.style.transform = '';
+                            block.style.transition = '';
+                        }, 300);
+                    }, 100);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

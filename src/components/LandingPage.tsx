@@ -23,7 +23,6 @@ interface LandingPageProps {
   isAnalyzingImage?: boolean;
   onFigmaImport?: (html: string, fileName: string) => void;
   onFigmaExport?: (format: 'figma-file' | 'figma-components') => void;
-  onDemoGenerate?: (imagePath: string, description: string) => void;
 }
 
 import {
@@ -59,7 +58,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
   isAnalyzingImage = false,
   onFigmaImport,
   onFigmaExport,
-  onDemoGenerate,
 }) => {
   // Create ref for textarea autofocus
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -382,65 +380,78 @@ const LandingPage: React.FC<LandingPageProps> = ({
                   </button>
                 </div>
                 <div className="projects-container github-container">
-                  <div className="project-item github-item">
-                    <div className="project-icon">
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M8 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8Z"></path>
-                      </svg>
-                    </div>
-                    <div className="project-details">
-                      <div className="project-name">Azure Certification Dashboard</div>
-                      <div className="project-meta">Last updated 3 hours ago</div>
-                    </div>
-                    <div className="project-actions">
-                      <button className="action-btn star-btn" aria-label="Star">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  {activeTab === 'recent' ? (
+                    <>
+                      <div className="project-item github-item">
+                        <div className="project-icon">
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8Z"></path>
+                          </svg>
+                        </div>
+                        <div className="project-details">
+                          <div className="project-name">Azure Certification Dashboard</div>
+                          <div className="project-meta">Last updated 3 hours ago</div>
+                        </div>
+                        <div className="project-actions">
+                          <button className="action-btn star-btn" aria-label="Star">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                              <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
+                            </svg>
+                          </button>
+                          <button className="action-btn menu-btn" aria-label="More options">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                              <path d="M8 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM1.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm13 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <div className="project-item github-item">
+                        <div className="project-icon">
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8Z"></path>
+                          </svg>
+                        </div>
+                        <div className="project-details">
+                          <div className="project-name">Microsoft 365 Admin Portal</div>
+                          <div className="project-meta">Last updated last week</div>
+                        </div>
+                        <div className="project-actions">
+                          <button className="action-btn star-btn" aria-label="Star">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                              <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
+                            </svg>
+                          </button>
+                          <button className="action-btn menu-btn" aria-label="More options">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                              <path d="M8 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM1.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm13 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="empty-state">
+                      <div className="empty-state-content">
+                        <svg className="empty-icon" width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
                           <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
                         </svg>
-                      </button>
-                      <button className="action-btn menu-btn" aria-label="More options">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                          <path d="M8 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM1.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm13 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path>
-                        </svg>
-                      </button>
+                        <p className="empty-message">No favorites</p>
+                        <p className="empty-description">Star projects to add them to your favorites</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="project-item github-item">
-                    <div className="project-icon">
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M8 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8Z"></path>
-                      </svg>
-                    </div>
-                    <div className="project-details">
-                      <div className="project-name">Microsoft 365 Admin Portal</div>
-                      <div className="project-meta">Last updated last week</div>
-                    </div>
-                    <div className="project-actions">
-                      <button className="action-btn star-btn" aria-label="Star">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                          <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
-                        </svg>
-                      </button>
-                      <button className="action-btn menu-btn" aria-label="More options">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                          <path d="M8 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM1.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm13 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path>
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
           </form>
 
           {/* Image Upload Zone */}
-          {showImageUpload && onImageUpload && onAnalyzeImage && onDemoGenerate && (
+          {showImageUpload && onImageUpload && onAnalyzeImage && (
             <ImageUploadModal
               isOpen={showImageUpload}
               onClose={() => setShowImageUpload(false)}
               onImageUpload={onImageUpload}
               onAnalyzeImage={onAnalyzeImage}
-              onDemoGenerate={onDemoGenerate}
               isAnalyzing={isAnalyzingImage}
             />
           )}

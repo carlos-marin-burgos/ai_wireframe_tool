@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag & Drop Test</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .rearrangeable-wireframe {
+            position: relative;
+            min-height: 500px;
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .draggable-item {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: move;
+            position: relative;
+            z-index: 1;
+        }
+
+        .draggable-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .draggable-item.dragging {
+            opacity: 0.7;
+            transform: scale(1.05);
+            z-index: 1000;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .drop-zone {
+            position: absolute;
+            background: linear-gradient(45deg, #007bff22, #28a74522);
+            border: 2px dashed #007bff;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .drop-zone.active {
+            opacity: 1;
+        }
+
+        .drop-zone::before {
+            content: "Drop here";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #007bff;
+            font-weight: bold;
+            font-size: 14px;
+            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
+        }
+
+        .wireframe-content {
+            min-height: 100%;
+        }
+
+        .card {
+            margin-bottom: 1rem;
+        }
+
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-container">
+        <h1>Drag & Drop Rearrangeable Test</h1>
+        <p>Try dragging the cards below to rearrange them:</p>
+        <div id="root"></div>
+    </div>
+
+    <script type="text/babel">
+        const { useState, useRef, useEffect } = React;
+
+        function TestRearrangeable() {
+            const containerRef = useRef(null);
+            const [draggableItems, setDraggableItems] = useState([]);
+            const [isDragging, setIsDragging] = useState(false);
+            const [dragState, setDragState] = useState({
+                draggedElement: null,
+                startX: 0,
+                startY: 0,
+                offsetX: 0,
+                offsetY: 0
+            });
+
+            // Sample HTML content
+            const htmlContent = `
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">Card 1</div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Feature Card</h5>
+                                    <p class="card-text">This is a sample feature card that can be rearranged.</p>
+                                    <a href="#" class="btn btn-primary">Learn More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">Card 2</div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Service Card</h5>
+                                    <p class="card-text">Another rearrangeable component in the wireframe.</p>
+                                    <a href="#" class="btn btn-success">Get Started</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">Card 3</div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Info Card</h5>
+                                    <p class="card-text">Third component that demonstrates drag and drop.</p>
+                                    <a href="#" class="btn btn-info">Contact Us</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Wide Card</h5>
+                                    <p class="card-text">This is a wider card that spans multiple columns.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Another Wide Card</h5>
+                                    <p class="card-text">Second wide card for testing rearrangement.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const initializeDragDrop = () => {
+                if (!containerRef.current) return;
+
+                // Find all draggable items
+                const items = containerRef.current.querySelectorAll('.col-md-4, .col-md-6, .col-md-12, .card');
+                console.log('Found draggable items:', items.length);
+
+                items.forEach((item, index) => {
+                    item.classList.add('draggable-item');
+                    item.setAttribute('data-drag-index', index);
+
+                    // Remove existing listeners
+                    item.removeEventListener('mousedown', handleMouseDown);
+                    // Add new listeners
+                    item.addEventListener('mousedown', handleMouseDown);
+                });
+
+                setDraggableItems(Array.from(items));
+            };
+
+            const handleMouseDown = (e) => {
+                e.preventDefault();
+                console.log('Mouse down on:', e.target);
+
+                const target = e.target.closest('.draggable-item');
+                if (!target) return;
+
+                const rect = target.getBoundingClientRect();
+                const containerRect = containerRef.current.getBoundingClientRect();
+
+                setDragState({
+                    draggedElement: target,
+                    startX: e.clientX,
+                    startY: e.clientY,
+                    offsetX: e.clientX - rect.left,
+                    offsetY: e.clientY - rect.top
+                });
+
+                setIsDragging(true);
+                target.classList.add('dragging');
+
+                // Add global mouse event listeners
+                document.addEventListener('mousemove', handleMouseMove);
+                document.addEventListener('mouseup', handleMouseUp);
+            };
+
+            const handleMouseMove = (e) => {
+                if (!isDragging || !dragState.draggedElement) return;
+
+                const { draggedElement, offsetX, offsetY } = dragState;
+                const containerRect = containerRef.current.getBoundingClientRect();
+
+                // Position the dragged element
+                draggedElement.style.position = 'fixed';
+                draggedElement.style.left = `${e.clientX - offsetX}px`;
+                draggedElement.style.top = `${e.clientY - offsetY}px`;
+                draggedElement.style.zIndex = '1000';
+                draggedElement.style.pointerEvents = 'none';
+
+                // Show drop zones
+                showDropZones(e.clientX, e.clientY);
+            };
+
+            const handleMouseUp = (e) => {
+                if (!isDragging || !dragState.draggedElement) return;
+
+                const { draggedElement } = dragState;
+
+                // Reset styles
+                draggedElement.style.position = '';
+                draggedElement.style.left = '';
+                draggedElement.style.top = '';
+                draggedElement.style.zIndex = '';
+                draggedElement.style.pointerEvents = '';
+                draggedElement.classList.remove('dragging');
+
+                // Hide drop zones
+                hideDropZones();
+
+                // Find drop target
+                const dropTarget = findDropTarget(e.clientX, e.clientY);
+                if (dropTarget && dropTarget !== draggedElement) {
+                    console.log('Dropping on:', dropTarget);
+                    // Perform the swap/rearrangement
+                    rearrangeElements(draggedElement, dropTarget);
+                }
+
+                // Clean up
+                setIsDragging(false);
+                setDragState({
+                    draggedElement: null,
+                    startX: 0,
+                    startY: 0,
+                    offsetX: 0,
+                    offsetY: 0
+                });
+
+                // Remove global listeners
+                document.removeEventListener('mousemove', handleMouseMove);
+                document.removeEventListener('mouseup', handleMouseUp);
+            };
+
+            const findDropTarget = (x, y) => {
+                const elements = document.elementsFromPoint(x, y);
+                return elements.find(el =>
+                    el.classList.contains('draggable-item') &&
+                    !el.classList.contains('dragging')
+                );
+            };
+
+            const rearrangeElements = (draggedElement, dropTarget) => {
+                const parent = draggedElement.parentNode;
+                const draggedNext = draggedElement.nextSibling;
+                const targetNext = dropTarget.nextSibling;
+
+                // Swap the elements
+                if (draggedNext === dropTarget) {
+                    // draggedElement is immediately before dropTarget
+                    parent.insertBefore(dropTarget, draggedElement);
+                } else if (targetNext === draggedElement) {
+                    // dropTarget is immediately before draggedElement
+                    parent.insertBefore(draggedElement, dropTarget);
+                } else {
+                    // Elements are not adjacent
+                    const temp = document.createElement('div');
+                    parent.insertBefore(temp, draggedElement);
+                    parent.insertBefore(draggedElement, targetNext);
+                    parent.insertBefore(dropTarget, temp);
+                    parent.removeChild(temp);
+                }
+
+                console.log('Elements rearranged successfully');
+            };
+
+            const showDropZones = (mouseX, mouseY) => {
+                // Remove existing drop zones
+                hideDropZones();
+
+                draggableItems.forEach(item => {
+                    if (item === dragState.draggedElement) return;
+
+                    const rect = item.getBoundingClientRect();
+                    const dropZone = document.createElement('div');
+                    dropZone.className = 'drop-zone active';
+                    dropZone.style.left = `${rect.left}px`;
+                    dropZone.style.top = `${rect.top}px`;
+                    dropZone.style.width = `${rect.width}px`;
+                    dropZone.style.height = `${rect.height}px`;
+
+                    document.body.appendChild(dropZone);
+                });
+            };
+
+            const hideDropZones = () => {
+                document.querySelectorAll('.drop-zone').forEach(zone => {
+                    zone.remove();
+                });
+            };
+
+            useEffect(() => {
+                // Initialize drag and drop after component mounts and content is rendered
+                const timer = setTimeout(() => {
+                    initializeDragDrop();
+                }, 100);
+
+                return () => {
+                    clearTimeout(timer);
+                    // Clean up event listeners
+                    document.removeEventListener('mousemove', handleMouseMove);
+                    document.removeEventListener('mouseup', handleMouseUp);
+                    hideDropZones();
+                };
+            }, []);
+
+            return (
+                <div className="rearrangeable-wireframe">
+                    <div className="wireframe-content" ref={containerRef}>
+                        <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<TestRearrangeable />, document.getElementById('root'));
+    </script>
+</body>
+
+</html>

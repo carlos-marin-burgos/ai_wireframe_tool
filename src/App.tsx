@@ -406,10 +406,10 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     // If the component has htmlCode property, use it directly (this is the real component HTML)
     if (component.htmlCode) {
       console.log("🔧 generateComponentHtml: Using component.htmlCode");
-      // Enhance the HTML to make it draggable within the wireframe
+      // Use the HTML directly without any modifications
       let html = component.htmlCode;
 
-      // Wrap the component in a draggable container if it's not already a single element
+      // Wrap the component if it's not already a single element
       if (html.trim().startsWith('<') && html.trim().endsWith('>')) {
         // Check if it's already a single element or multiple elements
         const parser = new DOMParser();
@@ -417,15 +417,14 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
         const bodyChildren = doc.body.children;
 
         if (bodyChildren.length === 1) {
-          // Single element - add draggable attributes to it
+          // Single element - add basic styling
           const element = bodyChildren[0] as HTMLElement;
-          element.setAttribute('data-draggable', 'true');
           element.setAttribute('data-user-added', 'true');
           element.classList.add('atlas-component');
           html = element.outerHTML;
         } else {
-          // Multiple elements - wrap in a draggable container
-          html = `<div class="atlas-component component-container" data-draggable="true" data-user-added="true" style="display: inline-block; margin: 8px;">${html}</div>`;
+          // Multiple elements - wrap in a container
+          html = `<div class="atlas-component component-container" data-user-added="true" style="display: inline-block; margin: 8px;">${html}</div>`;
         }
       }
 
@@ -523,7 +522,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
       // Atlas Button Components
       case 'atlas-button-primary':
-        return `<button class="button button-primary button-lg atlas-component" data-draggable="true" data-user-added="true" style="margin: 10px; padding: 12px 24px; background: #0078d4; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Primary Button'}</button>`;
+        return `<button class="button button-primary button-lg atlas-component" data-user-added="true" style="margin: 10px; padding: 12px 24px; background: #0078d4; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Primary Button'}</button>`;
 
       case 'atlas-button-primary-filled':
         return `<button class="button button-primary-filled" style="margin: 10px; padding: 12px 24px; background: #0078d4; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Primary Filled Button'}</button>`;
@@ -687,7 +686,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
         </div>`;
 
       case 'atlas-card':
-        return `<div class="card atlas-component" data-draggable="true" data-user-added="true" style="margin: 10px; padding: 20px; border: 1px solid #e1dfdd; border-radius: 8px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        return `<div class="card atlas-component" data-user-added="true" style="margin: 10px; padding: 20px; border: 1px solid #e1dfdd; border-radius: 8px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
           <h4 style="margin: 0 0 10px 0; color: #323130;">💳 Card Title</h4>
           <p style="margin: 0; color: #605e5c;">Card content goes here. This is a Microsoft Learn styled card component.</p>
         </div>`;
@@ -1025,30 +1024,6 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     }
   };
 
-  // Demo image generate handler (for modal demo tab)
-  const handleDemoGenerate = async (imagePath: string, description: string) => {
-    console.log('Demo image generate requested:', imagePath, description);
-
-    try {
-      setDescription(description);
-      showToast('Generating wireframe from demo image...', 'info');
-
-      const result = await generateWireframe(
-        description,
-        designTheme,
-        colorScheme
-      );
-
-      if (result && result.html) {
-        handleWireframeGenerated(result.html);
-        showToast('Demo wireframe generated!', 'success');
-      }
-    } catch (error) {
-      console.error('Error generating demo wireframe:', error);
-      showToast('Failed to generate demo wireframe', 'error');
-    }
-  };
-
   return (
     <div className={`app-content`}>
       {/* Conditional TopNavbar based on landing page state */}
@@ -1096,7 +1071,6 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           isAnalyzingImage={isAnalyzingImage}
           onFigmaImport={handleFigmaImport}
           onFigmaExport={handleFigmaExport}
-          onDemoGenerate={handleDemoGenerate}
         />
       ) : (
         <SplitLayout

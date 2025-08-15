@@ -1086,7 +1086,7 @@
 
 .project-item.github-item {
   display: flex;
-  align-items: center;
+  text-align: left;
   padding: 16px;
   border-bottom: 1px solid #d1d9e0;
   transition: background-color 0.1s ease;
@@ -1246,4 +1246,38 @@
     padding: 10px 16px;
     font-size: 13px;
   }
+}
+
+/* Empty State Styles */
+.empty-state {
+  padding: 48px 24px;
+  text-align: center;
+  border-bottom: none;
+}
+
+.empty-state-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.empty-icon {
+  color: #d1d9e0;
+  width: 48px;
+  height: 48px;
+}
+
+.empty-message {
+  font-size: 16px;
+  font-weight: 600;
+  color: #24292f;
+  margin: 0;
+}
+
+.empty-description {
+  font-size: 14px;
+  color: #656d76;
+  margin: 0;
+  line-height: 1.4;
 }

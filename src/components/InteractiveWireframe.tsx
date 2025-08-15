@@ -1,168 +1,27 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { FiMove, FiX, FiEdit3 } from 'react-icons/fi';
+import React, { useRef, useEffect, useState } from 'react';
 import { fixWireframeImages } from '../utils/imagePlaceholders';
 import './InteractiveWireframe.css';
-
-interface WireframeComponent {
-    id: string;
-    type: string;
-    content: string;
-    x: number;
-    y: number;
-    width?: number;
-    height?: number;
-    style?: React.CSSProperties;
-}
 
 interface InteractiveWireframeProps {
     htmlContent: string;
     onUpdateContent?: (newContent: string) => void;
+    rearrangeable?: boolean; // New prop to enable rearrangeable mode
 }
 
 const InteractiveWireframe: React.FC<InteractiveWireframeProps> = ({
     htmlContent,
     onUpdateContent,
+    rearrangeable = false,
 }) => {
-    const [components, setComponents] = useState<WireframeComponent[]>([]);
-    const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
-    const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+    const containerRef = useRef<HTMLDivElement>(null);
     const [isDragging, setIsDragging] = useState(false);
-    const wireframeRef = useRef<HTMLDivElement>(null);
-
-    // Parse HTML content into interactive components
-    useEffect(() => {
-        // Only parse if this is clearly a component library wireframe
-        if (htmlContent.includes('Component Library Wireframe')) {
-            parseHtmlToComponents(htmlContent);
-        } else {
-            // For regular wireframes, don't make them interactive
-            setComponents([]);
-        }
-    }, [htmlContent]);
-
-    const parseHtmlToComponents = (html: string) => {
-        // Simple approach: only parse if we know it's from component library
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-
-        // Only look for absolute positioned elements (our component additions)
-        const absoluteElements = doc.querySelectorAll('div[style*="position: absolute"]');
-
-        const parsedComponents: WireframeComponent[] = Array.from(absoluteElements).map((el, index) => {
-            // Extract position from inline styles
-            const style = el.getAttribute('style') || '';
-            const leftMatch = style.match(/left:\s*(\d+)px/);
-            const topMatch = style.match(/top:\s*(\d+)px/);
-
-            const x = leftMatch ? parseInt(leftMatch[1]) : 50;
-            const y = topMatch ? parseInt(topMatch[1]) : 50;
-
-            return {
-                id: `component-${index}`,
-                type: 'library-component',
-                content: el.innerHTML,
-                x: x,
-                y: y,
-                width: 200,
-                height: 40,
-            };
-        });
-
-        setComponents(parsedComponents);
-    };
-
-    const handleMouseDown = (e: React.MouseEvent, componentId: string) => {
-        e.preventDefault();
-        const component = components.find(c => c.id === componentId);
-        if (!component) return;
-
-        const rect = e.currentTarget.getBoundingClientRect();
-        setDragOffset({
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
-        });
-
-        setSelectedComponent(componentId);
-        setIsDragging(true);
-    };
-
-    const handleMouseMove = (e: React.MouseEvent) => {
-        if (!isDragging || !selectedComponent || !wireframeRef.current) return;
-
-        const wireframeRect = wireframeRef.current.getBoundingClientRect();
-        const newX = e.clientX - wireframeRect.left - dragOffset.x;
-        const newY = e.clientY - wireframeRect.top - dragOffset.y;
-
-        setComponents(prev => prev.map(component =>
-            component.id === selectedComponent
-                ? { ...component, x: Math.max(0, newX), y: Math.max(0, newY) }
-                : component
-        ));
-    };
-
-    const handleMouseUp = () => {
-        setIsDragging(false);
-        if (onUpdateContent) {
-            generateUpdatedHtml();
-        }
-    };
-
-    const handleDeleteComponent = (componentId: string) => {
-        setComponents(prev => prev.filter(c => c.id !== componentId));
-        setSelectedComponent(null);
-        if (onUpdateContent) {
-            generateUpdatedHtml();
-        }
-    };
-
-    const generateUpdatedHtml = () => {
-        // Generate new HTML with updated positions
-        const containerStyle = `
-      position: relative;
-      min-height: 600px;
-      background: #f9f9f9;
-      border: 1px solid #e1dfdd;
-      border-radius: 4px;
-      padding: 20px;
-    `;
-
-        const componentsHtml = components.map(component => `
-      <div style="position: absolute; left: ${component.x}px; top: ${component.y}px;">
-        ${component.content}
-      </div>
-    `).join('');
-
-        const newHtml = `
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Interactive Wireframe</title>
-          <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-          <style>
-              body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; }
-              .wireframe-container { ${containerStyle} }
-              .button { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; }
-              .button-primary { background: #0078d4; color: white; }
-              .button-secondary { background: #f3f2f1; color: #323130; border: 1px solid #e1dfdd; }
-              .button-lg { padding: 12px 24px; }
-              .button-search { display: inline-flex; align-items: center; gap: 8px; }
-          </style>
-      </head>
-      <body>
-          <div class="wireframe-container">
-              ${componentsHtml}
-          </div>
-      </body>
-      </html>
-    `;
-
-        if (onUpdateContent) {
-            onUpdateContent(newHtml);
-        }
-    };
-
+    const [dragState, setDragState] = useState({
+        draggedElement: null as HTMLElement | null,
+        startX: 0,
+        startY: 0,
+        offsetX: 0,
+        offsetY: 0
+    });
     // Clean HTML content before rendering
     const cleanHtmlContent = React.useMemo(() => {
         if (!htmlContent || typeof htmlContent !== 'string') {
@@ -182,84 +41,154 @@ const InteractiveWireframe: React.FC<InteractiveWireframeProps> = ({
         return cleaned.trim();
     }, [htmlContent]);
 
-    if (components.length === 0) {
-        return (
-            <div className="interactive-wireframe-container">
-                <div className="wireframe-content">
-                    <div dangerouslySetInnerHTML={{ __html: cleanHtmlContent }} />
-                </div>
-            </div>
-        );
-    }
+    // Drag and drop functionality for rearrangeable mode
+    const initializeDragDrop = () => {
+        if (!rearrangeable || !containerRef.current) return;
+
+        const items = containerRef.current.querySelectorAll('.col-md-4, .col-md-6, .col-md-12, .col-lg-4, .col-lg-6, .col-lg-12, .card, .btn, .alert, .nav, .navbar');
+
+        items.forEach((item, index) => {
+            const htmlItem = item as HTMLElement;
+            htmlItem.classList.add('draggable-item');
+            htmlItem.setAttribute('data-drag-index', index.toString());
+
+            htmlItem.style.cursor = 'move';
+            htmlItem.style.transition = 'transform 0.2s ease, box-shadow 0.2s ease';
+
+            htmlItem.removeEventListener('mousedown', handleMouseDown);
+            htmlItem.addEventListener('mousedown', handleMouseDown);
+        });
+    };
+
+    const handleMouseDown = (e: MouseEvent) => {
+        e.preventDefault();
+
+        const target = (e.target as HTMLElement).closest('.draggable-item') as HTMLElement;
+        if (!target) return;
+
+        const rect = target.getBoundingClientRect();
+
+        setDragState({
+            draggedElement: target,
+            startX: e.clientX,
+            startY: e.clientY,
+            offsetX: e.clientX - rect.left,
+            offsetY: e.clientY - rect.top
+        });
+
+        setIsDragging(true);
+        target.classList.add('dragging');
+        target.style.opacity = '0.7';
+        target.style.transform = 'scale(1.05)';
+        target.style.zIndex = '1000';
+
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+        if (!isDragging || !dragState.draggedElement) return;
+
+        const { draggedElement, offsetX, offsetY } = dragState;
+
+        draggedElement.style.position = 'fixed';
+        draggedElement.style.left = `${e.clientX - offsetX}px`;
+        draggedElement.style.top = `${e.clientY - offsetY}px`;
+        draggedElement.style.pointerEvents = 'none';
+    };
+
+    const handleMouseUp = (e: MouseEvent) => {
+        if (!isDragging || !dragState.draggedElement) return;
+
+        const { draggedElement } = dragState;
+
+        // Reset styles
+        draggedElement.style.position = '';
+        draggedElement.style.left = '';
+        draggedElement.style.top = '';
+        draggedElement.style.zIndex = '';
+        draggedElement.style.pointerEvents = '';
+        draggedElement.style.opacity = '';
+        draggedElement.style.transform = '';
+        draggedElement.classList.remove('dragging');
+
+        // Find drop target
+        const dropTarget = findDropTarget(e.clientX, e.clientY);
+        if (dropTarget && dropTarget !== draggedElement) {
+            rearrangeElements(draggedElement, dropTarget);
+
+            // Update content if callback provided
+            if (onUpdateContent && containerRef.current) {
+                const newContent = containerRef.current.innerHTML;
+                onUpdateContent(newContent);
+            }
+        }
+
+        // Clean up
+        setIsDragging(false);
+        setDragState({
+            draggedElement: null,
+            startX: 0,
+            startY: 0,
+            offsetX: 0,
+            offsetY: 0
+        });
+
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+    };
+
+    const findDropTarget = (x: number, y: number): HTMLElement | null => {
+        const elements = document.elementsFromPoint(x, y);
+        return elements.find(el =>
+            (el as HTMLElement).classList.contains('draggable-item') &&
+            !(el as HTMLElement).classList.contains('dragging')
+        ) as HTMLElement || null;
+    };
+
+    const rearrangeElements = (draggedElement: HTMLElement, dropTarget: HTMLElement) => {
+        const parent = draggedElement.parentNode;
+        if (!parent) return;
+
+        const draggedNext = draggedElement.nextSibling;
+        const targetNext = dropTarget.nextSibling;
+
+        if (draggedNext === dropTarget) {
+            parent.insertBefore(dropTarget, draggedElement);
+        } else if (targetNext === draggedElement) {
+            parent.insertBefore(draggedElement, dropTarget);
+        } else {
+            const temp = document.createElement('div');
+            parent.insertBefore(temp, draggedElement);
+            parent.insertBefore(draggedElement, targetNext);
+            parent.insertBefore(dropTarget, temp);
+            parent.removeChild(temp);
+        }
+    };
+
+    useEffect(() => {
+        if (rearrangeable) {
+            const timer = setTimeout(() => {
+                initializeDragDrop();
+            }, 100);
+
+            return () => {
+                clearTimeout(timer);
+                document.removeEventListener('mousemove', handleMouseMove);
+                document.removeEventListener('mouseup', handleMouseUp);
+            };
+        }
+    }, [cleanHtmlContent, rearrangeable]);
 
     return (
-        <div
-            className="interactive-wireframe-container"
-            ref={wireframeRef}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
-        >
-            <div className="wireframe-canvas">
-                {components.map(component => (
-                    <div
-                        key={component.id}
-                        className={`draggable-component ${selectedComponent === component.id ? 'selected' : ''} ${isDragging && selectedComponent === component.id ? 'grabbing' : 'grab'}`}
-                        style={{
-                            '--component-x': `${component.x}px`,
-                            '--component-y': `${component.y}px`,
-                            '--z-index': selectedComponent === component.id ? '1000' : '1',
-                        } as React.CSSProperties}
-                        onMouseDown={(e) => handleMouseDown(e, component.id)}
-                    >
-                        {/* Component Controls */}
-                        {selectedComponent === component.id && (
-                            <div className="component-controls">
-                                <button
-                                    className="control-btn move-btn"
-                                    title="Move Component"
-                                >
-                                    <FiMove />
-                                </button>
-                                <button
-                                    className="control-btn delete-btn"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleDeleteComponent(component.id);
-                                    }}
-                                    title="Delete Component"
-                                >
-                                    <FiX />
-                                </button>
-                                <button
-                                    className="control-btn edit-btn"
-                                    title="Edit Component"
-                                >
-                                    <FiEdit3 />
-                                </button>
-                            </div>
-                        )}
-
-                        {/* Component Content */}
-                        <div
-                            className={`component-content component-${component.type}`}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setSelectedComponent(component.id);
-                            }}
-                        >
-                            <div dangerouslySetInnerHTML={{ __html: component.content }} />
-                        </div>
-                    </div>
-                ))}
+        <div className={`interactive-wireframe-container ${rearrangeable ? 'rearrangeable-mode' : ''}`}>
+            <div className="wireframe-display">
+                <div
+                    ref={containerRef}
+                    className="wireframe-content"
+                    dangerouslySetInnerHTML={{ __html: cleanHtmlContent }}
+                />
             </div>
-
-            {/* Instructions */}
-            {components.length > 0 && (
-                <div className="wireframe-instructions">
-                    <p>💡 Click components to select them, then drag to reposition. Use controls to delete or edit.</p>
-                </div>
-            )}
         </div>
     );
 };

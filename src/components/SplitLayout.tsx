@@ -7,11 +7,9 @@ import SaveWireframeModal, { SavedWireframe } from "./SaveWireframeModal";
 import FigmaIntegrationModal from "./FigmaIntegrationModal";
 import DownloadModal from "./DownloadModal";
 import ComponentLibraryModal from "./ComponentLibraryModal";
-import SimpleDragDrop from "./SimpleDragDrop";
-import MouseDragDrop from "./MouseDragDrop";
+import SimpleDragWireframe from "./SimpleDragWireframe";
 import EnhancedMessage from "./EnhancedMessage";
 import ImageUploadZone from "./ImageUploadZone";
-import DemoImageSelector from "./DemoImageSelector";
 import PageNavigation from "./PageNavigation";
 import HtmlCodeViewer from "./HtmlCodeViewer";
 import PresentationMode from "./PresentationMode";
@@ -149,7 +147,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   // Image Upload and Analysis state
   const [showImageUpload, setShowImageUpload] = useState(false);
-  const [showDemoSelector, setShowDemoSelector] = useState(false);
 
   // Enhanced Save System state
   const [isEnhancedSaveModalOpen, setIsEnhancedSaveModalOpen] = useState(false);
@@ -181,10 +178,8 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   // Download Modal state
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
 
-  // Left Panel Collapse state
-  const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);
-
-  // Function to validate chat input - check if it's only numbers
+  // Left panel collapse state
+  const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);  // Function to validate chat input - check if it's only numbers
   const validateChatInput = (input: string): boolean => {
     const trimmedInput = input.trim();
 
@@ -582,32 +577,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   const toggleImageUpload = useCallback(() => {
     setShowImageUpload(prev => !prev);
-    // Close demo selector when opening image upload
-    if (!showImageUpload) {
-      setShowDemoSelector(false);
-    }
-  }, [showImageUpload]);
-
-  const toggleDemoSelector = useCallback(() => {
-    setShowDemoSelector(prev => !prev);
-    // Close image upload when opening demo selector
-    if (!showDemoSelector) {
-      setShowImageUpload(false);
-    }
-  }, [showDemoSelector]);
-
-  const handleDemoGenerate = useCallback((imagePath: string, description: string) => {
-    setDescription(description);
-    setShowDemoSelector(false);
-
-    // Add demo message to chat
-    addMessage('user', `🎯 Demo: ${description}`);
-
-    // Generate wireframe immediately
-    setTimeout(() => {
-      handleSubmit({ preventDefault: () => { } } as React.FormEvent);
-    }, 100);
-  }, [setDescription, addMessage, handleSubmit]);
+  }, []);
 
   // Enhanced Save System handlers
   const handleOpenEnhancedSave = useCallback(() => {
@@ -988,27 +958,18 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               onOpenLibrary={handleOpenLibrary}
               onSave={enhancedOnSave}
             />
+
             <div className="wireframe-container">
-              {/* Status bar removed for cleaner presentation */}
               <div className="wireframe-content">
-                <MouseDragDrop
+                <SimpleDragWireframe
                   htmlContent={currentPageId ? (pageContents[currentPageId] || htmlWireframe) : htmlWireframe}
-                  onUpdateHtml={(newHtml) => {
-                    // Update the current page content
+                  onUpdateContent={(newContent) => {
                     if (currentPageId) {
-                      setPageContents(prev => ({
-                        ...prev,
-                        [currentPageId]: newHtml
-                      }));
-                    }
-                    // Also update the main htmlWireframe if it's the first page or no current page
-                    if (!currentPageId || wireframePages.length === 0) {
-                      // You would call your main update function here
-                      // For now, we'll just store it locally
+                      setPageContents(prev => ({ ...prev, [currentPageId]: newContent }));
+                    } else {
+                      setHtmlWireframe(newContent);
                     }
                   }}
-                  onNavigateToPage={handlePageSwitch}
-                  availablePages={wireframePages}
                 />
               </div>
             </div>

@@ -1,259 +1,93 @@
 /* Interactive Wireframe Styles */
 .interactive-wireframe-container {
+  position: relative;
   width: 100%;
   height: 100%;
-  position: relative;
-  background: #ffffff;
-  border-radius: 8px;
-  overflow: hidden;
 }
 
-.wireframe-content {
+.wireframe-display {
   width: 100%;
   height: 100%;
   overflow: auto;
 }
 
-.wireframe-canvas {
-  position: relative;
-  min-height: 600px;
+.wireframe-content {
   width: 100%;
-  background: #f9f9f9;
-  border: 1px solid #e1dfdd;
-  border-radius: 4px;
-  padding: 20px;
-  overflow: hidden;
+  min-height: 100%;
+  padding: 16px;
 }
 
-/* Draggable Component Styles */
-.draggable-component {
-  border: 2px solid transparent;
-  border-radius: 4px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  position: absolute !important;
-  left: var(--component-x, 0px);
-  top: var(--component-y, 0px);
-  z-index: var(--z-index, 1);
-}
-
-.draggable-component.grab {
-  cursor: grab;
-}
-
-.draggable-component.grabbing {
-  cursor: grabbing;
-}
-
-.draggable-component:hover {
-  border-color: #0078d4;
-}
-
-.draggable-component.selected {
-  border-color: #0078d4;
-  box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
-}
-
-/* Component Controls */
-.component-controls {
-  position: absolute;
-  top: -35px;
-  right: 0;
-  display: flex;
-  gap: 4px;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid #e1dfdd;
-  border-radius: 4px;
-  padding: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  z-index: 1001;
-}
-
-.control-btn {
-  width: 24px;
-  height: 24px;
-  border: none;
-  border-radius: 3px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  font-size: 12px;
-}
-
-.move-btn {
-  background: #f3f2f1;
-  color: #323130;
-}
-
-.move-btn:hover {
-  background: #e1dfdd;
-}
-
-.delete-btn {
-  background: #fdf2f2;
-  color: #d13438;
-}
-
-.delete-btn:hover {
-  background: #fed7d7;
-}
-
-.edit-btn {
-  background: #f0f9ff;
-  color: #0078d4;
-}
-
-.edit-btn:hover {
-  background: #dbeafe;
-}
-
-/* Component Content */
-.component-content {
-  pointer-events: none;
-  position: relative;
-}
-
-.draggable-component.selected .component-content {
-  pointer-events: auto;
-}
-
-/* Instructions */
-.wireframe-instructions {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid #e1dfdd;
-  border-radius: 4px;
-  padding: 8px 12px;
-  font-size: 12px;
-  color: #605e5c;
-  text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Override for component positioning */
-.draggable-component {
-  left: 0 !important;
-  top: 0 !important;
-  transform: translateX(var(--x, 0px)) translateY(var(--y, 0px));
-}
-
-/* Smooth dragging */
-.draggable-component:not(.dragging) {
-  transition: transform 0.1s ease-out;
-}
-
-.draggable-component.dragging {
-  z-index: 1000;
-  transition: none;
-}
-
-/* Selected state highlight */
-.draggable-component.selected::before {
-  content: "";
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  border: 2px solid #0078d4;
-  border-radius: 6px;
-  pointer-events: none;
-  z-index: -1;
-}
-
-/* Improve cursor feedback */
-.draggable-component {
-  cursor: grab;
-}
-
-.draggable-component:active {
-  cursor: grabbing;
-}
-
-/* Component content should not interfere with dragging */
-.component-content * {
-  pointer-events: none;
-}
-
-.draggable-component.selected .component-content * {
-  pointer-events: auto;
-}
-
-/* Component-specific styling */
-.component-content.component-button button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 14px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.component-content.component-button button.button-primary {
-  background: #0078d4;
-  color: white;
-}
-
-.component-content.component-button button.button-secondary {
-  background: #f3f2f1;
-  color: #323130;
-  border: 1px solid #e1dfdd;
-}
-
-.component-content.component-button button.button-lg {
-  padding: 12px 24px;
-}
-
-.component-content.component-div div.container {
-  padding: 20px;
-  border: 1px solid #e1dfdd;
-  border-radius: 4px;
-  background: #f9f9f9;
-  min-height: 100px;
-}
-
-.component-content.component-div div.card {
-  padding: 20px;
-  border: 1px solid #e1dfdd;
+/* Rearrangeable Mode Styles */
+.rearrangeable-mode .wireframe-content {
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
   border-radius: 8px;
-  background: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  min-height: 120px;
+  min-height: 500px;
 }
 
-.component-content.component-input input,
-.component-content.component-textarea textarea {
-  width: 200px;
-  padding: 8px;
-  border: 1px solid #e1dfdd;
+.rearrangeable-mode .draggable-item {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: move !important;
+  position: relative;
+  z-index: 1;
+}
+
+.rearrangeable-mode .draggable-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.rearrangeable-mode .draggable-item.dragging {
+  opacity: 0.7;
+  transform: scale(1.05);
+  z-index: 1000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Drop zone styles */
+.drop-zone {
+  position: absolute;
+  background: linear-gradient(45deg, #007bff22, #28a74522);
+  border: 2px dashed #007bff;
   border-radius: 4px;
-  background: white;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  z-index: 10;
 }
 
-.component-content.component-h1 h1,
-.component-content.component-h2 h2,
-.component-content.component-h3 h3,
-.component-content.component-h4 h4,
-.component-content.component-h5 h5,
-.component-content.component-h6 h6 {
-  color: #323130;
-  margin: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+.drop-zone.active {
+  opacity: 1;
 }
 
-.component-content.component-p p {
-  color: #605e5c;
-  line-height: 1.5;
-  margin: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+.drop-zone::before {
+  content: "Drop here";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #007bff;
+  font-weight: bold;
+  font-size: 14px;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
+}
+
+/* Enhanced visual feedback for rearrangeable elements */
+.rearrangeable-mode .card {
+  margin-bottom: 1rem;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.rearrangeable-mode .card:hover {
+  border-color: #007bff;
+}
+
+.rearrangeable-mode .btn {
+  transition: all 0.2s ease;
+}
+
+.rearrangeable-mode .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }

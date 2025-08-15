@@ -15,6 +15,50 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+/* Rearrangeable Mode Toggle */
+.rearrangeable-toggle-container {
+  padding: 8px 16px;
+  border-bottom: 1px solid #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f8f9fa;
+}
+
+.rearrangeable-toggle-label {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #495057;
+}
+
+.rearrangeable-toggle-button {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: none;
+}
+
+.rearrangeable-toggle-button.active {
+  border: 2px solid #007bff;
+  background-color: #007bff;
+  color: white;
+}
+
+.rearrangeable-toggle-button.inactive {
+  border: 2px solid #dee2e6;
+  background-color: white;
+  color: #495057;
+}
+
+.rearrangeable-toggle-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 /* Main layout container */
 .split-layout {
   display: flex;
