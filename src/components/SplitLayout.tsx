@@ -185,6 +185,9 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   // Wireframe name state
   const [wireframeName, setWireframeName] = useState<string | null>(null);
 
+  // Track if wireframe has been added to recents to avoid duplicates
+  const [addedToRecents, setAddedToRecents] = useState<boolean>(false);
+
   // Function to validate chat input - check if it's only numbers
   const validateChatInput = (input: string): boolean => {
     const trimmedInput = input.trim();
@@ -629,8 +632,33 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       const intelligentName = generateWireframeName(currentContent);
       setWireframeName(intelligentName);
       console.log('🧠 Generated intelligent wireframe name:', intelligentName);
+
+      // Automatically add to recents when wireframe is first generated (only once)
+      if (!addedToRecents) {
+        const addToRecents = (window as any).addToRecents;
+        if (addToRecents && typeof addToRecents === 'function') {
+          addToRecents(
+            intelligentName,
+            "Auto-generated wireframe",
+            currentContent
+          );
+          console.log(`✅ Auto-added "${intelligentName}" to recents`);
+          setAddedToRecents(true); // Mark as added to avoid duplicates
+
+          // Also dispatch a custom event to ensure UI updates
+          window.dispatchEvent(new CustomEvent('wireframeSaved', {
+            detail: {
+              name: intelligentName,
+              description: "Auto-generated wireframe",
+              html: currentContent
+            }
+          }));
+        } else {
+          console.warn("addToRecents function not available for auto-add");
+        }
+      }
     }
-  }, [currentPageId, pageContents, htmlWireframe]);
+  }, [currentPageId, pageContents, htmlWireframe, addedToRecents]);
 
   const handleSaveWireframe = useCallback(async (
     wireframeData: Omit<SavedWireframe, 'id' | 'createdAt' | 'updatedAt'>
@@ -714,6 +742,14 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       }
     }
   }, [currentPageId, pageContents, htmlWireframe, wireframeName]);
+
+  // Reset addedToRecents flag when starting a new wireframe session
+  useEffect(() => {
+    if (!htmlWireframe || htmlWireframe.trim() === '') {
+      setAddedToRecents(false);
+      setWireframeName(null);
+    }
+  }, [htmlWireframe]);
 
   const handleOpenLibrary = useCallback(() => {
     setIsComponentLibraryOpen(true);
@@ -1275,6 +1311,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         currentCss="/* Generated CSS styles */"
         designTheme={designTheme}
         colorScheme={colorScheme}
+        initialName={wireframeName || undefined}
         isUpdating={isUpdatingWireframe}
         existingWireframe={wireframeToUpdate}
       />

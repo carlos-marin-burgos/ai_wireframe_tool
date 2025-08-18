@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
     FiSave,
     FiX,
@@ -74,6 +74,13 @@ const SaveWireframeModal: React.FC<SaveWireframeModalProps> = ({
     });
     const [isSaving, setIsSaving] = useState(false);
     const [saveSuccess, setSaveSuccess] = useState(false);
+
+    // Update wireframe name when initialName prop changes
+    useEffect(() => {
+        if (initialName && !isUpdating) {
+            setWireframeName(initialName);
+        }
+    }, [initialName, isUpdating]);
 
     const addTag = useCallback(() => {
         if (newTag.trim() && !tags.includes(newTag.trim())) {
