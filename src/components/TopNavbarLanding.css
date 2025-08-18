@@ -10,7 +10,6 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
-  z-index: 1000;
   box-shadow: none;
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
