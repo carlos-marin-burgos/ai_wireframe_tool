@@ -1376,7 +1376,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       <ComponentLibraryModal
         isOpen={isComponentLibraryOpen}
         onClose={() => {
-          console.log('🔄 Component library modal closing');
           setIsComponentLibraryOpen(false);
         }}
         onAddComponent={(component: any) => {

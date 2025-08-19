@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { FiX, FiTrash, FiAlertTriangle } from 'react-icons/fi';
-import './DeleteConfirmationModal.css';
+import './Modal.css'; // Use shared modal styles
+import './DeleteConfirmationModal.css'; // Keep specific styles if needed
 
 interface DeleteConfirmationModalProps {
     isOpen: boolean;

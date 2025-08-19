@@ -28,8 +28,11 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     onGenerateWithAI,
     currentDescription
 }) => {
+    // ALL useState hooks MUST be declared first - DO NOT MOVE THESE!
     const [loadedFluentComponents, setLoadedFluentComponents] = useState<Component[]>([]);
     const [isLoadingFluentComponents, setIsLoadingFluentComponents] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState<string>('All');
+    const [selectedLibrary, setSelectedLibrary] = useState<'FluentUI' | 'Atlas'>('FluentUI');
 
     // Load Fluent UI components from JSON file
     useEffect(() => {
@@ -69,8 +72,6 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             loadFluentComponents();
         }
     }, [isOpen, loadedFluentComponents.length]);
-
-    if (!isOpen) return null;
 
     // Debug: Check if AI button should show
     console.log('🔍 ComponentLibraryModal debug:', {
@@ -5268,10 +5269,6 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         onClose();
     };
 
-    // State for filtering
-    const [selectedCategory, setSelectedCategory] = useState<string>('All');
-    const [selectedLibrary, setSelectedLibrary] = useState<'FluentUI' | 'Atlas'>('FluentUI');
-
     // Get unique categories for the selected library
     const categories = useMemo(() => {
         const libraryComponents = components.filter(c => (c.library || 'FluentUI') === selectedLibrary);
@@ -5287,9 +5284,12 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             : libraryComponents.filter(c => c.category === selectedCategory);
     }, [selectedCategory, selectedLibrary]);
 
+    // Early return AFTER all hooks to prevent hooks order violation
+    if (!isOpen) return null;
+
     return (
-        <div className="component-library-modal-overlay">
-            <div className="component-library-modal">
+        <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
+            <div className="modal-content component-library-modal">
                 <div className="component-library-header">
                     <div className="component-library-title">
                         <div className="fluentui-logo">

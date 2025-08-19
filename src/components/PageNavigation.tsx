@@ -77,14 +77,14 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         </button>
 
                         <button
-                            className="toolbar-btn"
-                            onClick={onOpenLibrary}
-                            onMouseEnter={(e) => showTooltip(e, "Component Library")}
-                            onMouseLeave={hideTooltip}
-                            aria-label="Component Library"
+                            className="icon-btn"
+                            title="Component Library"
+                            onClick={() => {
+                                console.log('🔍 Component Library button clicked!');
+                                onOpenLibrary();
+                            }}
                         >
-                            <FiGrid />
-                        </button>
+                            <FiGrid /></button>
 
                         <button
                             className="toolbar-btn"
