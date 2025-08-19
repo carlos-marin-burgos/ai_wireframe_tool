@@ -45,6 +45,9 @@
     "emergency:rollback": "./safe-deploy.sh emergency"
   },
   "dependencies": {
+    "@azure/cosmos": "^4.5.0",
+    "@azure/openai": "^2.0.0",
+    "@azure/storage-blob": "^12.28.0",
     "@fluentui/react-icons": "^2.0.307",
     "@microsoft/atlas-css": "^4.0.0",
     "@microsoft/atlas-js": "^1.15.0",
