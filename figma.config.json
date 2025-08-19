@@ -1,0 +1,7 @@
+{
+  "codeConnect": {
+    "include": ["src/**/*.{tsx,jsx}"],
+    "label": "React",
+    "interactiveSetupFigmaFileUrl": "https://www.figma.com/design/wSppVRlOi9JZO2LxtHUbbW/Fluent-2-Extended-Figma-Library?m=auto&node-id=3232-54"
+  }
+}
