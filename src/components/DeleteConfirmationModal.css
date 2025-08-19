@@ -1,4 +1,18 @@
 /* Delete Confirmation Modal Styles */
+
+/* Additional styles for delete modal specific elements */
+.modal-body .delete-warning {
+  color: #d13438;
+  font-size: 14px;
+  margin: 12px 0 0 0;
+  font-weight: 500;
+}
+
+.modal-header h2 .warning-icon {
+  color: #d13438;
+}
+
+/* Keep existing styles for backward compatibility */
 .delete-modal-overlay {
   position: fixed;
   top: 0;

@@ -1,7 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import './ComponentLibraryModal.css';
+import './Modal.css'; // Shared modal styles
+import './ComponentLibraryModal.css'; // Component-specific styles
 import { generateHeroHTML } from './HeroGenerator';
 import { generateFormHTML, FormTemplates } from './FormGenerator';
+import FigmaIntegrationModal from './FigmaIntegrationModal';
 
 interface Component {
     id: string;
@@ -33,6 +35,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     const [isLoadingFluentComponents, setIsLoadingFluentComponents] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
     const [selectedLibrary, setSelectedLibrary] = useState<'FluentUI' | 'Atlas'>('FluentUI');
+    const [showFigmaModal, setShowFigmaModal] = useState(false);
 
     // Load Fluent UI components from JSON file
     useEffect(() => {

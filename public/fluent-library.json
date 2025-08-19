@@ -1,7 +1,7 @@
 {
-  "lastUpdated": "2025-08-19T00:00:00.000Z",
+  "lastUpdated": "2025-08-19T23:01:07.077Z",
   "source": "microsoft/fluentui-enhanced",
-  "totalComponents": 25,
+  "totalComponents": 26,
   "components": [
     {
       "id": "fluent-github-menu",
@@ -252,6 +252,15 @@
       "source": "fluent-ui-react",
       "lastUpdated": "2025-08-19T00:00:00.000Z",
       "githubPath": "@fluentui/react-commandbar"
+    },
+    {
+      "id": "fluent-component-3232105",
+      "name": "Fluent Extended Component",
+      "description": "Component from Fluent 2 Extended Figma Library (node 3232-105)",
+      "category": "Fluent Extended",
+      "figmaUrl": "https://www.figma.com/design/wSppVRlOi9JZO2LxtHUbbW/Fluent-2-Extended-Figma-Library?node-id=3232-105&m=dev",
+      "nodeId": "3232-105",
+      "htmlCode": "<!-- Fluent Extended Component (3232-105) -->\n<div class=\"fluent-extended-component\" style=\"\n  font-family: 'Segoe UI', sans-serif;\n  display: inline-flex;\n  align-items: center;\n  padding: 8px 16px;\n  border: 1px solid #e1e5e9;\n  border-radius: 6px;\n  background: #ffffff;\n  color: #323130;\n  transition: all 0.2s ease;\n  cursor: pointer;\n  min-height: 32px;\n  font-size: 14px;\n  font-weight: 400;\n\" \nonmouseover=\"this.style.backgroundColor='#f3f2f1'; this.style.borderColor='#c8c6c4';\"\nonmouseout=\"this.style.backgroundColor='#ffffff'; this.style.borderColor='#e1e5e9';\"\nonfocus=\"this.style.borderColor='#0078d4'; this.style.outline='none';\"\nonblur=\"this.style.borderColor='#e1e5e9';\">\n  <span style=\"margin-right: 8px;\">📦</span>\n  Fluent Component 3232-105\n</div>\n\n<style>\n.fluent-extended-component:hover {\n  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);\n}\n.fluent-extended-component:active {\n  transform: translateY(1px);\n}\n</style>"
     }
   ]
 }

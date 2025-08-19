@@ -42,15 +42,15 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
     };
 
     return (
-        <div className="delete-modal-overlay" onClick={onClose}>
-            <div className="delete-modal-content" onClick={(e) => e.stopPropagation()}>
-                <div className="delete-modal-header">
-                    <div className="delete-modal-icon">
-                        <FiAlertTriangle size={24} />
-                    </div>
-                    <h2>Delete {itemType === 'favorite' ? 'Favorite' : 'Recent Project'}</h2>
+        <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
+            <div className="modal-content modal-small">
+                <div className="modal-header">
+                    <h2>
+                        <FiAlertTriangle size={20} className="warning-icon" />
+                        Delete {itemType === 'favorite' ? 'Favorite' : 'Recent Project'}
+                    </h2>
                     <button
-                        className="delete-modal-close"
+                        className="close-button"
                         onClick={onClose}
                         aria-label="Close dialog"
                         title="Close"
@@ -59,24 +59,24 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
                     </button>
                 </div>
 
-                <div className="delete-modal-body">
+                <div className="modal-body">
                     <p>
                         Are you sure you want to delete <strong>"{itemName}"</strong> from your {itemType === 'favorite' ? 'favorites' : 'recent projects'}?
                     </p>
-                    <p className="delete-modal-warning">
+                    <p className="delete-warning">
                         This action cannot be undone.
                     </p>
                 </div>
 
-                <div className="delete-modal-footer">
+                <div className="modal-footer">
                     <button
-                        className="delete-modal-cancel"
+                        className="modal-button modal-button-secondary"
                         onClick={onClose}
                     >
                         Cancel
                     </button>
                     <button
-                        className="delete-modal-confirm"
+                        className="modal-button modal-button-danger"
                         onClick={handleConfirm}
                     >
                         <FiTrash size={16} />
