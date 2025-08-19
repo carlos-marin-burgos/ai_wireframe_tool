@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import './ComponentLibraryModal.css';
 import { generateHeroHTML } from './HeroGenerator';
 import { generateFormHTML, FormTemplates } from './FormGenerator';
@@ -28,6 +28,48 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     onGenerateWithAI,
     currentDescription
 }) => {
+    const [loadedFluentComponents, setLoadedFluentComponents] = useState<Component[]>([]);
+    const [isLoadingFluentComponents, setIsLoadingFluentComponents] = useState(false);
+
+    // Load Fluent UI components from JSON file
+    useEffect(() => {
+        const loadFluentComponents = async () => {
+            if (loadedFluentComponents.length > 0) return; // Already loaded
+
+            setIsLoadingFluentComponents(true);
+            try {
+                const response = await fetch('/fluent-library.json');
+                if (!response.ok) {
+                    throw new Error('Failed to load Fluent UI components');
+                }
+
+                const data = await response.json();
+
+                // Convert the JSON format to our Component interface
+                const fluentComponents: Component[] = data.components.map((comp: any) => ({
+                    id: comp.id,
+                    name: comp.name,
+                    description: comp.description,
+                    category: comp.category,
+                    htmlCode: comp.htmlCode,
+                    library: 'FluentUI' as const
+                }));
+
+                setLoadedFluentComponents(fluentComponents);
+                console.log(`🎉 Loaded ${fluentComponents.length} Fluent UI components from library`);
+            } catch (error) {
+                console.error('Error loading Fluent UI components:', error);
+                // Keep using hardcoded components as fallback
+            } finally {
+                setIsLoadingFluentComponents(false);
+            }
+        };
+
+        if (isOpen) {
+            loadFluentComponents();
+        }
+    }, [isOpen, loadedFluentComponents.length]);
+
     if (!isOpen) return null;
 
     // Debug: Check if AI button should show
@@ -35,7 +77,10 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         onGenerateWithAI: !!onGenerateWithAI,
         currentDescription,
         shouldShowAIButton: !!(onGenerateWithAI && currentDescription)
-    }); const components: Component[] = [
+    });
+
+    // Hardcoded Atlas components (existing ones)
+    const atlasComponents: Component[] = [
         // Microsoft Learn Site Headers
         {
             id: 'ms-learn-header-basic',
@@ -5211,6 +5256,11 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
 </div>`
         }
     ];
+
+    // Combine Atlas components with loaded Fluent UI components
+    const components: Component[] = useMemo(() => {
+        return [...atlasComponents, ...loadedFluentComponents];
+    }, [loadedFluentComponents]);
 
     const handleComponentClick = (component: Component) => {
         console.log('🚀 Component clicked:', component.name);

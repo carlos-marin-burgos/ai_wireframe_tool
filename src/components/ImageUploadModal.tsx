@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiX, FiImage } from 'react-icons/fi';
+import { FiX, FiImage, FiUpload } from 'react-icons/fi';
 import ImageUploadZone from './ImageUploadZone';
 import './ImageUploadModal.css';
 
@@ -21,27 +21,42 @@ const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
     if (!isOpen) return null;
 
     return (
-        <div className="image-upload-modal-overlay" onClick={onClose}>
-            <div className="image-upload-modal" onClick={(e) => e.stopPropagation()}>
-                <div className="modal-header">
-                    <h2>Upload Image to Wireframe</h2>
-                    <button className="close-btn" onClick={onClose} title="Close modal">
+        <div className="fluent-modal-backdrop" onClick={onClose}>
+            <div className="fluent-dialog fluent-upload-dialog" onClick={(e) => e.stopPropagation()}>
+                {/* Fluent Dialog Header */}
+                <div className="fluent-dialog-header">
+                    <div className="fluent-dialog-title">
+                        <FiUpload className="fluent-dialog-icon" />
+                        <h2>Upload Image to Wireframe</h2>
+                    </div>
+                    <button className="fluent-close-btn" onClick={onClose} title="Close modal">
                         <FiX />
                     </button>
                 </div>
 
-                <div className="modal-content">
-                    <div className="upload-tab">
-                        <p className="tab-description">
+                {/* Fluent Dialog Body */}
+                <div className="fluent-dialog-body">
+                    <div className="fluent-upload-content">
+                        <p className="fluent-dialog-description">
                             Upload an image of a UI design, wireframe, or website screenshot to generate a wireframe based on its layout.
                         </p>
-                        <ImageUploadZone
-                            onImageUpload={onImageUpload}
-                            onAnalyzeImage={onAnalyzeImage}
-                            isAnalyzing={isAnalyzing}
-                            className="modal-upload-zone"
-                        />
+
+                        <div className="fluent-upload-zone-container">
+                            <ImageUploadZone
+                                onImageUpload={onImageUpload}
+                                onAnalyzeImage={onAnalyzeImage}
+                                isAnalyzing={isAnalyzing}
+                                className="fluent-upload-zone"
+                            />
+                        </div>
                     </div>
+                </div>
+
+                {/* Fluent Dialog Footer */}
+                <div className="fluent-dialog-footer">
+                    <button className="fluent-button fluent-button-secondary" onClick={onClose}>
+                        Cancel
+                    </button>
                 </div>
             </div>
         </div>

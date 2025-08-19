@@ -1,185 +1,368 @@
-/* Image Upload Modal Styles */
-.image-upload-modal-overlay {
+/* Image Upload Modal Styles - Updated to use Fluent UI Design System */
+/* Extends the base fluent modal styles with upload-specific styling */
+
+/* Fluent Modal Backdrop */
+.fluent-modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.4);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  padding: 2rem;
+  animation: fluent-backdrop-fade-in 0.2s ease-out;
 }
 
-.image-upload-modal {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-  max-width: 800px;
-  width: 100%;
-  max-height: 90vh;
-  overflow: hidden;
+@keyframes fluent-backdrop-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Fluent Dialog Container */
+.fluent-dialog {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14), 0 4px 16px rgba(0, 0, 0, 0.12);
   display: flex;
   flex-direction: column;
+  min-width: 400px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: hidden;
+  animation: fluent-dialog-slide-in 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
 }
 
-.modal-header {
+@keyframes fluent-dialog-slide-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.fluent-upload-dialog {
+  max-width: 520px;
+}
+
+/* Fluent Dialog Header */
+.fluent-dialog-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 2rem;
-  border-bottom: 1px solid #e5e7eb;
-  background: #f9fafb;
+  padding: 20px 24px 16px 24px;
+  border-bottom: 1px solid #edebe9;
 }
 
-.modal-header h2 {
+.fluent-dialog-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   margin: 0;
-  font-size: 1.5rem;
+}
+
+.fluent-dialog-title h2 {
+  margin: 0;
+  font-size: 20px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: #323130;
+  line-height: 1.2;
 }
 
-.close-btn {
+.fluent-dialog-icon {
+  color: #0078d4;
+  font-size: 20px;
+}
+
+.fluent-close-btn {
   background: none;
   border: none;
-  color: #6b7280;
+  color: #605e5c;
   cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 8px;
-  transition: all 0.2s ease;
+  padding: 8px;
+  border-radius: 4px;
+  transition: all 0.1s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 32px;
+  min-height: 32px;
 }
 
-.close-btn:hover {
-  background: #f3f4f6;
-  color: #1a1a1a;
+.fluent-close-btn:hover {
+  background: #f3f2f1;
+  color: #323130;
 }
 
-.close-btn svg {
-  width: 1.25rem;
-  height: 1.25rem;
+.fluent-close-btn:active {
+  background: #edebe9;
 }
 
-.modal-tabs {
-  display: flex;
-  border-bottom: 1px solid #e5e7eb;
-  background: #f9fafb;
+.fluent-close-btn svg {
+  width: 16px;
+  height: 16px;
 }
 
-.tab-btn {
+/* Fluent Dialog Body */
+.fluent-dialog-body {
   flex: 1;
-  padding: 1rem 1.5rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-weight: 500;
-  color: #6b7280;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  border-bottom: 2px solid transparent;
-}
-
-.tab-btn:hover {
-  background: #f3f4f6;
-  color: #1a1a1a;
-}
-
-.tab-btn.active {
-  color: #0066cc;
-  border-bottom-color: #0066cc;
-  background: white;
-}
-
-.tab-btn svg {
-  width: 1rem;
-  height: 1rem;
-}
-
-.modal-content {
-  flex: 1;
+  padding: 20px 24px;
   overflow-y: auto;
-  padding: 2rem;
-  max-height: calc(90vh - 180px); /* Ensure scrollable area */
 }
 
-.tab-description {
+.fluent-upload-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.fluent-dialog-description {
+  color: #605e5c;
+  font-size: 14px;
+  line-height: 1.4;
+  margin: 0;
   text-align: center;
-  color: #6b7280;
-  margin-bottom: 2rem;
-  font-size: 0.95rem;
-  line-height: 1.5;
 }
 
-.upload-tab,
-.demo-tab {
-  min-height: 400px;
-  overflow-y: auto; /* Enable scrolling within tab content */
+.fluent-upload-zone-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
 }
 
-.modal-upload-zone {
-  border: 2px dashed #d1d5db;
-  border-radius: 12px;
-  padding: 2rem;
-  text-align: center;
-  background: #f9fafb;
-  transition: all 0.3s ease;
+/* Override ImageUploadZone styles to match Fluent design */
+.fluent-upload-zone {
+  width: 100% !important;
+  max-width: 400px !important;
+  min-height: 200px !important;
+  border: 2px dashed #8a8886 !important;
+  border-radius: 8px !important;
+  background: #faf9f8 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 24px !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+  position: relative !important;
+  overflow: hidden !important;
 }
 
-.modal-upload-zone:hover {
-  border-color: #0066cc;
-  background: #f0f7ff;
+.fluent-upload-zone:hover {
+  border-color: #0078d4 !important;
+  background: #f3f9ff !important;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-  .image-upload-modal-overlay {
-    padding: 1rem;
+.fluent-upload-zone:focus-visible {
+  border-color: #0078d4 !important;
+  box-shadow: 0 0 0 1px #0078d4 !important;
+  outline: none !important;
+}
+
+/* Fluent Dialog Footer */
+.fluent-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 16px 24px 20px 24px;
+  border-top: 1px solid #edebe9;
+  background: #faf9f8;
+}
+
+/* Fluent Buttons */
+.fluent-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 80px;
+  min-height: 32px;
+  padding: 5px 16px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  outline: none;
+  position: relative;
+}
+
+.fluent-button:focus-visible {
+  box-shadow: 0 0 0 2px #0078d4;
+}
+
+.fluent-button-primary {
+  background: #0078d4;
+  border-color: #0078d4;
+  color: #ffffff;
+}
+
+.fluent-button-primary:hover {
+  background: #106ebe;
+  border-color: #106ebe;
+}
+
+.fluent-button-primary:active {
+  background: #005a9e;
+  border-color: #005a9e;
+}
+
+.fluent-button-secondary {
+  background: #ffffff;
+  border-color: #8a8886;
+  color: #323130;
+}
+
+.fluent-button-secondary:hover {
+  background: #f3f2f1;
+  border-color: #605e5c;
+}
+
+.fluent-button-secondary:active {
+  background: #edebe9;
+  border-color: #323130;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .fluent-dialog {
+    min-width: 300px;
+    margin: 16px;
   }
 
-  .image-upload-modal {
+  .fluent-upload-dialog {
     max-width: 100%;
-    max-height: 95vh;
   }
 
-  .modal-header {
-    padding: 1rem 1.5rem;
+  .fluent-dialog-header {
+    padding: 16px 20px 12px 20px;
   }
 
-  .modal-header h2 {
-    font-size: 1.25rem;
+  .fluent-dialog-title h2 {
+    font-size: 18px;
   }
 
-  .tab-btn {
-    padding: 0.75rem 1rem;
-    font-size: 0.9rem;
+  .fluent-dialog-body {
+    padding: 16px 20px;
   }
 
-  .modal-content {
-    padding: 1.5rem;
+  .fluent-dialog-footer {
+    padding: 12px 20px 16px 20px;
+    flex-direction: column-reverse;
   }
 
-  .upload-tab,
-  .demo-tab {
-    min-height: 300px;
+  .fluent-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .fluent-upload-zone {
+    min-height: 160px !important;
+    padding: 16px !important;
   }
 }
 
-@media (max-width: 480px) {
-  .tab-btn {
-    flex-direction: column;
-    gap: 0.25rem;
-    padding: 0.75rem 0.5rem;
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .fluent-modal-backdrop {
+    background: rgba(0, 0, 0, 0.6);
   }
 
-  .tab-btn svg {
-    width: 0.875rem;
-    height: 0.875rem;
+  .fluent-dialog {
+    background: #2d2d30;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  .fluent-dialog-header {
+    border-bottom-color: #454545;
+  }
+
+  .fluent-dialog-title h2 {
+    color: #ffffff;
+  }
+
+  .fluent-dialog-icon {
+    color: #4f94cd;
+  }
+
+  .fluent-close-btn {
+    color: #c8c6c4;
+  }
+
+  .fluent-close-btn:hover {
+    background: #3c3b39;
+    color: #ffffff;
+  }
+
+  .fluent-dialog-description {
+    color: #c8c6c4;
+  }
+
+  .fluent-dialog-footer {
+    border-top-color: #454545;
+    background: #323130;
+  }
+
+  .fluent-button-secondary {
+    background: #2d2d30;
+    border-color: #605e5c;
+    color: #ffffff;
+  }
+
+  .fluent-button-secondary:hover {
+    background: #3c3b39;
+    border-color: #8a8886;
+  }
+
+  .fluent-upload-zone {
+    background: #2d2d30 !important;
+    border-color: #454545 !important;
+  }
+
+  .fluent-upload-zone:hover {
+    background: #1e1e3f !important;
+    border-color: #4f94cd !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .fluent-dialog {
+    border: 2px solid #000000;
+  }
+
+  .fluent-button {
+    border-width: 2px;
+  }
+
+  .fluent-upload-zone {
+    border-width: 3px !important;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .fluent-modal-backdrop,
+  .fluent-dialog,
+  .fluent-button,
+  .fluent-close-btn,
+  .fluent-upload-zone {
+    animation: none;
+    transition: none;
   }
 }
