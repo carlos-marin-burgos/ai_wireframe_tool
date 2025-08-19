@@ -9,11 +9,11 @@ const path = require("path");
 require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 
 // Import services
-const CodeConnectService = require('./codeConnectService');
-const FigmaService = require('./figmaService');
-const ComponentDetectionService = require('./componentDetectionService');
-const ComponentDrivenWireframeGenerator = require('./componentDrivenWireframeGenerator');
-const WireframeApiService = require('./wireframeApiService');
+const CodeConnectService = require("./codeConnectService");
+const FigmaService = require("./figmaService");
+const ComponentDetectionService = require("./componentDetectionService");
+const ComponentDrivenWireframeGenerator = require("./componentDrivenWireframeGenerator");
+const WireframeApiService = require("./wireframeApiService");
 
 class DesigneticaServices {
   constructor() {
