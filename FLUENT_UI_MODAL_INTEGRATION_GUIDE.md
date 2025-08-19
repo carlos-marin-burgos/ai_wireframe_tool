@@ -7,11 +7,13 @@ This guide shows how to replace your existing modal components with the new Flue
 ## 📦 Available Components
 
 ### 1. FluentSaveWireframeModal
+
 - **Purpose**: Enhanced save dialog for wireframes
 - **File**: `src/components/FluentSaveWireframeModal.tsx`
 - **Styles**: `src/components/FluentSaveWireframeModal.css`
 
-### 2. FluentImageUploadModal  
+### 2. FluentImageUploadModal
+
 - **Purpose**: Streamlined image upload interface
 - **File**: `src/components/FluentImageUploadModal.tsx`
 - **Styles**: `src/components/FluentImageUploadModal.css`
@@ -24,12 +26,12 @@ Replace your existing imports:
 
 ```typescript
 // OLD - Remove these
-import SaveWireframeModal from './components/SaveWireframeModal';
-import ImageUploadModal from './components/ImageUploadModal';
+import SaveWireframeModal from "./components/SaveWireframeModal";
+import ImageUploadModal from "./components/ImageUploadModal";
 
 // NEW - Add these
-import FluentSaveWireframeModal from './components/FluentSaveWireframeModal';
-import FluentImageUploadModal from './components/FluentImageUploadModal';
+import FluentSaveWireframeModal from "./components/FluentSaveWireframeModal";
+import FluentImageUploadModal from "./components/FluentImageUploadModal";
 ```
 
 ### Step 2: Update Component Usage
@@ -116,24 +118,28 @@ In `src/components/SplitLayout.tsx`, update the modal implementations:
 ## ✨ Key Improvements
 
 ### 1. Design System Compliance
+
 - **Fluent Typography**: Proper font weights, sizes, and line heights
 - **Color Tokens**: Official Fluent color palette
 - **Spacing**: Consistent 4px grid system
 - **Border Radius**: Standardized corner radius values
 
 ### 2. Enhanced Accessibility
+
 - **ARIA Labels**: Proper labeling for screen readers
 - **Keyboard Navigation**: Full keyboard support
 - **Focus Management**: Logical focus flow
 - **High Contrast**: Support for high contrast mode
 
 ### 3. Improved User Experience
+
 - **Visual Feedback**: Loading states, success animations
 - **Form Validation**: Real-time validation with clear error messages
 - **Responsive Design**: Mobile-optimized layouts
 - **Touch Support**: Optimized for touch interactions
 
 ### 4. Modern Interactions
+
 - **Smooth Animations**: Fluent motion principles
 - **Backdrop Blur**: Modern backdrop effects
 - **Progress Indicators**: Clear progress communication
@@ -142,6 +148,7 @@ In `src/components/SplitLayout.tsx`, update the modal implementations:
 ## 🎯 Component Features
 
 ### FluentSaveWireframeModal Features
+
 - ✅ Form validation with real-time feedback
 - ✅ Tag management with add/remove functionality
 - ✅ Multiple export format options (HTML, React, Figma)
@@ -151,6 +158,7 @@ In `src/components/SplitLayout.tsx`, update the modal implementations:
 - ✅ Loading states with spinner animations
 
 ### FluentImageUploadModal Features
+
 - ✅ Drag and drop support with visual feedback
 - ✅ File type validation
 - ✅ Upload progress indication
@@ -162,6 +170,7 @@ In `src/components/SplitLayout.tsx`, update the modal implementations:
 ## 🎨 Customization Options
 
 ### CSS Custom Properties
+
 You can customize the Fluent components using CSS variables:
 
 ```css
@@ -170,17 +179,17 @@ You can customize the Fluent components using CSS variables:
   --fluent-primary: #0078d4;
   --fluent-primary-hover: #106ebe;
   --fluent-primary-active: #005a9e;
-  
+
   /* Neutral colors */
   --fluent-neutral-100: #323130;
   --fluent-neutral-60: #605e5c;
   --fluent-neutral-20: #edebe9;
-  
+
   /* Semantic colors */
   --fluent-success: #107c10;
   --fluent-error: #d13438;
   --fluent-warning: #ff8c00;
-  
+
   /* Spacing */
   --fluent-spacing-xs: 4px;
   --fluent-spacing-s: 8px;
@@ -191,38 +200,42 @@ You can customize the Fluent components using CSS variables:
 ```
 
 ### Component Props
+
 All original props are supported with additional enhancements:
 
 ```typescript
 interface FluentSaveWireframeModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    onSave: (wireframe: SavedWireframe, options: SaveOptions) => void;
-    currentHtml: string;
-    currentCss: string;
-    designTheme: string;
-    colorScheme: string;
-    initialName?: string;
-    isUpdating?: boolean;
-    existingWireframe?: SavedWireframe;
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (wireframe: SavedWireframe, options: SaveOptions) => void;
+  currentHtml: string;
+  currentCss: string;
+  designTheme: string;
+  colorScheme: string;
+  initialName?: string;
+  isUpdating?: boolean;
+  existingWireframe?: SavedWireframe;
 }
 ```
 
 ## 🔧 Testing the Integration
 
 ### 1. Visual Testing
+
 - Open the demo page: `fluent-modal-demo.html`
 - Test different screen sizes
 - Verify animations and transitions
 - Check dark mode compatibility
 
 ### 2. Accessibility Testing
+
 - Test keyboard navigation (Tab, Enter, Escape)
 - Verify screen reader announcements
 - Check focus indicators
 - Test high contrast mode
 
 ### 3. Functional Testing
+
 - Save wireframe with various inputs
 - Upload different image formats
 - Test error states and validation
@@ -269,6 +282,7 @@ The Fluent UI modals automatically adapt to mobile devices:
 ### Support
 
 For additional help with the integration:
+
 - Review the demo file: `fluent-modal-demo.html`
 - Check the component source code for implementation details
 - Test with the provided examples

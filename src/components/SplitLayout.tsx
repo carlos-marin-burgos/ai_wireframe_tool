@@ -3,7 +3,8 @@ import "./SplitLayout.css";
 import SuggestionSourceIndicator from "./SuggestionSourceIndicator";
 import LoadingOverlay from "./LoadingOverlay";
 import AddPagesModal from "./AddPagesModal";
-import SaveWireframeModal, { SavedWireframe } from "./SaveWireframeModal";
+import FluentSaveWireframeModal, { SavedWireframe } from "./FluentSaveWireframeModal";
+import FluentImageUploadModal from "./FluentImageUploadModal";
 import FigmaIntegrationModal from "./FigmaIntegrationModal";
 import DownloadModal from "./DownloadModal";
 import ComponentLibraryModal from "./ComponentLibraryModal";
@@ -178,6 +179,10 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   // Download Modal state
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+
+  // Image Upload Modal state
+  const [isImageUploadModalOpen, setIsImageUploadModalOpen] = useState(false);
+  const [isProcessingImage, setIsProcessingImage] = useState(false);
 
   // Left panel collapse state
   const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);
@@ -611,8 +616,33 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     }, 500);
   }, [addMessage]);
 
+  const handleImageFile = useCallback((file: File) => {
+    setIsProcessingImage(true);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imageDataUrl = e.target?.result as string;
+      handleImageUpload(imageDataUrl);
+      setIsImageUploadModalOpen(false);
+      setIsProcessingImage(false);
+    };
+    reader.readAsDataURL(file);
+  }, [handleImageUpload]);
+
+  const handleAnalyzeImage = useCallback((imageUrl: string, fileName: string) => {
+    setIsProcessingImage(true);
+    addMessage('user', `[Image uploaded: ${fileName}]`);
+    setTimeout(() => {
+      addMessage('ai', '🔍 Analyzing your uploaded image for UI components. Please wait while I detect buttons, inputs, and other elements...');
+      setIsProcessingImage(false);
+    }, 500);
+  }, [addMessage]);
+
   const toggleImageUpload = useCallback(() => {
     setShowImageUpload(prev => !prev);
+  }, []);
+
+  const openImageUploadModal = useCallback(() => {
+    setIsImageUploadModalOpen(true);
   }, []);
 
   // Enhanced Save System handlers
@@ -1093,6 +1123,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               onOpenLibrary={handleOpenLibrary}
               onSave={enhancedOnSave}
               onAddToFavorites={handleAddToFavorites}
+              onImageUpload={openImageUploadModal}
             />
 
             <div className="wireframe-container">
@@ -1303,7 +1334,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       */}
 
       {/* Enhanced Save Modal */}
-      <SaveWireframeModal
+      <FluentSaveWireframeModal
         isOpen={isEnhancedSaveModalOpen}
         onClose={() => setIsEnhancedSaveModalOpen(false)}
         onSave={handleSaveWireframe}
@@ -1314,6 +1345,15 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         initialName={wireframeName || undefined}
         isUpdating={isUpdatingWireframe}
         existingWireframe={wireframeToUpdate}
+      />
+
+      {/* Image Upload Modal */}
+      <FluentImageUploadModal
+        isOpen={isImageUploadModalOpen}
+        onClose={() => setIsImageUploadModalOpen(false)}
+        onImageUpload={handleImageFile}
+        onAnalyzeImage={handleAnalyzeImage}
+        isAnalyzing={isProcessingImage}
       />
 
       {/* Figma Integration Modal */}

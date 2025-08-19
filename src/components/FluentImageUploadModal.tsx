@@ -44,7 +44,7 @@ const FluentImageUploadModal: React.FC<FluentImageUploadModalProps> = ({
                         <p className="fluent-dialog-description">
                             Upload an image of a UI design, wireframe, or website screenshot to generate a wireframe based on its layout.
                         </p>
-                        
+
                         <div className="fluent-upload-zone-container">
                             <ImageUploadZone
                                 onImageUpload={onImageUpload}

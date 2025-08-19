@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiPlus, FiGrid, FiSave, FiStar } from 'react-icons/fi';
+import { FiPlus, FiGrid, FiSave, FiStar, FiImage } from 'react-icons/fi';
 import '../styles/PageNavigation.css';
 
 interface Page {
@@ -17,6 +17,7 @@ interface PageNavigationProps {
     onOpenLibrary?: () => void;
     onSave?: () => void;
     onAddToFavorites?: () => void;
+    onImageUpload?: () => void;
 }
 
 const PageNavigation: React.FC<PageNavigationProps> = ({
@@ -26,7 +27,8 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
     onAddPage,
     onOpenLibrary,
     onSave,
-    onAddToFavorites
+    onAddToFavorites,
+    onImageUpload
 }) => {
     const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
 
@@ -151,6 +153,16 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         aria-label="Component Library"
                     >
                         <FiGrid />
+                    </button>
+
+                    <button
+                        className="toolbar-btn"
+                        onClick={onImageUpload}
+                        onMouseEnter={(e) => showTooltip(e, "Upload Image")}
+                        onMouseLeave={hideTooltip}
+                        aria-label="Upload Image"
+                    >
+                        <FiImage />
                     </button>
 
                     <button

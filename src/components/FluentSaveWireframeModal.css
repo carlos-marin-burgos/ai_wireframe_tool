@@ -31,16 +31,15 @@
 .fluent-dialog {
   background: #ffffff;
   border-radius: 8px;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.14),
-    0 0 8px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14), 0 0 8px rgba(0, 0, 0, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.8);
   max-width: 600px;
   max-height: 90vh;
   width: 100%;
   overflow: hidden;
   animation: fluent-dialog-in 0.2s cubic-bezier(0.1, 0.9, 0.2, 1);
-  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Roboto", "Helvetica Neue", sans-serif;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Roboto",
+    "Helvetica Neue", sans-serif;
 }
 
 @keyframes fluent-dialog-in {
@@ -406,7 +405,7 @@
 }
 
 .fluent-radio:checked + .fluent-radio-indicator::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 2px;
   left: 2px;
@@ -484,7 +483,9 @@
   border-color: #323130;
 }
 
-.fluent-checkbox-option:hover .fluent-checkbox:checked + .fluent-checkbox-indicator {
+.fluent-checkbox-option:hover
+  .fluent-checkbox:checked
+  + .fluent-checkbox-indicator {
   border-color: #106ebe;
   background: #106ebe;
 }
@@ -590,36 +591,36 @@
   .fluent-modal-backdrop {
     padding: 12px;
   }
-  
+
   .fluent-dialog {
     max-width: 100%;
     max-height: 95vh;
   }
-  
+
   .fluent-dialog-header,
   .fluent-dialog-body,
   .fluent-dialog-footer {
     padding-left: 16px;
     padding-right: 16px;
   }
-  
+
   .fluent-info-grid {
     grid-template-columns: 1fr 1fr;
   }
-  
+
   .fluent-radio-group {
     gap: 12px;
   }
-  
+
   .fluent-checkbox-group {
     gap: 12px;
   }
-  
+
   .fluent-input-group {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .fluent-tag-list {
     gap: 4px;
   }
@@ -636,11 +637,11 @@
   .fluent-dialog {
     border: 2px solid;
   }
-  
+
   .fluent-button {
     border: 2px solid;
   }
-  
+
   .fluent-input,
   .fluent-textarea {
     border: 2px solid;
