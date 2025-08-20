@@ -1,24 +1,100 @@
 const { OpenAI } = require("openai");
-const SmartDualResourceGenerator = require("../SmartDualResourceGenerator");
 
-// Initialize Smart Dual Resource Generator
-let smartGenerator = null;
+// Initialize OpenAI client
+let openai = null;
 
 function initializeOpenAI() {
   try {
-    // Initialize Smart Dual Resource Generator
-    console.log("🔄 Initializing Smart Dual Resource Generator...");
-    smartGenerator = new SmartDualResourceGenerator();
-    console.log("✅ Smart Dual Resource Generator initialized!");
-    console.log(
-      "🎯 Benefits: Double quota, automatic failover, smart load balancing"
-    );
-    return true;
+    // Load local.settings.json values if in development
+    if (!process.env.AZURE_OPENAI_KEY) {
+      const fs = require("fs");
+      const path = require("path");
+      try {
+        const localSettingsPath = path.join(
+          __dirname,
+          "..",
+          "local.settings.json"
+        );
+        const localSettings = JSON.parse(
+          fs.readFileSync(localSettingsPath, "utf8")
+        );
+
+        console.log("📁 Loading local.settings.json...");
+
+        // Set environment variables from local.settings.json
+        Object.keys(localSettings.Values).forEach((key) => {
+          if (!process.env[key]) {
+            process.env[key] = localSettings.Values[key];
+            console.log(
+              `  Set ${key}: ${localSettings.Values[key]?.substring(0, 10)}...`
+            );
+          } else {
+            console.log(
+              `  Skipped ${key} (already set): ${process.env[key]?.substring(
+                0,
+                10
+              )}...`
+            );
+          }
+        });
+
+        console.log("📁 Loaded local.settings.json for generateWireframe");
+      } catch (error) {
+        console.error("⚠️ Could not load local.settings.json:", error.message);
+      }
+    } else {
+      console.log(
+        "📁 AZURE_OPENAI_KEY already set, skipping local.settings.json"
+      );
+      console.log("🔍 Current env vars:");
+      console.log(
+        `  AZURE_OPENAI_KEY: ${process.env.AZURE_OPENAI_KEY?.substring(
+          0,
+          10
+        )}...`
+      );
+      console.log(
+        `  AZURE_OPENAI_ENDPOINT: ${process.env.AZURE_OPENAI_ENDPOINT}`
+      );
+    }
+    if (process.env.AZURE_OPENAI_KEY && process.env.AZURE_OPENAI_ENDPOINT) {
+      const endpoint = process.env.AZURE_OPENAI_ENDPOINT.replace(/\/$/, "");
+      const deployment = process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o";
+      const apiVersion =
+        process.env.AZURE_OPENAI_API_VERSION || "2024-08-01-preview";
+
+      // DEBUG: Log the actual values being used
+      console.log("🔍 DEBUG OpenAI Config:");
+      console.log("  Endpoint:", endpoint);
+      console.log("  Deployment:", deployment);
+      console.log("  API Version:", apiVersion);
+      console.log(
+        "  API Key starts with:",
+        process.env.AZURE_OPENAI_KEY?.substring(0, 10) + "..."
+      );
+      console.log(
+        "  Base URL:",
+        `${endpoint}/openai/deployments/${deployment}`
+      );
+
+      openai = new OpenAI({
+        apiKey: process.env.AZURE_OPENAI_KEY,
+        baseURL: `${endpoint}/openai/deployments/${deployment}`,
+        defaultQuery: { "api-version": apiVersion },
+        defaultHeaders: {
+          "api-key": process.env.AZURE_OPENAI_KEY,
+        },
+      });
+
+      console.log("✅ OpenAI client initialized successfully");
+      console.log("🔑 Using endpoint:", endpoint);
+      console.log("🎯 Using deployment:", deployment);
+      return true;
+    }
+    console.log("⚠️ OpenAI environment variables not found");
+    return false;
   } catch (error) {
-    console.error(
-      "❌ Failed to initialize Smart Dual Resource Generator:",
-      error
-    );
+    console.error("❌ Failed to initialize OpenAI client:", error);
     return false;
   }
 }
@@ -29,279 +105,21 @@ initializeOpenAI();
 // Simple fallback wireframe generator
 // NO MORE FALLBACK FUNCTIONS - AI ONLY!
 
-// Load available components from library
-async function loadComponentLibrary() {
-  try {
-    const fs = require("fs");
-    const path = require("path");
-
-    // Try to load the fluent-library.json from the public folder
-    const libraryPath = path.join(
-      __dirname,
-      "..",
-      "..",
-      "public",
-      "fluent-library.json"
-    );
-    if (fs.existsSync(libraryPath)) {
-      const libraryData = JSON.parse(fs.readFileSync(libraryPath, "utf8"));
-      return libraryData.components || [];
-    }
-
-    console.log("⚠️ fluent-library.json not found, using default components");
-    return [];
-  } catch (error) {
-    console.error("Error loading component library:", error);
-    return [];
-  }
-}
-
 // AI wireframe generation
 async function generateWithAI(description) {
   if (!openai) {
     throw new Error("OpenAI not initialized");
   }
 
-  // Load available components
-  const availableComponents = await loadComponentLibrary();
-  console.log(
-    `📦 Loaded ${availableComponents.length} components from library`
-  );
-
-  // AI-powered component analysis and selection
-  async function analyzeComponentsWithAI(description, availableComponents) {
-    if (!openai || availableComponents.length === 0) {
-      return { componentSuggestions: "", designGuidance: "" };
-    }
-
-    try {
-      // Let AI analyze which components would be most relevant
-      const analysisPrompt = `Analyze this Microsoft Learn platform request: "${description}"
-
-Available components:
-${availableComponents
-  .map(
-    (comp, index) =>
-      `${index + 1}. ${comp.name} - ${comp.description}
-     Category: ${comp.category}`
-  )
-  .join("\n")}
-
-As an expert Microsoft Learn UX designer, provide:
-1. Which components (by number) would best serve this request and WHY
-2. How these components should be adapted for Microsoft Learn context
-3. What additional Microsoft Learn specific elements are needed
-
-Focus on Microsoft Learn patterns: documentation layouts, learning paths, code examples, tutorials, certification content, etc.
-
-Respond in this format:
-RECOMMENDED_COMPONENTS: [list component numbers that fit best]
-MICROSOFT_LEARN_ADAPTATION: [how to adapt for Learn platform]
-ADDITIONAL_ELEMENTS: [what else is needed for Learn context]`;
-
-      const analysisResponse = await smartGenerator.generateCompletion({
-        model: process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o",
-        messages: [{ role: "user", content: analysisPrompt }],
-        max_tokens: 1000,
-        temperature: 0.3, // Lower temperature for more focused analysis
-      });
-
-      const analysis = analysisResponse.choices[0]?.message?.content || "";
-
-      // Parse the AI analysis
-      const recommendedNumbers =
-        analysis
-          .match(/RECOMMENDED_COMPONENTS:\s*\[(.*?)\]/)?.[1]
-          ?.split(",")
-          .map((n) => parseInt(n.trim()))
-          .filter((n) => !isNaN(n)) || [];
-
-      const adaptationMatch = analysis.match(
-        /MICROSOFT_LEARN_ADAPTATION:\s*(.*?)(?=\nADDITIONAL_ELEMENTS:|$)/s
-      );
-      const adaptationGuidance = adaptationMatch
-        ? adaptationMatch[1].trim()
-        : "";
-
-      const elementsMatch = analysis.match(/ADDITIONAL_ELEMENTS:\s*(.*?)$/s);
-      const additionalElements = elementsMatch ? elementsMatch[1].trim() : "";
-
-      // Get the recommended components
-      const recommendedComponents = recommendedNumbers
-        .map((num) => availableComponents[num - 1])
-        .filter((comp) => comp);
-
-      const componentSuggestions =
-        recommendedComponents.length > 0
-          ? `
-RECOMMENDED COMPONENTS FOR THIS REQUEST:
-${recommendedComponents
-  .map(
-    (comp) =>
-      `- ${comp.name}: ${comp.description}
-    HTML: ${comp.htmlCode}`
-  )
-  .join("\n\n")}
-
-AI GUIDANCE: ${adaptationGuidance}
-`
-          : "";
-
-      const designGuidance = `
-MICROSOFT LEARN CONTEXT:
-${additionalElements}
-
-AI ANALYSIS: This request requires a Microsoft Learn approach with focus on educational content, clear navigation, and learning-oriented UI patterns.
-`;
-
-      return { componentSuggestions, designGuidance };
-    } catch (error) {
-      console.error("AI component analysis failed:", error);
-      return { componentSuggestions: "", designGuidance: "" };
-    }
-  }
-
-  // Use AI to analyze and recommend components
-  const { componentSuggestions, designGuidance } =
-    await analyzeComponentsWithAI(description, availableComponents);
-  console.log("🧠 AI component analysis completed");
-
-  // Extract semantic keywords from component for better AI matching
-  function extractComponentKeywords(component) {
-    const keywords = [];
-    const name = component.name.toLowerCase();
-    const desc = component.description.toLowerCase();
-    const category = component.category.toLowerCase();
-
-    // Functionality keywords
-    if (
-      name.includes("button") ||
-      desc.includes("button") ||
-      desc.includes("click")
-    )
-      keywords.push("buttons", "interactions");
-    if (
-      name.includes("menu") ||
-      desc.includes("menu") ||
-      desc.includes("dropdown")
-    )
-      keywords.push("navigation", "menus");
-    if (
-      name.includes("form") ||
-      desc.includes("form") ||
-      desc.includes("input")
-    )
-      keywords.push("forms", "data entry");
-    if (
-      name.includes("card") ||
-      desc.includes("card") ||
-      desc.includes("container")
-    )
-      keywords.push("content containers", "layouts");
-    if (
-      name.includes("table") ||
-      desc.includes("table") ||
-      desc.includes("grid")
-    )
-      keywords.push("data display", "tables");
-    if (
-      name.includes("modal") ||
-      desc.includes("modal") ||
-      desc.includes("dialog")
-    )
-      keywords.push("dialogs", "overlays");
-    if (
-      name.includes("header") ||
-      desc.includes("header") ||
-      desc.includes("navigation")
-    )
-      keywords.push("page headers", "site navigation");
-    if (
-      name.includes("hero") ||
-      desc.includes("hero") ||
-      desc.includes("banner")
-    )
-      keywords.push("hero sections", "banners");
-    if (
-      name.includes("command") ||
-      desc.includes("command") ||
-      desc.includes("toolbar")
-    )
-      keywords.push("toolbars", "action bars");
-
-    // Style/quality keywords
-    if (
-      category.includes("extended") ||
-      desc.includes("figma") ||
-      desc.includes("modern")
-    )
-      keywords.push("modern designs", "premium UI");
-    if (category.includes("github") || desc.includes("official"))
-      keywords.push("standard components");
-    if (desc.includes("interactive") || desc.includes("animation"))
-      keywords.push("interactive elements");
-    if (desc.includes("responsive") || desc.includes("mobile"))
-      keywords.push("responsive design");
-
-    // UI pattern keywords
-    if (name.includes("search") || desc.includes("search"))
-      keywords.push("search functionality");
-    if (name.includes("filter") || desc.includes("filter"))
-      keywords.push("filtering");
-    if (name.includes("list") || desc.includes("list"))
-      keywords.push("lists", "collections");
-    if (name.includes("tab") || desc.includes("tab"))
-      keywords.push("tabbed interfaces");
-    if (
-      name.includes("step") ||
-      desc.includes("step") ||
-      desc.includes("wizard")
-    )
-      keywords.push("multi-step processes");
-
-    // Fallback to category if no specific keywords found
-    if (keywords.length === 0) {
-      keywords.push(
-        category
-          .replace(/([A-Z])/g, " $1")
-          .toLowerCase()
-          .trim()
-      );
-    }
-
-    return [...new Set(keywords)]; // Remove duplicates
-  }
-
   const prompt = `Create a complete HTML wireframe for Microsoft Learn platform based on: "${description}"
 
-MICROSOFT LEARN FOCUS:
-- This is specifically for Microsoft Learn platform (learn.microsoft.com)
-- Focus on educational content, tutorials, documentation, learning paths
-- Use Microsoft Learn design patterns and content structures
-- Include learning-oriented UI elements (progress indicators, code blocks, step-by-step guides)
-- Optimize for developers and IT professionals learning Microsoft technologies
-
-${designGuidance}
-
-${componentSuggestions}
-
-DESIGN REQUIREMENTS:
+Requirements:
 - ALWAYS start with the official Microsoft Learn site header as the FIRST element in the body
 - Use Microsoft Learn design system with header background #ffffff and black text #000000
-- Include Segoe UI font family consistently
-- Make it responsive and accessible (WCAG 2.1 AA)
-- Use semantic HTML5 and modern CSS
-- Include Microsoft Learn specific elements like breadcrumbs, learning progress, related modules
-- Use the AI-recommended components above when they enhance the learning experience
-
-MICROSOFT LEARN PATTERNS TO INCLUDE:
-- Learning path navigation
-- Module progress indicators  
-- Code snippet containers with syntax highlighting
-- Step-by-step tutorial layouts
-- Related content suggestions
-- Skill level indicators
-- Estimated completion times
+- Include Segoe UI font family
+- Make it responsive and accessible
+- Include the exact components requested in the description
+- Use semantic HTML and modern CSS
 
 MICROSOFT LEARN HEADER TEMPLATE (ALWAYS INCLUDE FIRST):
 <header style="background: #ffffff; color: #000000; padding: 12px 24px; border-bottom: 1px solid #e5e5e5; font-family: 'Segoe UI', system-ui, sans-serif;">
@@ -331,17 +149,15 @@ COLOR GUIDELINES:
 
 Generate ONLY the HTML code (starting with <!DOCTYPE html>).`;
 
-  const response = await smartGenerator.generateCompletion({
+  const response = await openai.chat.completions.create({
     model: process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o",
-    messages: [{ role: "user", content: combinedPrompt }],
-    max_tokens: 2000, // EMERGENCY: Reduced from 4000 to 2000 to save quota
+    messages: [{ role: "user", content: prompt }],
+    max_tokens: 4000,
     temperature: 0.7,
   });
 
   return response.choices[0]?.message?.content || "";
 }
-
-// Main Azure Function
 
 // Main Azure Function
 module.exports = async function (context, req) {
@@ -407,39 +223,6 @@ module.exports = async function (context, req) {
       }
     } catch (aiError) {
       console.error("❌ AI generation failed:", aiError.message);
-
-      // Check if it's a rate limit error
-      if (
-        aiError.message.includes("429") ||
-        aiError.message.includes("rate limit")
-      ) {
-        console.log("🚦 Rate limit detected - suggesting solutions");
-
-        context.res.status = 429;
-        context.res.body = JSON.stringify({
-          success: false,
-          error: "RATE_LIMIT_EXCEEDED",
-          message: `Rate limit exceeded. Your Azure OpenAI S0 tier has limited quota. Solutions:
-          
-IMMEDIATE:
-• Wait 60 seconds and try again
-• Try a shorter, simpler description
-• Consider upgrading to Pay-as-you-go
-
-LONG-TERM:
-• Upgrade Azure OpenAI pricing tier
-• Request quota increase at https://aka.ms/oai/quotaincrease
-• This system has been optimized to use 50% less quota
-
-The system is running in emergency optimization mode with reduced token usage.`,
-          timestamp: new Date().toISOString(),
-          details: aiError.message,
-          retryAfter: 60,
-          optimizationMode: "emergency",
-          quotaReduction: "50%",
-        });
-        return;
-      }
 
       context.res.status = 503;
       context.res.body = JSON.stringify({
