@@ -114,7 +114,7 @@
 }
 
 .atlas-card-selected::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -136,7 +136,7 @@
   .atlas-card {
     margin: var(--atlas-spacing-sm);
   }
-  
+
   .atlas-card-header,
   .atlas-card-content,
   .atlas-card-footer {
@@ -161,4 +161,171 @@
 
 .atlas-cards-list .atlas-card {
   margin-bottom: 0;
+}
+
+/* Learning Path Card - Atlas Design Library Component */
+.atlas-learning-path-card {
+  background: var(--atlas-color-neutral-10);
+  border: 1px solid var(--atlas-color-neutral-30);
+  border-radius: var(--atlas-corner-radius-lg);
+  box-shadow: var(--atlas-shadow-2);
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  position: relative;
+  font-family: var(--atlas-font-family);
+  max-width: 400px;
+}
+
+.atlas-learning-path-card:hover {
+  box-shadow: var(--atlas-shadow-8);
+  transform: translateY(-2px);
+  border-color: var(--atlas-color-primary);
+}
+
+.atlas-learning-path-card-header {
+  padding: var(--atlas-spacing-lg);
+  border-bottom: 1px solid var(--atlas-color-neutral-30);
+  background: linear-gradient(
+    135deg,
+    var(--atlas-color-neutral-10) 0%,
+    var(--atlas-color-neutral-20) 100%
+  );
+}
+
+.atlas-learning-path-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--atlas-color-neutral-130);
+  margin: 0 0 var(--atlas-spacing-sm) 0;
+  line-height: 1.3;
+}
+
+.atlas-learning-path-card-description {
+  font-size: 14px;
+  color: var(--atlas-color-neutral-110);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.atlas-learning-path-card-content {
+  padding: var(--atlas-spacing-lg);
+}
+
+.atlas-learning-path-card-modules {
+  margin-bottom: var(--atlas-spacing-lg);
+}
+
+.atlas-learning-path-module {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--atlas-spacing-md);
+  margin-bottom: var(--atlas-spacing-sm);
+  background: var(--atlas-color-neutral-20);
+  border-radius: var(--atlas-corner-radius-md);
+  border-left: 4px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.atlas-learning-path-module:last-child {
+  margin-bottom: 0;
+}
+
+.atlas-learning-path-module-info {
+  flex: 1;
+}
+
+.atlas-learning-path-module-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--atlas-color-neutral-130);
+  margin: 0 0 4px 0;
+}
+
+.atlas-learning-path-module-subtitle {
+  font-size: 12px;
+  color: var(--atlas-color-neutral-110);
+  margin: 0;
+}
+
+.atlas-learning-path-module-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--atlas-spacing-sm);
+}
+
+.atlas-learning-path-module-percentage {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--atlas-color-primary);
+  min-width: 50px;
+  text-align: right;
+}
+
+.atlas-learning-path-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--atlas-color-neutral-30);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: var(--atlas-spacing-sm);
+}
+
+.atlas-learning-path-progress-fill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--atlas-color-primary) 0%,
+    #106ebe 100%
+  );
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* Module Status Variants */
+.atlas-learning-path-module.completed {
+  border-left-color: #107c10;
+  background: rgba(16, 124, 16, 0.05);
+}
+
+.atlas-learning-path-module.completed .atlas-learning-path-module-percentage {
+  color: #107c10;
+}
+
+.atlas-learning-path-module.in-progress {
+  border-left-color: var(--atlas-color-primary);
+  background: rgba(0, 120, 212, 0.05);
+}
+
+.atlas-learning-path-module.not-started {
+  border-left-color: var(--atlas-color-neutral-60);
+  background: var(--atlas-color-neutral-20);
+}
+
+.atlas-learning-path-module.not-started .atlas-learning-path-module-percentage {
+  color: var(--atlas-color-neutral-80);
+}
+
+/* Responsive Learning Path Card */
+@media (max-width: 768px) {
+  .atlas-learning-path-card {
+    max-width: 100%;
+  }
+
+  .atlas-learning-path-card-header,
+  .atlas-learning-path-card-content {
+    padding: var(--atlas-spacing-md);
+  }
+
+  .atlas-learning-path-module {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--atlas-spacing-sm);
+  }
+
+  .atlas-learning-path-module-progress {
+    width: 100%;
+    justify-content: space-between;
+  }
 }

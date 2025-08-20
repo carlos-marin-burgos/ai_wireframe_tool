@@ -435,6 +435,22 @@ class FigmaService {
       props: ["title", "subtitle", "image", "cta", "background", "overlay"],
     });
 
+    this.atlasComponentMap.set("atlas-learning-path-card", {
+      nodeId: "49009:263718", // Learning Path Card component from Figma URL
+      name: "Atlas/Learning Path Card",
+      description: "Atlas learning path card component for educational content",
+      variants: ["default", "completed", "in-progress", "locked"],
+      props: [
+        "title",
+        "description",
+        "progress",
+        "duration",
+        "modules",
+        "status",
+        "thumbnail",
+      ],
+    });
+
     console.log(
       `🎨 Initialized ${this.atlasComponentMap.size} Atlas Design Library component mappings`
     );
@@ -964,6 +980,14 @@ class FigmaService {
         // Fetch the actual Atlas Hero component from Figma using the node ID
         return await this.generateAtlasHeroFromFigma(component.nodeId);
 
+      case "learning-path-card":
+      case "learningpathcard":
+      case "learning_path_card":
+        // Fetch the actual Atlas Learning Path Card component from Figma using the node ID
+        return await this.generateAtlasLearningPathCardFromFigma(
+          component.nodeId
+        );
+
       default:
         return `
         <div class="atlas-component atlas-generic" data-node-id="${component.nodeId}">
@@ -1029,6 +1053,61 @@ class FigmaService {
             <p style="font-size: 12px; color: #a19f9d; margin: 0;">Node ID: ${nodeId}</p>
             <p style="font-size: 11px; color: #c8c6c4; margin: 4px 0 0 0;">Please check Figma connection and permissions</p>
         </div>
+    </div>`;
+  }
+
+  /**
+   * Generate Atlas Learning Path Card component from actual Figma data
+   */
+  async generateAtlasLearningPathCardFromFigma(nodeId, options = {}) {
+    try {
+      // Fetch the actual component image from Atlas Design Library Figma file
+      console.log(
+        `🔄 Fetching Atlas Learning Path Card from Figma node: ${nodeId}`
+      );
+      const componentImages = await this.exportAtlasComponentImages([nodeId], {
+        format: "png",
+        scale: 2,
+      });
+
+      const imageUrl = componentImages[nodeId];
+
+      if (imageUrl) {
+        console.log(
+          `✅ Successfully fetched Atlas Learning Path Card from Figma: ${nodeId}`
+        );
+        return `
+        <div class="atlas-component atlas-learning-path-card-figma" data-node-id="${nodeId}" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <img src="${imageUrl}" 
+                 alt="Atlas Learning Path Card Component from Figma (Node: ${nodeId})" 
+                 style="width: 100%; height: auto; display: block; object-fit: contain;" />
+            <div class="atlas-component-info" style="text-align: center; margin-top: 8px; padding: 8px;">
+                <p style="font-size: 11px; color: #605e5c; margin: 0; opacity: 0.8;">Official Atlas Design Library Learning Path Card</p>
+                <p style="font-size: 10px; color: #8a8886; margin: 2px 0 0 0; opacity: 0.6;">Node ID: ${nodeId} • Fetched from Figma</p>
+            </div>
+        </div>`;
+      }
+    } catch (error) {
+      console.error(
+        "Failed to fetch Atlas Learning Path Card from Figma:",
+        error
+      );
+    }
+
+    // Fallback message - don't generate random HTML
+    console.log(
+      `⚠️ Falling back to placeholder for Atlas Learning Path Card (Node: ${nodeId})`
+    );
+    return `
+    <div class="atlas-component atlas-learning-path-card-fallback" data-node-id="${nodeId}" style="background: #f8f9fa; padding: 24px; border-radius: 8px; border: 2px dashed #e1e5e9; text-align: center; font-family: 'Segoe UI', system-ui, sans-serif; max-width: 400px;">
+        <div style="font-size: 32px; margin-bottom: 12px; opacity: 0.6;">📚</div>
+        <h3 style="font-size: 16px; font-weight: 600; color: #323130; margin-bottom: 8px;">Atlas Learning Path Card</h3>
+        <p style="font-size: 14px; color: #605e5c; margin-bottom: 12px; line-height: 1.4;">Unable to fetch from Figma Atlas Design Library</p>
+        <div style="background: #e1f5fe; padding: 8px 12px; border-radius: 4px; margin-bottom: 8px;">
+            <p style="font-size: 12px; color: #0078d4; margin: 0; font-weight: 500;">Node ID: ${nodeId}</p>
+        </div>
+        <p style="font-size: 11px; color: #a19f9d; margin: 0;">Please check Figma connection and permissions</p>
+        <p style="font-size: 10px; color: #c8c6c4; margin: 4px 0 0 0;">Atlas Design Library: uVA2amRR71yJZ0GS6RI6zL</p>
     </div>`;
   }
 

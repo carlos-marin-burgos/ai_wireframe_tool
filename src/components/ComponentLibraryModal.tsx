@@ -1799,6 +1799,22 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
 </div>`
         },
 
+        // Atlas Learning Path Card Component - Direct from Figma
+        {
+            id: 'atlas-learning-path-card',
+            name: 'Atlas Learning Path Card',
+            description: 'Official Atlas Design Library Learning Path Card from Figma (Node ID: 49009:263718)',
+            category: 'Cards',
+            library: 'Atlas',
+            htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 100%;" data-figma-node="49009:263718" data-figma-file="uVA2amRR71yJZ0GS6RI6zL">
+                <div style="padding: 20px; text-align: center; background: #f8f9fa; border: 2px solid #e1e5e9; border-radius: 8px;">
+                    <div style="font-size: 28px; margin-bottom: 12px;">📚</div>
+                    <h3 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #323130; font-family: 'Segoe UI', system-ui, sans-serif;">Atlas Learning Path Card</h3>
+                    <p style="margin: 0; color: #605e5c; font-size: 14px;">Official component from Atlas Design Library</p>
+                </div>
+            </div>`
+        },
+
         // Atlas Design System Components
         {
             id: 'atlas-button-primary',

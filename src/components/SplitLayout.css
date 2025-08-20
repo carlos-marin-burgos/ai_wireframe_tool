@@ -62,7 +62,7 @@
 /* Main layout container */
 .split-layout {
   display: flex;
-  height: calc(100vh - 70px); /* Account for fixed header */
+  height: calc(100vh - 40px); /* Account for fixed header */
   width: 100%;
   overflow: hidden;
   position: relative;
@@ -79,10 +79,10 @@
   border-right: 1px solid #e1e1e1;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 70px);
+  height: calc(100vh - 40px);
   position: fixed;
   left: 0;
-  top: 70px;
+  top: 40px;
   z-index: 10;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
   overflow: hidden;
@@ -361,14 +361,17 @@
   margin: 0;
   font-size: 16px;
   font-weight: 600;
-  color: #2c3e50;
+  color: #000000;
   text-align: center;
-  letter-spacing: 0.3px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  letter-spacing: 1.2px;
+  font-family: "Courier New", "Monaco", "Consolas", "SF Mono", "Roboto Mono",
+    "Source Code Pro", monospace;
+  text-transform: uppercase;
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+  background-clip: unset;
+  text-shadow: none;
 }
 
 /* Dark mode support for wireframe name */
@@ -378,11 +381,15 @@
 }
 
 [data-theme="dark"] .wireframe-title {
-  color: #e2e8f0;
-  background: linear-gradient(135deg, #90cdf4 0%, #b794f6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ffffff;
+  font-family: "Courier New", "Monaco", "Consolas", "SF Mono", "Roboto Mono",
+    "Source Code Pro", monospace;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+  background-clip: unset;
 }
 
 /* AI Assistant main container - Microsoft Learn style */
