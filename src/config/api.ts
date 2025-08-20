@@ -51,8 +51,13 @@ export const API_CONFIG = {
   ENDPOINTS: {
     // NUCLEAR OPTION: Single endpoint that works no matter what
     GENERATE_WIREFRAME: "/api/generate-wireframe",
+    GENERATE_WIREFRAME_ENHANCED: "/api/generate-wireframe-enhanced",
+    GENERATE_FLUENT_WIREFRAME: "/api/generate-fluent-wireframe",
     GENERATE_SUGGESTIONS: "/api/generate-suggestions",
     GET_TEMPLATE: "/api/get-template",
+    COMPONENT_LIBRARY: "/api/component-library",
+    FLUENT_COMPONENTS: "/api/fluent-components",
+    FLUENT_COMPONENTS_SEARCH: "/api/fluent-components/search",
     HEALTH: "/api/health",
   },
 

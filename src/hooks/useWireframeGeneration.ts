@@ -182,7 +182,7 @@ export const useWireframeGeneration = () => {
           timestamp: Date.now(),
         });
 
-        // Call the API using our new client
+        // Call the API using our new client with fallback mechanism
         console.log("🚀 Making API call with:", {
           description,
           theme,
@@ -191,24 +191,55 @@ export const useWireframeGeneration = () => {
           timestamp: Date.now(),
         });
 
-        const data = await api.post<WireframeResponse>(
-          API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME + `?t=${Date.now()}`, // Add timestamp to force cache bust
-          { description, theme, colorScheme, fastMode: shouldUseFastMode },
-          {
-            signal: abortController.signal,
-            headers: {
-              "Cache-Control": "no-cache, no-store, must-revalidate",
-              Pragma: "no-cache",
-              Expires: "0",
-            },
-          }
-        );
+        let data: WireframeResponse;
+        let usingEnhanced = true;
+
+        try {
+          // Try enhanced endpoint first (component-driven)
+          data = await api.post<WireframeResponse>(
+            API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME_ENHANCED +
+              `?t=${Date.now()}`,
+            { description, theme, colorScheme, fastMode: shouldUseFastMode },
+            {
+              signal: abortController.signal,
+              headers: {
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+                Pragma: "no-cache",
+                Expires: "0",
+              },
+            }
+          );
+          console.log("✅ Enhanced endpoint succeeded");
+        } catch (enhancedError) {
+          console.warn(
+            "⚠️ Enhanced endpoint failed, falling back to original:",
+            enhancedError
+          );
+          usingEnhanced = false;
+
+          // Fallback to original endpoint
+          data = await api.post<WireframeResponse>(
+            API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME + `?t=${Date.now()}`,
+            { description, theme, colorScheme, fastMode: shouldUseFastMode },
+            {
+              signal: abortController.signal,
+              headers: {
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+                Pragma: "no-cache",
+                Expires: "0",
+              },
+            }
+          );
+          console.log("✅ Original endpoint succeeded");
+        }
 
         console.log("📥 API response received:", {
           hasHtml: !!data.html,
           htmlLength: data.html?.length,
           fallback: data.fallback,
           source: (data as any).source,
+          usingEnhanced,
+          endpoint: usingEnhanced ? "enhanced" : "original",
           title:
             data.html?.match(/<title>(.*?)<\/title>/)?.[1] || "No title found",
         });

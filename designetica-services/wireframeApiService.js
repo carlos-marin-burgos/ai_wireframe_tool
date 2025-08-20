@@ -4,10 +4,12 @@
  */
 
 const ComponentDrivenWireframeGenerator = require("./componentDrivenWireframeGenerator");
+const FigmaService = require("./figmaService");
 
 class WireframeApiService {
   constructor() {
     this.wireframeGenerator = new ComponentDrivenWireframeGenerator();
+    this.figmaService = new FigmaService();
     this.initialized = false;
   }
 
@@ -17,8 +19,14 @@ class WireframeApiService {
   async initialize() {
     if (!this.initialized) {
       await this.wireframeGenerator.init();
+
+      // Make Figma service accessible to wireframe generator
+      this.wireframeGenerator.figmaService = this.figmaService;
+
       this.initialized = true;
-      console.log("✅ Wireframe API Service initialized");
+      console.log(
+        "✅ Wireframe API Service initialized with Figma integration"
+      );
     }
   }
 

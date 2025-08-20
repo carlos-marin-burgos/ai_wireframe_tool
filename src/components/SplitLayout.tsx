@@ -1148,7 +1148,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
             {/* Complexity Level Selection */}
             <div className="complexity-section">
-              <h3 className="complexity-title">Choose complexity level</h3>
+              <h3 className="complexity-title">Choose generation mode</h3>
               <div className="complexity-options">
                 <label className="complexity-option selected">
                   <input
@@ -1173,6 +1173,18 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                   <div className="complexity-label">Detailed</div>
                   <p className="complexity-description">
                     Rich interactions and complex layouts. Great for production-ready designs.
+                  </p>
+                </label>
+                <label className="complexity-option">
+                  <input
+                    type="radio"
+                    name="complexity"
+                    value="fluent"
+                    className="complexity-radio"
+                  />
+                  <div className="complexity-label">Fluent UI</div>
+                  <p className="complexity-description">
+                    Component-driven wireframes using your React components and Fluent UI design system.
                   </p>
                 </label>
               </div>
@@ -1282,9 +1294,9 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
             {/* Feature callout */}
             <div className="feature-callout">
-              <div className="feature-callout-title">💡 Pro Tip</div>
+              <div className="feature-callout-title">✨ Enhanced Generation</div>
               <p className="feature-callout-text">
-                Be specific about your requirements. Mention components, layout, colors, and interactions for better results.
+                Now powered by component-driven AI! Wireframes use your actual React components and Fluent UI design system for production-ready results.
               </p>
             </div>
 

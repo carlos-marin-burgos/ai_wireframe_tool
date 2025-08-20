@@ -8,7 +8,7 @@ const path = require("path");
 
 class ComponentDetectionService {
   constructor() {
-    this.srcPath = "../src/components";
+    this.srcPath = "../src/components"; // Path relative to backend directory
     this.detectedComponents = new Map();
     this.componentPatterns = {
       button: /button|btn/i,

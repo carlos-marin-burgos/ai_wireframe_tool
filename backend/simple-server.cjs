@@ -12,6 +12,12 @@ const {
   AIEnhancedWireframeGenerator,
 } = require("./ai/ai-enhanced-wireframe-generator");
 
+// Import Component-Driven Wireframe Services
+const {
+  integrateWithBackend,
+  WireframeApiService,
+} = require("../designetica-services/backendIntegration");
+
 require("dotenv").config();
 
 // Initialize OpenAI client for Azure OpenAI
@@ -43,9 +49,17 @@ const PORT = process.env.PORT || 5001;
 const enhancedAI = new AIEnhancedWireframeGenerator();
 console.log("🚀 Enhanced AI Wireframe Generator initialized");
 
+// Initialize Component-Driven Wireframe API
+const componentWireframeApi = new WireframeApiService();
+console.log("🎨 Component-Driven Wireframe API initialized");
+
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Integrate Component-Driven Wireframe Services
+integrateWithBackend(app);
+console.log("✅ Component-driven wireframe endpoints integrated");
 
 // Serve static files
 app.use(express.static("../")); // Serve files from the parent directory

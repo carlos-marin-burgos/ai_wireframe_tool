@@ -133,10 +133,125 @@ function integrateWithBackend(app) {
     }
   });
 
+  // Fluent UI Node ID Wireframe Generation endpoint
+  app.post("/api/generate-fluent-wireframe", async (req, res) => {
+    try {
+      const {
+        nodeIds = [],
+        layout = "default",
+        fluentFileKey = null,
+      } = req.body;
+
+      if (!Array.isArray(nodeIds) || nodeIds.length === 0) {
+        return res.status(400).json({
+          error: "Node IDs are required",
+          message:
+            "Please provide an array of Figma node IDs from the Fluent UI library",
+          example: {
+            nodeIds: ["1:234", "1:235", "1:236"],
+            layout: "default",
+          },
+        });
+      }
+
+      console.log("🎨 Fluent UI wireframe request:", {
+        nodeIds,
+        layout,
+        fluentFileKey,
+      });
+
+      await wireframeApi.initialize();
+
+      // Get Figma service from wireframe API
+      const figmaService = wireframeApi.componentGenerator.figmaService;
+
+      // Generate wireframe using Fluent node IDs
+      const result = await figmaService.generateFluentWireframe(
+        nodeIds,
+        layout
+      );
+
+      res.json({
+        success: true,
+        html: result.html,
+        components: result.components,
+        layout: result.layout,
+        nodeIds: result.nodeIds,
+        timestamp: result.timestamp,
+        fluentUIGenerated: true,
+      });
+    } catch (error) {
+      console.error("❌ Fluent UI wireframe generation failed:", error);
+      res.status(500).json({
+        error: "Failed to generate Fluent UI wireframe",
+        details: error.message,
+        success: false,
+      });
+    }
+  });
+
+  // Get Fluent UI component mapping endpoint
+  app.get("/api/fluent-components", async (req, res) => {
+    try {
+      await wireframeApi.initialize();
+
+      const figmaService = wireframeApi.componentGenerator.figmaService;
+      const fluentMapping = figmaService.getFluentComponentMapping();
+
+      res.json({
+        success: true,
+        components: fluentMapping,
+        totalComponents: Object.keys(fluentMapping).length,
+        description: "Available Fluent UI components for wireframe generation",
+      });
+    } catch (error) {
+      console.error("❌ Failed to get Fluent components:", error);
+      res.status(500).json({
+        error: "Failed to retrieve Fluent UI components",
+        details: error.message,
+      });
+    }
+  });
+
+  // Search Fluent UI components endpoint
+  app.get("/api/fluent-components/search", async (req, res) => {
+    try {
+      const { q: query = "" } = req.query;
+
+      if (!query.trim()) {
+        return res.status(400).json({
+          error: "Query parameter 'q' is required",
+          message: "Please provide a search query to find Fluent UI components",
+        });
+      }
+
+      await wireframeApi.initialize();
+
+      const figmaService = wireframeApi.componentGenerator.figmaService;
+      const searchResults = figmaService.searchFluentComponents(query);
+
+      res.json({
+        success: true,
+        query,
+        results: searchResults,
+        totalResults: searchResults.length,
+      });
+    } catch (error) {
+      console.error("❌ Fluent component search failed:", error);
+      res.status(500).json({
+        error: "Failed to search Fluent UI components",
+        details: error.message,
+      });
+    }
+  });
+
   console.log("✅ Component-driven wireframe endpoints registered");
   console.log("   • POST /api/generate-wireframe-enhanced");
   console.log("   • GET  /api/component-library");
   console.log("   • POST /api/component-preview");
+  console.log("   • POST /api/generate-fluent-wireframe");
+  console.log("   • GET  /api/fluent-components");
+  console.log("   • GET  /api/fluent-components/search");
 }
 
 /**

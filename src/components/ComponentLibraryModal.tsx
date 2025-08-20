@@ -74,7 +74,8 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         }
     }, [isOpen, loadedFluentComponents.length]);
 
-    // Hardcoded Atlas components (moved here to be before early return)
+    // Remove the detected components loading - not needed
+    // The enhanced wireframe generation uses component knowledge behind the scenes    // Hardcoded Atlas components (moved here to be before early return)
     const atlasComponents: Component[] = [
         // Microsoft Learn Site Headers
         {
@@ -5252,12 +5253,10 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         }
     ];
 
-    // Combine Atlas components with loaded Fluent UI components - must be before early return
+    // Combine Atlas components with loaded Fluent UI components
     const components: Component[] = useMemo(() => {
         return [...atlasComponents, ...loadedFluentComponents];
-    }, [loadedFluentComponents]);
-
-    // Get unique categories for the selected library - must be before early return
+    }, [loadedFluentComponents]);    // Get unique categories for the selected library - must be before early return
     const categories = useMemo(() => {
         const libraryComponents = components.filter(c => (c.library || 'FluentUI') === selectedLibrary);
         const allCategories = Array.from(new Set(libraryComponents.map(c => c.category)));
