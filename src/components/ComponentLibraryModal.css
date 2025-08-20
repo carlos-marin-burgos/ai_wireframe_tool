@@ -1,16 +1,6 @@
-/* Component Li.component-library-modal {
-  background: white;
-  border-radius: 12px;
-  width: 90vw;
-  max-width: 1200px;
-  max-height: 90vh;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  display: flex;
-  flex-direction: column;
-}al Styles */
+/* Component Library Modal Styles */
 
-.modal-overlay {
+.component-library-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -20,28 +10,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10000;
+  z-index: 10001;
 }
 
 .component-library-modal {
   background: white;
   border-radius: 12px;
-  width: 95%;
+  width: 90vw;
   max-width: 1200px;
-  max-height: 80vh;
+  max-height: 90vh;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-}
-
-/* Also add modal-content for current usage */
-.modal-content {
-  background: white;
-  border-radius: 12px;
-  width: 95%;
-  max-width: 1200px;
-  max-height: 80vh;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
 }
 
 .component-library-header {
@@ -50,32 +31,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-/* Also add modal-header for current usage */
-.modal-header {
-  padding: 24px;
-  border-bottom: 1px solid #e1e5e9;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modal-header h2 {
-  margin: 0;
-  color: #323130;
-}
-
-.close-button {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #605e5c;
-}
-
-.close-button:hover {
-  color: #323130;
 }
 
 .component-library-title {

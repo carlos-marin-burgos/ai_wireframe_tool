@@ -1,13 +1,13 @@
 /* Landing Page Base Styles - PROTECTED */
 /* Override App.css styles */
 .landing-page {
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - 70px);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 2rem;
-  padding-top: calc(2rem + 60px); /* Account for fixed navbar height */
+  padding-top: calc(2rem + 70px); /* Account for fixed navbar height */
   /*background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);*/
   position: relative;
   overflow: hidden;
@@ -851,7 +851,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 1040;
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
 }
@@ -1385,4 +1385,46 @@
 [data-theme="dark"] .projects-container.github-container {
   background: #0d1117;
   border-color: #30363d;
+}
+
+/* Image Upload Modal Specific Styles */
+.modal-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.modal-icon {
+  font-size: 20px;
+  color: #0078d4;
+}
+
+.modal-description {
+  margin: 0 0 20px 0;
+  color: #605e5c;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.upload-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.upload-zone-container {
+  margin-top: 16px;
+}
+
+.upload-zone {
+  border: 2px dashed #d2d0ce;
+  border-radius: 8px;
+  padding: 32px;
+  text-align: center;
+  background: #faf9f8;
+  transition: all 0.2s ease;
+}
+
+.upload-zone:hover {
+  border-color: #0078d4;
+  background: #f3f9ff;
 }

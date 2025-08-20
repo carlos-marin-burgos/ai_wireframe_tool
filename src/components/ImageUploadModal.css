@@ -14,7 +14,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 1040;
   animation: fluent-backdrop-fade-in 0.2s ease-out;
 }
 

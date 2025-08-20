@@ -31,6 +31,10 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     const [loadedFluentComponents, setLoadedFluentComponents] = useState<Component[]>([]);
     const [isLoadingFluentComponents, setIsLoadingFluentComponents] = useState(false);
 
+    // State for filtering - must be declared before any early returns
+    const [selectedCategory, setSelectedCategory] = useState<string>('All');
+    const [selectedLibrary, setSelectedLibrary] = useState<'FluentUI' | 'Atlas'>('FluentUI');
+
     // Load Fluent UI components from JSON file
     useEffect(() => {
         const loadFluentComponents = async () => {
@@ -70,16 +74,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         }
     }, [isOpen, loadedFluentComponents.length]);
 
-    if (!isOpen) return null;
-
-    // Debug: Check if AI button should show
-    console.log('🔍 ComponentLibraryModal debug:', {
-        onGenerateWithAI: !!onGenerateWithAI,
-        currentDescription,
-        shouldShowAIButton: !!(onGenerateWithAI && currentDescription)
-    });
-
-    // Hardcoded Atlas components (existing ones)
+    // Hardcoded Atlas components (moved here to be before early return)
     const atlasComponents: Component[] = [
         // Microsoft Learn Site Headers
         {
@@ -5257,10 +5252,25 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         }
     ];
 
-    // Combine Atlas components with loaded Fluent UI components
+    // Combine Atlas components with loaded Fluent UI components - must be before early return
     const components: Component[] = useMemo(() => {
         return [...atlasComponents, ...loadedFluentComponents];
     }, [loadedFluentComponents]);
+
+    // Get unique categories for the selected library - must be before early return
+    const categories = useMemo(() => {
+        const libraryComponents = components.filter(c => (c.library || 'FluentUI') === selectedLibrary);
+        const allCategories = Array.from(new Set(libraryComponents.map(c => c.category)));
+        return ['All', ...allCategories.sort()];
+    }, [components, selectedLibrary]);
+
+    // Filter components based on selected category and library - must be before early return
+    const filteredComponents = useMemo(() => {
+        const libraryComponents = components.filter(c => (c.library || 'FluentUI') === selectedLibrary);
+        return selectedCategory === 'All'
+            ? libraryComponents
+            : libraryComponents.filter(c => c.category === selectedCategory);
+    }, [components, selectedCategory, selectedLibrary]);
 
     const handleComponentClick = (component: Component) => {
         console.log('🚀 Component clicked:', component.name);
@@ -5268,24 +5278,16 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         onClose();
     };
 
-    // State for filtering
-    const [selectedCategory, setSelectedCategory] = useState<string>('All');
-    const [selectedLibrary, setSelectedLibrary] = useState<'FluentUI' | 'Atlas'>('FluentUI');
+    if (!isOpen) return null;
 
-    // Get unique categories for the selected library
-    const categories = useMemo(() => {
-        const libraryComponents = components.filter(c => (c.library || 'FluentUI') === selectedLibrary);
-        const allCategories = Array.from(new Set(libraryComponents.map(c => c.category)));
-        return ['All', ...allCategories.sort()];
-    }, [selectedLibrary]);
+    console.log('🎯 ComponentLibraryModal is OPEN and rendering!');
 
-    // Filter components based on selected category and library
-    const filteredComponents = useMemo(() => {
-        const libraryComponents = components.filter(c => (c.library || 'FluentUI') === selectedLibrary);
-        return selectedCategory === 'All'
-            ? libraryComponents
-            : libraryComponents.filter(c => c.category === selectedCategory);
-    }, [selectedCategory, selectedLibrary]);
+    // Debug: Check if AI button should show
+    console.log('🔍 ComponentLibraryModal debug:', {
+        onGenerateWithAI: !!onGenerateWithAI,
+        currentDescription,
+        shouldShowAIButton: !!(onGenerateWithAI && currentDescription)
+    });
 
     return (
         <div className="component-library-modal-overlay">
