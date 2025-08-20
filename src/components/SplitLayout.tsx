@@ -1282,9 +1282,9 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
             {/* Feature callout */}
             <div className="feature-callout">
-              <div className="feature-callout-title">✨ Enhanced Generation</div>
+              <div className="feature-callout-title">✨ Enhanced with AI</div>
               <p className="feature-callout-text">
-                Now powered by component-driven AI! Wireframes use your actual React components and Fluent UI design system for production-ready results.
+                Now powered by component-aware AI! Your wireframes automatically use patterns from your React components for more realistic results.
               </p>
             </div>
 

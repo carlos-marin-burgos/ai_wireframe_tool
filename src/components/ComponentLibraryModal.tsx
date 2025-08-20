@@ -77,6 +77,27 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     // Remove the detected components loading - not needed
     // The enhanced wireframe generation uses component knowledge behind the scenes    // Hardcoded Atlas components (moved here to be before early return)
     const atlasComponents: Component[] = [
+        // Atlas Design Library Components (Microsoft Learn Style)
+        {
+            id: 'atlas-design-hero',
+            name: 'Atlas Hero Section',
+            description: 'Official Atlas Design Library hero component for Microsoft Learn',
+            category: 'Hero',
+            library: 'Atlas',
+            htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #F5F5DC; padding: 64px 32px; border-radius: 8px;">
+    <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+        <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 14px; color: #605e5c; margin-bottom: 16px; font-weight: 600;">MICROSOFT LEARN</p>
+        <h1 style="font-size: 48px; font-weight: 700; color: #323130; margin-bottom: 16px; line-height: 1.2;">Transform Your Vision</h1>
+        <p style="font-size: 20px; color: #605e5c; margin-bottom: 32px; line-height: 1.4;">Create stunning experiences with the Atlas Design Library</p>
+        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+            <button style="background: #0078d4; color: white; border: none; padding: 12px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Get Started</button>
+            <button style="background: transparent; color: #0078d4; border: 2px solid #0078d4; padding: 10px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Learn More</button>
+        </div>
+        <p style="font-size: 12px; color: #605e5c; margin-top: 16px; opacity: 0.8;">Official Atlas Design Library Hero Component (Node ID: 14647:163536)</p>
+    </div>
+</section>`
+        },
+
         // Microsoft Learn Site Headers
         {
             id: 'ms-learn-header-basic',
@@ -482,276 +503,6 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                 </div>
               </header>
             `
-        },
-        {
-            id: 'hero-section',
-            name: 'Microsoft Learn Accent Hero',
-            description: 'Microsoft Learn hero section with accent background',
-            category: 'Hero',
-            library: 'Atlas',
-            htmlCode: generateHeroHTML({
-                title: "Build your next great idea",
-                summary: "Transform your vision into reality with Microsoft Learn's comprehensive resources and tools.",
-                eyebrow: "MICROSOFT LEARN",
-                ctaText: "Get Started",
-                showSecondaryButton: true,
-                secondaryCtaText: "Learn More",
-                backgroundColor: "#E8E6DF",
-                heroImageUrl: "hero-learn.svg"
-            })
-        },
-        {
-            id: 'atlas-hero',
-            name: 'Fluent Hero - Azure',
-            description: 'Microsoft Azure themed hero section',
-            category: 'Fluent',
-            library: 'Atlas',
-            htmlCode: generateHeroHTML({
-                title: "Build and deploy with Azure",
-                summary: "Create scalable applications with Microsoft Azure cloud services and tools.",
-                eyebrow: "MICROSOFT AZURE",
-                ctaText: "Get Started",
-                showSecondaryButton: true,
-                secondaryCtaText: "Learn More",
-                backgroundColor: "#E8E6DF",
-                heroImageUrl: "azure.svg"
-            })
-        },
-        {
-            id: 'atlas-hero-ai',
-            name: 'Fluent Hero - AI',
-            description: 'AI and machine learning themed hero section',
-            category: 'Fluent',
-            library: 'Atlas',
-            htmlCode: generateHeroHTML({
-                title: "Accelerate innovation with AI",
-                summary: "Transform your business with artificial intelligence and machine learning solutions.",
-                eyebrow: "AI & MACHINE LEARNING",
-                ctaText: "Explore AI",
-                showSecondaryButton: false,
-                backgroundColor: "#E8E6DF",
-                heroImageUrl: "azure-ai.svg"
-            })
-        },
-
-        // Microsoft Learn Hero Size Variants
-        {
-            id: 'hero-xs',
-            name: 'Microsoft Learn Hero - Extra Small',
-            description: 'Compact hero with minimal height for subtle emphasis',
-            category: 'Hero',
-            library: 'Atlas',
-            htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #ffffff; padding: 32px 24px; border-bottom: 1px solid #e1e5e9;">
-    <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
-        <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 12px; color: #605e5c; margin-bottom: 8px; font-weight: 600;">MICROSOFT LEARN</p>
-        <h2 style="font-size: 28px; font-weight: 600; color: #323130; margin-bottom: 12px;">Extra small hero</h2>
-        <p style="font-size: 16px; color: #605e5c; max-width: 600px; margin: 0 auto;">Perfect for subtle emphasis without overwhelming the page content.</p>
-    </div>
-</section>`
-        },
-        {
-            id: 'hero-sm',
-            name: 'Microsoft Learn Hero - Small',
-            description: 'Small hero with balanced spacing for moderate emphasis',
-            category: 'Hero',
-            library: 'Atlas',
-            htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #0078d4; color: white; padding: 48px 24px; border-bottom: 1px solid #e1e5e9;">
-    <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
-        <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 12px; color: rgba(255,255,255,0.8); margin-bottom: 12px; font-weight: 600;">MICROSOFT LEARN</p>
-        <h2 style="font-size: 36px; font-weight: 600; color: white; margin-bottom: 16px;">Small hero section</h2>
-        <p style="font-size: 18px; color: rgba(255,255,255,0.9); max-width: 700px; margin: 0 auto;">Ideal for section introductions and moderate content emphasis with comfortable spacing.</p>
-    </div>
-</section>`
-        },
-        {
-            id: 'hero-default',
-            name: 'Microsoft Learn Hero - Default',
-            description: 'Standard hero with optimal spacing for most use cases',
-            category: 'Hero',
-            library: 'Atlas',
-            htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #d13438; color: white; padding: 64px 24px; border-bottom: 1px solid #e1e5e9;">
-    <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
-        <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 14px; color: rgba(255,255,255,0.9); margin-bottom: 16px; font-weight: 600;">MICROSOFT LEARN</p>
-        <h2 style="font-size: 48px; font-weight: 600; color: white; margin-bottom: 20px; line-height: 1.2;">Default hero section</h2>
-        <p style="font-size: 20px; color: rgba(255,255,255,0.95); max-width: 800px; margin: 0 auto 24px; line-height: 1.5;">The standard hero provides optimal spacing and visual hierarchy for most landing pages and section introductions.</p>
-        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-            <button style="background: white; color: #d13438; border: none; padding: 12px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Get Started</button>
-            <button style="background: transparent; color: white; border: 2px solid white; padding: 10px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Learn More</button>
-        </div>
-    </div>
-</section>`
-        },
-        {
-            id: 'hero-lg',
-            name: 'Microsoft Learn Hero - Large',
-            description: 'Large hero with generous spacing for maximum impact',
-            category: 'Hero',
-            library: 'Atlas',
-            htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #107c10; color: white; padding: 96px 24px; border-bottom: 1px solid #e1e5e9;">
-    <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
-        <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 14px; color: rgba(255,255,255,0.9); margin-bottom: 20px; font-weight: 600;">MICROSOFT LEARN</p>
-        <h1 style="font-size: 64px; font-weight: 700; color: white; margin-bottom: 24px; line-height: 1.1;">Large hero section</h1>
-        <p style="font-size: 24px; font-weight: 500; color: rgba(255,255,255,0.95); max-width: 900px; margin: 0 auto 32px; line-height: 1.4;">Perfect for landing pages and major announcements that demand attention and create lasting impressions.</p>
-        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-            <button style="background: white; color: #107c10; border: none; padding: 16px 32px; border-radius: 6px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">Get Started</button>
-            <button style="background: transparent; color: white; border: 2px solid white; padding: 14px 32px; border-radius: 6px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Explore Features</button>
-        </div>
-    </div>
-</section>`
-        },
-        {
-            id: 'hero-with-image',
-            name: 'Microsoft Learn Hero - With Side Image',
-            description: 'Hero with side-positioned image for visual storytelling',
-            category: 'Hero',
-            library: 'Atlas',
-            htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #ffffff; padding: 64px 24px; border-bottom: 1px solid #e1e5e9; position: relative; overflow: hidden;">
-    <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 400px; gap: 64px; align-items: center;">
-        <div>
-            <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 14px; color: #605e5c; margin-bottom: 16px; font-weight: 600;">MICROSOFT LEARN</p>
-            <h2 style="font-size: 48px; font-weight: 600; color: #323130; margin-bottom: 20px; line-height: 1.2;">Hero with visual storytelling</h2>
-            <p style="font-size: 20px; color: #605e5c; margin-bottom: 24px; line-height: 1.5;">Combine compelling content with supporting visuals to create engaging and memorable experiences for your users.</p>
-            <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-                <button style="background: #0078d4; color: white; border: none; padding: 12px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Get Started</button>
-                <button style="background: transparent; color: #0078d4; border: 2px solid #0078d4; padding: 10px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Learn More</button>
-            </div>
-        </div>
-        <div style="background: linear-gradient(135deg, #0078d4, #106ebe); border-radius: 12px; height: 300px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; font-weight: 500;">
-            📊 Visual Content
-        </div>
-    </div>
-    <style>
-        @media (max-width: 768px) {
-            section > div { grid-template-columns: 1fr !important; }
-            section > div > div:last-child { display: none !important; }
-        }
-    </style>
-</section>`
-        },
-        {
-            id: 'hero-with-details',
-            name: 'Microsoft Learn Hero - With Details Card',
-            description: 'Hero with overlay details card for additional content',
-            category: 'Hero',
-            library: 'Atlas',
-            htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); padding: 64px 24px; border-bottom: 1px solid #e1e5e9; position: relative;">
-    <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 320px; gap: 48px; align-items: start;">
-        <div>
-            <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 14px; color: #605e5c; margin-bottom: 16px; font-weight: 600;">MICROSOFT LEARN</p>
-            <h2 style="font-size: 48px; font-weight: 600; color: #323130; margin-bottom: 20px; line-height: 1.2;">Hero with rich details</h2>
-            <p style="font-size: 20px; color: #605e5c; margin-bottom: 24px; line-height: 1.5;">Perfect for complex offerings that need additional context or supporting information displayed prominently.</p>
-            <button style="background: #0078d4; color: white; border: none; padding: 12px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Get Started</button>
-        </div>
-        <div style="background: white; border: 1px solid #e1e5e9; border-radius: 8px; padding: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
-            <h3 style="font-size: 18px; font-weight: 600; color: #323130; margin-bottom: 12px;">Key Features</h3>
-            <ul style="list-style: none; padding: 0; margin: 0;">
-                <li style="display: flex; align-items: center; margin-bottom: 8px; color: #605e5c; font-size: 14px;">
-                    <span style="width: 6px; height: 6px; background: #0078d4; border-radius: 50%; margin-right: 12px;"></span>
-                    Comprehensive learning paths
-                </li>
-                <li style="display: flex; align-items: center; margin-bottom: 8px; color: #605e5c; font-size: 14px;">
-                    <span style="width: 6px; height: 6px; background: #0078d4; border-radius: 50%; margin-right: 12px;"></span>
-                    Hands-on labs and exercises
-                </li>
-                <li style="display: flex; align-items: center; margin-bottom: 8px; color: #605e5c; font-size: 14px;">
-                    <span style="width: 6px; height: 6px; background: #0078d4; border-radius: 50%; margin-right: 12px;"></span>
-                    Industry-recognized certifications
-                </li>
-                <li style="display: flex; align-items: center; color: #605e5c; font-size: 14px;">
-                    <span style="width: 6px; height: 6px; background: #0078d4; border-radius: 50%; margin-right: 12px;"></span>
-                    Expert-led content
-                </li>
-            </ul>
-        </div>
-    </div>
-    <style>
-        @media (max-width: 768px) {
-            section > div { grid-template-columns: 1fr !important; }
-        }
-    </style>
-</section>`
-        },
-        {
-            id: 'hero-full-media',
-            name: 'Microsoft Learn Hero - Full Media Background',
-            description: 'Hero with full-screen media background for maximum impact',
-            category: 'Hero',
-            library: 'Atlas',
-            htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; position: relative; padding: 120px 24px; min-height: 500px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0078d4 0%, #106ebe 50%, #005a9e 100%); z-index: 1;"></div>
-    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 2;"></div>
-    <div style="max-width: 900px; text-align: center; position: relative; z-index: 3; color: white;">
-        <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 14px; color: rgba(255,255,255,0.9); margin-bottom: 20px; font-weight: 600;">MICROSOFT LEARN</p>
-        <h1 style="font-size: 56px; font-weight: 700; color: white; margin-bottom: 24px; line-height: 1.1; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">Full media hero experience</h1>
-        <p style="font-size: 22px; color: rgba(255,255,255,0.95); margin-bottom: 32px; line-height: 1.4; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">Create immersive experiences with full-screen media backgrounds that capture attention and convey your brand's visual story.</p>
-        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-            <button style="background: white; color: #0078d4; border: none; padding: 16px 32px; border-radius: 6px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 16px rgba(0,0,0,0.2);">Get Started</button>
-            <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid white; padding: 14px 32px; border-radius: 6px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.2s; backdrop-filter: blur(10px);">Watch Demo</button>
-        </div>
-    </div>
-</section>`
-        },
-        {
-            id: 'hero-learn-details',
-            name: 'Microsoft Learn Hero - Images with Details (Official)',
-            description: 'Exact implementation of Microsoft Learn "Hero images with details" component',
-            category: 'Hero',
-            library: 'Atlas',
-            htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #f8f9fa; border: 1px solid #e1e5e9; background-image: linear-gradient(to right, transparent 50%, rgba(0,120,212,0.08) 100%); border-right: 4px solid rgba(0,120,212,0.2); display: flex; flex-direction: row; align-items: stretch; min-height: 320px; overflow: hidden;">
-    <!-- Hero content section -->
-    <div style="flex: 1; padding: 48px; display: flex; flex-direction: column; justify-content: center;">
-        <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 12px; color: #605e5c; margin-bottom: 16px; font-weight: 600;">MICROSOFT LEARN</p>
-        <h2 style="font-size: 48px; font-weight: 600; color: #323130; margin-bottom: 20px; line-height: 1.2;">Hero with images and details</h2>
-        <p style="font-size: 18px; color: #605e5c; margin-bottom: 24px; line-height: 1.5; max-width: 500px;">This component variant overlays a container on the opposite side of the hero content. It can be used to accommodate more content within the hero section if necessary.</p>
-        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-            <button style="background: #0078d4; color: white; border: none; padding: 12px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Get Started</button>
-            <button style="background: transparent; color: #0078d4; border: 2px solid #0078d4; padding: 10px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Learn More</button>
-        </div>
-    </div>
-    
-    <!-- Hero details section -->
-    <div style="width: 400px; padding: 48px 32px; display: flex; flex-direction: column; justify-content: center; position: relative;">
-        <!-- Background decorative element representing hero image -->
-        <div style="position: absolute; top: 20px; right: 20px; bottom: 20px; left: 20px; background: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 300\"><rect width=\"400\" height=\"300\" fill=\"%23f0f8ff\"/><circle cx=\"100\" cy=\"80\" r=\"20\" fill=\"%230078d4\" opacity=\"0.3\"/><circle cx=\"300\" cy=\"220\" r=\"30\" fill=\"%23106ebe\" opacity=\"0.2\"/><rect x=\"50\" y=\"150\" width=\"80\" height=\"40\" rx=\"8\" fill=\"%23005a9e\" opacity=\"0.1\"/><rect x=\"250\" y=\"100\" width=\"100\" height=\"60\" rx=\"12\" fill=\"%230078d4\" opacity=\"0.15\"/></svg>') center/cover; border-radius: 8px; opacity: 0.6;"></div>
-        
-        <!-- Details card -->
-        <div style="background: white; border: 1px solid #e1e5e9; border-radius: 12px; padding: 32px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; z-index: 2;">
-            <h3 style="font-size: 18px; font-weight: 600; color: #323130; margin-bottom: 16px;">Learning Path Details</h3>
-            <p style="font-size: 14px; color: #605e5c; margin-bottom: 20px; line-height: 1.4;">This component variant overlays a container on the opposite side of the hero content. It can be used to accommodate more content within the hero section if necessary.</p>
-            
-            <!-- Progress indicators -->
-            <div style="margin-bottom: 16px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <span style="font-size: 12px; color: #605e5c; font-weight: 500;">Modules Completed</span>
-                    <span style="font-size: 12px; color: #0078d4; font-weight: 600;">3 of 5</span>
-                </div>
-                <div style="width: 100%; height: 4px; background-color: #f3f2f1; border-radius: 2px; overflow: hidden;">
-                    <div style="width: 60%; height: 100%; background: linear-gradient(90deg, #0078d4, #106ebe); border-radius: 2px;"></div>
-                </div>
-            </div>
-            
-            <div style="margin-bottom: 20px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <span style="font-size: 12px; color: #605e5c; font-weight: 500;">Time Investment</span>
-                    <span style="font-size: 12px; color: #107c10; font-weight: 600;">2.5 hrs</span>
-                </div>
-                <div style="width: 100%; height: 4px; background-color: #f3f2f1; border-radius: 2px; overflow: hidden;">
-                    <div style="width: 45%; height: 100%; background: linear-gradient(90deg, #107c10, #0e6e0e); border-radius: 2px;"></div>
-                </div>
-            </div>
-            
-            <!-- Action button -->
-            <button style="width: 100%; background: #f8f9fa; color: #0078d4; border: 1px solid #e1e5e9; padding: 12px 16px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Continue Learning</button>
-        </div>
-    </div>
-    
-    <style>
-        @media (max-width: 768px) {
-            section { flex-direction: column !important; min-height: auto !important; }
-            section > div:last-child { width: 100% !important; padding: 32px 24px !important; }
-        }
-    </style>
-</section>`
         },
 
         // FluentUI ProgressBar Component

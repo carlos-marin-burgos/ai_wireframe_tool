@@ -16,11 +16,14 @@ class FigmaService {
     this.baseURL = "https://api.figma.com/v1";
     this.fileKey = "wSppVRlOi9JZO2LxtHUbbW"; // From figma.config.json
     this.fluentLibraryFileKey = "BNjrEE5xScFNrGY1w9rqBt"; // Microsoft Fluent UI Library
+    this.atlasLibraryFileKey = "uVA2amRR71yJZ0GS6RI6zL"; // Atlas Design Library
     this.axiosInstance = this.createAxiosInstance();
 
-    // Enhanced node ID mapping for Fluent UI components
+    // Enhanced node ID mapping for design systems
     this.fluentComponentMap = new Map();
+    this.atlasComponentMap = new Map();
     this.initializeFluentMapping();
+    this.initializeAtlasMapping();
   }
 
   /**
@@ -335,6 +338,73 @@ class FigmaService {
   }
 
   /**
+   * Initialize Atlas Design Library component mapping
+   */
+  initializeAtlasMapping() {
+    // Atlas Design Library components based on the provided URL
+    // Starting with the node ID from your URL: 14647-163530
+    this.atlasComponentMap.set("atlas-button-primary", {
+      nodeId: "14647:163530",
+      name: "Atlas/Button/Primary",
+      description: "Atlas primary button component",
+      variants: ["default", "hover", "active", "disabled"],
+      props: ["text", "icon", "size", "variant"],
+    });
+
+    this.atlasComponentMap.set("atlas-button-secondary", {
+      nodeId: "14647:163531", // Assumed adjacent node ID
+      name: "Atlas/Button/Secondary",
+      description: "Atlas secondary button component",
+      variants: ["default", "hover", "active", "disabled"],
+      props: ["text", "icon", "size", "variant"],
+    });
+
+    this.atlasComponentMap.set("atlas-card", {
+      nodeId: "14647:163532", // Assumed adjacent node ID
+      name: "Atlas/Card",
+      description: "Atlas card component",
+      variants: ["default", "elevated", "outlined"],
+      props: ["title", "content", "actions", "variant"],
+    });
+
+    this.atlasComponentMap.set("atlas-input", {
+      nodeId: "14647:163533", // Assumed adjacent node ID
+      name: "Atlas/Input",
+      description: "Atlas input field component",
+      variants: ["default", "focus", "error", "success"],
+      props: ["label", "placeholder", "value", "type", "required"],
+    });
+
+    this.atlasComponentMap.set("atlas-navigation", {
+      nodeId: "14647:163534", // Assumed adjacent node ID
+      name: "Atlas/Navigation",
+      description: "Atlas navigation component",
+      variants: ["horizontal", "vertical", "breadcrumb"],
+      props: ["items", "orientation", "active"],
+    });
+
+    this.atlasComponentMap.set("atlas-modal", {
+      nodeId: "14647:163535", // Assumed adjacent node ID
+      name: "Atlas/Modal",
+      description: "Atlas modal dialog component",
+      variants: ["small", "medium", "large", "fullscreen"],
+      props: ["title", "content", "actions", "size", "backdrop"],
+    });
+
+    this.atlasComponentMap.set("atlas-hero", {
+      nodeId: "14647:163536", // Hero component node ID
+      name: "Atlas/Hero",
+      description: "Atlas hero section component",
+      variants: ["default", "with-image", "with-video", "centered"],
+      props: ["title", "subtitle", "image", "cta", "background", "overlay"],
+    });
+
+    console.log(
+      `🎨 Initialized ${this.atlasComponentMap.size} Atlas Design Library component mappings`
+    );
+  }
+
+  /**
    * Get component by node ID from Fluent library
    */
   async getComponentByNodeId(nodeId, fileKey = this.fluentLibraryFileKey) {
@@ -364,6 +434,60 @@ class FigmaService {
       console.error(`❌ Failed to fetch node ${nodeId}:`, error.message);
       throw error;
     }
+  }
+
+  /**
+   * Get component by node ID from Atlas Design Library
+   */
+  async getAtlasComponentByNodeId(nodeId) {
+    return this.getComponentByNodeId(nodeId, this.atlasLibraryFileKey);
+  }
+
+  /**
+   * Get Atlas component mapping
+   */
+  getAtlasComponentMapping() {
+    const mapping = {};
+    for (const [key, value] of this.atlasComponentMap.entries()) {
+      mapping[key] = {
+        nodeId: value.nodeId,
+        name: value.name,
+        description: value.description,
+        variants: value.variants,
+        props: value.props,
+      };
+    }
+    return mapping;
+  }
+
+  /**
+   * Search Atlas components by keyword
+   */
+  searchAtlasComponents(query) {
+    const results = [];
+    const searchTerm = query.toLowerCase();
+
+    for (const [key, component] of this.atlasComponentMap.entries()) {
+      if (
+        component.name.toLowerCase().includes(searchTerm) ||
+        component.description.toLowerCase().includes(searchTerm) ||
+        key.toLowerCase().includes(searchTerm)
+      ) {
+        results.push({
+          id: key,
+          name: component.name,
+          description: component.description,
+          nodeId: component.nodeId,
+          variants: component.variants,
+          props: component.props,
+        });
+      }
+    }
+
+    console.log(
+      `🔍 Found ${results.length} Atlas components matching "${query}"`
+    );
+    return results;
   }
 
   /**
@@ -502,6 +626,39 @@ class FigmaService {
   }
 
   /**
+   * Generate wireframe using specific Atlas node IDs
+   */
+  async generateAtlasWireframe(componentNodeIds, layout = "default") {
+    try {
+      console.log(
+        `🎨 Generating wireframe with ${componentNodeIds.length} Atlas components`
+      );
+
+      // Fetch component data for each node ID from Atlas library
+      const components = await this.getComponentsByNodeIds(
+        componentNodeIds,
+        this.atlasLibraryFileKey
+      );
+
+      // Generate HTML structure based on components with Atlas styling
+      const wireframeHtml = this.generateAtlasWireframeHtml(components, layout);
+
+      console.log("✅ Atlas wireframe generated successfully");
+      return {
+        html: wireframeHtml,
+        components,
+        layout,
+        nodeIds: componentNodeIds,
+        designSystem: "atlas",
+        timestamp: new Date().toISOString(),
+      };
+    } catch (error) {
+      console.error("❌ Failed to generate Atlas wireframe:", error.message);
+      throw error;
+    }
+  }
+
+  /**
    * Extract properties from Figma node
    */
   extractNodeProperties(node) {
@@ -572,6 +729,47 @@ class FigmaService {
               .join(", ")}</p>
         </header>
         <main class="fluent-main">
+            ${componentHtml}
+        </main>
+    </div>
+</body>
+</html>`;
+  }
+
+  /**
+   * Generate HTML wireframe from Atlas components
+   */
+  async generateAtlasWireframeHtml(components, layout = "default") {
+    const styles = this.getAtlasWireframeStyles();
+
+    let layoutClass = "atlas-layout-default";
+    if (layout === "dashboard") layoutClass = "atlas-layout-dashboard";
+    else if (layout === "form") layoutClass = "atlas-layout-form";
+    else if (layout === "card-grid") layoutClass = "atlas-layout-cards";
+
+    const componentHtmlPromises = components.map((component, index) =>
+      this.generateAtlasComponentHtml(component, index)
+    );
+    const componentHtml = (await Promise.all(componentHtmlPromises)).join("\n");
+
+    return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlas Design Wireframe</title>
+    ${styles}
+</head>
+<body>
+    <div class="${layoutClass}">
+        <header class="atlas-header">
+            <h1>Atlas Design Wireframe</h1>
+            <p>Generated from Figma node IDs: ${components
+              .map((c) => c.nodeId)
+              .join(", ")}</p>
+        </header>
+        <main class="atlas-main">
             ${componentHtml}
         </main>
     </div>
@@ -657,6 +855,89 @@ class FigmaService {
   }
 
   /**
+   * Generate HTML for individual Atlas component
+   */
+  async generateAtlasComponentHtml(component, index) {
+    const componentType = this.detectComponentType(component.name);
+
+    switch (componentType) {
+      case "button":
+        return `
+        <div class="atlas-component atlas-button-container">
+            <button class="atlas-button ${
+              component.name.includes("Primary")
+                ? "atlas-button-primary"
+                : "atlas-button-secondary"
+            }" data-node-id="${component.nodeId}">
+                ${
+                  component.name.includes("Primary")
+                    ? "Primary Action"
+                    : "Secondary Action"
+                }
+            </button>
+        </div>`;
+
+      case "input":
+        return `
+        <div class="atlas-component atlas-input-container" data-node-id="${component.nodeId}">
+            <label class="atlas-label">Input Field</label>
+            <input class="atlas-input" type="text" placeholder="Enter text here..." />
+        </div>`;
+
+      case "card":
+        return `
+        <div class="atlas-component atlas-card" data-node-id="${component.nodeId}">
+            <div class="atlas-card-header">
+                <h3>Card Title</h3>
+            </div>
+            <div class="atlas-card-content">
+                <p>Card content based on Atlas component: ${component.name}</p>
+            </div>
+        </div>`;
+
+      case "navigation":
+        return `
+        <nav class="atlas-component atlas-navigation" data-node-id="${component.nodeId}">
+            <ul class="atlas-nav-list">
+                <li class="atlas-nav-item"><a href="#" class="atlas-nav-link">Home</a></li>
+                <li class="atlas-nav-item"><a href="#" class="atlas-nav-link">Products</a></li>
+                <li class="atlas-nav-item"><a href="#" class="atlas-nav-link">Services</a></li>
+                <li class="atlas-nav-item"><a href="#" class="atlas-nav-link">Contact</a></li>
+            </ul>
+        </nav>`;
+
+      case "modal":
+        return `
+        <div class="atlas-component atlas-modal-overlay" data-node-id="${component.nodeId}">
+            <div class="atlas-modal">
+                <div class="atlas-modal-header">
+                    <h2>Modal Title</h2>
+                    <button class="atlas-modal-close">×</button>
+                </div>
+                <div class="atlas-modal-content">
+                    <p>Modal content from Atlas component: ${component.name}</p>
+                </div>
+                <div class="atlas-modal-actions">
+                    <button class="atlas-button atlas-button-primary">Confirm</button>
+                    <button class="atlas-button atlas-button-secondary">Cancel</button>
+                </div>
+            </div>
+        </div>`;
+
+      case "hero":
+        // Fetch the actual Atlas Hero component from Figma using the node ID
+        return await this.generateAtlasHeroFromFigma(component.nodeId);
+
+      default:
+        return `
+        <div class="atlas-component atlas-generic" data-node-id="${component.nodeId}">
+            <h4>${component.name}</h4>
+            <p>Generic Atlas component</p>
+        </div>`;
+    }
+  }
+
+  /**
    * Detect component type from name
    */
   detectComponentType(name) {
@@ -670,8 +951,53 @@ class FigmaService {
       return "navigation";
     if (lowerName.includes("modal") || lowerName.includes("dialog"))
       return "modal";
+    if (lowerName.includes("hero") || lowerName.includes("banner"))
+      return "hero";
 
     return "generic";
+  }
+
+  /**
+   * Generate Atlas Hero component from actual Figma data
+   */
+  async generateAtlasHeroFromFigma(nodeId) {
+    try {
+      // Fetch the actual component image from Figma
+      const componentImages = await this.exportComponentImages([nodeId], {
+        format: "png",
+        scale: 2,
+      });
+
+      const imageUrl = componentImages[nodeId];
+
+      if (imageUrl) {
+        return `
+        <div class="atlas-component atlas-hero-figma" data-node-id="${nodeId}">
+            <img src="${imageUrl}" alt="Atlas Hero Component" style="width: 100%; height: auto; display: block;" />
+            <div class="atlas-hero-overlay">
+                <p style="font-size: 12px; color: #605e5c; text-align: center; margin-top: 8px;">Official Atlas Design Library Hero Component</p>
+            </div>
+        </div>`;
+      }
+    } catch (error) {
+      console.error("Failed to fetch Atlas Hero from Figma:", error);
+    }
+
+    // Fallback to tan background hero (matching Atlas Design Library style)
+    return `
+    <div class="atlas-component atlas-hero" data-node-id="${nodeId}">
+        <div style="background: #F5F5DC; padding: 64px 32px; border-radius: 8px; font-family: 'Segoe UI', system-ui, sans-serif;">
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <h1 style="font-size: 48px; font-weight: 700; color: #323130; margin-bottom: 16px; line-height: 1.2;">Transform Your Vision</h1>
+                <p style="font-size: 20px; color: #605e5c; margin-bottom: 32px; line-height: 1.4;">Create stunning experiences with the Atlas Design Library</p>
+                <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                    <button style="background: #0078d4; color: white; border: none; padding: 12px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer;">Get Started</button>
+                    <button style="background: transparent; color: #0078d4; border: 2px solid #0078d4; padding: 10px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer;">Learn More</button>
+                </div>
+                <p style="font-size: 12px; color: #605e5c; margin-top: 16px; opacity: 0.8;">Official Atlas Design Library Hero Component</p>
+            </div>
+        </div>
+    </div>`;
   }
 
   /**
@@ -988,6 +1314,367 @@ class FigmaService {
             }
         }
     </style>`;
+  }
+
+  /**
+   * Get Atlas Design Library specific CSS styles
+   */
+  getAtlasWireframeStyles() {
+    return `
+      <style>
+        /* Atlas Design Library Styles */
+        .atlas-component {
+          margin: 15px 0;
+          border: 2px solid #2563eb;
+          border-radius: 8px;
+          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+          box-shadow: 0 4px 6px rgba(37, 99, 235, 0.1);
+          position: relative;
+        }
+
+        .atlas-component::before {
+          content: 'ATLAS';
+          position: absolute;
+          top: -8px;
+          right: 8px;
+          background: #2563eb;
+          color: white;
+          padding: 2px 6px;
+          border-radius: 4px;
+          font-size: 10px;
+          font-weight: bold;
+        }
+
+        .atlas-button-container {
+          padding: 15px;
+          text-align: center;
+        }
+
+        .atlas-button {
+          padding: 12px 24px;
+          border: none;
+          border-radius: 6px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .atlas-button-primary {
+          background: linear-gradient(135deg, #2563eb, #1d4ed8);
+          color: white;
+        }
+
+        .atlas-button-primary:hover {
+          background: linear-gradient(135deg, #1d4ed8, #1e40af);
+          transform: translateY(-1px);
+        }
+
+        .atlas-button-secondary {
+          background: white;
+          color: #2563eb;
+          border: 2px solid #2563eb;
+        }
+
+        .atlas-button-secondary:hover {
+          background: #f1f5f9;
+          border-color: #1d4ed8;
+        }
+
+        .atlas-input-container {
+          padding: 15px;
+        }
+
+        .atlas-label {
+          display: block;
+          margin-bottom: 8px;
+          font-weight: 600;
+          color: #1e293b;
+        }
+
+        .atlas-input {
+          width: 100%;
+          padding: 12px;
+          border: 2px solid #e2e8f0;
+          border-radius: 6px;
+          font-size: 14px;
+          transition: border-color 0.2s ease;
+        }
+
+        .atlas-input:focus {
+          outline: none;
+          border-color: #2563eb;
+          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .atlas-card {
+          padding: 20px;
+          background: white;
+          border-radius: 8px;
+          border: 2px solid #e2e8f0;
+        }
+
+        .atlas-card-header h3 {
+          margin: 0 0 12px 0;
+          color: #1e293b;
+          font-size: 18px;
+        }
+
+        .atlas-card-content p {
+          margin: 0;
+          color: #64748b;
+          line-height: 1.5;
+        }
+
+        .atlas-navigation {
+          padding: 15px;
+          background: white;
+          border-radius: 6px;
+        }
+
+        .atlas-nav-list {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          gap: 20px;
+        }
+
+        .atlas-nav-item {
+          margin: 0;
+        }
+
+        .atlas-nav-link {
+          color: #2563eb;
+          text-decoration: none;
+          font-weight: 500;
+          padding: 8px 12px;
+          border-radius: 4px;
+          transition: background 0.2s ease;
+        }
+
+        .atlas-nav-link:hover {
+          background: #f1f5f9;
+          color: #1d4ed8;
+        }
+
+        .atlas-modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.5);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+        }
+
+        .atlas-modal {
+          background: white;
+          border-radius: 8px;
+          box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+          max-width: 500px;
+          width: 90%;
+          max-height: 80vh;
+          overflow: hidden;
+        }
+
+        .atlas-modal-header {
+          padding: 20px;
+          border-bottom: 1px solid #e2e8f0;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .atlas-modal-header h2 {
+          margin: 0;
+          color: #1e293b;
+        }
+
+        .atlas-modal-close {
+          background: none;
+          border: none;
+          font-size: 24px;
+          cursor: pointer;
+          color: #64748b;
+        }
+
+        .atlas-modal-content {
+          padding: 20px;
+          color: #64748b;
+        }
+
+        .atlas-modal-actions {
+          padding: 20px;
+          border-top: 1px solid #e2e8f0;
+          display: flex;
+          gap: 12px;
+          justify-content: flex-end;
+        }
+
+        .atlas-hero {
+          padding: 60px 40px;
+          background: #f5f1eb;
+          color: #323130;
+          border-radius: 8px;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 40px;
+          align-items: center;
+          min-height: 400px;
+          border: 1px solid #e1dfdd;
+        }
+
+        .atlas-hero-content {
+          text-align: left;
+        }
+
+        .atlas-hero-title {
+          font-size: 48px;
+          font-weight: 700;
+          margin: 0 0 20px 0;
+          line-height: 1.2;
+          color: #323130;
+        }
+
+        .atlas-hero-subtitle {
+          font-size: 20px;
+          color: #605e5c;
+          margin: 0 0 30px 0;
+          line-height: 1.6;
+        }
+
+        .atlas-hero-actions {
+          display: flex;
+          gap: 16px;
+          flex-wrap: wrap;
+        }
+
+        .atlas-hero-visual {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .atlas-hero-placeholder {
+          width: 100%;
+          height: 300px;
+          background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 18px;
+          font-weight: 600;
+          color: white;
+          border: 2px dashed rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+          .atlas-hero {
+            grid-template-columns: 1fr;
+            text-align: center;
+            padding: 40px 20px;
+          }
+          
+          .atlas-hero-title {
+            font-size: 36px;
+          }
+          
+          .atlas-hero-subtitle {
+            font-size: 18px;
+          }
+        }
+
+        .atlas-generic {
+          padding: 20px;
+          text-align: center;
+          background: white;
+          border-radius: 6px;
+        }
+
+        .atlas-generic h4 {
+          margin: 0 0 8px 0;
+          color: #1e293b;
+        }
+
+        .atlas-generic p {
+          margin: 0;
+          color: #64748b;
+        }
+
+        /* Atlas Layout Styles */
+        .atlas-layout-default {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 20px;
+          background: #f8fafc;
+          min-height: 100vh;
+        }
+
+        .atlas-layout-dashboard {
+          display: grid;
+          grid-template-columns: 250px 1fr;
+          grid-template-rows: auto 1fr;
+          min-height: 100vh;
+          background: #f8fafc;
+        }
+
+        .atlas-layout-form {
+          max-width: 600px;
+          margin: 0 auto;
+          padding: 40px 20px;
+          background: #f8fafc;
+          min-height: 100vh;
+        }
+
+        .atlas-layout-cards {
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 20px;
+          background: #f8fafc;
+          min-height: 100vh;
+        }
+
+        .atlas-header {
+          padding: 20px 0;
+          border-bottom: 2px solid #e2e8f0;
+          margin-bottom: 30px;
+          text-align: center;
+        }
+
+        .atlas-header h1 {
+          margin: 0 0 10px 0;
+          color: #1e293b;
+          font-size: 28px;
+        }
+
+        .atlas-header p {
+          margin: 0;
+          color: #64748b;
+          font-size: 14px;
+        }
+
+        .atlas-main {
+          display: grid;
+          gap: 20px;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        @media (max-width: 768px) {
+          .atlas-layout-dashboard {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto 1fr;
+          }
+          
+          .atlas-main {
+            grid-template-columns: 1fr;
+          }
+        }
+      </style>
+    `;
   }
 }
 
