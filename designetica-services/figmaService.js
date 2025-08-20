@@ -94,6 +94,42 @@ class FigmaService {
   }
 
   /**
+   * Export components as images from Atlas Design Library
+   */
+  async exportAtlasComponentImages(componentIds, options = {}) {
+    try {
+      const defaultOptions = {
+        format: "png",
+        scale: 2,
+        ...options,
+      };
+
+      console.log(
+        `🔄 Exporting ${componentIds.length} Atlas component images...`
+      );
+
+      const params = new URLSearchParams({
+        ids: componentIds.join(","),
+        format: defaultOptions.format,
+        scale: defaultOptions.scale,
+      });
+
+      const response = await this.axiosInstance.get(
+        `/images/${this.atlasLibraryFileKey}?${params.toString()}`
+      );
+
+      console.log("✅ Atlas component images exported successfully");
+      return response.data.images;
+    } catch (error) {
+      console.error(
+        "❌ Failed to export Atlas component images:",
+        error.message
+      );
+      throw error;
+    }
+  }
+
+  /**
    * Export components as images
    */
   async exportComponentImages(componentIds, options = {}) {
@@ -392,7 +428,7 @@ class FigmaService {
     });
 
     this.atlasComponentMap.set("atlas-hero", {
-      nodeId: "14647:163536", // Hero component node ID
+      nodeId: "14647:163530", // Hero component node ID (corrected from Figma URL)
       name: "Atlas/Hero",
       description: "Atlas hero section component",
       variants: ["default", "with-image", "with-video", "centered"],
@@ -962,8 +998,8 @@ class FigmaService {
    */
   async generateAtlasHeroFromFigma(nodeId) {
     try {
-      // Fetch the actual component image from Figma
-      const componentImages = await this.exportComponentImages([nodeId], {
+      // Fetch the actual component image from Atlas Design Library Figma file
+      const componentImages = await this.exportAtlasComponentImages([nodeId], {
         format: "png",
         scale: 2,
       });
@@ -972,10 +1008,11 @@ class FigmaService {
 
       if (imageUrl) {
         return `
-        <div class="atlas-component atlas-hero-figma" data-node-id="${nodeId}">
-            <img src="${imageUrl}" alt="Atlas Hero Component" style="width: 100%; height: auto; display: block;" />
-            <div class="atlas-hero-overlay">
-                <p style="font-size: 12px; color: #605e5c; text-align: center; margin-top: 8px;">Official Atlas Design Library Hero Component</p>
+        <div class="atlas-component atlas-hero-figma" data-node-id="${nodeId}" style="max-width: 100%; overflow: hidden;">
+            <img src="${imageUrl}" alt="Atlas Hero Component from Figma" style="width: 100%; height: auto; display: block; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);" />
+            <div class="atlas-hero-overlay" style="text-align: center; margin-top: 12px;">
+                <p style="font-size: 12px; color: #605e5c; margin: 0; opacity: 0.8;">Official Atlas Design Library Hero Component (Node: ${nodeId})</p>
+                <p style="font-size: 11px; color: #8a8886; margin: 4px 0 0 0; opacity: 0.6;">Fetched directly from Figma Atlas Design Library</p>
             </div>
         </div>`;
       }
@@ -983,19 +1020,14 @@ class FigmaService {
       console.error("Failed to fetch Atlas Hero from Figma:", error);
     }
 
-    // Fallback to tan background hero (matching Atlas Design Library style)
+    // Fallback to a simple placeholder if Figma fetch fails
     return `
-    <div class="atlas-component atlas-hero" data-node-id="${nodeId}">
-        <div style="background: #F5F5DC; padding: 64px 32px; border-radius: 8px; font-family: 'Segoe UI', system-ui, sans-serif;">
-            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-                <h1 style="font-size: 48px; font-weight: 700; color: #323130; margin-bottom: 16px; line-height: 1.2;">Transform Your Vision</h1>
-                <p style="font-size: 20px; color: #605e5c; margin-bottom: 32px; line-height: 1.4;">Create stunning experiences with the Atlas Design Library</p>
-                <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-                    <button style="background: #0078d4; color: white; border: none; padding: 12px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer;">Get Started</button>
-                    <button style="background: transparent; color: #0078d4; border: 2px solid #0078d4; padding: 10px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer;">Learn More</button>
-                </div>
-                <p style="font-size: 12px; color: #605e5c; margin-top: 16px; opacity: 0.8;">Official Atlas Design Library Hero Component</p>
-            </div>
+    <div class="atlas-component atlas-hero-fallback" data-node-id="${nodeId}" style="background: #f8f9fa; padding: 48px 32px; border-radius: 8px; border: 2px dashed #e1e5e9; text-align: center; font-family: 'Segoe UI', system-ui, sans-serif;">
+        <div style="max-width: 600px; margin: 0 auto;">
+            <h2 style="font-size: 24px; font-weight: 600; color: #605e5c; margin-bottom: 16px;">Atlas Hero Component</h2>
+            <p style="font-size: 16px; color: #8a8886; margin-bottom: 20px;">Unable to fetch from Figma Atlas Design Library</p>
+            <p style="font-size: 12px; color: #a19f9d; margin: 0;">Node ID: ${nodeId}</p>
+            <p style="font-size: 11px; color: #c8c6c4; margin: 4px 0 0 0;">Please check Figma connection and permissions</p>
         </div>
     </div>`;
   }

@@ -77,25 +77,54 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     // Remove the detected components loading - not needed
     // The enhanced wireframe generation uses component knowledge behind the scenes    // Hardcoded Atlas components (moved here to be before early return)
     const atlasComponents: Component[] = [
-        // Atlas Design Library Components (Microsoft Learn Style)
+        // Individual Atlas Hero Components from Figma
         {
-            id: 'atlas-design-hero',
-            name: 'Atlas Hero Section',
-            description: 'Official Atlas Design Library hero component for Microsoft Learn',
+            id: 'atlas-hero-1',
+            name: 'Atlas Hero 1',
+            description: 'Atlas Design Library Hero Component #1',
             category: 'Hero',
             library: 'Atlas',
-            htmlCode: `<section style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #F5F5DC; padding: 64px 32px; border-radius: 8px;">
-    <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-        <p style="letter-spacing: 0.5px; text-transform: uppercase; font-size: 14px; color: #605e5c; margin-bottom: 16px; font-weight: 600;">MICROSOFT LEARN</p>
-        <h1 style="font-size: 48px; font-weight: 700; color: #323130; margin-bottom: 16px; line-height: 1.2;">Transform Your Vision</h1>
-        <p style="font-size: 20px; color: #605e5c; margin-bottom: 32px; line-height: 1.4;">Create stunning experiences with the Atlas Design Library</p>
-        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-            <button style="background: #0078d4; color: white; border: none; padding: 12px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Get Started</button>
-            <button style="background: transparent; color: #0078d4; border: 2px solid #0078d4; padding: 10px 24px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Learn More</button>
-        </div>
-        <p style="font-size: 12px; color: #605e5c; margin-top: 16px; opacity: 0.8;">Official Atlas Design Library Hero Component (Node ID: 14647:163536)</p>
-    </div>
-</section>`
+            htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 100%;">
+                <img src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/7727c33f-01c5-481f-870a-f19e55d095a1" 
+                     alt="Atlas Hero Component 1" 
+                     style="width: 100%; height: auto; display: block; object-fit: contain;" />
+            </div>`
+        },
+        {
+            id: 'atlas-hero-2',
+            name: 'Atlas Hero 2',
+            description: 'Atlas Design Library Hero Component #2',
+            category: 'Hero',
+            library: 'Atlas',
+            htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 100%;">
+                <img src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/985892f2-b62b-44cc-9758-7a853d771fc2" 
+                     alt="Atlas Hero Component 2" 
+                     style="width: 100%; height: auto; display: block; object-fit: contain;" />
+            </div>`
+        },
+        {
+            id: 'atlas-hero-3',
+            name: 'Atlas Hero 3',
+            description: 'Atlas Design Library Hero Component #3',
+            category: 'Hero',
+            library: 'Atlas',
+            htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 100%;">
+                <img src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/1ffee34f-295c-4e6c-ae43-f74ff816396a" 
+                     alt="Atlas Hero Component 3" 
+                     style="width: 100%; height: auto; display: block; object-fit: contain;" />
+            </div>`
+        },
+        {
+            id: 'atlas-hero-4',
+            name: 'Atlas Hero 4',
+            description: 'Atlas Design Library Hero Component #4',
+            category: 'Hero',
+            library: 'Atlas',
+            htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 100%;">
+                <img src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/22597cdd-f183-480d-9472-029c70459fef" 
+                     alt="Atlas Hero Component 4" 
+                     style="width: 100%; height: auto; display: block; object-fit: contain;" />
+            </div>`
         },
 
         // Microsoft Learn Site Headers
