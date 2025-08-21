@@ -1806,11 +1806,43 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Official Atlas Design Library Learning Path Card from Figma (Node ID: 49009:263718)',
             category: 'Cards',
             library: 'Atlas',
-            htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 100%;" data-figma-node="49009:263718" data-figma-file="uVA2amRR71yJZ0GS6RI6zL">
-                <div style="padding: 20px; text-align: center; background: #f8f9fa; border: 2px solid #e1e5e9; border-radius: 8px;">
-                    <div style="font-size: 28px; margin-bottom: 12px;">📚</div>
-                    <h3 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #323130; font-family: 'Segoe UI', system-ui, sans-serif;">Atlas Learning Path Card</h3>
-                    <p style="margin: 0; color: #605e5c; font-size: 14px;">Official component from Atlas Design Library</p>
+            htmlCode: `<div class="atlas-learning-path-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 16px rgba(0,0,0,0.08); width: 100%; min-width: 300px; font-family: 'Segoe UI', system-ui, sans-serif;" data-figma-node="49009:263718" data-figma-file="uVA2amRR71yJZ0GS6RI6zL">
+                <div class="learning-path-header" style="background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%); padding: 20px; color: white; position: relative;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                        <span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Learning Path</span>
+                        <span style="background: #00bcf2; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">Beginner</span>
+                    </div>
+                    <h3 style="margin: 0 0 8px 0; font-size: 24px; font-weight: 700; line-height: 1.2;">Azure Fundamentals</h3>
+                    <p style="margin: 0; opacity: 0.9; font-size: 14px; line-height: 1.4;">Learn the fundamentals of cloud computing and Microsoft Azure services</p>
+                </div>
+                <div class="learning-path-content" style="padding: 24px;">
+                    <div style="margin-bottom: 20px;">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px; padding: 12px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #0078d4;">
+                            <div style="font-size: 20px;">📚</div>
+                            <span style="font-size: 14px; font-weight: 500; color: #323130;">Cloud Concepts & Core Services</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px; padding: 12px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #0078d4;">
+                            <div style="font-size: 20px;">🏗️</div>
+                            <span style="font-size: 14px; font-weight: 500; color: #323130;">Azure Architecture & Solutions</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px; padding: 12px; background: #e8f4fd; border-radius: 8px; border-left: 4px solid #00bcf2;">
+                            <div style="font-size: 20px;">🔐</div>
+                            <span style="font-size: 14px; font-weight: 500; color: #323130;">Security & Compliance</span>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 14px; font-weight: 600; color: #323130;">Progress</span>
+                            <span style="font-size: 14px; color: #0078d4; font-weight: 600;">2 of 5 modules</span>
+                        </div>
+                        <div style="background: #f3f2f1; border-radius: 8px; height: 8px; overflow: hidden;">
+                            <div style="background: linear-gradient(90deg, #0078d4, #00bcf2); height: 100%; width: 40%; transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button style="flex: 1; background: #0078d4; color: white; border: none; padding: 12px 20px; border-radius: 6px; font-weight: 600; font-size: 14px; cursor: pointer; transition: background 0.2s ease;">Continue Learning</button>
+                        <button style="background: #f3f2f1; color: #605e5c; border: none; padding: 12px; border-radius: 6px; font-size: 16px; cursor: pointer; transition: background 0.2s ease;">📖</button>
+                    </div>
                 </div>
             </div>`
         },

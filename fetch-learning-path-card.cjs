@@ -13,7 +13,7 @@ require("dotenv").config();
 
 const FIGMA_TOKEN = process.env.FIGMA_ACCESS_TOKEN;
 const ATLAS_FILE_ID = "uVA2amRR71yJZ0GS6RI6zL"; // From your Figma URL
-const LEARNING_PATH_NODE_ID = "49009:263718"; // From your Figma URL
+const LEARNING_PATH_NODE_ID = "14315:162386"; // New node ID from updated Figma URL
 
 async function fetchLearningPathCard() {
   try {
@@ -27,12 +27,18 @@ async function fetchLearningPathCard() {
       return;
     }
 
+    console.log("✅ Figma token found in environment");
+    console.log(
+      `🔗 API URL: https://api.figma.com/v1/images/${ATLAS_FILE_ID}?ids=${LEARNING_PATH_NODE_ID}&format=png&scale=2`
+    );
+
     const response = await axios.get(
       `https://api.figma.com/v1/images/${ATLAS_FILE_ID}?ids=${LEARNING_PATH_NODE_ID}&format=png&scale=2`,
       {
         headers: {
           "X-Figma-Token": FIGMA_TOKEN,
         },
+        timeout: 15000, // 15 second timeout
       }
     );
 
