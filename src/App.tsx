@@ -542,7 +542,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
       // Atlas Button Components
       case 'atlas-button-primary':
-        return `<button class="button button-primary button-lg atlas-component" data-user-added="true" style="margin: 10px; padding: 12px 24px; background: #0078d4; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Primary Button'}</button>`;
+        return `<button class="button button-primary button-lg atlas-component" data-user-added="true" style="margin: 10px; padding: 12px 24px; background: #E8E6DE; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Primary Button'}</button>`;
 
       case 'atlas-button-primary-filled':
         return `<button class="button button-primary-filled" style="margin: 10px; padding: 12px 24px; background: #0078d4; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Primary Filled Button'}</button>`;

@@ -80,6 +80,9 @@ export const useWireframeGeneration = () => {
     // Clear all loading timers
     loadingTimersRef.current.forEach((timer) => clearTimeout(timer));
     loadingTimersRef.current = [];
+    // Reset loading states
+    setIsLoading(false);
+    setLoadingStage("");
   }, []);
 
   const generateWireframe = useCallback(

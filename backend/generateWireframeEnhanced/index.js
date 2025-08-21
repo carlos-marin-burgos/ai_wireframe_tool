@@ -73,17 +73,9 @@ function addAtlasComponents(html, description) {
             <div class="learning-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 50px;">
                 <div class="atlas-component atlas-learning-path-card-figma" data-node-id="14315:162386" data-type="learning-path" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <img src="${atlasComponents.learningPath}" alt="Atlas Learning Path Card Component from Figma (Node: 14315:162386)" style="width: 100%; height: auto; display: block; object-fit: contain;" />
-                    <div class="atlas-component-info" style="text-align: center; margin-top: 8px; padding: 8px; background: rgba(255,255,255,0.95); border-radius: 6px; border: 1px solid #e1e1e1;">
-                        <p style="font-size: 11px; color: #323130; margin: 0; font-weight: 600;">✅ Official Atlas Design Library Learning Path Card</p>
-                        <p style="font-size: 10px; color: #605e5c; margin: 2px 0 0 0; font-weight: 500;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
-                    </div>
                 </div>
                 <div class="atlas-component atlas-learning-path-card-figma" data-node-id="14315:162386" data-type="learning-path" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <img src="${atlasComponents.learningPath}" alt="Atlas Learning Path Card Component from Figma (Node: 14315:162386)" style="width: 100%; height: auto; display: block; object-fit: contain;" />
-                    <div class="atlas-component-info" style="text-align: center; margin-top: 8px; padding: 8px; background: rgba(255,255,255,0.95); border-radius: 6px; border: 1px solid #e1e1e1;">
-                        <p style="font-size: 11px; color: #323130; margin: 0; font-weight: 600;">✅ Official Atlas Design Library Learning Path Card</p>
-                        <p style="font-size: 10px; color: #605e5c; margin: 2px 0 0 0; font-weight: 500;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
-                    </div>
                 </div>
             </div>
             
@@ -91,38 +83,16 @@ function addAtlasComponents(html, description) {
             <div class="modules-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
                 <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <img src="${atlasComponents.module}" alt="Atlas Module Card Component from Figma (Node: 14315:162386)" style="width: 100%; height: auto; display: block; object-fit: contain;" />
-                    <div class="atlas-component-info" style="text-align: center; margin-top: 8px; padding: 8px; background: rgba(255,255,255,0.95); border-radius: 6px; border: 1px solid #e1e1e1;">
-                        <p style="font-size: 11px; color: #323130; margin: 0; font-weight: 600;">✅ Official Atlas Design Library Module Card</p>
-                        <p style="font-size: 10px; color: #605e5c; margin: 2px 0 0 0; font-weight: 500;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
-                    </div>
                 </div>
                 <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <img src="${atlasComponents.module}" alt="Atlas Module Card Component from Figma (Node: 14315:162386)" style="width: 100%; height: auto; display: block; object-fit: contain;" />
-                    <div class="atlas-component-info" style="text-align: center; margin-top: 8px; padding: 8px; background: rgba(255,255,255,0.95); border-radius: 6px; border: 1px solid #e1e1e1;">
-                        <p style="font-size: 11px; color: #323130; margin: 0; font-weight: 600;">✅ Official Atlas Design Library Module Card</p>
-                        <p style="font-size: 10px; color: #605e5c; margin: 2px 0 0 0; font-weight: 500;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
-                    </div>
                 </div>
                 <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <img src="${atlasComponents.module}" alt="Atlas Module Card Component from Figma (Node: 14315:162386)" style="width: 100%; height: auto; display: block; object-fit: contain;" />
-                    <div class="atlas-component-info" style="text-align: center; margin-top: 8px; padding: 8px; background: rgba(255,255,255,0.95); border-radius: 6px; border: 1px solid #e1e1e1;">
-                        <p style="font-size: 11px; color: #323130; margin: 0; font-weight: 600;">✅ Official Atlas Design Library Module Card</p>
-                        <p style="font-size: 10px; color: #605e5c; margin: 2px 0 0 0; font-weight: 500;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
-                    </div>
                 </div>
                 <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <img src="${atlasComponents.module}" alt="Atlas Module Card Component from Figma (Node: 14315:162386)" style="width: 100%; height: auto; display: block; object-fit: contain;" />
-                    <div class="atlas-component-info" style="text-align: center; margin-top: 8px; padding: 8px; background: rgba(255,255,255,0.95); border-radius: 6px; border: 1px solid #e1e1e1;">
-                        <p style="font-size: 11px; color: #323130; margin: 0; font-weight: 600;">✅ Official Atlas Design Library Module Card</p>
-                        <p style="font-size: 10px; color: #605e5c; margin: 2px 0 0 0; font-weight: 500;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
-                    </div>
                 </div>
-            </div>
-            
-            <div class="atlas-credit" style="text-align: center; margin-top: 60px; padding: 24px; background: linear-gradient(135deg, rgba(0, 120, 212, 0.08), rgba(102, 187, 106, 0.08)); border-radius: 12px; border: 1px solid rgba(0, 120, 212, 0.2);">
-                <p style="margin: 0; color: #1e1e1e; font-size: 16px; font-weight: 600; margin-bottom: 8px;">🎨 Powered by Atlas Design Library</p>
-                <p style="margin: 0; color: #605e5c; font-size: 14px; line-height: 1.5;">These components are rendered directly from Microsoft's Atlas Design Library on Figma</p>
-                <p style="margin: 8px 0 0 0; color: #8a8886; font-size: 12px; font-weight: 500;">Components are dynamically fetched and integrated into your wireframes</p>
             </div>
         </div>
     </section>`;

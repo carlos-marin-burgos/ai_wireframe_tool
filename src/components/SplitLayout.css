@@ -43,8 +43,8 @@
 }
 
 .rearrangeable-toggle-button.active {
-  border: 2px solid #007bff;
-  background-color: #007bff;
+  border: 2px solid #e8e6de;
+  background-color: #e8e6de;
   color: white;
 }
 

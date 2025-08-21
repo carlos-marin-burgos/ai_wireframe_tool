@@ -1,12 +1,42 @@
 
-  VITE v6.3.5  ready in 225 ms
+  VITE v6.3.5  ready in 170 ms
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: http://192.168.1.91:5173/
-11:18:01 AM [vite] (client) hmr update /src/wireframe-styles.css
-11:18:06 AM [vite] (client) hmr update /src/wireframe-styles.css
-11:18:10 AM [vite] (client) hmr update /src/wireframe-styles.css
-11:18:30 AM [vite] (client) hmr update /src/wireframe-styles.css
-11:18:31 AM [vite] (client) hmr update /src/wireframe-styles.css
-11:18:32 AM [vite] (client) hmr update /src/wireframe-styles.css
-11:19:10 AM [vite] (client) hmr update /src/wireframe-styles.css
+11:34:30 AM [vite] (client) hmr update /src/App.tsx
+11:35:04 AM [vite] (client) hmr update /src/App.tsx
+11:37:58 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+11:38:21 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+11:38:47 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+11:41:45 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+11:42:49 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+11:43:32 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+11:43:47 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+11:44:02 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+11:44:19 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+11:45:24 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+11:45:40 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+11:46:33 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+11:47:16 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+11:47:30 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+11:48:38 AM [vite] (client) hmr update /src/components/SplitLayout.tsx
+11:49:00 AM [vite] (client) hmr update /src/components/SplitLayout.tsx
+11:57:17 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+11:57:43 AM [vite] (client) hmr update /src/components/SplitLayout.css
+11:57:50 AM [vite] (client) hmr update /src/App.css
+11:57:59 AM [vite] (client) hmr update /src/App.tsx
+11:58:15 AM [vite] (client) hmr update /src/App.css
+11:58:15 AM [vite] (client) hmr update /src/components/SplitLayout.css
+11:58:15 AM [vite] (client) hmr update /src/App.tsx
+11:58:15 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+11:58:16 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+11:58:40 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+11:59:10 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+11:59:26 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+11:59:47 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+12:00:17 PM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+12:00:29 PM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+12:01:48 PM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+12:02:01 PM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+12:04:17 PM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
+12:04:27 PM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
