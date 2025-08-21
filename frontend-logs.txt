@@ -75,3 +75,10 @@
 12:28:43 PM [vite] (client) hmr update /src/components/LandingPage.css
 12:42:23 PM [vite] (client) hmr update /src/wireframe-styles.css
 12:43:23 PM [vite] (client) hmr update /src/wireframe-styles.css
+12:50:54 PM [vite] (client) hmr update /src/components/ComponentLibraryModal.tsx
+12:51:27 PM [vite] (client) hmr update /src/components/ComponentLibraryModal.tsx
+1:00:34 PM [vite] (client) page reload test-wireframe.html
+1:00:38 PM [vite] (client) page reload test-wireframe.html
+1:01:00 PM [vite] (client) hmr update /src/components/ComponentLibraryModal.tsx
+1:01:17 PM [vite] (client) hmr update /src/components/ComponentLibraryModal.tsx
+1:01:34 PM [vite] (client) hmr update /src/components/ComponentLibraryModal.tsx

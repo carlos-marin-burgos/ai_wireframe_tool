@@ -162,7 +162,7 @@ function generateLearnHomePageTemplate(prompt) {
             
             <!-- Profile -->
             <div style="display: flex; align-items: center; gap: 8px; margin-left: auto;">
-                <div style="width: 36px; height: 36px; border-radius: 50%; background: url('public/mina.png') center/cover; border: 2px solid #0078d4;"></div>
+                <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #0078d4, #106ebe); border: 2px solid #0078d4; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">U</div>
             </div>
         </div>
     </header>

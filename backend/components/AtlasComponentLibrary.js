@@ -286,9 +286,15 @@ class AtlasComponentLibrary {
             </svg>
           </div>
           <!-- User Avatar -->
-          <div style="width: 36px; height: 36px; border-radius: 50%; background: url('public/mina.png') center/cover; border: 2px solid #0078d4;"></div>
+          <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #0078d4, #106ebe); border: 2px solid #0078d4; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">U</div>
           <!-- CXS Logo -->
-          <img src="/cxsLogo.png" alt="CXS Logo" style="height: 30px; object-fit: contain; margin-left: 8px;" />
+          <!-- Microsoft Logo -->
+          <div style="position: relative; width: 26px; height: 26px; margin-left: 8px;">
+            <div style="position: absolute; top: 0; left: 0; width: 12px; height: 12px; background: #F26522;"></div>
+            <div style="position: absolute; top: 0; right: 0; width: 12px; height: 12px; background: #8DC63F;"></div>
+            <div style="position: absolute; bottom: 0; left: 0; width: 12px; height: 12px; background: #00AEEF;"></div>
+            <div style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: #FFC20E;"></div>
+          </div>
         </div>
       </header>
     `;

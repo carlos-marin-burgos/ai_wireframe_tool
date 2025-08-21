@@ -127,6 +127,55 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             </div>`
         },
 
+        // Atlas Top Navigation Component
+        {
+            id: 'atlas-top-navigation',
+            name: 'Atlas Navigation',
+            description: 'Clean Atlas navigation component',
+            category: 'Navigation',
+            library: 'Atlas',
+            htmlCode: `<header class="atlas-navigation" style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 12px 24px;
+              background: #ffffff !important;
+              background-color: #ffffff !important;
+              border-bottom: 1px solid #e1e5e9;
+              box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+              position: sticky;
+              top: 0;
+              z-index: 1000;
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            ">
+              <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <div style="position: relative; width: 20px; height: 20px;">
+                    <div style="position: absolute; top: 0; left: 0; width: 9px; height: 9px; background: #F26522;"></div>
+                    <div style="position: absolute; top: 0; right: 0; width: 9px; height: 9px; background: #8DC63F;"></div>
+                    <div style="position: absolute; bottom: 0; left: 0; width: 9px; height: 9px; background: #00AEEF;"></div>
+                    <div style="position: absolute; bottom: 0; right: 0; width: 9px; height: 9px; background: #FFC20E;"></div>
+                  </div>
+                  <span style="font-size: 18px; font-weight: 600; color: #323130; margin-left: 8px;">Learn</span>
+                </div>
+                <nav style="display: flex; gap: 24px; margin-left: 32px;">
+                  <a href="#" style="color: #323130; text-decoration: none; font-weight: 500;">Browse</a>
+                  <a href="#" style="color: #323130; text-decoration: none; font-weight: 500;">Reference</a>
+                  <a href="#" style="color: #0078d4; text-decoration: none; font-weight: 500; border-bottom: 2px solid #0078d4;">Learn</a>
+                  <a href="#" style="color: #323130; text-decoration: none; font-weight: 500;">Q&A</a>
+                </nav>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <button style="padding: 6px; border: none; background: none; border-radius: 4px;">
+                  <svg width="16" height="16" viewBox="0 0 20 20" fill="#605e5c">
+                    <path d="M8.5 3C5.46243 3 3 5.46243 3 8.5C3 11.5376 5.46243 14 8.5 14C9.83879 14 11.0659 13.5217 12.0196 12.7266L16.6464 17.3536L17.3536 16.6464L12.7266 12.0196C13.5217 11.0659 14 9.83879 14 8.5C14 5.46243 11.5376 3 8.5 3ZM4 8.5C4 6.01472 6.01472 4 8.5 4C10.9853 4 13 6.01472 13 8.5C13 10.9853 10.9853 13 8.5 13C6.01472 13 4 10.9853 4 8.5Z"/>
+                  </svg>
+                </button>
+                <div style="width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #0078d4, #106ebe); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 12px;">U</div>
+              </div>
+            </header>`
+        },
+
         // Microsoft Learn Site Headers
         {
             id: 'ms-learn-header-basic',
@@ -1803,13 +1852,13 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         {
             id: 'atlas-learning-path-card',
             name: 'Atlas Learning Path Card',
-            description: 'Official Atlas Design Library Learning Path Card from Figma (Node ID: 14315:162386)',
+            description: 'Atlas Learning Path Card from Figma (Node ID: 14315:162386)',
             category: 'Cards',
             library: 'Atlas',
             htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: 100%;" data-figma-node="14315:162386" data-figma-file="uVA2amRR71yJZ0GS6RI6zL">
                 <img src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/e84821f9-29a4-4997-a8fe-674d906f613b" alt="Atlas Learning Path Card from Figma" style="width: 100%; height: auto; display: block;" />
                 <div style="text-align: center; margin-top: 8px; padding: 8px;">
-                    <p style="font-size: 12px; color: #605e5c; margin: 0; opacity: 0.8;">Official Atlas Design Library Learning Path Card (Node: 14315:162386)</p>
+                    <p style="font-size: 12px; color: #605e5c; margin: 0; opacity: 0.8;">Atlas Learning Path Card</p>
                 </div>
             </div>`
         },
@@ -1818,13 +1867,13 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         {
             id: 'atlas-module-card',
             name: 'Atlas Module Card',
-            description: 'Official Atlas Design Library Module Card from Figma (Node ID: 14315:162386) - Individual learning module component',
+            description: 'Atlas Module Card from Figma (Node ID: 14315:162386) - Individual learning module component',
             category: 'Cards',
             library: 'Atlas',
             htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: 100%;" data-figma-node="14315:162386" data-figma-file="uVA2amRR71yJZ0GS6RI6zL" data-type="module">
                 <img src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/e84821f9-29a4-4997-a8fe-674d906f613b" alt="Atlas Module Card from Figma" style="width: 100%; height: auto; display: block;" />
                 <div style="text-align: center; margin-top: 8px; padding: 8px;">
-                    <p style="font-size: 12px; color: #605e5c; margin: 0; opacity: 0.8;">Official Atlas Design Library Module Card (Node: 14315:162386)</p>
+                    <p style="font-size: 12px; color: #605e5c; margin: 0; opacity: 0.8;">Atlas Module Card</p>
                 </div>
             </div>`
         },

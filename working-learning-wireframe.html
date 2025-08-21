@@ -1,0 +1,297 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage with Learning Paths and Modules</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #333333;
+        }
+        header {
+            background-color: #f8f8f8;
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #ffffff;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #333333;
+        }
+        .hero {
+            background-color: #ffffff;
+            padding: 50px 20px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 2.5em;
+            margin: 0 0 10px;
+        }
+        .hero p {
+            font-size: 1.2em;
+            margin: 0 0 20px;
+        }
+        .learning-paths {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+        .learning-path {
+            background-color: #f8f8f8;
+            margin: 10px;
+            padding: 20px;
+            width: calc(33.333% - 40px);
+            box-sizing: border-box;
+            border: 1px solid #e0e0e0;
+        }
+        .learning-path h2 {
+            margin: 0 0 10px;
+            font-size: 1.5em;
+        }
+        .learning-path p {
+            margin: 0 0 20px;
+            font-size: 1em;
+        }
+        .module {
+            background-color: #ffffff;
+            margin: 5px 0;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+        }
+        .module h3 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+        @media (max-width: 768px) {
+            .learning-path {
+                width: calc(50% - 40px);
+            }
+        }
+        @media (max-width: 480px) {
+            .learning-path {
+                width: calc(100% - 40px);
+            }
+        }
+    </style>
+
+<style>
+/* Atlas Component Animations */
+@keyframes atlasSlideIn {
+  0% { transform: translateY(-20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes atlasGlow {
+  0%, 100% { box-shadow: 0 4px 16px rgba(0,120,212,0.3); }
+  50% { box-shadow: 0 8px 32px rgba(0,120,212,0.6); }
+}
+
+@keyframes atlasFlash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes atlasFadeInUp {
+  0% { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+/* Atlas newly added indicator */
+.atlas-newly-added {
+  position: relative;
+}
+
+.atlas-new-indicator {
+  z-index: 1000;
+}
+
+/* Hover effects for Atlas components */
+.atlas-component:hover {
+  transform: translateY(-5px);
+  transition: transform 0.3s ease;
+}
+</style>
+</head>
+<body>
+
+  <!-- Atlas Top Navigation - Always Present (Node ID: 11530:113245) -->
+  <header class="atlas-top-navigation" data-node-id="11530:113245" style="
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 24px;
+    gap: 21px;
+    width: 100%;
+    height: 54px;
+    box-sizing: border-box;
+    background: #FFFFFF;
+    border-bottom: 1px solid #E0E0E0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  ">
+    <!-- Logo & Menu Section -->
+    <div style="display: flex; flex-direction: row; align-items: center; padding: 0px; gap: 16px; flex-grow: 1;">
+      <!-- Logo Container -->
+      <div style="display: flex; flex-direction: row; align-items: center; padding: 0px; gap: 13px;">
+        <!-- Microsoft Logo -->
+        <div style="position: relative; width: 26px; height: 26px;">
+          <div style="position: absolute; top: 0; left: 0; width: 12px; height: 12px; background: #F26522;"></div>
+          <div style="position: absolute; top: 0; right: 0; width: 12px; height: 12px; background: #8DC63F;"></div>
+          <div style="position: absolute; bottom: 0; left: 0; width: 12px; height: 12px; background: #00AEEF;"></div>
+          <div style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: #FFC20E;"></div>
+        </div>
+        <!-- Separator -->
+        <div style="width: 2px; height: 24px; background: #2F2F2F;"></div>
+        <!-- Site Title -->
+        <span style="font-family: 'Segoe UI', sans-serif; font-weight: 600; font-size: 16px; color: #171717; text-decoration: none;">Learn</span>
+      </div>
+      
+      <!-- Navigation Menu -->
+      <nav style="display: flex; align-items: center;">
+        <ul style="display: flex; align-items: center; gap: 8px; list-style: none; margin: 0; padding: 0;">
+          <li style="display: flex; align-items: center; padding: 6px 8px; cursor: pointer;">
+            <span style="font-family: 'Segoe UI', sans-serif; font-weight: 400; font-size: 14px; color: #171717;">Browse</span>
+          </li>
+          <li style="display: flex; align-items: center; padding: 6px 8px; cursor: pointer;">
+            <span style="font-family: 'Segoe UI', sans-serif; font-weight: 400; font-size: 14px; color: #171717;">Reference</span>
+          </li>
+          <li style="display: flex; align-items: center; padding: 6px 8px; cursor: pointer;">
+            <span style="font-family: 'Segoe UI', sans-serif; font-weight: 400; font-size: 14px; color: #171717;">Learn</span>
+          </li>
+          <li style="display: flex; align-items: center; padding: 6px 8px; cursor: pointer;">
+            <span style="font-family: 'Segoe UI', sans-serif; font-weight: 400; font-size: 14px; color: #171717;">Q&A</span>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    
+    <!-- Profile Section -->
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <!-- Search Icon -->
+      <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+          <path d="M8.5 3C5.46243 3 3 5.46243 3 8.5C3 11.5376 5.46243 14 8.5 14C9.83879 14 11.0659 13.5217 12.0196 12.7266L16.6464 17.3536L17.3536 16.6464L12.7266 12.0196C13.5217 11.0659 14 9.83879 14 8.5C14 5.46243 11.5376 3 8.5 3ZM4 8.5C4 6.01472 6.01472 4 8.5 4C10.9853 4 13 6.01472 13 8.5C13 10.9853 10.9853 13 8.5 13C6.01472 13 4 10.9853 4 8.5Z" fill="#171717"/>
+        </svg>
+      </div>
+      <!-- User Avatar -->
+      <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #0078d4, #106ebe); border: 2px solid #0078d4; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">U</div>
+    </div>
+  </header>
+  
+
+    <header>
+        <h1>Welcome to Our Learning Platform</h1>
+    </header>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#paths">Learning Paths</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <!-- Atlas Learning Content Section -->
+    <section class="learning-content atlas-learning-section atlas-newly-added" style="padding: 60px 0; background: #f8f9fa; animation: atlasSlideIn 0.8s ease-out, atlasGlow 2s ease-in-out; border: 2px solid #0078d4; margin: 20px 0; border-radius: 12px; position: relative; overflow: hidden;">
+        <!-- New Component Indicator -->
+        <div class="atlas-new-indicator" style="position: absolute; top: 0; left: 0; right: 0; background: linear-gradient(90deg, #0078d4, #40e0d0); color: white; text-align: center; padding: 8px; font-size: 14px; font-weight: bold; animation: atlasFlash 1.5s ease-in-out infinite;">
+            ✨ NEWLY ADDED ATLAS COMPONENTS ✨
+        </div>
+        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 50px 20px 20px;">
+            <h2 style="text-align: center; margin-bottom: 40px; color: #323130; animation: atlasFadeInUp 1s ease-out 0.3s both;">🎓 Learning Paths</h2>
+            <div class="learning-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 50px;">
+                <div class="atlas-component atlas-learning-path-card-figma" data-node-id="14315:162386" data-type="learning-path" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 0.5s both; transform: translateY(20px);">
+                    <img src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/e84821f9-29a4-4997-a8fe-674d906f613b" alt="Learning Path" style="width: 100%; height: auto; display: block; object-fit: contain;" />
+                </div>
+                <div class="atlas-component atlas-learning-path-card-figma" data-node-id="14315:162386" data-type="learning-path" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 0.7s both; transform: translateY(20px);">
+                    <img src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/e84821f9-29a4-4997-a8fe-674d906f613b" alt="Learning Path" style="width: 100%; height: auto; display: block; object-fit: contain;" />
+                </div>
+            </div>
+            
+            <h2 style="text-align: center; margin-bottom: 40px; color: #323130; animation: atlasFadeInUp 1s ease-out 0.9s both;">📚 Available Modules</h2>
+            <div class="modules-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 1.1s both; transform: translateY(20px);">
+                    <img src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/e84821f9-29a4-4997-a8fe-674d906f613b" alt="Learning Module" style="width: 100%; height: auto; display: block; object-fit: contain;" />
+                </div>
+                <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 1.3s both; transform: translateY(20px);">
+                    <img src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/e84821f9-29a4-4997-a8fe-674d906f613b" alt="Learning Module" style="width: 100%; height: auto; display: block; object-fit: contain;" />
+                </div>
+                <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 1.5s both; transform: translateY(20px);">
+                    <img src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/e84821f9-29a4-4997-a8fe-674d906f613b" alt="Learning Module" style="width: 100%; height: auto; display: block; object-fit: contain;" />
+                </div>
+                <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 1.7s both; transform: translateY(20px);">
+                    <img src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/e84821f9-29a4-4997-a8fe-674d906f613b" alt="Learning Module" style="width: 100%; height: auto; display: block; object-fit: contain;" />
+                </div>
+                <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 1.9s both; transform: translateY(20px);">
+                    <img src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/e84821f9-29a4-4997-a8fe-674d906f613b" alt="Learning Module" style="width: 100%; height: auto; display: block; object-fit: contain;" />
+                </div>
+                <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 2.1s both; transform: translateY(20px);">
+                    <img src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/e84821f9-29a4-4997-a8fe-674d906f613b" alt="Learning Module" style="width: 100%; height: auto; display: block; object-fit: contain;" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="hero">
+        <h1>Discover Your Path to Success</h1>
+        <p>Explore our comprehensive learning paths and modules designed to guide you through your educational journey.</p>
+    </div>
+    <section class="learning-paths">
+        <div class="learning-path">
+            <h2>Learning Path 1</h2>
+            <p>Description of Learning Path 1.</p>
+            <div class="module">
+                <h3>Module 1.1</h3>
+                <p>Description of Module 1.1.</p>
+            </div>
+            <div class="module">
+                <h3>Module 1.2</h3>
+                <p>Description of Module 1.2.</p>
+            </div>
+        </div>
+        <div class="learning-path">
+            <h2>Learning Path 2</h2>
+            <p>Description of Learning Path 2.</p>
+            <div class="module">
+                <h3>Module 2.1</h3>
+                <p>Description of Module 2.1.</p>
+            </div>
+            <div class="module">
+                <h3>Module 2.2</h3>
+                <p>Description of Module 2.2.</p>
+            </div>
+        </div>
+        <div class="learning-path">
+            <h2>Learning Path 3</h2>
+            <p>Description of Learning Path 3.</p>
+            <div class="module">
+                <h3>Module 3.1</h3>
+                <p>Description of Module 3.1.</p>
+            </div>
+            <div class="module">
+                <h3>Module 3.2</h3>
+                <p>Description of Module 3.2.</p>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
+```
