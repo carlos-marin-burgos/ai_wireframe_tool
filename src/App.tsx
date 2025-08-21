@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
 import "./wireframe-styles.css";
 import "./styles/microsoftlearn-card.css";
@@ -385,13 +385,13 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
       const updatedHtml = insertComponentIntoWireframe(htmlWireframe, componentHtml);
       console.log("🔧 App.tsx: Updating existing wireframe, new length:", updatedHtml.length);
       setHtmlWireframe(updatedHtml);
-      console.log("🔧 App.tsx: Added to existing wireframe");
+      console.log("🔧 App.tsx: ✅ Component added to wireframe at top-left position!");
     } else {
       // Create a new wireframe with just this component
       const newWireframe = createWireframeWithComponent(componentHtml);
       console.log("🔧 App.tsx: Creating new wireframe, length:", newWireframe.length);
       setHtmlWireframe(newWireframe);
-      console.log("🔧 App.tsx: Created new wireframe with component");
+      console.log("🔧 App.tsx: ✅ Created new wireframe with component at top-left!");
     }
 
     // Force a re-render to ensure the wireframe updates
@@ -727,31 +727,79 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   };
 
   const insertComponentIntoWireframe = (existingHtml: string, componentHtml: string) => {
-    // For SimpleDragWireframe, we want to add components as direct children
-    // of the main container, not nested inside other elements
+    // Add component positioned absolutely at top-left of the wireframe
+    const animatedComponent = `<div class="atlas-component-overlay" style="
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 9999;
+      background: rgba(255, 255, 255, 0.95);
+      border: 2px solid #0078d4;
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      animation: atlasSlideIn 0.6s ease-out;
+      max-width: 300px;
+    ">${componentHtml}</div>`;
 
-    // Look for the closing tag of the last top-level element before </body> or end of content
-    // This ensures the component is added as a sibling to existing components
-    const bodyEndMatch = existingHtml.match(/<\/body>/);
-    if (bodyEndMatch) {
-      // Insert before the closing body tag
-      const insertionPoint = bodyEndMatch.index!;
-      return existingHtml.slice(0, insertionPoint) + componentHtml + existingHtml.slice(insertionPoint);
-    }
+    // Enhanced animation and overlay CSS
+    const animationCSS = `
+<style>
+/* Atlas Component Entry Animation */
+@keyframes atlasSlideIn {
+  0% { 
+    transform: translateY(-20px) scale(0.95); 
+    opacity: 0; 
+  }
+  100% { 
+    transform: translateY(0) scale(1); 
+    opacity: 1; 
+  }
+}
+.atlas-component-overlay {
+  animation: atlasSlideIn 0.6s ease-out;
+  transition: all 0.3s ease;
+}
+.atlas-component-overlay:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+</style>`;
 
-    // Look for the last closing tag of a top-level element (avoiding nested elements)
-    const topLevelClosingTags = existingHtml.match(/<\/(div|section|article|header|footer|main|nav)>/g);
-    if (topLevelClosingTags) {
-      // Find the last occurrence of a top-level closing tag
-      const lastTagMatch = existingHtml.lastIndexOf(topLevelClosingTags[topLevelClosingTags.length - 1]);
-      if (lastTagMatch !== -1) {
-        const insertionPoint = lastTagMatch + topLevelClosingTags[topLevelClosingTags.length - 1].length;
-        return existingHtml.slice(0, insertionPoint) + componentHtml + existingHtml.slice(insertionPoint);
+    // Show alert when component is added
+    setTimeout(() => {
+      alert('🎉 Atlas Component Added!\n\nComponent has been placed at the top-left of your wireframe.');
+    }, 100);
+
+    // Check if animation CSS is already present
+    let processedHtml = existingHtml;
+    if (!existingHtml.includes('@keyframes atlasSlideIn')) {
+      // Inject animation CSS into the head
+      const headMatch = existingHtml.match(/<\/head>/);
+      if (headMatch) {
+        processedHtml = existingHtml.replace('</head>', `${animationCSS}\n</head>`);
+      } else {
+        // Fallback: add to the beginning of body
+        processedHtml = existingHtml.replace('<body>', `<body>${animationCSS}`);
       }
     }
 
-    // Final fallback: append to the end of existing content
-    return existingHtml + componentHtml;
+    // Insert component as fixed overlay at top-left after body tag
+    const bodyMatch = processedHtml.match(/<body[^>]*>/);
+    if (bodyMatch) {
+      const insertionPoint = bodyMatch.index! + bodyMatch[0].length;
+      return processedHtml.slice(0, insertionPoint) + '\n' + animatedComponent + processedHtml.slice(insertionPoint);
+    }
+
+    // Fallback: insert after opening html tag
+    const htmlMatch = processedHtml.match(/<html[^>]*>/);
+    if (htmlMatch) {
+      const insertionPoint = htmlMatch.index! + htmlMatch[0].length;
+      return processedHtml.slice(0, insertionPoint) + '\n' + animatedComponent + processedHtml.slice(insertionPoint);
+    }
+
+    // Ultimate fallback: prepend to existing content
+    return animatedComponent + processedHtml;
   };
 
   const createWireframeWithComponent = (componentHtml: string) => {
@@ -770,19 +818,28 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
         .button-secondary { background: #f3f2f1; color: #323130; border: 1px solid #e1dfdd; }
         .button-lg { padding: 12px 24px; }
         .button-search { display: inline-flex; align-items: center; gap: 8px; }
+        
+        /* Component entry animation */
+        @keyframes atlasSlideIn {
+          0% { transform: translateY(-20px); opacity: 0; }
+          100% { transform: translateY(0); opacity: 1; }
+        }
+        .atlas-component-entry {
+          animation: atlasSlideIn 0.6s ease-out;
+        }
     </style>
 </head>
 <body>
     <div class="wireframe-container">
+        <div class="atlas-component-entry" style="margin: 10px; display: inline-block;">
+            ${componentHtml}
+        </div>
         <h1>Component Library Wireframe</h1>
-        <p>Components added from the library:</p>
-        ${componentHtml}
+        <p>Components added from the library are positioned at the top-left of the content area.</p>
     </div>
 </body>
 </html>`;
-  };
-
-  const handleDesignChange = async (_newTheme?: string, newScheme?: string) => {
+  }; const handleDesignChange = async (_newTheme?: string, newScheme?: string) => {
     // Only color scheme can be changed now (Microsoft Learn theme is fixed)
     if (newScheme) setColorScheme(newScheme);
 
@@ -857,7 +914,9 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
       // Always return fallback suggestions when API fails
       return API_CONFIG.FALLBACK_SUGGESTIONS;
     }
-  }; const handleGenerateAiSuggestions = async (input: string) => {
+  };
+
+  const handleGenerateAiSuggestions = useCallback(async (input: string) => {
     // Immediate feedback with fast local suggestions
     const shouldShowSuggestions = input.trim().length >= 2;
 
@@ -905,7 +964,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
       setShowAiSuggestions(false);
       setSuggestionLoading(false);
     }
-  };
+  }, []);
 
   const handleMultiStep = () => {
     // Stub for future multi-step functionality

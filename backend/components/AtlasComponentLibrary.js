@@ -279,14 +279,14 @@ class AtlasComponentLibrary {
         
         <!-- Profile Section -->
         <div style="display: flex; align-items: center; gap: 8px;">
-          <!-- Search Icon -->
-          <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-            <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-              <path d="M8.5 3C5.46243 3 3 5.46243 3 8.5C3 11.5376 5.46243 14 8.5 14C9.83879 14 11.0659 13.5217 12.0196 12.7266L16.6464 17.3536L17.3536 16.6464L12.7266 12.0196C13.5217 11.0659 14 9.83879 14 8.5C14 5.46243 11.5376 3 8.5 3ZM4 8.5C4 6.01472 6.01472 4 8.5 4C10.9853 4 13 6.01472 13 8.5C13 10.9853 10.9853 13 8.5 13C6.01472 13 4 10.9853 4 8.5Z" fill="#171717"/>
-            </svg>
-          </div>
-          <!-- User Avatar -->
-          <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #0078d4, #106ebe); border: 2px solid #0078d4; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">U</div>
+          <!-- User Avatar with Mina image -->
+          <img src="mina.png" alt="Mina" style="
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #e1e1e1;
+          " />
           <!-- CXS Logo -->
           <!-- Microsoft Logo -->
           <div style="position: relative; width: 26px; height: 26px; margin-left: 8px;">

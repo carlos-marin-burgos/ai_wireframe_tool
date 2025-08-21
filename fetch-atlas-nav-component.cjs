@@ -3,7 +3,19 @@
 /**
  * Fetch Specific Atlas Navigation Component from Figma
  * This script fetches the navigation component from the Figma URL provided by the user
- * URL: https://www.figma.com/design/uVA2amRR71yJZ0GS6RI6zL/%F0%9F%8C%9E-Atlas-Design-Library?node-id=11530-113245&m=dev
+ * URL:   <!-- Profile Section -->
+  <div style="display: flex; align-items: center; gap: 8px;">
+    <!-- User Avatar with Mina image -->
+    <img src="mina.png" alt="Mina" style="
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #e1e1e1;
+    " />
+    <!-- CXS Logo -->
+    <img src="/cxsLogo.png" alt="CXS Logo" style="height: 30px; object-fit: contain; margin-left: 8px;" />
+  </div>/www.figma.com/design/uVA2amRR71yJZ0GS6RI6zL/%F0%9F%8C%9E-Atlas-Design-Library?node-id=11530-113245&m=dev
  */
 
 const axios = require("axios");
@@ -102,12 +114,9 @@ async function fetchAtlasNavComponent() {
 
       return componentData;
     } else {
-      console.log("✅ Successfully fetched Atlas Navigation Component!");
-      console.log("🖼️ Image URL:", imageUrl);
-      console.log("Response data:", imageResponse.data);
-
-      // Create HTML template for this navigation component
-      const navHTML = generateNavHTML(null, imageUrl);
+      console.log("❌ Failed to fetch navigation component image");
+      console.log("Response:", imageResponse.data);
+      return null;
     }
   } catch (error) {
     console.error(
@@ -180,14 +189,8 @@ function generateNavHTML(nodeData, imageUrl) {
   
   <!-- Profile Section -->
   <div style="display: flex; align-items: center; gap: 8px;">
-    <!-- Search Icon -->
-    <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-      <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-        <path d="M8.5 3C5.46243 3 3 5.46243 3 8.5C3 11.5376 5.46243 14 8.5 14C9.83879 14 11.0659 13.5217 12.0196 12.7266L16.6464 17.3536L17.3536 16.6464L12.7266 12.0196C13.5217 11.0659 14 9.83879 14 8.5C14 5.46243 11.5376 3 8.5 3ZM4 8.5C4 6.01472 6.01472 4 8.5 4C10.9853 4 13 6.01472 13 8.5C13 10.9853 10.9853 13 8.5 13C6.01472 13 4 10.9853 4 8.5Z" fill="#171717"/>
-      </svg>
-    </div>
-    <!-- User Avatar -->
-    <div style="width: 36px; height: 36px; border-radius: 50%; background: url('public/mina.png') center/cover; border: 2px solid #0078d4;"></div>
+    <!-- User Avatar with Mona text -->
+    <div style="padding: 8px 16px; background: #f5f5f5; border: 1px solid #e1e1e1; border-radius: 20px; display: flex; align-items: center; justify-content: center; color: #323130; font-weight: 600; font-size: 14px; font-family: 'Segoe UI', sans-serif;">Mona</div>
     <!-- CXS Logo -->
     <img src="/cxsLogo.png" alt="CXS Logo" style="height: 30px; object-fit: contain; margin-left: 8px;" />
   </div>
