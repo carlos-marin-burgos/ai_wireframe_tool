@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Hero Section Fix</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .test-button {
+            background: #0078d4;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+            display: block;
+            width: 100%;
+        }
+
+        .test-button:hover {
+            background: #106ebe;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 4px;
+            background: #f8f9fa;
+            border-left: 4px solid #0078d4;
+        }
+
+        .loading {
+            color: #605e5c;
+            font-style: italic;
+        }
+
+        .success {
+            border-left-color: #107c10;
+            background: #f3f9f1;
+        }
+
+        .error {
+            border-left-color: #d13438;
+            background: #fdf3f4;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-container">
+        <h1>🔧 Hero Section Fix Test</h1>
+        <p>This test verifies that the fix prevents "Hero section with call-to-action" from triggering learning platform
+            mode and adding unwanted course cards.</p>
+
+        <button class="test-button" onclick="testHeroSection()">
+            🎯 Test: "Hero section with call-to-action"
+        </button>
+
+        <button class="test-button" onclick="testLearningPlatform()">
+            📚 Test: "Learning platform with courses" (should still work)
+        </button>
+
+        <div id="result" class="result" style="display: none;">
+            <h3>Test Result:</h3>
+            <div id="result-content"></div>
+        </div>
+    </div>
+
+    <script>
+        async function testHeroSection() {
+            await runTest("Hero section with call-to-action", false);
+        }
+
+        async function testLearningPlatform() {
+            await runTest("Learning platform with courses and modules", true);
+        }
+
+        async function runTest(description, shouldHaveAtlasComponents) {
+            const resultDiv = document.getElementById('result');
+            const contentDiv = document.getElementById('result-content');
+
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result loading';
+            contentDiv.innerHTML = `<p class="loading">🔄 Testing: "${description}"...</p>`;
+
+            try {
+                const response = await fetch('http://localhost:7072/api/generate-html-wireframe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        description: description
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.html) {
+                    // Check for Atlas components
+                    const hasLearningPaths = data.html.includes('atlas-learning-path-card-figma');
+                    const hasModules = data.html.includes('atlas-module-card-figma');
+                    const hasAtlasHero = data.html.includes('atlas-hero-figma');
+                    const hasAtlasComponents = hasLearningPaths || hasModules || hasAtlasHero;
+
+                    const testPassed = shouldHaveAtlasComponents ? hasAtlasComponents : !hasAtlasComponents;
+
+                    resultDiv.className = testPassed ? 'result success' : 'result error';
+
+                    contentDiv.innerHTML = `
+                        <h4>${testPassed ? '✅ Test PASSED' : '❌ Test FAILED'}</h4>
+                        <p><strong>Description:</strong> "${description}"</p>
+                        <p><strong>Expected:</strong> ${shouldHaveAtlasComponents ? 'Should have Atlas components' : 'Should NOT have Atlas components'}</p>
+                        <p><strong>Result:</strong> ${hasAtlasComponents ? 'Has Atlas components' : 'No Atlas components'}</p>
+                        <ul>
+                            <li>Learning Path Cards: ${hasLearningPaths ? '✅ Found' : '❌ Not found'}</li>
+                            <li>Module Cards: ${hasModules ? '✅ Found' : '❌ Not found'}</li>
+                            <li>Atlas Hero: ${hasAtlasHero ? '✅ Found' : '❌ Not found'}</li>
+                        </ul>
+                        <details>
+                            <summary>View generated HTML (first 500 chars)</summary>
+                            <pre style="background: #f5f5f5; padding: 10px; overflow: auto; font-size: 12px;">${data.html.substring(0, 500)}...</pre>
+                        </details>
+                    `;
+                } else {
+                    throw new Error('No HTML in response');
+                }
+
+            } catch (error) {
+                resultDiv.className = 'result error';
+                contentDiv.innerHTML = `
+                    <h4>❌ Test ERROR</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+
+</html>

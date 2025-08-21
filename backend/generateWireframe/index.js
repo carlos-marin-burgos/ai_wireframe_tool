@@ -15,11 +15,19 @@ function addAtlasComponents(html, description) {
       "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/e84821f9-29a4-4997-a8fe-674d906f613b",
   };
 
-  // Check if description contains learning/training/module/hero keywords
+  // Check if description contains learning/training/module keywords (but NOT just "hero")
   const isLearningPlatform =
-    /learning|training|module|course|certification|education|path|skill|tutorial|hero|homepage/i.test(
+    /learning|training|module|course|certification|education|path|skill|tutorial/i.test(
       description
-    );
+    ) && !/^hero\s+section/i.test(description.trim());
+
+  console.log(`🔍 Atlas component check:
+    Description: "${description}"
+    Contains learning keywords: ${/learning|training|module|course|certification|education|path|skill|tutorial/i.test(
+      description
+    )}
+    Is hero section exclusion: ${/^hero\s+section/i.test(description.trim())}
+    Final isLearningPlatform: ${isLearningPlatform}`);
 
   if (!isLearningPlatform) {
     console.log("ℹ️ Not a learning platform, skipping Atlas components");
@@ -28,10 +36,10 @@ function addAtlasComponents(html, description) {
 
   let processedHtml = html;
 
-  // 1. Replace hero sections with Atlas Hero
+  // 1. Replace hero sections with Atlas Hero ONLY for learning platforms
   const heroPattern =
     /<section[^>]*class="[^"]*hero[^"]*"[^>]*>[\s\S]*?<\/section>/gi;
-  if (processedHtml.match(heroPattern)) {
+  if (processedHtml.match(heroPattern) && isLearningPlatform) {
     processedHtml = processedHtml.replace(
       heroPattern,
       `<section class="hero atlas-hero-section">
@@ -39,8 +47,8 @@ function addAtlasComponents(html, description) {
           <div class="atlas-component atlas-hero-figma" data-node-id="14647:163530" style="max-width: 100%; overflow: hidden;">
               <img src="${atlasComponents.hero}" alt="Atlas Hero Component from Figma" style="width: 100%; height: auto; display: block; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);" />
               <div class="atlas-hero-overlay" style="text-align: center; margin-top: 12px;">
-                  <p style="font-size: 12px; color: #605e5c; margin: 0; opacity: 0.8;">✅ Official Atlas Design Library Hero Component (Node: 14647:163530)</p>
-                  <p style="font-size: 11px; color: #8a8886; margin: 4px 0 0 0; opacity: 0.6;">🎨 Fetched directly from Figma Atlas Design Library</p>
+                  <p style="font-size: 12px; color: #323130; margin: 0; background: rgba(255,255,255,0.9); padding: 4px 8px; border-radius: 4px; display: inline-block;">✅ Official Atlas Design Library Hero Component (Node: 14647:163530)</p>
+                  <p style="font-size: 11px; color: #484644; margin: 4px 0 0 0; background: rgba(255,255,255,0.8); padding: 2px 6px; border-radius: 3px; display: inline-block;">🎨 Fetched directly from Figma Atlas Design Library</p>
               </div>
           </div>
         </div>
@@ -63,15 +71,15 @@ function addAtlasComponents(html, description) {
                 <div class="atlas-component atlas-learning-path-card-figma" data-node-id="14315:162386" data-type="learning-path" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <img src="${atlasComponents.learningPath}" alt="Atlas Learning Path Card Component from Figma (Node: 14315:162386)" style="width: 100%; height: auto; display: block; object-fit: contain;" />
                     <div class="atlas-component-info" style="text-align: center; margin-top: 8px; padding: 8px;">
-                        <p style="font-size: 11px; color: #605e5c; margin: 0; opacity: 0.8;">✅ Official Atlas Design Library Learning Path Card</p>
-                        <p style="font-size: 10px; color: #8a8886; margin: 2px 0 0 0; opacity: 0.6;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
+                        <p style="font-size: 11px; color: #323130; margin: 0; background: rgba(255,255,255,0.9); padding: 3px 6px; border-radius: 3px; display: inline-block;">✅ Official Atlas Design Library Learning Path Card</p>
+                        <p style="font-size: 10px; color: #484644; margin: 2px 0 0 0; background: rgba(255,255,255,0.8); padding: 2px 5px; border-radius: 2px; display: inline-block;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
                     </div>
                 </div>
                 <div class="atlas-component atlas-learning-path-card-figma" data-node-id="14315:162386" data-type="learning-path" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <img src="${atlasComponents.learningPath}" alt="Atlas Learning Path Card Component from Figma (Node: 14315:162386)" style="width: 100%; height: auto; display: block; object-fit: contain;" />
                     <div class="atlas-component-info" style="text-align: center; margin-top: 8px; padding: 8px;">
-                        <p style="font-size: 11px; color: #605e5c; margin: 0; opacity: 0.8;">✅ Official Atlas Design Library Learning Path Card</p>
-                        <p style="font-size: 10px; color: #8a8886; margin: 2px 0 0 0; opacity: 0.6;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
+                        <p style="font-size: 11px; color: #323130; margin: 0; background: rgba(255,255,255,0.9); padding: 3px 6px; border-radius: 3px; display: inline-block;">✅ Official Atlas Design Library Learning Path Card</p>
+                        <p style="font-size: 10px; color: #484644; margin: 2px 0 0 0; background: rgba(255,255,255,0.8); padding: 2px 5px; border-radius: 2px; display: inline-block;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
                     </div>
                 </div>
             </div>
@@ -81,43 +89,43 @@ function addAtlasComponents(html, description) {
                 <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <img src="${atlasComponents.module}" alt="Atlas Module Card Component from Figma (Node: 14315:162386)" style="width: 100%; height: auto; display: block; object-fit: contain;" />
                     <div class="atlas-component-info" style="text-align: center; margin-top: 8px; padding: 8px;">
-                        <p style="font-size: 11px; color: #605e5c; margin: 0; opacity: 0.8;">✅ Official Atlas Design Library Module Card</p>
-                        <p style="font-size: 10px; color: #8a8886; margin: 2px 0 0 0; opacity: 0.6;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
+                        <p style="font-size: 11px; color: #323130; margin: 0; background: rgba(255,255,255,0.9); padding: 3px 6px; border-radius: 3px; display: inline-block;">✅ Official Atlas Design Library Module Card</p>
+                        <p style="font-size: 10px; color: #484644; margin: 2px 0 0 0; background: rgba(255,255,255,0.8); padding: 2px 5px; border-radius: 2px; display: inline-block;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
                     </div>
                 </div>
                 <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <img src="${atlasComponents.module}" alt="Atlas Module Card Component from Figma (Node: 14315:162386)" style="width: 100%; height: auto; display: block; object-fit: contain;" />
                     <div class="atlas-component-info" style="text-align: center; margin-top: 8px; padding: 8px;">
-                        <p style="font-size: 11px; color: #605e5c; margin: 0; opacity: 0.8;">✅ Official Atlas Design Library Module Card</p>
-                        <p style="font-size: 10px; color: #8a8886; margin: 2px 0 0 0; opacity: 0.6;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
+                        <p style="font-size: 11px; color: #323130; margin: 0; background: rgba(255,255,255,0.9); padding: 3px 6px; border-radius: 3px; display: inline-block;">✅ Official Atlas Design Library Module Card</p>
+                        <p style="font-size: 10px; color: #484644; margin: 2px 0 0 0; background: rgba(255,255,255,0.8); padding: 2px 5px; border-radius: 2px; display: inline-block;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
                     </div>
                 </div>
                 <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <img src="${atlasComponents.module}" alt="Atlas Module Card Component from Figma (Node: 14315:162386)" style="width: 100%; height: auto; display: block; object-fit: contain;" />
                     <div class="atlas-component-info" style="text-align: center; margin-top: 8px; padding: 8px;">
-                        <p style="font-size: 11px; color: #605e5c; margin: 0; opacity: 0.8;">✅ Official Atlas Design Library Module Card</p>
-                        <p style="font-size: 10px; color: #8a8886; margin: 2px 0 0 0; opacity: 0.6;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
+                        <p style="font-size: 11px; color: #323130; margin: 0; background: rgba(255,255,255,0.9); padding: 3px 6px; border-radius: 3px; display: inline-block;">✅ Official Atlas Design Library Module Card</p>
+                        <p style="font-size: 10px; color: #484644; margin: 2px 0 0 0; background: rgba(255,255,255,0.8); padding: 2px 5px; border-radius: 2px; display: inline-block;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
                     </div>
                 </div>
                 <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <img src="${atlasComponents.module}" alt="Atlas Module Card Component from Figma (Node: 14315:162386)" style="width: 100%; height: auto; display: block; object-fit: contain;" />
                     <div class="atlas-component-info" style="text-align: center; margin-top: 8px; padding: 8px;">
-                        <p style="font-size: 11px; color: #605e5c; margin: 0; opacity: 0.8;">✅ Official Atlas Design Library Module Card</p>
-                        <p style="font-size: 10px; color: #8a8886; margin: 2px 0 0 0; opacity: 0.6;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
+                        <p style="font-size: 11px; color: #323130; margin: 0; background: rgba(255,255,255,0.9); padding: 3px 6px; border-radius: 3px; display: inline-block;">✅ Official Atlas Design Library Module Card</p>
+                        <p style="font-size: 10px; color: #484644; margin: 2px 0 0 0; background: rgba(255,255,255,0.8); padding: 2px 5px; border-radius: 2px; display: inline-block;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
                     </div>
                 </div>
                 <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <img src="${atlasComponents.module}" alt="Atlas Module Card Component from Figma (Node: 14315:162386)" style="width: 100%; height: auto; display: block; object-fit: contain;" />
                     <div class="atlas-component-info" style="text-align: center; margin-top: 8px; padding: 8px;">
-                        <p style="font-size: 11px; color: #605e5c; margin: 0; opacity: 0.8;">✅ Official Atlas Design Library Module Card</p>
-                        <p style="font-size: 10px; color: #8a8886; margin: 2px 0 0 0; opacity: 0.6;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
+                        <p style="font-size: 11px; color: #323130; margin: 0; background: rgba(255,255,255,0.9); padding: 3px 6px; border-radius: 3px; display: inline-block;">✅ Official Atlas Design Library Module Card</p>
+                        <p style="font-size: 10px; color: #484644; margin: 2px 0 0 0; background: rgba(255,255,255,0.8); padding: 2px 5px; border-radius: 2px; display: inline-block;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
                     </div>
                 </div>
                 <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <img src="${atlasComponents.module}" alt="Atlas Module Card Component from Figma (Node: 14315:162386)" style="width: 100%; height: auto; display: block; object-fit: contain;" />
                     <div class="atlas-component-info" style="text-align: center; margin-top: 8px; padding: 8px;">
-                        <p style="font-size: 11px; color: #605e5c; margin: 0; opacity: 0.8;">✅ Official Atlas Design Library Module Card</p>
-                        <p style="font-size: 10px; color: #8a8886; margin: 2px 0 0 0; opacity: 0.6;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
+                        <p style="font-size: 11px; color: #323130; margin: 0; background: rgba(255,255,255,0.9); padding: 3px 6px; border-radius: 3px; display: inline-block;">✅ Official Atlas Design Library Module Card</p>
+                        <p style="font-size: 10px; color: #484644; margin: 2px 0 0 0; background: rgba(255,255,255,0.8); padding: 2px 5px; border-radius: 2px; display: inline-block;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
                     </div>
                 </div>
             </div>
@@ -258,41 +266,19 @@ async function generateWithAI(description) {
     throw new Error("OpenAI not initialized");
   }
 
-  const prompt = `Create a complete HTML wireframe for Microsoft Learn platform based on: "${description}"
+  const prompt = `Create a complete HTML wireframe based on: "${description}"
 
 Requirements:
-- ALWAYS start with the official Microsoft Learn site header as the FIRST element in the body
-- Use Microsoft Learn design system with header background #ffffff and black text #000000
-- Include Segoe UI font family
+- Create ONLY what is requested in the description
+- Use clean, modern design with proper semantics
+- Use Segoe UI font family for Microsoft consistency
 - Make it responsive and accessible
-- Include the exact components requested in the description
-- Use semantic HTML and modern CSS
+- Include semantic HTML and modern CSS
+- Use white backgrounds and dark text for readability
+- If it's a hero section, make it prominent and engaging
+- If it's navigation, use dark text on light backgrounds
 
-MICROSOFT LEARN HEADER TEMPLATE (ALWAYS INCLUDE FIRST):
-<header style="background: #ffffff; color: #000000; padding: 12px 24px; border-bottom: 1px solid #e5e5e5; font-family: 'Segoe UI', system-ui, sans-serif;">
-  <div style="display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto;">
-    <div style="display: flex; align-items: center;">
-      <svg aria-hidden="true" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; margin-right: 16px;">
-        <path d="M11.5216 0.5H0V11.9067H11.5216V0.5Z" fill="#f25022" />
-        <path d="M24.2418 0.5H12.7202V11.9067H24.2418V0.5Z" fill="#7fba00" />
-        <path d="M11.5216 13.0933H0V24.5H11.5216V13.0933Z" fill="#00a4ef" />
-        <path d="M24.2418 13.0933H12.7202V24.5H24.2418V13.0933Z" fill="#ffb900" />
-      </svg>
-      <div style="width: 1px; height: 24px; background: #e1e5e9; margin-right: 16px;"></div>
-      <span style="font-weight: 600; font-size: 16px; color: #000000;">Microsoft Learn</span>
-    </div>
-    <nav style="display: flex; gap: 24px;">
-      <a href="#" style="color: #000000; text-decoration: none; font-size: 14px;">Documentation</a>
-      <a href="#" style="color: #000000; text-decoration: none; font-size: 14px;">Training</a>
-      <a href="#" style="color: #000000; text-decoration: none; font-size: 14px;">Certifications</a>
-    </nav>
-  </div>
-</header>
-
-COLOR GUIDELINES:
-- Header background: #ffffff with black text (#000000)
-- Primary buttons: #0078d4 (keep blue for buttons and links)
-- Hero/banner sections: #ffffff background
+IMPORTANT: Generate ONLY the components requested. Do not add learning paths, courses, or modules unless specifically requested.
 
 Generate ONLY the HTML code (starting with <!DOCTYPE html>).`;
 

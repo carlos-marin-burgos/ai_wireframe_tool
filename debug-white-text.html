@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔍 White Text Debug Tool</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 10px 10px 10px 0;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+            font-family: monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .error {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+            color: #721c24;
+        }
+
+        .loading {
+            border-left-color: #ffc107;
+            background: #fffbf0;
+            color: #856404;
+        }
+
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .highlight {
+            background: yellow;
+            color: black !important;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔍 White Text Debug Tool</h1>
+        <p>This tool helps identify where white text is appearing inappropriately in generated wireframes.</p>
+
+        <div class="test-section">
+            <h3>🎯 Debug White Text Issues</h3>
+            <button onclick="testHeroSection()">Test Hero Section</button>
+            <button onclick="testLearningPlatform()">Test Learning Platform</button>
+            <button onclick="testContactPage()">Test Contact Page</button>
+            <button onclick="testEcommerce()">Test E-commerce Page</button>
+
+            <div id="debugResult" class="result" style="display: none;"></div>
+            <iframe id="debugPreview" style="display: none;"></iframe>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 White Text Analysis</h3>
+            <div id="whiteTextAnalysis" style="display: none;">
+                <h4>Found White Text:</h4>
+                <div id="whiteTextList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function analyzeWhiteText(html, description) {
+            const lines = html.split('\\n');
+            const whiteTextIssues = [];
+
+            lines.forEach((line, index) => {
+                // Look for problematic white text patterns
+                if (line.includes('color: #fff') || line.includes('color: white')) {
+                    // Check if it's on a dark background (acceptable)
+                    const isDarkBackground =
+                        line.includes('background-color: #007bff') ||
+                        line.includes('background-color: #333') ||
+                        line.includes('background: #007bff') ||
+                        line.includes('background: #333') ||
+                        line.includes('background-color: #000') ||
+                        line.includes('background: #000');
+
+                    if (!isDarkBackground) {
+                        // Check previous and next lines for context
+                        const context = [
+                            lines[index - 2] || '',
+                            lines[index - 1] || '',
+                            line,
+                            lines[index + 1] || '',
+                            lines[index + 2] || ''
+                        ].join('\\n');
+
+                        whiteTextIssues.push({
+                            line: index + 1,
+                            content: line.trim(),
+                            context: context,
+                            severity: isDarkBackground ? 'low' : 'high'
+                        });
+                    }
+                }
+            });
+
+            return whiteTextIssues;
+        }
+
+        async function testWireframe(description, testName) {
+            const resultEl = document.getElementById('debugResult');
+            const previewEl = document.getElementById('debugPreview');
+            const analysisEl = document.getElementById('whiteTextAnalysis');
+            const listEl = document.getElementById('whiteTextList');
+
+            resultEl.style.display = 'block';
+            resultEl.className = 'result loading';
+            resultEl.textContent = \`🔄 Testing \${testName}...\\n\\nGenerating wireframe for: "\${description}"\`;
+            
+            try {
+                const response = await fetch('http://localhost:7072/api/generate-wireframe-enhanced', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        description: description,
+                        theme: 'modern',
+                        colorScheme: 'light'
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (response.ok && result.html) {
+                    const whiteTextIssues = await analyzeWhiteText(result.html, description);
+                    
+                    resultEl.className = 'result';
+                    resultEl.textContent = \`✅ \${testName} generated successfully!\\n\\nLength: \${result.html.length} characters\\nWhite text issues found: \${whiteTextIssues.length}\\n\\nAtlas Components: \${JSON.stringify(result.metadata.atlasComponents, null, 2)}\`;
+                    
+                    // Show analysis
+                    if (whiteTextIssues.length > 0) {
+                        analysisEl.style.display = 'block';
+                        listEl.innerHTML = whiteTextIssues.map(issue => \`
+                            <div style="margin: 10px 0; padding: 10px; background: \${issue.severity === 'high' ? '#ffebee' : '#fff3e0'}; border-radius: 6px;">
+                                <strong>Line \${issue.line}</strong> (\${issue.severity} severity)<br>
+                                <code>\${issue.content}</code><br>
+                                <details style="margin-top: 5px;">
+                                    <summary>Context</summary>
+                                    <pre style="font-size: 12px; margin: 5px 0;">\${issue.context}</pre>
+                                </details>
+                            </div>
+                        \`).join('');
+                    } else {
+                        analysisEl.style.display = 'block';
+                        listEl.innerHTML = '<div style="color: green; font-weight: 600;">✅ No inappropriate white text found!</div>';
+                    }
+                    
+                    // Show preview
+                    previewEl.style.display = 'block';
+                    previewEl.srcdoc = result.html;
+                } else {
+                    resultEl.className = 'result error';
+                    resultEl.textContent = \`❌ Error: \${response.status}\\n\\n\${JSON.stringify(result, null, 2)}\`;
+                }
+            } catch (error) {
+                resultEl.className = 'result error';
+                resultEl.textContent = \`❌ Network Error: \${error.message}\`;
+            }
+        }
+
+        async function testHeroSection() {
+            await testWireframe('Hero section with call-to-action', 'Hero Section');
+        }
+
+        async function testLearningPlatform() {
+            await testWireframe('Learning platform with training modules', 'Learning Platform');
+        }
+
+        async function testContactPage() {
+            await testWireframe('Contact page with form and map', 'Contact Page');
+        }
+
+        async function testEcommerce() {
+            await testWireframe('E-commerce product catalog page', 'E-commerce Page');
+        }
+    </script>
+</body>
+
+</html>

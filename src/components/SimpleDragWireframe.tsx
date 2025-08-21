@@ -26,10 +26,14 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
         // Parse and display the HTML content
         containerRef.current.innerHTML = htmlContent;
 
-        // Ensure all elements are visible (remove any transparency)
+        // Ensure all elements are visible but don't force opacity: 1 on everything
         const allElements = Array.from(containerRef.current.querySelectorAll('*')) as HTMLElement[];
         allElements.forEach(el => {
-            el.style.opacity = '1';
+            // Only fix elements with opacity < 0.9 (leave properly styled elements alone)
+            const computedOpacity = window.getComputedStyle(el).opacity;
+            if (parseFloat(computedOpacity) < 0.9) {
+                el.style.opacity = '1';
+            }
         });
 
         // Initialize dragula on the container itself

@@ -17,6 +17,11 @@ class FigmaService {
     this.fileKey = "wSppVRlOi9JZO2LxtHUbbW"; // From figma.config.json
     this.fluentLibraryFileKey = "BNjrEE5xScFNrGY1w9rqBt"; // Microsoft Fluent UI Library
     this.atlasLibraryFileKey = "uVA2amRR71yJZ0GS6RI6zL"; // Atlas Design Library
+
+    // OAuth2 support
+    this.oauthTokens = null;
+    this.loadOAuthTokens();
+
     this.axiosInstance = this.createAxiosInstance();
 
     // Enhanced node ID mapping for design systems
@@ -27,17 +32,72 @@ class FigmaService {
   }
 
   /**
+   * Load OAuth2 tokens if available
+   */
+  loadOAuthTokens() {
+    try {
+      const tokenFile = path.join(
+        __dirname,
+        "..",
+        ".figma-tokens",
+        "oauth-tokens.json"
+      );
+      if (fs.existsSync(tokenFile)) {
+        const tokenData = JSON.parse(fs.readFileSync(tokenFile, "utf8"));
+
+        // Check if token is expired
+        const expiresAt = new Date(tokenData.expires_at);
+        const now = new Date();
+
+        if (now < expiresAt) {
+          this.oauthTokens = tokenData;
+          console.log("✅ OAuth2 tokens loaded successfully");
+        } else {
+          console.log("⚠️  OAuth2 tokens expired");
+        }
+      }
+    } catch (error) {
+      console.log("ℹ️  No OAuth2 tokens found, using personal access token");
+    }
+  }
+
+  /**
+   * Get the appropriate authorization header
+   */
+  getAuthHeader() {
+    if (this.oauthTokens && this.oauthTokens.access_token) {
+      return { Authorization: `Bearer ${this.oauthTokens.access_token}` };
+    } else if (this.apiToken) {
+      return { "X-Figma-Token": this.apiToken };
+    } else {
+      throw new Error(
+        "No Figma authentication available. Please set up OAuth2 or personal access token."
+      );
+    }
+  }
+
+  /**
    * Create configured axios instance
    */
   createAxiosInstance() {
     return axios.create({
       baseURL: this.baseURL,
       headers: {
-        "X-Figma-Token": this.apiToken,
+        ...this.getAuthHeader(),
         "Content-Type": "application/json",
       },
       timeout: 10000,
     });
+  }
+
+  /**
+   * Update axios instance with new auth headers
+   */
+  updateAuthHeaders() {
+    this.axiosInstance.defaults.headers = {
+      ...this.axiosInstance.defaults.headers,
+      ...this.getAuthHeader(),
+    };
   }
 
   /**

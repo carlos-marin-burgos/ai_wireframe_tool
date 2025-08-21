@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional Hero Section Wireframe">
+    <title>Hero Section Wireframe</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+        }
+        header, footer {
+            background-color: #1a73e8;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #0047ab;
+            padding: 10px;
+        }
+        nav a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+        }
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            background-color: #e3f2fd;
+            min-height: 60vh;
+        }
+        .hero-content {
+            text-align: center;
+        }
+        .hero-content h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .hero-content p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        .cta-button {
+            background-color: #1a73e8;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+            }
+            .hero-content h1 {
+                font-size: 2em;
+            }
+            .hero-content p {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Company Logo</h1>
+    </header>
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Contact</a>
+    </nav>
+    <main>
+        <section class="hero-content">
+            <h1>Welcome to Our Website</h1>
+            <p>We provide the best services for your needs. Discover more about what we offer.</p>
+            <button class="cta-button">Learn More</button>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Company Name. All rights reserved.</p>
+    </footer>
+</body>
+</html>
