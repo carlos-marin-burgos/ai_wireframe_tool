@@ -1,9 +1,11 @@
 const { validateWireframeParams } = require("./types");
 const { TemplateManager, selectTemplate } = require("./template-manager");
 const { generateSiteHeaderHTML } = require("./components/SiteHeaderGenerator");
+const AtlasComponentLibrary = require("./components/AtlasComponentLibrary");
 
-// Initialize template manager
+// Initialize template manager and Atlas library
 const templateManager = new TemplateManager();
+const atlasLibrary = new AtlasComponentLibrary();
 
 /**
  * Enhanced fallback wireframe generator with template-based system
@@ -1361,9 +1363,9 @@ function createInlineFallbackTemplate(description, theme, primaryColor) {
     primaryColor
   );
 
-  // Get Microsoft Learn TopNav components
-  const msLearnTopNav = createMicrosoftLearnTopNav();
-  const msLearnTopNavCSS = getMicrosoftLearnTopNavCSS();
+  // Get Atlas Top Navigation (specific Figma component)
+  const atlasTopNav = atlasLibrary.generateAtlasTopNavigation();
+  const atlasTopNavCSS = getAtlasTopNavCSS();
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -1372,12 +1374,12 @@ function createInlineFallbackTemplate(description, theme, primaryColor) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${description}</title>
     <style>
-        ${msLearnTopNavCSS}
+        ${atlasTopNavCSS}
         ${styles}
     </style>
 </head>
 <body>
-    ${msLearnTopNav}
+    ${atlasTopNav}
     
     ${content}
     
@@ -1391,23 +1393,59 @@ function createInlineFallbackTemplate(description, theme, primaryColor) {
 }
 
 /**
- * Create Microsoft Learn Site Header HTML using official design system
+ * Create Atlas Top Navigation HTML using specific Figma component
  */
-function createMicrosoftLearnTopNav() {
-  return generateSiteHeaderHTML();
+function createAtlasTopNav() {
+  return atlasLibrary.generateAtlasTopNavigation();
 }
 
 /**
- * Get Microsoft Learn TopNav CSS
+ * Get Atlas Top Navigation CSS
  */
-function getMicrosoftLearnTopNavCSS() {
+function getAtlasTopNavCSS() {
   return `
-    /* Microsoft Learn TopNav Styles */
-    :root {
-      --ms-color-primary: #0078d4;
-      --ms-color-primary-hover: #106ebe;
-      --ms-color-white: #ffffff;
-      --ms-color-gray-100: #f1f1f1;
+    /* Atlas Top Navigation Styles (from wireframe-styles.css) */
+    .atlas-top-navigation {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #FFFFFF;
+      border-bottom: 1px solid #E0E0E0;
+    }
+    
+    .ms-learn-brand {
+      font-family: 'Segoe UI', sans-serif;
+      font-weight: 600;
+      font-size: 16px;
+      color: #171717;
+      text-decoration: none;
+    }
+    
+    .wireframe-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .wireframe-nav-item {
+      display: flex;
+      align-items: center;
+      padding: 6px 8px;
+      cursor: pointer;
+    }
+    
+    .wireframe-nav-link {
+      font-family: 'Segoe UI', sans-serif;
+      font-weight: 400;
+      font-size: 14px;
+      color: #171717;
+      text-decoration: none;
+    }
+    
+    .wireframe-nav-item:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      border-radius: 4px;
+    }
       --ms-color-gray-600: #5c5c5c;
       --ms-font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
       --ms-shadow-nav: 0 2px 4px rgba(0, 0, 0, 0.1);

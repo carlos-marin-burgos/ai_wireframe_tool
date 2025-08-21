@@ -5,6 +5,7 @@ const {
   generateMicrosoftNavHTML,
   generateMicrosoftFooterHTML,
 } = require("./components/HeroGenerator");
+const AtlasComponentLibrary = require("./components/AtlasComponentLibrary");
 const { createFallbackWireframe } = require("./fallback-generator");
 
 // Import Enhanced AI System
@@ -42,7 +43,9 @@ const PORT = process.env.PORT || 5001;
 
 // Initialize Enhanced AI System
 const enhancedAI = new AIEnhancedWireframeGenerator();
+const atlasLibrary = new AtlasComponentLibrary();
 console.log("🚀 Enhanced AI Wireframe Generator initialized");
+console.log("🎨 Atlas Component Library initialized");
 
 // Middleware
 app.use(cors());
@@ -383,8 +386,15 @@ app.post("/api/generate-html-wireframe", async (req, res) => {
 
     if (aiGeneratedHtml) {
       console.log("✅ AI generation successful!");
+
+      // Always prepend Atlas Top Navigation to every wireframe
+      const atlasTopNav = atlasLibrary.generateAtlasTopNavigation();
+      const fullWireframeHtml = `${atlasTopNav}\n${aiGeneratedHtml}`;
+
+      console.log("🧭 Atlas Top Navigation added to wireframe");
+
       return res.json({
-        html: aiGeneratedHtml,
+        html: fullWireframeHtml,
         fallback: false,
         cached: false,
         theme: designTheme,
@@ -392,6 +402,7 @@ app.post("/api/generate-html-wireframe", async (req, res) => {
         generatedBy: "AI",
         timestamp: new Date().toISOString(),
         aiPowered: true,
+        atlasNavigation: true,
       });
     }
 
@@ -715,12 +726,12 @@ MICROSOFT LEARN HEADER TEMPLATE (ALWAYS INCLUDE FIRST):
         <path d="M11.5216 13.0933H0V24.5H11.5216V13.0933Z" fill="#00a4ef" />
         <path d="M24.2418 13.0933H12.7202V24.5H24.2418V13.0933Z" fill="#ffb900" />
       </svg>
-      <span style="font-weight: 600; font-size: 16px; color: #000000;">Microsoft Learn</span>
+      <span class="ms-learn-brand">Microsoft Learn</span>
     </div>
-    <nav style="display: flex; gap: 24px;">
-      <a href="#" style="color: #000000; text-decoration: none; font-size: 14px;">Documentation</a>
-      <a href="#" style="color: #000000; text-decoration: none; font-size: 14px;">Training</a>
-      <a href="#" style="color: #000000; text-decoration: none; font-size: 14px;">Certifications</a>
+    <nav class="wireframe-nav">
+      <a href="#" class="wireframe-nav-link">Documentation</a>
+      <a href="#" class="wireframe-nav-link">Training</a>
+      <a href="#" class="wireframe-nav-link">Certifications</a>
     </nav>
   </div>
 </header>

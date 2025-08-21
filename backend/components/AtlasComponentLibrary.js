@@ -151,6 +151,10 @@ class AtlasComponentLibrary {
     switch (type) {
       case "site-header":
         return this.generateSiteHeader(options);
+      case "atlas-top-nav":
+      case "atlas-navigation":
+      case "top-navigation":
+        return this.generateAtlasTopNavigation(options);
 
       case "hero-section":
         return this.generateHeroSection(options);
@@ -205,17 +209,88 @@ class AtlasComponentLibrary {
         <div style="width: 1px; height: 24px; background: #e1e5e9; margin-right: 16px;"></div>
 
         <!-- Brand -->
-        <a href="#" style="color: #323130; text-decoration: none; font-weight: 600; font-size: 16px; margin-right: auto;">
+        <a href="#" class="ms-learn-brand">
           <span>Microsoft Learn</span>
         </a>
 
         <!-- Navigation -->
-        <nav aria-label="site header navigation" style="display: flex; align-items: center; gap: 8px;">
-          <a href="#" style="color: #323130; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.2s; font-size: 14px;">Documentation</a>
-          <a href="#" style="color: #323130; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.2s; font-size: 14px;">Training</a>
-          <a href="#" style="color: #323130; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.2s; font-size: 14px;">Certifications</a>
+        <nav aria-label="site header navigation" class="wireframe-nav">
+          <a href="#" class="wireframe-nav-link">Documentation</a>
+          <a href="#" class="wireframe-nav-link">Training</a>
+          <a href="#" class="wireframe-nav-link">Certifications</a>
         </nav>
       </div>
+    `;
+  }
+
+  generateAtlasTopNavigation(options = {}) {
+    // Specific Atlas Top Navigation from Figma (node-id: 11530:113245)
+    return `
+      <!-- Atlas Top Navigation - Always Present (Node ID: 11530:113245) -->
+      <header class="atlas-top-navigation" data-node-id="11530:113245" style="
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 24px;
+        gap: 21px;
+        width: 100%;
+        height: 54px;
+        box-sizing: border-box;
+        background: #FFFFFF;
+        border-bottom: 1px solid #E0E0E0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      ">
+        <!-- Logo & Menu Section -->
+        <div style="display: flex; flex-direction: row; align-items: center; padding: 0px; gap: 16px; flex-grow: 1;">
+          <!-- Logo Container -->
+          <div style="display: flex; flex-direction: row; align-items: center; padding: 0px; gap: 13px;">
+            <!-- Microsoft Logo -->
+            <div style="position: relative; width: 26px; height: 26px;">
+              <div style="position: absolute; top: 0; left: 0; width: 12px; height: 12px; background: #F26522;"></div>
+              <div style="position: absolute; top: 0; right: 0; width: 12px; height: 12px; background: #8DC63F;"></div>
+              <div style="position: absolute; bottom: 0; left: 0; width: 12px; height: 12px; background: #00AEEF;"></div>
+              <div style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: #FFC20E;"></div>
+            </div>
+            <!-- Separator -->
+            <div style="width: 2px; height: 24px; background: #2F2F2F;"></div>
+            <!-- Site Title -->
+            <span class="ms-learn-brand">Learn</span>
+          </div>
+          
+          <!-- Navigation Menu -->
+          <nav class="wireframe-nav">
+            <div class="wireframe-nav-item">
+              <span class="wireframe-nav-link">Browse</span>
+            </div>
+            <div class="wireframe-nav-item">
+              <span class="wireframe-nav-link">Reference</span>
+            </div>
+            <div class="wireframe-nav-item">
+              <span class="wireframe-nav-link">Learn</span>
+            </div>
+            <div class="wireframe-nav-item">
+              <span class="wireframe-nav-link">Q&A</span>
+            </div>
+          </nav>
+        </div>
+        
+        <!-- Profile Section -->
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <!-- Search Icon -->
+          <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+              <path d="M8.5 3C5.46243 3 3 5.46243 3 8.5C3 11.5376 5.46243 14 8.5 14C9.83879 14 11.0659 13.5217 12.0196 12.7266L16.6464 17.3536L17.3536 16.6464L12.7266 12.0196C13.5217 11.0659 14 9.83879 14 8.5C14 5.46243 11.5376 3 8.5 3ZM4 8.5C4 6.01472 6.01472 4 8.5 4C10.9853 4 13 6.01472 13 8.5C13 10.9853 10.9853 13 8.5 13C6.01472 13 4 10.9853 4 8.5Z" fill="#171717"/>
+            </svg>
+          </div>
+          <!-- User Avatar -->
+          <div style="width: 36px; height: 36px; border-radius: 50%; background: url('public/mina.png') center/cover; border: 2px solid #0078d4;"></div>
+          <!-- CXS Logo -->
+          <img src="/cxsLogo.png" alt="CXS Logo" style="height: 30px; object-fit: contain; margin-left: 8px;" />
+        </div>
+      </header>
     `;
   }
 

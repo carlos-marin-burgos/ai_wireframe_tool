@@ -3,12 +3,13 @@
 
 /**
  * Generates the complete Microsoft Learn Navigation HTML
+ * Uses the specific Atlas navigation component from Figma (node-id: 11530:113245)
  * @returns {string} Complete HTML string for Microsoft Learn navbar
  */
 function generateMicrosoftNavHTML() {
   return `
-  <!-- Microsoft Learn Navigation -->
-  <header style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 8px 24px; gap: 21px; width: 100%; height: 54px; box-sizing: border-box; background: #FFFFFF; border-bottom: 1px solid #E0E0E0;">
+  <!-- Atlas Top Navigation - Always Present (Node ID: 11530:113245) -->
+  <header class="atlas-top-navigation" data-node-id="11530:113245" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 8px 24px; gap: 21px; width: 100%; height: 54px; box-sizing: border-box; background: #FFFFFF; border-bottom: 1px solid #E0E0E0; position: sticky; top: 0; z-index: 1000;">
     <!-- Logo & Menu Section -->
     <div style="display: flex; flex-direction: row; align-items: center; padding: 0px; gap: 16px; flex-grow: 1;">
       <!-- Logo Container -->
@@ -23,16 +24,16 @@ function generateMicrosoftNavHTML() {
         <!-- Separator -->
         <div style="width: 2px; height: 24px; background: #2F2F2F;"></div>
         <!-- Site Title -->
-        <span style="font-family: 'Segoe UI', sans-serif; font-weight: 600; font-size: 20px; color: #171717; line-height: 1;">Learn</span>
+        <span class="ms-learn-brand">Learn</span>
       </div>
       
       <!-- Navigation Menu -->
-      <nav style="display: flex; align-items: center; gap: 8px; margin-left: 24px;">
-        <div style="display: flex; align-items: center; padding: 6px 8px; gap: 4px; cursor: pointer;">
-          <span style="font-family: 'Segoe UI', sans-serif; font-weight: 400; font-size: 14px; color: #171717;">Browse</span>
+      <nav class="wireframe-nav">
+        <div class="wireframe-nav-item">
+          <span class="wireframe-nav-link">Browse</span>
         </div>
-        <div style="display: flex; align-items: center; padding: 6px 8px; gap: 4px; cursor: pointer;">
-          <span style="font-family: 'Segoe UI', sans-serif; font-weight: 400; font-size: 14px; color: #171717;">Reference</span>
+        <div class="wireframe-nav-item">
+          <span class="wireframe-nav-link">Reference</span>
         </div>
         <div style="display: flex; align-items: center; padding: 6px 8px; gap: 4px; cursor: pointer;">
           <span style="font-family: 'Segoe UI', sans-serif; font-weight: 400; font-size: 14px; color: #171717;">Learn</span>
@@ -87,7 +88,7 @@ function generateHeroHTML(options = {}) {
     secondaryCtaText = "Browse",
     showSecondaryButton = true,
     backgroundColor = "#E8E6DF",
-    heroImageUrl = "public/hero300.png"
+    heroImageUrl = "public/hero300.png",
   } = options;
 
   return `
@@ -134,7 +135,9 @@ function generateHeroHTML(options = {}) {
                          background-color: transparent; color: #0078d4;">
             ${ctaText}
           </button>
-          ${showSecondaryButton ? `
+          ${
+            showSecondaryButton
+              ? `
           <button class="button border" 
                   style="display: inline-flex; align-items: center; justify-content: center; 
                          padding: 0.5rem 1rem; border-radius: 0.25rem; font-family: 'Segoe UI', sans-serif; 
@@ -143,7 +146,9 @@ function generateHeroHTML(options = {}) {
                          background-color: #0078d4; color: white;">
             ${secondaryCtaText}
           </button>
-          ` : ''}
+          `
+              : ""
+          }
         </div>
       </div>
     </section>

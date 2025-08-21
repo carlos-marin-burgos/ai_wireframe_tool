@@ -4,6 +4,24 @@
 /* Main app styles should go in App.css */
 
 /* ============================================
+   ATLAS TOP NAVIGATION (Node ID: 11530:113245)
+   ============================================ */
+
+/* Atlas Top Navigation - Always present in wireframes */
+.atlas-top-navigation {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.atlas-top-navigation:hover {
+  border-bottom-color: #c8c6c4;
+}
+
+/* ============================================
    WIREFRAME CONTAINER & LAYOUT
    ============================================ */
 
@@ -193,6 +211,58 @@ ul.nav-list,
 .nav-list a:hover {
   background-color: #f3f2f1;
   color: #323130;
+}
+
+/* ============================================
+   WIREFRAME NAVIGATION STYLES
+   ============================================ */
+
+/* Main navigation container */
+.wireframe-nav {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+/* Navigation items container */
+.wireframe-nav-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  gap: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.wireframe-nav-item:hover {
+  background-color: #f3f2f1;
+}
+
+/* Navigation links */
+.wireframe-nav-link {
+  color: #000000;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  font-weight: 500;
+}
+
+.wireframe-nav-link:hover {
+  background-color: #f3f2f1;
+  color: #000000;
+}
+
+/* Microsoft Learn header styles */
+.ms-learn-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  font-size: 16px;
+  color: #000000;
 }
 
 /* Sidebar Navigation Lists */

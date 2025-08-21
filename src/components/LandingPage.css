@@ -7,7 +7,6 @@
   justify-content: center;
   align-items: center;
   padding: 2rem;
-  padding-top: calc(2rem + 70px); /* Account for fixed navbar height */
   /*background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);*/
   position: relative;
   overflow: hidden;

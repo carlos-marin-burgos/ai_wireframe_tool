@@ -727,30 +727,31 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   };
 
   const insertComponentIntoWireframe = (existingHtml: string, componentHtml: string) => {
-    // Find a good insertion point in the existing wireframe - preferably at the top
-    const containerMatch = existingHtml.match(/<div[^>]*class="[^"]*wireframe-container[^"]*"[^>]*>/);
-    if (containerMatch) {
-      // Insert right after the opening wireframe-container div tag
-      const insertionPoint = containerMatch.index! + containerMatch[0].length;
+    // For SimpleDragWireframe, we want to add components as direct children
+    // of the main container, not nested inside other elements
+
+    // Look for the closing tag of the last top-level element before </body> or end of content
+    // This ensures the component is added as a sibling to existing components
+    const bodyEndMatch = existingHtml.match(/<\/body>/);
+    if (bodyEndMatch) {
+      // Insert before the closing body tag
+      const insertionPoint = bodyEndMatch.index!;
       return existingHtml.slice(0, insertionPoint) + componentHtml + existingHtml.slice(insertionPoint);
     }
 
-    // Alternative: look for main content area
-    const mainMatch = existingHtml.match(/<main[^>]*>|<div[^>]*class="[^"]*main[^"]*"[^>]*>|<div[^>]*class="[^"]*content[^"]*"[^>]*>/);
-    if (mainMatch) {
-      const insertionPoint = mainMatch.index! + mainMatch[0].length;
-      return existingHtml.slice(0, insertionPoint) + componentHtml + existingHtml.slice(insertionPoint);
+    // Look for the last closing tag of a top-level element (avoiding nested elements)
+    const topLevelClosingTags = existingHtml.match(/<\/(div|section|article|header|footer|main|nav)>/g);
+    if (topLevelClosingTags) {
+      // Find the last occurrence of a top-level closing tag
+      const lastTagMatch = existingHtml.lastIndexOf(topLevelClosingTags[topLevelClosingTags.length - 1]);
+      if (lastTagMatch !== -1) {
+        const insertionPoint = lastTagMatch + topLevelClosingTags[topLevelClosingTags.length - 1].length;
+        return existingHtml.slice(0, insertionPoint) + componentHtml + existingHtml.slice(insertionPoint);
+      }
     }
 
-    // Look for body tag and insert right after it
-    const bodyMatch = existingHtml.match(/<body[^>]*>/);
-    if (bodyMatch) {
-      const insertionPoint = bodyMatch.index! + bodyMatch[0].length;
-      return existingHtml.slice(0, insertionPoint) + componentHtml + existingHtml.slice(insertionPoint);
-    }
-
-    // Final fallback: prepend to existing content
-    return componentHtml + existingHtml;
+    // Final fallback: append to the end of existing content
+    return existingHtml + componentHtml;
   };
 
   const createWireframeWithComponent = (componentHtml: string) => {

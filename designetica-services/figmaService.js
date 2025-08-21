@@ -472,9 +472,10 @@ class FigmaService {
     });
 
     this.atlasComponentMap.set("atlas-navigation", {
-      nodeId: "14647:163534", // Assumed adjacent node ID
-      name: "Atlas/Navigation",
-      description: "Atlas navigation component",
+      nodeId: "11530:113245", // Updated from your specific Figma URL
+      name: "Atlas/TopNavigation",
+      description:
+        "Atlas top navigation component - always present in wireframes",
       variants: ["horizontal", "vertical", "breadcrumb"],
       props: ["items", "orientation", "active"],
     });
