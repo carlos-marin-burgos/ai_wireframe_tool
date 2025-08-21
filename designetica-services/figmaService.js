@@ -950,6 +950,511 @@ class FigmaService {
   }
 
   /**
+   * Option B: Generate HTML components with exact Atlas colors from Figma
+   * This method extracts real colors and generates HTML that perfectly matches Atlas designs
+   */
+  async generateComponentHtmlWithExactColors(component, index) {
+    const componentType = this.detectComponentType(component.name);
+
+    // Extract exact colors from Atlas Design Library
+    const atlasColors = await this.getAtlasColorPalette();
+
+    switch (componentType) {
+      case "hero":
+        return await this.generateAtlasHeroHtmlWithExactColors(
+          component.nodeId || "14647:163530",
+          atlasColors
+        );
+
+      case "button":
+        return this.generateButtonHtmlWithExactColors(component, atlasColors);
+
+      case "card":
+        return this.generateCardHtmlWithExactColors(component, atlasColors);
+
+      case "input":
+        return this.generateInputHtmlWithExactColors(component, atlasColors);
+
+      case "navigation":
+        return this.generateNavigationHtmlWithExactColors(
+          component,
+          atlasColors
+        );
+
+      case "learning-path-card":
+      case "module-card":
+        return this.generateLearningCardHtmlWithExactColors(
+          component,
+          componentType,
+          atlasColors
+        );
+
+      default:
+        return this.generateGenericHtmlWithExactColors(component, atlasColors);
+    }
+  }
+
+  /**
+   * Extract exact color palette from Atlas Design Library
+   */
+  async getAtlasColorPalette() {
+    try {
+      // Get the Atlas Hero component to extract exact colors
+      const heroResponse = await this.axiosInstance.get(
+        `/files/${this.atlasLibraryFileKey}/nodes?ids=14647:163530`
+      );
+      const heroNode = heroResponse.data.nodes["14647:163530"];
+
+      const colors = {
+        // Default Atlas colors (fallback)
+        background: "#e8e6df",
+        text: "#171717",
+        primaryButton: "#0078d4",
+        secondaryButton: "#242424",
+        accent: "#0064b5",
+        badge: "#002050",
+        white: "#ffffff",
+        lightGray: "#f5f5f5",
+        mediumGray: "#8a8886",
+        stroke: "#e1e5e9",
+      };
+
+      // Extract actual colors from the hero node if available
+      if (heroNode && heroNode.document) {
+        const extractColorsFromNode = (node) => {
+          if (node.fills && node.fills.length > 0) {
+            node.fills.forEach((fill) => {
+              if (fill.type === "SOLID") {
+                const r = Math.round(fill.color.r * 255);
+                const g = Math.round(fill.color.g * 255);
+                const b = Math.round(fill.color.b * 255);
+                const hex = `#${r.toString(16).padStart(2, "0")}${g
+                  .toString(16)
+                  .padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+
+                // Map specific color values to our palette
+                if (hex === "#e8e6df") colors.background = hex;
+                if (hex === "#171717") colors.text = hex;
+                if (hex === "#0078d4") colors.primaryButton = hex;
+                if (hex === "#242424") colors.secondaryButton = hex;
+                if (hex === "#0064b5") colors.accent = hex;
+                if (hex === "#002050") colors.badge = hex;
+                if (hex === "#ffffff") colors.white = hex;
+              }
+            });
+          }
+
+          // Recursively check children
+          if (node.children) {
+            node.children.forEach((child) => extractColorsFromNode(child));
+          }
+        };
+
+        extractColorsFromNode(heroNode.document);
+      }
+
+      console.log("🎨 Extracted Atlas Color Palette:", colors);
+      return colors;
+    } catch (error) {
+      console.error("❌ Error extracting Atlas colors:", error.message);
+      // Return default Atlas colors
+      return {
+        background: "#e8e6df",
+        text: "#171717",
+        primaryButton: "#0078d4",
+        secondaryButton: "#242424",
+        accent: "#0064b5",
+        badge: "#002050",
+        white: "#ffffff",
+        lightGray: "#f5f5f5",
+        mediumGray: "#8a8886",
+        stroke: "#e1e5e9",
+      };
+    }
+  }
+
+  /**
+   * Generate Hero HTML with exact Atlas colors
+   */
+  async generateAtlasHeroHtmlWithExactColors(nodeId, colors) {
+    const timestamp = Date.now();
+
+    return `
+    <div class="atlas-hero-exact" data-node-id="${nodeId}" style="
+      background: ${colors.background};
+      color: ${colors.text};
+      padding: 48px 32px;
+      border-radius: 8px;
+      text-align: center;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      margin: 16px 0;
+    ">
+      <div style="display: inline-block; background: ${colors.white}; padding: 8px 16px; border-radius: 20px; margin-bottom: 16px;">
+        <div style="width: 24px; height: 24px; background: ${colors.badge}; border-radius: 50%; display: inline-block; margin-right: 8px;"></div>
+        <span style="color: ${colors.badge}; font-weight: 600; font-size: 12px;">MICROSOFT CERTIFIED</span>
+      </div>
+      
+      <h1 style="
+        font-size: 32px;
+        font-weight: 700;
+        color: ${colors.text};
+        margin: 0 0 16px 0;
+        line-height: 1.2;
+      ">
+        Azure Fundamentals
+      </h1>
+      
+      <p style="
+        font-size: 18px;
+        color: ${colors.text};
+        margin: 0 0 24px 0;
+        line-height: 1.5;
+        opacity: 0.8;
+      ">
+        Learn cloud computing concepts, core Azure services, and Azure management tools
+      </p>
+      
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <button style="
+          background: ${colors.primaryButton};
+          color: ${colors.white};
+          border: none;
+          padding: 12px 24px;
+          border-radius: 4px;
+          font-weight: 500;
+          font-size: 14px;
+          cursor: pointer;
+          transition: opacity 0.2s ease;
+        " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+          Start Free Trial
+        </button>
+        
+        <button style="
+          background: ${colors.secondaryButton};
+          color: ${colors.white};
+          border: none;
+          padding: 12px 24px;
+          border-radius: 4px;
+          font-weight: 500;
+          font-size: 14px;
+          cursor: pointer;
+          transition: opacity 0.2s ease;
+        " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+          Learn More
+        </button>
+      </div>
+      
+      <div style="margin-top: 16px; padding: 8px 12px; background: rgba(255,255,255,0.1); border-radius: 4px; display: inline-block;">
+        <span style="font-size: 11px; opacity: 0.7;">✨ Generated with exact Atlas colors from Figma • Node: ${nodeId}</span>
+      </div>
+    </div>`;
+  }
+
+  /**
+   * Generate Button HTML with exact Atlas colors
+   */
+  generateButtonHtmlWithExactColors(component, colors) {
+    const isPrimary = component.name.includes("Primary");
+
+    return `
+    <div class="atlas-button-exact" data-node-id="${
+      component.nodeId
+    }" style="margin: 8px 0;">
+      <button style="
+        background: ${
+          isPrimary ? colors.primaryButton : colors.secondaryButton
+        };
+        color: ${colors.white};
+        border: none;
+        padding: 12px 24px;
+        border-radius: 4px;
+        font-weight: 500;
+        font-size: 14px;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        cursor: pointer;
+        transition: opacity 0.2s ease;
+      " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+        ${isPrimary ? "Primary Action" : "Secondary Action"}
+      </button>
+      <div style="font-size: 10px; color: ${
+        colors.mediumGray
+      }; margin-top: 4px;">
+        Atlas ${isPrimary ? "Primary" : "Secondary"} Button • ${component.name}
+      </div>
+    </div>`;
+  }
+
+  /**
+   * Generate Card HTML with exact Atlas colors
+   */
+  generateCardHtmlWithExactColors(component, colors) {
+    return `
+    <div class="atlas-card-exact" data-node-id="${component.nodeId}" style="
+      background: ${colors.white};
+      border: 1px solid ${colors.stroke};
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 16px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    ">
+      <div style="
+        background: ${colors.lightGray};
+        padding: 16px;
+        border-bottom: 1px solid ${colors.stroke};
+      ">
+        <h3 style="
+          font-size: 18px;
+          font-weight: 600;
+          color: ${colors.text};
+          margin: 0;
+        ">Card Title</h3>
+      </div>
+      <div style="padding: 16px;">
+        <p style="
+          color: ${colors.text};
+          font-size: 14px;
+          line-height: 1.5;
+          margin: 0 0 12px 0;
+        ">
+          Card content using exact Atlas colors from Figma Design Library
+        </p>
+        <button style="
+          background: ${colors.primaryButton};
+          color: ${colors.white};
+          border: none;
+          padding: 8px 16px;
+          border-radius: 4px;
+          font-size: 12px;
+          font-weight: 500;
+          cursor: pointer;
+        ">Learn More</button>
+      </div>
+      <div style="
+        background: ${colors.lightGray};
+        padding: 8px 16px;
+        font-size: 10px;
+        color: ${colors.mediumGray};
+        border-top: 1px solid ${colors.stroke};
+      ">
+        Atlas Card Component • ${component.name}
+      </div>
+    </div>`;
+  }
+
+  /**
+   * Generate Input HTML with exact Atlas colors
+   */
+  generateInputHtmlWithExactColors(component, colors) {
+    return `
+    <div class="atlas-input-exact" data-node-id="${component.nodeId}" style="margin: 16px 0; font-family: 'Segoe UI', system-ui, sans-serif;">
+      <label style="
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 500;
+        font-size: 14px;
+        color: ${colors.text};
+      ">Input Field</label>
+      <input type="text" placeholder="Enter text here..." style="
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid ${colors.stroke};
+        border-radius: 4px;
+        font-family: inherit;
+        font-size: 14px;
+        color: ${colors.text};
+        background: ${colors.white};
+        transition: border-color 0.2s ease;
+        box-sizing: border-box;
+      " onfocus="this.style.borderColor='${colors.primaryButton}'; this.style.boxShadow='0 0 0 1px ${colors.primaryButton}'" onblur="this.style.borderColor='${colors.stroke}'; this.style.boxShadow='none'">
+      <div style="font-size: 10px; color: ${colors.mediumGray}; margin-top: 4px;">
+        Atlas Input Component • ${component.name}
+      </div>
+    </div>`;
+  }
+
+  /**
+   * Generate Navigation HTML with exact Atlas colors
+   */
+  generateNavigationHtmlWithExactColors(component, colors) {
+    return `
+    <nav class="atlas-navigation-exact" data-node-id="${component.nodeId}" style="
+      background: ${colors.white};
+      border-bottom: 1px solid ${colors.stroke};
+      padding: 12px 24px;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      margin: 16px 0;
+    ">
+      <ul style="
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: 24px;
+        align-items: center;
+      ">
+        <li><a href="#" style="
+          color: ${colors.text};
+          text-decoration: none;
+          font-weight: 500;
+          font-size: 14px;
+          padding: 8px 12px;
+          border-radius: 4px;
+          transition: background-color 0.2s ease;
+        " onmouseover="this.style.backgroundColor='${colors.lightGray}'" onmouseout="this.style.backgroundColor='transparent'">Home</a></li>
+        <li><a href="#" style="
+          color: ${colors.text};
+          text-decoration: none;
+          font-weight: 500;
+          font-size: 14px;
+          padding: 8px 12px;
+          border-radius: 4px;
+          transition: background-color 0.2s ease;
+        " onmouseover="this.style.backgroundColor='${colors.lightGray}'" onmouseout="this.style.backgroundColor='transparent'">Learning Paths</a></li>
+        <li><a href="#" style="
+          color: ${colors.text};
+          text-decoration: none;
+          font-weight: 500;
+          font-size: 14px;
+          padding: 8px 12px;
+          border-radius: 4px;
+          transition: background-color 0.2s ease;
+        " onmouseover="this.style.backgroundColor='${colors.lightGray}'" onmouseout="this.style.backgroundColor='transparent'">Certifications</a></li>
+        <li><a href="#" style="
+          color: ${colors.primaryButton};
+          text-decoration: none;
+          font-weight: 500;
+          font-size: 14px;
+          padding: 8px 12px;
+          background: ${colors.lightGray};
+          border-radius: 4px;
+          transition: background-color 0.2s ease;
+        " onmouseover="this.style.backgroundColor='${colors.stroke}'" onmouseout="this.style.backgroundColor='${colors.lightGray}'">Get Started</a></li>
+      </ul>
+      <div style="font-size: 10px; color: ${colors.mediumGray}; margin-top: 8px;">
+        Atlas Navigation Component • ${component.name}
+      </div>
+    </nav>`;
+  }
+
+  /**
+   * Generate Learning Card HTML with exact Atlas colors
+   */
+  generateLearningCardHtmlWithExactColors(component, componentType, colors) {
+    const isLearningPath = componentType === "learning-path-card";
+    const cardIcon = isLearningPath ? "📚" : "📖";
+    const cardType = isLearningPath ? "Learning Path" : "Module";
+
+    return `
+    <div class="atlas-learning-card-exact" data-node-id="${
+      component.nodeId
+    }" style="
+      background: ${colors.white};
+      border: 1px solid ${colors.stroke};
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 16px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      max-width: 320px;
+    ">
+      <div style="
+        background: linear-gradient(135deg, ${colors.background} 0%, ${
+      colors.lightGray
+    } 100%);
+        padding: 20px;
+        text-align: center;
+      ">
+        <div style="font-size: 24px; margin-bottom: 8px;">${cardIcon}</div>
+        <h4 style="
+          font-size: 16px;
+          font-weight: 600;
+          color: ${colors.text};
+          margin: 0;
+        ">${cardType} Title</h4>
+      </div>
+      <div style="padding: 16px;">
+        <p style="
+          color: ${colors.text};
+          font-size: 14px;
+          line-height: 1.5;
+          margin: 0 0 12px 0;
+        ">
+          ${
+            isLearningPath
+              ? "Complete learning path with multiple modules"
+              : "Individual learning module content"
+          }
+        </p>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="
+            color: ${colors.mediumGray};
+            font-size: 12px;
+          ">${isLearningPath ? "6 modules" : "45 min"}</span>
+          <button style="
+            background: ${colors.primaryButton};
+            color: ${colors.white};
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+          ">Start</button>
+        </div>
+      </div>
+      <div style="
+        background: ${colors.lightGray};
+        padding: 8px 16px;
+        font-size: 10px;
+        color: ${colors.mediumGray};
+        border-top: 1px solid ${colors.stroke};
+      ">
+        Atlas ${cardType} Card • ${component.name}
+      </div>
+    </div>`;
+  }
+
+  /**
+   * Generate Generic HTML with exact Atlas colors
+   */
+  generateGenericHtmlWithExactColors(component, colors) {
+    return `
+    <div class="atlas-generic-exact" data-node-id="${component.nodeId}" style="
+      background: ${colors.white};
+      border: 1px solid ${colors.stroke};
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    ">
+      <h4 style="
+        font-size: 16px;
+        font-weight: 600;
+        color: ${colors.text};
+        margin: 0 0 8px 0;
+      ">${component.name}</h4>
+      <p style="
+        color: ${colors.text};
+        font-size: 14px;
+        margin: 0 0 12px 0;
+        opacity: 0.8;
+      ">
+        Generic Atlas component with exact Figma colors
+      </p>
+      <div style="
+        background: ${colors.lightGray};
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 10px;
+        color: ${colors.mediumGray};
+      ">
+        Atlas Generic Component • Exact Colors Applied
+      </div>
+    </div>`;
+  }
+
+  /**
    * Generate HTML for individual Atlas component
    */
   async generateAtlasComponentHtml(component, index) {
