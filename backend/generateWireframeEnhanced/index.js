@@ -1,7 +1,8 @@
 // Enhanced wireframe generator (cleaned and restored)
 // Purpose: Generate an HTML wireframe via OpenAI and optionally inject Atlas components
 
-const { OpenAI } = require("openai");
+// Import secure OpenAI client utility (supports OAuth2 and API key auth)
+const { getOpenAIClient } = require('../utils/secure-openai');
 
 // --- Atlas component injection helper ---
 function addAtlasComponents(html, description) {
@@ -151,69 +152,34 @@ function addAtlasComponents(html, description) {
   return processedHtml;
 }
 
-// --- OpenAI initialization (supports local dev via local.settings.json) ---
+// --- Secure OpenAI initialization with OAuth2 support ---
 let openai = null;
 
-function initializeOpenAI() {
+async function initializeOpenAI() {
   try {
-    // Try to load local.settings.json for development if env not set
-    if (!process.env.AZURE_OPENAI_KEY) {
-      const fs = require("fs");
-      const path = require("path");
-      try {
-        const localSettingsPath = path.join(
-          __dirname,
-          "..",
-          "local.settings.json"
-        );
-        const localSettings = JSON.parse(
-          fs.readFileSync(localSettingsPath, "utf8")
-        );
-
-        console.log(
-          "📁 Loading local.settings.json for generateWireframeEnhanced..."
-        );
-
-        Object.keys(localSettings.Values || {}).forEach((key) => {
-          if (!process.env[key]) process.env[key] = localSettings.Values[key];
-        });
-      } catch (e) {
-        // ignore if file not present
-      }
-    }
-
-    if (process.env.AZURE_OPENAI_KEY && process.env.AZURE_OPENAI_ENDPOINT) {
-      const endpoint = process.env.AZURE_OPENAI_ENDPOINT.replace(/\/$/, "");
-      const deployment = process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o";
-      const apiVersion =
-        process.env.AZURE_OPENAI_API_VERSION || "2024-08-01-preview";
-
-      openai = new OpenAI({
-        apiKey: process.env.AZURE_OPENAI_KEY,
-        baseURL: `${endpoint}/openai/deployments/${deployment}`,
-        defaultQuery: { "api-version": apiVersion },
-        defaultHeaders: { "api-key": process.env.AZURE_OPENAI_KEY },
-      });
-
-      console.log("✅ OpenAI client initialized for generateWireframeEnhanced");
+    console.log("🔐 Initializing secure OpenAI client with OAuth2 support for enhanced generator...");
+    
+    // Use the secure OpenAI client which supports both OAuth2 and API key auth
+    openai = await getOpenAIClient();
+    
+    if (openai) {
+      console.log("✅ Secure OpenAI client initialized for generateWireframeEnhanced");
+      console.log("🔑 Authentication: OAuth2 managed identity or API key fallback");
       return true;
+    } else {
+      console.log("❌ Failed to initialize secure OpenAI client for enhanced generator");
+      return false;
     }
-
-    console.log(
-      "⚠️ OpenAI environment variables not fully configured for generateWireframeEnhanced"
-    );
-    return false;
   } catch (error) {
-    console.error(
-      "❌ Failed to initialize OpenAI client for enhanced generator:",
-      error
-    );
+    console.error("❌ Failed to initialize OpenAI client for enhanced generator:", error);
     return false;
   }
 }
 
-// Initialize on module load
-initializeOpenAI();
+// Initialize on startup with async support
+(async () => {
+  await initializeOpenAI();
+})();
 
 // --- AI wireframe generation using OpenAI ---
 async function generateWithAI(description, options = {}) {
@@ -296,7 +262,7 @@ module.exports = async function (context, req) {
 
     // Ensure OpenAI client
     if (!openai) {
-      const initialized = initializeOpenAI();
+      const initialized = await initializeOpenAI();
       if (!initialized) {
         context.res.status = 503;
         context.res.body = JSON.stringify({

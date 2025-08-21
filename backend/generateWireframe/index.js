@@ -1,4 +1,5 @@
-const { OpenAI } = require("openai");
+// Import secure OpenAI client utility (supports OAuth2 and API key auth)
+const { getOpenAIClient } = require('../utils/secure-openai');
 
 // Simple Atlas component post-processing (same as enhanced endpoint)
 function addAtlasComponents(html, description) {
@@ -246,8 +247,10 @@ function initializeOpenAI() {
   }
 }
 
-// Initialize on startup
-initializeOpenAI();
+// Initialize on startup with async support
+(async () => {
+  await initializeOpenAI();
+})();
 
 // Simple fallback wireframe generator
 // NO MORE FALLBACK FUNCTIONS - AI ONLY!
@@ -255,6 +258,8 @@ initializeOpenAI();
 // AI wireframe generation
 async function generateWithAI(description) {
   if (!openai) {
+    // Try to reinitialize OpenAI with secure OAuth2 client
+    await initializeOpenAI();
     throw new Error("OpenAI not initialized");
   }
 
@@ -349,7 +354,7 @@ module.exports = async function (context, req) {
     // ONLY AI generation - NO FALLBACKS!
     if (!openai) {
       // Try to reinitialize OpenAI
-      const initialized = initializeOpenAI();
+      const initialized = await initializeOpenAI();
       if (!initialized) {
         context.res.status = 503;
         context.res.body = JSON.stringify({

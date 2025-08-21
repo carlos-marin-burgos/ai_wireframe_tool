@@ -3,7 +3,8 @@
  * Provides instant suggestions with minimal AI calls
  */
 
-const { AzureOpenAI } = require("openai");
+// Import secure OpenAI client utility (supports OAuth2 and API key auth)
+const { getOpenAIClient } = require('../utils/secure-openai');
 
 // Fast pattern-based suggestions
 const FAST_SUGGESTION_PATTERNS = {
@@ -135,13 +136,10 @@ module.exports = async function (context, req) {
     // For complex inputs, try AI with fallback
     let aiSuggestions = [];
 
-    const openai = new AzureOpenAI({
-      apiKey: process.env.AZURE_OPENAI_API_KEY,
-      apiVersion: process.env.AZURE_OPENAI_API_VERSION || "2024-08-01-preview",
-      baseURL: `${process.env.AZURE_OPENAI_ENDPOINT}/openai/deployments/${process.env.AZURE_OPENAI_DEPLOYMENT}`,
-    });
+    // Use secure OpenAI client with OAuth2 support
+    const openai = await getOpenAIClient();
 
-    if (openai && process.env.AZURE_OPENAI_API_KEY) {
+    if (openai) {
       try {
         context.log(`🧠 AI suggestions for complex input: "${trimmedInput}"`);
 

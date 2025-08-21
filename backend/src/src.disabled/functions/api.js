@@ -1,24 +1,11 @@
 const { app } = require('@azure/functions');
-const { DefaultAzureCredential } = require('@azure/identity');
-const { OpenAIClient } = require('@azure/openai');
 
 // Import monitoring
 const WireframeMonitor = require('../../monitoring');
 const monitor = new WireframeMonitor();
 
-// Initialize Azure OpenAI client
-let openAIClient;
-
-function getOpenAIClient() {
-  if (!openAIClient) {
-    const endpoint = process.env.AZURE_OPENAI_ENDPOINT;
-    const credential = new DefaultAzureCredential({
-      managedIdentityClientId: process.env.AZURE_CLIENT_ID
-    });
-    openAIClient = new OpenAIClient(endpoint, credential);
-  }
-  return openAIClient;
-}
+// Import secure OpenAI client utility (supports OAuth2 and API key auth)
+const { getOpenAIClient } = require('../../utils/secure-openai');
 
 // Health check endpoint
 app.http('health', {
