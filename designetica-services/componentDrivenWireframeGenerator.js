@@ -240,7 +240,10 @@ class ComponentDrivenWireframeGenerator {
       );
 
       // Apply styling and theming
-      const styledWireframe = this.applyWireframeStyles(wireframeHtml, options);
+      const styledWireframe = await this.applyWireframeStyles(
+        wireframeHtml,
+        options
+      );
 
       console.log("✅ Generated component-driven wireframe");
 
@@ -266,7 +269,7 @@ class ComponentDrivenWireframeGenerator {
   analyzeDescription(description) {
     const lowerDesc = description.toLowerCase();
 
-    // Template detection
+    // Template detection - be more specific about patterns
     let templateType = "landing"; // default
 
     if (
@@ -276,17 +279,30 @@ class ComponentDrivenWireframeGenerator {
     ) {
       templateType = "dashboard";
     } else if (
-      lowerDesc.includes("form") ||
-      lowerDesc.includes("submit") ||
-      lowerDesc.includes("input")
-    ) {
-      templateType = "form";
-    } else if (
       lowerDesc.includes("modal") ||
       lowerDesc.includes("dialog") ||
       lowerDesc.includes("popup")
     ) {
       templateType = "modal";
+    } else if (
+      // Only classify as form if it's specifically about forms, not just contains "form" or related words
+      (lowerDesc.includes("form") && !lowerDesc.includes("platform")) ||
+      (lowerDesc.includes("submit") && lowerDesc.includes("form")) ||
+      lowerDesc.includes("contact form") ||
+      lowerDesc.includes("signup form") ||
+      lowerDesc.includes("login form")
+    ) {
+      templateType = "form";
+    } else if (
+      // Prefer landing page for homepage, hero, platform, learning content
+      lowerDesc.includes("homepage") ||
+      lowerDesc.includes("landing") ||
+      lowerDesc.includes("hero") ||
+      lowerDesc.includes("platform") ||
+      lowerDesc.includes("learning") ||
+      lowerDesc.includes("website")
+    ) {
+      templateType = "landing";
     }
 
     // Component requirements
@@ -301,6 +317,13 @@ class ComponentDrivenWireframeGenerator {
       requiredComponents.push("form");
     if (lowerDesc.includes("table") || lowerDesc.includes("list"))
       requiredComponents.push("table");
+
+    // Atlas-specific component detection
+    if (lowerDesc.includes("hero") || lowerDesc.includes("banner"))
+      requiredComponents.push("hero");
+    if (lowerDesc.includes("learning") && lowerDesc.includes("path"))
+      requiredComponents.push("learning-path-card");
+    if (lowerDesc.includes("module")) requiredComponents.push("module-card");
 
     return {
       templateType,
@@ -343,6 +366,17 @@ class ComponentDrivenWireframeGenerator {
   generateLandingPageWireframe(description, components) {
     const navComponent = components.find((c) => c.type === "navigation");
     const buttonComponents = components.filter((c) => c.type === "button");
+    const heroComponents = components.filter((c) => c.type === "hero");
+    const learningPathComponents = components.filter(
+      (c) => c.type === "learning-path-card"
+    );
+    const moduleComponents = components.filter((c) => c.type === "module-card");
+
+    // Check if description mentions learning content
+    const isLearningPlatform =
+      description.toLowerCase().includes("learning") ||
+      description.toLowerCase().includes("module") ||
+      description.toLowerCase().includes("course");
 
     return `
 <!DOCTYPE html>
@@ -373,6 +407,52 @@ class ComponentDrivenWireframeGenerator {
         </div>
     </section>
     
+    ${
+      isLearningPlatform
+        ? `
+    <!-- Learning Content Section -->
+    <section class="learning-content">
+        <div class="container">
+            <h2>Learning Paths</h2>
+            <div class="learning-grid">
+                <div class="learning-path-card">
+                    <h3>Learning Path 1</h3>
+                    <p>Comprehensive learning path for beginners</p>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 60%"></div>
+                    </div>
+                </div>
+                <div class="learning-path-card">
+                    <h3>Learning Path 2</h3>
+                    <p>Advanced concepts and practical applications</p>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 30%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2>Available Modules</h2>
+            <div class="modules-grid">
+                <div class="module-card">
+                    <h4>Module: Introduction</h4>
+                    <p>Get started with the basics</p>
+                    <span class="duration">2 hours</span>
+                </div>
+                <div class="module-card">
+                    <h4>Module: Advanced Topics</h4>
+                    <p>Deep dive into complex concepts</p>
+                    <span class="duration">4 hours</span>
+                </div>
+                <div class="module-card">
+                    <h4>Module: Practical Application</h4>
+                    <p>Apply what you've learned</p>
+                    <span class="duration">3 hours</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    `
+        : `
     <!-- Features Section -->
     <section class="features">
         <div class="container">
@@ -390,6 +470,11 @@ class ComponentDrivenWireframeGenerator {
                     <h3>Feature 3</h3>
                     <p>Description of your third key feature</p>
                 </div>
+            </div>
+        </div>
+    </section>
+    `
+    }
             </div>
         </div>
     </section>
@@ -791,13 +876,27 @@ class ComponentDrivenWireframeGenerator {
   /**
    * Apply styles and theming to wireframe
    */
-  applyWireframeStyles(html, options = {}) {
+  async applyWireframeStyles(html, options = {}) {
     const theme = options.theme || "default";
     const colorScheme = options.colorScheme || "primary";
 
     // Add theme-specific classes or styles if needed
     if (theme === "dark") {
       html = html.replace("<body>", '<body class="theme-dark">');
+    }
+
+    // Process HTML to replace Atlas component classes with real Atlas components if figmaService is available
+    if (this.figmaService && this.figmaService.processHtmlForAtlasComponents) {
+      try {
+        console.log(
+          "🎯 Processing wireframe for all Atlas components (Hero, Learning Path Cards, Modules, etc.)..."
+        );
+        html = await this.figmaService.processHtmlForAtlasComponents(html);
+        console.log("✅ All Atlas components processed successfully");
+      } catch (error) {
+        console.error("⚠️ Failed to process Atlas components:", error);
+        // Continue with original HTML if processing fails
+      }
     }
 
     return html;

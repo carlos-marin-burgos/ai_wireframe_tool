@@ -436,7 +436,7 @@ class FigmaService {
     });
 
     this.atlasComponentMap.set("atlas-learning-path-card", {
-      nodeId: "49009:263718", // Learning Path Card component from Figma URL
+      nodeId: "14315:162386", // Updated Learning Path Card component from Figma URL
       name: "Atlas/Learning Path Card",
       description: "Atlas learning path card component for educational content",
       variants: ["default", "completed", "in-progress", "locked"],
@@ -446,6 +446,24 @@ class FigmaService {
         "progress",
         "duration",
         "modules",
+        "status",
+        "thumbnail",
+      ],
+    });
+
+    // Add support for modules using the same card design
+    this.atlasComponentMap.set("atlas-module-card", {
+      nodeId: "14315:162386", // Same design as learning path, different content
+      name: "Atlas/Module Card",
+      description:
+        "Atlas module card component for individual learning modules",
+      variants: ["default", "completed", "in-progress", "locked"],
+      props: [
+        "title",
+        "description",
+        "duration",
+        "difficulty",
+        "progress",
         "status",
         "thumbnail",
       ],
@@ -661,7 +679,10 @@ class FigmaService {
       const components = await this.getComponentsByNodeIds(componentNodeIds);
 
       // Generate HTML structure based on components
-      const wireframeHtml = this.generateWireframeHtml(components, layout);
+      const wireframeHtml = await this.generateWireframeHtml(
+        components,
+        layout
+      );
 
       console.log("✅ Fluent wireframe generated successfully");
       return {
@@ -751,7 +772,7 @@ class FigmaService {
   /**
    * Generate HTML wireframe from Fluent components
    */
-  generateWireframeHtml(components, layout = "default") {
+  async generateWireframeHtml(components, layout = "default") {
     const styles = this.getFluentWireframeStyles();
 
     let layoutClass = "fluent-layout-default";
@@ -759,9 +780,11 @@ class FigmaService {
     else if (layout === "form") layoutClass = "fluent-layout-form";
     else if (layout === "card-grid") layoutClass = "fluent-layout-cards";
 
-    const componentHtml = components
-      .map((component, index) => this.generateComponentHtml(component, index))
-      .join("\n");
+    const componentHtmlPromises = components.map((component, index) =>
+      this.generateComponentHtml(component, index)
+    );
+    const componentHtmlArray = await Promise.all(componentHtmlPromises);
+    const componentHtml = componentHtmlArray.join("\n");
 
     return `
 <!DOCTYPE html>
@@ -832,7 +855,7 @@ class FigmaService {
   /**
    * Generate HTML for individual component
    */
-  generateComponentHtml(component, index) {
+  async generateComponentHtml(component, index) {
     const componentType = this.detectComponentType(component.name);
 
     switch (componentType) {
@@ -896,6 +919,26 @@ class FigmaService {
                 </div>
             </div>
         </div>`;
+
+      case "hero":
+        // Use Atlas Hero component for all hero sections
+        return await this.generateAtlasHeroFromFigma(
+          component.nodeId || "14647:163530"
+        );
+
+      case "learning-path-card":
+        // Use Atlas Learning Path Card component
+        return await this.generateAtlasLearningPathCardFromFigma(
+          component.nodeId || "14315:162386",
+          { type: "learning-path" }
+        );
+
+      case "module-card":
+        // Use Atlas Module Card component
+        return await this.generateAtlasLearningPathCardFromFigma(
+          component.nodeId || "14315:162386",
+          { type: "module" }
+        );
 
       default:
         return `
@@ -985,7 +1028,20 @@ class FigmaService {
       case "learning_path_card":
         // Fetch the actual Atlas Learning Path Card component from Figma using the node ID
         return await this.generateAtlasLearningPathCardFromFigma(
-          component.nodeId
+          component.nodeId,
+          { type: "learning-path" }
+        );
+
+      case "module-card":
+      case "modulecard":
+      case "module_card":
+      case "learning-module":
+      case "learningmodule":
+      case "learning_module":
+        // Use the same Atlas card design but configure it for modules
+        return await this.generateAtlasLearningPathCardFromFigma(
+          component.nodeId || "14315:162386",
+          { type: "module" }
         );
 
       default:
@@ -1003,6 +1059,18 @@ class FigmaService {
   detectComponentType(name) {
     const lowerName = name.toLowerCase();
 
+    // Atlas Learning Path and Module detection (check these first before generic "card")
+    if (lowerName.includes("learning") && lowerName.includes("path"))
+      return "learning-path-card";
+    if (
+      lowerName.includes("module") ||
+      (lowerName.includes("learning") && lowerName.includes("module"))
+    )
+      return "module-card";
+
+    // Generic component types
+    if (lowerName.includes("hero") || lowerName.includes("banner"))
+      return "hero";
     if (lowerName.includes("button")) return "button";
     if (lowerName.includes("input") || lowerName.includes("textfield"))
       return "input";
@@ -1011,8 +1079,6 @@ class FigmaService {
       return "navigation";
     if (lowerName.includes("modal") || lowerName.includes("dialog"))
       return "modal";
-    if (lowerName.includes("hero") || lowerName.includes("banner"))
-      return "hero";
 
     return "generic";
   }
@@ -1061,9 +1127,14 @@ class FigmaService {
    */
   async generateAtlasLearningPathCardFromFigma(nodeId, options = {}) {
     try {
+      const { type = "learning-path" } = options;
+      const isModule = type === "module";
+
       // Fetch the actual component image from Atlas Design Library Figma file
       console.log(
-        `🔄 Fetching Atlas Learning Path Card from Figma node: ${nodeId}`
+        `🔄 Fetching Atlas ${
+          isModule ? "Module" : "Learning Path"
+        } Card from Figma node: ${nodeId}`
       );
       const componentImages = await this.exportAtlasComponentImages([nodeId], {
         format: "png",
@@ -1074,34 +1145,56 @@ class FigmaService {
 
       if (imageUrl) {
         console.log(
-          `✅ Successfully fetched Atlas Learning Path Card from Figma: ${nodeId}`
+          `✅ Successfully fetched Atlas ${
+            isModule ? "Module" : "Learning Path"
+          } Card from Figma: ${nodeId}`
         );
+
+        const componentLabel = isModule ? "Module Card" : "Learning Path Card";
+        const altText = `Atlas ${componentLabel} Component from Figma (Node: ${nodeId})`;
+
         return `
-        <div class="atlas-component atlas-learning-path-card-figma" data-node-id="${nodeId}" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <div class="atlas-component ${
+          isModule
+            ? "atlas-module-card-figma"
+            : "atlas-learning-path-card-figma"
+        }" data-node-id="${nodeId}" data-type="${type}" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
             <img src="${imageUrl}" 
-                 alt="Atlas Learning Path Card Component from Figma (Node: ${nodeId})" 
+                 alt="${altText}" 
                  style="width: 100%; height: auto; display: block; object-fit: contain;" />
             <div class="atlas-component-info" style="text-align: center; margin-top: 8px; padding: 8px;">
-                <p style="font-size: 11px; color: #605e5c; margin: 0; opacity: 0.8;">Official Atlas Design Library Learning Path Card</p>
+                <p style="font-size: 11px; color: #605e5c; margin: 0; opacity: 0.8;">Official Atlas Design Library ${componentLabel}</p>
                 <p style="font-size: 10px; color: #8a8886; margin: 2px 0 0 0; opacity: 0.6;">Node ID: ${nodeId} • Fetched from Figma</p>
             </div>
         </div>`;
       }
     } catch (error) {
       console.error(
-        "Failed to fetch Atlas Learning Path Card from Figma:",
+        `Failed to fetch Atlas ${
+          options.type === "module" ? "Module" : "Learning Path"
+        } Card from Figma:`,
         error
       );
     }
 
     // Fallback message - don't generate random HTML
+    const isModule = options.type === "module";
+    const componentLabel = isModule ? "Module Card" : "Learning Path Card";
+    const icon = isModule ? "📖" : "📚";
+
     console.log(
-      `⚠️ Falling back to placeholder for Atlas Learning Path Card (Node: ${nodeId})`
+      `⚠️ Falling back to placeholder for Atlas ${componentLabel} (Node: ${nodeId})`
     );
     return `
-    <div class="atlas-component atlas-learning-path-card-fallback" data-node-id="${nodeId}" style="background: #f8f9fa; padding: 24px; border-radius: 8px; border: 2px dashed #e1e5e9; text-align: center; font-family: 'Segoe UI', system-ui, sans-serif; max-width: 400px;">
-        <div style="font-size: 32px; margin-bottom: 12px; opacity: 0.6;">📚</div>
-        <h3 style="font-size: 16px; font-weight: 600; color: #323130; margin-bottom: 8px;">Atlas Learning Path Card</h3>
+    <div class="atlas-component ${
+      isModule
+        ? "atlas-module-card-fallback"
+        : "atlas-learning-path-card-fallback"
+    }" data-node-id="${nodeId}" data-type="${
+      options.type || "learning-path"
+    }" style="background: #f8f9fa; padding: 24px; border-radius: 8px; border: 2px dashed #e1e5e9; text-align: center; font-family: 'Segoe UI', system-ui, sans-serif; max-width: 400px;">
+        <div style="font-size: 32px; margin-bottom: 12px; opacity: 0.6;">${icon}</div>
+        <h3 style="font-size: 16px; font-weight: 600; color: #323130; margin-bottom: 8px;">Atlas ${componentLabel}</h3>
         <p style="font-size: 14px; color: #605e5c; margin-bottom: 12px; line-height: 1.4;">Unable to fetch from Figma Atlas Design Library</p>
         <div style="background: #e1f5fe; padding: 8px 12px; border-radius: 4px; margin-bottom: 8px;">
             <p style="font-size: 12px; color: #0078d4; margin: 0; font-weight: 500;">Node ID: ${nodeId}</p>
@@ -1786,6 +1879,187 @@ class FigmaService {
         }
       </style>
     `;
+  }
+
+  /**
+   * Process HTML content and replace Atlas component classes with real Atlas components from Figma
+   */
+  async processHtmlForAtlasComponents(htmlContent) {
+    if (!htmlContent || typeof htmlContent !== "string") {
+      return htmlContent;
+    }
+
+    try {
+      let processedHtml = htmlContent;
+
+      // Define Atlas component patterns and their corresponding replacement functions
+      const atlasPatterns = [
+        // Hero components
+        {
+          patterns: [
+            /<section[^>]*class\s*=\s*["'][^"']*hero[^"']*["'][^>]*>.*?<\/section>/gis,
+            /<header[^>]*class\s*=\s*["'][^"']*hero[^"']*["'][^>]*>.*?<\/header>/gis,
+            /<div[^>]*class\s*=\s*["'][^"']*hero[^"']*["'][^>]*>.*?<\/div>/gis,
+          ],
+          generator: () => this.generateAtlasHeroFromFigma("14647:163530"),
+          name: "Hero",
+        },
+
+        // Learning Path Card components
+        {
+          patterns: [
+            /<div[^>]*class\s*=\s*["'][^"']*learning[-_]?path[-_]?card[^"']*["'][^>]*>.*?<\/div>/gis,
+            /<section[^>]*class\s*=\s*["'][^"']*learning[-_]?path[^"']*["'][^>]*>.*?<\/section>/gis,
+            /<article[^>]*class\s*=\s*["'][^"']*learning[-_]?path[^"']*["'][^>]*>.*?<\/article>/gis,
+          ],
+          generator: () =>
+            this.generateAtlasLearningPathCardFromFigma("14315:162386", {
+              type: "learning-path",
+            }),
+          name: "Learning Path Card",
+        },
+
+        // Module Card components
+        {
+          patterns: [
+            /<div[^>]*class\s*=\s*["'][^"']*module[-_]?card[^"']*["'][^>]*>.*?<\/div>/gis,
+            /<section[^>]*class\s*=\s*["'][^"']*module[^"']*["'][^>]*>.*?<\/section>/gis,
+            /<article[^>]*class\s*=\s*["'][^"']*module[^"']*["'][^>]*>.*?<\/article>/gis,
+            /<div[^>]*class\s*=\s*["'][^"']*learning[-_]?module[^"']*["'][^>]*>.*?<\/div>/gis,
+          ],
+          generator: () =>
+            this.generateAtlasLearningPathCardFromFigma("14315:162386", {
+              type: "module",
+            }),
+          name: "Module Card",
+        },
+
+        // Atlas Button components
+        {
+          patterns: [
+            /<button[^>]*class\s*=\s*["'][^"']*atlas[-_]?button[^"']*["'][^>]*>.*?<\/button>/gis,
+            /<a[^>]*class\s*=\s*["'][^"']*atlas[-_]?button[^"']*["'][^>]*>.*?<\/a>/gis,
+          ],
+          generator: () =>
+            this.generateAtlasComponentHtml(
+              { name: "Atlas Button", nodeId: "14647:163531" },
+              0
+            ),
+          name: "Button",
+        },
+
+        // Atlas Card components (generic)
+        {
+          patterns: [
+            /<div[^>]*class\s*=\s*["'][^"']*atlas[-_]?card[^"']*["'][^>]*>.*?<\/div>/gis,
+            /<section[^>]*class\s*=\s*["'][^"']*atlas[-_]?card[^"']*["'][^>]*>.*?<\/section>/gis,
+          ],
+          generator: () =>
+            this.generateAtlasComponentHtml(
+              { name: "Atlas Card", nodeId: "14647:163532" },
+              0
+            ),
+          name: "Card",
+        },
+
+        // Atlas Navigation components
+        {
+          patterns: [
+            /<nav[^>]*class\s*=\s*["'][^"']*atlas[-_]?nav[^"']*["'][^>]*>.*?<\/nav>/gis,
+            /<div[^>]*class\s*=\s*["'][^"']*atlas[-_]?navigation[^"']*["'][^>]*>.*?<\/div>/gis,
+          ],
+          generator: () =>
+            this.generateAtlasComponentHtml(
+              { name: "Atlas Navigation", nodeId: "14647:163534" },
+              0
+            ),
+          name: "Navigation",
+        },
+
+        // Atlas Input components
+        {
+          patterns: [
+            /<input[^>]*class\s*=\s*["'][^"']*atlas[-_]?input[^"']*["'][^>]*>/gis,
+            /<div[^>]*class\s*=\s*["'][^"']*atlas[-_]?input[^"']*["'][^>]*>.*?<\/div>/gis,
+          ],
+          generator: () =>
+            this.generateAtlasComponentHtml(
+              { name: "Atlas Input", nodeId: "14647:163533" },
+              0
+            ),
+          name: "Input",
+        },
+
+        // Atlas Modal components
+        {
+          patterns: [
+            /<div[^>]*class\s*=\s*["'][^"']*atlas[-_]?modal[^"']*["'][^>]*>.*?<\/div>/gis,
+            /<section[^>]*class\s*=\s*["'][^"']*atlas[-_]?dialog[^"']*["'][^>]*>.*?<\/section>/gis,
+          ],
+          generator: () =>
+            this.generateAtlasComponentHtml(
+              { name: "Atlas Modal", nodeId: "14647:163535" },
+              0
+            ),
+          name: "Modal",
+        },
+      ];
+
+      // Process each Atlas component pattern
+      for (const atlasComponent of atlasPatterns) {
+        for (const pattern of atlasComponent.patterns) {
+          const matches = processedHtml.match(pattern);
+          if (matches) {
+            console.log(
+              `🔄 Found ${matches.length} ${atlasComponent.name} component(s) to replace...`
+            );
+
+            for (const match of matches) {
+              try {
+                // Generate the corresponding Atlas component
+                const atlasComponentHtml = await atlasComponent.generator();
+
+                // Replace the matched section with Atlas component
+                processedHtml = processedHtml.replace(
+                  match,
+                  atlasComponentHtml
+                );
+
+                console.log(
+                  `✅ Replaced ${atlasComponent.name} with Atlas component`
+                );
+              } catch (error) {
+                console.error(
+                  `❌ Failed to replace ${atlasComponent.name}:`,
+                  error.message
+                );
+                // Continue with the next match if one fails
+              }
+            }
+          }
+        }
+      }
+
+      return processedHtml;
+    } catch (error) {
+      console.error("Error processing HTML for Atlas components:", error);
+      return htmlContent; // Return original content if processing fails
+    }
+  }
+
+  /**
+   * Enhanced wireframe generation with Atlas component replacement
+   */
+  async generateFluentWireframeWithAtlasHeroes(components, layout = "default") {
+    // Generate the base wireframe
+    const baseWireframe = await this.generateWireframeHtml(components, layout);
+
+    // Process the wireframe to replace hero sections with Atlas components
+    const enhancedWireframe = await this.processHtmlForAtlasComponents(
+      baseWireframe
+    );
+
+    return enhancedWireframe;
   }
 }
 

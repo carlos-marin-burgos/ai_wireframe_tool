@@ -14,17 +14,19 @@ const FIGMA_TOKEN =
   process.env.FIGMA_ACCESS_TOKEN ||
   "figd_GgDW0X-9x98osaRbrkDNffeaWKbVjP6cJ6ZMUS5G";
 const ATLAS_FILE_ID = "uVA2amRR71yJZ0GS6RI6zL"; // From user's URL
-const ATLAS_HERO_NODE_ID = "14647:163530"; // From user's URL
+const ATLAS_LEARNING_PATH_NODE_ID = "14315:162386"; // New learning path card node ID
 
-async function fetchRealAtlasHero() {
+async function fetchRealAtlasLearningPath() {
   try {
-    console.log("🔄 Fetching real Atlas Hero component from Figma...");
+    console.log(
+      "🔄 Fetching real Atlas Learning Path Card component from Figma..."
+    );
     console.log(`📁 File ID: ${ATLAS_FILE_ID}`);
-    console.log(`🎯 Node ID: ${ATLAS_HERO_NODE_ID}`);
+    console.log(`🎯 Node ID: ${ATLAS_LEARNING_PATH_NODE_ID}`);
 
-    // Fetch the Atlas Hero component image
+    // Fetch the Atlas Learning Path component image
     const imageResponse = await axios.get(
-      `https://api.figma.com/v1/images/${ATLAS_FILE_ID}?ids=${ATLAS_HERO_NODE_ID}&format=png&scale=2`,
+      `https://api.figma.com/v1/images/${ATLAS_FILE_ID}?ids=${ATLAS_LEARNING_PATH_NODE_ID}&format=png&scale=2`,
       {
         headers: {
           "X-Figma-Token": FIGMA_TOKEN,
@@ -34,10 +36,13 @@ async function fetchRealAtlasHero() {
 
     if (
       imageResponse.data.images &&
-      imageResponse.data.images[ATLAS_HERO_NODE_ID]
+      imageResponse.data.images[ATLAS_LEARNING_PATH_NODE_ID]
     ) {
-      const imageUrl = imageResponse.data.images[ATLAS_HERO_NODE_ID];
-      console.log("✅ Successfully fetched Atlas Hero image URL:", imageUrl);
+      const imageUrl = imageResponse.data.images[ATLAS_LEARNING_PATH_NODE_ID];
+      console.log(
+        "✅ Successfully fetched Atlas Learning Path Card image URL:",
+        imageUrl
+      );
 
       // Generate HTML for the real Atlas Hero component
       const atlasHeroHTML = `

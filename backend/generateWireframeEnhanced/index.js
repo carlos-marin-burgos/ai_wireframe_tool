@@ -1,6 +1,9 @@
+// Enhanced wireframe generator (cleaned and restored)
+// Purpose: Generate an HTML wireframe via OpenAI and optionally inject Atlas components
+
 const { OpenAI } = require("openai");
 
-// Simple Atlas component post-processing (same as enhanced endpoint)
+// --- Atlas component injection helper ---
 function addAtlasComponents(html, description) {
   if (!html || typeof html !== "string") return html;
 
@@ -106,33 +109,34 @@ function addAtlasComponents(html, description) {
                         <p style="font-size: 10px; color: #8a8886; margin: 2px 0 0 0; opacity: 0.6;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
                     </div>
                 </div>
-                <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <img src="${atlasComponents.module}" alt="Atlas Module Card Component from Figma (Node: 14315:162386)" style="width: 100%; height: auto; display: block; object-fit: contain;" />
-                    <div class="atlas-component-info" style="text-align: center; margin-top: 8px; padding: 8px;">
-                        <p style="font-size: 11px; color: #605e5c; margin: 0; opacity: 0.8;">✅ Official Atlas Design Library Module Card</p>
-                        <p style="font-size: 10px; color: #8a8886; margin: 2px 0 0 0; opacity: 0.6;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
-                    </div>
-                </div>
-                <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <img src="${atlasComponents.module}" alt="Atlas Module Card Component from Figma (Node: 14315:162386)" style="width: 100%; height: auto; display: block; object-fit: contain;" />
-                    <div class="atlas-component-info" style="text-align: center; margin-top: 8px; padding: 8px;">
-                        <p style="font-size: 11px; color: #605e5c; margin: 0; opacity: 0.8;">✅ Official Atlas Design Library Module Card</p>
-                        <p style="font-size: 10px; color: #8a8886; margin: 2px 0 0 0; opacity: 0.6;">🎨 Node ID: 14315:162386 • Fetched from Figma</p>
-                    </div>
-                </div>
+            </div>
+            
+            <div class="atlas-credit" style="text-align: center; margin-top: 60px; padding: 24px; background: linear-gradient(135deg, rgba(0, 120, 212, 0.08), rgba(102, 187, 106, 0.08)); border-radius: 12px; border: 1px solid rgba(0, 120, 212, 0.2);">
+                <p style="margin: 0; color: #1e1e1e; font-size: 16px; font-weight: 600; margin-bottom: 8px;">🎨 Powered by Atlas Design Library</p>
+                <p style="margin: 0; color: #605e5c; font-size: 14px; line-height: 1.5;">These components are rendered directly from Microsoft's Atlas Design Library on Figma</p>
+                <p style="margin: 8px 0 0 0; color: #8a8886; font-size: 12px; opacity: 0.8;">Components are dynamically fetched and integrated into your wireframes</p>
             </div>
         </div>
     </section>`;
 
-    // Insert before the last closing body tag
-    processedHtml = processedHtml.replace(
-      "</body>",
-      learningSection + "\n</body>"
-    );
-    console.log("✅ Added Atlas Learning Path and Module components");
+    // Insert before closing body tag or append to existing content
+    if (processedHtml.includes("</body>")) {
+      processedHtml = processedHtml.replace(
+        "</body>",
+        learningSection + "\n</body>"
+      );
+    } else if (processedHtml.includes("</main>")) {
+      processedHtml = processedHtml.replace(
+        "</main>",
+        learningSection + "\n</main>"
+      );
+    } else {
+      processedHtml += learningSection;
+    }
+    console.log("✅ Added Atlas learning content section");
   }
 
-  // Count components for verification
+  // Count and log Atlas components
   const heroCount = (processedHtml.match(/atlas-hero-figma/g) || []).length;
   const moduleCount = (processedHtml.match(/atlas-module-card-figma/g) || [])
     .length;
@@ -147,12 +151,12 @@ function addAtlasComponents(html, description) {
   return processedHtml;
 }
 
-// Initialize OpenAI client
+// --- OpenAI initialization (supports local dev via local.settings.json) ---
 let openai = null;
 
 function initializeOpenAI() {
   try {
-    // Load local.settings.json values if in development
+    // Try to load local.settings.json for development if env not set
     if (!process.env.AZURE_OPENAI_KEY) {
       const fs = require("fs");
       const path = require("path");
@@ -166,147 +170,89 @@ function initializeOpenAI() {
           fs.readFileSync(localSettingsPath, "utf8")
         );
 
-        console.log("📁 Loading local.settings.json...");
+        console.log(
+          "📁 Loading local.settings.json for generateWireframeEnhanced..."
+        );
 
-        // Set environment variables from local.settings.json
-        Object.keys(localSettings.Values).forEach((key) => {
-          if (!process.env[key]) {
-            process.env[key] = localSettings.Values[key];
-            console.log(
-              `  Set ${key}: ${localSettings.Values[key]?.substring(0, 10)}...`
-            );
-          } else {
-            console.log(
-              `  Skipped ${key} (already set): ${process.env[key]?.substring(
-                0,
-                10
-              )}...`
-            );
-          }
+        Object.keys(localSettings.Values || {}).forEach((key) => {
+          if (!process.env[key]) process.env[key] = localSettings.Values[key];
         });
-
-        console.log("📁 Loaded local.settings.json for generateWireframe");
-      } catch (error) {
-        console.error("⚠️ Could not load local.settings.json:", error.message);
+      } catch (e) {
+        // ignore if file not present
       }
-    } else {
-      console.log(
-        "📁 AZURE_OPENAI_KEY already set, skipping local.settings.json"
-      );
-      console.log("🔍 Current env vars:");
-      console.log(
-        `  AZURE_OPENAI_KEY: ${process.env.AZURE_OPENAI_KEY?.substring(
-          0,
-          10
-        )}...`
-      );
-      console.log(
-        `  AZURE_OPENAI_ENDPOINT: ${process.env.AZURE_OPENAI_ENDPOINT}`
-      );
     }
+
     if (process.env.AZURE_OPENAI_KEY && process.env.AZURE_OPENAI_ENDPOINT) {
       const endpoint = process.env.AZURE_OPENAI_ENDPOINT.replace(/\/$/, "");
       const deployment = process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o";
       const apiVersion =
         process.env.AZURE_OPENAI_API_VERSION || "2024-08-01-preview";
 
-      // DEBUG: Log the actual values being used
-      console.log("🔍 DEBUG OpenAI Config:");
-      console.log("  Endpoint:", endpoint);
-      console.log("  Deployment:", deployment);
-      console.log("  API Version:", apiVersion);
-      console.log(
-        "  API Key starts with:",
-        process.env.AZURE_OPENAI_KEY?.substring(0, 10) + "..."
-      );
-      console.log(
-        "  Base URL:",
-        `${endpoint}/openai/deployments/${deployment}`
-      );
-
       openai = new OpenAI({
         apiKey: process.env.AZURE_OPENAI_KEY,
         baseURL: `${endpoint}/openai/deployments/${deployment}`,
         defaultQuery: { "api-version": apiVersion },
-        defaultHeaders: {
-          "api-key": process.env.AZURE_OPENAI_KEY,
-        },
+        defaultHeaders: { "api-key": process.env.AZURE_OPENAI_KEY },
       });
 
-      console.log("✅ OpenAI client initialized successfully");
-      console.log("🔑 Using endpoint:", endpoint);
-      console.log("🎯 Using deployment:", deployment);
+      console.log("✅ OpenAI client initialized for generateWireframeEnhanced");
       return true;
     }
-    console.log("⚠️ OpenAI environment variables not found");
+
+    console.log(
+      "⚠️ OpenAI environment variables not fully configured for generateWireframeEnhanced"
+    );
     return false;
   } catch (error) {
-    console.error("❌ Failed to initialize OpenAI client:", error);
+    console.error(
+      "❌ Failed to initialize OpenAI client for enhanced generator:",
+      error
+    );
     return false;
   }
 }
 
-// Initialize on startup
+// Initialize on module load
 initializeOpenAI();
 
-// Simple fallback wireframe generator
-// NO MORE FALLBACK FUNCTIONS - AI ONLY!
+// --- AI wireframe generation using OpenAI ---
+async function generateWithAI(description, options = {}) {
+  if (!openai) throw new Error("OpenAI not initialized");
 
-// AI wireframe generation
-async function generateWithAI(description) {
-  if (!openai) {
-    throw new Error("OpenAI not initialized");
-  }
+  const theme = options.theme || "professional";
+  const colorScheme = options.colorScheme || "blue";
+  const fastMode = options.fastMode !== false;
 
-  const prompt = `Create a complete HTML wireframe for Microsoft Learn platform based on: "${description}"
+  const prompt = `Create a complete, modern HTML wireframe for: ${description}\n\nRequirements:\n- Use modern CSS with flexbox/grid\n- Include semantic HTML structure\n- ${theme} theme with ${colorScheme} color scheme\n- Mobile-responsive design\n- Include proper meta tags and DOCTYPE\n- Use inline CSS for complete standalone file\n- Create sections for: header, navigation, main content, and footer\n${
+    fastMode
+      ? "- Keep it simple and fast to load"
+      : "- Include rich interactions and detailed styling"
+  }\n\nReturn only the complete HTML code, no explanations.`;
 
-Requirements:
-- ALWAYS start with the official Microsoft Learn site header as the FIRST element in the body
-- Use Microsoft Learn design system with header background #ffffff and black text #000000
-- Include Segoe UI font family
-- Make it responsive and accessible
-- Include the exact components requested in the description
-- Use semantic HTML and modern CSS
+  const deployment = process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o";
 
-MICROSOFT LEARN HEADER TEMPLATE (ALWAYS INCLUDE FIRST):
-<header style="background: #ffffff; color: #000000; padding: 12px 24px; border-bottom: 1px solid #e5e5e5; font-family: 'Segoe UI', system-ui, sans-serif;">
-  <div style="display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto;">
-    <div style="display: flex; align-items: center;">
-      <svg aria-hidden="true" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; margin-right: 16px;">
-        <path d="M11.5216 0.5H0V11.9067H11.5216V0.5Z" fill="#f25022" />
-        <path d="M24.2418 0.5H12.7202V11.9067H24.2418V0.5Z" fill="#7fba00" />
-        <path d="M11.5216 13.0933H0V24.5H11.5216V13.0933Z" fill="#00a4ef" />
-        <path d="M24.2418 13.0933H12.7202V24.5H24.2418V13.0933Z" fill="#ffb900" />
-      </svg>
-      <div style="width: 1px; height: 24px; background: #e1e5e9; margin-right: 16px;"></div>
-      <span style="font-weight: 600; font-size: 16px; color: #000000;">Microsoft Learn</span>
-    </div>
-    <nav style="display: flex; gap: 24px;">
-      <a href="#" style="color: #000000; text-decoration: none; font-size: 14px;">Documentation</a>
-      <a href="#" style="color: #000000; text-decoration: none; font-size: 14px;">Training</a>
-      <a href="#" style="color: #000000; text-decoration: none; font-size: 14px;">Certifications</a>
-    </nav>
-  </div>
-</header>
-
-COLOR GUIDELINES:
-- Header background: #ffffff with black text (#000000)
-- Primary buttons: #0078d4 (keep blue for buttons and links)
-- Hero/banner sections: #ffffff background
-
-Generate ONLY the HTML code (starting with <!DOCTYPE html>).`;
-
-  const response = await openai.chat.completions.create({
-    model: process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o",
-    messages: [{ role: "user", content: prompt }],
+  const completion = await openai.chat.completions.create({
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a professional web developer who creates clean, modern HTML wireframes. Return only valid HTML code.",
+      },
+      { role: "user", content: prompt },
+    ],
+    model: deployment,
     max_tokens: 4000,
     temperature: 0.7,
   });
 
-  return response.choices[0]?.message?.content || "";
+  const html = completion.choices?.[0]?.message?.content || "";
+  return html
+    .replace(/```html\n?/g, "")
+    .replace(/```\n?/g, "")
+    .trim();
 }
 
-// Main Azure Function
+// --- Azure Function handler ---
 module.exports = async function (context, req) {
   const startTime = Date.now();
 
@@ -321,21 +267,26 @@ module.exports = async function (context, req) {
       },
     };
 
-    // Handle OPTIONS request
+    // Handle preflight
     if (req.method === "OPTIONS") {
       context.res.status = 200;
       context.res.body = "";
       return;
     }
 
-    // Validate request
     if (req.method !== "POST") {
       context.res.status = 405;
       context.res.body = JSON.stringify({ error: "Method not allowed" });
       return;
     }
 
-    const { description } = req.body || {};
+    const {
+      description,
+      theme,
+      colorScheme,
+      fastMode,
+      includeAtlas = true,
+    } = req.body || {};
 
     if (!description) {
       context.res.status = 400;
@@ -343,97 +294,68 @@ module.exports = async function (context, req) {
       return;
     }
 
-    let html;
-    let source = "openai";
-
-    // ONLY AI generation - NO FALLBACKS!
+    // Ensure OpenAI client
     if (!openai) {
-      // Try to reinitialize OpenAI
       const initialized = initializeOpenAI();
       if (!initialized) {
         context.res.status = 503;
         context.res.body = JSON.stringify({
           success: false,
           error: "AI_SERVICE_UNAVAILABLE",
-          message:
-            "AI service is not available. Please check the service status and try again.",
-          timestamp: new Date().toISOString(),
+          message: "AI service is not available. Please check configuration.",
         });
         return;
       }
     }
 
-    try {
-      html = await generateWithAI(description);
-      if (!html || !html.includes("<!DOCTYPE html>") || html.length < 1000) {
-        throw new Error("AI response insufficient or invalid");
-      }
+    // Generate base wireframe
+    let html = await generateWithAI(description, {
+      theme,
+      colorScheme,
+      fastMode,
+    });
 
-      // 🎨 Add Atlas components to the generated wireframe
+    if (!html || !html.includes("<!DOCTYPE html>") || html.length < 500) {
+      throw new Error("AI response insufficient or invalid");
+    }
+
+    // Optionally apply Atlas components
+    if (includeAtlas) {
       html = addAtlasComponents(html, description);
-
-      // Count Atlas components for stats
-      const heroCount = (html.match(/atlas-hero-figma/g) || []).length;
-      const moduleCount = (html.match(/atlas-module-card-figma/g) || []).length;
-      const learningPathCount = (
-        html.match(/atlas-learning-path-card-figma/g) || []
-      ).length;
-
-      console.log(
-        `✅ Wireframe completed with Atlas components: Hero: ${heroCount}, Modules: ${moduleCount}, Learning Paths: ${learningPathCount}`
-      );
-    } catch (aiError) {
-      console.error("❌ AI generation failed:", aiError.message);
-
-      context.res.status = 503;
-      context.res.body = JSON.stringify({
-        success: false,
-        error: "AI_GENERATION_FAILED",
-        message: `AI generation failed: ${aiError.message}. No fallback templates available - only real AI generation.`,
-        timestamp: new Date().toISOString(),
-        details: aiError.message,
-      });
-      return;
     }
 
     const processingTime = Date.now() - startTime;
 
-    // Count Atlas components for response stats
-    const heroCount = (html.match(/atlas-hero-figma/g) || []).length;
-    const moduleCount = (html.match(/atlas-module-card-figma/g) || []).length;
-    const learningPathCount = (
-      html.match(/atlas-learning-path-card-figma/g) || []
-    ).length;
+    // Stats
+    const atlasStats = {
+      hero: (html.match(/atlas-hero-figma/g) || []).length,
+      modules: (html.match(/atlas-module-card-figma/g) || []).length,
+      learningPaths: (html.match(/atlas-learning-path-card-figma/g) || [])
+        .length,
+    };
 
     context.res.status = 200;
     context.res.body = {
+      success: true,
       html,
-      source,
-      aiGenerated: source === "openai",
-      processingTimeMs: processingTime,
-      fallback: source === "fallback",
-      stats: {
-        atlasComponents: {
-          hero: heroCount,
-          modules: moduleCount,
-          learningPaths: learningPathCount,
-          total: heroCount + moduleCount + learningPathCount,
-        },
+      metadata: {
+        theme: theme || "professional",
+        colorScheme: colorScheme || "blue",
+        fastMode: fastMode !== false,
+        includeAtlas: includeAtlas !== false,
+        atlasComponents: atlasStats,
+        generatedAt: new Date().toISOString(),
+        processingTimeMs: processingTime,
+        descriptionPreview: description.substring(0, 200),
       },
     };
   } catch (error) {
-    const processingTime = Date.now() - startTime;
-    console.error("❌ Function error:", error);
-
-    // NO EMERGENCY FALLBACK - Return proper error
+    console.error("❌ Enhanced wireframe generation failed:", error);
     context.res.status = 500;
-    context.res.body = JSON.stringify({
+    context.res.body = {
       success: false,
-      error: "FUNCTION_ERROR",
-      message:
-        "Internal server error occurred. No fallback templates available.",
-      timestamp: new Date().toISOString(),
-      processingTimeMs: processingTime,
-    });
+      error: error.message,
+      details: error.stack,
+    };
   }
 };
