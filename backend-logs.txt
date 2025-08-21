@@ -2573,3 +2573,62 @@ For detailed output, run func with --verbose flag.
 [2025-08-21T18:53:50.765Z] Worker 0a556412-04d2-4492-b77e-5752398025bc received FunctionLoadRequest
 [2025-08-21T18:53:50.777Z] Host restarted.
 [2025-08-21T18:53:55.510Z] Host lock lease acquired by instance ID '00000000000000000000000049CADE8B'.
+[2025-08-21T19:05:04.168Z] Executing HTTP request: {
+[2025-08-21T19:05:04.168Z]   "requestId": "f80b6aea-efb5-421f-843d-2b0702c56bd8",
+[2025-08-21T19:05:04.168Z]   "method": "POST",
+[2025-08-21T19:05:04.168Z]   "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0",
+[2025-08-21T19:05:04.168Z]   "uri": "/api/generate-suggestions"
+[2025-08-21T19:05:04.168Z] }
+[2025-08-21T19:05:04.202Z] Executing 'Functions.generateSuggestions' (Reason='This function was programmatically called via the host APIs.', Id=08d8bb64-336e-4191-92b5-1b1630cc0602)
+[2025-08-21T19:05:04.265Z] Worker 0a556412-04d2-4492-b77e-5752398025bc received FunctionInvocationRequest with invocationId 08d8bb64-336e-4191-92b5-1b1630cc0602
+[2025-08-21T19:05:04.268Z] Executed 'Functions.generateSuggestions' (Succeeded, Id=08d8bb64-336e-4191-92b5-1b1630cc0602, Duration=76ms)
+[2025-08-21T19:05:04.270Z] Executed HTTP request: {
+[2025-08-21T19:05:04.270Z]   "requestId": "f80b6aea-efb5-421f-843d-2b0702c56bd8",
+[2025-08-21T19:05:04.270Z]   "identities": "",
+[2025-08-21T19:05:04.270Z]   "status": "200",
+[2025-08-21T19:05:04.270Z]   "duration": "103"
+[2025-08-21T19:05:04.270Z] }
+[2025-08-21T19:05:06.379Z] Executing HTTP request: {
+[2025-08-21T19:05:06.379Z]   "requestId": "564b28b8-5bd9-4bf7-9640-aea087029fa0",
+[2025-08-21T19:05:06.379Z]   "method": "POST",
+[2025-08-21T19:05:06.379Z]   "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0",
+[2025-08-21T19:05:06.379Z]   "uri": "/api/generate-wireframe-enhanced"
+[2025-08-21T19:05:06.379Z] }
+[2025-08-21T19:05:06.382Z] Executing 'Functions.generateWireframeEnhanced' (Reason='This function was programmatically called via the host APIs.', Id=851acae3-b191-404d-b0d8-cdb43a242d49)
+[2025-08-21T19:05:06.448Z] Worker 0a556412-04d2-4492-b77e-5752398025bc received FunctionInvocationRequest with invocationId 851acae3-b191-404d-b0d8-cdb43a242d49
+[2025-08-21T19:05:14.921Z] 🎨 Processing wireframe for Atlas components...
+[2025-08-21T19:05:14.921Z] 🔍 Atlas component check (ENHANCED):
+[2025-08-21T19:05:14.921Z]     Description: "Design Microsoft Learn's documentation page with table of contents and code examples"
+[2025-08-21T19:05:14.921Z]     Contains learning keywords: false
+[2025-08-21T19:05:14.921Z]     Is hero section exclusion: false
+[2025-08-21T19:05:14.921Z]     Final isLearningPlatform: false
+[2025-08-21T19:05:14.921Z] ℹ️ Not a learning platform, skipping Atlas components
+[2025-08-21T19:05:14.927Z] Executed 'Functions.generateWireframeEnhanced' (Succeeded, Id=851acae3-b191-404d-b0d8-cdb43a242d49, Duration=8546ms)
+[2025-08-21T19:05:14.929Z] Executed HTTP request: {
+[2025-08-21T19:05:14.929Z]   "requestId": "564b28b8-5bd9-4bf7-9640-aea087029fa0",
+[2025-08-21T19:05:14.929Z]   "identities": "",
+[2025-08-21T19:05:14.929Z]   "status": "200",
+[2025-08-21T19:05:14.929Z]   "duration": "8550"
+[2025-08-21T19:05:14.929Z] }
+[2025-08-21T19:08:20.004Z] Executing HTTP request: {
+[2025-08-21T19:08:20.004Z]   "requestId": "b6d219e3-5527-4240-82eb-b7ae9c86eb98",
+[2025-08-21T19:08:20.004Z]   "method": "POST",
+[2025-08-21T19:08:20.004Z]   "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0",
+[2025-08-21T19:08:20.004Z]   "uri": "/api/generate-wireframe-enhanced"
+[2025-08-21T19:08:20.005Z] }
+[2025-08-21T19:08:20.025Z] Executing 'Functions.generateWireframeEnhanced' (Reason='This function was programmatically called via the host APIs.', Id=4bc5881b-3ded-49ca-9f63-2ef05bc02510)
+[2025-08-21T19:08:20.068Z] Worker 0a556412-04d2-4492-b77e-5752398025bc received FunctionInvocationRequest with invocationId 4bc5881b-3ded-49ca-9f63-2ef05bc02510
+[2025-08-21T19:08:28.570Z] 🎨 Processing wireframe for Atlas components...
+[2025-08-21T19:08:28.571Z] 🔍 Atlas component check (ENHANCED):
+[2025-08-21T19:08:28.571Z]     Description: "Design Microsoft Learn's documentation page with table of contents and code examples"
+[2025-08-21T19:08:28.571Z]     Contains learning keywords: false
+[2025-08-21T19:08:28.571Z]     Is hero section exclusion: false
+[2025-08-21T19:08:28.571Z]     Final isLearningPlatform: false
+[2025-08-21T19:08:28.571Z] ℹ️ Not a learning platform, skipping Atlas components
+[2025-08-21T19:08:28.576Z] Executed 'Functions.generateWireframeEnhanced' (Succeeded, Id=4bc5881b-3ded-49ca-9f63-2ef05bc02510, Duration=8556ms)
+[2025-08-21T19:08:28.579Z] Executed HTTP request: {
+[2025-08-21T19:08:28.579Z]   "requestId": "b6d219e3-5527-4240-82eb-b7ae9c86eb98",
+[2025-08-21T19:08:28.579Z]   "identities": "",
+[2025-08-21T19:08:28.579Z]   "status": "200",
+[2025-08-21T19:08:28.579Z]   "duration": "8576"
+[2025-08-21T19:08:28.579Z] }

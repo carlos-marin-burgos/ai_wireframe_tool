@@ -51,6 +51,372 @@
    WIREFRAME COMPONENTS
    ============================================ */
 
+/* Basic Header Styles for Wireframes */
+header {
+  background-color: #e8e6de;
+  color: #ccc;
+  padding: 1em;
+}
+
+/* ============================================
+   WIREFRAME HEADING STYLES (NO H1 TAGS)
+   ============================================ */
+
+/* Primary Heading Style - replaces <h1> usage */
+.wireframe-heading,
+.wireframe-title,
+.main-heading,
+.primary-title {
+  color: #161616;
+  font-feature-settings: "liga" off, "clig" off;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 40px; /* 125% */
+  margin: 0 0 1rem 0;
+  display: block;
+}
+
+/* Secondary Heading Styles */
+.wireframe-subheading,
+.section-title {
+  color: #161616;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 32px;
+  margin: 1.5rem 0 0.75rem 0;
+  display: block;
+}
+
+/* Tertiary Heading Styles */
+.wireframe-section-header,
+.subsection-title {
+  color: #161616;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+  margin: 1rem 0 0.5rem 0;
+  display: block;
+}
+
+/* Override any potential h1 styles in wireframe content */
+.wireframe-preview h1,
+.wireframe-content h1,
+.generated-wireframe h1 {
+  color: #161616 !important;
+  font-feature-settings: "liga" off, "clig" off !important;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 32px !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  line-height: 40px !important;
+  margin: 0 0 1rem 0 !important;
+  display: block !important;
+}
+
+/* Ensure other heading levels maintain consistency */
+.wireframe-preview h2,
+.wireframe-content h2,
+.generated-wireframe h2 {
+  color: #161616 !important;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 24px !important;
+  font-weight: 600 !important;
+  line-height: 32px !important;
+  margin: 1.5rem 0 0.75rem 0 !important;
+}
+
+.wireframe-preview h3,
+.wireframe-content h3,
+.generated-wireframe h3 {
+  color: #161616 !important;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  line-height: 28px !important;
+  margin: 1rem 0 0.5rem 0 !important;
+}
+
+/* ============================================
+   WIREFRAME LIST STYLES
+   ============================================ */
+
+/* List Styling for Wireframes */
+ul,
+ol {
+  margin: 0.75rem 0;
+  padding-left: 1.5rem;
+  color: #323130;
+  line-height: 1.6;
+}
+
+li {
+  margin: 0.5rem 0;
+  color: #323130;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Navigation Lists */
+ul.nav-links,
+ul.nav-list,
+.nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.nav-links li,
+.nav-list li {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.nav-links a,
+.nav-list a {
+  text-decoration: none;
+  color: #323130;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  font-weight: 500;
+}
+
+.nav-links a:hover,
+.nav-list a:hover {
+  background-color: #f3f2f1;
+  color: #323130;
+}
+
+/* Sidebar Navigation Lists */
+.sidebar ul,
+.side-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li,
+.side-nav li {
+  margin: 0;
+  border-bottom: 1px solid #f3f2f1;
+}
+
+.sidebar a,
+.side-nav a {
+  display: block;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  color: #605e5c;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.sidebar a:hover,
+.side-nav a:hover,
+.sidebar a.active,
+.side-nav a.active {
+  background-color: #f8f9fa;
+  color: #323130;
+  border-left: 3px solid #e8e6de;
+}
+
+/* Learning Objectives Lists */
+.learning-objectives ul,
+.module-content ul {
+  list-style-type: disc;
+  padding-left: 1.25rem;
+  margin: 0.75rem 0;
+}
+
+.learning-objectives li,
+.module-content li {
+  margin: 0.4rem 0;
+  color: #605e5c;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* Breadcrumb Lists */
+.breadcrumb,
+ol.breadcrumb {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.breadcrumb li {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb li:not(:last-child)::after {
+  content: "/";
+  margin-left: 0.5rem;
+  color: #a19f9d;
+}
+
+.breadcrumb a {
+  text-decoration: none;
+  color: #605e5c;
+  transition: color 0.2s ease;
+}
+
+.breadcrumb a:hover {
+  color: #323130;
+  text-decoration: underline;
+}
+
+.breadcrumb .active {
+  color: #323130;
+  font-weight: 500;
+}
+
+/* Feature Lists */
+.features ul,
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.features li,
+.feature-list li {
+  margin: 0.75rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  color: #323130;
+}
+
+.features li::before,
+.feature-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #107c10;
+  font-weight: bold;
+}
+
+/* General Content Lists - Default styling for unclassed lists */
+.content ul:not([class]),
+.main-content ul:not([class]),
+.wireframe-content ul:not([class]),
+div:not([class]) ul:not([class]) {
+  list-style-type: disc;
+  margin: 0.75rem 0;
+  padding-left: 1.5rem;
+  color: #323130;
+}
+
+.content li:not([class]),
+.main-content li:not([class]),
+.wireframe-content li:not([class]),
+div:not([class]) li:not([class]) {
+  margin: 0.4rem 0;
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+/* Ordered Lists */
+ol:not([class]) {
+  list-style-type: decimal;
+  margin: 0.75rem 0;
+  padding-left: 1.5rem;
+  color: #323130;
+}
+
+/* Nested Lists */
+ul ul,
+ol ol,
+ul ol,
+ol ul {
+  margin: 0.25rem 0;
+  padding-left: 1.25rem;
+}
+
+ul ul {
+  list-style-type: circle;
+}
+
+ul ul ul {
+  list-style-type: square;
+}
+
+/* Prerequisites and Requirements Lists */
+.prerequisites ul,
+.requirements ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.prerequisites li,
+.requirements li {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  color: #605e5c;
+  font-size: 0.875rem;
+}
+
+.prerequisites li::before,
+.requirements li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #e8e6de;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* Step Lists */
+.steps ol,
+.step-list {
+  counter-reset: step-counter;
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.steps li,
+.step-list li {
+  counter-increment: step-counter;
+  margin: 1rem 0;
+  padding-left: 2.5rem;
+  position: relative;
+  color: #323130;
+}
+
+.steps li::before,
+.step-list li::before {
+  content: counter(step-counter);
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #e8e6de;
+  color: #323130;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
 /* Onboarding Section */
 .onboarding h3 {
   color: #323130;
@@ -667,7 +1033,7 @@
 }
 
 .microsoft-learn-header .profile-btn {
-  background: #0078d4;
+  background: #e8e6de;
   color: white;
   font-size: 14px;
 }
