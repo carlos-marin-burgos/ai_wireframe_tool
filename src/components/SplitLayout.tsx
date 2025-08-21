@@ -884,7 +884,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         loading
       });
     }
-  }, [description, loading, setDescription, conversationHistory.length, showImageUpload, setShowImageUpload, addMessage, validateChatInput]);
+  }, [description, loading, conversationHistory.length, showImageUpload, setShowImageUpload, addMessage, validateChatInput, handleSubmit]);
 
   // Scroll to bottom of chat
   const scrollToBottom = () => {

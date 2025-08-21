@@ -26,12 +26,6 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
         // Parse and display the HTML content
         containerRef.current.innerHTML = htmlContent;
 
-        // Ensure all elements are visible (remove any transparency)
-        const allElements = Array.from(containerRef.current.querySelectorAll('*')) as HTMLElement[];
-        allElements.forEach(el => {
-            el.style.opacity = '1';
-        });
-
         // Initialize dragula on the container itself
         dragulaRef.current = dragula([containerRef.current], {
             moves: function (el, source, handle, sibling) {

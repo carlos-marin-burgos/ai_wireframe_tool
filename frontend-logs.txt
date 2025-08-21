@@ -1,12 +1,12 @@
 
-  VITE v6.3.5  ready in 295 ms
+  VITE v6.3.5  ready in 225 ms
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: http://192.168.1.91:5173/
-11:05:00 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.tsx
-11:05:00 AM [vite] (client) hmr update /src/wireframe-styles.css
-11:05:00 AM [vite] (client) hmr update /src/components/SimpleDragWireframe.css
-11:05:00 AM [vite] (client) hmr update /src/App.tsx
-11:05:00 AM [vite] (client) hmr update /src/App.tsx
-11:05:00 AM [vite] (client) hmr update /src/components/TopNavbarLanding.css
-11:05:00 AM [vite] (client) hmr update /src/components/SplitLayout.tsx
+11:18:01 AM [vite] (client) hmr update /src/wireframe-styles.css
+11:18:06 AM [vite] (client) hmr update /src/wireframe-styles.css
+11:18:10 AM [vite] (client) hmr update /src/wireframe-styles.css
+11:18:30 AM [vite] (client) hmr update /src/wireframe-styles.css
+11:18:31 AM [vite] (client) hmr update /src/wireframe-styles.css
+11:18:32 AM [vite] (client) hmr update /src/wireframe-styles.css
+11:19:10 AM [vite] (client) hmr update /src/wireframe-styles.css
