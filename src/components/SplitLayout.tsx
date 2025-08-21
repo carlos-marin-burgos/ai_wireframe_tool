@@ -193,15 +193,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   // Track if wireframe has been added to recents to avoid duplicates
   const [addedToRecents, setAddedToRecents] = useState<boolean>(false);
 
-  // Memoized callback to handle content updates from SimpleDragWireframe
-  const handleWireframeContentUpdate = useCallback((newContent: string) => {
-    if (currentPageId) {
-      setPageContents(prev => ({ ...prev, [currentPageId]: newContent }));
-    } else {
-      setHtmlWireframe(newContent);
-    }
-  }, [currentPageId, setHtmlWireframe]);
-
   // Function to validate chat input - check if it's only numbers
   const validateChatInput = (input: string): boolean => {
     const trimmedInput = input.trim();
@@ -881,7 +872,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       // Check our ref to make sure this isn't the first message from landing page
       if (initialMessageAddedRef.current || conversationHistory.length > 0) {
         addMessage('user', description);
-        addMessage('ai', '� Generating your wireframe...');
+        addMessage('ai', '� Generating wireframe with Microsoft Learn components...');
       }
 
       // Call the original handleSubmit for direct AI generation
@@ -1139,7 +1130,13 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               <div className="wireframe-content">
                 <SimpleDragWireframe
                   htmlContent={currentPageId ? (pageContents[currentPageId] || htmlWireframe) : htmlWireframe}
-                  onUpdateContent={handleWireframeContentUpdate}
+                  onUpdateContent={(newContent) => {
+                    if (currentPageId) {
+                      setPageContents(prev => ({ ...prev, [currentPageId]: newContent }));
+                    } else {
+                      setHtmlWireframe(newContent);
+                    }
+                  }}
                 />
               </div>
             </div>

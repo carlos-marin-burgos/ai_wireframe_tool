@@ -4,22 +4,6 @@
 /* Main app styles should go in App.css */
 
 /* ============================================
-   MINIMAL TEXT CONTRAST HELPERS
-   ============================================ */
-
-/* Basic navigation contrast (only when needed) */
-nav a {
-  color: #333;
-}
-
-/* Dark navigation overrides */
-nav[style*="background-color: #333"] a,
-nav[style*="background-color: #000"] a,
-.dark-nav a {
-  color: #fff;
-}
-
-/* ============================================
    WIREFRAME CONTAINER & LAYOUT
    ============================================ */
 
@@ -500,7 +484,7 @@ nav[style*="background-color: #000"] a,
 
 /* Dark theme variations */
 .ms-header--dark,
-.microsoft-learn-header.ms-header--dark {
+.microsoft-learn-header {
   background: #2b2b2b;
   border-bottom-color: #605e5c;
   color: #ffffff;
@@ -590,12 +574,12 @@ nav[style*="background-color: #000"] a,
 }
 
 .ms-header--dark .ms-nav-link,
-.ms-header--dark.microsoft-learn-header .main-nav a {
+.microsoft-learn-header .main-nav a {
   color: #cccccc;
 }
 
 .ms-header--dark .ms-nav-link:hover,
-.ms-header--dark.microsoft-learn-header .main-nav a:hover {
+.microsoft-learn-header .main-nav a:hover {
   background: #464648;
   color: #ffffff;
 }

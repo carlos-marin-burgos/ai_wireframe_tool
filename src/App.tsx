@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import "./wireframe-styles.css";
 import "./styles/microsoftlearn-card.css";
@@ -246,8 +246,8 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
     // Only set non-empty HTML
     if (safeHtml && safeHtml.length > 0) {
-      // Process the wireframe to fix images only - don't override styling
-      const processedHtml = processWireframeForProduction(safeHtml, { addMicrosoftBranding: false });
+      // Process the wireframe to fix images and Microsoft branding
+      const processedHtml = processWireframeForProduction(safeHtml);
       setHtmlWireframe(processedHtml);
 
       // Add to recents
@@ -856,9 +856,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
       // Always return fallback suggestions when API fails
       return API_CONFIG.FALLBACK_SUGGESTIONS;
     }
-  };
-
-  const handleGenerateAiSuggestions = useCallback(async (input: string) => {
+  }; const handleGenerateAiSuggestions = async (input: string) => {
     // Immediate feedback with fast local suggestions
     const shouldShowSuggestions = input.trim().length >= 2;
 
@@ -906,7 +904,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
       setShowAiSuggestions(false);
       setSuggestionLoading(false);
     }
-  }, []);
+  };
 
   const handleMultiStep = () => {
     // Stub for future multi-step functionality

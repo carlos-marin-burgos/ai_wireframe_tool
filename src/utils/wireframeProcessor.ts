@@ -163,23 +163,13 @@ export function validateWireframeHTML(html: string): {
 
 /**
  * Process wireframe HTML for production use
- * @param html - Raw HTML wireframe
- * @param options - Processing options
  */
-export function processWireframeForProduction(
-  html: string,
-  options: { addMicrosoftBranding?: boolean } = {}
-): string {
-  // Step 1: Fix Microsoft logo references
-  let processedHtml = fixMicrosoftLogoReferences(html);
+export function processWireframeForProduction(html: string): string {
+  const validation = validateWireframeHTML(html);
 
-  // Step 2: Fix all image placeholders
-  processedHtml = fixWireframeImages(processedHtml);
-
-  // Step 3: Add Microsoft Learn branding enhancements ONLY if requested
-  if (options.addMicrosoftBranding) {
-    processedHtml = addMicrosoftLearnEnhancements(processedHtml);
+  if (!validation.isValid) {
+    console.log("Wireframe validation issues:", validation.issues);
   }
 
-  return processedHtml;
+  return validation.fixedHtml;
 }

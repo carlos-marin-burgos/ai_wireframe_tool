@@ -9,42 +9,65 @@
   padding: 5px 20px 20px;
 }
 
-/* Minimal drag styling - preserve original wireframe appearance */
+/* Make ALL elements in the container visible and draggable */
 .dragula-container > * {
-  cursor: move;
+  opacity: 1 !important;
+  background: #f8f9fa !important;
+  border: 2px dashed #dee2e6 !important;
+  padding: 10px !important;
+  margin: 10px !important;
+  cursor: move !important;
+  border-radius: 6px;
   transition: all 0.2s ease;
   position: relative;
 }
 
-/* Show dashed border on hover to indicate draggable elements */
 .dragula-container > *:hover {
-  border: 2px dashed #0078d4 !important;
-  box-sizing: border-box;
+  border-color: #0078d4 !important;
+  background: #e7f3ff !important;
 }
 
-/* Drag handle indicator */
+/* Drag icon on hover */
 .dragula-container > *:hover::before {
   content: "⋮⋮";
   position: absolute;
-  top: 5px;
-  right: 5px;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%) rotate(90deg);
+  font-size: 16px;
   color: #0078d4;
   font-weight: bold;
-  font-size: 14px;
-  transform: rotate(90deg);
-  z-index: 10;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 2px 4px;
-  border-radius: 3px;
   pointer-events: none;
+  z-index: 10;
 }
 
-/* Dragula specific styles */
+/* Bootstrap column styling */
+.dragula-container .col,
+.dragula-container [class*="col-"] {
+  padding: 8px;
+  border: 2px dashed #dee2e6;
+  border-radius: 6px;
+  margin: 4px 0;
+  background: #f8f9fa;
+  min-height: 100px;
+  transition: all 0.2s ease;
+}
+
+.dragula-container .col:hover,
+.dragula-container [class*="col-"]:hover {
+  border-color: #0078d4;
+  background: #e7f3ff;
+}
+
+/* Dragula specific styles - prevent ALL transparency */
 .simple-drag-wireframe .gu-mirror {
   position: fixed !important;
   margin: 0 !important;
   z-index: 9999 !important;
-  opacity: 0.8 !important;
+  opacity: 1 !important;
+  background: white !important;
+  border: 2px solid #0078d4 !important;
+  border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -60,18 +83,42 @@
 }
 
 .simple-drag-wireframe .gu-transit {
-  opacity: 0.5 !important;
+  opacity: 1 !important;
+  background: #f0f8ff !important;
   border: 2px dashed #0078d4 !important;
 }
 
-/* Drop zone highlighting */
-.dragula-container.gu-over {
-  background-color: rgba(0, 120, 212, 0.05);
-  border: 2px dashed #0078d4;
-  border-radius: 8px;
+/* Force ALL elements to be visible */
+.simple-drag-wireframe * {
+  opacity: 1 !important;
 }
 
-/* Make sure elements maintain their draggable appearance */
-.dragula-container > *:not(:hover) {
-  border: 1px solid transparent;
+.simple-drag-wireframe .dragula-container * {
+  opacity: 1 !important;
+}
+
+/* Drop zone highlighting */
+.dragula-container .row {
+  min-height: 80px;
+  padding: 10px;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  background: white;
+}
+
+.dragula-container .row.gu-over {
+  background: #e7f3ff !important;
+  border-color: #0078d4 !important;
+}
+
+/* Force buttons to be fully opaque */
+.simple-drag-wireframe .btn,
+.simple-drag-wireframe button,
+.simple-drag-wireframe input[type="button"],
+.simple-drag-wireframe input[type="submit"] {
+  opacity: 1 !important;
+  visibility: visible !important;
+  background-color: #007bff !important; /* Example color */
+  color: white !important;
 }

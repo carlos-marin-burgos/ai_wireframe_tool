@@ -49,6 +49,10 @@ function addAtlasComponents(html, description) {
         <div class="container">
           <div class="atlas-component atlas-hero-figma" data-node-id="14647:163530" style="max-width: 100%; overflow: hidden;">
               <img src="${atlasComponents.hero}" alt="Atlas Hero Component from Figma" style="width: 100%; height: auto; display: block; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);" />
+              <div class="atlas-hero-overlay" style="text-align: center; margin-top: 12px; background: rgba(255,255,255,0.95); padding: 8px; border-radius: 6px; border: 1px solid #e1e1e1;">
+                  <p style="font-size: 12px; color: #323130; margin: 0; font-weight: 600;">✅ Official Atlas Design Library Hero Component (Node: 14647:163530)</p>
+                  <p style="font-size: 11px; color: #605e5c; margin: 4px 0 0 0; font-weight: 500;">🎨 Fetched directly from Figma Atlas Design Library</p>
+              </div>
           </div>
         </div>
       </section>`
@@ -227,11 +231,13 @@ async function generateWithAI(description, options = {}) {
   const colorScheme = options.colorScheme || "blue";
   const fastMode = options.fastMode !== false;
 
-      const prompt = `Create a complete, modern HTML wireframe for: ${description}\n\nRequirements:\n- Use modern CSS with flexbox/grid\n- Include semantic HTML structure\n- ${theme} theme with ${colorScheme} color scheme\n- Mobile-responsive design\n- Include proper meta tags and DOCTYPE\n- Use inline CSS for complete standalone file\n- Create sections for: header, navigation, main content, and footer\n- Use appropriate colors and backgrounds for a professional look\n- Ensure good contrast between text and backgrounds\n- DO NOT include any theme branding, watermarks, or "Microsoft Learn" text\n- Focus on clean, neutral wireframe content\n${
+  const prompt = `Create a complete, modern HTML wireframe for: ${description}\n\nRequirements:\n- Use modern CSS with flexbox/grid\n- Include semantic HTML structure\n- ${theme} theme with ${colorScheme} color scheme\n- Mobile-responsive design\n- Include proper meta tags and DOCTYPE\n- Use inline CSS for complete standalone file\n- Create sections for: header, navigation, main content, and footer\n- IMPORTANT: Ensure proper color contrast - use dark text (#333) on light backgrounds (#fff, #f8f9fa) and light text (#fff) only on dark backgrounds (#333, #007bff)\n- Avoid opacity values below 0.9 for text to ensure readability\n${
     fastMode
       ? "- Keep it simple and fast to load"
       : "- Include rich interactions and detailed styling"
-  }\n\nReturn only the complete HTML code, no explanations.`;  const deployment = process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o";
+  }\n\nReturn only the complete HTML code, no explanations.`;
+
+  const deployment = process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o";
 
   const completion = await openai.chat.completions.create({
     messages: [
