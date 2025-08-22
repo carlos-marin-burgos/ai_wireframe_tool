@@ -1,7 +1,23 @@
 #!/bin/bash
 
 # Bulletproof Development Environment Starter
-# This script eliminates the constant connection issues by:
+# This script eliminates th# Get the project root directory (parent of scripts)
+PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$PROJECT_ROOT"
+
+# Step 2: Check if we're in the right directory
+log_info "Step 2: Verifying project structure..."
+if [ ! -f "package.json" ]; then
+    log_error "package.json not found! Make sure you're in the project root."
+    exit 1
+fi
+
+if [ ! -d "backend" ]; then
+    log_error "backend directory not found!"
+    exit 1
+fi
+
+log_success "Project structure verified in: $PROJECT_ROOT"connection issues by:
 # 1. Properly cleaning up any stuck processes
 # 2. Starting services in the correct order
 # 3. Waiting for proper initialization

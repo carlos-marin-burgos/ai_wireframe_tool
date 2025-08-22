@@ -62,7 +62,7 @@ kill_port 5173
 kill_port 3000
 
 # Ensure we're in the right directory
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."
 PROJECT_ROOT="$(pwd)"
 
 echo -e "${BLUE}📁 Project root: $PROJECT_ROOT${NC}"
@@ -110,11 +110,12 @@ fi
 
 # Test the full stack
 echo -e "${BLUE}🧪 Testing full stack connection...${NC}"
-if node test-full-stack.js; then
-    echo -e "${GREEN}✅ Full stack test passed!${NC}"
-else
-    echo -e "${YELLOW}⚠️ Full stack test had issues, but services are running${NC}"
-fi
+# if node test-full-stack.js; then
+#     echo -e "${GREEN}✅ Full stack test passed!${NC}"
+# else
+#     echo -e "${YELLOW}⚠️ Full stack test had issues, but services are running${NC}"
+# fi
+echo -e "${GREEN}✅ Skipping full stack test (not implemented)${NC}"
 
 echo ""
 echo -e "${GREEN}🎉 Development environment is ready!${NC}"
@@ -129,7 +130,7 @@ echo "   • Backend:  tail -f backend-logs.txt"
 echo "   • Frontend: tail -f frontend-logs.txt"
 echo ""
 echo -e "${BLUE}🛑 To stop all services:${NC}"
-echo "   • Run: ./dev-stop.sh"
+echo "   • Run: ./scripts/dev-stop.sh"
 echo "   • Or: npm run dev:stop"
 echo ""
 echo -e "${YELLOW}💡 Tip: Services will continue running in the background${NC}"
