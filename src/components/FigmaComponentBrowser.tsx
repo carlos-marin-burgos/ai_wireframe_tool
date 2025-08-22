@@ -80,10 +80,47 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({ onImportC
         setSelectedComponents(newSelected);
     };
 
-    const handleImportSelected = () => {
+    const handleImportSelected = async () => {
         if (selectedComponents.size > 0) {
-            onImportComponents(Array.from(selectedComponents) as string[]);
-            setSelectedComponents(new Set());
+            try {
+                setLoading(true);
+
+                // Call the backend import API
+                const response = await fetch('/api/figma/import', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        componentIds: Array.from(selectedComponents),
+                        options: {
+                            designSystem: 'fluent',
+                            wireframeMode: false,
+                            responsive: true
+                        }
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Pass the results to the parent component
+                    onImportComponents(Array.from(selectedComponents));
+
+                    // Show success feedback
+                    alert(`Successfully imported ${result.summary.successful} of ${result.summary.total} components!`);
+
+                    // Reset selection
+                    setSelectedComponents(new Set());
+                } else {
+                    throw new Error(result.error || 'Import failed');
+                }
+            } catch (error) {
+                console.error('Import error:', error);
+                alert(`Import failed: ${error.message}`);
+            } finally {
+                setLoading(false);
+            }
         }
     };
 
