@@ -1,18 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import './Wire                  button, .button {
-background - color: var(--primary);
-color: white;
-border: 2px dashed rgba(156, 163, 175, 0.4);
-padding: 10px 20px;
-border - radius: 2px;
-cursor: pointer;
-font - weight: 600;
-transition: border - color 0.2s ease;
-                  }
-
-button: hover, .button:hover {
-  border - color: rgba(75, 85, 99, 0.8);
-}.css';
+import './WireframeRenderer.css';
 
 interface WireframeRendererProps {
   htmlContent: string;

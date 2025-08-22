@@ -13,7 +13,6 @@
   box-shadow: none;
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
-  z-index: 1030;
 }
 
 .navbar-left {

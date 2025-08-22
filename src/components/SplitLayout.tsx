@@ -782,8 +782,14 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   }, [htmlWireframe]);
 
   const handleOpenLibrary = useCallback(() => {
-    setIsComponentLibraryOpen(true);
-  }, []);
+    console.log('🎨 Opening Figma Component Browser instead of Component Library');
+    // Instead of opening component library, open Figma integration
+    if (onFigmaIntegration?.current) {
+      onFigmaIntegration.current();
+    } else {
+      console.warn('Figma integration function not available');
+    }
+  }, [onFigmaIntegration]);
 
   // Export handlers
 

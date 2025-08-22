@@ -456,3 +456,33 @@ For detailed output, run func with --verbose flag.
 [2025-08-22T15:37:38.564Z]   "duration": "103"
 [2025-08-22T15:37:38.564Z] }
 [2025-08-22T15:37:42.531Z] Host lock lease acquired by instance ID '00000000000000000000000049CADE8B'.
+[2025-08-22T15:38:29.935Z] Executing HTTP request: {
+[2025-08-22T15:38:29.935Z]   "requestId": "25f7c820-b9ea-4cac-81a4-4da901bc6097",
+[2025-08-22T15:38:29.935Z]   "method": "POST",
+[2025-08-22T15:38:29.935Z]   "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0",
+[2025-08-22T15:38:29.935Z]   "uri": "/api/generate-wireframe-enhanced"
+[2025-08-22T15:38:29.935Z] }
+[2025-08-22T15:38:29.957Z] Executing 'Functions.generateWireframeEnhanced' (Reason='This function was programmatically called via the host APIs.', Id=3a2c1018-c46a-422c-9532-995f36251a20)
+[2025-08-22T15:38:30.031Z] Worker 97c8e5b8-de08-4762-85fd-648d678c6faf received FunctionInvocationRequest with invocationId 3a2c1018-c46a-422c-9532-995f36251a20
+[2025-08-22T15:38:35.550Z] 🧹 OpenAI Response Cleanup (ENHANCED):
+[2025-08-22T15:38:35.551Z] Raw response length: 2653
+[2025-08-22T15:38:35.551Z] Cleaned response length: 2641
+[2025-08-22T15:38:35.551Z] First 100 chars of cleaned response: <!DOCTYPE html>
+[2025-08-22T15:38:35.551Z] <html lang="en">
+[2025-08-22T15:38:35.551Z] <head>
+[2025-08-22T15:38:35.551Z]     <meta charset="UTF-8">
+[2025-08-22T15:38:35.551Z]     <meta name="viewport" content
+[2025-08-22T15:38:35.551Z] 🧭 Injecting clean Atlas Navigation for ALL wireframes...
+[2025-08-22T15:38:35.551Z] ✅ Atlas Navigation injected after <body> tag
+[2025-08-22T15:38:35.551Z] 🎨 Processing wireframe for Atlas components...
+[2025-08-22T15:38:35.552Z] 🔍 Atlas component check (ENHANCED):
+[2025-08-22T15:38:35.552Z]     Description: "Sidebar menu with icons"
+[2025-08-22T15:38:35.553Z]     Specifically requests learning components: false
+[2025-08-22T15:38:35.553Z] ℹ️ Learning components not specifically requested, skipping
+[2025-08-22T15:38:35.558Z] Executed 'Functions.generateWireframeEnhanced' (Succeeded, Id=3a2c1018-c46a-422c-9532-995f36251a20, Duration=5613ms)
+[2025-08-22T15:38:35.560Z] Executed HTTP request: {
+[2025-08-22T15:38:35.560Z]   "requestId": "25f7c820-b9ea-4cac-81a4-4da901bc6097",
+[2025-08-22T15:38:35.560Z]   "identities": "",
+[2025-08-22T15:38:35.560Z]   "status": "200",
+[2025-08-22T15:38:35.560Z]   "duration": "5626"
+[2025-08-22T15:38:35.560Z] }

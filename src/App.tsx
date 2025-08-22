@@ -13,6 +13,7 @@ import SaveDialog from "./components/SaveDialog";
 import LoadDialog from "./components/LoadDialog";
 import Toast from "./components/Toast";
 import PasswordProtection from "./components/PasswordProtection";
+import FigmaIntegration from "./components/FigmaIntegration";
 import { API_CONFIG, getApiUrl } from "./config/api";
 // All API calls are now handled by the wireframe generation hook
 import { useWireframeGeneration } from './hooks/useWireframeGeneration';
@@ -56,6 +57,8 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   const [isAnalyzingImage, setIsAnalyzingImage] = useState(false);
   const [toasts, setToasts] = useState<ToastData[]>([]);
   const [fastMode, setFastMode] = useState(false);
+  const [showFigmaIntegration, setShowFigmaIntegration] = useState(false);
+  const [showTopToolbarFigmaImport, setShowTopToolbarFigmaImport] = useState(false);
 
   // Toolbar function refs
   const figmaIntegrationRef = useRef<(() => void) | null>(null);
@@ -66,12 +69,17 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
   // Toolbar handler functions for header
   const handleToolbarFigma = () => {
-    if (figmaIntegrationRef.current) {
-      figmaIntegrationRef.current();
-    } else {
-      console.log('Figma integration function not available');
-    }
+    console.log('🎨 TOP TOOLBAR FIGMA BUTTON CLICKED - Opening Figma import (like landing page)...');
+    setShowTopToolbarFigmaImport(true);
   };
+
+  // Set up the figma integration ref for Pages toolbar (component browser)
+  useEffect(() => {
+    figmaIntegrationRef.current = () => {
+      console.log('🎨 PAGES TOOLBAR FIGMA BUTTON CLICKED - Opening Figma Component Browser...');
+      setShowFigmaIntegration(true);
+    };
+  }, []);
 
   const handleToolbarHtmlCode = () => {
     if (viewHtmlCodeRef.current) {
@@ -1080,6 +1088,48 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   };
 
   // Figma integration handlers
+  const handleFigmaComponentsImported = (components: any[]) => {
+    console.log('Figma components imported:', components);
+
+    if (components.length === 0) {
+      showToast('No components were imported', 'warning');
+      return;
+    }
+
+    // Create HTML from imported components
+    let combinedHtml = '';
+    components.forEach((component, index) => {
+      if (component.wireframeHtml) {
+        combinedHtml += `
+          <div class="figma-imported-component" data-component-name="${component.componentName}" style="margin: 20px 0; padding: 20px; border: 2px solid #0078d4; border-radius: 8px; background: rgba(255,255,255,0.95);">
+            <h4 style="margin: 0 0 15px 0; color: #0078d4; font-size: 16px;">📦 ${component.componentName}</h4>
+            ${component.wireframeHtml}
+          </div>
+        `;
+      }
+    });
+
+    if (combinedHtml) {
+      if (htmlWireframe) {
+        // Add to existing wireframe
+        const updatedHtml = insertComponentIntoWireframe(htmlWireframe, combinedHtml);
+        setHtmlWireframe(updatedHtml);
+        showToast(`Added ${components.length} Figma component(s) to wireframe`, 'success');
+      } else {
+        // Create new wireframe with imported components
+        const newWireframe = createWireframeWithComponent(combinedHtml);
+        setHtmlWireframe(newWireframe);
+        setShowLandingPage(false);
+        showToast(`Created wireframe with ${components.length} Figma component(s)`, 'success');
+      }
+      setForceUpdateKey(Date.now());
+    } else {
+      showToast('Failed to process imported components', 'error');
+    }
+
+    setShowFigmaIntegration(false);
+  };
+
   const handleFigmaImport = (html: string, fileName: string) => {
     console.log('Figma file imported:', fileName);
     setHtmlWireframe(html);
@@ -1289,6 +1339,46 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           onClose={() => removeToast(toast.id)}
         />
       ))}
+
+      {/* Figma Integration Modal */}
+      {/* This modal is used for both:
+          - Top toolbar Figma button (design import)  
+          - Pages toolbar Figma button (component browser) */}
+      {(() => {
+        console.log('🔍 App.tsx render: showFigmaIntegration =', showFigmaIntegration);
+        return null;
+      })()}
+      {showFigmaIntegration && (
+        <div className="figma-modal-overlay">
+          <FigmaIntegration
+            onComponentsImported={handleFigmaComponentsImported}
+            onClose={() => setShowFigmaIntegration(false)}
+            designSystem="auto"
+            mode="component-browser"
+          />
+        </div>
+      )}
+
+      {showTopToolbarFigmaImport && (
+        <div className="figma-modal-overlay">
+          <FigmaIntegration
+            onComponentsImported={(components) => {
+              // For top toolbar, we want design import behavior like the landing page
+              // Convert to the format expected by handleFigmaImport
+              if (components && components.length > 0) {
+                const firstComponent = components[0];
+                if (firstComponent.wireframeHtml) {
+                  handleFigmaImport(firstComponent.wireframeHtml, firstComponent.componentName || 'Figma Import');
+                }
+              }
+              setShowTopToolbarFigmaImport(false);
+            }}
+            onClose={() => setShowTopToolbarFigmaImport(false)}
+            designSystem="auto"
+            mode="design-import"
+          />
+        </div>
+      )}
 
     </div>
   );

@@ -26,6 +26,7 @@ interface LandingPageProps {
   onFigmaImport?: (html: string, fileName: string) => void;
   onFigmaExport?: (format: 'figma-file' | 'figma-components') => void;
   onOpenWireframe?: (html: string, description: string) => void;
+  onFigmaModalOpen?: () => void;
 }
 
 import {
@@ -72,6 +73,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
   onFigmaImport,
   onFigmaExport,
   onOpenWireframe,
+  onFigmaModalOpen,
 }) => {
   // Create ref for textarea autofocus
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -144,6 +146,14 @@ const LandingPage: React.FC<LandingPageProps> = ({
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
+
+  // Expose Figma modal opening functionality to parent
+  useEffect(() => {
+    if (onFigmaModalOpen) {
+      // Pass the function to open the Figma modal
+      onFigmaModalOpen.openModal = () => setIsFigmaModalOpen(true);
+    }
+  }, [onFigmaModalOpen]);
 
   // Delete favorite function
   const handleDeleteFavorite = (favoriteId: string) => {

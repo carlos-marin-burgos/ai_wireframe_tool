@@ -1,8 +1,7 @@
-// Use dynamic import for ES module
-const figmaSetup = await import("../../figma-oauth2-setup.js");
-const { loadTokens, refreshAccessToken, saveTokens } = figmaSetup;
-
 module.exports = async function (context, req) {
+  // Use dynamic import for ES module
+  const figmaSetup = await import("../../figma-oauth2-setup.js");
+  const { loadTokens, refreshAccessToken, saveTokens } = figmaSetup;
   console.log("🔐 Figma OAuth2 Callback Handler");
 
   // CORS headers

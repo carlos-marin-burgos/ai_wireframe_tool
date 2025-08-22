@@ -1,0 +1,265 @@
+/* Figma Design Import Styles */
+
+.figma-design-import-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.figma-design-import-modal {
+  background: white;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 24px 16px 24px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.figma-icon {
+  font-size: 24px;
+  color: #f24e1e;
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: #323130;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #6c757d;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.close-button:hover {
+  background: #f8f9fa;
+  color: #495057;
+}
+
+.import-method-selection {
+  padding: 24px;
+}
+
+.import-method-selection h3 {
+  margin: 0 0 24px 0;
+  color: #323130;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.method-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.method-option {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.method-option:hover {
+  border-color: #f24e1e;
+  background: #fff8f7;
+}
+
+.method-icon {
+  font-size: 24px;
+  color: #f24e1e;
+  flex-shrink: 0;
+}
+
+.method-info h4 {
+  margin: 0 0 4px 0;
+  color: #323130;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.method-info p {
+  margin: 0;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.url-import-section,
+.file-import-section {
+  padding: 24px;
+}
+
+.url-import-section h3,
+.file-import-section h3 {
+  margin: 0 0 20px 0;
+  color: #323130;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.url-input-group {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.figma-url-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.figma-url-input:focus {
+  outline: none;
+  border-color: #f24e1e;
+  box-shadow: 0 0 0 3px rgba(242, 78, 30, 0.1);
+}
+
+.import-button {
+  background: #f24e1e;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.import-button:hover:not(:disabled) {
+  background: #e34425;
+}
+
+.import-button:disabled {
+  background: #ced4da;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background: #fff5f5;
+  color: #d63384;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #f5c6cb;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.back-button {
+  background: none;
+  border: 1px solid #ced4da;
+  color: #6c757d;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.back-button:hover {
+  background: #f8f9fa;
+  border-color: #adb5bd;
+  color: #495057;
+}
+
+.file-upload-area {
+  margin-bottom: 20px;
+}
+
+.file-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.file-upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  border: 2px dashed #ced4da;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #f8f9fa;
+}
+
+.file-upload-label:hover {
+  border-color: #f24e1e;
+  background: #fff8f7;
+}
+
+.upload-icon {
+  font-size: 32px;
+  color: #f24e1e;
+  margin-bottom: 12px;
+}
+
+.upload-text h4 {
+  margin: 0 0 4px 0;
+  color: #323130;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.upload-text p {
+  margin: 0;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .figma-design-import-modal {
+    width: 95%;
+    max-height: 90vh;
+  }
+
+  .url-input-group {
+    flex-direction: column;
+  }
+
+  .method-option {
+    padding: 16px;
+  }
+}

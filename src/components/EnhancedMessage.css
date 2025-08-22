@@ -249,7 +249,7 @@
   font-family: var(--microsoft-font-family);
   font-style: normal;
   font-weight: 400;
-  font-size: var(--microsoft-font-size-14);
+  font-size: var(--microsoft-font-size-12);
   line-height: var(--microsoft-spacing-xl);
   color: var(--microsoft-neutral-primary);
   align-self: stretch;

@@ -75,7 +75,7 @@
 .left-pane {
   width: 300px;
   min-width: 280px;
-  background: #ffffff;
+  background: #f9fbfb;
   border-right: 1px solid #e1e1e1;
   display: flex;
   flex-direction: column;

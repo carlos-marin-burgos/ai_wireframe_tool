@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiPlus, FiGrid, FiSave, FiStar, FiImage } from 'react-icons/fi';
+import { FiPlus, FiFigma, FiSave, FiStar, FiImage } from 'react-icons/fi';
 import '../styles/PageNavigation.css';
 
 interface Page {
@@ -78,13 +78,13 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
 
                         <button
                             className="icon-btn"
-                            title="Component Library"
+                            title="Import Figma Components"
                             onClick={() => {
-                                console.log('🔍 Component Library button clicked!');
+                                console.log('🎨 Figma Components Import button clicked!');
                                 onOpenLibrary();
                             }}
                         >
-                            <FiGrid /></button>
+                            <FiFigma /></button>
 
                         <button
                             className="toolbar-btn"
@@ -148,11 +148,11 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                     <button
                         className="toolbar-btn"
                         onClick={onOpenLibrary}
-                        onMouseEnter={(e) => showTooltip(e, "Component Library")}
+                        onMouseEnter={(e) => showTooltip(e, "Import Figma Components")}
                         onMouseLeave={hideTooltip}
-                        aria-label="Component Library"
+                        aria-label="Import Figma Components"
                     >
-                        <FiGrid />
+                        <FiFigma />
                     </button>
 
                     <button
