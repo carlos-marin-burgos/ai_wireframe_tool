@@ -73,8 +73,8 @@
 
 /* Left sidebar - Microsoft Fluent Design */
 .left-pane {
-  width: 380px;
-  min-width: 320px;
+  width: 300px;
+  min-width: 280px;
   background: #ffffff;
   border-right: 1px solid #e1e1e1;
   display: flex;
@@ -241,7 +241,7 @@
 /* Main content area */
 .right-pane {
   flex: 1;
-  margin-left: 380px;
+  margin-left: 300px;
   padding: 0;
   padding-top: 10px;
   background: radial-gradient(
@@ -259,7 +259,7 @@
       rgba(32, 201, 151, 0.1) 0%,
       transparent 50%
     );
-  width: calc(100% - 380px);
+  width: calc(100% - 300px);
   height: 100vh;
   overflow-y: auto;
   scroll-behavior: smooth;
@@ -269,7 +269,7 @@
 .panel-toggle-btn {
   position: fixed;
   top: 50%;
-  left: 380px;
+  left: 300px;
   transform: translateY(-50%);
   z-index: 1000;
   background: #ffffff;
@@ -1548,19 +1548,19 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 /* Responsive styles */
 @media (max-width: 1200px) {
   .left-pane {
-    width: 340px;
-    min-width: 300px;
+    width: 280px;
+    min-width: 260px;
     padding: 1.5rem;
   }
 
   .right-pane {
-    margin-left: 340px;
-    width: calc(100% - 340px);
+    margin-left: 280px;
+    width: calc(100% - 280px);
   }
 
   /* Adjust toggle button for smaller left panel */
   .panel-toggle-btn {
-    left: 340px;
+    left: 280px;
   }
 
   .split-layout.left-panel-collapsed .panel-toggle-btn {
