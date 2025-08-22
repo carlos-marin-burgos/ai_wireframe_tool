@@ -103,7 +103,7 @@ const FigmaIntegration: React.FC<FigmaIntegrationProps> = ({
             if (figmaAccessToken.toLowerCase().includes('figd_') || figmaAccessToken.length > 10) {
                 setFigmaIsConnected(true);
                 setFigmaSuccess('🔗 Successfully connected to Figma! You can now import designs.');
-                
+
                 // Switch to import tab after successful connection
                 setTimeout(() => {
                     setActiveTab('import');
@@ -126,7 +126,7 @@ const FigmaIntegration: React.FC<FigmaIntegrationProps> = ({
         setFigmaAccessToken('');
         setFigmaError(null);
         setFigmaSuccess('🔓 Disconnected from Figma. Your data has been cleared.');
-        
+
         // Clear success message after 3 seconds
         setTimeout(() => {
             setFigmaSuccess(null);
@@ -135,7 +135,13 @@ const FigmaIntegration: React.FC<FigmaIntegrationProps> = ({
 
     return (
         <div className="figma-integration">
-            {mode === 'component-browser' ? (
+            {(() => {
+                console.log('🔍 FigmaIntegration render: mode =', mode);
+                console.log('🔍 FigmaIntegration render: mode === component-browser?', mode === 'component-browser');
+                console.log('🔍 FigmaIntegration render: typeof mode =', typeof mode);
+                return null;
+            })()}
+            {(mode === 'component-browser' || !mode) ? (
                 // Component Browser Mode (for Pages toolbar)
                 <FigmaComponentBrowser
                     onImportComponents={handleImportComponents}
@@ -150,13 +156,13 @@ const FigmaIntegration: React.FC<FigmaIntegrationProps> = ({
                     </div>
                     <div className="modal-content">
                         <div className="import-tabs">
-                            <button 
+                            <button
                                 className={`tab-btn ${activeTab === 'import' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('import')}
                             >
                                 Import Design
                             </button>
-                            <button 
+                            <button
                                 className={`tab-btn ${activeTab === 'connect' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('connect')}
                             >
@@ -182,7 +188,7 @@ const FigmaIntegration: React.FC<FigmaIntegrationProps> = ({
                             <div className="import-section">
                                 <h3>Import Figma Design</h3>
                                 <p>Import your Figma designs as wireframes. Paste a Figma share link or upload a Figma file.</p>
-                                
+
                                 {/* Connection status indicator */}
                                 <div className={`connection-status ${figmaIsConnected ? 'connected' : 'disconnected'}`}>
                                     {figmaIsConnected ? (
@@ -199,8 +205,8 @@ const FigmaIntegration: React.FC<FigmaIntegrationProps> = ({
                                         className="figma-url-input"
                                         disabled={!figmaIsConnected}
                                     />
-                                    <button 
-                                        className="import-btn" 
+                                    <button
+                                        className="import-btn"
                                         disabled={isImporting || !figmaIsConnected}
                                     >
                                         {isImporting ? 'Importing...' : 'Import Design'}
@@ -208,10 +214,10 @@ const FigmaIntegration: React.FC<FigmaIntegrationProps> = ({
                                 </div>
                                 <div className="file-upload-section">
                                     <label className={`file-upload-label ${!figmaIsConnected ? 'disabled' : ''}`}>
-                                        <input 
-                                            type="file" 
-                                            accept=".fig,.figma" 
-                                            className="hidden-file-input" 
+                                        <input
+                                            type="file"
+                                            accept=".fig,.figma"
+                                            className="hidden-file-input"
                                             disabled={!figmaIsConnected}
                                         />
                                         <div className="upload-zone">
@@ -228,7 +234,7 @@ const FigmaIntegration: React.FC<FigmaIntegrationProps> = ({
                             <div className="connect-section">
                                 <h3>Connect to Figma</h3>
                                 <p>Connect your Figma account to import designs directly into the wireframe tool.</p>
-                                
+
                                 {!figmaIsConnected ? (
                                     <div className="connect-form">
                                         <div className="input-group">
@@ -265,14 +271,14 @@ const FigmaIntegration: React.FC<FigmaIntegrationProps> = ({
                                             </div>
                                         </div>
                                         <div className="connected-actions">
-                                            <button 
-                                                className="primary-btn" 
+                                            <button
+                                                className="primary-btn"
                                                 onClick={() => setActiveTab('import')}
                                             >
                                                 Start Importing
                                             </button>
-                                            <button 
-                                                className="secondary-btn" 
+                                            <button
+                                                className="secondary-btn"
                                                 onClick={handleFigmaDisconnect}
                                             >
                                                 Disconnect

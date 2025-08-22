@@ -31,7 +31,8 @@ module.exports = async function (context, req) {
         description: "Primary action button with Fluent UI styling",
         category: "Actions",
         library: "Fluent UI",
-        preview: null,
+        preview:
+          "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTIwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iNDAiIHJ4PSI0IiBmaWxsPSIjMDA2Q0VCIi8+PHRleHQgeD0iNjAiIHk9IjI1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0Ij5QcmltYXJ5IEJ1dHRvbjwvdGV4dD48L3N2Zz4=",
         variants: ["Default", "Hover", "Disabled"],
         usageCount: 15,
         tags: ["button", "primary", "action"],
@@ -45,7 +46,8 @@ module.exports = async function (context, req) {
         description: "Atlas design hero section with call-to-action",
         category: "Marketing",
         library: "Atlas Design",
-        preview: null,
+        preview:
+          "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjE2MCIgdmlld0JveD0iMCAwIDMwMCAxNjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIxNjAiIGZpbGw9IiNGNUY1RjUiLz48cmVjdCB4PSIyMCIgeT0iMjAiIHdpZHRoPSIyNjAiIGhlaWdodD0iNDAiIGZpbGw9IiNFMEUwRTAiLz48cmVjdCB4PSIyMCIgeT0iNzAiIHdpZHRoPSIxODAiIGhlaWdodD0iMjAiIGZpbGw9IiNDQ0NDQ0MiLz48cmVjdCB4PSIyMCIgeT0iMTAwIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjMwIiByeD0iNCIgZmlsbD0iIzAwNkNFQiIvPjx0ZXh0IHg9IjE1MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgZmlsbD0iIzMzMzMzMyI+SGVybyBTZWN0aW9uPC90ZXh0Pjx0ZXh0IHg9IjcwIiB5PSIxMTciIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0id2hpdGUiPkdldCBTdGFydGVkPC90ZXh0Pjwvc3ZnPg==",
         variants: ["Light", "Dark", "Gradient"],
         usageCount: 8,
         tags: ["hero", "marketing", "cta"],

@@ -783,8 +783,10 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   const handleOpenLibrary = useCallback(() => {
     console.log('🎨 Opening Figma Component Browser instead of Component Library');
-    // Instead of opening component library, open Figma integration
+    // Instead of opening component library, open Figma integration with component browser mode
+    // Call the parent's figma integration function from App.tsx which should open component browser
     if (onFigmaIntegration?.current) {
+      console.log('🎯 Calling onFigmaIntegration.current for component browser');
       onFigmaIntegration.current();
     } else {
       console.warn('Figma integration function not available');
@@ -801,11 +803,12 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   }, []);
 
   // Set toolbar function refs for header toolbar access
-  useEffect(() => {
-    if (onFigmaIntegration) {
-      onFigmaIntegration.current = handleFigmaIntegration;
-    }
-  }, [onFigmaIntegration, handleFigmaIntegration]);
+  // NOTE: Don't override onFigmaIntegration - let App.tsx handle it for component browser
+  // useEffect(() => {
+  //   if (onFigmaIntegration) {
+  //     onFigmaIntegration.current = handleFigmaIntegration;
+  //   }
+  // }, [onFigmaIntegration, handleFigmaIntegration]);
 
   useEffect(() => {
     if (onViewHtmlCode) {
