@@ -136,12 +136,11 @@ const FigmaIntegration: React.FC<FigmaIntegrationProps> = ({
     return (
         <div className="figma-integration">
             {(() => {
-                console.log('🔍 FigmaIntegration render: mode =', mode);
-                console.log('🔍 FigmaIntegration render: mode === component-browser?', mode === 'component-browser');
-                console.log('🔍 FigmaIntegration render: typeof mode =', typeof mode);
+                console.log('🔍 FigmaIntegration mode:', mode);
+                console.log('🔍 Showing component browser?', mode === 'component-browser');
                 return null;
             })()}
-            {(mode === 'component-browser' || !mode) ? (
+            {mode === 'component-browser' ? (
                 // Component Browser Mode (for Pages toolbar)
                 <FigmaComponentBrowser
                     onImportComponents={handleImportComponents}

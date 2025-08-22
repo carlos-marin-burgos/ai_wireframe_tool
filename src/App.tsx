@@ -76,8 +76,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   // Set up the figma integration ref for Pages toolbar (component browser)
   useEffect(() => {
     figmaIntegrationRef.current = () => {
-      console.log('� PAGES TOOLBAR FIGMA BUTTON CLICKED - Opening Figma Component Browser...');
-      console.log('🎯 Setting showFigmaIntegration to true with mode="component-browser"');
+      console.log('🎨 PAGES TOOLBAR FIGMA BUTTON CLICKED - Opening Figma Component Browser...');
       setShowFigmaIntegration(true);
     };
   }, []);
