@@ -385,19 +385,20 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
       const updatedHtml = insertComponentIntoWireframe(htmlWireframe, componentHtml);
       console.log("🔧 App.tsx: Updating existing wireframe, new length:", updatedHtml.length);
       setHtmlWireframe(updatedHtml);
-      console.log("🔧 App.tsx: ✅ Component added to wireframe at top-left position!");
+      console.log("🔧 App.tsx: ✅ Component added as overlay in top-right!");
     } else {
       // Create a new wireframe with just this component
       const newWireframe = createWireframeWithComponent(componentHtml);
       console.log("🔧 App.tsx: Creating new wireframe, length:", newWireframe.length);
       setHtmlWireframe(newWireframe);
-      console.log("🔧 App.tsx: ✅ Created new wireframe with component at top-left!");
+      console.log("🔧 App.tsx: ✅ Created new wireframe with component overlay!");
     }
 
     // Force a re-render to ensure the wireframe updates
     setForceUpdateKey(Date.now());
 
-    // Component added successfully (removed annoying toast notification)
+    // Show success notification
+    showToast("Component added successfully!", 'success');
   };
 
   // Handler for generating page content using AI
@@ -727,82 +728,106 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   };
 
   const insertComponentIntoWireframe = (existingHtml: string, componentHtml: string) => {
-    // Add component positioned absolutely at top-left of the wireframe
-    const animatedComponent = `<div class="atlas-component-overlay" style="
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      z-index: 9999;
-      background: rgba(255, 255, 255, 0.95);
-      border: 2px solid #0078d4;
-      border-radius: 8px;
-      padding: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      animation: atlasSlideIn 0.6s ease-out;
-      max-width: 300px;
-    ">${componentHtml}</div>`;
+    console.log("🔧 insertComponentIntoWireframe: Adding component to Bootstrap grid");
 
-    // Enhanced animation and overlay CSS
-    const animationCSS = `
-<style>
-/* Atlas Component Entry Animation */
-@keyframes atlasSlideIn {
-  0% { 
-    transform: translateY(-20px) scale(0.95); 
-    opacity: 0; 
-  }
-  100% { 
-    transform: translateY(0) scale(1); 
-    opacity: 1; 
-  }
-}
-.atlas-component-overlay {
-  animation: atlasSlideIn 0.6s ease-out;
-  transition: all 0.3s ease;
-}
-.atlas-component-overlay:hover {
-  transform: scale(1.02);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-}
-</style>`;
+    // Check if we have an existing wireframe with Bootstrap grid structure
+    const hasBootstrapGrid = existingHtml.includes('container') || existingHtml.includes('row') || existingHtml.includes('col-');
 
-    // Show alert when component is added
-    setTimeout(() => {
-      alert('🎉 Atlas Component Added!\n\nComponent has been placed at the top-left of your wireframe.');
-    }, 100);
+    if (hasBootstrapGrid) {
+      // Find the first available Bootstrap column or create a new one
+      const colRegex = /<div class="col-[^"]*"[^>]*>/g;
+      const columns = existingHtml.match(colRegex);
 
-    // Check if animation CSS is already present
-    let processedHtml = existingHtml;
-    if (!existingHtml.includes('@keyframes atlasSlideIn')) {
-      // Inject animation CSS into the head
-      const headMatch = existingHtml.match(/<\/head>/);
-      if (headMatch) {
-        processedHtml = existingHtml.replace('</head>', `${animationCSS}\n</head>`);
-      } else {
-        // Fallback: add to the beginning of body
-        processedHtml = existingHtml.replace('<body>', `<body>${animationCSS}`);
+      if (columns && columns.length > 0) {
+        // Find an empty column or the last column to append to
+        const firstColMatch = existingHtml.match(/<div class="col-[^"]*"[^>]*>[\s]*<\/div>/);
+
+        if (firstColMatch) {
+          // Found an empty column, insert the component there
+          return existingHtml.replace(
+            firstColMatch[0],
+            firstColMatch[0].replace('</div>', `
+              <div class="atlas-component-wrapper" data-user-added="true">
+                ${componentHtml}
+              </div>
+            </div>`)
+          );
+        } else {
+          // Find the last closing div of a column and insert before it
+          const lastColEndMatch = existingHtml.match(/(<div class="col-[^"]*"[^>]*>)([\s\S]*?)(<\/div>)(?![\s\S]*<div class="col-)/);
+
+          if (lastColEndMatch) {
+            const beforeClosing = lastColEndMatch[0];
+            const newContent = beforeClosing.replace(
+              lastColEndMatch[3],
+              `
+              <div class="atlas-component-wrapper mb-3" data-user-added="true">
+                ${componentHtml}
+              </div>
+            ${lastColEndMatch[3]}`
+            );
+            return existingHtml.replace(beforeClosing, newContent);
+          }
+        }
+      }
+
+      // If no suitable column found, add a new row with the component
+      const lastRowMatch = existingHtml.match(/(<div class="row[^"]*"[^>]*>[\s\S]*?<\/div>)(?![\s\S]*<div class="row)/);
+
+      if (lastRowMatch) {
+        const insertAfterRow = lastRowMatch[0];
+        const newRow = `
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <div class="atlas-component-wrapper" data-user-added="true">
+                ${componentHtml}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-4 border border-dashed rounded text-center text-muted">
+                <p class="mb-0">Drop zone for additional components</p>
+              </div>
+            </div>
+          </div>`;
+
+        return existingHtml.replace(insertAfterRow, insertAfterRow + newRow);
       }
     }
 
-    // Insert component as fixed overlay at top-left after body tag
-    const bodyMatch = processedHtml.match(/<body[^>]*>/);
-    if (bodyMatch) {
-      const insertionPoint = bodyMatch.index! + bodyMatch[0].length;
-      return processedHtml.slice(0, insertionPoint) + '\n' + animatedComponent + processedHtml.slice(insertionPoint);
+    // If no Bootstrap structure found, wrap the component and append
+    const componentWrapper = `
+      <div class="atlas-component-wrapper mt-4" data-user-added="true" style="
+        background: rgba(255, 255, 255, 0.95);
+        border: 2px solid #0078d4;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 15px 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        animation: atlasSlideIn 0.6s ease-out;
+      ">
+        ${componentHtml}
+      </div>
+      
+      <style>
+        @keyframes atlasSlideIn {
+          0% { transform: translateY(-20px) scale(0.95); opacity: 0; }
+          100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        .atlas-component-wrapper:hover {
+          transform: scale(1.02);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+      </style>`;
+
+    // Insert before closing body tag
+    const bodyCloseMatch = existingHtml.match(/<\/body>/);
+    if (bodyCloseMatch) {
+      return existingHtml.replace('</body>', componentWrapper + '\n</body>');
     }
 
-    // Fallback: insert after opening html tag
-    const htmlMatch = processedHtml.match(/<html[^>]*>/);
-    if (htmlMatch) {
-      const insertionPoint = htmlMatch.index! + htmlMatch[0].length;
-      return processedHtml.slice(0, insertionPoint) + '\n' + animatedComponent + processedHtml.slice(insertionPoint);
-    }
-
-    // Ultimate fallback: prepend to existing content
-    return animatedComponent + processedHtml;
-  };
-
-  const createWireframeWithComponent = (componentHtml: string) => {
+    // Fallback: append to end
+    return existingHtml + componentWrapper;
+  }; const createWireframeWithComponent = (componentHtml: string) => {
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -811,8 +836,18 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     <title>Component Wireframe</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .wireframe-container { padding: 20px; min-height: 400px; }
+        body { 
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+          background-color: #f8f9fa;
+          padding: 20px;
+        }
+        .wireframe-container { 
+          background: white;
+          border-radius: 8px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+          padding: 30px;
+          min-height: 400px; 
+        }
         .button { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; }
         .button-primary { background: #0078d4; color: white; }
         .button-secondary { background: #f3f2f1; color: #323130; border: 1px solid #e1dfdd; }
@@ -821,21 +856,54 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
         
         /* Component entry animation */
         @keyframes atlasSlideIn {
-          0% { transform: translateY(-20px); opacity: 0; }
-          100% { transform: translateY(0); opacity: 1; }
+          0% { transform: translateY(-20px) scale(0.95); opacity: 0; }
+          100% { transform: translateY(0) scale(1); opacity: 1; }
         }
-        .atlas-component-entry {
+        .atlas-component-wrapper {
           animation: atlasSlideIn 0.6s ease-out;
+          transition: all 0.3s ease;
+          background: rgba(255, 255, 255, 0.95);
+          border: 2px solid #0078d4;
+          border-radius: 8px;
+          padding: 15px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          min-height: 80px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .atlas-component-wrapper:hover {
+          transform: scale(1.02);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+        .atlas-component-wrapper .atlas-component {
+          margin: 0 !important;
         }
     </style>
 </head>
 <body>
-    <div class="wireframe-container">
-        <div class="atlas-component-entry" style="margin: 10px; display: inline-block;">
-            ${componentHtml}
+    <div class="container-fluid">
+        <div class="wireframe-container">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h1 class="h3 text-primary mb-1">Component Library Wireframe</h1>
+                    <p class="text-muted">Components are added to the Bootstrap grid and can be rearranged using drag & drop.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="atlas-component-wrapper" data-user-added="true">
+                        ${componentHtml}
+                    </div>
+                </div>
+                <div class="col-md-8 mb-3">
+                    <div class="p-4 border border-dashed rounded text-center text-muted">
+                        <h5>Drop Zone</h5>
+                        <p class="mb-0">Add more components from the library or drag existing ones to rearrange.</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <h1>Component Library Wireframe</h1>
-        <p>Components added from the library are positioned at the top-left of the content area.</p>
     </div>
 </body>
 </html>`;

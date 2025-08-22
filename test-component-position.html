@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Component Position Test</title>
+    <style>
+        /* Force hide all chat-related elements */
+        .chat-messages,
+        .chat-messages-disabled-debug,
+        div[class*="chat-messages"],
+        div[class*="chat"] {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            height: 0 !important;
+            width: 0 !important;
+            overflow: hidden !important;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Atlas Component Top-Right Overlay */
+        .atlas-component-overlay {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+            background: rgba(255, 255, 255, 0.98);
+            border: 2px solid #0078d4;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 8px 24px rgba(0, 120, 212, 0.25);
+            max-width: 320px;
+            min-width: 200px;
+        }
+
+        .atlas-component-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e1dfdd;
+        }
+
+        .atlas-component-header span {
+            font-size: 12px;
+            color: #605e5c;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .atlas-component-header button {
+            background: none;
+            border: none;
+            color: #605e5c;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            border-radius: 4px;
+            line-height: 1;
+        }
+
+        .atlas-component-header button:hover {
+            background: #f3f2f1;
+        }
+
+        /* Test areas that should NOT capture components */
+        .chat-messages {
+            background: #ffe6e6;
+            border: 2px dashed red;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .toast-container {
+            background: #fff3cd;
+            border: 2px dashed orange;
+            padding: 10px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-container">
+        <h1>Component Position Test</h1>
+        <p>This page tests component positioning. Components should appear in the top-right corner as overlays, NOT
+            inside any of the containers below.</p>
+
+        <div class="chat-messages">
+            <h3>❌ FORBIDDEN: Chat Messages Container</h3>
+            <p>Components should NEVER appear here!</p>
+        </div>
+
+        <div class="chat-messages-disabled-debug">
+            <h3>❌ FORBIDDEN: Disabled Chat Container</h3>
+            <p>Components should NEVER appear here either!</p>
+        </div>
+
+        <div class="toast-container">
+            <h3>❌ FORBIDDEN: Toast Container</h3>
+            <p>Components should NEVER appear in toasts!</p>
+        </div>
+
+        <div>
+            <h3>✅ Expected Behavior</h3>
+            <p>Components should appear as overlays in the top-right corner of the viewport, not inside any containers.
+            </p>
+        </div>
+    </div>
+
+    <!-- This is where the component SHOULD appear -->
+    <div class="atlas-component-overlay" data-user-added="true">
+        <div class="atlas-component-header">
+            <span>Atlas Component</span>
+            <button onclick="this.parentElement.parentElement.remove()" title="Remove component">×</button>
+        </div>
+        <div class="atlas-component-content">
+            <div style="padding: 12px; background: #f8f9fa; border: 1px solid #e1dfdd; border-radius: 4px;">
+                <h4 style="margin: 0 0 8px 0; font-size: 14px;">✅ Test Component</h4>
+                <p style="margin: 0; font-size: 12px; color: #666;">This component should appear in the top-right corner
+                    as an overlay!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log("🔍 Testing component positioning...");
+
+        // Check if chat-messages elements are properly hidden
+        const chatElements = document.querySelectorAll('.chat-messages, .chat-messages-disabled-debug');
+        chatElements.forEach((el, index) => {
+            const computed = window.getComputedStyle(el);
+            console.log(`Chat element ${index}:`, {
+                display: computed.display,
+                visibility: computed.visibility,
+                opacity: computed.opacity
+            });
+        });
+
+        // Test component overlay position
+        const overlay = document.querySelector('.atlas-component-overlay');
+        if (overlay) {
+            const rect = overlay.getBoundingClientRect();
+            console.log("Component overlay position:", {
+                top: rect.top,
+                right: window.innerWidth - rect.right,
+                position: window.getComputedStyle(overlay).position,
+                zIndex: window.getComputedStyle(overlay).zIndex
+            });
+        }
+    </script>
+</body>
+
+</html>

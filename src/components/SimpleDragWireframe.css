@@ -49,8 +49,7 @@
 }
 
 .dragula-container > *:hover {
-  border-color: #e8e6de !important;
-  background: #e6e6e6 !important;
+  background-color: rgba(0, 120, 212, 0.1) !important;
 }
 
 /* Drag icon on hover */
@@ -81,8 +80,7 @@
 
 .dragula-container .col:hover,
 .dragula-container [class*="col-"]:hover {
-  border-color: #e8e6de;
-  background: #e7f3ff;
+  background-color: rgba(0, 120, 212, 0.1);
 }
 
 /* Dragula specific styles - prevent ALL transparency */

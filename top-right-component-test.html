@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top-Left Component Test</title>
+    <title>Component Position Test - Top Right</title>
     <style>
         body {
             margin: 0;
@@ -21,31 +21,33 @@
             padding: 40px;
             margin: 20px;
             min-height: 400px;
+            position: relative;
         }
 
-        /* Component positioned at actual top-left of viewport */
-        .atlas-component-overlay {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 9999;
-            background: rgba(255, 255, 255, 0.95);
+        /* Component positioned at TOP-RIGHT */
+        .atlas-component-wrapper {
+            position: absolute;
+            top: 80px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
             border: 2px solid #0078d4;
             border-radius: 8px;
-            padding: 12px;
+            padding: 16px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             animation: atlasSlideIn 0.6s ease-out;
-            max-width: 300px;
+            max-width: 280px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         @keyframes atlasSlideIn {
             0% {
-                transform: translateY(-20px) scale(0.95);
+                transform: translateX(20px) scale(0.95);
                 opacity: 0;
             }
 
             100% {
-                transform: translateY(0) scale(1);
+                transform: translateX(0) scale(1);
                 opacity: 1;
             }
         }
@@ -63,22 +65,31 @@
 </head>
 
 <body>
-    <!-- Simulated Atlas Component at Top-Left -->
-    <div class="atlas-component-overlay">
-        <div class="component-demo">
-            📌 Atlas Component
-        </div>
-        <div style="font-size: 12px; margin-top: 8px; color: #666;">
-            Positioned at top-left of wireframe
-        </div>
-    </div>
-
     <!-- Main Wireframe Content -->
     <div class="wireframe-content">
+        <!-- Simulated Atlas Component at Top-RIGHT -->
+        <div class="atlas-component-wrapper">
+            <div style="
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin-bottom: 8px;
+                color: #0078d4;
+                font-weight: 600;
+                font-size: 12px;
+            ">
+                <span>📌</span>
+                <span>ATLAS COMPONENT</span>
+            </div>
+            <div class="component-demo">
+                Sample Button Component
+            </div>
+        </div>
+
         <h1>Sample Wireframe Content</h1>
         <p>This represents the main wireframe content area.</p>
-        <p>Notice how the Atlas component is positioned at the actual top-left of the viewport, not inside this content
-            area.</p>
+        <p><strong>✅ FIXED:</strong> Notice how the Atlas component is now positioned at the <strong>TOP-RIGHT</strong>
+            of the wireframe, not the left side!</p>
 
         <div style="margin: 20px 0;">
             <input type="text" placeholder="Sample input" style="padding: 8px; margin: 5px;">
@@ -86,20 +97,21 @@
                 style="padding: 8px 16px; background: #28a745; color: white; border: none; border-radius: 4px;">Submit</button>
         </div>
 
-        <p>The component overlay is:</p>
+        <p>The component positioning is now:</p>
         <ul>
-            <li>✅ Positioned fixed at top: 20px, left: 20px</li>
-            <li>✅ Has z-index: 9999 to stay on top</li>
-            <li>✅ Includes entry animation</li>
+            <li>✅ Positioned at <strong>top: 80px, right: 20px</strong> (TOP-RIGHT)</li>
+            <li>✅ Has z-index: 1000 to stay on top</li>
+            <li>✅ Includes slide-in from right animation</li>
             <li>✅ Visually distinct with border and shadow</li>
+            <li>✅ NO MORE ANNOYING ALERT!</li>
         </ul>
     </div>
 
     <script>
-        // Simulate the alert that would show when component is added
+        // Elegant toast notification (no more alerts!)
         window.addEventListener('load', () => {
             setTimeout(() => {
-                console.log('🎉 Atlas Component Added! Component has been placed at the top-left of your wireframe.');
+                console.log('✅ Component positioned at top-right with smooth animation!');
             }, 100);
         });
     </script>

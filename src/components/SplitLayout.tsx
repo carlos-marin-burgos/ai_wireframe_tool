@@ -957,6 +957,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
             />
           )}
 
+          {/* Conversation History */}
           {conversationHistory.map((message) => (
             <EnhancedMessage
               key={message.id}
@@ -966,6 +967,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
             />
           ))}
 
+          {/* Loading message */}
           {loading && (
             <EnhancedMessage
               message={{
@@ -1375,7 +1377,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
           if (onAddComponent) {
             onAddComponent(component);
           }
-          addMessage('ai', `✨ Added ${component.name} to your wireframe!`);
+          // Removed toast notification to prevent components showing inside toasts
         }}
         onGenerateWithAI={(description: string) => {
           console.log('🤖 AI generation requested for:', description);
