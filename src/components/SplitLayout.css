@@ -1416,14 +1416,14 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 .wireframe-preview button,
 .wireframe-preview .button,
 .wireframe-preview [role="button"] {
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease;
+  border: 2px dashed rgba(156, 163, 175, 0.4);
 }
 
 .wireframe-preview button:hover,
 .wireframe-preview .button:hover,
 .wireframe-preview [role="button"]:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-color: rgba(75, 85, 99, 0.8);
 }
 
 .wireframe-preview input,
@@ -1447,27 +1447,14 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 .wireframe-preview textarea,
 .wireframe-preview [role="button"] {
   position: relative;
+  border: 2px dashed rgba(156, 163, 175, 0.4);
+  transition: border-color 0.2s ease;
 }
 
-.wireframe-preview button:before,
-.wireframe-preview a:before,
-.wireframe-preview [role="button"]:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(59, 130, 246, 0);
-  pointer-events: none;
-  transition: background 0.2s ease;
-  border-radius: inherit;
-}
-
-.wireframe-preview button:hover:before,
-.wireframe-preview a:hover:before,
-.wireframe-preview [role="button"]:hover:before {
-  background: rgba(59, 130, 246, 0.05);
+.wireframe-preview button:hover,
+.wireframe-preview a:hover,
+.wireframe-preview [role="button"]:hover {
+  border-color: rgba(75, 85, 99, 0.8);
 }
 
 /* Wireframe info panel */

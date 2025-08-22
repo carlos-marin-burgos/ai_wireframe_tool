@@ -241,16 +241,15 @@ class WireframeExportService {
         /* Preserve existing wireframe styles */
         .card, .button, .btn {
             transition: all 0.2s ease;
+            border: 2px dashed rgba(156, 163, 175, 0.4);
         }
 
         .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-color: rgba(75, 85, 99, 0.8);
         }
 
         .button:hover, .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            border-color: rgba(75, 85, 99, 0.8);
         }
 
         /* Microsoft Learn specific styles */

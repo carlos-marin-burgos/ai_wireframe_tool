@@ -112,9 +112,13 @@ function injectAtlasAnimations(html) {
 }
 
 /* Hover effects for Atlas components */
+.atlas-component {
+  border: 2px dashed rgba(156, 163, 175, 0.4);
+  transition: border-color 0.3s ease;
+}
+
 .atlas-component:hover {
-  transform: translateY(-5px);
-  transition: transform 0.3s ease;
+  border-color: rgba(75, 85, 99, 0.8);
 }
 </style>`;
 

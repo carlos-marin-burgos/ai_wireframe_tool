@@ -26,15 +26,15 @@
 }
 
 .rearrangeable-mode .draggable-item {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease;
+  border: 2px dashed rgba(156, 163, 175, 0.4);
   cursor: move !important;
   position: relative;
   z-index: 1;
 }
 
 .rearrangeable-mode .draggable-item:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transform: translateY(-2px);
+  border-color: rgba(75, 85, 99, 0.8);
 }
 
 .rearrangeable-mode .draggable-item.dragging {
@@ -75,19 +75,19 @@
 /* Enhanced visual feedback for rearrangeable elements */
 .rearrangeable-mode .card {
   margin-bottom: 1rem;
-  border: 2px solid transparent;
+  border: 2px dashed rgba(156, 163, 175, 0.4);
   transition: border-color 0.2s ease;
 }
 
 .rearrangeable-mode .card:hover {
-  border-color: #e8e6de;
+  border-color: rgba(75, 85, 99, 0.8);
 }
 
 .rearrangeable-mode .btn {
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease;
+  border: 2px dashed rgba(156, 163, 175, 0.4);
 }
 
 .rearrangeable-mode .btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border-color: rgba(75, 85, 99, 0.8);
 }

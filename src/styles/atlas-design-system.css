@@ -304,16 +304,15 @@
 /* Card System */
 .atlas-card {
   background-color: white;
-  border: 1px solid var(--atlas-color-neutral-40);
+  border: 2px dashed rgba(156, 163, 175, 0.4);
   border-radius: var(--atlas-corner-radius-md);
   box-shadow: var(--atlas-shadow-2);
   overflow: hidden;
-  transition: all 0.15s ease-in-out;
+  transition: border-color 0.15s ease-in-out;
 }
 
 .atlas-card:hover {
-  box-shadow: var(--atlas-shadow-8);
-  transform: translateY(-1px);
+  border-color: rgba(75, 85, 99, 0.8);
 }
 
 .atlas-card-header {
