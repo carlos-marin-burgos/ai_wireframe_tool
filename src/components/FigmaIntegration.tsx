@@ -6,6 +6,7 @@
 import React, { useState } from 'react';
 import FigmaComponentBrowser from './FigmaComponentBrowser';
 import { FigmaIntegrationProps, FigmaComponentImportResult } from '../types/figma';
+import { getApiUrl } from '../config/api';
 import './FigmaIntegration.css';
 
 const FigmaIntegration: React.FC<FigmaIntegrationProps> = ({
@@ -35,7 +36,7 @@ const FigmaIntegration: React.FC<FigmaIntegrationProps> = ({
         setImportStatus(null);
 
         try {
-            const response = await fetch('/api/figma/import', {
+            const response = await fetch(getApiUrl('/api/figma/import'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -5,6 +5,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { FigmaComponentBrowserProps, FigmaComponent, FigmaComponentsResponse } from '../types/figma';
+import { getApiUrl } from '../config/api';
 import './FigmaComponentBrowser.css';
 
 const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({ onImportComponents, onClose }) => {
@@ -29,7 +30,7 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({ onImportC
             setLoading(true);
 
             // Load all components
-            const response = await fetch('/api/figma/components');
+            const response = await fetch(getApiUrl('/api/figma/components'));
             const data: FigmaComponentsResponse = await response.json();
 
             setComponents(data.components || []);
@@ -86,7 +87,7 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({ onImportC
                 setLoading(true);
 
                 // Call the backend import API
-                const response = await fetch('/api/figma/import', {
+                const response = await fetch(getApiUrl('/api/figma/import'), {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -131,7 +132,20 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({ onImportC
         >
             <div className="component-preview">
                 {component.preview ? (
-                    <img src={component.preview} alt={component.name} />
+                    <>
+                        <img
+                            src={component.preview}
+                            alt={component.name}
+                            onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.classList.add('hidden');
+                                target.nextElementSibling?.classList.remove('hidden');
+                            }}
+                        />
+                        <div className="preview-placeholder hidden">
+                            <span>{component.name.charAt(0)}</span>
+                        </div>
+                    </>
                 ) : (
                     <div className="preview-placeholder">
                         <span>{component.name.charAt(0)}</span>
@@ -162,7 +176,20 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({ onImportC
         >
             <div className="list-item-preview">
                 {component.preview ? (
-                    <img src={component.preview} alt={component.name} />
+                    <>
+                        <img
+                            src={component.preview}
+                            alt={component.name}
+                            onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.classList.add('hidden');
+                                target.nextElementSibling?.classList.remove('hidden');
+                            }}
+                        />
+                        <div className="preview-placeholder hidden">
+                            <span>{component.name.charAt(0)}</span>
+                        </div>
+                    </>
                 ) : (
                     <div className="preview-placeholder">
                         <span>{component.name.charAt(0)}</span>
@@ -242,8 +269,11 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({ onImportC
                         aria-label="Filter by library"
                     >
                         <option value="All">All Libraries</option>
-                        <option value="Fluent UI">Fluent UI</option>
-                        <option value="Atlas Design">Atlas Design</option>
+                        {statistics?.libraries?.map(library => (
+                            <option key={library.name} value={library.name}>
+                                {library.name} ({library.count})
+                            </option>
+                        ))}
                     </select>
 
                     <div className="view-controls">
@@ -273,7 +303,18 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({ onImportC
                                 className="popular-component"
                                 onClick={() => handleComponentSelect(component.id)}
                             >
-                                <img src={component.preview} alt={component.name} />
+                                <img
+                                    src={component.preview}
+                                    alt={component.name}
+                                    onError={(e) => {
+                                        const target = e.target as HTMLImageElement;
+                                        target.classList.add('hidden');
+                                        target.nextElementSibling?.classList.remove('hidden');
+                                    }}
+                                />
+                                <div className="preview-placeholder hidden">
+                                    <span>{component.name.charAt(0)}</span>
+                                </div>
                                 <span>{component.name}</span>
                             </div>
                         ))}

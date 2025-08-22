@@ -1,3 +1,8 @@
+/* Utility Classes */
+.hidden {
+  display: none !important;
+}
+
 /* Figma Component Browser Styles */
 
 .figma-component-browser {
@@ -10,7 +15,7 @@
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
 }
 
 .figma-browser-loading {
@@ -175,7 +180,7 @@
 /* Popular Section */
 .popular-section {
   background: white;
-  padding: 20px 24px;
+  padding: 10px 24px;
   border-bottom: 1px solid #e9ecef;
 }
 

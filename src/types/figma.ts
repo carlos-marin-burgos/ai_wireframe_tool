@@ -60,9 +60,15 @@ export interface FigmaComponentsResponse {
   }>;
   statistics: {
     totalComponents: number;
-    categories: string[];
+    categories: Array<{
+      name: string;
+      count: number;
+    }>;
     totalUsage: number;
-    libraries: string[];
+    libraries: Array<{
+      name: string;
+      count: number;
+    }>;
   };
 }
 
