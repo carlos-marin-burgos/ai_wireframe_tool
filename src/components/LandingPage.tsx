@@ -147,14 +147,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  // Expose Figma modal opening functionality to parent
-  useEffect(() => {
-    if (onFigmaModalOpen) {
-      // Pass the function to open the Figma modal
-      onFigmaModalOpen.openModal = () => setIsFigmaModalOpen(true);
-    }
-  }, [onFigmaModalOpen]);
-
   // Delete favorite function
   const handleDeleteFavorite = (favoriteId: string) => {
     const favoriteToDelete = favorites.find(fav => fav.id === favoriteId);
