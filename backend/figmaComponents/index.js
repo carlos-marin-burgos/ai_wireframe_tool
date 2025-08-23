@@ -57,6 +57,13 @@ module.exports = async function (context, req) {
 
     const components = [...atlasComponents, ...fluentComponents];
 
+    // Load custom components (added via admin script)
+    const customComponents = await loadCustomComponents(context);
+    if (customComponents.length > 0) {
+      context.log(`📦 Loaded ${customComponents.length} custom components`);
+      components.push(...customComponents);
+    }
+
     // Option 1: Use test data (fallback if both APIs fail)
     if (components.length === 0) {
       context.log("🔄 Falling back to test data...");
@@ -227,14 +234,18 @@ async function fetchRealFigmaComponents(token, fileId, libraryName, context) {
       `📄 Successfully loaded ${libraryName}: ${fileResponse.data.name}`
     );
 
-    // Step 2: Find all component nodes in the file
+    // Step 2: Find all component nodes in the file with quality filtering
     const componentNodes = [];
     function findComponents(node, path = []) {
       if (node.type === "COMPONENT" || node.type === "COMPONENT_SET") {
-        componentNodes.push({
-          node,
-          path: [...path, node.name],
-        });
+        // Quality filtering: exclude variants and focus on main components
+        const isQualityComponent = isHighQualityComponent(node, path);
+        if (isQualityComponent) {
+          componentNodes.push({
+            node,
+            path: [...path, node.name],
+          });
+        }
       }
 
       if (node.children) {
@@ -250,7 +261,7 @@ async function fetchRealFigmaComponents(token, fileId, libraryName, context) {
     );
 
     // Step 3: Get component images (SVG format for crisp rendering)
-    const nodeIds = componentNodes.map((c) => c.node.id).slice(0, 15); // Limit for performance
+    const nodeIds = componentNodes.map((c) => c.node.id).slice(0, 25); // Reduced limit for Microsoft Learn quality focus
     let imageUrls = {};
 
     if (nodeIds.length > 0) {
@@ -283,34 +294,44 @@ async function fetchRealFigmaComponents(token, fileId, libraryName, context) {
       }
     }
 
-    // Step 4: Transform to our component format
-    const components = componentNodes.slice(0, 15).map((item, index) => {
-      const node = item.node;
-      const preview = imageUrls[node.id] || null;
+    // Step 4: Transform to our component format with Microsoft Learn focus
+    const components = componentNodes
+      .slice(0, 25)
+      .map((item, index) => {
+        const node = item.node;
 
-      // Smart categorization based on component name and structure
-      const category = categorizeComponent(node.name, item.path, libraryName);
-      const usageCount = Math.floor(Math.random() * 50) + 10; // Simulated usage data
+        // Add null checks to prevent errors
+        if (!node || !node.id || !node.name) {
+          context.log.warn(`⚠️ Skipping invalid component node:`, item);
+          return null;
+        }
 
-      return {
-        id: `${libraryName.toLowerCase().replace(/\s+/g, "-")}-${node.id}`,
-        name: node.name,
-        description:
-          node.description ||
-          `${node.name} component from ${libraryName} library`,
-        category: category,
-        library: libraryName,
-        preview: preview,
-        variants: getVariants(node),
-        usageCount: usageCount,
-        tags: generateTags(node.name, category, libraryName),
-        type: "component",
-        lastModified: new Date().toISOString(),
-        createdBy: `${libraryName} Team`,
-        figmaNodeId: node.id,
-        figmaFileId: fileId,
-      };
-    });
+        const preview = imageUrls[node.id] || null;
+
+        // Smart categorization based on component name and structure
+        const category = categorizeComponent(node.name, item.path, libraryName);
+        const usageCount = Math.floor(Math.random() * 50) + 10; // Simulated usage data
+
+        return {
+          id: `${libraryName.toLowerCase().replace(/\s+/g, "-")}-${node.id}`,
+          name: cleanComponentName(node.name),
+          description:
+            node.description ||
+            generateComponentDescription(node.name, category, libraryName),
+          category: category,
+          library: libraryName,
+          preview: preview,
+          variants: getVariants(node),
+          usageCount: usageCount,
+          tags: generateTags(node.name, category, libraryName),
+          type: "component",
+          lastModified: new Date().toISOString(),
+          createdBy: `${libraryName} Team`,
+          figmaNodeId: node.id,
+          figmaFileId: fileId,
+        };
+      })
+      .filter((component) => component !== null); // Filter out invalid components
 
     context.log(
       `✅ Successfully processed ${components.length} components from ${libraryName}`
@@ -325,142 +346,92 @@ async function fetchRealFigmaComponents(token, fileId, libraryName, context) {
 }
 
 /**
- * 🏷️ Smart component categorization
+ * 🏷️ Smart component categorization for Microsoft Learn
  * @param {string} name - Component name
  * @param {Array} path - Component path in Figma
  * @param {string} libraryName - Name of the design library
  */
 function categorizeComponent(name, path, libraryName) {
+  // Add null checking
+  if (!name) return "Other";
+
   const nameLower = name.toLowerCase();
-  const pathString = path.join(" ").toLowerCase();
+  const pathString = (path || []).join(" ").toLowerCase();
 
-  // Fluent-specific categorization
-  if (libraryName === "Fluent Design") {
-    if (
-      nameLower.includes("button") ||
-      nameLower.includes("menu button") ||
-      nameLower.includes("split button") ||
-      nameLower.includes("toggle button")
-    )
-      return "Actions";
-    if (
-      nameLower.includes("text input") ||
-      nameLower.includes("number input") ||
-      nameLower.includes("search box") ||
-      nameLower.includes("text area") ||
-      nameLower.includes("dropdown") ||
-      nameLower.includes("combobox") ||
-      nameLower.includes("checkbox") ||
-      nameLower.includes("radio") ||
-      nameLower.includes("slider") ||
-      nameLower.includes("rating") ||
-      nameLower.includes("date picker")
-    )
-      return "Forms";
-    if (
-      nameLower.includes("nav") ||
-      nameLower.includes("breadcrumb") ||
-      nameLower.includes("tab") ||
-      nameLower.includes("pivot") ||
-      nameLower.includes("tree") ||
-      nameLower.includes("command bar")
-    )
-      return "Navigation";
-    if (
-      nameLower.includes("card") ||
-      nameLower.includes("persona") ||
-      nameLower.includes("info button")
-    )
-      return "Cards";
-    if (
-      nameLower.includes("dialog") ||
-      nameLower.includes("modal") ||
-      nameLower.includes("panel") ||
-      nameLower.includes("overlay") ||
-      nameLower.includes("callout") ||
-      nameLower.includes("tooltip")
-    )
-      return "Overlays";
-    if (
-      nameLower.includes("message bar") ||
-      nameLower.includes("progress") ||
-      nameLower.includes("spinner") ||
-      nameLower.includes("shimmer")
-    )
-      return "Feedback";
-    if (
-      nameLower.includes("list") ||
-      nameLower.includes("table") ||
-      nameLower.includes("data grid") ||
-      nameLower.includes("detail list")
-    )
-      return "Data Display";
-  }
+  // Microsoft Learn specific categorization
+  if (
+    nameLower.includes("nav") ||
+    nameLower.includes("breadcrumb") ||
+    nameLower.includes("menu") ||
+    nameLower.includes("tab") ||
+    nameLower.includes("pagination") ||
+    pathString.includes("navigation")
+  )
+    return "Navigation";
 
-  // General categorization (works for both libraries)
   if (
     nameLower.includes("button") ||
+    nameLower.includes("link") ||
     nameLower.includes("cta") ||
     nameLower.includes("action")
   )
     return "Actions";
+
   if (
-    nameLower.includes("input") ||
+    nameLower.includes("card") ||
+    nameLower.includes("article") ||
+    nameLower.includes("module") ||
+    nameLower.includes("course") ||
+    nameLower.includes("learning path")
+  )
+    return "Cards";
+
+  if (
     nameLower.includes("form") ||
-    nameLower.includes("field") ||
+    nameLower.includes("input") ||
+    nameLower.includes("search") ||
+    nameLower.includes("dropdown") ||
+    nameLower.includes("checkbox") ||
+    nameLower.includes("radio") ||
     nameLower.includes("textarea")
   )
     return "Forms";
-  if (
-    nameLower.includes("nav") ||
-    nameLower.includes("menu") ||
-    nameLower.includes("breadcrumb") ||
-    nameLower.includes("tab")
-  )
-    return "Navigation";
-  if (
-    nameLower.includes("hero") ||
-    nameLower.includes("banner") ||
-    nameLower.includes("landing") ||
-    nameLower.includes("feature")
-  )
-    return "Marketing";
-  if (
-    nameLower.includes("card") ||
-    nameLower.includes("tile") ||
-    nameLower.includes("panel")
-  )
-    return "Cards";
-  if (
-    nameLower.includes("header") ||
-    nameLower.includes("footer") ||
-    nameLower.includes("layout") ||
-    nameLower.includes("grid")
-  )
-    return "Layout";
+
   if (
     nameLower.includes("table") ||
-    nameLower.includes("chart") ||
-    nameLower.includes("data") ||
-    nameLower.includes("list")
+    nameLower.includes("list") ||
+    nameLower.includes("grid") ||
+    nameLower.includes("data")
   )
     return "Data Display";
-  if (
-    nameLower.includes("modal") ||
-    nameLower.includes("dialog") ||
-    nameLower.includes("popup") ||
-    nameLower.includes("overlay")
-  )
-    return "Overlays";
+
   if (
     nameLower.includes("alert") ||
-    nameLower.includes("notification") ||
     nameLower.includes("toast") ||
-    nameLower.includes("message")
+    nameLower.includes("notification") ||
+    nameLower.includes("message") ||
+    nameLower.includes("tooltip")
   )
     return "Feedback";
 
-  return "Layout"; // Default category
+  if (
+    nameLower.includes("hero") ||
+    nameLower.includes("header") ||
+    nameLower.includes("footer") ||
+    nameLower.includes("section") ||
+    nameLower.includes("container")
+  )
+    return "Layout";
+
+  // Default fallback
+  return "Layout";
+}
+
+/**
+      }
+
+/**
+ * 🔄 Extract component variants
 }
 
 /**
@@ -480,11 +451,18 @@ function getVariants(node) {
  * @param {string} libraryName - Name of the design library
  */
 function generateTags(name, category, libraryName) {
+  // Add null checking
+  if (!name)
+    return [
+      category?.toLowerCase() || "component",
+      libraryName?.toLowerCase() || "library",
+    ];
+
   const tags = [name.toLowerCase()];
   const words = name.toLowerCase().split(/[\s\-_]/);
   tags.push(...words);
-  tags.push(category.toLowerCase());
-  tags.push(libraryName.toLowerCase());
+  tags.push((category || "other").toLowerCase());
+  tags.push((libraryName || "library").toLowerCase());
 
   // Add library-specific tags
   if (libraryName === "Atlas Design") {
@@ -494,6 +472,145 @@ function generateTags(name, category, libraryName) {
   }
 
   return [...new Set(tags)]; // Remove duplicates
+}
+
+/**
+ * 🎯 Quality filtering for components
+ * Filters out variants and low-quality components, focusing on main usable components
+ * @param {object} node - Figma node
+ * @param {Array} path - Component path in Figma
+ */
+function isHighQualityComponent(node, path) {
+  const name = node.name.toLowerCase();
+
+  // Exclude technical variants (contain = signs)
+  if (name.includes("=") || name.includes(",")) {
+    return false;
+  }
+
+  // Exclude size-only variants
+  if (/^(size=|small|medium|large|xs|sm|md|lg|xl)$/i.test(name)) {
+    return false;
+  }
+
+  // Exclude state variants
+  if (/^(state=|hover|focus|active|disabled|rest)$/i.test(name)) {
+    return false;
+  }
+
+  // Exclude frames and pages
+  if (node.type === "FRAME" && path.length < 2) {
+    return false;
+  }
+
+  // Microsoft Learn priority components
+  const microsoftLearnComponents = [
+    "button",
+    "card",
+    "nav",
+    "breadcrumb",
+    "search",
+    "table",
+    "list",
+    "form",
+    "input",
+    "dropdown",
+    "checkbox",
+    "radio",
+    "tab",
+    "badge",
+    "alert",
+    "progress",
+    "pagination",
+    "tooltip",
+    "accordion",
+    "hero",
+  ];
+
+  // Check if component matches Microsoft Learn patterns
+  const isMicrosoftLearnComponent = microsoftLearnComponents.some(
+    (component) =>
+      name.includes(component) || name.includes(component.replace(/s$/, ""))
+  );
+
+  // Include components that are likely main components or Microsoft Learn relevant
+  const isMainComponent =
+    node.type === "COMPONENT_SET" || // Component sets are usually main components
+    (node.type === "COMPONENT" && !name.includes("/")) || // Simple component names
+    isMicrosoftLearnComponent || // Microsoft Learn specific components
+    /^(learn|docs|documentation|article|module|course)/.test(name); // Educational content components
+
+  return isMainComponent;
+}
+
+/**
+ * 🧹 Clean component names for better UX
+ * @param {string} name - Original Figma component name
+ */
+function cleanComponentName(name) {
+  // Add null checking
+  if (!name || typeof name !== "string") {
+    return "Unnamed Component";
+  }
+
+  // Remove technical suffixes and prefixes
+  let cleaned = name
+    .replace(/^(Size=|State=|Variant=)/i, "")
+    .replace(/\s*\/\s*(Default|Primary|Secondary)$/i, "")
+    .replace(/\s*\d+px\s*/g, " ") // Remove pixel values
+    .replace(/\s+/g, " ") // Normalize whitespace
+    .trim();
+
+  // Convert to proper case if it's all caps or all lowercase
+  if (cleaned === cleaned.toUpperCase() || cleaned === cleaned.toLowerCase()) {
+    cleaned = cleaned.toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase());
+  }
+
+  return cleaned || "Unnamed Component";
+}
+
+/**
+ * 📝 Generate meaningful component descriptions
+ * @param {string} name - Component name
+ * @param {string} category - Component category
+ * @param {string} libraryName - Library name
+ */
+function generateComponentDescription(name, category, libraryName) {
+  const cleanName = cleanComponentName(name);
+  const lowercaseName = cleanName.toLowerCase();
+
+  // Generate contextual descriptions based on component type
+  if (lowercaseName.includes("button")) {
+    return `Interactive ${cleanName} for user actions and navigation in ${libraryName}`;
+  } else if (lowercaseName.includes("card")) {
+    return `Content ${cleanName} for displaying structured information and data`;
+  } else if (lowercaseName.includes("nav") || lowercaseName.includes("menu")) {
+    return `Navigation ${cleanName} for site structure and user guidance`;
+  } else if (
+    lowercaseName.includes("form") ||
+    lowercaseName.includes("input")
+  ) {
+    return `Form ${cleanName} for user data collection and input handling`;
+  } else if (
+    lowercaseName.includes("header") ||
+    lowercaseName.includes("hero")
+  ) {
+    return `Header ${cleanName} for page introductions and key messaging`;
+  } else if (lowercaseName.includes("footer")) {
+    return `Footer ${cleanName} for additional links and site information`;
+  } else if (
+    lowercaseName.includes("modal") ||
+    lowercaseName.includes("dialog")
+  ) {
+    return `Modal ${cleanName} for focused user interactions and confirmations`;
+  } else if (
+    lowercaseName.includes("table") ||
+    lowercaseName.includes("list")
+  ) {
+    return `Data ${cleanName} for organizing and displaying structured content`;
+  } else {
+    return `${cleanName} component from ${libraryName} library for ${category.toLowerCase()} interfaces`;
+  }
 }
 
 /**
@@ -526,4 +643,30 @@ function generateStatistics(components) {
     })),
     totalUsage: components.reduce((sum, c) => sum + c.usageCount, 0),
   };
+}
+
+/**
+ * Load custom components from storage
+ * In production, this would load from a database
+ * For now, we'll use a simple JSON file or in-memory storage
+ */
+async function loadCustomComponents(context) {
+  try {
+    // For now, return empty array
+    // In the future, this could load from Azure Storage, Cosmos DB, etc.
+    // The admin script will need to store components somewhere persistent
+
+    context.log("📁 Loading custom components...");
+
+    // Placeholder for custom components storage
+    // This would typically be:
+    // const fs = require('fs').promises;
+    // const customComponents = JSON.parse(await fs.readFile('custom-components.json'));
+    // return customComponents;
+
+    return [];
+  } catch (error) {
+    context.log.warn("⚠️ Could not load custom components:", error.message);
+    return [];
+  }
 }

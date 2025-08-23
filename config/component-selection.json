@@ -1,0 +1,116 @@
+{
+  "componentSelectionCriteria": {
+    "maxComponentsPerLibrary": 25,
+    "preferredCategories": [
+      "Navigation",
+      "Actions",
+      "Cards",
+      "Forms",
+      "Data Display",
+      "Layout",
+      "Feedback"
+    ],
+    "microsoftLearnComponents": [
+      "navigation",
+      "breadcrumb",
+      "button",
+      "card",
+      "hero",
+      "form",
+      "search",
+      "table",
+      "list",
+      "badge",
+      "alert",
+      "tooltip",
+      "dropdown",
+      "input",
+      "checkbox",
+      "radio",
+      "tab",
+      "accordion",
+      "progress",
+      "pagination"
+    ],
+    "excludePatterns": [
+      "Size=",
+      "State=",
+      "Variant=",
+      "/Default",
+      "/Primary",
+      "/Secondary",
+      "hover",
+      "focus",
+      "active",
+      "disabled",
+      "rest",
+      "small",
+      "medium",
+      "large",
+      "xs",
+      "sm",
+      "md",
+      "lg",
+      "xl"
+    ],
+    "priorityComponents": {
+      "microsoft_learn_essentials": [
+        "Learn Navigation",
+        "Learn Hero",
+        "Learn Card",
+        "Learn Button",
+        "Learn Search",
+        "Learn Breadcrumb",
+        "Learn Progress",
+        "Learn Table"
+      ],
+      "content_components": [
+        "Article Card",
+        "Module Card",
+        "Learning Path Card",
+        "Code Block",
+        "Documentation Table",
+        "Progress Indicator",
+        "Badge",
+        "Tag"
+      ],
+      "navigation_components": [
+        "Top Navigation",
+        "Side Navigation",
+        "Breadcrumb Trail",
+        "Table of Contents",
+        "Pagination",
+        "Search Box"
+      ]
+    },
+    "libraryPreferences": {
+      "Fluent Design": {
+        "enabled": true,
+        "weight": 1.0,
+        "focusAreas": ["navigation", "forms", "data", "actions", "education"]
+      },
+      "Atlas Design": {
+        "enabled": true,
+        "weight": 0.7,
+        "focusAreas": ["cards", "hero", "badges", "progress"]
+      }
+    }
+  },
+  "qualityFilters": {
+    "minimumUsageCount": 0,
+    "requirePreview": false,
+    "requireDescription": false,
+    "excludeFrames": true,
+    "excludeVariants": true,
+    "includeComponentSets": true,
+    "microsoftLearnRelevance": true
+  },
+  "searchAndDiscovery": {
+    "enableSmartSearch": true,
+    "boostPopularComponents": false,
+    "boostMicrosoftLearnComponents": true,
+    "enableCategoryFiltering": true,
+    "enableLibraryFiltering": true,
+    "defaultSortBy": "relevance"
+  }
+}

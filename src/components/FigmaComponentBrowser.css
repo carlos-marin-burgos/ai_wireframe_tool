@@ -3,6 +3,88 @@
   display: none !important;
 }
 
+/* Figma Component Styles */
+.figma-component {
+  margin: 10px 0;
+  transition: all 0.2s ease;
+}
+
+.figma-component:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.figma-component.btn {
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.btn-outlined {
+  background: transparent;
+  border: 2px solid #0066cc;
+  color: #0066cc;
+}
+
+.btn-outlined:hover {
+  background: #0066cc;
+  color: white;
+}
+
+.btn-filled {
+  background: #0066cc;
+  border: 2px solid #0066cc;
+  color: white;
+}
+
+.btn-filled:hover {
+  background: #0052a3;
+  border-color: #0052a3;
+}
+
+.btn-split {
+  background: #0066cc;
+  border: 2px solid #0066cc;
+  color: white;
+  position: relative;
+  padding-right: 40px;
+}
+
+.btn-split::after {
+  content: "▼";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+}
+
+.hero-section.figma-component {
+  background: linear-gradient(135deg, #0066cc 0%, #004499 100%);
+  border-radius: 8px;
+}
+
+.card.figma-component {
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.navbar.figma-component {
+  border-radius: 8px;
+  border: 1px solid #e1e5e9;
+}
+
+.alert.figma-component {
+  border-radius: 8px;
+}
+
+.table.figma-component {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
 /* Figma Component Browser Styles */
 
 .figma-component-browser {
@@ -19,19 +101,35 @@
 }
 
 .figma-browser-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  z-index: 1040;
+  padding: 20px;
+}
+
+.loading-modal-content {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 400px;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3),
+    0 10px 10px -5px rgba(0, 0, 0, 0.2);
 }
 
 /* Background Animation */
-.figma-browser-loading::before {
+.loading-modal-content::before {
   content: "";
   position: absolute;
   top: -50%;
@@ -367,12 +465,31 @@
   gap: 24px;
   color: #6c757d;
   font-size: 14px;
+  align-items: center;
 }
 
 .browser-stats span {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.clear-cache-button {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: #495057;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: auto;
+}
+
+.clear-cache-button:hover {
+  background: #e9ecef;
+  color: #343a40;
+  transform: translateY(-1px);
 }
 
 /* Controls */

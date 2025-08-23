@@ -16,7 +16,7 @@ class FigmaService {
     this.baseURL = "https://api.figma.com/v1";
     this.fileKey = "wSppVRlOi9JZO2LxtHUbbW"; // From figma.config.json
     this.fluentLibraryFileKey = "BNjrEE5xScFNrGY1w9rqBt"; // Microsoft Fluent UI Library
-    this.atlasLibraryFileKey = "uVA2amRR71yJZ0GS6RI6zL"; // Atlas Design Library
+    this.atlasLibraryFileKey = "PuWj05uKXhfbqrhmJLtCij"; // Atlas Design Library
 
     // OAuth2 support
     this.oauthTokens = null;
@@ -1766,7 +1766,7 @@ class FigmaService {
             <p style="font-size: 12px; color: #0078d4; margin: 0; font-weight: 500;">Node ID: ${nodeId}</p>
         </div>
         <p style="font-size: 11px; color: #a19f9d; margin: 0;">Please check Figma connection and permissions</p>
-        <p style="font-size: 10px; color: #c8c6c4; margin: 4px 0 0 0;">Atlas Design Library: uVA2amRR71yJZ0GS6RI6zL</p>
+        <p style="font-size: 10px; color: #c8c6c4; margin: 4px 0 0 0;">Atlas Design Library: PuWj05uKXhfbqrhmJLtCij</p>
     </div>`;
   }
 
