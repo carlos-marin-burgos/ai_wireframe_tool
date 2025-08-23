@@ -5,6 +5,13 @@
 
 echo "🔍 Starting pre-deployment validation..."
 
+# Get the project root (parent of scripts directory)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+# Change to project root
+cd "$PROJECT_ROOT"
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -92,14 +99,14 @@ echo "4. Checking dependencies..."
 if [ -f "backend/package.json" ]; then
     print_status "package.json exists" 0
     
-    cd backend
+    cd "$PROJECT_ROOT/backend"
     if [ -d "node_modules" ]; then
         print_status "Dependencies installed" 0
     else
         print_status "Dependencies not installed" 1
-        echo "   Run: cd backend && npm install"
+        echo "   Run: cd $PROJECT_ROOT/backend && npm install"
     fi
-    cd ..
+    cd "$PROJECT_ROOT"
 else
     print_status "package.json missing" 1
 fi
@@ -107,13 +114,13 @@ fi
 # 5. Test local function app startup
 echo ""
 echo "5. Testing local function app..."
-cd backend
+cd "$PROJECT_ROOT/backend"
 if npm run build &> /dev/null; then
     print_status "Function app builds successfully" 0
 else
     print_status "Function app build failed" 1
 fi
-cd ..
+cd "$PROJECT_ROOT"
 
 # 6. Check if Azure resources exist (if azd env exists)
 if [ -d ".azure" ] && command -v azd &> /dev/null; then

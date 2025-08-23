@@ -120,14 +120,14 @@ fi
 
 if [ ! -d "backend/node_modules" ]; then
     log_warning "Backend dependencies not found, installing..."
-    cd backend && npm install && cd ..
+    cd "$PROJECT_ROOT/backend" && npm install && cd "$PROJECT_ROOT"
 fi
 
 log_success "Dependencies verified"
 
 # Step 4: Start Azure Functions Backend
 log_info "Step 4: Starting Azure Functions Backend..."
-cd backend
+cd "$PROJECT_ROOT/backend"
 
 # Create a wrapper script for func start to handle environment properly
 cat > start-func.sh << 'EOF'
@@ -140,9 +140,9 @@ EOF
 chmod +x start-func.sh
 
 # Start backend in background
-nohup ./start-func.sh > ../backend-startup.log 2>&1 &
+nohup ./start-func.sh > "$PROJECT_ROOT/backend-startup.log" 2>&1 &
 BACKEND_PID=$!
-cd ..
+cd "$PROJECT_ROOT"
 
 # Wait for backend to be ready
 if wait_for_service "http://localhost:7072/api/health" "Azure Functions Backend"; then

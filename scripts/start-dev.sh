@@ -6,6 +6,10 @@
 echo "🚀 Starting Designetica Development Environment"
 echo "=============================================="
 
+# Get the project root (parent of scripts directory)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
 # Colors for output
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
@@ -13,9 +17,10 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-# Check if we're in the right directory
+# Change to project root and check if we're in the right directory
+cd "$PROJECT_ROOT"
 if [ ! -f "package.json" ]; then
-    echo -e "${RED}❌ Error: Please run this script from the project root directory${NC}"
+    echo -e "${RED}❌ Error: package.json not found in $PROJECT_ROOT${NC}"
     exit 1
 fi
 
@@ -55,7 +60,7 @@ fi
 
 if [ ! -d "backend/node_modules" ]; then
     echo -e "${BLUE}📦 Installing backend dependencies...${NC}"
-    cd backend && npm install && cd ..
+    cd "$PROJECT_ROOT/backend" && npm install && cd "$PROJECT_ROOT"
 fi
 
 # Check if concurrently is installed

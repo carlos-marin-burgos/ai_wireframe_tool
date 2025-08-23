@@ -5,8 +5,16 @@
 
 set -e
 
+# Get the project root (parent of scripts directory)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
 echo "🎯 Starting Designetica deployment to Azure..."
+echo "📁 Project root: $PROJECT_ROOT"
 echo ""
+
+# Change to project root
+cd "$PROJECT_ROOT"
 
 # Check if Azure CLI is installed
 if ! command -v az &> /dev/null; then
@@ -36,9 +44,9 @@ echo "🔧 Building frontend for production..."
 npm run build
 
 echo "📦 Preparing backend deployment..."
-cd backend
+cd "$PROJECT_ROOT/backend"
 npm install --production
-cd ..
+cd "$PROJECT_ROOT"
 
 echo "🚀 Deploying to Azure..."
 

@@ -6,7 +6,8 @@
 set -e
 
 # Configuration
-PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 BACKUP_DIR="$PROJECT_ROOT/backups"
 PROJECT_NAME="designetica"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
@@ -28,20 +29,23 @@ create_backup() {
     echo -e "${YELLOW}📁 Project root: $PROJECT_ROOT${NC}"
     echo -e "${YELLOW}💾 Backup location: $BACKUP_PATH${NC}"
     
+    # Ensure backup directory exists
+    mkdir -p "$BACKUP_DIR"
+    
     # Create backup excluding unnecessary files
-    cd "$(dirname "$PROJECT_ROOT")"
+    cd "$PROJECT_ROOT"
     tar -czf "$BACKUP_PATH" \
-        --exclude="$(basename "$PROJECT_ROOT")/backups" \
-        --exclude="$(basename "$PROJECT_ROOT")/node_modules" \
-        --exclude="$(basename "$PROJECT_ROOT")/.git" \
-        --exclude="$(basename "$PROJECT_ROOT")/dist" \
-        --exclude="$(basename "$PROJECT_ROOT")/build" \
-        --exclude="$(basename "$PROJECT_ROOT")/*.log" \
-        --exclude="$(basename "$PROJECT_ROOT")/.DS_Store" \
-        --exclude="$(basename "$PROJECT_ROOT")/Thumbs.db" \
-        --exclude="$(basename "$PROJECT_ROOT")/*.tmp" \
-        --exclude="$(basename "$PROJECT_ROOT")/*.temp" \
-        "$(basename "$PROJECT_ROOT")"
+        --exclude="backups" \
+        --exclude="node_modules" \
+        --exclude=".git" \
+        --exclude="dist" \
+        --exclude="build" \
+        --exclude="*.log" \
+        --exclude=".DS_Store" \
+        --exclude="Thumbs.db" \
+        --exclude="*.tmp" \
+        --exclude="*.temp" \
+        .
     
     # Get backup size
     BACKUP_SIZE=$(du -h "$BACKUP_PATH" | cut -f1)

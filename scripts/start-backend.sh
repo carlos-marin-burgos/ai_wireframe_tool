@@ -3,9 +3,13 @@
 # Start Backend Script for Designetica
 echo "🚀 Starting Designetica Backend on port 7072..."
 
+# Get the project root (parent of scripts directory)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
 # Navigate to backend directory
-cd "$(dirname "$0")/backend" 2>/dev/null || cd backend 2>/dev/null || {
-    echo "❌ Backend directory not found. Make sure you're running this from the project root."
+cd "$PROJECT_ROOT/backend" || {
+    echo "❌ Backend directory not found at $PROJECT_ROOT/backend"
     exit 1
 }
 
