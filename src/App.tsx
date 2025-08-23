@@ -1130,6 +1130,54 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     setShowFigmaIntegration(false);
   };
 
+  // Handler for adding components directly to wireframe
+  const handleAddToWireframe = (componentData: any[]) => {
+    console.log('Adding components to wireframe:', componentData);
+
+    if (componentData.length === 0) {
+      showToast('No components selected to add to wireframe', 'warning');
+      return;
+    }
+
+    // Create HTML from component data
+    let combinedHtml = '';
+    componentData.forEach((component) => {
+      if (component.content) {
+        combinedHtml += `
+          <div class="wireframe-component" data-component-id="${component.id}" style="margin: 10px 0; padding: 15px; border: 1px solid #e0e0e0; border-radius: 6px; background: #f9f9f9;">
+            <div class="component-header" style="margin-bottom: 10px; font-size: 12px; color: #666; border-bottom: 1px solid #ddd; padding-bottom: 5px;">
+              <span style="font-weight: bold;">📦 ${component.name}</span>
+              ${component.category ? `<span style="margin-left: 10px; padding: 2px 6px; background: #e3f2fd; color: #1565c0; border-radius: 3px; font-size: 10px;">${component.category}</span>` : ''}
+            </div>
+            <div class="component-content">
+              ${component.content}
+            </div>
+          </div>
+        `;
+      }
+    });
+
+    if (combinedHtml) {
+      if (htmlWireframe && htmlWireframe.trim() !== '') {
+        // Add to existing wireframe
+        const updatedHtml = insertComponentIntoWireframe(htmlWireframe, combinedHtml);
+        setHtmlWireframe(updatedHtml);
+        showToast(`Added ${componentData.length} component(s) to existing wireframe`, 'success');
+      } else {
+        // Create new wireframe with components
+        const newWireframe = createWireframeWithComponent(combinedHtml);
+        setHtmlWireframe(newWireframe);
+        setShowLandingPage(false);
+        showToast(`Created new wireframe with ${componentData.length} component(s)`, 'success');
+      }
+      setForceUpdateKey(Date.now());
+    } else {
+      showToast('Failed to process component data', 'error');
+    }
+
+    setShowFigmaIntegration(false);
+  };
+
   const handleFigmaImport = (html: string, fileName: string) => {
     console.log('Figma file imported:', fileName);
     setHtmlWireframe(html);
@@ -1352,9 +1400,10 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
         <div className="figma-modal-overlay">
           <FigmaIntegration
             onComponentsImported={handleFigmaComponentsImported}
+            onAddToWireframe={handleAddToWireframe}
             onClose={() => setShowFigmaIntegration(false)}
             designSystem="auto"
-            mode="component-browser"
+            mode="add-to-wireframe"
           />
         </div>
       )}

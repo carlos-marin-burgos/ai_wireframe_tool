@@ -74,14 +74,17 @@ export interface FigmaComponentsResponse {
 
 export interface FigmaIntegrationProps {
   onComponentsImported?: (components: FigmaComponentImportResult[]) => void;
+  onAddToWireframe?: (componentData: any[]) => void; // New prop for adding to wireframe
   onClose?: () => void;
   designSystem?: "auto" | "fluent" | "atlas";
-  mode?: "design-import" | "component-browser"; // New prop to distinguish use cases
+  mode?: "design-import" | "component-browser" | "add-to-wireframe"; // New mode for wireframe integration
 }
 
 export interface FigmaComponentBrowserProps {
-  onImportComponents: (componentIds: string[]) => void;
+  onImportComponents?: (componentIds: string[]) => void;
+  onAddToWireframe?: (componentData: any[]) => void; // New prop for adding to wireframe
   onClose: () => void;
+  mode?: "import" | "add-to-wireframe"; // New prop to distinguish modes
 }
 
 export interface WireframeOptions {

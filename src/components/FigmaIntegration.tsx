@@ -11,6 +11,7 @@ import './FigmaIntegration.css';
 
 const FigmaIntegration: React.FC<FigmaIntegrationProps> = ({
     onComponentsImported,
+    onAddToWireframe,
     onClose,
     designSystem = 'auto',
     mode = 'component-browser'
@@ -138,13 +139,14 @@ const FigmaIntegration: React.FC<FigmaIntegrationProps> = ({
         <div className="figma-integration">
             {(() => {
                 console.log('🔍 FigmaIntegration mode:', mode);
-                console.log('🔍 Showing component browser?', mode === 'component-browser');
+                console.log('🔍 Showing component browser?', mode === 'component-browser' || mode === 'add-to-wireframe');
                 return null;
             })()}
-            {mode === 'component-browser' ? (
+            {(mode === 'component-browser' || mode === 'add-to-wireframe') ? (
                 // Component Browser Mode (for Pages toolbar)
                 <FigmaComponentBrowser
                     onImportComponents={handleImportComponents}
+                    onAddToWireframe={onAddToWireframe}
                     onClose={handleCloseBrowser}
                 />
             ) : (

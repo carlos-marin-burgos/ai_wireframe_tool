@@ -8,7 +8,12 @@ import { FigmaComponentBrowserProps, FigmaComponent, FigmaComponentsResponse } f
 import { getApiUrl } from '../config/api';
 import './FigmaComponentBrowser.css';
 
-const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({ onImportComponents, onClose }) => {
+const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({
+    onImportComponents,
+    onAddToWireframe,
+    onClose,
+    mode = 'add-to-wireframe'
+}) => {
     const [components, setComponents] = useState<FigmaComponent[]>([]);
     const [categories, setCategories] = useState<string[]>([]);
     const [selectedCategory, setSelectedCategory] = useState('All');
@@ -34,7 +39,7 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({ onImportC
             const data: FigmaComponentsResponse = await response.json();
 
             setComponents(data.components || []);
-            setCategories(['All', ...data.categories || []]);
+            setCategories(['All', ...(data.categories || []).filter(cat => cat !== 'All')]);
             setPopularComponents(data.popular || []);
             setStatistics(data.statistics || null);
 
@@ -86,39 +91,33 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({ onImportC
             try {
                 setLoading(true);
 
-                // Call the backend import API
-                const response = await fetch(getApiUrl('/api/figma/import'), {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        componentIds: Array.from(selectedComponents),
-                        options: {
-                            designSystem: 'fluent',
-                            wireframeMode: false,
-                            responsive: true
-                        }
-                    })
+                // Handle adding to wireframe (default behavior)
+                const selectedComponentData = Array.from(selectedComponents).map(id => {
+                    const component = components.find(c => c.id === id);
+                    return {
+                        id: component?.id,
+                        name: component?.name,
+                        htmlCode: component?.htmlCode,
+                        type: component?.type || 'component',
+                        category: component?.category,
+                        library: component?.library,
+                        defaultWidth: 4, // Default Bootstrap column width
+                        content: component?.htmlCode || `<div class="figma-component">${component?.name}</div>`
+                    };
                 });
 
-                const result = await response.json();
+                // Call the wireframe addition callback
+                if (onAddToWireframe) {
+                    onAddToWireframe(selectedComponentData);
 
-                if (response.ok) {
-                    // Pass the results to the parent component
-                    onImportComponents(Array.from(selectedComponents));
-
-                    // Show success feedback
-                    alert(`Successfully imported ${result.summary.successful} of ${result.summary.total} components!`);
-
-                    // Reset selection
+                    // Reset selection and close
                     setSelectedComponents(new Set());
-                } else {
-                    throw new Error(result.error || 'Import failed');
+                    onClose();
+                    return;
                 }
             } catch (error) {
-                console.error('Import error:', error);
-                alert(`Import failed: ${error.message}`);
+                console.error('Operation error:', error);
+                alert(`Operation failed: ${error.message}`);
             } finally {
                 setLoading(false);
             }
@@ -216,17 +215,38 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({ onImportC
     if (loading) {
         return (
             <div className="figma-browser-loading">
-                <div className="loading-spinner"></div>
-                <p>Loading Figma components...</p>
+                <div className="figma-brand">
+                    <div className="figma-logo">F</div>
+                    <span className="figma-brand-text">Figma</span>
+                </div>
+
+                <div className="loading-container">
+                    <div className="loading-spinner">
+                        <div className="inner-dot"></div>
+                    </div>
+
+                    <div className="loading-text">
+                        <h2>Loading Components</h2>
+                        <p>Fetching your Figma component library...</p>
+                    </div>
+
+                    <div className="loading-progress">
+                        <div className="loading-progress-bar"></div>
+                    </div>
+
+                    <div className="loading-dots">
+                        <div className="loading-dot"></div>
+                        <div className="loading-dot"></div>
+                        <div className="loading-dot"></div>
+                    </div>
+                </div>
             </div>
         );
-    }
-
-    return (
+    } return (
         <div className="figma-component-browser">
             <div className="browser-header">
                 <div className="header-title">
-                    <h2>Figma Component Browser</h2>
+                    <h2>Add Components to Wireframe</h2>
                     <button className="close-button" onClick={onClose}>✕</button>
                 </div>
 
@@ -293,6 +313,8 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({ onImportC
                 </div>
             </div>
 
+            {/* Popular Components Section - Hidden for now */}
+            {/* 
             {popularComponents.length > 0 && !searchQuery && selectedCategory === 'All' && (
                 <div className="popular-section">
                     <h3>Popular Components</h3>
@@ -321,6 +343,7 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({ onImportC
                     </div>
                 </div>
             )}
+            */}
 
             <div className="browser-content">
                 <div className={`components-${viewMode}`}>
@@ -352,7 +375,7 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({ onImportC
                     {selectedComponents.size > 0 ? (
                         <span>{selectedComponents.size} component(s) selected</span>
                     ) : (
-                        <span>Select components to import</span>
+                        <span>Select components to add to wireframe</span>
                     )}
                 </div>
 
@@ -362,7 +385,7 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({ onImportC
                         onClick={handleImportSelected}
                         disabled={selectedComponents.size === 0}
                     >
-                        Import Selected ({selectedComponents.size})
+                        Add to Wireframe ({selectedComponents.size})
                     </button>
                 </div>
             </div>
