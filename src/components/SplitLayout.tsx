@@ -7,6 +7,8 @@ import FluentSaveWireframeModal, { SavedWireframe } from "./FluentSaveWireframeM
 import FluentImageUploadModal from "./FluentImageUploadModal";
 import FigmaIntegrationModal from "./FigmaIntegrationModal";
 import DownloadModal from "./DownloadModal";
+import DevPlaybooksLibrary from "./DevPlaybooksLibrary";
+import FigmaComponentsLibrary from "./FigmaComponentsLibrary";
 import EnhancedComponentLibrary from "./EnhancedComponentLibrary";
 import SimpleDragWireframe from "./SimpleDragWireframe";
 import EnhancedMessage from "./EnhancedMessage";
@@ -76,6 +78,8 @@ interface SplitLayoutProps {
   // Toolbar function references for header toolbar
   onFigmaIntegration?: React.MutableRefObject<(() => void) | null>;
   onComponentLibrary?: React.MutableRefObject<(() => void) | null>;
+  onDevPlaybooks?: React.MutableRefObject<(() => void) | null>;
+  onFigmaComponents?: React.MutableRefObject<(() => void) | null>;
   onViewHtmlCode?: React.MutableRefObject<(() => void) | null>;
   onDownloadWireframe?: React.MutableRefObject<(() => void) | null>;
   onPresentationMode?: React.MutableRefObject<(() => void) | null>;
@@ -109,6 +113,8 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   onFigmaExport,
   onFigmaIntegration,
   onComponentLibrary,
+  onDevPlaybooks,
+  onFigmaComponents,
   onViewHtmlCode,
   onDownloadWireframe,
   onPresentationMode,
@@ -178,6 +184,8 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   // Component Library Modal state
   const [isComponentLibraryOpen, setIsComponentLibraryOpen] = useState(false);
+  const [isDevPlaybooksOpen, setIsDevPlaybooksOpen] = useState(false);
+  const [isFigmaComponentsOpen, setIsFigmaComponentsOpen] = useState(false);
 
   // Download Modal state
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
@@ -792,6 +800,16 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     setIsComponentLibraryOpen(true);
   }, []);
 
+  const handleOpenDevPlaybooks = useCallback(() => {
+    console.log('📚 Opening Dev Playbooks Library');
+    setIsDevPlaybooksOpen(true);
+  }, []);
+
+  const handleOpenFigmaComponents = useCallback(() => {
+    console.log('🎨 Opening Figma Components Library');
+    setIsFigmaComponentsOpen(true);
+  }, []);
+
   // Export handlers
 
 
@@ -814,6 +832,18 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       onComponentLibrary.current = handleOpenLibrary;
     }
   }, [onComponentLibrary, handleOpenLibrary]);
+
+  useEffect(() => {
+    if (onDevPlaybooks) {
+      onDevPlaybooks.current = handleOpenDevPlaybooks;
+    }
+  }, [onDevPlaybooks, handleOpenDevPlaybooks]);
+
+  useEffect(() => {
+    if (onFigmaComponents) {
+      onFigmaComponents.current = handleOpenFigmaComponents;
+    }
+  }, [onFigmaComponents, handleOpenFigmaComponents]);
 
   useEffect(() => {
     if (onViewHtmlCode) {
@@ -1137,6 +1167,8 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               onPageSwitch={handlePageSwitch}
               onAddPage={handleAddPages}
               onOpenLibrary={handleOpenLibrary}
+              onOpenDevPlaybooks={handleOpenDevPlaybooks}
+              onOpenFigmaComponents={handleOpenFigmaComponents}
               onSave={enhancedOnSave}
               onAddToFavorites={handleAddToFavorites}
               onImageUpload={openImageUploadModal}
@@ -1380,7 +1412,51 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         wireframeTitle={description || 'Wireframe'}
       />
 
-      {/* Enhanced Component Library */}
+      {/* Dev Playbooks Library */}
+      <DevPlaybooksLibrary
+        isOpen={isDevPlaybooksOpen}
+        onClose={() => {
+          setIsDevPlaybooksOpen(false);
+        }}
+        onAddComponent={(component: any) => {
+          console.log('✨ Dev Playbook component added:', component.name);
+          if (onAddComponent) {
+            onAddComponent(component);
+          }
+        }}
+        onGenerateWithAI={(description: string) => {
+          console.log('🤖 AI generation requested for:', description);
+          // Call the original handleSubmit to trigger AI generation
+          const mockEvent = new Event('submit') as any;
+          handleSubmit(mockEvent);
+          addMessage('ai', '🤖 Generating wireframe with AI...');
+        }}
+        currentDescription={description}
+      />
+
+      {/* Figma Components Library */}
+      <FigmaComponentsLibrary
+        isOpen={isFigmaComponentsOpen}
+        onClose={() => {
+          setIsFigmaComponentsOpen(false);
+        }}
+        onAddComponent={(component: any) => {
+          console.log('✨ Figma component added:', component.name);
+          if (onAddComponent) {
+            onAddComponent(component);
+          }
+        }}
+        onGenerateWithAI={(description: string) => {
+          console.log('🤖 AI generation requested for:', description);
+          // Call the original handleSubmit to trigger AI generation
+          const mockEvent = new Event('submit') as any;
+          handleSubmit(mockEvent);
+          addMessage('ai', '🤖 Generating wireframe with AI...');
+        }}
+        currentDescription={description}
+      />
+
+      {/* Enhanced Component Library (Legacy) */}
       <EnhancedComponentLibrary
         isOpen={isComponentLibraryOpen}
         onClose={() => {
@@ -1401,6 +1477,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
           addMessage('ai', '🤖 Generating wireframe with AI...');
         }}
         currentDescription={description}
+        libraryType="dev-playbooks"
       />
 
       {/* HTML Code Viewer */}

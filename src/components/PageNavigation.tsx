@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { FiPlus, FiFigma, FiSave, FiStar, FiImage } from 'react-icons/fi';
+import { FiPlus, FiPackage, FiSave, FiStar, FiImage, FiCode, FiLayers, FiGithub } from 'react-icons/fi';
+import { SiFigma } from 'react-icons/si';
 import '../styles/PageNavigation.css';
 
 interface Page {
@@ -15,6 +16,8 @@ interface PageNavigationProps {
     onPageSwitch: (pageId: string) => void;
     onAddPage?: () => void;
     onOpenLibrary?: () => void;
+    onOpenDevPlaybooks?: () => void;
+    onOpenFigmaComponents?: () => void;
     onSave?: () => void;
     onAddToFavorites?: () => void;
     onImageUpload?: () => void;
@@ -26,6 +29,8 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
     onPageSwitch,
     onAddPage,
     onOpenLibrary,
+    onOpenDevPlaybooks,
+    onOpenFigmaComponents,
     onSave,
     onAddToFavorites,
     onImageUpload
@@ -78,13 +83,35 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
 
                         <button
                             className="icon-btn"
-                            title="Import Figma Components"
+                            title="Dev Playbooks"
                             onClick={() => {
-                                console.log('🎨 Figma Components Import button clicked!');
-                                onOpenLibrary();
+                                console.log('📚 Dev Playbooks button clicked!');
+                                onOpenDevPlaybooks && onOpenDevPlaybooks();
                             }}
                         >
-                            <FiFigma /></button>
+                            <FiCode />
+                        </button>
+
+                        <button
+                            className="icon-btn"
+                            title="Figma Components"
+                            onClick={() => {
+                                console.log('🎨 Figma Components button clicked!');
+                                onOpenFigmaComponents && onOpenFigmaComponents();
+                            }}
+                        >
+                            <FiLayers />
+                        </button>
+
+                        <button
+                            className="icon-btn"
+                            title="Component Library (Legacy)"
+                            onClick={() => {
+                                console.log('🎨 Component Library button clicked!');
+                                onOpenLibrary && onOpenLibrary();
+                            }}
+                        >
+                            <FiPackage /></button>
 
                         <button
                             className="toolbar-btn"
@@ -147,12 +174,22 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
 
                     <button
                         className="toolbar-btn"
-                        onClick={onOpenLibrary}
-                        onMouseEnter={(e) => showTooltip(e, "Import Figma Components")}
+                        onClick={onOpenDevPlaybooks}
+                        onMouseEnter={(e) => showTooltip(e, "Dev Playbooks")}
                         onMouseLeave={hideTooltip}
-                        aria-label="Import Figma Components"
+                        aria-label="Dev Playbooks"
                     >
-                        <FiFigma />
+                        <FiGithub />
+                    </button>
+
+                    <button
+                        className="toolbar-btn"
+                        onClick={onOpenFigmaComponents}
+                        onMouseEnter={(e) => showTooltip(e, "Figma Components")}
+                        onMouseLeave={hideTooltip}
+                        aria-label="Figma Components"
+                    >
+                        <SiFigma />
                     </button>
 
                     <button

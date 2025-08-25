@@ -121,6 +121,11 @@
   color: white;
 }
 
+.source-badge.azure {
+  background: #0078d4;
+  color: white;
+}
+
 /* Filters */
 .filters-section {
   display: flex;

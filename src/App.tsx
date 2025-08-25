@@ -63,6 +63,8 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   // Toolbar function refs
   const figmaIntegrationRef = useRef<(() => void) | null>(null);
   const componentLibraryRef = useRef<(() => void) | null>(null);
+  const devPlaybooksRef = useRef<(() => void) | null>(null);
+  const figmaComponentsRef = useRef<(() => void) | null>(null);
   const viewHtmlCodeRef = useRef<(() => void) | null>(null);
   const downloadWireframeRef = useRef<(() => void) | null>(null);
   const presentationModeRef = useRef<(() => void) | null>(null);
@@ -83,6 +85,22 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
       } else {
         console.warn('Component Library function not available');
       }
+    };
+  }, []);
+
+  // Set up the dev playbooks ref for toolbar
+  useEffect(() => {
+    devPlaybooksRef.current = () => {
+      console.log('📚 DEV PLAYBOOKS BUTTON CLICKED - Opening Dev Playbooks...');
+      // Dev playbooks functionality would be handled by SplitLayout
+    };
+  }, []);
+
+  // Set up the figma components ref for toolbar
+  useEffect(() => {
+    figmaComponentsRef.current = () => {
+      console.log('🎨 FIGMA COMPONENTS BUTTON CLICKED - Opening Figma Components...');
+      // Figma components functionality would be handled by SplitLayout
     };
   }, []);
 
@@ -1416,6 +1434,9 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           onGeneratePageContent={handleGeneratePageContent}
           onFigmaExport={handleFigmaExport}
           onFigmaIntegration={figmaIntegrationRef}
+          onComponentLibrary={componentLibraryRef}
+          onDevPlaybooks={devPlaybooksRef}
+          onFigmaComponents={figmaComponentsRef}
           onViewHtmlCode={viewHtmlCodeRef}
           onDownloadWireframe={downloadWireframeRef}
           onPresentationMode={presentationModeRef}
