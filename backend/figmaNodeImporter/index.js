@@ -4,6 +4,8 @@
  */
 
 const axios = require("axios");
+const fs = require("fs").promises;
+const path = require("path");
 
 module.exports = async function (context, req) {
   try {
@@ -67,21 +69,31 @@ module.exports = async function (context, req) {
     // Generate accurate HTML/CSS from Figma data
     const htmlComponent = await generateAccurateHTML(componentData, context);
 
+    // Create component data structure
+    const componentDataToStore = {
+      id: `atlas-design-${urlInfo.nodeId}`,
+      name: componentData.name,
+      description: componentData.description || `Component from Figma`,
+      category: categorizeFromFigma(componentData),
+      library: "Atlas Design",
+      htmlCode: htmlComponent.html,
+      css: htmlComponent.css,
+      type: "component",
+      lastModified: new Date().toISOString(),
+      createdBy: "Figma Import",
+      figmaUrl: figmaUrl,
+      figmaFileId: urlInfo.fileId,
+      figmaNodeId: urlInfo.nodeId,
+      designTokens: htmlComponent.designTokens,
+    };
+
+    // Store component persistently
+    await storeComponent(componentDataToStore, context);
+
     context.res.status = 200;
     context.res.body = {
       success: true,
-      component: {
-        id: urlInfo.nodeId,
-        name: componentData.name,
-        description: componentData.description || `Component from Figma`,
-        category: categorizeFromFigma(componentData),
-        html: htmlComponent.html,
-        css: htmlComponent.css,
-        figmaUrl: figmaUrl,
-        fileId: urlInfo.fileId,
-        nodeId: urlInfo.nodeId,
-        designTokens: htmlComponent.designTokens,
-      },
+      component: componentDataToStore,
     };
   } catch (error) {
     context.log.error("❌ Figma Node Import Error:", error.message);
@@ -177,6 +189,7 @@ async function fetchFigmaNode(token, fileId, nodeId, context) {
       imageUrl,
       figmaFileId: fileId,
       figmaNodeId: nodeId,
+      id: nodeId, // Add id property for easier access
     };
   } catch (error) {
     throw new Error(`Failed to fetch Figma node: ${error.message}`);
@@ -190,8 +203,12 @@ async function generateAccurateHTML(componentData, context) {
   try {
     context.log(`🎨 Generating HTML for: ${componentData.name}`);
 
+    // Ensure the root component has a proper node ID
+    componentData.figmaNodeId = componentData.figmaNodeId || componentData.id;
+
     // Extract design properties from Figma node
     const designTokens = extractDesignTokens(componentData);
+    designTokens.figmaNodeId = componentData.figmaNodeId;
 
     // Generate component based on type and properties
     const htmlStructure = generateComponentStructure(
@@ -200,7 +217,9 @@ async function generateAccurateHTML(componentData, context) {
     );
 
     // Generate CSS from Figma properties
-    const css = generateCSSFromFigma(designTokens);
+    const componentCSS = generateCSSFromFigma(designTokens);
+    const commonCSS = addCommonCSS();
+    const css = componentCSS + commonCSS;
 
     return {
       html: htmlStructure,
@@ -307,6 +326,13 @@ function extractDesignTokens(node) {
 function generateComponentStructure(node, tokens) {
   const componentType = detectComponentType(node, tokens);
 
+  // Add node ID to all child nodes for proper CSS class generation
+  if (node.figmaNodeId && node.children) {
+    node.children.forEach((child, index) => {
+      child.figmaNodeId = `${node.figmaNodeId}-${index}`;
+    });
+  }
+
   switch (componentType) {
     case "button":
       return generateButtonHTML(node, tokens);
@@ -316,6 +342,10 @@ function generateComponentStructure(node, tokens) {
       return generateInputHTML(node, tokens);
     case "text":
       return generateTextHTML(node, tokens);
+    case "hero":
+      return generateHeroHTML(node, tokens);
+    case "image":
+      return generateImageHTML(node, tokens);
     default:
       return generateGenericHTML(node, tokens);
   }
@@ -326,6 +356,10 @@ function generateComponentStructure(node, tokens) {
  */
 function detectComponentType(node, tokens) {
   const name = node.name.toLowerCase();
+
+  if (name.includes("hero")) {
+    return "hero";
+  }
 
   if (name.includes("button") || name.includes("btn")) {
     return "button";
@@ -347,6 +381,18 @@ function detectComponentType(node, tokens) {
     return "text";
   }
 
+  // Detect images and visual elements
+  if (
+    name.includes("image") ||
+    name.includes("icon") ||
+    name.includes("logo") ||
+    name.includes("keyart") ||
+    name.includes("vector") ||
+    node.type === "VECTOR"
+  ) {
+    return "image";
+  }
+
   return "generic";
 }
 
@@ -355,10 +401,8 @@ function detectComponentType(node, tokens) {
  */
 function generateButtonHTML(node, tokens) {
   const text = extractTextContent(node) || "Button";
-  const className = `figma-btn figma-btn-${node.figmaNodeId?.replace(
-    ":",
-    "-"
-  )}`;
+  const nodeId = node.figmaNodeId || node.id || "unknown";
+  const className = `figma-btn figma-btn-${nodeId.replace(":", "-")}`;
 
   return `<button class="${className}" type="button">${text}</button>`;
 }
@@ -367,10 +411,8 @@ function generateButtonHTML(node, tokens) {
  * Generate card HTML
  */
 function generateCardHTML(node, tokens) {
-  const className = `figma-card figma-card-${node.figmaNodeId?.replace(
-    ":",
-    "-"
-  )}`;
+  const nodeId = node.figmaNodeId || node.id || "unknown";
+  const className = `figma-card figma-card-${nodeId.replace(":", "-")}`;
   const content = generateChildrenHTML(node, tokens);
 
   return `<div class="${className}">
@@ -382,10 +424,8 @@ function generateCardHTML(node, tokens) {
  * Generate input HTML
  */
 function generateInputHTML(node, tokens) {
-  const className = `figma-input figma-input-${node.figmaNodeId?.replace(
-    ":",
-    "-"
-  )}`;
+  const nodeId = node.figmaNodeId || node.id || "unknown";
+  const className = `figma-input figma-input-${nodeId.replace(":", "-")}`;
   const placeholder = extractTextContent(node) || "Enter text...";
 
   return `<input class="${className}" type="text" placeholder="${placeholder}">`;
@@ -396,10 +436,8 @@ function generateInputHTML(node, tokens) {
  */
 function generateTextHTML(node, tokens) {
   const text = node.characters || "Text";
-  const className = `figma-text figma-text-${node.figmaNodeId?.replace(
-    ":",
-    "-"
-  )}`;
+  const nodeId = node.figmaNodeId || node.id || "unknown";
+  const className = `figma-text figma-text-${nodeId.replace(":", "-")}`;
 
   // Choose appropriate tag based on text size/weight
   const fontSize = tokens.typography.fontSize || 16;
@@ -415,14 +453,100 @@ function generateTextHTML(node, tokens) {
 }
 
 /**
+ * Generate hero component HTML
+ */
+function generateHeroHTML(node, tokens) {
+  const nodeId = node.figmaNodeId || node.id || "unknown";
+  const className = `figma-hero figma-hero-${nodeId.replace(":", "-")}`;
+
+  // Extract hero content
+  let heroContent = "";
+  let heroImage = "";
+
+  if (node.children) {
+    node.children.forEach((child, index) => {
+      const childTokens = tokens.children[index] || extractDesignTokens(child);
+      child.figmaNodeId = `${nodeId}-${index}`;
+
+      const childName = child.name.toLowerCase();
+      if (
+        childName.includes("image") ||
+        childName.includes("keyart") ||
+        childName.includes("abstract")
+      ) {
+        heroImage = generateImageHTML(child, childTokens);
+      } else {
+        heroContent += generateComponentStructure(child, childTokens);
+      }
+    });
+  }
+
+  return `<section class="${className}">
+    <div class="figma-hero-content">
+      ${heroContent}
+    </div>
+    <div class="figma-hero-image">
+      ${heroImage}
+    </div>
+  </section>`;
+}
+
+/**
+ * Generate image HTML
+ */
+function generateImageHTML(node, tokens) {
+  const nodeId = node.figmaNodeId || node.id || "unknown";
+  const className = `figma-image figma-image-${nodeId.replace(":", "-")}`;
+  const alt = node.name || "Image";
+
+  // For now, use a placeholder div styled to match Figma dimensions
+  // In a real implementation, you'd fetch the actual image from Figma
+  return `<div class="${className}" role="img" aria-label="${alt}">
+    <span class="figma-image-placeholder">${alt}</span>
+  </div>`;
+}
+
+/**
  * Generate generic container HTML
  */
 function generateGenericHTML(node, tokens) {
-  const className = `figma-component figma-component-${node.figmaNodeId?.replace(
+  const nodeId = node.figmaNodeId || node.id || "unknown";
+  const className = `figma-component figma-component-${nodeId.replace(
     ":",
     "-"
   )}`;
   const content = generateChildrenHTML(node, tokens);
+
+  // Choose appropriate semantic HTML based on node type and name
+  const name = node.name.toLowerCase();
+
+  if (
+    name.includes("section") ||
+    name.includes("container") ||
+    node.type === "FRAME"
+  ) {
+    return `<div class="${className}">
+      ${content || `<div class="figma-content">${node.name}</div>`}
+    </div>`;
+  }
+
+  if (name.includes("nav") || name.includes("menu")) {
+    return `<nav class="${className}">
+      ${content || `<div class="figma-content">${node.name}</div>`}
+    </nav>`;
+  }
+
+  if (name.includes("header")) {
+    return `<header class="${className}">
+      ${content || `<div class="figma-content">${node.name}</div>`}
+    </header>`;
+  }
+
+  if (name.includes("footer")) {
+    return `<footer class="${className}">
+      ${content || `<div class="figma-content">${node.name}</div>`}
+    </footer>`;
+  }
 
   return `<div class="${className}">
     ${content || `<div class="figma-content">${node.name}</div>`}
@@ -440,6 +564,9 @@ function generateChildrenHTML(node, tokens) {
   return node.children
     .map((child, index) => {
       const childTokens = tokens.children[index] || extractDesignTokens(child);
+      // Ensure child has proper node ID
+      const parentNodeId = node.figmaNodeId || node.id || "unknown";
+      child.figmaNodeId = child.figmaNodeId || `${parentNodeId}-${index}`;
       return generateComponentStructure(child, childTokens);
     })
     .join("\n");
@@ -469,44 +596,61 @@ function extractTextContent(node) {
 function generateCSSFromFigma(tokens) {
   let css = "";
 
-  // Generate unique class name
-  const className = `.figma-component-${tokens.name
-    ?.toLowerCase()
-    .replace(/\s+/g, "-")}`;
+  // Generate unique class name with better sanitization
+  const safeNodeId = (
+    tokens.figmaNodeId ||
+    tokens.id ||
+    tokens.name ||
+    "unknown"
+  )
+    .toLowerCase()
+    .replace(/[\s:]/g, "-")
+    .replace(/[^a-z0-9-]/g, "");
+
+  const className = `.figma-component-${safeNodeId}`;
 
   css += `${className} {\n`;
 
-  // Dimensions
-  if (tokens.width !== "auto") {
+  // Dimensions with proper units
+  if (tokens.width && tokens.width !== "auto") {
     css += `  width: ${tokens.width}px;\n`;
   }
-  if (tokens.height !== "auto") {
+  if (tokens.height && tokens.height !== "auto") {
     css += `  height: ${tokens.height}px;\n`;
   }
 
-  // Background
-  if (tokens.fills && tokens.fills.length > 0) {
+  // Background with fallback check
+  if (
+    tokens.fills &&
+    tokens.fills.length > 0 &&
+    tokens.fills[0].color &&
+    tokens.fills[0].color !== "undefined"
+  ) {
     css += `  background-color: ${tokens.fills[0].color};\n`;
   }
 
-  // Border
+  // Border with proper syntax
   if (tokens.strokes && tokens.strokes.length > 0) {
     const stroke = tokens.strokes[0];
-    css += `  border: ${stroke.weight}px solid ${stroke.color};\n`;
+    if (stroke.color && stroke.color !== "undefined") {
+      css += `  border: ${stroke.weight || 1}px solid ${stroke.color};\n`;
+    }
   }
 
   // Border radius
-  if (tokens.cornerRadius > 0) {
+  if (tokens.cornerRadius && tokens.cornerRadius > 0) {
     css += `  border-radius: ${tokens.cornerRadius}px;\n`;
   }
 
-  // Padding
+  // Padding with proper fallbacks
   if (tokens.padding && Object.keys(tokens.padding).length > 0) {
     const p = tokens.padding;
-    css += `  padding: ${p.top}px ${p.right}px ${p.bottom}px ${p.left}px;\n`;
+    css += `  padding: ${p.top || 0}px ${p.right || 0}px ${p.bottom || 0}px ${
+      p.left || 0
+    }px;\n`;
   }
 
-  // Typography
+  // Typography with proper fallbacks
   if (tokens.typography && Object.keys(tokens.typography).length > 0) {
     const t = tokens.typography;
     if (t.fontFamily) css += `  font-family: '${t.fontFamily}', sans-serif;\n`;
@@ -514,19 +658,121 @@ function generateCSSFromFigma(tokens) {
     if (t.fontWeight) css += `  font-weight: ${t.fontWeight};\n`;
     if (t.lineHeight) css += `  line-height: ${t.lineHeight};\n`;
     if (t.textAlign) css += `  text-align: ${t.textAlign};\n`;
-    if (t.color) css += `  color: ${t.color};\n`;
+    if (t.color && t.color !== "undefined") css += `  color: ${t.color};\n`;
   }
+
+  // Layout properties for better structure
+  css += `  display: flex;\n`;
+  css += `  flex-direction: column;\n`;
+  css += `  position: relative;\n`;
 
   css += "}\n\n";
 
   // Generate CSS for children
   if (tokens.children && tokens.children.length > 0) {
-    tokens.children.forEach((childTokens) => {
+    tokens.children.forEach((childTokens, index) => {
+      // Ensure child tokens have proper ID
+      childTokens.figmaNodeId =
+        childTokens.figmaNodeId ||
+        `${tokens.figmaNodeId || tokens.name || "unknown"}-${index}`;
       css += generateCSSFromFigma(childTokens);
     });
   }
 
   return css;
+}
+
+// Add common component CSS at the end of the generation
+function addCommonCSS() {
+  return `
+/* Common Figma Component Styles */
+.figma-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+  border: 1px dashed #ccc;
+  min-height: 100px;
+  background-size: cover;
+  background-position: center;
+}
+
+.figma-image-placeholder {
+  color: #666;
+  font-style: italic;
+  text-align: center;
+  padding: 1rem;
+}
+
+.figma-hero {
+  display: flex;
+  align-items: stretch;
+  min-height: 300px;
+  overflow: hidden;
+}
+
+.figma-hero-content {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.figma-hero-image {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+.figma-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.figma-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.figma-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.figma-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.figma-text {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.figma-component {
+  box-sizing: border-box;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .figma-hero {
+    flex-direction: column;
+  }
+  
+  .figma-hero-content {
+    padding: 1rem;
+  }
+}
+`;
 }
 
 /**
@@ -543,4 +789,43 @@ function categorizeFromFigma(componentData) {
   if (name.includes("icon") || name.includes("image")) return "Media";
 
   return "Layout";
+}
+
+/**
+ * Store component in persistent storage
+ */
+async function storeComponent(componentData, context) {
+  try {
+    const componentsFile = path.join(__dirname, "..", "custom-components.json");
+
+    // Load existing components
+    let existingComponents = [];
+    try {
+      const fileContent = await fs.readFile(componentsFile, "utf8");
+      existingComponents = JSON.parse(fileContent);
+    } catch (error) {
+      context.log("📁 Creating new components file");
+      existingComponents = [];
+    }
+
+    // Remove existing component with same ID
+    existingComponents = existingComponents.filter(
+      (comp) => comp.id !== componentData.id
+    );
+
+    // Add new component
+    existingComponents.push(componentData);
+
+    // Save back to file
+    await fs.writeFile(
+      componentsFile,
+      JSON.stringify(existingComponents, null, 2)
+    );
+
+    context.log(
+      `💾 Stored component: ${componentData.name} (${componentData.id})`
+    );
+  } catch (error) {
+    context.log.error("❌ Failed to store component:", error.message);
+  }
 }

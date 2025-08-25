@@ -159,6 +159,15 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({
     const generateComponentHTML = (component: FigmaComponent): string => {
         console.log('🔧 Generating HTML for component:', component.name, component);
 
+        // First priority: Use the actual Figma HTML if it exists
+        if (component.htmlCode && component.htmlCode.trim().length > 0) {
+            console.log('✅ Using authentic Figma HTML for:', component.name);
+            return component.htmlCode;
+        }
+
+        // Fallback: Generate Bootstrap-based HTML for components without Figma HTML
+        console.log('⚠️ No Figma HTML found, using Bootstrap fallback for:', component.name);
+
         const cleanName = component.name.toLowerCase();
         const category = component.category.toLowerCase();
 
@@ -280,13 +289,15 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({
                     console.log('🔧 Selected component data for', component?.name, ':', {
                         component,
                         generatedHTML,
-                        hasPreview: !!component?.preview
+                        hasPreview: !!component?.preview,
+                        hasCSS: !!(component as any).css
                     });
 
                     return {
                         id: component?.id,
                         name: component?.name,
                         htmlCode: generatedHTML,
+                        css: (component as any).css || '', // Include Figma CSS
                         type: component?.type || 'component',
                         category: component?.category,
                         library: component?.library,

@@ -28,46 +28,27 @@ module.exports = async function (context, req) {
     // Get Figma credentials from environment
     const figmaToken = process.env.FIGMA_ACCESS_TOKEN;
     const atlasFileId = process.env.FIGMA_FILE_ID; // Atlas Design Library
-    const fluentFileId = "GvIcCw0tWaJVDSWD4f1OIW"; // Fluent 2 web library
 
-    if (!figmaToken || !atlasFileId) {
-      throw new Error("Figma credentials not configured");
-    }
+    context.log(
+      `🔑 Using Figma token: ${
+        figmaToken ? figmaToken.substring(0, 10) + "..." : "not found"
+      }`
+    );
+    context.log(`📁 Atlas Design Library ID: ${atlasFileId || "not found"}`);
 
-    context.log(`🔑 Using Figma token: ${figmaToken.substring(0, 10)}...`);
-    context.log(`📁 Atlas Design Library ID: ${atlasFileId}`);
-    context.log(`📁 Fluent Library ID: ${fluentFileId}`);
+    let components = [];
 
-    // 🚀 REAL FIGMA INTEGRATION ACTIVATED!
-    // Fetching LIVE data from both libraries
-    const [atlasComponents, fluentComponents] = await Promise.all([
-      fetchRealFigmaComponents(
-        figmaToken,
-        atlasFileId,
-        "Atlas Design",
-        context
-      ),
-      fetchRealFigmaComponents(
-        figmaToken,
-        fluentFileId,
-        "Fluent Design",
-        context
-      ),
-    ]);
-
-    const components = [...atlasComponents, ...fluentComponents];
-
-    // Load custom components (added via admin script)
+    // Load custom components (added via admin script) first
     const customComponents = await loadCustomComponents(context);
     if (customComponents.length > 0) {
       context.log(`📦 Loaded ${customComponents.length} custom components`);
       components.push(...customComponents);
     }
 
-    // Option 1: Use test data (fallback if both APIs fail)
+    // Use test data for immediate functionality
     if (components.length === 0) {
-      context.log("🔄 Falling back to test data...");
-      const testComponents = getTestComponents(atlasFileId);
+      context.log("🔄 Using test data...");
+      const testComponents = getTestComponents(atlasFileId || "test-file-id");
       components.push(...testComponents);
     }
 
@@ -648,23 +629,28 @@ function generateStatistics(components) {
 /**
  * Load custom components from storage
  * In production, this would load from a database
- * For now, we'll use a simple JSON file or in-memory storage
+ * For now, we'll use a simple JSON file
  */
 async function loadCustomComponents(context) {
   try {
-    // For now, return empty array
-    // In the future, this could load from Azure Storage, Cosmos DB, etc.
-    // The admin script will need to store components somewhere persistent
+    const fs = require("fs");
+    const path = require("path");
 
     context.log("📁 Loading custom components...");
 
-    // Placeholder for custom components storage
-    // This would typically be:
-    // const fs = require('fs').promises;
-    // const customComponents = JSON.parse(await fs.readFile('custom-components.json'));
-    // return customComponents;
+    const componentsFile = path.join(__dirname, "..", "custom-components.json");
 
-    return [];
+    try {
+      // Use synchronous read for now to avoid async issues
+      const fileContent = fs.readFileSync(componentsFile, "utf8");
+      const customComponents = JSON.parse(fileContent);
+
+      context.log(`✅ Loaded ${customComponents.length} custom components`);
+      return customComponents;
+    } catch (fileError) {
+      context.log("📄 No custom components file found, returning empty array");
+      return [];
+    }
   } catch (error) {
     context.log.warn("⚠️ Could not load custom components:", error.message);
     return [];

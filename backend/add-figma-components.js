@@ -8,7 +8,7 @@
 const axios = require("axios");
 
 // Configuration
-const BACKEND_URL = "http://localhost:7073/api/figmaNodeImporter";
+const BACKEND_URL = "http://localhost:7072/api/figmaNodeImporter";
 
 // Component URLs to add (you can modify this list)
 const COMPONENTS_TO_ADD = [
