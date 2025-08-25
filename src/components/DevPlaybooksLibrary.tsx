@@ -15,8 +15,8 @@ interface Component {
     preview?: string;
     source: string;
     sourceUrl?: string;
-    library: string;
-    collection: string;
+    library?: string;
+    collection?: string;
 }
 
 interface DevPlaybooksLibraryProps {
