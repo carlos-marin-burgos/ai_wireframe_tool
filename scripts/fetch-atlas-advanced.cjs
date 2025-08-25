@@ -44,7 +44,8 @@ const enhancedAtlasComponents = {
         "Navigation breadcrumb for Microsoft Learn with proper hierarchy from Atlas Design System",
       category: "Navigation",
       githubPath: "microsoft/atlas-design/components/breadcrumbs",
-      atlasUrl: "https://design.learn.microsoft.com/components/breadcrumbs.html",
+      atlasUrl:
+        "https://design.learn.microsoft.com/components/breadcrumbs.html",
       htmlCode: `<nav aria-label="Breadcrumb" style="font-family: 'Segoe UI', sans-serif; padding: 16px 0;"><ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; flex-wrap: wrap;"><li><a href="#" style="color: #0078d4; text-decoration: none; font-size: 14px; transition: color 0.2s;" onmouseover="this.style.color='#106ebe'" onmouseout="this.style.color='#0078d4'">Microsoft Learn</a></li><li style="margin: 0 8px; color: #8a8886; font-size: 14px;">/</li><li><a href="#" style="color: #0078d4; text-decoration: none; font-size: 14px; transition: color 0.2s;" onmouseover="this.style.color='#106ebe'" onmouseout="this.style.color='#0078d4'">Documentation</a></li><li style="margin: 0 8px; color: #8a8886; font-size: 14px;">/</li><li style="color: #323130; font-size: 14px; font-weight: 600;">Current Page</li></ol></nav>`,
     },
     {
@@ -54,7 +55,8 @@ const enhancedAtlasComponents = {
         "Microsoft Learn site header navigation with proper branding and menu structure from Atlas Design System",
       category: "Navigation",
       githubPath: "microsoft/atlas-design/components/site-header",
-      atlasUrl: "https://design.learn.microsoft.com/components/site-header.html",
+      atlasUrl:
+        "https://design.learn.microsoft.com/components/site-header.html",
       htmlCode: `<header style="background: #ffffff; border-bottom: 1px solid #e1e5e9; padding: 0; font-family: 'Segoe UI', sans-serif; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"><div style="max-width: 1600px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; min-height: 64px;"><div style="display: flex; align-items: center; gap: 32px;"><div style="display: flex; align-items: center; gap: 12px;"><div style="width: 32px; height: 32px; background: #0078d4; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">M</div><span style="font-size: 20px; font-weight: 600; color: #323130;">Microsoft Learn</span></div><nav style="display: flex; gap: 24px;"><a href="#" style="color: #323130; text-decoration: none; font-weight: 500; font-size: 14px; padding: 8px 12px; border-radius: 4px; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">Documentation</a><a href="#" style="color: #323130; text-decoration: none; font-weight: 500; font-size: 14px; padding: 8px 12px; border-radius: 4px; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">Training</a><a href="#" style="color: #323130; text-decoration: none; font-weight: 500; font-size: 14px; padding: 8px 12px; border-radius: 4px; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">Certifications</a><a href="#" style="color: #323130; text-decoration: none; font-weight: 500; font-size: 14px; padding: 8px 12px; border-radius: 4px; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">Browse</a></nav></div><div style="display: flex; align-items: center; gap: 16px;"><button style="background: none; border: 1px solid #8a8886; color: #323130; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 14px; transition: all 0.2s;" onmouseover="this.style.borderColor='#605e5c'; this.style.background='#f3f2f1'" onmouseout="this.style.borderColor='#8a8886'; this.style.background='transparent'">🔍 Search</button><button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 14px; transition: background 0.2s;" onmouseover="this.style.background='#106ebe'" onmouseout="this.style.background='#0078d4'">Sign in</button></div></div></header>`,
     },
     {
@@ -68,12 +70,11 @@ const enhancedAtlasComponents = {
       htmlCode: `<nav aria-label="Pagination" style="font-family: 'Segoe UI', sans-serif; padding: 24px 0;"><ul style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;"><li><button style="background: #f3f2f1; border: 1px solid #e1e5e9; color: #605e5c; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 14px; transition: all 0.2s;" onmouseover="this.style.background='#e1e5e9'" onmouseout="this.style.background='#f3f2f1'">← Previous</button></li><li><button style="background: white; border: 1px solid #e1e5e9; color: #323130; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 14px; transition: all 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='white'">1</button></li><li><button style="background: #0078d4; border: 1px solid #0078d4; color: white; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 600;">2</button></li><li><button style="background: white; border: 1px solid #e1e5e9; color: #323130; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 14px; transition: all 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='white'">3</button></li><li><span style="color: #8a8886; padding: 8px 12px; font-size: 14px;">...</span></li><li><button style="background: white; border: 1px solid #e1e5e9; color: #323130; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 14px; transition: all 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='white'">10</button></li><li><button style="background: white; border: 1px solid #e1e5e9; color: #323130; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 14px; transition: all 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='white'">Next →</button></li></ul></nav>`,
     },
 
-    // UI Components  
+    // UI Components
     {
       id: "atlas-button",
       name: "Button",
-      description:
-        "Microsoft Learn button component from Atlas Design System",
+      description: "Microsoft Learn button component from Atlas Design System",
       category: "Components",
       githubPath: "microsoft/atlas-design/components/button",
       atlasUrl: "https://design.learn.microsoft.com/components/button.html",
@@ -86,14 +87,14 @@ const enhancedAtlasComponents = {
         "Microsoft Learn link button component from Atlas Design System",
       category: "Components",
       githubPath: "microsoft/atlas-design/components/link-button",
-      atlasUrl: "https://design.learn.microsoft.com/components/link-button.html",
+      atlasUrl:
+        "https://design.learn.microsoft.com/components/link-button.html",
       htmlCode: `<div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap; font-family: 'Segoe UI', sans-serif;"><a href="#" style="color: #0078d4; text-decoration: none; font-weight: 600; font-size: 14px; padding: 8px 12px; border-radius: 4px; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px;" onmouseover="this.style.background='#f3f2f1'; this.style.color='#106ebe'" onmouseout="this.style.background='transparent'; this.style.color='#0078d4'">Learn more <span>→</span></a><a href="#" style="color: #323130; text-decoration: underline; font-size: 14px; transition: color 0.2s;" onmouseover="this.style.color='#0078d4'" onmouseout="this.style.color='#323130'">Standard link</a><a href="#" style="color: #d13438; text-decoration: none; font-weight: 600; font-size: 14px; transition: color 0.2s;" onmouseover="this.style.color='#a4262c'" onmouseout="this.style.color='#d13438'">Destructive action</a></div>`,
     },
     {
       id: "atlas-badge",
       name: "Badge",
-      description:
-        "Microsoft Learn badge component from Atlas Design System",
+      description: "Microsoft Learn badge component from Atlas Design System",
       category: "Components",
       githubPath: "microsoft/atlas-design/components/badge",
       atlasUrl: "https://design.learn.microsoft.com/components/badge.html",
@@ -102,8 +103,7 @@ const enhancedAtlasComponents = {
     {
       id: "atlas-tag",
       name: "Tag",
-      description:
-        "Microsoft Learn tag component from Atlas Design System",
+      description: "Microsoft Learn tag component from Atlas Design System",
       category: "Components",
       githubPath: "microsoft/atlas-design/components/tag",
       atlasUrl: "https://design.learn.microsoft.com/components/tag.html",
@@ -128,7 +128,8 @@ const enhancedAtlasComponents = {
         "Microsoft Learn gradient card component from Atlas Design System",
       category: "Content",
       githubPath: "microsoft/atlas-design/components/gradient-card",
-      atlasUrl: "https://design.learn.microsoft.com/components/gradient-card.html",
+      atlasUrl:
+        "https://design.learn.microsoft.com/components/gradient-card.html",
       htmlCode: `<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; overflow: hidden; font-family: 'Segoe UI', sans-serif; max-width: 400px; color: white; position: relative; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'"><div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('data:image/svg+xml,<svg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"><g fill=\"none\" fill-rule=\"evenodd\"><g fill=\"%23ffffff\" fill-opacity=\"0.1\"><circle cx=\"30\" cy=\"30\" r=\"1.5\"/></g></g></svg>'); opacity: 0.4;"></div><div style="padding: 24px; position: relative; z-index: 1;"><div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;"><div style="width: 48px; height: 48px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">🎯</div><span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; text-transform: uppercase;">Learning Path</span></div><h3 style="margin: 0 0 12px 0; font-size: 20px; font-weight: 700; line-height: 1.3;">Azure AI Fundamentals</h3><p style="margin: 0 0 20px 0; opacity: 0.9; line-height: 1.5; font-size: 14px;">Explore artificial intelligence workloads and considerations for responsible AI on Azure.</p><div style="display: flex; justify-content: space-between; align-items: center;"><span style="font-size: 12px; opacity: 0.8;">6 modules • 4 hours</span><button style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.2s; backdrop-filter: blur(10px);" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">Start Learning</button></div></div></div>`,
     },
     {
@@ -166,8 +167,7 @@ const enhancedAtlasComponents = {
     {
       id: "atlas-form",
       name: "Form",
-      description:
-        "Microsoft Learn form component from Atlas Design System",
+      description: "Microsoft Learn form component from Atlas Design System",
       category: "Forms",
       githubPath: "microsoft/atlas-design/components/form",
       atlasUrl: "https://design.learn.microsoft.com/components/form.html",
@@ -176,8 +176,7 @@ const enhancedAtlasComponents = {
     {
       id: "atlas-input",
       name: "Input",
-      description:
-        "Microsoft Learn input component from Atlas Design System",
+      description: "Microsoft Learn input component from Atlas Design System",
       category: "Forms",
       githubPath: "microsoft/atlas-design/components/input",
       atlasUrl: "https://design.learn.microsoft.com/components/input.html",
@@ -252,7 +251,8 @@ const enhancedAtlasComponents = {
         "Microsoft Learn progress tracking component from Atlas Design System",
       category: "Interactive",
       githubPath: "microsoft/atlas-design/components/progress-bar",
-      atlasUrl: "https://design.learn.microsoft.com/components/progress-bar.html",
+      atlasUrl:
+        "https://design.learn.microsoft.com/components/progress-bar.html",
       htmlCode: `<div style="background: white; border: 1px solid #e1e5e9; border-radius: 12px; padding: 24px; font-family: 'Segoe UI', sans-serif; max-width: 450px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;"><h3 style="margin: 0; font-size: 18px; font-weight: 600; color: #323130;">Your Learning Progress</h3><span style="background: #e6f3ff; color: #0078d4; padding: 4px 12px; border-radius: 16px; font-size: 12px; font-weight: 600;">3 of 6 modules</span></div><div style="margin-bottom: 24px;"><div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span style="font-size: 14px; color: #605e5c;">Overall Progress</span><span style="font-size: 14px; font-weight: 600; color: #323130;">50%</span></div><div style="background: #f3f2f1; height: 8px; border-radius: 4px; overflow: hidden;"><div style="background: linear-gradient(90deg, #0078d4 0%, #106ebe 100%); height: 100%; width: 50%; border-radius: 4px; transition: width 0.5s ease;"></div></div></div><div style="space-y: 12px;"><div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: #f9f8f7; border-radius: 8px; margin-bottom: 8px;"><div style="width: 24px; height: 24px; background: #107c10; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold;">✓</div><div style="flex: 1;"><div style="font-weight: 600; color: #323130; font-size: 14px;">Introduction to Cloud Computing</div><div style="color: #605e5c; font-size: 12px;">Completed • 45 min</div></div></div><div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: #f9f8f7; border-radius: 8px; margin-bottom: 8px;"><div style="width: 24px; height: 24px; background: #107c10; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold;">✓</div><div style="flex: 1;"><div style="font-weight: 600; color: #323130; font-size: 14px;">Azure Core Services</div><div style="color: #605e5c; font-size: 12px;">Completed • 1 hr 20 min</div></div></div><div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: #e6f3ff; border-radius: 8px; border: 2px solid #0078d4; margin-bottom: 8px;"><div style="width: 24px; height: 24px; background: #0078d4; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold;">▶</div><div style="flex: 1;"><div style="font-weight: 600; color: #323130; font-size: 14px;">Azure Security Fundamentals</div><div style="color: #0078d4; font-size: 12px; font-weight: 600;">In Progress • 30 min remaining</div></div></div><div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: #faf9f8; border-radius: 8px; opacity: 0.7; margin-bottom: 8px;"><div style="width: 24px; height: 24px; background: #f3f2f1; border: 2px solid #e1e5e9; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #8a8886; font-size: 12px;">4</div><div style="flex: 1;"><div style="font-weight: 600; color: #605e5c; font-size: 14px;">Azure Networking</div><div style="color: #8a8886; font-size: 12px;">Not started • 1 hr 10 min</div></div></div></div><button style="width: 100%; background: #0078d4; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; margin-top: 20px; transition: background 0.2s;" onmouseover="this.style.background='#106ebe'" onmouseout="this.style.background='#0078d4'">Continue Learning</button></div>`,
     },
     {
@@ -272,14 +272,14 @@ const enhancedAtlasComponents = {
         "Microsoft Learn segmented controls component from Atlas Design System",
       category: "Interactive",
       githubPath: "microsoft/atlas-design/components/segmented-controls",
-      atlasUrl: "https://design.learn.microsoft.com/components/segmented-controls.html",
+      atlasUrl:
+        "https://design.learn.microsoft.com/components/segmented-controls.html",
       htmlCode: `<div style="font-family: 'Segoe UI', sans-serif; max-width: 600px;"><div style="background: #f3f2f1; border-radius: 8px; padding: 4px; display: inline-flex; margin-bottom: 24px;"><button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.2s;" onclick="document.querySelectorAll('[data-tab]').forEach(el => el.style.display = 'none'); document.getElementById('overview').style.display = 'block'; this.parentElement.querySelectorAll('button').forEach(btn => { btn.style.background = 'transparent'; btn.style.color = '#605e5c'; }); this.style.background = '#0078d4'; this.style.color = 'white';">Overview</button><button style="background: transparent; color: #605e5c; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.2s;" onmouseover="if(this.style.background === 'transparent') this.style.background = '#e1e5e9'" onmouseout="if(this.style.background !== '#0078d4') this.style.background = 'transparent'" onclick="document.querySelectorAll('[data-tab]').forEach(el => el.style.display = 'none'); document.getElementById('modules').style.display = 'block'; this.parentElement.querySelectorAll('button').forEach(btn => { btn.style.background = 'transparent'; btn.style.color = '#605e5c'; }); this.style.background = '#0078d4'; this.style.color = 'white';">Modules</button><button style="background: transparent; color: #605e5c; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.2s;" onmouseover="if(this.style.background === 'transparent') this.style.background = '#e1e5e9'" onmouseout="if(this.style.background !== '#0078d4') this.style.background = 'transparent'" onclick="document.querySelectorAll('[data-tab]').forEach(el => el.style.display = 'none'); document.getElementById('progress').style.display = 'block'; this.parentElement.querySelectorAll('button').forEach(btn => { btn.style.background = 'transparent'; btn.style.color = '#605e5c'; }); this.style.background = '#0078d4'; this.style.color = 'white';">Progress</button></div><div id="overview" data-tab style="background: white; border: 1px solid #e1e5e9; border-radius: 8px; padding: 20px;"><h3 style="margin: 0 0 12px 0; color: #323130;">Azure Fundamentals Overview</h3><p style="margin: 0; color: #605e5c; line-height: 1.6;">This learning path provides a comprehensive introduction to cloud computing concepts and Azure services. Perfect for beginners looking to understand the fundamentals of Microsoft Azure.</p></div><div id="modules" data-tab style="display: none; background: white; border: 1px solid #e1e5e9; border-radius: 8px; padding: 20px;"><h3 style="margin: 0 0 12px 0; color: #323130;">Learning Modules</h3><ul style="margin: 0; padding-left: 20px; color: #605e5c;"><li>Introduction to cloud computing</li><li>Azure core services</li><li>Azure security and compliance</li><li>Azure pricing and support</li></ul></div><div id="progress" data-tab style="display: none; background: white; border: 1px solid #e1e5e9; border-radius: 8px; padding: 20px;"><h3 style="margin: 0 0 12px 0; color: #323130;">Your Progress</h3><div style="background: #f3f2f1; height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 8px;"><div style="background: #107c10; height: 100%; width: 75%; border-radius: 4px;"></div></div><p style="margin: 0; color: #605e5c;">3 of 4 modules completed (75%)</p></div></div>`,
     },
     {
       id: "atlas-modal",
       name: "Popover",
-      description:
-        "Microsoft Learn popover component from Atlas Design System",
+      description: "Microsoft Learn popover component from Atlas Design System",
       category: "Interactive",
       githubPath: "microsoft/atlas-design/components/popover",
       atlasUrl: "https://design.learn.microsoft.com/components/popover.html",
@@ -290,8 +290,7 @@ const enhancedAtlasComponents = {
     {
       id: "atlas-table",
       name: "Table",
-      description:
-        "Microsoft Learn table component from Atlas Design System",
+      description: "Microsoft Learn table component from Atlas Design System",
       category: "Data",
       githubPath: "microsoft/atlas-design/components/table",
       atlasUrl: "https://design.learn.microsoft.com/components/table.html",
@@ -300,8 +299,7 @@ const enhancedAtlasComponents = {
     {
       id: "atlas-persona",
       name: "Persona",
-      description:
-        "Microsoft Learn persona component from Atlas Design System",
+      description: "Microsoft Learn persona component from Atlas Design System",
       category: "Data",
       githubPath: "microsoft/atlas-design/components/persona",
       atlasUrl: "https://design.learn.microsoft.com/components/persona.html",
@@ -326,14 +324,14 @@ const enhancedAtlasComponents = {
         "Microsoft Learn notification component from Atlas Design System",
       category: "Feedback",
       githubPath: "microsoft/atlas-design/components/notification",
-      atlasUrl: "https://design.learn.microsoft.com/components/notification.html",
+      atlasUrl:
+        "https://design.learn.microsoft.com/components/notification.html",
       htmlCode: `<div style="font-family: 'Segoe UI', sans-serif; max-width: 400px;"><div style="background: #e8f5e8; border: 1px solid #107c10; border-left: 4px solid #107c10; border-radius: 4px; padding: 12px 16px; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 8px;"><div style="color: #107c10; font-size: 16px; margin-top: 2px;">✓</div><div style="flex: 1;"><div style="font-weight: 600; color: #323130; margin-bottom: 4px;">Module Completed!</div><div style="color: #605e5c; font-size: 14px; line-height: 1.4;">You've successfully finished "Introduction to Azure Functions" and earned 50 XP points.</div></div><button style="background: none; border: none; color: #8a8886; cursor: pointer; padding: 0; font-size: 16px;" onclick="this.parentElement.style.display='none'">×</button></div><div style="background: #fff4ce; border: 1px solid #ca5010; border-left: 4px solid #ca5010; border-radius: 4px; padding: 12px 16px; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 8px;"><div style="color: #ca5010; font-size: 16px; margin-top: 2px;">⚠️</div><div style="flex: 1;"><div style="font-weight: 600; color: #323130; margin-bottom: 4px;">Lab Environment Expiring</div><div style="color: #605e5c; font-size: 14px; line-height: 1.4;">Your sandbox environment will expire in 15 minutes. Save your progress now.</div></div><button style="background: none; border: none; color: #8a8886; cursor: pointer; padding: 0; font-size: 16px;" onclick="this.parentElement.style.display='none'">×</button></div><div style="background: #fde7e9; border: 1px solid #d13438; border-left: 4px solid #d13438; border-radius: 4px; padding: 12px 16px; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 8px;"><div style="color: #d13438; font-size: 16px; margin-top: 2px;">❌</div><div style="flex: 1;"><div style="font-weight: 600; color: #323130; margin-bottom: 4px;">Connection Error</div><div style="color: #605e5c; font-size: 14px; line-height: 1.4;">Unable to connect to the lab environment. Please check your internet connection and try again.</div></div><button style="background: none; border: none; color: #8a8886; cursor: pointer; padding: 0; font-size: 16px;" onclick="this.parentElement.style.display='none'">×</button></div><div style="background: #e6f3ff; border: 1px solid #0078d4; border-left: 4px solid #0078d4; border-radius: 4px; padding: 12px 16px; display: flex; align-items: flex-start; gap: 8px;"><div style="color: #0078d4; font-size: 16px; margin-top: 2px;">ℹ️</div><div style="flex: 1;"><div style="font-weight: 600; color: #323130; margin-bottom: 4px;">New Learning Path Available</div><div style="color: #605e5c; font-size: 14px; line-height: 1.4;">Based on your progress, we recommend the "Azure AI Fundamentals" learning path.</div></div><button style="background: none; border: none; color: #8a8886; cursor: pointer; padding: 0; font-size: 16px;" onclick="this.parentElement.style.display='none'">×</button></div></div>`,
     },
     {
       id: "atlas-message",
       name: "Message",
-      description:
-        "Microsoft Learn message component from Atlas Design System",
+      description: "Microsoft Learn message component from Atlas Design System",
       category: "Feedback",
       githubPath: "microsoft/atlas-design/components/message",
       atlasUrl: "https://design.learn.microsoft.com/components/message.html",
@@ -342,8 +340,7 @@ const enhancedAtlasComponents = {
     {
       id: "atlas-help",
       name: "Help",
-      description:
-        "Microsoft Learn help component from Atlas Design System",
+      description: "Microsoft Learn help component from Atlas Design System",
       category: "Feedback",
       githubPath: "microsoft/atlas-design/components/help",
       atlasUrl: "https://design.learn.microsoft.com/components/help.html",
@@ -354,8 +351,7 @@ const enhancedAtlasComponents = {
     {
       id: "atlas-image",
       name: "Image",
-      description:
-        "Microsoft Learn image component from Atlas Design System",
+      description: "Microsoft Learn image component from Atlas Design System",
       category: "Media",
       githubPath: "microsoft/atlas-design/components/image",
       atlasUrl: "https://design.learn.microsoft.com/components/image.html",
@@ -364,8 +360,7 @@ const enhancedAtlasComponents = {
     {
       id: "atlas-media",
       name: "Media",
-      description:
-        "Microsoft Learn media component from Atlas Design System",
+      description: "Microsoft Learn media component from Atlas Design System",
       category: "Media",
       githubPath: "microsoft/atlas-design/components/media",
       atlasUrl: "https://design.learn.microsoft.com/components/media.html",
@@ -390,14 +385,14 @@ const enhancedAtlasComponents = {
         "Microsoft Learn stretched link component from Atlas Design System",
       category: "Layout",
       githubPath: "microsoft/atlas-design/components/stretched-link",
-      atlasUrl: "https://design.learn.microsoft.com/components/stretched-link.html",
+      atlasUrl:
+        "https://design.learn.microsoft.com/components/stretched-link.html",
       htmlCode: `<div style="font-family: 'Segoe UI', sans-serif; max-width: 400px;"><div style="position: relative; background: white; border: 1px solid #e1e5e9; border-radius: 8px; padding: 20px; margin-bottom: 16px; transition: all 0.2s; cursor: pointer;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)'"><div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;"><div style="width: 48px; height: 48px; background: linear-gradient(135deg, #0078d4, #106ebe); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px;">📚</div><div><h3 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">Azure Fundamentals</h3><div style="color: #8a8886; font-size: 12px;">Learning Path</div></div></div><p style="margin: 0 0 12px 0; color: #605e5c; font-size: 14px; line-height: 1.4;">Learn the fundamentals of cloud computing and Microsoft Azure services. Perfect for beginners starting their cloud journey.</p><div style="display: flex; align-items: center; justify-content: between; gap: 8px;"><div style="display: flex; align-items: center; gap: 8px; color: #8a8886; font-size: 12px;"><span>6 modules</span><span>•</span><span>4 hours</span><span>•</span><span>Beginner</span></div><div style="margin-left: auto; color: #0078d4; font-size: 14px; font-weight: 600;">Start →</div></div><a href="#" style="position: absolute; inset: 0; text-decoration: none; z-index: 1;" aria-label="Azure Fundamentals Learning Path"></a></div><div style="position: relative; background: white; border: 1px solid #e1e5e9; border-radius: 8px; padding: 20px; transition: all 0.2s; cursor: pointer;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)'"><div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;"><div style="width: 48px; height: 48px; background: linear-gradient(135deg, #107c10, #0e6e0e); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px;">🤖</div><div><h3 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">AI-900: Azure AI Fundamentals</h3><div style="color: #8a8886; font-size: 12px;">Certification Prep</div></div></div><p style="margin: 0 0 12px 0; color: #605e5c; font-size: 14px; line-height: 1.4;">Prepare for the AI-900 certification exam and demonstrate your knowledge of machine learning and AI concepts on Azure.</p><div style="display: flex; align-items: center; justify-content: between; gap: 8px;"><div style="display: flex; align-items: center; gap: 8px; color: #8a8886; font-size: 12px;"><span>8 modules</span><span>•</span><span>6 hours</span><span>•</span><span>Beginner</span></div><div style="margin-left: auto; color: #107c10; font-weight: 600; font-size: 14px;">Study →</div></div><a href="#" style="position: absolute; inset: 0; text-decoration: none; z-index: 1;" aria-label="AI-900 Azure AI Fundamentals Certification"></a></div></div>`,
     },
     {
       id: "atlas-steps",
       name: "Steps",
-      description:
-        "Microsoft Learn steps component from Atlas Design System",
+      description: "Microsoft Learn steps component from Atlas Design System",
       category: "Layout",
       githubPath: "microsoft/atlas-design/components/steps",
       atlasUrl: "https://design.learn.microsoft.com/components/steps.html",
