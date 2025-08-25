@@ -123,7 +123,7 @@ module.exports = async function (context, req) {
       </div>
     </div>
     <div class="hero-image">
-      <div class="image-placeholder">📚</div>
+      <div class="hero-bg"></div>
     </div>
   </div>
 </section>`,
@@ -173,9 +173,19 @@ module.exports = async function (context, req) {
   text-align: center;
 }
 
-.image-placeholder {
-  font-size: 120px;
-  opacity: 0.8;
+.hero-bg {
+  width: 100%;
+  height: 300px;
+  background: linear-gradient(135deg, rgba(0, 120, 212, 0.05) 0%, rgba(16, 110, 190, 0.05) 100%), url('Microsoft-Learn-keyart-neutral-gray-angle-1.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 8px;
+  transition: background-size 0.3s ease;
+}
+
+.hero-bg:hover {
+  background-size: 105%;
 }
 
 @media (max-width: 768px) {
@@ -187,6 +197,11 @@ module.exports = async function (context, req) {
   
   .hero-title {
     font-size: 36px;
+  }
+  
+  .hero-bg {
+    height: 200px;
+    background-size: contain;
   }
 }`,
       },
@@ -462,6 +477,642 @@ module.exports = async function (context, req) {
 @media (max-width: 768px) {
   .nav-menu {
     display: none;
+  }
+}`,
+      },
+      "atlas-footer-001": {
+        id: "atlas-footer-001",
+        name: "Footer Section",
+        category: "Layout",
+        library: "Atlas Design",
+        htmlCode: `<footer class="footer-section">
+  <div class="footer-container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h3 class="footer-brand-title">Microsoft Learn</h3>
+        <p class="footer-brand-desc">Develop skills that drive success in any career.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-column">
+          <h4 class="footer-column-title">Products</h4>
+          <ul class="footer-link-list">
+            <li><a href="#" class="footer-link">Azure</a></li>
+            <li><a href="#" class="footer-link">Microsoft 365</a></li>
+            <li><a href="#" class="footer-link">Power Platform</a></li>
+            <li><a href="#" class="footer-link">Visual Studio</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4 class="footer-column-title">Resources</h4>
+          <ul class="footer-link-list">
+            <li><a href="#" class="footer-link">Documentation</a></li>
+            <li><a href="#" class="footer-link">Training</a></li>
+            <li><a href="#" class="footer-link">Certifications</a></li>
+            <li><a href="#" class="footer-link">Q&A</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4 class="footer-column-title">Community</h4>
+          <ul class="footer-link-list">
+            <li><a href="#" class="footer-link">Events</a></li>
+            <li><a href="#" class="footer-link">Blog</a></li>
+            <li><a href="#" class="footer-link">Forum</a></li>
+            <li><a href="#" class="footer-link">Support</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copyright">&copy; 2025 Microsoft Corporation. All rights reserved.</p>
+    </div>
+  </div>
+</footer>`,
+        cssCode: `.footer-section {
+  background-color: #323130;
+  color: #ffffff;
+  padding: 60px 20px 20px;
+  margin-top: auto;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 60px;
+  margin-bottom: 40px;
+}
+
+.footer-brand-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: #ffffff;
+}
+
+.footer-brand-desc {
+  font-size: 16px;
+  color: #d2d0ce;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.footer-links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.footer-column-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: #ffffff;
+}
+
+.footer-link-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-link-list li {
+  margin-bottom: 8px;
+}
+
+.footer-link {
+  color: #d2d0ce;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  color: #ffffff;
+}
+
+.footer-bottom {
+  border-top: 1px solid #484644;
+  padding-top: 20px;
+  text-align: center;
+}
+
+.footer-copyright {
+  font-size: 14px;
+  color: #a19f9d;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .footer-links {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}`,
+      },
+      "atlas-breadcrumb-001": {
+        id: "atlas-breadcrumb-001",
+        name: "Breadcrumb Navigation",
+        category: "Navigation",
+        library: "Atlas Design",
+        htmlCode: `<nav class="breadcrumb-nav" aria-label="Breadcrumb">
+  <ol class="breadcrumb-list">
+    <li class="breadcrumb-item">
+      <a href="#" class="breadcrumb-link">Home</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a href="#" class="breadcrumb-link">Learning Paths</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a href="#" class="breadcrumb-link">Azure</a>
+    </li>
+    <li class="breadcrumb-item breadcrumb-current" aria-current="page">
+      <span class="breadcrumb-text">Azure Fundamentals</span>
+    </li>
+  </ol>
+</nav>`,
+        cssCode: `.breadcrumb-nav {
+  padding: 16px 0;
+  border-bottom: 1px solid #e1dfdd;
+}
+
+.breadcrumb-list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb-item:not(:last-child)::after {
+  content: ">";
+  margin-left: 8px;
+  color: #8a8886;
+}
+
+.breadcrumb-link {
+  color: #0078d4;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.breadcrumb-link:hover {
+  color: #106ebe;
+  text-decoration: underline;
+}
+
+.breadcrumb-current .breadcrumb-text {
+  color: #323130;
+  font-weight: 600;
+}`,
+      },
+      "fluent-checkbox-001": {
+        id: "fluent-checkbox-001",
+        name: "Checkbox",
+        category: "Forms",
+        library: "Fluent UI",
+        htmlCode: `<div class="form-field">
+  <label class="checkbox-label">
+    <input type="checkbox" class="checkbox-input" id="checkbox-1">
+    <span class="checkbox-indicator"></span>
+    <span class="checkbox-text">I agree to the terms and conditions</span>
+  </label>
+</div>`,
+        cssCode: `.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #323130;
+}
+
+.checkbox-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.checkbox-indicator {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #8a8886;
+  border-radius: 2px;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.checkbox-input:checked + .checkbox-indicator {
+  background-color: #0078d4;
+  border-color: #0078d4;
+}
+
+.checkbox-input:checked + .checkbox-indicator::after {
+  content: "✓";
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.checkbox-input:focus + .checkbox-indicator {
+  box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+}
+
+.checkbox-text {
+  user-select: none;
+}`,
+      },
+      "fluent-radio-001": {
+        id: "fluent-radio-001",
+        name: "Radio Group",
+        category: "Forms",
+        library: "Fluent UI",
+        htmlCode: `<fieldset class="radio-fieldset">
+  <legend class="radio-legend">Choose your experience level</legend>
+  <div class="radio-group">
+    <label class="radio-label">
+      <input type="radio" class="radio-input" name="experience" value="beginner" checked>
+      <span class="radio-indicator"></span>
+      <span class="radio-text">Beginner</span>
+    </label>
+    <label class="radio-label">
+      <input type="radio" class="radio-input" name="experience" value="intermediate">
+      <span class="radio-indicator"></span>
+      <span class="radio-text">Intermediate</span>
+    </label>
+    <label class="radio-label">
+      <input type="radio" class="radio-input" name="experience" value="advanced">
+      <span class="radio-indicator"></span>
+      <span class="radio-text">Advanced</span>
+    </label>
+  </div>
+</fieldset>`,
+        cssCode: `.radio-fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.radio-legend {
+  font-size: 14px;
+  font-weight: 600;
+  color: #323130;
+  margin-bottom: 8px;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #323130;
+}
+
+.radio-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.radio-indicator {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #8a8886;
+  border-radius: 50%;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.radio-input:checked + .radio-indicator {
+  border-color: #0078d4;
+}
+
+.radio-input:checked + .radio-indicator::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #0078d4;
+}
+
+.radio-input:focus + .radio-indicator {
+  box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+}
+
+.radio-text {
+  user-select: none;
+}`,
+      },
+      "atlas-notification-001": {
+        id: "atlas-notification-001",
+        name: "Notification Banner",
+        category: "Feedback",
+        library: "Atlas Design",
+        htmlCode: `<div class="notification-banner notification-success">
+  <div class="notification-content">
+    <div class="notification-icon">✓</div>
+    <div class="notification-text">
+      <strong class="notification-title">Success!</strong>
+      <span class="notification-message">Your learning path has been saved successfully.</span>
+    </div>
+    <button class="notification-close" aria-label="Close notification">×</button>
+  </div>
+</div>`,
+        cssCode: `.notification-banner {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  border-left: 4px solid;
+}
+
+.notification-success {
+  background-color: #dff6dd;
+  border-left-color: #107c10;
+  color: #323130;
+}
+
+.notification-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.notification-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #107c10;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.notification-text {
+  flex: 1;
+}
+
+.notification-title {
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+.notification-message {
+  font-size: 14px;
+}
+
+.notification-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #605e5c;
+  padding: 4px;
+  border-radius: 2px;
+  transition: background-color 0.2s ease;
+}
+
+.notification-close:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}`,
+      },
+      "atlas-progress-001": {
+        id: "atlas-progress-001",
+        name: "Progress Indicator",
+        category: "Feedback",
+        library: "Atlas Design",
+        htmlCode: `<div class="progress-container">
+  <div class="progress-header">
+    <span class="progress-label">Course Progress</span>
+    <span class="progress-percentage">65%</span>
+  </div>
+  <div class="progress-bar">
+    <div class="progress-fill" style="width: 65%"></div>
+  </div>
+  <div class="progress-details">
+    <span class="progress-text">13 of 20 modules completed</span>
+  </div>
+</div>`,
+        cssCode: `.progress-container {
+  margin-bottom: 24px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.progress-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #323130;
+}
+
+.progress-percentage {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0078d4;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #f3f2f1;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0078d4 0%, #106ebe 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progress-details {
+  font-size: 12px;
+  color: #605e5c;
+}`,
+      },
+      "atlas-sidebar-001": {
+        id: "atlas-sidebar-001",
+        name: "Learning Sidebar",
+        category: "Navigation",
+        library: "Atlas Design",
+        htmlCode: `<aside class="learning-sidebar">
+  <div class="sidebar-header">
+    <h3 class="sidebar-title">Course Content</h3>
+    <button class="sidebar-toggle" aria-label="Toggle sidebar">☰</button>
+  </div>
+  <nav class="sidebar-nav">
+    <ul class="sidebar-list">
+      <li class="sidebar-item">
+        <div class="sidebar-module completed">
+          <span class="module-icon">✓</span>
+          <span class="module-title">Introduction to Azure</span>
+          <span class="module-duration">15 min</span>
+        </div>
+      </li>
+      <li class="sidebar-item">
+        <div class="sidebar-module current">
+          <span class="module-icon">▶</span>
+          <span class="module-title">Azure Services Overview</span>
+          <span class="module-duration">30 min</span>
+        </div>
+      </li>
+      <li class="sidebar-item">
+        <div class="sidebar-module">
+          <span class="module-icon">○</span>
+          <span class="module-title">Azure Storage</span>
+          <span class="module-duration">25 min</span>
+        </div>
+      </li>
+      <li class="sidebar-item">
+        <div class="sidebar-module">
+          <span class="module-icon">○</span>
+          <span class="module-title">Azure Networking</span>
+          <span class="module-duration">40 min</span>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</aside>`,
+        cssCode: `.learning-sidebar {
+  width: 300px;
+  background-color: #faf9f8;
+  border-right: 1px solid #e1dfdd;
+  padding: 24px 0;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px 16px;
+  border-bottom: 1px solid #e1dfdd;
+  margin-bottom: 16px;
+}
+
+.sidebar-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #323130;
+  margin: 0;
+}
+
+.sidebar-toggle {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #605e5c;
+  display: none;
+}
+
+.sidebar-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-item {
+  margin-bottom: 4px;
+}
+
+.sidebar-module {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.sidebar-module:hover {
+  background-color: #f3f2f1;
+}
+
+.sidebar-module.completed {
+  background-color: #dff6dd;
+}
+
+.sidebar-module.current {
+  background-color: #deecf9;
+  border-right: 3px solid #0078d4;
+}
+
+.module-icon {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.module-title {
+  flex: 1;
+  font-size: 14px;
+  color: #323130;
+  font-weight: 500;
+}
+
+.module-duration {
+  font-size: 12px;
+  color: #8a8886;
+}
+
+@media (max-width: 768px) {
+  .learning-sidebar {
+    width: 100%;
+    height: auto;
+  }
+  
+  .sidebar-toggle {
+    display: block;
   }
 }`,
       },

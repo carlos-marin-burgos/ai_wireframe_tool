@@ -9,13 +9,13 @@ function addAtlasComponents(html, description) {
 
   console.log("🎨 Processing wireframe for Atlas components...");
 
-  // Atlas component image URLs (proven working from our tests)
+  // Atlas component image URLs (Microsoft Azure Blob Storage)
   const atlasComponents = {
-    hero: "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/7d68379c-75a0-4198-851c-0f86aa531834",
+    hero: "https://designeticastorage.blob.core.windows.net/figma-assets/atlas-hero-component.png",
     learningPath:
-      "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/e84821f9-29a4-4997-a8fe-674d906f613b",
+      "https://designeticastorage.blob.core.windows.net/figma-assets/atlas-learning-path-card.png",
     module:
-      "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/e84821f9-29a4-4997-a8fe-674d906f613b",
+      "https://designeticastorage.blob.core.windows.net/figma-assets/atlas-module-card.png",
   };
 
   // Check if description SPECIFICALLY requests learning components

@@ -85,9 +85,13 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             category: 'Hero',
             library: 'Atlas',
             htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 100%;">
-                <img src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/7727c33f-01c5-481f-870a-f19e55d095a1" 
-                     alt="Atlas Hero Component 1" 
-                     style="width: 100%; height: auto; display: block; object-fit: contain;" />
+                <div style="width: 100%; height: 300px; background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%); display: flex; align-items: center; justify-content: center; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                    <div style="text-align: center; padding: 40px;">
+                        <div style="font-size: 32px; margin-bottom: 16px;">🚀</div>
+                        <h1 style="font-size: 28px; font-weight: 600; margin: 0 0 12px 0;">Atlas Hero Component 1</h1>
+                        <p style="font-size: 16px; opacity: 0.9; margin: 0;">Microsoft Design System</p>
+                    </div>
+                </div>
             </div>`
         },
         {
@@ -97,9 +101,13 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             category: 'Hero',
             library: 'Atlas',
             htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 100%;">
-                <img src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/985892f2-b62b-44cc-9758-7a853d771fc2" 
-                     alt="Atlas Hero Component 2" 
-                     style="width: 100%; height: auto; display: block; object-fit: contain;" />
+                <div style="width: 100%; height: 300px; background: linear-gradient(135deg, #005a9e 0%, #0078d4 100%); display: flex; align-items: center; justify-content: center; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                    <div style="text-align: center; padding: 40px;">
+                        <div style="font-size: 32px; margin-bottom: 16px;">💼</div>
+                        <h1 style="font-size: 28px; font-weight: 600; margin: 0 0 12px 0;">Atlas Hero Component 2</h1>
+                        <p style="font-size: 16px; opacity: 0.9; margin: 0;">Enterprise Solutions</p>
+                    </div>
+                </div>
             </div>`
         },
         {
@@ -109,9 +117,13 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             category: 'Hero',
             library: 'Atlas',
             htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 100%;">
-                <img src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/1ffee34f-295c-4e6c-ae43-f74ff816396a" 
-                     alt="Atlas Hero Component 3" 
-                     style="width: 100%; height: auto; display: block; object-fit: contain;" />
+                <div style="width: 100%; height: 300px; background: linear-gradient(135deg, #8764b8 0%, #0078d4 100%); display: flex; align-items: center; justify-content: center; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                    <div style="text-align: center; padding: 40px;">
+                        <div style="font-size: 32px; margin-bottom: 16px;">🎯</div>
+                        <h1 style="font-size: 28px; font-weight: 600; margin: 0 0 12px 0;">Atlas Hero Component 3</h1>
+                        <p style="font-size: 16px; opacity: 0.9; margin: 0;">Innovation & Technology</p>
+                    </div>
+                </div>
             </div>`
         },
         {
@@ -121,9 +133,13 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             category: 'Hero',
             library: 'Atlas',
             htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 100%;">
-                <img src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/22597cdd-f183-480d-9472-029c70459fef" 
-                     alt="Atlas Hero Component 4" 
-                     style="width: 100%; height: auto; display: block; object-fit: contain;" />
+                <div style="width: 100%; height: 300px; background: linear-gradient(135deg, #00188f 0%, #0078d4 100%); display: flex; align-items: center; justify-content: center; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                    <div style="text-align: center; padding: 40px;">
+                        <div style="font-size: 32px; margin-bottom: 16px;">⭐</div>
+                        <h1 style="font-size: 28px; font-weight: 600; margin: 0 0 12px 0;">Atlas Hero Component 4</h1>
+                        <p style="font-size: 16px; opacity: 0.9; margin: 0;">Excellence & Quality</p>
+                    </div>
+                </div>
             </div>`
         },
 
@@ -174,6 +190,232 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                 <div style="width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #0078d4, #106ebe); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 12px;">U</div>
               </div>
             </header>`
+        },
+
+        // Atlas Footer Component
+        {
+            id: 'atlas-footer-001',
+            name: 'Footer Section',
+            description: 'Microsoft Learn footer with links and branding',
+            category: 'Layout',
+            library: 'Atlas',
+            htmlCode: `<footer style="background-color: #f8f9fa; border-top: 1px solid #e1dfdd; padding: 48px 0 24px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+              <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 32px;">
+                  <div>
+                    <h3 style="font-size: 18px; font-weight: 600; color: #323130; margin-bottom: 16px;">Microsoft Learn</h3>
+                    <p style="font-size: 14px; color: #605e5c; line-height: 1.4;">Develop skills that drive success in any career.</p>
+                  </div>
+                  <div>
+                    <h4 style="font-size: 14px; font-weight: 600; color: #323130; margin-bottom: 12px;">Products</h4>
+                    <ul style="list-style: none; margin: 0; padding: 0;">
+                      <li style="margin-bottom: 8px;"><a href="#" style="color: #0078d4; text-decoration: none; font-size: 14px;">Azure</a></li>
+                      <li style="margin-bottom: 8px;"><a href="#" style="color: #0078d4; text-decoration: none; font-size: 14px;">Microsoft 365</a></li>
+                      <li style="margin-bottom: 8px;"><a href="#" style="color: #0078d4; text-decoration: none; font-size: 14px;">Power Platform</a></li>
+                      <li style="margin-bottom: 8px;"><a href="#" style="color: #0078d4; text-decoration: none; font-size: 14px;">Visual Studio</a></li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 style="font-size: 14px; font-weight: 600; color: #323130; margin-bottom: 12px;">Resources</h4>
+                    <ul style="list-style: none; margin: 0; padding: 0;">
+                      <li style="margin-bottom: 8px;"><a href="#" style="color: #0078d4; text-decoration: none; font-size: 14px;">Documentation</a></li>
+                      <li style="margin-bottom: 8px;"><a href="#" style="color: #0078d4; text-decoration: none; font-size: 14px;">Training</a></li>
+                      <li style="margin-bottom: 8px;"><a href="#" style="color: #0078d4; text-decoration: none; font-size: 14px;">Certifications</a></li>
+                      <li style="margin-bottom: 8px;"><a href="#" style="color: #0078d4; text-decoration: none; font-size: 14px;">Q&A</a></li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 style="font-size: 14px; font-weight: 600; color: #323130; margin-bottom: 12px;">Community</h4>
+                    <ul style="list-style: none; margin: 0; padding: 0;">
+                      <li style="margin-bottom: 8px;"><a href="#" style="color: #0078d4; text-decoration: none; font-size: 14px;">Events</a></li>
+                      <li style="margin-bottom: 8px;"><a href="#" style="color: #0078d4; text-decoration: none; font-size: 14px;">Blog</a></li>
+                      <li style="margin-bottom: 8px;"><a href="#" style="color: #0078d4; text-decoration: none; font-size: 14px;">Forum</a></li>
+                      <li style="margin-bottom: 8px;"><a href="#" style="color: #0078d4; text-decoration: none; font-size: 14px;">Support</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div style="border-top: 1px solid #e1dfdd; padding-top: 24px; text-align: center;">
+                  <p style="font-size: 14px; color: #605e5c; margin: 0;">© 2024 Microsoft Corporation. All rights reserved.</p>
+                </div>
+              </div>
+            </footer>`
+        },
+
+        // Atlas Breadcrumb Component
+        {
+            id: 'atlas-breadcrumb-001',
+            name: 'Breadcrumb Navigation',
+            description: 'Learning path breadcrumb navigation',
+            category: 'Navigation',
+            library: 'Atlas',
+            htmlCode: `<nav style="padding: 16px 0; border-bottom: 1px solid #e1dfdd; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;" aria-label="Breadcrumb">
+              <ol style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; font-size: 14px;">
+                <li style="display: flex; align-items: center;">
+                  <a href="#" style="color: #0078d4; text-decoration: none;">Home</a>
+                </li>
+                <li style="color: #605e5c; font-size: 12px;">></li>
+                <li style="display: flex; align-items: center;">
+                  <a href="#" style="color: #0078d4; text-decoration: none;">Learning Paths</a>
+                </li>
+                <li style="color: #605e5c; font-size: 12px;">></li>
+                <li style="display: flex; align-items: center;">
+                  <a href="#" style="color: #0078d4; text-decoration: none;">Azure</a>
+                </li>
+                <li style="color: #605e5c; font-size: 12px;">></li>
+                <li style="display: flex; align-items: center;" aria-current="page">
+                  <span style="color: #323130; font-weight: 600;">Azure Fundamentals</span>
+                </li>
+              </ol>
+            </nav>`
+        },
+
+        // Fluent Checkbox Component
+        {
+            id: 'fluent-checkbox-001',
+            name: 'Checkbox',
+            description: 'Checkbox input with Microsoft Learn styling',
+            category: 'Forms',
+            library: 'Atlas',
+            htmlCode: `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px;">
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; color: #323130;">
+                <input type="checkbox" style="position: absolute; opacity: 0; width: 0; height: 0;" id="checkbox-1">
+                <span style="width: 16px; height: 16px; border: 1px solid #8a8886; border-radius: 2px; background-color: #ffffff; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; position: relative;">
+                  <span style="display: none; color: #ffffff; font-size: 12px; font-weight: bold;">✓</span>
+                </span>
+                <span>I agree to the terms and conditions</span>
+              </label>
+              <style>
+                input:checked + span {
+                  background-color: #0078d4 !important;
+                  border-color: #0078d4 !important;
+                }
+                input:checked + span > span {
+                  display: block !important;
+                }
+              </style>
+            </div>`
+        },
+
+        // Fluent Radio Component
+        {
+            id: 'fluent-radio-001',
+            name: 'Radio Group',
+            description: 'Radio button group for experience level selection',
+            category: 'Forms',
+            library: 'Atlas',
+            htmlCode: `<fieldset style="border: none; margin: 0; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+              <legend style="font-size: 14px; font-weight: 600; color: #323130; margin-bottom: 16px;">Choose your experience level</legend>
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; color: #323130;">
+                  <input type="radio" name="experience" value="beginner" checked style="position: absolute; opacity: 0; width: 0; height: 0;">
+                  <span style="width: 16px; height: 16px; border: 1px solid #8a8886; border-radius: 50%; background-color: #ffffff; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; position: relative;">
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background-color: #0078d4; display: block;"></span>
+                  </span>
+                  <span>Beginner</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; color: #323130;">
+                  <input type="radio" name="experience" value="intermediate" style="position: absolute; opacity: 0; width: 0; height: 0;">
+                  <span style="width: 16px; height: 16px; border: 1px solid #8a8886; border-radius: 50%; background-color: #ffffff; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; position: relative;">
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background-color: #0078d4; display: none;"></span>
+                  </span>
+                  <span>Intermediate</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; color: #323130;">
+                  <input type="radio" name="experience" value="advanced" style="position: absolute; opacity: 0; width: 0; height: 0;">
+                  <span style="width: 16px; height: 16px; border: 1px solid #8a8886; border-radius: 50%; background-color: #ffffff; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; position: relative;">
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background-color: #0078d4; display: none;"></span>
+                  </span>
+                  <span>Advanced</span>
+                </label>
+              </div>
+            </fieldset>`
+        },
+
+        // Atlas Notification Component
+        {
+            id: 'atlas-notification-001',
+            name: 'Notification Banner',
+            description: 'Success notification banner for learning progress',
+            category: 'Feedback',
+            library: 'Atlas',
+            htmlCode: `<div style="display: flex; align-items: center; padding: 16px 20px; border-radius: 4px; margin-bottom: 16px; border-left: 4px solid #107c10; background-color: #dff6dd; color: #323130; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                <div style="display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; background-color: #107c10; color: #ffffff; font-size: 12px; font-weight: bold; flex-shrink: 0;">✓</div>
+                <div style="flex: 1;">
+                  <strong style="font-weight: 600; margin-right: 8px;">Success!</strong>
+                  <span style="font-size: 14px;">Your learning path has been saved successfully.</span>
+                </div>
+                <button style="background: none; border: none; font-size: 20px; cursor: pointer; color: #605e5c; padding: 4px; border-radius: 2px; transition: background-color 0.2s ease;" aria-label="Close notification">×</button>
+              </div>
+            </div>`
+        },
+
+        // Atlas Progress Component
+        {
+            id: 'atlas-progress-001',
+            name: 'Progress Indicator',
+            description: 'Course progress indicator with percentage and details',
+            category: 'Feedback',
+            library: 'Atlas',
+            htmlCode: `<div style="margin-bottom: 24px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 14px; font-weight: 600; color: #323130;">Course Progress</span>
+                <span style="font-size: 14px; font-weight: 600; color: #0078d4;">65%</span>
+              </div>
+              <div style="width: 100%; height: 8px; background-color: #f3f2f1; border-radius: 4px; overflow: hidden; margin-bottom: 8px;">
+                <div style="width: 65%; height: 100%; background-color: #0078d4; border-radius: 4px; transition: width 0.3s ease;"></div>
+              </div>
+              <div>
+                <span style="font-size: 12px; color: #605e5c;">13 of 20 modules completed</span>
+              </div>
+            </div>`
+        },
+
+        // Atlas Sidebar Component
+        {
+            id: 'atlas-sidebar-001',
+            name: 'Learning Sidebar',
+            description: 'Course content sidebar with module progress',
+            category: 'Navigation',
+            library: 'Atlas',
+            htmlCode: `<aside style="width: 300px; background-color: #faf9f8; border-right: 1px solid #e1dfdd; padding: 24px 0; height: 400px; overflow-y: auto; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 24px 16px; border-bottom: 1px solid #e1dfdd; margin-bottom: 16px;">
+                <h3 style="font-size: 18px; font-weight: 600; color: #323130; margin: 0;">Course Content</h3>
+                <button style="background: none; border: none; font-size: 18px; cursor: pointer; color: #605e5c;" aria-label="Toggle sidebar">☰</button>
+              </div>
+              <nav>
+                <ul style="list-style: none; margin: 0; padding: 0;">
+                  <li style="margin-bottom: 4px;">
+                    <div style="display: flex; align-items: center; gap: 12px; padding: 12px 24px; cursor: pointer; background-color: #f3f2f1;">
+                      <span style="color: #107c10; font-weight: bold;">✓</span>
+                      <span style="flex: 1; font-size: 14px; color: #323130;">Introduction to Azure</span>
+                      <span style="font-size: 12px; color: #605e5c;">15 min</span>
+                    </div>
+                  </li>
+                  <li style="margin-bottom: 4px;">
+                    <div style="display: flex; align-items: center; gap: 12px; padding: 12px 24px; cursor: pointer; background-color: #e6f3ff; border-left: 3px solid #0078d4;">
+                      <span style="color: #0078d4; font-weight: bold;">▶</span>
+                      <span style="flex: 1; font-size: 14px; color: #323130; font-weight: 600;">Azure Services Overview</span>
+                      <span style="font-size: 12px; color: #605e5c;">30 min</span>
+                    </div>
+                  </li>
+                  <li style="margin-bottom: 4px;">
+                    <div style="display: flex; align-items: center; gap: 12px; padding: 12px 24px; cursor: pointer; transition: background-color 0.2s ease;">
+                      <span style="color: #8a8886;">○</span>
+                      <span style="flex: 1; font-size: 14px; color: #323130;">Azure Storage</span>
+                      <span style="font-size: 12px; color: #605e5c;">25 min</span>
+                    </div>
+                  </li>
+                  <li style="margin-bottom: 4px;">
+                    <div style="display: flex; align-items: center; gap: 12px; padding: 12px 24px; cursor: pointer; transition: background-color 0.2s ease;">
+                      <span style="color: #8a8886;">○</span>
+                      <span style="flex: 1; font-size: 14px; color: #323130;">Azure Networking</span>
+                      <span style="font-size: 12px; color: #605e5c;">40 min</span>
+                    </div>
+                  </li>
+                </ul>
+              </nav>
+            </aside>`
         },
 
         // Microsoft Learn Site Headers
@@ -1848,17 +2090,23 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
 </div>`
         },
 
-        // Atlas Learning Path Card Component - Direct from Figma
+        // Atlas Learning Path Card Component - Updated from new Figma design
         {
             id: 'atlas-learning-path-card',
             name: 'Atlas Learning Path Card',
-            description: 'Atlas Learning Path Card from Figma (Node ID: 14315:162386)',
+            description: 'Atlas Learning Path Card from Figma (Node ID: 2-393)',
             category: 'Cards',
             library: 'Atlas',
-            htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: 100%;" data-figma-node="14315:162386" data-figma-file="uVA2amRR71yJZ0GS6RI6zL">
-                <img src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/e84821f9-29a4-4997-a8fe-674d906f613b" alt="Atlas Learning Path Card from Figma" style="width: 100%; height: auto; display: block;" />
+            htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: 100%;" data-figma-node="2-393" data-figma-file="PuWj05uKXhfbqrhmJLtCij">
+                <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%); display: flex; align-items: center; justify-content: center; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 24px; margin-bottom: 8px;">📚</div>
+                        <div style="font-size: 16px; font-weight: 600;">Atlas Learning Path</div>
+                        <div style="font-size: 12px; opacity: 0.9; margin-top: 4px;">Microsoft Learn Component</div>
+                    </div>
+                </div>
                 <div style="text-align: center; margin-top: 8px; padding: 8px;">
-                    <p style="font-size: 12px; color: #605e5c; margin: 0; opacity: 0.8;">Atlas Learning Path Card</p>
+                    <p style="font-size: 12px; color: #605e5c; margin: 0; opacity: 0.8;">Atlas Learning Path Card (Updated)</p>
                 </div>
             </div>`
         },
@@ -1871,7 +2119,13 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             category: 'Cards',
             library: 'Atlas',
             htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: 100%;" data-figma-node="14315:162386" data-figma-file="uVA2amRR71yJZ0GS6RI6zL" data-type="module">
-                <img src="https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/e84821f9-29a4-4997-a8fe-674d906f613b" alt="Atlas Module Card from Figma" style="width: 100%; height: auto; display: block;" />
+                <div style="width: 100%; height: 160px; background: linear-gradient(135deg, #005a9e 0%, #0078d4 100%); display: flex; align-items: center; justify-content: center; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 24px; margin-bottom: 8px;">📖</div>
+                        <div style="font-size: 14px; font-weight: 600;">Learning Module</div>
+                        <div style="font-size: 11px; opacity: 0.9; margin-top: 4px;">Interactive Content</div>
+                    </div>
+                </div>
                 <div style="text-align: center; margin-top: 8px; padding: 8px;">
                     <p style="font-size: 12px; color: #605e5c; margin: 0; opacity: 0.8;">Atlas Module Card</p>
                 </div>
@@ -5124,10 +5378,22 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
 
     // Filter components based on selected category and library - must be before early return
     const filteredComponents = useMemo(() => {
+        console.log('🔍 Filtering components:', {
+            totalComponents: components.length,
+            selectedLibrary,
+            selectedCategory,
+            componentsWithLibrary: components.map(c => ({ name: c.name, library: c.library || 'FluentUI', category: c.category }))
+        });
+
         const libraryComponents = components.filter(c => (c.library || 'FluentUI') === selectedLibrary);
-        return selectedCategory === 'All'
+        console.log('📚 Library components found:', libraryComponents.length, libraryComponents.map(c => c.name));
+
+        const filtered = selectedCategory === 'All'
             ? libraryComponents
             : libraryComponents.filter(c => c.category === selectedCategory);
+
+        console.log('✅ Final filtered components:', filtered.length, filtered.map(c => c.name));
+        return filtered;
     }, [components, selectedCategory, selectedLibrary]);
 
     const handleComponentClick = (component: Component) => {
@@ -5139,6 +5405,10 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     if (!isOpen) return null;
 
     console.log('🎯 ComponentLibraryModal is OPEN and rendering!');
+    console.log('📋 Total components loaded:', components.length);
+    console.log('🏷️ Components by name:', components.map(c => c.name));
+    console.log('📚 Selected library:', selectedLibrary);
+    console.log('🗂️ Selected category:', selectedCategory);
 
     // Debug: Check if AI button should show
     console.log('🔍 ComponentLibraryModal debug:', {

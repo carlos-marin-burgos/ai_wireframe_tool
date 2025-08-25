@@ -3,22 +3,22 @@
   "heroes": [
     {
       "nodeId": "14678:163022",
-      "imageUrl": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/7727c33f-01c5-481f-870a-f19e55d095a1",
+      "imageUrl": "https://designeticastorage.blob.core.windows.net/figma-assets/atlas-hero-1.png",
       "name": "Atlas Hero 1"
     },
     {
       "nodeId": "14651:163352",
-      "imageUrl": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/985892f2-b62b-44cc-9758-7a853d771fc2",
+      "imageUrl": "https://designeticastorage.blob.core.windows.net/figma-assets/atlas-hero-2.png",
       "name": "Atlas Hero 2"
     },
     {
       "nodeId": "14651:163398",
-      "imageUrl": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/1ffee34f-295c-4e6c-ae43-f74ff816396a",
+      "imageUrl": "https://designeticastorage.blob.core.windows.net/figma-assets/atlas-hero-3.png",
       "name": "Atlas Hero 3"
     },
     {
       "nodeId": "14647:163531",
-      "imageUrl": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/22597cdd-f183-480d-9472-029c70459fef",
+      "imageUrl": "https://designeticastorage.blob.core.windows.net/figma-assets/atlas-hero-4.png",
       "name": "Atlas Hero 4"
     }
   ],

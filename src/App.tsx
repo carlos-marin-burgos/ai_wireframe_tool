@@ -62,6 +62,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
   // Toolbar function refs
   const figmaIntegrationRef = useRef<(() => void) | null>(null);
+  const componentLibraryRef = useRef<(() => void) | null>(null);
   const viewHtmlCodeRef = useRef<(() => void) | null>(null);
   const downloadWireframeRef = useRef<(() => void) | null>(null);
   const presentationModeRef = useRef<(() => void) | null>(null);
@@ -73,11 +74,15 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     setShowTopToolbarFigmaImport(true);
   };
 
-  // Set up the figma integration ref for Pages toolbar (component browser)
+  // Set up the component library ref for Pages toolbar 
   useEffect(() => {
     figmaIntegrationRef.current = () => {
-      console.log('🎨 PAGES TOOLBAR FIGMA BUTTON CLICKED - Opening Figma Component Browser...');
-      setShowFigmaIntegration(true);
+      console.log('🎨 PAGES TOOLBAR COMPONENT LIBRARY BUTTON CLICKED - Opening Component Library...');
+      if (componentLibraryRef.current) {
+        componentLibraryRef.current();
+      } else {
+        console.warn('Component Library function not available');
+      }
     };
   }, []);
 
@@ -915,7 +920,44 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     </div>
 </body>
 </html>`;
-  }; const handleDesignChange = async (_newTheme?: string, newScheme?: string) => {
+  };
+
+  const injectCSSIntoWireframe = (html: string, css: string) => {
+    console.log('🎨 Injecting CSS into wireframe');
+
+    // Look for existing <style> tag in the head
+    const styleRegex = /(<head>[\s\S]*?)(<\/head>)/i;
+    const styleMatch = html.match(styleRegex);
+
+    if (styleMatch) {
+      // Check if there's already a <style> tag
+      const existingStyleRegex = /(<style>[\s\S]*?<\/style>)/i;
+      const existingStyleMatch = styleMatch[1].match(existingStyleRegex);
+
+      if (existingStyleMatch) {
+        // Append to existing style tag
+        const updatedStyle = existingStyleMatch[1].replace('</style>', `\n${css}\n</style>`);
+        return html.replace(existingStyleMatch[1], updatedStyle);
+      } else {
+        // Add new style tag before closing head
+        const newHead = styleMatch[1] + `\n<style>\n${css}\n</style>\n`;
+        return html.replace(styleMatch[1], newHead);
+      }
+    } else {
+      // If no head found, try to add after <head> tag
+      const headOpenRegex = /<head[^>]*>/i;
+      const headOpenMatch = html.match(headOpenRegex);
+
+      if (headOpenMatch) {
+        return html.replace(headOpenMatch[0], `${headOpenMatch[0]}\n<style>\n${css}\n</style>`);
+      }
+    }
+
+    // Fallback: add style tag at the beginning of the document
+    return `<style>\n${css}\n</style>\n${html}`;
+  };
+
+  const handleDesignChange = async (_newTheme?: string, newScheme?: string) => {
     // Only color scheme can be changed now (Microsoft Learn theme is fixed)
     if (newScheme) setColorScheme(newScheme);
 
@@ -1142,11 +1184,18 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     // Process each component separately to ensure individual placement
     let updatedHtml = htmlWireframe;
     let componentsAdded = 0;
+    let allComponentCSS = ''; // Collect all CSS from components
 
     componentData.forEach((component) => {
       console.log('🔧 Processing component:', component.name, 'content:', component.content);
 
       if (component.content) {
+        // Collect CSS from component
+        if (component.css && component.css.trim()) {
+          allComponentCSS += `\n/* CSS for ${component.name} */\n${component.css}\n`;
+          console.log('🎨 Collected CSS for component:', component.name);
+        }
+
         // Create individual component HTML
         const componentHtml = `
           <div class="figma-imported-component" data-component-id="${component.id}" style="margin: 10px 0;">
@@ -1167,6 +1216,12 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
         componentsAdded++;
       }
     });
+
+    // Inject collected CSS into the wireframe
+    if (allComponentCSS.trim()) {
+      console.log('🎨 Injecting component CSS into wireframe');
+      updatedHtml = injectCSSIntoWireframe(updatedHtml, allComponentCSS);
+    }
 
     if (componentsAdded > 0) {
       setHtmlWireframe(updatedHtml);

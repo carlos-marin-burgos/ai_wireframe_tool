@@ -21,6 +21,7 @@ interface DraggableItem {
     height: number;
     content: string;
     type: string;
+    css?: string; // Add CSS support
 }
 
 interface DropZone {
@@ -165,7 +166,8 @@ const RearrangeableWireframe: React.FC<RearrangeableWireframeProps> = ({
                 width: width,
                 height: 1,
                 content: element.innerHTML,
-                type: getElementType(element)
+                type: getElementType(element),
+                css: ''
             });
         });
 
@@ -183,7 +185,8 @@ const RearrangeableWireframe: React.FC<RearrangeableWireframeProps> = ({
                         width: 4,
                         height: 1,
                         content: element.innerHTML,
-                        type: getElementType(element)
+                        type: getElementType(element),
+                        css: ''
                     });
                 }
             });
@@ -247,8 +250,21 @@ const RearrangeableWireframe: React.FC<RearrangeableWireframeProps> = ({
             rowGroups[item.row].push(item);
         });
 
+        // Collect all CSS from components
+        const allCSS = items
+            .filter(item => item.css && item.css.trim())
+            .map(item => item.css)
+            .join('\n\n');
+
         // Generate Bootstrap grid HTML
-        let html = '<div class="container rearrangeable-wireframe">\n';
+        let html = '';
+
+        // Add CSS if any components have it
+        if (allCSS) {
+            html += `<style>\n${allCSS}\n</style>\n\n`;
+        }
+
+        html += '<div class="container rearrangeable-wireframe">\n';
 
         Object.keys(rowGroups)
             .sort((a, b) => parseInt(a) - parseInt(b))
@@ -307,8 +323,9 @@ const RearrangeableWireframe: React.FC<RearrangeableWireframeProps> = ({
             col: 0,
             width: component.defaultWidth || 4,
             height: 1,
-            content: component.html || component.content || `<p>${component.name}</p>`,
-            type: component.type || 'library-component'
+            content: component.htmlCode || component.html || component.content || `<p>${component.name}</p>`,
+            type: component.type || 'library-component',
+            css: component.css || ''
         };
 
         const updatedItems = [...draggableItems, newItem];

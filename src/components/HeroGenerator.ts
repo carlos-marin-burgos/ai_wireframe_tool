@@ -21,7 +21,7 @@ export function generateHeroHTML(options: HeroOptions = {}): string {
     secondaryCtaText = "Browse",
     showSecondaryButton = true,
     backgroundColor = "#E8E6DF",
-    heroImageUrl = "public/hero300.png",
+    heroImageUrl = "Microsoft-Learn-keyart-neutral-gray-angle-1.png",
   } = options;
 
   return `

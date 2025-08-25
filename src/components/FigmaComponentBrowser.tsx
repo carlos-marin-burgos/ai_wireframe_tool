@@ -36,26 +36,38 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({
         loadComponentData();
     }, []);
 
-    const loadComponentData = async () => {
+    const loadComponentData = async (forceRefresh = false) => {
         try {
             setLoading(true);
 
-            // Check if we have cached data
-            const cachedData = getCachedComponents();
-            if (cachedData) {
-                console.log('🚀 Loading components from cache');
-                setComponents(cachedData.components || []);
-                setCategories(['All', ...(cachedData.categories || []).filter(cat => cat !== 'All')]);
-                setPopularComponents(cachedData.popular || []);
-                setStatistics(cachedData.statistics || null);
-                setLoading(false);
-                return;
+            // Check if we have cached data (unless forcing refresh)
+            if (!forceRefresh) {
+                const cachedData = getCachedComponents();
+                if (cachedData) {
+                    console.log('🚀 Loading components from cache');
+                    setComponents(cachedData.components || []);
+                    setCategories(['All', ...(cachedData.categories || []).filter(cat => cat !== 'All')]);
+                    setPopularComponents(cachedData.popular || []);
+                    setStatistics(cachedData.statistics || null);
+                    setLoading(false);
+                    return;
+                }
             }
 
-            console.log('🔄 Fetching fresh components from API');
+            console.log(forceRefresh ? '🔄 Force refreshing components from API' : '🔄 Fetching fresh components from API');
             // Load all components from API
             const response = await fetch(getApiUrl('/api/figma/components'));
             const data: FigmaComponentsResponse = await response.json();
+
+            console.log('📦 API Response received:', {
+                componentCount: data.components?.length || 0,
+                firstComponent: data.components?.[0] ? {
+                    name: data.components[0].name,
+                    hasHtmlCode: !!(data.components[0] as any).htmlCode,
+                    hasCSS: !!(data.components[0] as any).css,
+                    htmlCodeLength: (data.components[0] as any).htmlCode?.length || 0
+                } : null
+            });
 
             // Cache the data
             setCachedComponents(data);
@@ -112,8 +124,9 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({
         try {
             localStorage.removeItem(CACHE_KEY);
             console.log('🗑️ Cache cleared successfully');
-            // Reload components from API
-            loadComponentData();
+            console.log('🔄 Forcing fresh API call...');
+            // Force reload components from API
+            loadComponentData(true);
         } catch (error) {
             console.error('Error clearing cache:', error);
         }
@@ -284,25 +297,29 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({
                 // Handle adding to wireframe (default behavior)
                 const selectedComponentData = Array.from(selectedComponents).map(id => {
                     const component = components.find(c => c.id === id);
-                    const generatedHTML = generateComponentHTML(component!);
+
+                    // Use authentic Figma HTML if available, otherwise fallback to generated HTML
+                    const authenticHTML = (component as any).htmlCode;
+                    const fallbackHTML = generateComponentHTML(component!);
+                    const finalHTML = authenticHTML || fallbackHTML;
 
                     console.log('🔧 Selected component data for', component?.name, ':', {
                         component,
-                        generatedHTML,
-                        hasPreview: !!component?.preview,
-                        hasCSS: !!(component as any).css
+                        hasAuthenticHTML: !!authenticHTML,
+                        hasCSS: !!(component as any).css,
+                        usingFallback: !authenticHTML
                     });
 
                     return {
                         id: component?.id,
                         name: component?.name,
-                        htmlCode: generatedHTML,
+                        htmlCode: finalHTML,
                         css: (component as any).css || '', // Include Figma CSS
                         type: component?.type || 'component',
                         category: component?.category,
                         library: component?.library,
                         defaultWidth: 4, // Default Bootstrap column width
-                        content: generatedHTML
+                        content: finalHTML
                     };
                 });
 
@@ -355,6 +372,14 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({
             <div className="component-info">
                 <h4 className="component-name">{component.name}</h4>
                 <p className="component-description">{component.description}</p>
+
+                {/* Debug info to show if we have authentic Figma HTML */}
+                {(component as any).htmlCode && (
+                    <div style={{ fontSize: '10px', color: 'green', fontWeight: 'bold', marginTop: '4px' }}>
+                        ✅ Authentic Figma HTML Available
+                    </div>
+                )}
+
                 <div className="component-meta">
                     <span className="component-category">{component.category}</span>
                     <span className="component-usage">Used {component.usageCount} times</span>
