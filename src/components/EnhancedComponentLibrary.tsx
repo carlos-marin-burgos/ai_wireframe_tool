@@ -42,6 +42,7 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
     const [searchQuery, setSearchQuery] = useState('');
     const [loadedComponents, setLoadedComponents] = useState<Component[]>([]);
     const [loading, setLoading] = useState(false);
+    const [selectedComponentIds, setSelectedComponentIds] = useState<Set<string>>(new Set());
 
     // Load components based on selected playbook
     useEffect(() => {
@@ -98,90 +99,27 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
         }
     };
 
-    // Load Atlas components from GitHub
+    // Load Atlas components from Microsoft Learn Design System
     const loadAtlasComponents = async (): Promise<Component[]> => {
-        // Atlas components based on microsoft/atlas-design repository structure
-        return [
-            {
-                id: 'atlas-navigation-header',
-                name: 'Navigation Header',
-                description: 'Atlas navigation header component from Atlas Dev Playbook',
-                category: 'Navigation',
-                source: 'atlas-github',
-                sourceUrl: 'https://github.com/microsoft/atlas-design/tree/main/src/components/navigation',
-                playbook: 'Atlas Dev Playbook',
-                htmlCode: `
-                <header style="background: #f8f9fa; padding: 16px 24px; border-bottom: 1px solid #e1e5e9; font-family: 'Segoe UI', sans-serif;">
-                    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
-                        <div style="display: flex; align-items: center; gap: 16px;">
-                            <div style="font-size: 20px; font-weight: 600; color: #323130;">Atlas</div>
-                            <nav style="display: flex; gap: 24px;">
-                                <a href="#" style="color: #323130; text-decoration: none; font-weight: 500;">Overview</a>
-                                <a href="#" style="color: #323130; text-decoration: none; font-weight: 500;">Components</a>
-                                <a href="#" style="color: #323130; text-decoration: none; font-weight: 500;">Patterns</a>
-                                <a href="#" style="color: #323130; text-decoration: none; font-weight: 500;">Resources</a>
-                            </nav>
-                        </div>
-                        <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600;">Get Started</button>
-                    </div>
-                </header>`
-            },
-            {
-                id: 'atlas-hero-section',
-                name: 'Hero Section',
-                description: 'Atlas hero section component from Atlas Dev Playbook',
-                category: 'Hero',
-                source: 'atlas-github',
-                sourceUrl: 'https://github.com/microsoft/atlas-design/tree/main/src/components/hero',
-                playbook: 'Atlas Dev Playbook',
-                htmlCode: `
-                <section style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 80px 24px; text-align: center; font-family: 'Segoe UI', sans-serif;">
-                    <div style="max-width: 800px; margin: 0 auto;">
-                        <h1 style="font-size: 48px; font-weight: 700; margin: 0 0 24px 0; line-height: 1.2;">Build amazing experiences with Atlas</h1>
-                        <p style="font-size: 20px; margin: 0 0 32px 0; opacity: 0.9; line-height: 1.5;">A comprehensive design system for creating consistent, accessible, and beautiful user interfaces.</p>
-                        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-                            <button style="background: white; color: #323130; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 16px;">Get Started</button>
-                            <button style="background: transparent; color: white; border: 2px solid white; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 16px;">Learn More</button>
-                        </div>
-                    </div>
-                </section>`
-            },
-            {
-                id: 'atlas-card-grid',
-                name: 'Card Grid',
-                description: 'Atlas card grid layout from Atlas Dev Playbook',
-                category: 'Layout',
-                source: 'atlas-github',
-                sourceUrl: 'https://github.com/microsoft/atlas-design/tree/main/src/components/cards',
-                playbook: 'Atlas Dev Playbook',
-                htmlCode: `
-                <div style="padding: 48px 24px; font-family: 'Segoe UI', sans-serif;">
-                    <div style="max-width: 1200px; margin: 0 auto;">
-                        <h2 style="text-align: center; font-size: 32px; font-weight: 600; color: #323130; margin: 0 0 48px 0;">Featured Components</h2>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
-                            <div style="background: white; border: 1px solid #e1e5e9; border-radius: 8px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s;">
-                                <div style="width: 48px; height: 48px; background: #0078d4; border-radius: 8px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">📊</div>
-                                <h3 style="font-size: 20px; font-weight: 600; color: #323130; margin: 0 0 12px 0;">Analytics</h3>
-                                <p style="color: #605e5c; line-height: 1.5; margin: 0 0 16px 0;">Track and analyze your data with powerful visualization tools.</p>
-                                <a href="#" style="color: #0078d4; text-decoration: none; font-weight: 600;">Learn more →</a>
-                            </div>
-                            <div style="background: white; border: 1px solid #e1e5e9; border-radius: 8px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s;">
-                                <div style="width: 48px; height: 48px; background: #107c10; border-radius: 8px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">🎨</div>
-                                <h3 style="font-size: 20px; font-weight: 600; color: #323130; margin: 0 0 12px 0;">Design Tools</h3>
-                                <p style="color: #605e5c; line-height: 1.5; margin: 0 0 16px 0;">Create beautiful interfaces with our comprehensive design system.</p>
-                                <a href="#" style="color: #0078d4; text-decoration: none; font-weight: 600;">Learn more →</a>
-                            </div>
-                            <div style="background: white; border: 1px solid #e1e5e9; border-radius: 8px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s;">
-                                <div style="width: 48px; height: 48px; background: #ff8c00; border-radius: 8px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">⚡</div>
-                                <h3 style="font-size: 20px; font-weight: 600; color: #323130; margin: 0 0 12px 0;">Performance</h3>
-                                <p style="color: #605e5c; line-height: 1.5; margin: 0 0 16px 0;">Optimize your applications for speed and efficiency.</p>
-                                <a href="#" style="color: #0078d4; text-decoration: none; font-weight: 600;">Learn more →</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>`
-            }
-        ];
+        try {
+            const response = await fetch('/atlas-library.json');
+            if (!response.ok) throw new Error('Failed to load Atlas components');
+
+            const data = await response.json();
+            return data.components.map((comp: any) => ({
+                id: comp.id,
+                name: comp.name,
+                description: comp.description,
+                category: comp.category,
+                htmlCode: comp.htmlCode,
+                source: 'atlas-github' as const,
+                sourceUrl: comp.atlasUrl || `https://design.learn.microsoft.com/atomics/${comp.category.toLowerCase()}`,
+                playbook: 'Atlas Dev Playbook' as const
+            }));
+        } catch (error) {
+            console.error('Error loading Atlas components:', error);
+            return [];
+        }
     };
 
     // Load Figma components (both Fluent and Atlas)
@@ -280,6 +218,36 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
         return counts;
     }, [loadedComponents]);
 
+    // Handle component selection
+    const toggleComponentSelection = (componentId: string) => {
+        const newSelected = new Set(selectedComponentIds);
+        if (newSelected.has(componentId)) {
+            newSelected.delete(componentId);
+        } else {
+            newSelected.add(componentId);
+        }
+        setSelectedComponentIds(newSelected);
+    };
+
+    // Handle adding selected components
+    const addSelectedComponents = () => {
+        const selectedComponents = loadedComponents.filter(comp =>
+            selectedComponentIds.has(comp.id)
+        );
+
+        selectedComponents.forEach(component => {
+            onAddComponent(component);
+        });
+
+        // Clear selection after adding
+        setSelectedComponentIds(new Set());
+    };
+
+    // Clear all selections
+    const clearSelection = () => {
+        setSelectedComponentIds(new Set());
+    };
+
     if (!isOpen) return null;
 
     return (
@@ -370,6 +338,31 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                     </div>
                 </div>
 
+                {/* Selection Controls */}
+                {selectedComponentIds.size > 0 && (
+                    <div className="selection-controls">
+                        <div className="selection-info">
+                            <span className="selection-count">
+                                {selectedComponentIds.size} component{selectedComponentIds.size !== 1 ? 's' : ''} selected
+                            </span>
+                        </div>
+                        <div className="selection-actions">
+                            <button
+                                onClick={addSelectedComponents}
+                                className="add-selected-btn primary"
+                            >
+                                Add Selected to Wireframe
+                            </button>
+                            <button
+                                onClick={clearSelection}
+                                className="clear-selection-btn"
+                            >
+                                Clear Selection
+                            </button>
+                        </div>
+                    </div>
+                )}
+
                 {/* Loading State */}
                 {loading && (
                     <div className="loading-state">
@@ -381,47 +374,63 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                 {/* Components Grid */}
                 {!loading && (
                     <div className="components-grid">
-                        {filteredComponents.map(component => (
-                            <div key={component.id} className="component-card">
-                                <div className="component-preview">
-                                    <div
-                                        dangerouslySetInnerHTML={{ __html: component.htmlCode }}
-                                        className="component-preview-scaled"
-                                    />
-                                </div>
-                                <div className="component-info">
-                                    <div className="component-header">
-                                        <h3>{component.name}</h3>
-                                        <div className="source-indicators">
-                                            <span className={`source-tag ${component.source}`}>
-                                                {component.source.includes('github') ? 'GitHub' : 'Figma'}
-                                            </span>
-                                            <span className="playbook-tag">{component.playbook}</span>
+                        {filteredComponents.map(component => {
+                            const isSelected = selectedComponentIds.has(component.id);
+                            return (
+                                <div
+                                    key={component.id}
+                                    className={`component-card ${isSelected ? 'selected' : ''}`}
+                                    onClick={() => toggleComponentSelection(component.id)}
+                                >
+                                    <div className="component-selection-indicator">
+                                        <div className={`selection-checkbox ${isSelected ? 'checked' : ''}`}>
+                                            {isSelected && <span className="checkmark">✓</span>}
                                         </div>
                                     </div>
-                                    <p className="component-description">{component.description}</p>
-                                    <div className="component-meta">
-                                        <span className="category-tag">{component.category}</span>
-                                        {component.sourceUrl && (
-                                            <a
-                                                href={component.sourceUrl}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="source-link"
-                                            >
-                                                View Source
-                                            </a>
-                                        )}
+                                    <div className="component-preview">
+                                        <div
+                                            dangerouslySetInnerHTML={{ __html: component.htmlCode }}
+                                            className="component-preview-scaled"
+                                        />
                                     </div>
-                                    <button
-                                        onClick={() => onAddComponent(component)}
-                                        className="add-component-btn"
-                                    >
-                                        Add to Wireframe
-                                    </button>
+                                    <div className="component-info">
+                                        <div className="component-header">
+                                            <h3>{component.name}</h3>
+                                            <div className="source-indicators">
+                                                <span className={`source-tag ${component.source}`}>
+                                                    {component.source.includes('github') ? 'GitHub' : 'Figma'}
+                                                </span>
+                                                <span className="playbook-tag">{component.playbook}</span>
+                                            </div>
+                                        </div>
+                                        <p className="component-description">{component.description}</p>
+                                        <div className="component-meta">
+                                            <span className="category-tag">{component.category}</span>
+                                            {component.sourceUrl && (
+                                                <a
+                                                    href={component.sourceUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="source-link"
+                                                    onClick={(e) => e.stopPropagation()} // Prevent selection toggle
+                                                >
+                                                    View Source
+                                                </a>
+                                            )}
+                                        </div>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // Prevent selection toggle
+                                                onAddComponent(component);
+                                            }}
+                                            className="add-component-btn individual"
+                                        >
+                                            Add to Wireframe
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 )}
 
@@ -433,6 +442,7 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                             setSearchQuery('');
                             setSelectedCategory('All');
                             setSelectedSource('all');
+                            setSelectedComponentIds(new Set()); // Clear selections when clearing filters
                         }}>
                             Clear Filters
                         </button>
@@ -444,14 +454,6 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                     <div className="stats">
                         Showing {filteredComponents.length} of {loadedComponents.length} components from {selectedPlaybook}
                     </div>
-                    {onGenerateWithAI && (
-                        <button
-                            onClick={() => onGenerateWithAI('Generate a custom component')}
-                            className="ai-generate-btn"
-                        >
-                            ➕ Add to Wireframe
-                        </button>
-                    )}
                 </div>
             </div>
         </div>
