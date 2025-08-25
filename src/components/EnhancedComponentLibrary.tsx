@@ -449,7 +449,7 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                             onClick={() => onGenerateWithAI('Generate a custom component')}
                             className="ai-generate-btn"
                         >
-                            🤖 Generate with AI
+                            ➕ Add to Wireframe
                         </button>
                     )}
                 </div>

@@ -17,9 +17,9 @@
 .enhanced-component-library-modal {
   background: white;
   border-radius: 12px;
-  width: 90vw;
-  max-width: 1400px;
-  height: 90vh;
+  width: 95vw;
+  max-width: 1600px;
+  height: 95vh;
   display: flex;
   flex-direction: column;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
@@ -205,9 +205,10 @@
   overflow-y: auto;
   padding: 24px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
   gap: 24px;
   align-content: start;
+  max-height: calc(90vh - 200px);
 }
 
 .component-card {
@@ -216,6 +217,9 @@
   border-radius: 8px;
   overflow: hidden;
   transition: box-shadow 0.2s, transform 0.2s;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
 }
 
 .component-card:hover {
@@ -225,25 +229,59 @@
 
 .component-preview {
   background: #faf9f8;
-  padding: 16px;
+  padding: 20px;
   border-bottom: 1px solid #e1e5e9;
-  overflow: hidden;
-  height: 200px;
+  overflow: auto;
+  min-height: 180px;
+  max-height: 250px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   position: relative;
 }
 
 .component-preview-scaled {
-  transform: scale(0.8);
-  transform-origin: top left;
-  width: 125%;
-  height: 125%;
+  transform: scale(0.75);
+  transform-origin: center top;
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+}
+
+/* Ensure component preview content is properly displayed */
+.component-preview iframe,
+.component-preview > div {
+  width: 100%;
+  max-width: 100%;
+  border: none;
+  background: transparent;
+}
+
+.component-preview .preview-content {
+  width: 100%;
+  max-width: 100%;
+  padding: 8px;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Hide any text nodes that might leak through */
+.component-preview-scaled {
+  white-space: normal;
+  overflow: hidden;
+}
+
+.component-preview-scaled * {
+  box-sizing: border-box;
 }
 
 .component-info {
-  padding: 16px;
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 120px;
 }
 
 .component-header {
@@ -404,8 +442,8 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .enhanced-component-library-modal {
-    width: 95vw;
-    height: 95vh;
+    width: 98vw;
+    height: 98vh;
   }
 
   .filters-section {
@@ -425,35 +463,23 @@
   }
 
   .playbook-tabs {
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: 4px;
   }
 
   .playbook-tab {
-    justify-content: center;
-  }
-
-  .library-footer {
-    flex-direction: column;
-    gap: 12px;
-    text-align: center;
-  }
-}
-
-@media (max-width: 480px) {
-  .library-header {
-    padding: 16px;
-  }
-
-  .header-content h2 {
-    font-size: 20px;
+    font-size: 12px;
+    padding: 8px 12px;
   }
 
   .component-preview {
-    height: 150px;
+    min-height: 150px;
+    max-height: 200px;
   }
+}
 
-  .component-info {
-    padding: 12px;
+@media (max-width: 1200px) {
+  .components-grid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   }
 }
