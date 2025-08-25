@@ -8,6 +8,8 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import './EnhancedComponentLibrary.css';
 
+type ComponentSource = 'fluent' | 'atlas' | 'figma-fluent' | 'figma-atlas';
+
 interface Component {
     id: string;
     name: string;
@@ -15,9 +17,9 @@ interface Component {
     category: string;
     htmlCode: string;
     preview?: string;
-    source: 'fluent-github' | 'atlas-github' | 'figma-fluent' | 'figma-atlas';
+    source: ComponentSource;
     sourceUrl?: string;
-    playbook: 'Fluent Dev Playbook' | 'Atlas Dev Playbook' | 'Figma Design System';
+    playbook: 'Fluent Dev Playbook' | 'Atlas Dev Playbook' | 'Figma Fluent Library' | 'Figma Atlas Library';
 }
 
 interface EnhancedComponentLibraryProps {
@@ -36,7 +38,7 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
     currentDescription
 }) => {
     // State management
-    const [selectedPlaybook, setSelectedPlaybook] = useState<'Fluent Dev Playbook' | 'Atlas Dev Playbook' | 'Figma Design System'>('Fluent Dev Playbook');
+    const [selectedPlaybook, setSelectedPlaybook] = useState<'Fluent Dev Playbook' | 'Atlas Dev Playbook' | 'Figma Fluent Library' | 'Figma Atlas Library'>('Fluent Dev Playbook');
     const [selectedSource, setSelectedSource] = useState<'all' | 'fluent-github' | 'atlas-github' | 'figma-fluent' | 'figma-atlas'>('all');
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
     const [searchQuery, setSearchQuery] = useState('');
@@ -47,6 +49,8 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
     // Load components based on selected playbook
     useEffect(() => {
         if (isOpen) {
+            // Reset source filter when changing playbooks
+            setSelectedSource('all');
             loadComponentsForPlaybook();
         }
     }, [isOpen, selectedPlaybook]);
@@ -63,8 +67,11 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                 case 'Atlas Dev Playbook':
                     components = await loadAtlasComponents();
                     break;
-                case 'Figma Design System':
-                    components = await loadFigmaComponents();
+                case 'Figma Fluent Library':
+                    components = await loadFigmaFluentComponents();
+                    break;
+                case 'Figma Atlas Library':
+                    components = await loadFigmaAtlasComponents();
                     break;
             }
 
@@ -122,55 +129,99 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
         }
     };
 
-    // Load Figma components (both Fluent and Atlas)
-    const loadFigmaComponents = async (): Promise<Component[]> => {
-        return [
-            {
-                id: 'figma-fluent-button-set',
-                name: 'Fluent Button Set',
-                description: 'Complete button component set from Fluent 2 Figma library',
-                category: 'Buttons',
-                source: 'figma-fluent',
-                sourceUrl: 'https://www.figma.com/design/GvIcCw0tWaJVDSWD4f1OIW/Fluent-2-web?node-id=326816-44116',
-                playbook: 'Figma Design System',
-                htmlCode: `
-                <div style="padding: 24px; background: #f8f9fa; border-radius: 8px; font-family: 'Segoe UI', sans-serif;">
-                    <h3 style="margin: 0 0 16px 0; color: #323130;">Fluent Button Components</h3>
-                    <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
-                        <button style="background: #0078d4; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: 600;">Primary</button>
-                        <button style="background: transparent; color: #0078d4; border: 1px solid #0078d4; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: 600;">Secondary</button>
-                        <button style="background: transparent; color: #323130; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: 600;">Subtle</button>
-                        <button style="background: #f3f2f1; color: #a19f9d; border: none; padding: 10px 20px; border-radius: 4px; cursor: not-allowed; font-weight: 600;" disabled>Disabled</button>
-                    </div>
-                    <p style="margin: 16px 0 0 0; font-size: 12px; color: #605e5c;">From Fluent 2 Figma Design System</p>
-                </div>`
-            },
-            {
-                id: 'figma-atlas-navigation',
-                name: 'Atlas Navigation',
-                description: 'Navigation component from Atlas Figma library',
-                category: 'Navigation',
-                source: 'figma-atlas',
-                sourceUrl: 'https://www.figma.com/design/PuWj05uKXhfbqrhmJLtCij/Atlas-library-for-designetica?node-id=1-4688',
-                playbook: 'Figma Design System',
-                htmlCode: `
-                <div style="background: white; border: 1px solid #e1e5e9; border-radius: 8px; overflow: hidden; font-family: 'Segoe UI', sans-serif;">
-                    <div style="background: #0078d4; color: white; padding: 16px 24px;">
-                        <h3 style="margin: 0; font-size: 18px;">Atlas Navigation</h3>
-                    </div>
-                    <nav style="padding: 16px 0;">
-                        <a href="#" style="display: block; padding: 12px 24px; color: #323130; text-decoration: none; border-left: 3px solid #0078d4; background: #f3f9ff;">Dashboard</a>
-                        <a href="#" style="display: block; padding: 12px 24px; color: #605e5c; text-decoration: none; border-left: 3px solid transparent;">Analytics</a>
-                        <a href="#" style="display: block; padding: 12px 24px; color: #605e5c; text-decoration: none; border-left: 3px solid transparent;">Projects</a>
-                        <a href="#" style="display: block; padding: 12px 24px; color: #605e5c; text-decoration: none; border-left: 3px solid transparent;">Settings</a>
-                    </nav>
-                    <p style="margin: 0; padding: 16px 24px; font-size: 12px; color: #605e5c; border-top: 1px solid #f3f2f1;">From Atlas Figma Library</p>
-                </div>`
+    // Load Figma Fluent components only
+    const loadFigmaFluentComponents = async (): Promise<Component[]> => {
+        try {
+            const response = await fetch('/figma-fluent-library.json');
+            if (response.ok) {
+                const data = await response.json();
+                const components = data.components.map((comp: any) => ({
+                    id: comp.id,
+                    name: comp.name,
+                    description: comp.description,
+                    category: comp.category,
+                    htmlCode: comp.htmlCode,
+                    source: 'figma-fluent' as const,
+                    sourceUrl: comp.sourceUrl,
+                    playbook: 'Figma Fluent Library' as const
+                }));
+                console.log(`✅ Loaded ${components.length} Fluent Figma components`);
+                return components;
             }
-        ];
+        } catch (error) {
+            console.warn('Could not load Fluent Figma library:', error);
+        }
+
+        // Fallback component
+        return [{
+            id: 'figma-fluent-button-set',
+            name: 'Fluent Button Set',
+            description: 'Complete button component set from Fluent 2 Figma library',
+            category: 'Buttons',
+            source: 'figma-fluent',
+            sourceUrl: 'https://www.figma.com/design/GvIcCw0tWaJVDSWD4f1OIW/Fluent-2-web?node-id=0-1&p=f&t=0UVE7Ann6oVPNlGW-0',
+            playbook: 'Figma Fluent Library',
+            htmlCode: `
+            <div style="padding: 24px; background: #f8f9fa; border-radius: 8px; font-family: 'Segoe UI', sans-serif;">
+                <h3 style="margin: 0 0 16px 0; color: #323130;">Fluent Button Components</h3>
+                <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+                    <button style="background: #0078d4; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: 600;">Primary</button>
+                    <button style="background: transparent; color: #0078d4; border: 1px solid #0078d4; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: 600;">Secondary</button>
+                    <button style="background: transparent; color: #323130; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: 600;">Subtle</button>
+                    <button style="background: #f3f2f1; color: #a19f9d; border: none; padding: 10px 20px; border-radius: 4px; cursor: not-allowed; font-weight: 600;" disabled>Disabled</button>
+                </div>
+                <p style="margin: 16px 0 0 0; font-size: 12px; color: #605e5c;">From Fluent 2 Figma Design System (Fallback)</p>
+            </div>`
+        }];
     };
 
-    // Filter components based on selection
+    // Load Figma Atlas components only
+    const loadFigmaAtlasComponents = async (): Promise<Component[]> => {
+        try {
+            const response = await fetch('/figma-atlas-library.json');
+            if (response.ok) {
+                const data = await response.json();
+                const components = data.components.map((comp: any) => ({
+                    id: comp.id,
+                    name: comp.name,
+                    description: comp.description,
+                    category: comp.category,
+                    htmlCode: comp.htmlCode,
+                    source: 'figma-atlas' as const,
+                    sourceUrl: comp.sourceUrl,
+                    playbook: 'Figma Atlas Library' as const
+                }));
+                console.log(`✅ Loaded ${components.length} Atlas Figma components`);
+                return components;
+            }
+        } catch (error) {
+            console.warn('Could not load Atlas Figma library:', error);
+        }
+
+        // Fallback component
+        return [{
+            id: 'figma-atlas-navigation',
+            name: 'Atlas Navigation',
+            description: 'Navigation component from Atlas Figma library',
+            category: 'Navigation',
+            source: 'figma-atlas',
+            sourceUrl: 'https://www.figma.com/design/PuWj05uKXhfbqrhmJLtCij/Atlas-library-for-designetica?node-id=1-4688',
+            playbook: 'Figma Atlas Library',
+            htmlCode: `
+            <div style="background: white; border: 1px solid #e1e5e9; border-radius: 8px; overflow: hidden; font-family: 'Segoe UI', sans-serif;">
+                <div style="background: #0078d4; color: white; padding: 16px 24px;">
+                    <h3 style="margin: 0; font-size: 18px;">Atlas Navigation</h3>
+                </div>
+                <nav style="padding: 16px 0;">
+                    <a href="#" style="display: block; padding: 12px 24px; color: #323130; text-decoration: none; border-left: 3px solid #0078d4; background: #f3f9ff;">Dashboard</a>
+                    <a href="#" style="display: block; padding: 12px 24px; color: #605e5c; text-decoration: none; border-left: 3px solid transparent;">Analytics</a>
+                    <a href="#" style="display: block; padding: 12px 24px; color: #605e5c; text-decoration: none; border-left: 3px solid transparent;">Projects</a>
+                    <a href="#" style="display: block; padding: 12px 24px; color: #605e5c; text-decoration: none; border-left: 3px solid transparent;">Settings</a>
+                </nav>
+                <p style="margin: 0; padding: 16px 24px; font-size: 12px; color: #605e5c; border-top: 1px solid #f3f2f1;">From Atlas Figma Library (Fallback)</p>
+            </div>`
+        }];
+    };    // Filter components based on selection
     const filteredComponents = useMemo(() => {
         let filtered = loadedComponents;
 
@@ -257,7 +308,7 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                 <div className="library-header">
                     <div className="header-content">
                         <h2>Component Library</h2>
-                        <p>Browse components from Fluent Dev Playbook, Atlas Dev Playbook, and Figma Design Systems</p>
+                        <p>Browse components from Fluent Dev Playbook, Atlas Dev Playbook, Figma Fluent Library, and Figma Atlas Library</p>
                     </div>
                     <button onClick={onClose} className="close-button">×</button>
                 </div>
@@ -265,7 +316,7 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                 {/* Playbook Selector */}
                 <div className="playbook-selector">
                     <div className="playbook-tabs">
-                        {(['Fluent Dev Playbook', 'Atlas Dev Playbook', 'Figma Design System'] as const).map(playbook => (
+                        {(['Fluent Dev Playbook', 'Atlas Dev Playbook', 'Figma Fluent Library', 'Figma Atlas Library'] as const).map(playbook => (
                             <button
                                 key={playbook}
                                 className={`playbook-tab ${selectedPlaybook === playbook ? 'active' : ''}`}
@@ -278,7 +329,10 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                                 {playbook === 'Atlas Dev Playbook' && (
                                     <span className="source-badge github">GitHub</span>
                                 )}
-                                {playbook === 'Figma Design System' && (
+                                {playbook === 'Figma Fluent Library' && (
+                                    <span className="source-badge figma">Figma</span>
+                                )}
+                                {playbook === 'Figma Atlas Library' && (
                                     <span className="source-badge figma">Figma</span>
                                 )}
                             </button>
@@ -303,11 +357,11 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                             {selectedPlaybook === 'Atlas Dev Playbook' && (
                                 <option value="atlas-github">Atlas GitHub ({sourceCounts['atlas-github']})</option>
                             )}
-                            {selectedPlaybook === 'Figma Design System' && (
-                                <>
-                                    <option value="figma-fluent">Figma Fluent ({sourceCounts['figma-fluent']})</option>
-                                    <option value="figma-atlas">Figma Atlas ({sourceCounts['figma-atlas']})</option>
-                                </>
+                            {selectedPlaybook === 'Figma Fluent Library' && (
+                                <option value="figma-fluent">Figma Fluent ({sourceCounts['figma-fluent']})</option>
+                            )}
+                            {selectedPlaybook === 'Figma Atlas Library' && (
+                                <option value="figma-atlas">Figma Atlas ({sourceCounts['figma-atlas']})</option>
                             )}
                         </select>
                     </div>
