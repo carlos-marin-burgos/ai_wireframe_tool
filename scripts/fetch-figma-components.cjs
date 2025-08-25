@@ -74,21 +74,27 @@ function extractComponents(figmaData, systemType) {
   function traverseNode(node, path = "") {
     // Check if this is a component
     if (node.type === "COMPONENT") {
-      const component = {
-        id: `figma-${systemType}-${node.id}`,
-        name: node.name,
-        description:
-          node.description ||
-          `${node.name} component from ${FIGMA_FILES[systemType].name}`,
-        category: categorizeComponent(node.name),
-        figmaNodeId: node.id,
-        figmaPath: path,
-        source: `figma-${systemType}`,
-        playbook: "Figma Design System",
-        sourceUrl: `${FIGMA_FILES[systemType].baseUrl}?node-id=${node.id}`,
-        htmlCode: generateMockHTML(node, systemType),
-      };
-      components.push(component);
+      // Filter out internal variants and focus on main components
+      const componentName = node.name;
+
+      // Skip components that are clearly internal variants or states
+      if (shouldIncludeComponent(componentName)) {
+        const component = {
+          id: `figma-${systemType}-${node.id}`,
+          name: node.name,
+          description:
+            node.description ||
+            `${node.name} component from ${FIGMA_FILES[systemType].name}`,
+          category: categorizeComponent(node.name),
+          figmaNodeId: node.id,
+          figmaPath: path,
+          source: `figma-${systemType}`,
+          playbook: "Figma Design System",
+          sourceUrl: `${FIGMA_FILES[systemType].baseUrl}?node-id=${node.id}`,
+          htmlCode: generateMockHTML(node, systemType),
+        };
+        components.push(component);
+      }
     }
 
     // Recursively traverse children
@@ -108,30 +114,137 @@ function extractComponents(figmaData, systemType) {
 }
 
 /**
- * Categorize components based on their names
+ * Filter function to decide which components to include
+ */
+function shouldIncludeComponent(componentName) {
+  const name = componentName.toLowerCase();
+
+  // Skip components that are clearly internal variants
+  if (name.includes("state=") && name.includes("size=")) return false;
+  if (name.includes("variant=")) return false;
+  if (name.includes("property=")) return false;
+  if (name.match(/=.*,.*=/)) return false; // Skip components with multiple property assignments
+
+  // Skip documentation or example components
+  if (name.includes("example")) return false;
+  if (name.includes("documentation")) return false;
+  if (name.includes("_internal")) return false;
+  if (name.includes("_temp")) return false;
+
+  // Skip components that are just color swatches or styles
+  if (name.includes("color") && name.includes("swatch")) return false;
+  if (name.includes("style guide")) return false;
+
+  // Include main component definitions
+  return true;
+}
+
+/**
+ * Categorize components into meaningful groups
  */
 function categorizeComponent(componentName) {
   const name = componentName.toLowerCase();
+  const path = componentName.toLowerCase();
 
-  if (name.includes("button")) return "Buttons";
+  // Buttons
+  if (name.includes("button") || name.includes("btn")) return "Buttons";
+
+  // Forms & Inputs
   if (
     name.includes("input") ||
     name.includes("textfield") ||
-    name.includes("form")
+    name.includes("textarea") ||
+    name.includes("form") ||
+    name.includes("checkbox") ||
+    name.includes("radio") ||
+    name.includes("select") ||
+    name.includes("dropdown") ||
+    name.includes("combobox") ||
+    name.includes("slider") ||
+    name.includes("switch") ||
+    name.includes("toggle")
   )
     return "Forms";
-  if (name.includes("card")) return "Content";
+
+  // Navigation
   if (
     name.includes("nav") ||
     name.includes("menu") ||
-    name.includes("breadcrumb")
+    name.includes("breadcrumb") ||
+    name.includes("tab") ||
+    name.includes("link") ||
+    name.includes("sidebar") ||
+    name.includes("header") ||
+    name.includes("footer")
   )
     return "Navigation";
-  if (name.includes("icon")) return "Icons";
-  if (name.includes("dialog") || name.includes("modal")) return "Overlays";
-  if (name.includes("table") || name.includes("list")) return "Data Display";
-  if (name.includes("tab")) return "Navigation";
-  if (name.includes("tooltip") || name.includes("popover")) return "Feedback";
+
+  // Content & Display
+  if (
+    name.includes("card") ||
+    name.includes("tile") ||
+    name.includes("panel") ||
+    name.includes("persona") ||
+    name.includes("avatar") ||
+    name.includes("image") ||
+    name.includes("badge") ||
+    name.includes("chip") ||
+    name.includes("tag")
+  )
+    return "Content";
+
+  // Data Display
+  if (
+    name.includes("table") ||
+    name.includes("list") ||
+    name.includes("grid") ||
+    name.includes("tree") ||
+    name.includes("pivot") ||
+    name.includes("calendar") ||
+    name.includes("date") ||
+    name.includes("chart")
+  )
+    return "Data Display";
+
+  // Overlays & Dialogs
+  if (
+    name.includes("dialog") ||
+    name.includes("modal") ||
+    name.includes("popup") ||
+    name.includes("flyout") ||
+    name.includes("callout") ||
+    name.includes("panel") ||
+    name.includes("drawer")
+  )
+    return "Overlays";
+
+  // Feedback
+  if (
+    name.includes("tooltip") ||
+    name.includes("popover") ||
+    name.includes("message") ||
+    name.includes("notification") ||
+    name.includes("alert") ||
+    name.includes("banner") ||
+    name.includes("progress") ||
+    name.includes("spinner") ||
+    name.includes("loading")
+  )
+    return "Feedback";
+
+  // Icons
+  if (name.includes("icon") || name.includes("symbol")) return "Icons";
+
+  // Layout
+  if (
+    name.includes("stack") ||
+    name.includes("group") ||
+    name.includes("container") ||
+    name.includes("divider") ||
+    name.includes("separator") ||
+    name.includes("spacer")
+  )
+    return "Layout";
 
   return "Components";
 }

@@ -427,65 +427,126 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
 
                 {/* Components Grid */}
                 {!loading && (
-                    <div className="components-grid">
-                        {filteredComponents.map(component => {
-                            const isSelected = selectedComponentIds.has(component.id);
-                            return (
-                                <div
-                                    key={component.id}
-                                    className={`component-card ${isSelected ? 'selected' : ''}`}
-                                    onClick={() => toggleComponentSelection(component.id)}
-                                >
-                                    <div className="component-selection-indicator">
-                                        <div className={`selection-checkbox ${isSelected ? 'checked' : ''}`}>
-                                            {isSelected && <span className="checkmark">✓</span>}
-                                        </div>
-                                    </div>
-                                    <div className="component-preview">
-                                        <div
-                                            dangerouslySetInnerHTML={{ __html: component.htmlCode }}
-                                            className="component-preview-scaled"
-                                        />
-                                    </div>
-                                    <div className="component-info">
-                                        <div className="component-header">
-                                            <h3>{component.name}</h3>
-                                            <div className="source-indicators">
-                                                <span className={`source-tag ${component.source}`}>
-                                                    {component.source.includes('github') ? 'GitHub' : 'Figma'}
-                                                </span>
-                                                <span className="playbook-tag">{component.playbook}</span>
+                    <>
+                        {/* Grid Header with Library Link */}
+                        {selectedPlaybook === 'Figma Fluent Library' && (
+                            <div className="components-grid-header">
+                                <div className="grid-header-info">
+                                    <h3>Fluent 2 Design System Components</h3>
+                                    <p>{filteredComponents.length} components available</p>
+                                </div>
+                                <div className="grid-header-actions">
+                                    <a
+                                        href="https://www.figma.com/design/GvIcCw0tWaJVDSWD4f1OIW/Fluent-2-web?node-id=0-1&p=f&t=0UVE7Ann6oVPNlGW-0"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="figma-library-link"
+                                    >
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="figma-icon">
+                                            <path d="M8 24c2.208 0 4-1.792 4-4v-4H8c-2.208 0-4 1.792-4 4s1.792 4 4 4z" />
+                                            <path d="M4 12c0-2.208 1.792-4 4-4h4v8H8c-2.208 0-4-1.792-4-4z" />
+                                            <path d="M4 4c0-2.208 1.792-4 4-4h4v8H8C5.792 8 4 6.208 4 4z" />
+                                            <path d="M12 0h4c2.208 0 4 1.792 4 4s-1.792 4-4 4h-4V0z" />
+                                            <path d="M20 12c0 2.208-1.792 4-4 4s-4-1.792-4-4 1.792-4 4-4 4 1.792 4 4z" />
+                                        </svg>
+                                        <span>Open in Figma</span>
+                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" className="external-link-icon">
+                                            <path d="M3 3L9 9M9 3L9 9L3 9" stroke="currentColor" strokeWidth="1" fill="none" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        )}
+
+                        {selectedPlaybook === 'Figma Atlas Library' && (
+                            <div className="components-grid-header">
+                                <div className="grid-header-info">
+                                    <h3>Atlas Design System Components</h3>
+                                    <p>{filteredComponents.length} components available</p>
+                                </div>
+                                <div className="grid-header-actions">
+                                    <a
+                                        href="https://www.figma.com/design/GvIcCw0tWaJVDSWD4f1OIW/Fluent-2-web?node-id=0-1&p=f&t=0UVE7Ann6oVPNlGW-0"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="figma-library-link"
+                                    >
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="figma-icon">
+                                            <path d="M8 24c2.208 0 4-1.792 4-4v-4H8c-2.208 0-4 1.792-4 4s1.792 4 4 4z" />
+                                            <path d="M4 12c0-2.208 1.792-4 4-4h4v8H8c-2.208 0-4-1.792-4-4z" />
+                                            <path d="M4 4c0-2.208 1.792-4 4-4h4v8H8C5.792 8 4 6.208 4 4z" />
+                                            <path d="M12 0h4c2.208 0 4 1.792 4 4s-1.792 4-4 4h-4V0z" />
+                                            <path d="M20 12c0 2.208-1.792 4-4 4s-4-1.792-4-4 1.792-4 4-4 4 1.792 4 4z" />
+                                        </svg>
+                                        <span>Open in Figma</span>
+                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" className="external-link-icon">
+                                            <path d="M3 3L9 9M9 3L9 9L3 9" stroke="currentColor" strokeWidth="1" fill="none" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="components-grid">
+                            {filteredComponents.map(component => {
+                                const isSelected = selectedComponentIds.has(component.id);
+                                return (
+                                    <div
+                                        key={component.id}
+                                        className={`component-card ${isSelected ? 'selected' : ''}`}
+                                        onClick={() => toggleComponentSelection(component.id)}
+                                    >
+                                        <div className="component-selection-indicator">
+                                            <div className={`selection-checkbox ${isSelected ? 'checked' : ''}`}>
+                                                {isSelected && <span className="checkmark">✓</span>}
                                             </div>
                                         </div>
-                                        <p className="component-description">{component.description}</p>
-                                        <div className="component-meta">
-                                            <span className="category-tag">{component.category}</span>
-                                            {component.sourceUrl && (
-                                                <a
-                                                    href={component.sourceUrl}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="source-link"
-                                                    onClick={(e) => e.stopPropagation()} // Prevent selection toggle
-                                                >
-                                                    View Source
-                                                </a>
-                                            )}
+                                        <div className="component-preview">
+                                            <div
+                                                dangerouslySetInnerHTML={{ __html: component.htmlCode }}
+                                                className="component-preview-scaled"
+                                            />
                                         </div>
-                                        <button
-                                            onClick={(e) => {
-                                                e.stopPropagation(); // Prevent selection toggle
-                                                onAddComponent(component);
-                                            }}
-                                            className="add-component-btn individual"
-                                        >
-                                            Add to Wireframe
-                                        </button>
+                                        <div className="component-info">
+                                            <div className="component-header">
+                                                <h3>{component.name}</h3>
+                                                <div className="source-indicators">
+                                                    <span className={`source-tag ${component.source}`}>
+                                                        {component.source.includes('github') ? 'GitHub' : 'Figma'}
+                                                    </span>
+                                                    <span className="playbook-tag">{component.playbook}</span>
+                                                </div>
+                                            </div>
+                                            <p className="component-description">{component.description}</p>
+                                            <div className="component-meta">
+                                                <span className="category-tag">{component.category}</span>
+                                                {component.sourceUrl && (
+                                                    <a
+                                                        href={component.sourceUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="source-link"
+                                                        onClick={(e) => e.stopPropagation()} // Prevent selection toggle
+                                                    >
+                                                        View Source
+                                                    </a>
+                                                )}
+                                            </div>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation(); // Prevent selection toggle
+                                                    onAddComponent(component);
+                                                }}
+                                                className="add-component-btn individual"
+                                            >
+                                                Add to Wireframe
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            );
-                        })}
-                    </div>
+                                );
+                            })}
+                        </div>
+                    </>
                 )}
 
                 {/* Empty State */}

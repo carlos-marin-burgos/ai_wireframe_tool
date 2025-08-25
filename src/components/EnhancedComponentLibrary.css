@@ -611,3 +611,86 @@
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   }
 }
+
+/* Components Grid Header */
+.components-grid-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e1e5e9;
+  background: #f8f9fa;
+}
+
+.grid-header-info h3 {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #323130;
+}
+
+.grid-header-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #605e5c;
+}
+
+.grid-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.figma-library-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #0078d4;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid #0078d4;
+}
+
+.figma-library-link:hover {
+  background: #106ebe;
+  border-color: #106ebe;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 120, 212, 0.3);
+}
+
+.figma-library-link svg {
+  opacity: 0.8;
+}
+
+.figma-library-link:hover svg {
+  opacity: 1;
+}
+
+.figma-icon {
+  color: white;
+  flex-shrink: 0;
+}
+
+.external-link-icon {
+  color: white;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .components-grid-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .grid-header-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
