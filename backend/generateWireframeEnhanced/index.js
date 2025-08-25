@@ -3,6 +3,73 @@
 
 const { OpenAI } = require("openai");
 
+// Fluent UI Playbook imports and utilities
+const fluentPlaybook = {
+  // Fluent UI Web Components CDN
+  webComponentsCSS:
+    "https://unpkg.com/@fluentui/web-components/dist/fluent-design-system.css",
+  webComponentsJS:
+    "https://unpkg.com/@fluentui/web-components/dist/web-components.min.js",
+
+  // Fluent UI React CSS (if needed)
+  reactCSS: "https://unpkg.com/@fluentui/react/dist/css/fabric.min.css",
+
+  // Common Fluent Playbook patterns
+  patterns: {
+    navigation:
+      "https://docs.microsoft.com/en-us/fluent-ui/web-components/components/navigation",
+    cards:
+      "https://docs.microsoft.com/en-us/fluent-ui/web-components/components/card",
+    forms:
+      "https://docs.microsoft.com/en-us/fluent-ui/web-components/components/form",
+    buttons:
+      "https://docs.microsoft.com/en-us/fluent-ui/web-components/components/button",
+  },
+};
+
+// --- Fluent Playbook component injection helper ---
+function addFluentPlaybookComponents(html) {
+  if (!html || typeof html !== "string") return html;
+
+  console.log("🎨 Processing wireframe for Fluent Playbook components...");
+
+  // Inject Fluent UI CSS and JS into the head
+  const fluentResources = `
+    <link rel="stylesheet" href="${fluentPlaybook.webComponentsCSS}">
+    <script type="module" src="${fluentPlaybook.webComponentsJS}"></script>
+  `;
+
+  // Add Fluent resources to head
+  if (html.includes("</head>")) {
+    html = html.replace("</head>", `  ${fluentResources}\n</head>`);
+  }
+
+  // Replace common elements with Fluent UI Web Components
+  html = html.replace(
+    /<button([^>]*)>(.*?)<\/button>/gi,
+    "<fluent-button$1>$2</fluent-button>"
+  );
+  html = html.replace(
+    /<input([^>]*type="text"[^>]*)>/gi,
+    "<fluent-text-field$1></fluent-text-field>"
+  );
+  html = html.replace(
+    /<input([^>]*type="email"[^>]*)>/gi,
+    '<fluent-text-field$1 type="email"></fluent-text-field>'
+  );
+  html = html.replace(
+    /<input([^>]*type="password"[^>]*)>/gi,
+    '<fluent-text-field$1 type="password"></fluent-text-field>'
+  );
+  html = html.replace(/<select([^>]*)>/gi, "<fluent-select$1>");
+  html = html.replace(/<\/select>/gi, "</fluent-select>");
+  html = html.replace(/<option([^>]*)>/gi, "<fluent-option$1>");
+  html = html.replace(/<\/option>/gi, "</fluent-option>");
+
+  console.log("✅ Fluent Playbook components injected successfully");
+  return html;
+}
+
 // --- Atlas component injection helper ---
 function addAtlasComponents(html, description) {
   if (!html || typeof html !== "string") return html;
@@ -392,6 +459,9 @@ module.exports = async function (context, req) {
     if (includeAtlas) {
       html = addAtlasComponents(html, description);
     }
+
+    // Apply Fluent Playbook components (always enabled for Microsoft consistency)
+    html = addFluentPlaybookComponents(html);
 
     const processingTime = Date.now() - startTime;
 

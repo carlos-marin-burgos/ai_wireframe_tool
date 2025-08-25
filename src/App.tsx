@@ -741,13 +741,13 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   };
 
   const insertComponentIntoWireframe = (existingHtml: string, componentHtml: string) => {
-    console.log("🔧 insertComponentIntoWireframe: Adding component to Bootstrap grid");
+    console.log("🔧 insertComponentIntoWireframe: Adding component to Fluent UI layout");
 
-    // Check if we have an existing wireframe with Bootstrap grid structure
-    const hasBootstrapGrid = existingHtml.includes('container') || existingHtml.includes('row') || existingHtml.includes('col-');
+    // Check if we have an existing wireframe with Fluent UI layout structure
+    const hasFluentGrid = existingHtml.includes('fluent-container') || existingHtml.includes('fluent-row') || existingHtml.includes('fluent-col');
 
-    if (hasBootstrapGrid) {
-      // Find the first available Bootstrap column or create a new one
+    if (hasFluentGrid) {
+      // Find the first available Fluent UI column or create a new one
       const colRegex = /<div class="col-[^"]*"[^>]*>/g;
       const columns = existingHtml.match(colRegex);
 
@@ -807,7 +807,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
       }
     }
 
-    // If no Bootstrap structure found, wrap the component and append
+    // If no Fluent UI structure found, wrap the component and append
     const componentWrapper = `
       <div class="atlas-component-wrapper mt-4" data-user-added="true" style="
         background: rgba(255, 255, 255, 0.95);
@@ -847,7 +847,13 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Component Wireframe</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/11.0.0/css/fabric.min.css" rel="stylesheet">
+    <style>
+      body { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; }
+      .fluent-container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+      .fluent-row { display: flex; flex-wrap: wrap; margin: 0 -8px; }
+      .fluent-col { flex: 1; padding: 0 8px; min-width: 0; }
+    </style>
     <style>
         body { 
           font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
@@ -895,12 +901,12 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     </style>
 </head>
 <body>
-    <div class="container-fluid">
+    <div style="width: 100%; padding: 0 16px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
         <div class="wireframe-container">
             <div class="row mb-4">
                 <div class="col-12">
                     <h1 class="h3 text-primary mb-1">Component Library Wireframe</h1>
-                    <p class="text-muted">Components are added to the Bootstrap grid and can be rearranged using drag & drop.</p>
+                    <p style="color: #605e5c; font-size: 14px;">Components are added to the Fluent UI layout and can be rearranged using drag & drop.</p>
                 </div>
             </div>
             <div class="row">

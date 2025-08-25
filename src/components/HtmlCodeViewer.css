@@ -137,21 +137,23 @@
   font-size: 12px;
 }
 
-.btn-secondary {
-  background: #ffffff;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+.fluent-btn-secondary {
+  background: transparent;
+  color: #323130;
+  border: 1px solid #d1d1d1;
   padding: 8px 16px;
-  color: #374151;
+  margin: 0 4px;
+  border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   transition: all 0.2s ease;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.btn-secondary:hover {
-  background: #f9fafb;
-  border-color: #9ca3af;
+.fluent-btn-secondary:hover {
+  background: #f3f2f1;
+  border-color: #c7c6c4;
 }
 
 /* Responsive Design */

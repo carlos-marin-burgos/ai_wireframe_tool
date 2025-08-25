@@ -14,44 +14,47 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.figma-component.btn {
-  font-weight: 500;
+/* Fluent UI Button Styles */
+.figma-component.fluent-button {
+  font-weight: 600;
   padding: 8px 16px;
-  border-radius: 6px;
+  border-radius: 4px;
   text-decoration: none;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.btn-outlined {
+.fluent-btn-outlined {
   background: transparent;
-  border: 2px solid #0066cc;
-  color: #0066cc;
+  border: 1px solid #0078d4;
+  color: #0078d4;
 }
 
-.btn-outlined:hover {
-  background: #0066cc;
+.fluent-btn-outlined:hover {
+  background: #f3f2f1;
+  color: #106ebe;
+  border-color: #106ebe;
+}
+
+.fluent-btn-filled {
+  background: #0078d4;
+  border: 1px solid #0078d4;
   color: white;
 }
 
-.btn-filled {
-  background: #0066cc;
-  border: 2px solid #0066cc;
-  color: white;
+.fluent-btn-filled:hover {
+  background: #106ebe;
+  border-color: #106ebe;
 }
 
-.btn-filled:hover {
-  background: #0052a3;
-  border-color: #0052a3;
-}
-
-.btn-split {
-  background: #0066cc;
-  border: 2px solid #0066cc;
+.fluent-btn-split {
+  background: #0078d4;
+  border: 1px solid #0078d4;
   color: white;
   position: relative;
   padding-right: 40px;
 }
 
-.btn-split::after {
+.fluent-btn-split::after {
   content: "▼";
   position: absolute;
   right: 12px;

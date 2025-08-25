@@ -7,7 +7,7 @@ import FluentSaveWireframeModal, { SavedWireframe } from "./FluentSaveWireframeM
 import FluentImageUploadModal from "./FluentImageUploadModal";
 import FigmaIntegrationModal from "./FigmaIntegrationModal";
 import DownloadModal from "./DownloadModal";
-import ComponentLibraryModal from "./ComponentLibraryModal";
+import EnhancedComponentLibrary from "./EnhancedComponentLibrary";
 import SimpleDragWireframe from "./SimpleDragWireframe";
 import EnhancedMessage from "./EnhancedMessage";
 import ImageUploadZone from "./ImageUploadZone";
@@ -1380,8 +1380,8 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         wireframeTitle={description || 'Wireframe'}
       />
 
-      {/* Component Library Modal */}
-      <ComponentLibraryModal
+      {/* Enhanced Component Library */}
+      <EnhancedComponentLibrary
         isOpen={isComponentLibraryOpen}
         onClose={() => {
           setIsComponentLibraryOpen(false);

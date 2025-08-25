@@ -178,8 +178,8 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({
             return component.htmlCode;
         }
 
-        // Fallback: Generate Bootstrap-based HTML for components without Figma HTML
-        console.log('⚠️ No Figma HTML found, using Bootstrap fallback for:', component.name);
+        // Fallback: Generate Fluent UI-based HTML for components without Figma HTML
+        console.log('⚠️ No Figma HTML found, using Fluent UI fallback for:', component.name);
 
         const cleanName = component.name.toLowerCase();
         const category = component.category.toLowerCase();
@@ -190,7 +190,13 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({
                 cleanName.includes('filled') ? 'filled' :
                     cleanName.includes('split') ? 'split' : 'primary';
 
-            const htmlResult = `<button class="btn btn-${buttonType} figma-component" type="button">
+            const buttonStyle = buttonType === 'outlined'
+                ? 'background: transparent; color: #0078d4; border: 1px solid #0078d4;'
+                : buttonType === 'filled'
+                    ? 'background: #0078d4; color: white; border: none;'
+                    : 'background: #0078d4; color: white; border: none;';
+
+            const htmlResult = `<button style="${buttonStyle} padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: all 0.2s;" class="fluent-button figma-component" type="button">
                 ${component.name}
             </button>`;
 
@@ -200,13 +206,13 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({
 
         // Card components
         if (cleanName.includes('card') || category === 'cards') {
-            return `<div class="card figma-component">
-                <div class="card-header">
-                    <h5 class="card-title">${component.name}</h5>
+            return `<div style="background: white; border: 1px solid #edebe9; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;" class="fluent-card figma-component">
+                <div style="padding: 16px; border-bottom: 1px solid #f3f2f1;">
+                    <h5 style="margin: 0; font-size: 16px; font-weight: 600; color: #323130;">${component.name}</h5>
                 </div>
-                <div class="card-body">
-                    <p class="card-text">This is a ${component.name} from ${component.library}.</p>
-                    <a href="#" class="btn btn-primary">Learn More</a>
+                <div style="padding: 16px;">
+                    <p style="margin: 0 0 16px 0; font-size: 14px; color: #605e5c; line-height: 1.4;">This is a ${component.name} from ${component.library}.</p>
+                    <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600;">Learn More</button>
                 </div>
             </div>`;
         }
@@ -214,30 +220,34 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({
         // Navigation components
         if (cleanName.includes('nav') || cleanName.includes('breadcrumb') || category === 'navigation') {
             if (cleanName.includes('breadcrumb')) {
-                return `<nav aria-label="breadcrumb" class="figma-component">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item"><a href="#">Learn</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Current Page</li>
+                return `<nav aria-label="breadcrumb" style="padding: 16px 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;" class="fluent-breadcrumb figma-component">
+                    <ol style="display: flex; align-items: center; list-style: none; margin: 0; padding: 0; font-size: 14px;">
+                        <li style="margin-right: 8px;"><a href="#" style="color: #0078d4; text-decoration: none;">Home</a></li>
+                        <li style="margin-right: 8px; color: #605e5c;">></li>
+                        <li style="margin-right: 8px;"><a href="#" style="color: #0078d4; text-decoration: none;">Learn</a></li>
+                        <li style="margin-right: 8px; color: #605e5c;">></li>
+                        <li style="color: #323130; font-weight: 600;" aria-current="page">Current Page</li>
                     </ol>
                 </nav>`;
             }
-            return `<nav class="navbar navbar-expand-lg navbar-light bg-light figma-component">
-                <div class="container">
-                    <a class="navbar-brand" href="#">${component.name}</a>
-                    <button class="navbar-toggler" type="button">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+            return `<nav style="background: #faf9f8; padding: 12px 24px; border-bottom: 1px solid #edebe9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;" class="fluent-navbar figma-component">
+                <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="font-size: 18px; font-weight: 600; color: #323130;">${component.name}</div>
+                    <div style="display: flex; gap: 24px;">
+                        <a href="#" style="color: #323130; text-decoration: none; font-weight: 500;">Home</a>
+                        <a href="#" style="color: #323130; text-decoration: none; font-weight: 500;">Products</a>
+                        <a href="#" style="color: #323130; text-decoration: none; font-weight: 500;">Contact</a>
+                    </div>
                 </div>
             </nav>`;
         }
 
         // Form components
         if (cleanName.includes('input') || cleanName.includes('form') || category === 'forms') {
-            return `<div class="form-group figma-component">
-                <label for="${component.id}Input">${component.name}</label>
-                <input type="text" class="form-control" id="${component.id}Input" placeholder="Enter text">
-                <small class="form-text text-muted">This is a ${component.name} component.</small>
+            return `<div style="margin-bottom: 16px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;" class="fluent-form-group figma-component">
+                <label for="${component.id}Input" style="display: block; margin-bottom: 4px; font-size: 14px; font-weight: 600; color: #323130;">${component.name}</label>
+                <input type="text" style="width: 100%; max-width: 300px; padding: 8px 12px; border: 1px solid #d1d1d1; border-radius: 4px; font-size: 14px; color: #323130; font-family: inherit;" id="${component.id}Input" placeholder="Enter text">
+                <small style="display: block; margin-top: 4px; font-size: 12px; color: #605e5c;">This is a ${component.name} component.</small>
             </div>`;
         }
 
@@ -269,7 +279,7 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({
                 <div class="container">
                     <h1 class="display-4">${component.name}</h1>
                     <p class="lead">This is a ${component.name} component from ${component.library}.</p>
-                    <button class="btn btn-light btn-lg">Get Started</button>
+                    <button style="background: #0078d4; color: white; border: none; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 16px;">Get Started</button>
                 </div>
             </div>`;
         }
@@ -318,7 +328,7 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({
                         type: component?.type || 'component',
                         category: component?.category,
                         library: component?.library,
-                        defaultWidth: 4, // Default Bootstrap column width
+                        defaultWidth: 4, // Default Fluent grid column width
                         content: finalHTML
                     };
                 });

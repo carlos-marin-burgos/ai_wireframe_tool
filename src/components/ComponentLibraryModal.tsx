@@ -10,7 +10,8 @@ interface Component {
     category: string;
     htmlCode: string;
     preview?: string;
-    library?: 'FluentUI' | 'Atlas';
+    library?: 'FluentUI' | 'Atlas' | 'Figma';
+    source?: 'FluentUI' | 'Atlas' | 'Figma';
 }
 
 interface ComponentLibraryModalProps {
@@ -33,7 +34,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
 
     // State for filtering - must be declared before any early returns
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
-    const [selectedLibrary, setSelectedLibrary] = useState<'FluentUI' | 'Atlas'>('FluentUI');
+    const [selectedLibrary, setSelectedLibrary] = useState<'FluentUI' | 'Atlas' | 'Figma'>('FluentUI');
 
     // Load Fluent UI components from JSON file
     useEffect(() => {
@@ -84,14 +85,11 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Atlas Design Library Hero Component #1',
             category: 'Hero',
             library: 'Atlas',
-            htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 100%;">
-                <div style="width: 100%; height: 300px; background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%); display: flex; align-items: center; justify-content: center; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-                    <div style="text-align: center; padding: 40px;">
-                        <div style="font-size: 32px; margin-bottom: 16px;">🚀</div>
-                        <h1 style="font-size: 28px; font-weight: 600; margin: 0 0 12px 0;">Atlas Hero Component 1</h1>
-                        <p style="font-size: 16px; opacity: 0.9; margin: 0;">Microsoft Design System</p>
-                    </div>
-                </div>
+            htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 100%;" data-figma-node="1-4688" data-figma-file="PuWj05uKXhfbqrhmJLtCij">
+                <iframe src="https://www.figma.com/embed?embed_host=share&url=https%3A//www.figma.com/design/PuWj05uKXhfbqrhmJLtCij/Atlas-library-for-designetica%3Fnode-id%3D1-4688%26t%3DZZG7ksmOtnLfGef2-4" 
+                        style="width: 100%; height: 300px; border: none; border-radius: 8px;" 
+                        allowfullscreen>
+                </iframe>
             </div>`
         },
         {
@@ -100,14 +98,11 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Atlas Design Library Hero Component #2',
             category: 'Hero',
             library: 'Atlas',
-            htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 100%;">
-                <div style="width: 100%; height: 300px; background: linear-gradient(135deg, #005a9e 0%, #0078d4 100%); display: flex; align-items: center; justify-content: center; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-                    <div style="text-align: center; padding: 40px;">
-                        <div style="font-size: 32px; margin-bottom: 16px;">💼</div>
-                        <h1 style="font-size: 28px; font-weight: 600; margin: 0 0 12px 0;">Atlas Hero Component 2</h1>
-                        <p style="font-size: 16px; opacity: 0.9; margin: 0;">Enterprise Solutions</p>
-                    </div>
-                </div>
+            htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 100%;" data-figma-node="1-4786" data-figma-file="PuWj05uKXhfbqrhmJLtCij">
+                <iframe src="https://www.figma.com/embed?embed_host=share&url=https%3A//www.figma.com/design/PuWj05uKXhfbqrhmJLtCij/Atlas-library-for-designetica%3Fnode-id%3D1-4786%26t%3DZZG7ksmOtnLfGef2-4" 
+                        style="width: 100%; height: 300px; border: none; border-radius: 8px;" 
+                        allowfullscreen>
+                </iframe>
             </div>`
         },
         {
@@ -116,14 +111,11 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Atlas Design Library Hero Component #3',
             category: 'Hero',
             library: 'Atlas',
-            htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 100%;">
-                <div style="width: 100%; height: 300px; background: linear-gradient(135deg, #8764b8 0%, #0078d4 100%); display: flex; align-items: center; justify-content: center; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-                    <div style="text-align: center; padding: 40px;">
-                        <div style="font-size: 32px; margin-bottom: 16px;">🎯</div>
-                        <h1 style="font-size: 28px; font-weight: 600; margin: 0 0 12px 0;">Atlas Hero Component 3</h1>
-                        <p style="font-size: 16px; opacity: 0.9; margin: 0;">Innovation & Technology</p>
-                    </div>
-                </div>
+            htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 100%;" data-figma-node="1-4886" data-figma-file="PuWj05uKXhfbqrhmJLtCij">
+                <iframe src="https://www.figma.com/embed?embed_host=share&url=https%3A//www.figma.com/design/PuWj05uKXhfbqrhmJLtCij/Atlas-library-for-designetica%3Fnode-id%3D1-4886%26t%3DZZG7ksmOtnLfGef2-4" 
+                        style="width: 100%; height: 300px; border: none; border-radius: 8px;" 
+                        allowfullscreen>
+                </iframe>
             </div>`
         },
         {
@@ -137,7 +129,6 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                     <div style="text-align: center; padding: 40px;">
                         <div style="font-size: 32px; margin-bottom: 16px;">⭐</div>
                         <h1 style="font-size: 28px; font-weight: 600; margin: 0 0 12px 0;">Atlas Hero Component 4</h1>
-                        <p style="font-size: 16px; opacity: 0.9; margin: 0;">Excellence & Quality</p>
                     </div>
                 </div>
             </div>`
@@ -2102,11 +2093,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                     <div style="text-align: center;">
                         <div style="font-size: 24px; margin-bottom: 8px;">📚</div>
                         <div style="font-size: 16px; font-weight: 600;">Atlas Learning Path</div>
-                        <div style="font-size: 12px; opacity: 0.9; margin-top: 4px;">Microsoft Learn Component</div>
                     </div>
-                </div>
-                <div style="text-align: center; margin-top: 8px; padding: 8px;">
-                    <p style="font-size: 12px; color: #605e5c; margin: 0; opacity: 0.8;">Atlas Learning Path Card (Updated)</p>
                 </div>
             </div>`
         },
@@ -2123,11 +2110,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                     <div style="text-align: center;">
                         <div style="font-size: 24px; margin-bottom: 8px;">📖</div>
                         <div style="font-size: 14px; font-weight: 600;">Learning Module</div>
-                        <div style="font-size: 11px; opacity: 0.9; margin-top: 4px;">Interactive Content</div>
                     </div>
-                </div>
-                <div style="text-align: center; margin-top: 8px; padding: 8px;">
-                    <p style="font-size: 12px; color: #605e5c; margin: 0; opacity: 0.8;">Atlas Module Card</p>
                 </div>
             </div>`
         },
@@ -5363,6 +5346,72 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         </div>
     </div>
 </div>`
+        },
+
+        // Figma Components - Direct from Figma Playbook
+        {
+            id: 'figma-hero-modern',
+            name: 'Modern Hero Section',
+            description: 'Modern hero section from Figma design system',
+            category: 'Hero',
+            library: 'Figma',
+            htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 100%;" data-source="figma">
+                <iframe src="https://www.figma.com/embed?embed_host=share&url=https%3A//www.figma.com/community/file/928108847914589057" 
+                        style="width: 100%; height: 300px; border: none; border-radius: 8px;" 
+                        allowfullscreen>
+                </iframe>
+            </div>`
+        },
+        {
+            id: 'figma-card-interactive',
+            name: 'Interactive Card',
+            description: 'Interactive card component from Figma community',
+            category: 'Cards',
+            library: 'Figma',
+            htmlCode: `<div style="background: white; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: 100%;" data-source="figma">
+                <div style="width: 100%; height: 180px; background: linear-gradient(45deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 28px; margin-bottom: 8px;">🎨</div>
+                        <div style="font-size: 16px; font-weight: 600;">Figma Component</div>
+                    </div>
+                </div>
+            </div>`
+        },
+        {
+            id: 'figma-navigation-clean',
+            name: 'Clean Navigation',
+            description: 'Clean navigation bar from Figma design system',
+            category: 'Navigation',
+            library: 'Figma',
+            htmlCode: `<nav style="background: #ffffff; border-bottom: 1px solid #e0e0e0; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;" data-source="figma">
+                <div style="font-size: 20px; font-weight: 700; color: #333;">🎨 Figma</div>
+                <div style="display: flex; gap: 24px;">
+                    <a href="#" style="color: #666; text-decoration: none; font-weight: 500;">Home</a>
+                    <a href="#" style="color: #666; text-decoration: none; font-weight: 500;">Design</a>
+                    <a href="#" style="color: #666; text-decoration: none; font-weight: 500;">Prototype</a>
+                    <a href="#" style="color: #4F46E5; text-decoration: none; font-weight: 600;">Community</a>
+                </div>
+                <button style="background: #4F46E5; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer;">Get Started</button>
+            </nav>`
+        },
+        {
+            id: 'figma-form-modern',
+            name: 'Modern Form',
+            description: 'Modern form design from Figma community',
+            category: 'Forms',
+            library: 'Figma',
+            htmlCode: `<form style="background: white; padding: 32px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); max-width: 400px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;" data-source="figma">
+                <h3 style="margin: 0 0 24px 0; color: #333; font-size: 24px; font-weight: 700;">Contact Us</h3>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: #555; font-weight: 500;">Name</label>
+                    <input type="text" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px; box-sizing: border-box;" placeholder="Your name">
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: #555; font-weight: 500;">Email</label>
+                    <input type="email" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px; box-sizing: border-box;" placeholder="your@email.com">
+                </div>
+                <button type="submit" style="width: 100%; background: linear-gradient(45deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">Send Message</button>
+            </form>`
         }
     ];
 
@@ -5409,6 +5458,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     console.log('🏷️ Components by name:', components.map(c => c.name));
     console.log('📚 Selected library:', selectedLibrary);
     console.log('🗂️ Selected category:', selectedCategory);
+    console.log('🎨 NEW: Figma components available! Switch to Figma tab to see community designs.');
 
     // Debug: Check if AI button should show
     console.log('🔍 ComponentLibraryModal debug:', {
@@ -5423,7 +5473,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                 <div className="component-library-header">
                     <div className="component-library-title">
                         <div className="fluentui-logo">
-                            {selectedLibrary === 'FluentUI' ? 'F' : 'A'}
+                            {selectedLibrary === 'FluentUI' ? 'F' : selectedLibrary === 'Atlas' ? 'A' : '🎨'}
                         </div>
                         <div>
                             <h2>{selectedLibrary} Component Library</h2>
@@ -5449,6 +5499,15 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                                 className={`library-tab ${selectedLibrary === 'Atlas' ? 'active' : ''}`}
                             >
                                 Atlas
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setSelectedLibrary('Figma');
+                                    setSelectedCategory('All');
+                                }}
+                                className={`library-tab ${selectedLibrary === 'Figma' ? 'active' : ''}`}
+                            >
+                                Figma
                             </button>
                         </div>
                         <button

@@ -481,24 +481,24 @@
 }
 
 .atlas-hero-preview {
-  background: #E8E6DF;
+  background: #e8e6df;
   color: #323130;
   padding: 20px 16px;
   border-radius: 6px;
   text-align: left;
   width: 100%;
   position: relative;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
 }
 
 .atlas-hero-preview::after {
-  content: '';
+  content: "";
   position: absolute;
   right: 0;
   top: 0;
   bottom: 0;
   width: 3px;
-  background: linear-gradient(180deg, #E8E6DF 0%, rgba(232, 230, 223, 0) 100%);
+  background: linear-gradient(180deg, #e8e6df 0%, rgba(232, 230, 223, 0) 100%);
 }
 
 .atlas-hero-preview .hero-eyebrow {
@@ -540,7 +540,7 @@
   border-radius: 2px;
   font-size: 10px;
   font-weight: 600;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
 }
 
 .atlas-hero-preview .hero-btn-secondary {
@@ -551,7 +551,7 @@
   border-radius: 2px;
   font-size: 10px;
   font-weight: 600;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
 }
 
 .atlas-nav-preview {
@@ -700,21 +700,22 @@
   gap: 12px;
 }
 
-.btn-secondary {
+.fluent-btn-secondary {
   padding: 8px 16px;
-  border: 1px solid #d1d5db;
+  border: 1px solid #d1d1d1;
   background: white;
-  border-radius: 8px;
+  border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
-  font-weight: 500;
-  color: #374151;
+  font-weight: 600;
+  color: #323130;
   transition: all 0.2s ease;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.btn-secondary:hover {
-  background: #f9fafb;
-  border-color: #9ca3af;
+.fluent-btn-secondary:hover {
+  background: #f3f2f1;
+  border-color: #c7c6c4;
 }
 
 /* Responsive Design */
