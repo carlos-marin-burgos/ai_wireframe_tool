@@ -17,10 +17,25 @@ const AzureAuth: React.FC<AzureAuthProps> = ({ onAuthSuccess }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Check if user is authenticated via Azure Static Web Apps
+        // Check if we're running in local development
+        const isLocalDev = window.location.hostname === 'localhost' ||
+            window.location.hostname === '127.0.0.1' ||
+            window.location.port !== '';
+
+        if (isLocalDev) {
+            // In local development, simulate authentication success
+            console.log('🔧 Development mode: Simulating authentication success');
+            onAuthSuccess();
+            setLoading(false);
+            return;
+        }
+
+        // In production, check if user is authenticated via Azure Static Web Apps
+        console.log('🔐 Production mode: Checking Azure Static Web Apps authentication');
         fetch('/.auth/me')
             .then(response => response.json())
             .then(data => {
+                console.log('🔐 Azure auth data:', data);
                 const clientPrincipal = data.clientPrincipal;
                 if (clientPrincipal) {
                     setUser(clientPrincipal);
@@ -28,7 +43,8 @@ const AzureAuth: React.FC<AzureAuthProps> = ({ onAuthSuccess }) => {
                 }
                 setLoading(false);
             })
-            .catch(() => {
+            .catch((error) => {
+                console.log('🔐 Azure auth failed:', error);
                 setLoading(false);
             });
     }, [onAuthSuccess]);

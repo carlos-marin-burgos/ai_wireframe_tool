@@ -1522,16 +1522,32 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check Azure authentication status
+    // Check if we're running in local development
+    const isLocalDev = window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1' ||
+      window.location.port !== '';
+
+    if (isLocalDev) {
+      // In local development, bypass authentication for testing
+      console.log('🔧 Development mode: Bypassing Azure authentication');
+      setIsAuthenticated(true);
+      setLoading(false);
+      return;
+    }
+
+    // In production (Azure), check Azure authentication status
+    console.log('🔐 Production mode: Checking Azure authentication');
     fetch('/.auth/me')
       .then(response => response.json())
       .then(data => {
+        console.log('🔐 Azure auth response:', data);
         if (data.clientPrincipal) {
           setIsAuthenticated(true);
         }
         setLoading(false);
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log('🔐 Azure auth check failed:', error);
         setLoading(false);
       });
   }, []);
@@ -1541,8 +1557,18 @@ function App() {
   };
 
   const handleLogout = () => {
-    // Redirect to Azure logout
-    window.location.href = '/.auth/logout';
+    // Check if we're in production before attempting logout
+    const isLocalDev = window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1' ||
+      window.location.port !== '';
+
+    if (isLocalDev) {
+      // In local development, just reload the page
+      window.location.reload();
+    } else {
+      // In production, redirect to Azure logout
+      window.location.href = '/.auth/logout';
+    }
   };
 
   if (loading) {
