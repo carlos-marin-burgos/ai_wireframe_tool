@@ -1,9 +1,10 @@
 import React from 'react';
-import { FiFigma, FiCode, FiShare2, FiMonitor, FiDownload, FiSave } from 'react-icons/fi';
+import { FiLogOut, FiFigma, FiCode, FiShare2, FiMonitor, FiDownload, FiSave } from 'react-icons/fi';
 import './TopNavbar.css';
 
 interface TopNavbarProps {
     onLogoClick?: () => void;
+    onLogout?: () => void;
     // Toolbar actions
     onSave?: () => void;
     onFigmaIntegration?: () => void;
@@ -15,6 +16,7 @@ interface TopNavbarProps {
 
 const TopNavbar: React.FC<TopNavbarProps> = ({
     onLogoClick,
+    onLogout,
     onSave,
     onFigmaIntegration,
     onViewHtmlCode,
@@ -86,7 +88,14 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
                     </button>
                 </div>
 
-                {/* CXS Logo */}
+                {/* Logout and Logo */}
+                <button
+                    onClick={onLogout}
+                    className="navbar-toolbar-btn logout-btn"
+                    title="Logout"
+                >
+                    <FiLogOut />
+                </button>
                 <img src="/cxsLogo.png" alt="CXS Logo" className="navbar-cxs-logo" />
             </div>
         </nav>

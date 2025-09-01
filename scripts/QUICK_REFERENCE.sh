@@ -75,21 +75,23 @@ echo -e "${BOLD}📊 CURRENT STATUS:${NC}"
 echo ""
 
 # Quick status check
-if curl -s "https://func-designetica-prod-xabnur6oyusju.azurewebsites.net/api/health" > /dev/null; then
+if curl -s "https://func-designetica-vjib6nx2wh4a4.azurewebsites.net/api/health" > /dev/null; then
     echo -e "${GREEN}✅ API Health: HEALTHY${NC}"
 else
     echo -e "${RED}❌ API Health: UNHEALTHY${NC}"
 fi
 
-if curl -s "https://white-flower-006d2370f.1.azurestaticapps.net" > /dev/null; then
-    echo "✅ Website is up!"
-    echo "✅ Backend is responding!"
-    echo "🔍 Run full diagnostics with: ./full-check.sh"
-    echo ""
-    echo "🚀 SUCCESS!"
-    echo "  Website: https://white-flower-006d2370f.1.azurestaticapps.net"
-echo "  API: https://func-designetica-prod-xabnur6oyusju.azurewebsites.net/api/generate-html-wireframe"
-echo "  Health: https://func-designetica-prod-xabnur6oyusju.azurewebsites.net/api/health"
+if curl -s "https://designetica.carlosmarin.net" > /dev/null; then
+    echo -e "${GREEN}✅ Website: HEALTHY${NC}"
+else
+    echo -e "${RED}❌ Website: UNHEALTHY${NC}"
+fi
+
+echo ""
+echo -e "${BOLD}🌐 YOUR URLS:${NC}"
+echo "  Website: https://designetica.carlosmarin.net"
+echo "  API: https://func-designetica-vjib6nx2wh4a4.azurewebsites.net/api/generate-html-wireframe"
+echo "  Health: https://func-designetica-vjib6nx2wh4a4.azurewebsites.net/api/health"
 echo ""
 
 echo -e "${BOLD}📖 DOCUMENTATION:${NC}"

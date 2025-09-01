@@ -49,9 +49,9 @@ export const API_CONFIG = {
   ],
 
   ENDPOINTS: {
-    // Fixed endpoint to match Azure Function route
-    GENERATE_WIREFRAME: "/api/generate-html-wireframe",
-    GENERATE_WIREFRAME_ENHANCED: "/api/generate-html-wireframe", // Same endpoint for now
+    // NUCLEAR OPTION: Single endpoint that works no matter what
+    GENERATE_WIREFRAME: "/api/generate-wireframe",
+    GENERATE_WIREFRAME_ENHANCED: "/api/generate-wireframe-enhanced",
     GENERATE_FLUENT_WIREFRAME: "/api/generate-fluent-wireframe",
     GENERATE_SUGGESTIONS: "/api/generate-suggestions",
     GET_TEMPLATE: "/api/get-template",
@@ -78,7 +78,7 @@ export const verifyBackendAI = async (baseUrl: string): Promise<boolean> => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-    const response = await fetch(`${baseUrl}/api/generate-html-wireframe`, {
+    const response = await fetch(`${baseUrl}/api/generate-wireframe`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

@@ -6,10 +6,10 @@ echo "================================"
 
 echo ""
 echo "1. Testing Backend Health:"
-echo "   URL: https://func-designetica-prod-xabnur6oyusju.azurewebsites.net/api/health"
+echo "   URL: https://func-designetica-vjib6nx2wh4a4.azurewebsites.net/api/health"
 
 # Test with timeout
-timeout 10s curl -s "https://func-designetica-prod-xabnur6oyusju.azurewebsites.net/api/health" > /tmp/health_test.json
+timeout 10s curl -s "https://func-designetica-vjib6nx2wh4a4.azurewebsites.net/api/health" > /tmp/health_test.json
 if [ $? -eq 0 ]; then
     echo "   ✅ Backend responded!"
     echo "   Response:"
@@ -20,13 +20,13 @@ fi
 
 echo ""
 echo "2. Testing Wireframe Generation:"
-echo "   URL: https://func-designetica-prod-xabnur6oyusju.azurewebsites.net/api/generate-html-wireframe"
+echo "   URL: https://func-designetica-vjib6nx2wh4a4.azurewebsites.net/api/generate-html-wireframe"
 
 # Test wireframe generation with timeout
 timeout 15s curl -s -X POST \
   -H "Content-Type: application/json" \
   -d '{"description":"simple test button","fastMode":true}' \
-  "https://func-designetica-prod-xabnur6oyusju.azurewebsites.net/api/generate-html-wireframe" > /tmp/wireframe_test.json
+  "https://func-designetica-vjib6nx2wh4a4.azurewebsites.net/api/generate-html-wireframe" > /tmp/wireframe_test.json
 
 if [ $? -eq 0 ]; then
     echo "   ✅ Wireframe API responded!"
@@ -40,7 +40,7 @@ echo ""
 echo "3. Frontend Build Check:"
 if [ -f "dist/assets/main-G05flp-d.js" ]; then
     echo "   ✅ Frontend build exists"
-    echo "   Backend URL in build: $(grep -o 'func-designetica-prod-xabnur6oyusju.azurewebsites.net' dist/assets/main-*.js | head -1)"
+    echo "   Backend URL in build: $(grep -o 'func-designetica-vjib6nx2wh4a4.azurewebsites.net' dist/assets/main-*.js | head -1)"
 else
     echo "   ❌ Frontend build missing"
 fi

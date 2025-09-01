@@ -45,8 +45,8 @@ while true; do
             echo "🌐 Testing production site in 60 seconds..."
             sleep 60
             
-            echo "🔍 Testing white-flower-006d2370f.1.azurestaticapps.net..."
-            curl -I https://white-flower-006d2370f.1.azurestaticapps.net/ || echo "❌ Site not yet accessible"
+            echo "🔍 Testing designetica.carlosmarin.net..."
+            curl -I https://designetica.carlosmarin.net/ || echo "❌ Site not yet accessible"
             
             break
         fi

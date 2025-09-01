@@ -109,9 +109,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
   const [favorites, setFavorites] = useState<any[]>([]);
   const [recents, setRecents] = useState<any[]>([]);
 
-  // Plugin toast state - permanent announcement, always visible
-  const [isPluginToastDismissed] = useState(false);
-
   // Delete modal state
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
@@ -556,28 +553,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
 
   return (
     <div className="landing-page">
-      {/* Plugin Toast Notification - Permanent Announcement */}
-      <div className="plugin-toast">
-        <div className="toast-content">
-          <div className="toast-icon">
-            <FiFigma />
-          </div>
-          <div className="toast-text">
-            <strong>New Figma Plugin!</strong> Generate wireframes directly in Figma.
-          </div>
-          <div className="toast-actions">
-            <a
-              href="figma://plugin/1543300122157762658"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="toast-btn-primary"
-            >
-              Open Plugin
-            </a>
-          </div>
-        </div>
-      </div>
-
       <div className="landing-container">
         <div className="landing-content">
           <h1 className="main-heading">What will you <span className="design-word">design</span> today?</h1>
@@ -585,6 +560,30 @@ const LandingPage: React.FC<LandingPageProps> = ({
             Sketch your vision, ship your wireframe - Designetica AI does the
             heavy lifting.
           </p>
+
+          {/* Figma Plugin Announcement Banner */}
+          <div className="figma-plugin-announcement">
+            <div className="announcement-content">
+              <div className="announcement-icon">
+                <FiFigma />
+              </div>
+              <div className="announcement-text">
+                <h3>🎉 New: Designetica Figma Plugin!</h3>
+                <p>Generate AI wireframes directly in Figma. Perfect for designers who want to stay in their workflow.</p>
+              </div>
+              <div className="announcement-action">
+                <a
+                  href="figma://plugin/1543300122157762658"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="figma-plugin-btn"
+                >
+                  <FiFigma />
+                  Open in Figma
+                </a>
+              </div>
+            </div>
+          </div>
 
           {error && <div className="error error-center">{error}</div>}
           {validationError && <div className="input-info-alert">{validationError}</div>}
