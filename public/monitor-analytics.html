@@ -483,10 +483,10 @@
         let currentTab = 'overview';
 
         // Azure Production API endpoint only
-        const API_BASE = 'https://func-designetica-vdlmicyosd4ua.azurewebsites.net/api';
+        const API_BASE = 'https://func-designetica-prod-xabnur6oyusju.azurewebsites.net/api';
         const AZURE_URLS = {
-            frontend: 'https://brave-island-04ba9f70f.2.azurestaticapps.net',
-            backend: 'https://func-designetica-vdlmicyosd4ua.azurewebsites.net',
+            frontend: 'https://white-flower-006d2370f.1.azurestaticapps.net',
+            backend: 'https://func-designetica-prod-xabnur6oyusju.azurewebsites.net',
             customDomain: 'https://designetica.carlosmarin.net'
         };
 
@@ -532,7 +532,7 @@
         // Load analytics data from Azure
         async function loadAnalytics() {
             try {
-                const response = await fetch(`${API_BASE}/ai-analytics`, {
+                const response = await fetch(`${API_BASE}/analytics`, {
                     timeout: 10000
                 });
 

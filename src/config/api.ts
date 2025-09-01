@@ -69,7 +69,7 @@ export const API_CONFIG = {
     import.meta.env.VITE_BACKEND_BASE_URL ||
     (isDevelopment
       ? `http://localhost:7072`
-      : "https://func-designetica-vdlmicyosd4ua.azurewebsites.net"),
+      : "https://func-designetica-prod-xabnur6oyusju.azurewebsites.net"),
 };
 
 // Health check to verify backend has AI capabilities

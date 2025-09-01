@@ -116,16 +116,30 @@ If you need immediate access:
 3. **Create Function App** manually
 4. **Configure OpenAI** service manually
 
-### Commands Ready for Deployment
+### ✅ **MIGRATION COMPLETED SUCCESSFULLY!**
+
+**Deployment Status**: ✅ COMPLETE
+
+- **Frontend URL**: https://white-flower-006d2370f.1.azurestaticapps.net/
+- **Backend URL**: https://func-designetica-prod-xabnur6oyusju.azurewebsites.net/
+- **Resource Group**: rg-designetica-prod
+- **Subscription**: Designetica (330eaa36-e19f-4d4c-8dea-37c2332f754d)
+
+**CI/CD Pipeline**: ✅ CONFIGURED
+
+- **Provider**: GitHub Actions with Federated Authentication
+- **Service Principal**: az-dev-08-30-2025-17-21-07
+- **Triggers**: Push to main, working-version, and pull requests
+- **Pipeline URL**: https://github.com/carlos-marin-burgos/ai_wireframe_tool/actions
+
+### Deployment Commands Used
 
 ```bash
-# Once permissions are granted:
-azd auth login
-azd env select production-bami
-azd up
-
-# Or with specific resource group:
-azd up --resource-group <provided-rg-name>
+# Successful deployment commands:
+azd env new designetica-prod
+azd env set AZURE_SUBSCRIPTION_ID 330eaa36-e19f-4d4c-8dea-37c2332f754d
+azd up  # ✅ SUCCESS (13 minutes 34 seconds)
+azd pipeline config --provider github --auth-type federated  # ✅ SUCCESS
 ```
 
 ## Cost Considerations for BAMI
