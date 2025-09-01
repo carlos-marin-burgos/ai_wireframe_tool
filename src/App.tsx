@@ -12,7 +12,7 @@ import TopNavbarLanding from "./components/TopNavbarLanding";
 import SaveDialog from "./components/SaveDialog";
 import LoadDialog from "./components/LoadDialog";
 import Toast from "./components/Toast";
-import PasswordProtection from "./components/PasswordProtection";
+import AzureAuth from "./components/AzureAuth";
 import FigmaIntegration from "./components/FigmaIntegration";
 import { API_CONFIG, getApiUrl } from "./config/api";
 // All API calls are now handled by the wireframe generation hook
@@ -1516,23 +1516,52 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   );
 }
 
-// Main App component with password protection
+// Main App component with Azure authentication
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Check Azure authentication status
+    fetch('/.auth/me')
+      .then(response => response.json())
+      .then(data => {
+        if (data.clientPrincipal) {
+          setIsAuthenticated(true);
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  }, []);
 
   const handleAuthSuccess = () => {
     setIsAuthenticated(true);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('designetica_authenticated');
-    localStorage.removeItem('designetica_auth_time');
-    setIsAuthenticated(false);
+    // Redirect to Azure logout
+    window.location.href = '/.auth/logout';
   };
 
-  // If not authenticated, show password protection
+  if (loading) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        fontFamily: 'Segoe UI, sans-serif'
+      }}>
+        <div>Loading...</div>
+      </div>
+    );
+  }
+
+  // If not authenticated, show Azure authentication
   if (!isAuthenticated) {
-    return <PasswordProtection onAuthSuccess={handleAuthSuccess} />;
+    return <AzureAuth onAuthSuccess={handleAuthSuccess} />;
   }
 
   // If authenticated, show the main application
