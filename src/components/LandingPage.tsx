@@ -561,6 +561,30 @@ const LandingPage: React.FC<LandingPageProps> = ({
             heavy lifting.
           </p>
 
+          {/* Figma Plugin Announcement Banner */}
+          <div className="figma-plugin-announcement">
+            <div className="announcement-content">
+              <div className="announcement-icon">
+                <FiFigma />
+              </div>
+              <div className="announcement-text">
+                <h3>🎉 New: Designetica Figma Plugin!</h3>
+                <p>Generate AI wireframes directly in Figma. Perfect for designers who want to stay in their workflow.</p>
+              </div>
+              <div className="announcement-action">
+                <a
+                  href="https://www.figma.com/community/plugin/1543300122157762658/designetica-ai-wireframes"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="figma-plugin-btn"
+                >
+                  <FiFigma />
+                  Install Plugin
+                </a>
+              </div>
+            </div>
+          </div>
+
           {error && <div className="error error-center">{error}</div>}
           {validationError && <div className="input-info-alert">{validationError}</div>}
           {savedWireframesCount > 0 && (
