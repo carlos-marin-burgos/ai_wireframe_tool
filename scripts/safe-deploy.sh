@@ -60,7 +60,7 @@ deploy_backend() {
         success "🎉 BACKEND DEPLOYMENT COMPLETED SUCCESSFULLY!"
         echo ""
         echo "Your API is now live and healthy at:"
-        echo "  https://func-designetica-vjib6nx2wh4a4.azurewebsites.net/api/generate-html-wireframe"
+        echo "  https://func-designetica-prod-xabnur6oyusju.azurewebsites.net/api/generate-html-wireframe"
         echo ""
         echo "Website: https://white-flower-006d2370f.1.azurestaticapps.net"
         return 0
@@ -115,7 +115,7 @@ deploy_all() {
             
             echo ""
             echo "🌟 Your Designetica application is fully deployed and operational!"
-            echo "   API: https://func-designetica-vjib6nx2wh4a4.azurewebsites.net/"
+            echo "   API: https://func-designetica-prod-xabnur6oyusju.azurewebsites.net/"
             echo "   Website: https://white-flower-006d2370f.1.azurestaticapps.net"
             echo ""
             return 0

@@ -29,16 +29,7 @@ const TopNavbarLanding: React.FC<TopNavbarLandingProps> = ({
                 <div className="separator-bar"></div>
                 <img src="/cxsLogo.png" alt="CXS" className="navbar-cxs-logo" />
             </div>
-            <div className="navbar-right">
-                <button
-                    onClick={onLogout}
-                    className="navbar-logout-btn"
-                    title="Logout"
-                >
-                    Logout
-                </button>
-
-            </div>
+            {/* Logout removed for Microsoft internal use */}
         </nav>
     );
 };

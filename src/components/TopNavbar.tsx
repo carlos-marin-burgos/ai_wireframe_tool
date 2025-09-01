@@ -88,14 +88,7 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
                     </button>
                 </div>
 
-                {/* Logout and Logo */}
-                <button
-                    onClick={onLogout}
-                    className="navbar-toolbar-btn logout-btn"
-                    title="Logout"
-                >
-                    <FiLogOut />
-                </button>
+                {/* Logo only - logout removed for Microsoft internal use */}
                 <img src="/cxsLogo.png" alt="CXS Logo" className="navbar-cxs-logo" />
             </div>
         </nav>

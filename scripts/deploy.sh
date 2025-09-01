@@ -70,7 +70,7 @@ if [ -n "$SWA_URL" ]; then
 fi
 
 # Get Function App URL
-FUNC_URL=$(az functionapp show --resource-group rg-designetica --name func-designetica-vjib6nx2wh4a4 --query "defaultHostName" -o tsv 2>/dev/null || echo "")
+FUNC_URL=$(az functionapp show --resource-group rg-designetica-prod --name func-designetica-prod-xabnur6oyusju --query "defaultHostName" -o tsv 2>/dev/null || echo "")
 if [ -n "$FUNC_URL" ]; then
     echo "🔧 Backend API: https://$FUNC_URL"
 fi
