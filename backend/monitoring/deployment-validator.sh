@@ -6,9 +6,9 @@
 set -e
 
 # Configuration
-API_ENDPOINT="https://func-designetica-vjib6nx2wh4a4.azurewebsites.net/api/generate-html-wireframe"
-HEALTH_ENDPOINT="https://func-designetica-vjib6nx2wh4a4.azurewebsites.net/api/health"
-WEBSITE_ENDPOINT="https://designetica.carlosmarin.net"
+API_ENDPOINT="https://func-designetica-prod-xabnur6oyusju.azurewebsites.net/api/generate-html-wireframe"
+HEALTH_ENDPOINT="https://func-designetica-prod-xabnur6oyusju.azurewebsites.net/api/health"
+WEBSITE_ENDPOINT="https://white-flower-006d2370f.1.azurestaticapps.net"
 TIMEOUT=60
 MAX_RETRIES=3
 VALIDATION_WAIT=30

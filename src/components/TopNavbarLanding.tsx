@@ -1,22 +1,20 @@
 import React from 'react';
-import './TopNavbarLanding.css';
+import './TopNavbar.css';
 
-interface TopNavbarLandingProps {
+export interface TopNavbarLandingProps {
     onLogoClick?: () => void;
-    onLogout?: () => void;
 }
 
 const TopNavbarLanding: React.FC<TopNavbarLandingProps> = ({
-    onLogoClick,
-    onLogout
+    onLogoClick
 }) => {
     return (
-        <nav className="top-nav-landing">
+        <nav className="top-nav">
             <div className="navbar-left">
                 <button
                     onClick={onLogoClick}
                     className="navbar-logo-button"
-                    title="Designetica"
+                    title="Back to Home"
                 >
                     <svg width="20" height="20" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M11.5216 0.5H0V11.9067H11.5216V0.5Z" fill="#F26522" />
@@ -26,18 +24,9 @@ const TopNavbarLanding: React.FC<TopNavbarLandingProps> = ({
                     </svg>
                     <span className="navbar-logo-text">Designetica</span>
                 </button>
-                <div className="separator-bar"></div>
-                <img src="/cxsLogo.png" alt="CXS" className="navbar-cxs-logo" />
             </div>
             <div className="navbar-right">
-                <button
-                    onClick={onLogout}
-                    className="navbar-logout-btn"
-                    title="Logout"
-                >
-                    Logout
-                </button>
-
+                <img src="/cxsLogo.png" alt="CXS Logo" className="navbar-cxs-logo" />
             </div>
         </nav>
     );

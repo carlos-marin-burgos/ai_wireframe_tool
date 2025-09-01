@@ -70,13 +70,13 @@ if [ -n "$SWA_URL" ]; then
 fi
 
 # Get Function App URL
-FUNC_URL=$(az functionapp show --resource-group rg-designetica --name func-designetica-vjib6nx2wh4a4 --query "defaultHostName" -o tsv 2>/dev/null || echo "")
+FUNC_URL=$(az functionapp show --resource-group rg-designetica --name func-designetica-prod-xabnur6oyusju --query "defaultHostName" -o tsv 2>/dev/null || echo "")
 if [ -n "$FUNC_URL" ]; then
     echo "🔧 Backend API: https://$FUNC_URL"
 fi
 
 echo ""
-echo "🌐 Custom Domain: https://designetica.carlosmarin.net/"
+echo "🌐 Microsoft Azure URL: https://white-flower-006d2370f.1.azurestaticapps.net/"
 echo "📊 Azure Portal: https://portal.azure.com/#@/resource/subscriptions/$(az account show --query id -o tsv)/resourceGroups/rg-designetica"
 echo ""
 echo "🎉 Deployment successful!"

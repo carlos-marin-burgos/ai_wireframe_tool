@@ -118,11 +118,11 @@ test_production() {
 show_logs() {
     echo -e "${YELLOW}📋 Recent Backend Logs:${NC}"
     echo ""
-    echo "Function App: func-designetica-vjib6nx2wh4a4"
+    echo "Function App: func-designetica-prod-xabnur6oyusju"
     echo "Portal URL: https://portal.azure.com"
     echo ""
     echo "To view logs, visit the Azure Portal and navigate to:"
-    echo "Function Apps > func-designetica-vjib6nx2wh4a4 > Monitor > Logs"
+    echo "Function Apps > func-designetica-prod-xabnur6oyusju > Monitor > Logs"
 }
 
 # Function to show help

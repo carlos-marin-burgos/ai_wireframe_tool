@@ -9,7 +9,7 @@
       "email": "support@designetica.com"
     }
   },
-  "host": "func-designetica-vjib6nx2wh4a4.azurewebsites.net",
+  "host": "func-designetica-prod-xabnur6oyusju.azurewebsites.net",
   "basePath": "/api",
   "schemes": ["https"],
   "consumes": ["application/json", "multipart/form-data"],

@@ -6,9 +6,9 @@ const path = require("path");
 class HealthMonitor {
   constructor() {
     this.apiEndpoint =
-      "https://func-designetica-vjib6nx2wh4a4.azurewebsites.net/api/generate-html-wireframe";
+      "https://func-designetica-prod-xabnur6oyusju.azurewebsites.net/api/generate-html-wireframe";
     this.healthEndpoint =
-      "https://func-designetica-vjib6nx2wh4a4.azurewebsites.net/api/health";
+      "https://func-designetica-prod-xabnur6oyusju.azurewebsites.net/api/health";
     this.websiteEndpoint =
       "https://white-flower-006d2370f.1.azurestaticapps.net";
     this.logFile = path.join(__dirname, "health-log.json");

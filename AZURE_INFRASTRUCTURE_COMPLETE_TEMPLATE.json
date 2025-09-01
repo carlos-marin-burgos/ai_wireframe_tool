@@ -11777,7 +11777,7 @@
             "https://flow.microsoft.com",
             "https://powerapps.microsoft.com",
             "https://api.designetica.com",
-            "https://designetica.carlosmarin.net",
+            "https://white-flower-006d2370f.1.azurestaticapps.net",
             "https://happy-forest-0e9d7fa0f.2.azurestaticapps.net"
           ],
           "supportCredentials": false
@@ -12043,10 +12043,7 @@
             {
               "authLevel": "anonymous",
               "direction": "in",
-              "methods": [
-                "post",
-                "options"
-              ],
+              "methods": ["post", "options"],
               "name": "req",
               "route": "analyzeUIImage",
               "type": "httpTrigger"
@@ -12082,11 +12079,7 @@
             {
               "authLevel": "anonymous",
               "direction": "in",
-              "methods": [
-                "get",
-                "post",
-                "options"
-              ],
+              "methods": ["get", "post", "options"],
               "name": "req",
               "type": "httpTrigger"
             },
@@ -12121,11 +12114,7 @@
             {
               "authLevel": "anonymous",
               "direction": "in",
-              "methods": [
-                "get",
-                "post",
-                "options"
-              ],
+              "methods": ["get", "post", "options"],
               "name": "req",
               "route": "generate-suggestions",
               "type": "httpTrigger"
@@ -12161,11 +12150,7 @@
             {
               "authLevel": "anonymous",
               "direction": "in",
-              "methods": [
-                "get",
-                "post",
-                "options"
-              ],
+              "methods": ["get", "post", "options"],
               "name": "req",
               "route": "generate-wireframe",
               "type": "httpTrigger"
@@ -12201,10 +12186,7 @@
             {
               "authLevel": "anonymous",
               "direction": "in",
-              "methods": [
-                "post",
-                "options"
-              ],
+              "methods": ["post", "options"],
               "name": "req",
               "route": "get-template",
               "type": "httpTrigger"
@@ -12240,9 +12222,7 @@
             {
               "authLevel": "anonymous",
               "direction": "in",
-              "methods": [
-                "get"
-              ],
+              "methods": ["get"],
               "name": "req",
               "route": "health",
               "type": "httpTrigger"
@@ -12278,9 +12258,7 @@
             {
               "authLevel": "anonymous",
               "direction": "in",
-              "methods": [
-                "get"
-              ],
+              "methods": ["get"],
               "name": "req",
               "type": "httpTrigger"
             },
@@ -12315,9 +12293,7 @@
             {
               "authLevel": "anonymous",
               "direction": "in",
-              "methods": [
-                "get"
-              ],
+              "methods": ["get"],
               "name": "req",
               "type": "httpTrigger"
             },
@@ -12370,7 +12346,7 @@
         "[resourceId('Microsoft.Web/staticSites', parameters('staticSites_swa_designetica_prod_rjsqzg4bs3fc6_name'))]"
       ],
       "location": "East US 2",
-      "name": "[concat(parameters('staticSites_swa_designetica_prod_rjsqzg4bs3fc6_name'), '/designetica.carlosmarin.net')]",
+      "name": "[concat(parameters('staticSites_swa_designetica_prod_rjsqzg4bs3fc6_name'), '/white-flower-006d2370f.1.azurestaticapps.net')]",
       "properties": {},
       "type": "Microsoft.Web/staticSites/customDomains"
     },
