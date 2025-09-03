@@ -77,11 +77,88 @@ function addAtlasComponents(html, description) {
   console.log("🎨 Processing wireframe for Atlas components...");
 
   // Atlas component image URLs (proper Microsoft Learn badges)
+  // Atlas learning components using pure HTML/CSS (no images)
   const atlasComponents = {
-    hero: "/Hero300.png", // Use existing hero image
-    learningPath: "/course.png", // Use course/learning path badge
-    module: "/microsoft-certified-fundamentals-badge 2.png", // Use Microsoft certification badge
+    hero: generateAtlasHeroHTML(),
+    learningPath: generateLearningPathHTML(),
+    module: generateModuleCardHTML(),
   };
+
+  // Helper functions to generate pure HTML/CSS components
+  function generateAtlasHeroHTML() {
+    return `
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; padding: 40px; color: white; text-align: center; box-shadow: 0 8px 24px rgba(102,126,234,0.3);">
+      <div style="max-width: 800px; margin: 0 auto;">
+        <h1 style="margin: 0 0 16px 0; font-size: 48px; font-weight: 700; font-family: 'Segoe UI', sans-serif;">Master Microsoft Technologies</h1>
+        <p style="margin: 0 0 32px 0; font-size: 20px; opacity: 0.9; font-family: 'Segoe UI', sans-serif;">Accelerate your career with hands-on learning paths and industry-recognized certifications</p>
+        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+          <button style="background: white; color: #667eea; border: none; padding: 16px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">Start Learning</button>
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid white; padding: 14px 30px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">Explore Paths</button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function generateLearningPathHTML() {
+    return `
+    <div style="background: white; border: 1px solid #e1e5e9; border-radius: 16px; padding: 24px; font-family: 'Segoe UI', sans-serif; width: 100%; max-width: 100%; box-shadow: 0 4px 16px rgba(0,0,0,0.1); box-sizing: border-box;">
+      <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; height: 120px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; position: relative;">
+        <div style="color: white; text-align: center;">
+          <div style="font-size: 32px; margin-bottom: 8px;">🎓</div>
+          <div style="font-size: 14px; font-weight: 600; opacity: 0.9;">Learning Path</div>
+        </div>
+        <div style="position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.9); color: #667eea; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">6 modules</div>
+      </div>
+      <div style="margin-bottom: 16px;">
+        <h3 style="margin: 0 0 8px 0; font-size: clamp(16px, 4vw, 20px); font-weight: 600; color: #1a1a1a;">Azure Fundamentals</h3>
+        <p style="margin: 0 0 12px 0; color: #6b7280; font-size: clamp(13px, 3vw, 15px); line-height: 1.5;">Learn the fundamentals of cloud computing and how Azure provides secure, reliable cloud services.</p>
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+          <div style="flex: 1; height: 6px; background: #f1f5f9; border-radius: 3px; overflow: hidden;">
+            <div style="width: 65%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+          </div>
+          <span style="font-size: 12px; color: #6b7280; font-weight: 500; white-space: nowrap;">65%</span>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+          <span style="background: #f0f2ff; color: #667eea; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 500;">Beginner</span>
+          <span style="background: #f0f2ff; color: #667eea; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 500;">4h 30m</span>
+        </div>
+        <button style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap;">Continue</button>
+      </div>
+    </div>`;
+  }
+
+  function generateModuleCardHTML() {
+    return `
+    <div style="background: white; border: 1px solid #e1e5e9; border-radius: 12px; padding: 20px; font-family: 'Segoe UI', sans-serif; width: 100%; max-width: 100%; box-shadow: 0 2px 12px rgba(0,0,0,0.08); box-sizing: border-box;">
+      <div style="display: flex; align-items: flex-start; gap: 16px; margin-bottom: 16px;">
+        <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+          <div style="color: white; font-size: 20px;">📚</div>
+        </div>
+        <div style="flex: 1; min-width: 0;">
+          <h4 style="margin: 0 0 6px 0; font-size: clamp(14px, 3.5vw, 18px); font-weight: 600; color: #1a1a1a;">Introduction to Azure</h4>
+          <p style="margin: 0; color: #6b7280; font-size: clamp(12px, 3vw, 14px); line-height: 1.4;">Understand core Azure concepts and services in this foundational module.</p>
+        </div>
+      </div>
+      <div style="margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="font-size: 12px; color: #6b7280; font-weight: 500;">Progress</span>
+          <span style="font-size: 12px; color: #1a1a1a; font-weight: 600; white-space: nowrap;">3 of 5 units</span>
+        </div>
+        <div style="width: 100%; height: 6px; background: #f1f5f9; border-radius: 3px; overflow: hidden;">
+          <div style="width: 60%; height: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%);"></div>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+          <span style="background: #ecfdf5; color: #047857; padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: 500;">25 min</span>
+          <span style="background: #eff6ff; color: #1d4ed8; padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: 500;">Beginner</span>
+        </div>
+        <button style="background: #667eea; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap;">Continue</button>
+      </div>
+    </div>`;
+  }
 
   // Check if description SPECIFICALLY requests learning components
   const requestsLearningComponents =
@@ -109,10 +186,10 @@ function addAtlasComponents(html, description) {
       `<section class="hero atlas-hero-section">
         <div class="container">
           <div class="atlas-component atlas-hero-figma" data-node-id="14647:163530" style="max-width: 100%; overflow: hidden;">
-              <img src="${atlasComponents.hero}" alt="Atlas Hero Component from Figma" style="width: 100%; height: auto; display: block; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);" />
+              ${atlasComponents.hero}
               <div class="atlas-hero-overlay" style="text-align: center; margin-top: 12px; background: rgba(255,255,255,0.95); padding: 8px; border-radius: 6px; border: 1px solid #e1e1e1;">
                   <p style="font-size: 12px; color: #323130; margin: 0; font-weight: 600;">✅ Atlas Hero Component (Node: 14647:163530)</p>
-                  <p style="font-size: 11px; color: #605e5c; margin: 4px 0 0 0; font-weight: 500;">🎨 Fetched directly from Figma</p>
+                  <p style="font-size: 11px; color: #605e5c; margin: 4px 0 0 0; font-weight: 500;">🎨 Pure HTML/CSS Component</p>
               </div>
           </div>
         </div>
@@ -131,16 +208,22 @@ function addAtlasComponents(html, description) {
     <section class="learning-content atlas-learning-section" style="padding: 60px 0; background: #f8f9fa;">
         <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
             <h2 style="text-align: center; margin-bottom: 40px; color: #323130;">🎓 Learning Path</h2>
-            <div class="learning-grid" style="display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 50px; max-width: 400px; margin-left: auto; margin-right: auto;">
-                <div class="atlas-component atlas-learning-path-card-figma" data-node-id="14315:162386" data-type="learning-path" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <img src="${atlasComponents.learningPath}" alt="Atlas Learning Path Card Component from Figma (Node: 14315:162386)" style="width: 100%; height: auto; display: block; object-fit: contain;" />
+            <div class="learning-grid" style="display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 50px; width: 100%;">
+                <div class="atlas-component atlas-learning-path-card-figma" data-node-id="14315:162386" data-type="learning-path" style="width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    ${atlasComponents.learningPath}
                 </div>
             </div>
             
-            <h2 style="text-align: center; margin-bottom: 40px; color: #323130;">📚 Module</h2>
-            <div class="modules-grid" style="display: grid; grid-template-columns: 1fr; gap: 20px; max-width: 350px; margin-left: auto; margin-right: auto;">
-                <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <img src="${atlasComponents.module}" alt="Atlas Module Card Component from Figma (Node: 14315:162386)" style="width: 100%; height: auto; display: block; object-fit: contain;" />
+            <h2 style="text-align: center; margin-bottom: 40px; color: #323130;">📚 Modules</h2>
+            <div class="modules-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; width: 100%;">
+                <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    ${atlasComponents.module}
+                </div>
+                <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    ${atlasComponents.module}
+                </div>
+                <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    ${atlasComponents.module}
                 </div>
             </div>
         </div>
@@ -255,7 +338,7 @@ async function generateWithAI(description, options = {}) {
   const colorScheme = options.colorScheme || "blue";
   const fastMode = options.fastMode !== false;
 
-  const prompt = `Create a complete, modern HTML wireframe for: ${description}\n\nRequirements:\n- Use modern CSS with flexbox/grid\n- Include semantic HTML structure\n- ${theme} theme with ${colorScheme} color scheme\n- Mobile-responsive design\n- Include proper meta tags and DOCTYPE\n- Use inline CSS for complete standalone file\n- Create sections for: header, main content, and footer (navigation will be provided separately)\n- DO NOT create any navigation elements (nav, header with navigation) as navigation is provided\n- IMPORTANT: Ensure proper color contrast - use dark text (#333) on light backgrounds (#fff, #f8f9fa) and light text (#fff) only on dark backgrounds (#333, #007bff)\n- Avoid opacity values below 0.9 for text to ensure readability\n${
+  const prompt = `Create a complete, modern HTML wireframe for: ${description}\n\nRequirements:\n- Use modern CSS with flexbox/grid\n- Include semantic HTML structure\n- ${theme} theme with ${colorScheme} color scheme\n- Mobile-responsive design\n- Include proper meta tags and DOCTYPE\n- Use inline CSS for complete standalone file\n- Create sections for: header, main content, and footer (navigation will be provided separately)\n- DO NOT create any navigation elements (nav, header with navigation) as navigation is provided\n- IMPORTANT: Color contrast rules - ALWAYS use dark text (#333 or #000) on light backgrounds (#fff, #f8f9fa, #E8E6DF). For headers with #E8E6DF background, use black text (#333 or #000) for optimal readability.\n- Avoid opacity values below 0.9 for text to ensure readability\n${
     fastMode
       ? "- Keep it simple and fast to load"
       : "- Include rich interactions and detailed styling"

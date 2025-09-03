@@ -38,6 +38,20 @@
             margin-top: 20px;
         }
 
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .component-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+        }
+
+        /* Make all components take full width */
+        .component-grid>div {
+            width: 100%;
+            max-width: none;
+        }
+
         .loading {
             text-align: center;
             padding: 40px;
@@ -76,54 +90,219 @@
     <script>
         // Simulate our enhanced component loading from the React component
 
-        // Azure fallback component (rich preview)
-        const azureComponent = {
-            id: 'figma-azure-dashboard',
-            name: 'Azure Resource Dashboard',
-            htmlCode: `
-            <div style="background: white; border: 1px solid #e1dfdd; border-radius: 12px; overflow: hidden; font-family: 'Segoe UI', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 480px;">
-                <div style="background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%); color: white; padding: 24px;">
-                    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
-                        <div style="width: 48px; height: 48px; background: rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                            <div style="width: 24px; height: 24px; background: white; border-radius: 4px;"></div>
-                        </div>
-                        <div>
-                            <h2 style="margin: 0; font-size: 24px; font-weight: 600;">Azure Portal</h2>
-                            <p style="margin: 4px 0 0 0; opacity: 0.9; font-size: 14px;">Resource Management Dashboard</p>
-                        </div>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
-                        <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 28px; font-weight: 700; margin-bottom: 4px;">47</div>
-                            <div style="font-size: 12px; opacity: 0.9;">Resources</div>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 28px; font-weight: 700; margin-bottom: 4px;">12</div>
-                            <div style="font-size: 12px; opacity: 0.9;">Services</div>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 28px; font-weight: 700; margin-bottom: 4px;">3</div>
-                            <div style="font-size: 12px; opacity: 0.9;">Regions</div>
-                        </div>
-                    </div>
-                </div>
-                <div style="padding: 24px;">
-                    <div style="margin-bottom: 20px;">
-                        <h3 style="margin: 0 0 12px 0; font-size: 16px; color: #323130;">Recent Activity</h3>
-                        <div style="display: flex; flex-direction: column; gap: 8px;">
-                            <div style="padding: 12px; background: #f3f2f1; border-radius: 6px; display: flex; justify-content: space-between;">
-                                <span style="font-size: 14px; color: #323130;">Storage Account</span>
-                                <span style="font-size: 12px; color: #0078d4;">Running</span>
+        // Azure fallback components (rich preview)
+        const azureComponents = [
+            {
+                id: 'figma-azure-dashboard',
+                name: 'Azure Resource Dashboard',
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 12px; overflow: hidden; font-family: 'Segoe UI', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 480px;">
+                    <div style="background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%); color: white; padding: 24px;">
+                        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+                            <div style="width: 48px; height: 48px; background: rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                <div style="width: 24px; height: 24px; background: white; border-radius: 4px;"></div>
                             </div>
-                            <div style="padding: 12px; background: #f3f2f1; border-radius: 6px; display: flex; justify-content: space-between;">
-                                <span style="font-size: 14px; color: #323130;">Web App</span>
-                                <span style="font-size: 12px; color: #107c10;">Healthy</span>
+                            <div>
+                                <h2 style="margin: 0; font-size: 24px; font-weight: 600;">Azure Portal</h2>
+                                <p style="margin: 4px 0 0 0; opacity: 0.9; font-size: 14px;">Resource Management Dashboard</p>
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+                            <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 28px; font-weight: 700; margin-bottom: 4px;">47</div>
+                                <div style="font-size: 12px; opacity: 0.9;">Resources</div>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 28px; font-weight: 700; margin-bottom: 4px;">12</div>
+                                <div style="font-size: 12px; opacity: 0.9;">Services</div>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 28px; font-weight: 700; margin-bottom: 4px;">3</div>
+                                <div style="font-size: 12px; opacity: 0.9;">Regions</div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>`
-        };
+                    <div style="padding: 24px;">
+                        <div style="margin-bottom: 20px;">
+                            <h3 style="margin: 0 0 12px 0; font-size: 16px; color: #323130;">Recent Activity</h3>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <div style="padding: 12px; background: #f3f2f1; border-radius: 6px; display: flex; justify-content: space-between;">
+                                    <span style="font-size: 14px; color: #323130;">Storage Account</span>
+                                    <span style="font-size: 12px; color: #0078d4;">Running</span>
+                                </div>
+                                <div style="padding: 12px; background: #f3f2f1; border-radius: 6px; display: flex; justify-content: space-between;">
+                                    <span style="font-size: 14px; color: #323130;">Web App</span>
+                                    <span style="font-size: 12px; color: #107c10;">Healthy</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+            },
+            {
+                id: 'azure-function-app',
+                name: 'Azure Function App',
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 12px; overflow: hidden; font-family: 'Segoe UI', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 380px;">
+                    <div style="background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%); color: white; padding: 20px;">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                            <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 18px;">⚡</div>
+                            <div>
+                                <h3 style="margin: 0; font-size: 18px; font-weight: 600;">Function App</h3>
+                                <p style="margin: 4px 0 0 0; opacity: 0.9; font-size: 12px;">Serverless compute service</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 20px;">
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 12px; color: #605e5c;">Execution Count</span>
+                                <span style="font-size: 12px; color: #0078d4; font-weight: 600;">1,247</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 12px; color: #605e5c;">Average Duration</span>
+                                <span style="font-size: 12px; color: #107c10; font-weight: 600;">142ms</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="font-size: 12px; color: #605e5c;">Success Rate</span>
+                                <span style="font-size: 12px; color: #107c10; font-weight: 600;">99.8%</span>
+                            </div>
+                        </div>
+                        <div style="background: #f3f2f1; padding: 12px; border-radius: 6px;">
+                            <div style="font-size: 11px; color: #605e5c; margin-bottom: 4px;">Latest Functions</div>
+                            <div style="font-size: 12px; color: #323130;">• HttpTrigger1</div>
+                            <div style="font-size: 12px; color: #323130;">• TimerTrigger1</div>
+                            <div style="font-size: 12px; color: #323130;">• BlobTrigger1</div>
+                        </div>
+                    </div>
+                </div>`
+            },
+            {
+                id: 'azure-storage-account',
+                name: 'Azure Storage Account',
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 12px; overflow: hidden; font-family: 'Segoe UI', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 380px;">
+                    <div style="background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%); color: white; padding: 20px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 18px;">💾</div>
+                            <div>
+                                <h3 style="margin: 0; font-size: 18px; font-weight: 600;">Storage Account</h3>
+                                <p style="margin: 4px 0 0 0; opacity: 0.9; font-size: 12px;">Blob, file, queue, and table storage</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 20px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                            <div style="background: #f3f2f1; padding: 12px; border-radius: 6px; text-align: center;">
+                                <div style="font-size: 16px; font-weight: 600; color: #323130; margin-bottom: 2px;">2.4 GB</div>
+                                <div style="font-size: 10px; color: #605e5c;">Used Space</div>
+                            </div>
+                            <div style="background: #f3f2f1; padding: 12px; border-radius: 6px; text-align: center;">
+                                <div style="font-size: 16px; font-weight: 600; color: #323130; margin-bottom: 2px;">156</div>
+                                <div style="font-size: 10px; color: #605e5c;">Containers</div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <div style="font-size: 12px; color: #605e5c; margin-bottom: 6px;">Storage Services</div>
+                            <div style="display: flex; flex-wrap: gap; gap: 4px;">
+                                <span style="background: #e6f3ff; color: #0078d4; padding: 4px 8px; border-radius: 4px; font-size: 10px;">Blob</span>
+                                <span style="background: #e6f3ff; color: #0078d4; padding: 4px 8px; border-radius: 4px; font-size: 10px;">File</span>
+                                <span style="background: #e6f3ff; color: #0078d4; padding: 4px 8px; border-radius: 4px; font-size: 10px;">Queue</span>
+                                <span style="background: #e6f3ff; color: #0078d4; padding: 4px 8px; border-radius: 4px; font-size: 10px;">Table</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+            },
+            {
+                id: 'azure-app-service',
+                name: 'Azure App Service',
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 12px; overflow: hidden; font-family: 'Segoe UI', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 380px;">
+                    <div style="background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%); color: white; padding: 20px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 18px;">🌐</div>
+                            <div>
+                                <h3 style="margin: 0; font-size: 18px; font-weight: 600;">App Service</h3>
+                                <p style="margin: 4px 0 0 0; opacity: 0.9; font-size: 12px;">Web app hosting platform</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 20px;">
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                <span style="font-size: 12px; color: #605e5c;">Status</span>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <div style="width: 8px; height: 8px; background: #107c10; border-radius: 50%;"></div>
+                                    <span style="font-size: 12px; color: #107c10; font-weight: 600;">Running</span>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 12px; color: #605e5c;">App Service Plan</span>
+                                <span style="font-size: 12px; color: #323130; font-weight: 500;">B1 Basic</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="font-size: 12px; color: #605e5c;">Runtime Stack</span>
+                                <span style="font-size: 12px; color: #323130; font-weight: 500;">Node.js 18</span>
+                            </div>
+                        </div>
+                        <div style="background: #f3f2f1; padding: 12px; border-radius: 6px;">
+                            <div style="font-size: 11px; color: #605e5c; margin-bottom: 6px;">Performance Metrics</div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                <span style="font-size: 11px; color: #323130;">Response Time</span>
+                                <span style="font-size: 11px; color: #107c10; font-weight: 600;">85ms</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="font-size: 11px; color: #323130;">Requests/min</span>
+                                <span style="font-size: 11px; color: #0078d4; font-weight: 600;">342</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+            },
+            {
+                id: 'azure-cosmos-db',
+                name: 'Azure Cosmos DB',
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 12px; overflow: hidden; font-family: 'Segoe UI', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 380px;">
+                    <div style="background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%); color: white; padding: 20px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 18px;">🌌</div>
+                            <div>
+                                <h3 style="margin: 0; font-size: 18px; font-weight: 600;">Cosmos DB</h3>
+                                <p style="margin: 4px 0 0 0; opacity: 0.9; font-size: 12px;">Global NoSQL database</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 20px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                            <div style="background: #f3f2f1; padding: 12px; border-radius: 6px; text-align: center;">
+                                <div style="font-size: 16px; font-weight: 600; color: #323130; margin-bottom: 2px;">5</div>
+                                <div style="font-size: 10px; color: #605e5c;">Regions</div>
+                            </div>
+                            <div style="background: #f3f2f1; padding: 12px; border-radius: 6px; text-align: center;">
+                                <div style="font-size: 16px; font-weight: 600; color: #323130; margin-bottom: 2px;">98.7ms</div>
+                                <div style="font-size: 10px; color: #605e5c;">Latency</div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span style="font-size: 12px; color: #605e5c;">API</span>
+                                <span style="font-size: 12px; color: #323130; font-weight: 500;">SQL (Core)</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span style="font-size: 12px; color: #605e5c;">Consistency</span>
+                                <span style="font-size: 12px; color: #323130; font-weight: 500;">Session</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="font-size: 12px; color: #605e5c;">Throughput</span>
+                                <span style="font-size: 12px; color: #0078d4; font-weight: 600;">400 RU/s</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+            }
+        ];
 
         // Enhanced Fluent component examples
         const fluentComponents = [
@@ -332,6 +511,73 @@
                         <div style="color: #605e5c; font-size: 12px; line-height: 1.4;">This is the overview tab content with relevant information and data.</div>
                     </div>
                     <div style="padding: 12px 16px; font-size: 11px; color: #605e5c; opacity: 0.8; border-top: 1px solid #e1dfdd;">From Figma Fluent Library</div>
+                </div>`
+            },
+            {
+                name: "Hero Component (Fluent 2)",
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; overflow: hidden; font-family: 'Segoe UI', sans-serif; width: 100%; max-width: 600px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <!-- Hero Container -->
+                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; padding: 0px 0px 0px 16px; gap: 20px; background: #FFFFFF; min-height: 180px;">
+                        
+                        <!-- Left Section -->
+                        <div style="display: flex; flex-direction: column; align-items: flex-start; padding: 24px 0px; gap: 16px; flex: 1; max-width: 400px;">
+                            
+                            <!-- Icon Placeholder -->
+                            <div style="width: 62px; height: 62px; background: #EBF3FC; border-radius: 8px; display: flex; align-items: center; justify-content: center; position: relative;">
+                                <div style="font-family: 'Segoe UI'; font-weight: 400; font-size: 10px; line-height: 14px; color: #0F6CBD; text-align: center;">CONTENT</div>
+                            </div>
+                            
+                            <!-- Text Box -->
+                            <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 12px; width: 100%;">
+                                
+                                <!-- Metadata -->
+                                <div style="display: flex; flex-direction: row; align-items: flex-start; gap: 8px;">
+                                    <span style="font-family: 'Segoe UI'; font-weight: 400; font-size: 12px; line-height: 16px; color: #424242;">Category • Published</span>
+                                </div>
+                                
+                                <!-- Page Title -->
+                                <div style="display: flex; flex-direction: row; align-items: center; width: 100%; min-width: 180px;">
+                                    <h1 style="margin: 0; font-family: 'Segoe UI'; font-weight: 600; font-size: 32px; line-height: 42px; color: #242424; flex-grow: 1;">Hero Component Title</h1>
+                                </div>
+                                
+                                <!-- Content Description -->
+                                <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px; width: 100%;">
+                                    <p style="margin: 0; font-family: 'Segoe UI'; font-weight: 400; font-size: 16px; line-height: 22px; color: #424242;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+                                </div>
+                                
+                                <!-- Button Group -->
+                                <div style="display: flex; flex-direction: row; align-items: flex-start; padding: 4px 0px 0px; gap: 8px;">
+                                    <!-- Primary Button -->
+                                    <button style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding: 8px 16px; background: #0F6CBD; border: none; border-radius: 4px; cursor: pointer;">
+                                        <span style="font-family: 'Segoe UI'; font-weight: 600; font-size: 16px; line-height: 22px; color: #FFFFFF;">Action</span>
+                                    </button>
+                                    
+                                    <!-- Secondary Button -->
+                                    <button style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding: 8px 16px; background: #FFFFFF; border: 1px solid #D1D1D1; border-radius: 4px; cursor: pointer;">
+                                        <span style="font-family: 'Segoe UI'; font-weight: 600; font-size: 16px; line-height: 22px; color: #242424;">Learn</span>
+                                    </button>
+                                    
+                                    <!-- Menu Button -->
+                                    <button style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding: 6px; width: 32px; height: 32px; background: transparent; border: none; border-radius: 4px; cursor: pointer;">
+                                        <div style="width: 12.5px; height: 2.5px; background: #424242; border-radius: 1px;"></div>
+                                    </button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+                        <!-- Right Section (Placeholder) -->
+                        <div style="display: flex; flex-direction: row; align-items: flex-start; flex: 1; max-width: 200px; height: 180px;">
+                            <div style="width: 100%; height: 100%; background: #EBF3FC; border-radius: 8px; display: flex; align-items: center; justify-content: center; position: relative;">
+                                <span style="font-family: 'Segoe UI'; font-weight: 400; font-size: 10px; line-height: 14px; color: #0F6CBD; text-align: center;">SWAP WITH CONTENT COMPONENT</span>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <!-- Component Label -->
+                    <div style="padding: 12px 16px; font-size: 11px; color: #605e5c; opacity: 0.8; border-top: 1px solid #e1dfdd;">From Figma Fluent 2 Extended Library</div>
                 </div>`
             }
         ];
@@ -602,8 +848,11 @@
         }
 
         // Load Azure components
-        document.getElementById('azure-components').innerHTML = '';
-        document.getElementById('azure-components').appendChild(renderComponent(azureComponent));
+        const azureContainer = document.getElementById('azure-components');
+        azureContainer.innerHTML = '';
+        azureComponents.forEach(component => {
+            azureContainer.appendChild(renderComponent(component));
+        });
 
         // Load Fluent components
         const fluentContainer = document.getElementById('fluent-components');
