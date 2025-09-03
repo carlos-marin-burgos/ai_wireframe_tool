@@ -394,7 +394,7 @@
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
   border-radius: 0;
-  padding: 4rem 2rem 8px 2rem; /* Reduced bottom padding from 120px to 48px */
+  padding: 0rem 2rem 8px 2rem; /* Reduced bottom padding from 120px to 48px */
   box-shadow: none;
   max-width: 1200px;
   width: 100%;

@@ -14,6 +14,7 @@ import LoadDialog from "./components/LoadDialog";
 import Toast from "./components/Toast";
 import AzureAuth from "./components/AzureAuth";
 import FigmaIntegration from "./components/FigmaIntegration";
+import FigmaIntegrationModal from "./components/FigmaIntegrationModal";
 import { API_CONFIG, getApiUrl } from "./config/api";
 // All API calls are now handled by the wireframe generation hook
 import { useWireframeGeneration } from './hooks/useWireframeGeneration';
@@ -1492,24 +1493,32 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
       )}
 
       {showTopToolbarFigmaImport && (
-        <div className="figma-modal-overlay">
-          <FigmaIntegration
-            onComponentsImported={(components) => {
-              // For top toolbar, we want design import behavior like the landing page
-              // Convert to the format expected by handleFigmaImport
-              if (components && components.length > 0) {
-                const firstComponent = components[0];
-                if (firstComponent.wireframeHtml) {
-                  handleFigmaImport(firstComponent.wireframeHtml, firstComponent.componentName || 'Figma Import');
-                }
-              }
-              setShowTopToolbarFigmaImport(false);
-            }}
-            onClose={() => setShowTopToolbarFigmaImport(false)}
-            designSystem="auto"
-            mode="design-import"
-          />
-        </div>
+        <FigmaIntegrationModal
+          isOpen={showTopToolbarFigmaImport}
+          onClose={() => setShowTopToolbarFigmaImport(false)}
+          onImport={(html, fileName, tokens) => {
+            // Handle the import with design tokens
+            handleFigmaImport(html, fileName);
+            if (tokens) {
+              console.log('Design tokens extracted:', tokens);
+              // You can add token handling logic here if needed
+            }
+            setShowTopToolbarFigmaImport(false);
+          }}
+          onExport={(format) => {
+            console.log('Figma export requested:', format);
+            // Handle export functionality
+            setShowTopToolbarFigmaImport(false);
+          }}
+          onTokensExtracted={(tokens) => {
+            console.log('Design tokens extracted:', tokens);
+            // Handle token extraction
+          }}
+          onFileProcessed={(file, data) => {
+            console.log('File processed:', file.name, data);
+            // Handle file processing
+          }}
+        />
       )}
 
     </div>

@@ -541,11 +541,9 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   // Figma Integration handlers
   const handleFigmaIntegration = useCallback(() => {
-    console.log('🎨 SplitLayout: handleFigmaIntegration - DELEGATING to App.tsx for component browser');
-    // Don't use local modal! Let App.tsx handle the component browser modal
-    // The App.tsx figmaIntegrationRef should be called instead
-    console.warn('🚨 SplitLayout local modal should not be used - App.tsx should handle this');
-    // setIsFigmaModalOpen(true); // REMOVED: Don't use local modal
+    console.log('🎨 SplitLayout: handleFigmaIntegration - Opening enhanced Figma Integration Modal');
+    // Enable the enhanced FigmaIntegrationModal
+    setIsFigmaModalOpen(true);
   }, []);
 
   const handleFigmaImport = useCallback((html: string, fileName: string) => {
@@ -820,12 +818,12 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   }, []);
 
   // Set toolbar function refs for header toolbar access
-  // NOTE: DON'T override onFigmaIntegration - let App.tsx handle component browser
-  // useEffect(() => {
-  //   if (onFigmaIntegration) {
-  //     onFigmaIntegration.current = handleFigmaIntegration;
-  //   }
-  // }, [onFigmaIntegration, handleFigmaIntegration]);
+  // Set up the Figma Integration ref
+  useEffect(() => {
+    if (onFigmaIntegration) {
+      onFigmaIntegration.current = handleFigmaIntegration;
+    }
+  }, [onFigmaIntegration, handleFigmaIntegration]);
 
   useEffect(() => {
     if (onComponentLibrary) {
