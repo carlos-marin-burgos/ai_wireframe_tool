@@ -7,13 +7,13 @@
   justify-content: center;
   align-items: center;
   padding: 2rem;
-  /*background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);*/
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   position: relative;
   overflow: hidden;
   margin-top: 0; /* Remove margin since we're using padding-top */
 }
 
-/* Figma Plugin Announcement Banner - Toast Style */
+/* Figma Plugin Announcement Banner - Toast Style v2 */
 .figma-plugin-announcement {
   width: 100%;
   max-width: 600px;
@@ -394,7 +394,7 @@
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
   border-radius: 0;
-  padding: 4rem 2rem 48px 2rem; /* Reduced bottom padding from 120px to 48px */
+  padding: 4rem 2rem 8px 2rem; /* Reduced bottom padding from 120px to 48px */
   box-shadow: none;
   max-width: 1200px;
   width: 100%;

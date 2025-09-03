@@ -45,6 +45,7 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({
                 const cachedData = getCachedComponents();
                 if (cachedData) {
                     console.log('🚀 Loading components from cache');
+                    console.log('📦 CACHED Components count:', cachedData.components?.length);
                     setComponents(cachedData.components || []);
                     setCategories(['All', ...(cachedData.categories || []).filter(cat => cat !== 'All')]);
                     setPopularComponents(cachedData.popular || []);
@@ -67,6 +68,17 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({
                     hasCSS: !!(data.components[0] as any).css,
                     htmlCodeLength: (data.components[0] as any).htmlCode?.length || 0
                 } : null
+            });
+
+            // DEBUG: Log first 3 components to see names and previews
+            console.log('🔍 DEBUG: First 3 components:');
+            data.components?.slice(0, 3).forEach((comp, index) => {
+                console.log(`${index + 1}. Name: "${comp.name}"`, {
+                    library: comp.library,
+                    preview: comp.preview ? `${comp.preview.substring(0, 50)}...` : 'NO_PREVIEW',
+                    description: comp.description?.substring(0, 30) || 'NO_DESC',
+                    id: comp.id
+                });
             });
 
             // Cache the data
@@ -351,57 +363,71 @@ const FigmaComponentBrowser: React.FC<FigmaComponentBrowserProps> = ({
         }
     };
 
-    const ComponentCard: React.FC<{ component: FigmaComponent }> = ({ component }) => (
-        <div
-            className={`component-card ${selectedComponents.has(component.id) ? 'selected' : ''}`}
-            onClick={() => handleComponentSelect(component.id)}
-        >
-            <div className="component-preview">
-                {component.preview ? (
-                    <>
-                        <img
-                            src={component.preview}
-                            alt={component.name}
-                            onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                target.classList.add('hidden');
-                                target.nextElementSibling?.classList.remove('hidden');
-                            }}
-                        />
-                        <div className="preview-placeholder hidden">
-                            <span>{component.name.charAt(0)}</span>
+    const ComponentCard: React.FC<{ component: FigmaComponent }> = ({ component }) => {
+        // DEBUG: Log component data to see what's being rendered
+        console.log('🎴 Rendering ComponentCard:', {
+            name: component.name,
+            nameType: typeof component.name,
+            nameLength: component.name?.length,
+            firstChar: component.name?.charAt(0),
+            preview: component.preview ? 'HAS_PREVIEW' : 'NO_PREVIEW',
+            library: component.library
+        });
+
+        return (
+            <div
+                className={`component-card ${selectedComponents.has(component.id) ? 'selected' : ''}`}
+                onClick={() => handleComponentSelect(component.id)}
+            >
+                <div className="component-preview">
+                    {component.preview ? (
+                        <>
+                            <img
+                                src={component.preview}
+                                alt={component.name}
+                                onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.classList.add('hidden');
+                                    target.nextElementSibling?.classList.remove('hidden');
+                                }}
+                            />
+                            <div className="preview-placeholder hidden">
+                                <span>{component.name.charAt(0)}</span>
+                            </div>
+                        </>
+                    ) : (
+                        <div className="preview-placeholder">
+                            <span title={`Component name: "${component.name}" | First char: "${component.name.charAt(0)}"`}>
+                                {component.name.charAt(0)}
+                            </span>
                         </div>
-                    </>
-                ) : (
-                    <div className="preview-placeholder">
-                        <span>{component.name.charAt(0)}</span>
-                    </div>
-                )}
-                <div className="component-library-badge">{component.library}</div>
-            </div>
-            <div className="component-info">
-                <h4 className="component-name">{component.name}</h4>
-                <p className="component-description">{component.description}</p>
-
-                {/* Debug info to show if we have authentic Figma HTML */}
-                {(component as any).htmlCode && (
-                    <div style={{ fontSize: '10px', color: 'green', fontWeight: 'bold', marginTop: '4px' }}>
-                        ✅ Authentic Figma HTML Available
-                    </div>
-                )}
-
-                <div className="component-meta">
-                    <span className="component-category">{component.category}</span>
-                    <span className="component-usage">Used {component.usageCount} times</span>
+                    )}
+                    <div className="component-library-badge">{component.library}</div>
                 </div>
-                {component.variants && component.variants.length > 0 && (
-                    <div className="component-variants">
-                        <span className="variants-label">{component.variants.length} variants</span>
+                <div className="component-info">
+                    <h4 className="component-name">{component.name}</h4>
+                    <p className="component-description">{component.description}</p>
+
+                    {/* Debug info to show if we have authentic Figma HTML */}
+                    {(component as any).htmlCode && (
+                        <div style={{ fontSize: '10px', color: 'green', fontWeight: 'bold', marginTop: '4px' }}>
+                            ✅ Authentic Figma HTML Available
+                        </div>
+                    )}
+
+                    <div className="component-meta">
+                        <span className="component-category">{component.category}</span>
+                        <span className="component-usage">Used {component.usageCount} times</span>
                     </div>
-                )}
+                    {component.variants && component.variants.length > 0 && (
+                        <div className="component-variants">
+                            <span className="variants-label">{component.variants.length} variants</span>
+                        </div>
+                    )}
+                </div>
             </div>
-        </div>
-    );
+        );
+    };
 
     const ComponentListItem: React.FC<{ component: FigmaComponent }> = ({ component }) => (
         <div

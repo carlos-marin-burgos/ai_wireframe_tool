@@ -5,25 +5,27 @@
 
 const dns = require("dns").promises;
 
-module.exports = async function (context, req) {
-  const startTime /**
+/**
  * Generate required TXT record pattern
  */
 function generateRequiredTxtRecord(type, domain) {
   // For designetica.onmicrosoft.com, we have the actual verification ID
-  if (domain === 'designetica.onmicrosoft.com') {
-    return 'ms-azure-staticwebapp-verify=_gizsvol1m4gbecw8dzqz8243knshkws';
+  if (domain === "designetica.onmicrosoft.com") {
+    return "ms-azure-staticwebapp-verify=_gizsvol1m4gbecw8dzqz8243knshkws";
   }
-  
+
   switch (type) {
-    case 'azure-static-web-app':
-      return 'ms-azure-staticwebapp-verify=<verification-id>';
-    case 'github-pages':
-      return 'github-pages-challenge-<username>';
+    case "azure-static-web-app":
+      return "ms-azure-staticwebapp-verify=<verification-id>";
+    case "github-pages":
+      return "github-pages-challenge-<username>";
     default:
-      return 'ms-azure-staticwebapp-verify=<verification-id>';
+      return "ms-azure-staticwebapp-verify=<verification-id>";
   }
 }
+
+module.exports = async function (context, req) {
+  const startTime = Date.now();
 
   try {
     // Set CORS headers
@@ -119,10 +121,12 @@ async function validateDomainTxtRecord(domain, type, context) {
     switch (type) {
       case "azure-static-web-app":
         // Azure Static Web Apps verification pattern
-        if (domain === 'designetica.onmicrosoft.com') {
+        if (domain === "designetica.onmicrosoft.com") {
           // Check for specific verification ID
-          foundRecord = flatRecords.find((record) =>
-            record === 'ms-azure-staticwebapp-verify=_gizsvol1m4gbecw8dzqz8243knshkws'
+          foundRecord = flatRecords.find(
+            (record) =>
+              record ===
+              "ms-azure-staticwebapp-verify=_gizsvol1m4gbecw8dzqz8243knshkws"
           );
           verified = !!foundRecord;
         } else {

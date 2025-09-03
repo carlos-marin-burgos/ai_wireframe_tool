@@ -555,13 +555,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
     <div className="landing-page">
       <div className="landing-container">
         <div className="landing-content">
-          <h1 className="main-heading">What will you <span className="design-word">design</span> today?</h1>
-          <p className="main-subtitle">
-            Sketch your vision, ship your wireframe - Designetica AI does the
-            heavy lifting.
-          </p>
-
-          {/* Figma Plugin Announcement Banner */}
+          {/* Figma Plugin Announcement Banner - Positioned at the very top */}
           <div className="figma-plugin-announcement">
             <div className="announcement-content">
               <div className="announcement-icon">
@@ -584,6 +578,12 @@ const LandingPage: React.FC<LandingPageProps> = ({
               </div>
             </div>
           </div>
+
+          <h1 className="main-heading">What will you <span className="design-word">design</span> today?</h1>
+          <p className="main-subtitle">
+            Sketch your vision, ship your wireframe - Designetica AI does the
+            heavy lifting.
+          </p>
 
           {error && <div className="error error-center">{error}</div>}
           {validationError && <div className="input-info-alert">{validationError}</div>}

@@ -155,23 +155,231 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
         }
     };
 
+    // Enhanced HTML generator functions with expanded component type detection
+    const detectComponentType = (name: string) => {
+        const lowerName = name.toLowerCase();
+
+        // Interactive Components
+        if (lowerName.includes('button') || lowerName.includes('btn')) return 'button';
+        if (lowerName.includes('toggle') || lowerName.includes('switch')) return 'toggle';
+        if (lowerName.includes('slider') || lowerName.includes('range')) return 'slider';
+        if (lowerName.includes('checkbox') || lowerName.includes('check')) return 'checkbox';
+        if (lowerName.includes('radio')) return 'radio';
+        if (lowerName.includes('menu') || lowerName.includes('dropdown')) return 'menu';
+        if (lowerName.includes('tooltip') || lowerName.includes('popover')) return 'tooltip';
+
+        // Layout Components
+        if (lowerName.includes('card')) return 'card';
+        if (lowerName.includes('panel') || lowerName.includes('container')) return 'panel';
+        if (lowerName.includes('sidebar') || lowerName.includes('drawer')) return 'sidebar';
+        if (lowerName.includes('nav') || lowerName.includes('navigation')) return 'navigation';
+        if (lowerName.includes('tab')) return 'tabs';
+        if (lowerName.includes('accordion') || lowerName.includes('collapse')) return 'accordion';
+        if (lowerName.includes('divider') || lowerName.includes('separator')) return 'divider';
+
+        // Data Display
+        if (lowerName.includes('table') || lowerName.includes('data') || lowerName.includes('grid')) return 'table';
+        if (lowerName.includes('list') || lowerName.includes('item')) return 'list';
+        if (lowerName.includes('chart') || lowerName.includes('graph')) return 'chart';
+        if (lowerName.includes('calendar') || lowerName.includes('date')) return 'calendar';
+        if (lowerName.includes('timeline') || lowerName.includes('step')) return 'timeline';
+        if (lowerName.includes('avatar') || lowerName.includes('profile')) return 'avatar';
+
+        // Form Components
+        if (lowerName.includes('form') || lowerName.includes('input')) return 'form';
+        if (lowerName.includes('field') || lowerName.includes('text')) return 'input';
+        if (lowerName.includes('select') || lowerName.includes('picker')) return 'select';
+        if (lowerName.includes('upload') || lowerName.includes('file')) return 'upload';
+        if (lowerName.includes('search') || lowerName.includes('filter')) return 'search';
+
+        // Feedback Components
+        if (lowerName.includes('modal') || lowerName.includes('dialog')) return 'modal';
+        if (lowerName.includes('alert') || lowerName.includes('notification')) return 'alert';
+        if (lowerName.includes('badge') || lowerName.includes('tag') || lowerName.includes('label')) return 'badge';
+        if (lowerName.includes('progress') || lowerName.includes('loading') || lowerName.includes('spinner')) return 'progress';
+        if (lowerName.includes('skeleton') || lowerName.includes('placeholder')) return 'skeleton';
+        if (lowerName.includes('toast') || lowerName.includes('snackbar')) return 'toast';
+
+        // Media Components
+        if (lowerName.includes('image') || lowerName.includes('photo') || lowerName.includes('picture')) return 'image';
+        if (lowerName.includes('video') || lowerName.includes('player')) return 'video';
+        if (lowerName.includes('carousel') || lowerName.includes('gallery') || lowerName.includes('slideshow')) return 'carousel';
+
+        // Advanced Components
+        if (lowerName.includes('tree') || lowerName.includes('hierarchy')) return 'tree';
+        if (lowerName.includes('editor') || lowerName.includes('rich')) return 'editor';
+        if (lowerName.includes('code') || lowerName.includes('syntax')) return 'code';
+        if (lowerName.includes('breadcrumb') || lowerName.includes('path')) return 'breadcrumb';
+        if (lowerName.includes('pagination')) return 'pagination';
+
+        return 'general';
+    };
+
+    // Generate enhanced Fluent UI HTML
+    const generateFluentHTML = (name: string, type: string) => {
+        const templates = {
+            button: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; font-family: 'Segoe UI', sans-serif; width: 280px;">
+                    <div style="margin-bottom: 16px;">
+                        <div style="font-weight: 600; color: #323130; font-size: 14px; margin-bottom: 12px;">${name}</div>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Primary</button>
+                            <button style="background: transparent; color: #0078d4; border: 1px solid #0078d4; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Secondary</button>
+                        </div>
+                    </div>
+                    <div style="font-size: 11px; color: #605e5c; opacity: 0.8;">From Figma Fluent Library</div>
+                </div>`,
+            card: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; padding: 16px; font-family: 'Segoe UI', sans-serif; width: 280px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <div style="background: #f3f2f1; border-radius: 6px; height: 80px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; color: #605e5c;">
+                        <div style="font-size: 24px;">📊</div>
+                    </div>
+                    <div style="font-weight: 600; color: #323130; font-size: 14px; margin-bottom: 4px;">${name}</div>
+                    <div style="color: #605e5c; font-size: 12px; line-height: 1.4; margin-bottom: 12px;">Interactive card component with Fluent Design styling</div>
+                    <div style="font-size: 11px; color: #605e5c; opacity: 0.8;">From Figma Fluent Library</div>
+                </div>`,
+            navigation: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; overflow: hidden; font-family: 'Segoe UI', sans-serif; width: 320px;">
+                    <div style="background: #f3f2f1; padding: 12px 16px; border-bottom: 1px solid #e1dfdd; display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 24px; height: 24px; background: #0078d4; border-radius: 4px;"></div>
+                        <div style="font-weight: 600; color: #323130; font-size: 14px;">${name}</div>
+                    </div>
+                    <div style="padding: 8px;">
+                        <div style="display: flex; flex-direction: column; gap: 2px;">
+                            <div style="padding: 8px 12px; color: #0078d4; background: #f3f9fd; border-radius: 4px; font-size: 13px;">Home</div>
+                            <div style="padding: 8px 12px; color: #605e5c; font-size: 13px;">Products</div>
+                            <div style="padding: 8px 12px; color: #605e5c; font-size: 13px;">About</div>
+                        </div>
+                    </div>
+                    <div style="padding: 12px 16px; font-size: 11px; color: #605e5c; opacity: 0.8; border-top: 1px solid #e1dfdd;">From Figma Fluent Library</div>
+                </div>`,
+            form: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; font-family: 'Segoe UI', sans-serif; width: 280px;">
+                    <div style="font-weight: 600; color: #323130; font-size: 14px; margin-bottom: 16px;">${name}</div>
+                    <div style="margin-bottom: 12px;">
+                        <label style="display: block; font-size: 12px; color: #605e5c; margin-bottom: 4px;">Email address</label>
+                        <input style="width: 100%; padding: 8px 12px; border: 1px solid #d2d0ce; border-radius: 4px; font-size: 14px; box-sizing: border-box;" type="email" placeholder="name@example.com" disabled>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <label style="display: block; font-size: 12px; color: #605e5c; margin-bottom: 4px;">Message</label>
+                        <textarea style="width: 100%; padding: 8px 12px; border: 1px solid #d2d0ce; border-radius: 4px; font-size: 14px; height: 60px; resize: none; box-sizing: border-box;" placeholder="Your message..." disabled></textarea>
+                    </div>
+                    <div style="font-size: 11px; color: #605e5c; opacity: 0.8;">From Figma Fluent Library</div>
+                </div>`,
+            general: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; padding: 16px; font-family: 'Segoe UI', sans-serif; width: 280px;">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                        <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #0078d4, #106ebe); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 20px;">
+                            ${name.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; color: #323130; font-size: 14px;">${name}</div>
+                            <div style="color: #605e5c; font-size: 12px;">Fluent UI Component</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 11px; color: #605e5c; opacity: 0.8;">From Figma Fluent Library</div>
+                </div>`
+        };
+
+        return templates[type] || templates.general;
+    };
+
+    // Generate enhanced Atlas HTML
+    const generateAtlasHTML = (name: string, type: string) => {
+        const templates = {
+            button: `
+                <div style="background: white; border: 1px solid #e1e5e9; border-radius: 12px; padding: 20px; font-family: 'Segoe UI', sans-serif; width: 280px; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
+                    <div style="margin-bottom: 16px;">
+                        <div style="font-weight: 600; color: #1a1a1a; font-size: 14px; margin-bottom: 12px;">${name}</div>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <button style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; box-shadow: 0 2px 8px rgba(102,126,234,0.3);">Primary</button>
+                            <button style="background: transparent; color: #667eea; border: 2px solid #667eea; padding: 8px 18px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer;">Secondary</button>
+                        </div>
+                    </div>
+                    <div style="font-size: 11px; color: #6b7280; opacity: 0.8;">From Figma Atlas Library</div>
+                </div>`,
+            card: `
+                <div style="background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); border: 1px solid #e1e5e9; border-radius: 16px; padding: 16px; font-family: 'Segoe UI', sans-serif; width: 280px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; height: 80px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; color: white;">
+                        <div style="font-size: 28px;">🎨</div>
+                    </div>
+                    <div style="font-weight: 600; color: #1a1a1a; font-size: 14px; margin-bottom: 4px;">${name}</div>
+                    <div style="color: #6b7280; font-size: 12px; line-height: 1.4; margin-bottom: 12px;">Atlas Design System card with gradient styling and modern aesthetics</div>
+                    <div style="font-size: 11px; color: #6b7280; opacity: 0.8;">From Figma Atlas Library</div>
+                </div>`,
+            navigation: `
+                <div style="background: white; border: 1px solid #e1e5e9; border-radius: 12px; overflow: hidden; font-family: 'Segoe UI', sans-serif; width: 320px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 16px; color: white;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 28px; height: 28px; background: rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                <div style="width: 16px; height: 16px; background: white; border-radius: 4px;"></div>
+                            </div>
+                            <div style="font-weight: 600; font-size: 14px;">${name}</div>
+                        </div>
+                    </div>
+                    <div style="padding: 12px;">
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <div style="padding: 10px 16px; color: #667eea; background: linear-gradient(135deg, #f0f2ff 0%, #e6e9ff 100%); border-radius: 8px; font-size: 13px; font-weight: 500;">Dashboard</div>
+                            <div style="padding: 10px 16px; color: #6b7280; font-size: 13px;">Analytics</div>
+                            <div style="padding: 10px 16px; color: #6b7280; font-size: 13px;">Settings</div>
+                        </div>
+                    </div>
+                    <div style="padding: 12px 16px; font-size: 11px; color: #6b7280; opacity: 0.8; border-top: 1px solid #e1e5e9;">From Figma Atlas Library</div>
+                </div>`,
+            form: `
+                <div style="background: white; border: 1px solid #e1e5e9; border-radius: 12px; padding: 20px; font-family: 'Segoe UI', sans-serif; width: 280px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+                    <div style="font-weight: 600; color: #1a1a1a; font-size: 14px; margin-bottom: 16px;">${name}</div>
+                    <div style="margin-bottom: 12px;">
+                        <label style="display: block; font-size: 12px; color: #6b7280; margin-bottom: 6px; font-weight: 500;">Email address</label>
+                        <input style="width: 100%; padding: 12px 16px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 14px; box-sizing: border-box; transition: border-color 0.2s;" type="email" placeholder="name@example.com" disabled>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <label style="display: block; font-size: 12px; color: #6b7280; margin-bottom: 6px; font-weight: 500;">Message</label>
+                        <textarea style="width: 100%; padding: 12px 16px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 14px; height: 60px; resize: none; box-sizing: border-box;" placeholder="Your message..." disabled></textarea>
+                    </div>
+                    <div style="font-size: 11px; color: #6b7280; opacity: 0.8;">From Figma Atlas Library</div>
+                </div>`,
+            general: `
+                <div style="background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); border: 1px solid #e1e5e9; border-radius: 12px; padding: 16px; font-family: 'Segoe UI', sans-serif; width: 280px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                        <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 20px; box-shadow: 0 4px 12px rgba(102,126,234,0.3);">
+                            ${name.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; color: #1a1a1a; font-size: 14px;">${name}</div>
+                            <div style="color: #6b7280; font-size: 12px;">Atlas Design Component</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 11px; color: #6b7280; opacity: 0.8;">From Figma Atlas Library</div>
+                </div>`
+        };
+
+        return templates[type] || templates.general;
+    };
+
     // Load Figma Fluent components only
     const loadFigmaFluentComponents = async (): Promise<Component[]> => {
         try {
             const response = await fetch('/figma-fluent-library.json');
             if (response.ok) {
                 const data = await response.json();
-                const components = data.components.map((comp: any) => ({
-                    id: comp.id,
-                    name: comp.name,
-                    description: comp.description,
-                    category: comp.category,
-                    htmlCode: comp.htmlCode,
-                    source: 'figma-fluent' as const,
-                    sourceUrl: comp.sourceUrl,
-                    playbook: 'Figma Fluent Library' as const
-                }));
-                console.log(`✅ Loaded ${components.length} Fluent Figma components`);
+                const components = data.components.map((comp: any) => {
+                    // Generate enhanced HTML based on component type
+                    const componentType = detectComponentType(comp.name);
+                    const enhancedHTML = generateFluentHTML(comp.name, componentType);
+
+                    return {
+                        id: comp.id,
+                        name: comp.name,
+                        description: comp.description,
+                        category: comp.category,
+                        htmlCode: enhancedHTML,
+                        source: 'figma-fluent' as const,
+                        sourceUrl: comp.sourceUrl,
+                        playbook: 'Figma Fluent Library' as const
+                    };
+                });
+                console.log(`✅ Loaded ${components.length} enhanced Fluent Figma components`);
                 return components;
             }
         } catch (error) {
@@ -207,17 +415,23 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
             const response = await fetch('/figma-atlas-library.json');
             if (response.ok) {
                 const data = await response.json();
-                const components = data.components.map((comp: any) => ({
-                    id: comp.id,
-                    name: comp.name,
-                    description: comp.description,
-                    category: comp.category,
-                    htmlCode: comp.htmlCode,
-                    source: 'figma-atlas' as const,
-                    sourceUrl: comp.sourceUrl,
-                    playbook: 'Figma Atlas Library' as const
-                }));
-                console.log(`✅ Loaded ${components.length} Atlas Figma components`);
+                const components = data.components.map((comp: any) => {
+                    // Generate enhanced HTML based on component type
+                    const componentType = detectComponentType(comp.name);
+                    const enhancedHTML = generateAtlasHTML(comp.name, componentType);
+
+                    return {
+                        id: comp.id,
+                        name: comp.name,
+                        description: comp.description,
+                        category: comp.category,
+                        htmlCode: enhancedHTML,
+                        source: 'figma-atlas' as const,
+                        sourceUrl: comp.sourceUrl,
+                        playbook: 'Figma Atlas Library' as const
+                    };
+                });
+                console.log(`✅ Loaded ${components.length} enhanced Atlas Figma components`);
                 return components;
             }
         } catch (error) {
@@ -1502,6 +1716,7 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                         <div className="components-grid">
                             {filteredComponents.map(component => {
                                 const isSelected = selectedComponentIds.has(component.id);
+
                                 return (
                                     <div
                                         key={component.id}

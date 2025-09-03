@@ -45,9 +45,30 @@ module.exports = async function (context, req) {
       components.push(...customComponents);
     }
 
-    // Use test data for immediate functionality
+    // 🔥 LOAD REAL FIGMA COMPONENTS if token and file ID available
+    if (figmaToken && atlasFileId && components.length === 0) {
+      try {
+        context.log("🎯 Loading REAL Atlas Design Library components...");
+        const realComponents = await fetchRealFigmaComponents(
+          figmaToken,
+          atlasFileId,
+          "Atlas Design Library",
+          context
+        );
+        if (realComponents && realComponents.length > 0) {
+          context.log(
+            `✅ Loaded ${realComponents.length} real Figma components`
+          );
+          components.push(...realComponents);
+        }
+      } catch (error) {
+        context.log(`⚠️ Failed to load real components: ${error.message}`);
+      }
+    }
+
+    // Use test data only as final fallback
     if (components.length === 0) {
-      context.log("🔄 Using test data...");
+      context.log("🔄 Using test data as fallback...");
       const testComponents = getTestComponents(atlasFileId || "test-file-id");
       components.push(...testComponents);
     }

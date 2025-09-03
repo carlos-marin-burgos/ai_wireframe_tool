@@ -76,13 +76,11 @@ function addAtlasComponents(html, description) {
 
   console.log("🎨 Processing wireframe for Atlas components...");
 
-  // Atlas component image URLs (Microsoft Azure Blob Storage)
+  // Atlas component image URLs (proper Microsoft Learn badges)
   const atlasComponents = {
-    hero: "https://designeticastorage.blob.core.windows.net/figma-assets/atlas-hero-component.png",
-    learningPath:
-      "https://designeticastorage.blob.core.windows.net/figma-assets/atlas-learning-path-card.png",
-    module:
-      "https://designeticastorage.blob.core.windows.net/figma-assets/atlas-module-card.png",
+    hero: "/Hero300.png", // Use existing hero image
+    learningPath: "/course.png", // Use course/learning path badge
+    module: "/microsoft-certified-fundamentals-badge 2.png", // Use Microsoft certification badge
   };
 
   // Check if description SPECIFICALLY requests learning components

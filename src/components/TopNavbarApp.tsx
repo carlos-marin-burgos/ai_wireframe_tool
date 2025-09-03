@@ -96,15 +96,7 @@ const TopNavbarApp: React.FC<TopNavbarAppProps> = ({
                         </button>
                     </div>
 
-                    <button
-                        onClick={onLogout}
-                        className="navbar-toolbar-btn logout-btn"
-                        onMouseEnter={(e) => showTooltip(e, "Logout")}
-                        onMouseLeave={hideTooltip}
-                        aria-label="Logout"
-                    >
-                        <FiLogOut />
-                    </button>
+                    {/* Logout removed for Microsoft internal use */}
                 </div>
             </nav>
 

@@ -138,20 +138,239 @@ function injectAtlasAnimations(html) {
   return html;
 }
 
+// Function to fetch learning path component from Figma
+async function fetchLearningPathFromFigma() {
+  try {
+    const FIGMA_TOKEN = process.env.FIGMA_ACCESS_TOKEN;
+    const FIGMA_FILE_ID = "PuWj05uKXhfbqrhmJLtCij"; // Atlas library file ID
+    const LEARNING_PATH_NODE_ID = "1:3993"; // Card-Certification component
+
+    if (!FIGMA_TOKEN) {
+      console.log("⚠️ No FIGMA_ACCESS_TOKEN found, using fallback image");
+      return "/course.png";
+    }
+
+    console.log(
+      `🔄 Fetching learning path component from Figma (${LEARNING_PATH_NODE_ID})`
+    );
+
+    const response = await fetch(
+      `https://api.figma.com/v1/images/${FIGMA_FILE_ID}?ids=${LEARNING_PATH_NODE_ID}&format=png&scale=2`,
+      {
+        headers: {
+          "X-Figma-Token": FIGMA_TOKEN,
+        },
+        timeout: 10000,
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Figma API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data.images && data.images[LEARNING_PATH_NODE_ID]) {
+      const imageUrl = data.images[LEARNING_PATH_NODE_ID];
+      console.log("✅ Successfully fetched learning path from Figma");
+      return imageUrl;
+    } else {
+      throw new Error("No image URL returned from Figma API");
+    }
+  } catch (error) {
+    console.error("❌ Error fetching from Figma:", error.message);
+    console.log("🔄 Falling back to static image");
+    return "/course.png"; // Fallback to static image
+  }
+}
+
+// Function to fetch components using the FigmaComponentBrowser service
+async function fetchFigmaComponents() {
+  try {
+    // Load local.settings.json values first if in development
+    if (!process.env.FIGMA_ACCESS_TOKEN) {
+      const fs = require("fs");
+      const path = require("path");
+      try {
+        const localSettingsPath = path.join(
+          __dirname,
+          "..",
+          "local.settings.json"
+        );
+        const localSettings = JSON.parse(
+          fs.readFileSync(localSettingsPath, "utf8")
+        );
+
+        // Set environment variables from local.settings.json
+        Object.keys(localSettings.Values).forEach((key) => {
+          if (!process.env[key]) {
+            process.env[key] = localSettings.Values[key];
+          }
+        });
+        console.log("📁 Loaded local.settings.json for Figma integration");
+      } catch (error) {
+        console.error("⚠️ Could not load local.settings.json:", error.message);
+      }
+    }
+
+    const FIGMA_TOKEN = process.env.FIGMA_ACCESS_TOKEN;
+
+    if (!FIGMA_TOKEN) {
+      console.log("⚠️ No FIGMA_ACCESS_TOKEN found, using fallback images");
+      return {
+        learningPath: "/course.png",
+        module: "/course.png",
+        hero: "/Hero300.png",
+        banner: "/banner.png",
+      };
+    }
+
+    console.log(
+      "🔄 Fetching components from Figma Component Browser service..."
+    );
+
+    // Try to use the FigmaComponentBrowser service if available
+    try {
+      const FigmaComponentBrowser = require("../../designetica-services/figmaComponentBrowser");
+      const browser = new FigmaComponentBrowser();
+
+      // Get popular/recent components
+      const popularComponents = await browser.getPopularComponents(10);
+      const allComponents = await browser.getAllComponents();
+
+      console.log(
+        `🎨 Found ${allComponents.length} total components in browser`
+      );
+
+      // Find specific component types we need
+      const learningComponent = allComponents.find(
+        (c) =>
+          c.name.toLowerCase().includes("learning") ||
+          c.name.toLowerCase().includes("card") ||
+          c.category === "Education"
+      );
+
+      const heroComponent = allComponents.find(
+        (c) =>
+          c.name.toLowerCase().includes("hero") ||
+          c.name.toLowerCase().includes("banner") ||
+          c.category === "Marketing"
+      );
+
+      const bannerComponent = allComponents.find(
+        (c) =>
+          c.name.toLowerCase().includes("banner") ||
+          c.name.toLowerCase().includes("info")
+      );
+
+      const components = {
+        learningPath: learningComponent?.preview || "/course.png",
+        module: learningComponent?.preview || "/course.png",
+        hero: heroComponent?.preview || "/Hero300.png",
+        banner: bannerComponent?.preview || "/banner.png",
+        // Store component details for reference
+        _componentDetails: {
+          learning: learningComponent,
+          hero: heroComponent,
+          banner: bannerComponent,
+          totalAvailable: allComponents.length,
+        },
+      };
+
+      console.log(`✅ Successfully loaded components from browser:
+        - Learning: ${learningComponent?.name || "fallback"}
+        - Hero: ${heroComponent?.name || "fallback"} 
+        - Banner: ${bannerComponent?.name || "fallback"}
+        - Total components available: ${allComponents.length}`);
+
+      return components;
+    } catch (browserError) {
+      console.warn(
+        "⚠️ FigmaComponentBrowser service not available, falling back to direct API:",
+        browserError.message
+      );
+
+      // Fallback to direct Figma API for specific components
+      const FIGMA_FILE_ID = "PuWj05uKXhfbqrhmJLtCij"; // Atlas library file ID
+
+      const componentNodeIds = {
+        learningPath: "1:3993", // Card-Certification component
+        hero: "1:4688", // Hero component from Figma
+      };
+
+      console.log("🔄 Fetching specific components from Figma API...");
+
+      const nodeIds = Object.values(componentNodeIds).join(",");
+      const response = await fetch(
+        `https://api.figma.com/v1/images/${FIGMA_FILE_ID}?ids=${nodeIds}&format=png&scale=2`,
+        {
+          headers: {
+            "X-Figma-Token": FIGMA_TOKEN,
+          },
+          timeout: 15000,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Figma API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const components = {};
+
+      Object.entries(componentNodeIds).forEach(([componentName, nodeId]) => {
+        if (data.images && data.images[nodeId]) {
+          components[componentName] = data.images[nodeId];
+          console.log(
+            `✅ Successfully fetched ${componentName} from Figma (${nodeId})`
+          );
+        } else {
+          console.log(`⚠️ Failed to fetch ${componentName}, using fallback`);
+          components[componentName] =
+            componentName === "hero" ? "/Hero300.png" : "/course.png";
+        }
+      });
+
+      components.module = components.learningPath;
+      components.banner = "/banner.png";
+
+      return components;
+    }
+  } catch (error) {
+    console.error("❌ Error fetching components from Figma:", error.message);
+    console.log("🔄 Falling back to static images");
+    return {
+      learningPath: "/course.png",
+      module: "/course.png",
+      hero: "/Hero300.png",
+      banner: "/banner.png",
+    };
+  }
+}
+
 // Simple Atlas component post-processing (same as enhanced endpoint)
-function addAtlasComponents(html, description) {
-  if (!html || typeof html !== "string") return html;
+async function addAtlasComponents(html, description) {
+  // Comprehensive input validation
+  if (!html) {
+    console.error("❌ addAtlasComponents received null/undefined html");
+    return html;
+  }
+
+  if (typeof html !== "string") {
+    console.error(
+      "❌ addAtlasComponents received non-string html:",
+      typeof html,
+      html
+    );
+    return html;
+  }
 
   console.log("🎨 Processing wireframe for Atlas components...");
+  console.log("📏 Input HTML length:", html.length);
+  console.log("📝 HTML type check:", typeof html);
 
-  // Atlas component image URLs (Microsoft Azure Blob Storage)
-  const atlasComponents = {
-    hero: "https://designeticastorage.blob.core.windows.net/figma-assets/atlas-hero-component.png",
-    learningPath:
-      "https://designeticastorage.blob.core.windows.net/figma-assets/atlas-learning-path-card.png",
-    module:
-      "https://designeticastorage.blob.core.windows.net/figma-assets/atlas-module-card.png",
-  };
+  // Fetch all components from Figma Atlas library
+  const atlasComponents = await fetchFigmaComponents();
 
   // Check if description SPECIFICALLY requests learning components
   const requestsLearningComponents =
@@ -170,145 +389,157 @@ function addAtlasComponents(html, description) {
 
   let processedHtml = html;
 
-  // 1. Replace hero sections with Atlas Hero ONLY when specifically requested
-  const heroPattern =
-    /<section[^>]*class="[^"]*hero[^"]*"[^>]*>[\s\S]*?<\/section>/gi;
-  if (processedHtml.match(heroPattern) && requestsLearningComponents) {
-    processedHtml = processedHtml.replace(
-      heroPattern,
-      `<section class="hero atlas-hero-section">
+  try {
+    // 1. Replace hero sections with Atlas Hero from Figma ONLY when specifically requested
+    const heroPattern =
+      /<section[^>]*class="[^"]*hero[^"]*"[^>]*>[\s\S]*?<\/section>/gi;
+    if (processedHtml.match(heroPattern) && requestsLearningComponents) {
+      processedHtml = processedHtml.replace(
+        heroPattern,
+        `<section class="hero atlas-hero-section">
         <div class="container">
-          <div class="atlas-component atlas-hero-figma" data-node-id="14647:163530" style="max-width: 100%; overflow: hidden;">
-              <img src="${atlasComponents.hero}" alt="Atlas Hero Component" style="width: 100%; height: auto; display: block; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);" />
+          <div class="atlas-component atlas-hero-figma" data-node-id="1:4688" data-source="figma" style="max-width: 100%; overflow: hidden;">
+              <img src="${atlasComponents.hero}" alt="Atlas Hero Component from Figma (Node: 1:4688)" style="width: 100%; height: auto; display: block; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);" />
           </div>
         </div>
       </section>`
-    );
-    console.log("✅ Hero section replaced with Atlas Hero component");
-  }
+      );
+      console.log(
+        "✅ Hero section replaced with Atlas Hero component from Figma"
+      );
+    }
 
-  // 2. Add learning content section if learning platform and not already present
-  if (
-    !processedHtml.includes("atlas-learning-path-card-figma") &&
-    !processedHtml.includes("atlas-module-card-figma")
-  ) {
-    const learningSection = `
-    <!-- Atlas Learning Content Section -->
+    // 2. Add learning content section if learning platform and not already present
+    if (
+      !processedHtml.includes("atlas-learning-path-card-figma") &&
+      !processedHtml.includes("atlas-module-card-fluent")
+    ) {
+      const learningSection = `
+    <!-- Atlas Learning Content Section - Using Figma Components -->
     <section class="learning-content atlas-learning-section atlas-newly-added" style="padding: 60px 0; background: #f8f9fa; animation: atlasSlideIn 0.8s ease-out, atlasGlow 2s ease-in-out; border: 2px solid #0078d4; margin: 20px 0; border-radius: 12px; position: relative; overflow: hidden;">
         <!-- New Component Indicator -->
         <div class="atlas-new-indicator" style="position: absolute; top: 0; left: 0; right: 0; background: linear-gradient(90deg, #0078d4, #40e0d0); color: white; text-align: center; padding: 8px; font-size: 14px; font-weight: bold; animation: atlasFlash 1.5s ease-in-out infinite;">
-            ✨ NEWLY ADDED ATLAS COMPONENTS ✨
+            ✨ FIGMA ATLAS COMPONENTS (Hero: 1:4688, Cards: 1:3993) ✨
         </div>
         <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 50px 20px 20px;">
-            <h2 style="text-align: center; margin-bottom: 40px; color: #323130; animation: atlasFadeInUp 1s ease-out 0.3s both;">🎓 Learning Paths</h2>
+            <h2 style="text-align: center; margin-bottom: 40px; color: #323130; animation: atlasFadeInUp 1s ease-out 0.3s both;">🎓 Learning Paths (From Fluent UI)</h2>
             <div class="learning-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 50px;">
-                <div class="atlas-component atlas-learning-path-card-figma" data-node-id="14315:162386" data-type="learning-path" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 0.5s both; transform: translateY(20px);">
-                    <img src="${atlasComponents.learningPath}" alt="Learning Path" style="width: 100%; height: auto; display: block; object-fit: contain;" />
+                                <div class="atlas-component atlas-learning-path-card-figma" data-type="learning-path" data-node-id="1:3993" data-source="figma" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 0.5s both; transform: translateY(20px);">
+                    <img src="${atlasComponents.learningPath}" alt="Atlas Learning Path Component from Figma (Node: 1:3993)" style="width: 100%; height: auto; display: block;" />
                 </div>
-                <div class="atlas-component atlas-learning-path-card-figma" data-node-id="14315:162386" data-type="learning-path" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 0.7s both; transform: translateY(20px);">
-                    <img src="${atlasComponents.learningPath}" alt="Learning Path" style="width: 100%; height: auto; display: block; object-fit: contain;" />
+                                <div class="atlas-component atlas-learning-path-card-figma" data-type="learning-path" data-node-id="1:3993" data-source="figma" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 0.7s both; transform: translateY(20px);">
+                    <img src="${atlasComponents.learningPath}" alt="Atlas Learning Path Component from Figma (Node: 1:3993)" style="width: 100%; height: auto; display: block;" />
                 </div>
             </div>
             
-            <h2 style="text-align: center; margin-bottom: 40px; color: #323130; animation: atlasFadeInUp 1s ease-out 0.9s both;">📚 Available Modules</h2>
+            <h2 style="text-align: center; margin-bottom: 40px; color: #323130; animation: atlasFadeInUp 1s ease-out 0.9s both;">📚 Available Modules (From Fluent UI)</h2>
             <div class="modules-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-                <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 1.1s both; transform: translateY(20px);">
-                    <img src="${atlasComponents.module}" alt="Learning Module" style="width: 100%; height: auto; display: block; object-fit: contain;" />
+                <div class="atlas-component atlas-module-card-fluent" data-type="module" data-source="fluent-ui" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 1.1s both; transform: translateY(20px);">
+                    <img src="${atlasComponents.module}" alt="Learning Module from Fluent UI Library" style="width: 100%; height: auto; display: block; object-fit: contain;" />
                 </div>
-                <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 1.3s both; transform: translateY(20px);">
-                    <img src="${atlasComponents.module}" alt="Learning Module" style="width: 100%; height: auto; display: block; object-fit: contain;" />
+                <div class="atlas-component atlas-module-card-fluent" data-type="module" data-source="fluent-ui" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 1.3s both; transform: translateY(20px);">
+                    <img src="${atlasComponents.module}" alt="Learning Module from Fluent UI Library" style="width: 100%; height: auto; display: block; object-fit: contain;" />
                 </div>
-                <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 1.5s both; transform: translateY(20px);">
-                    <img src="${atlasComponents.module}" alt="Learning Module" style="width: 100%; height: auto; display: block; object-fit: contain;" />
+                <div class="atlas-component atlas-module-card-fluent" data-type="module" data-source="fluent-ui" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 1.5s both; transform: translateY(20px);">
+                    <img src="${atlasComponents.module}" alt="Learning Module from Fluent UI Library" style="width: 100%; height: auto; display: block; object-fit: contain;" />
                 </div>
-                <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 1.7s both; transform: translateY(20px);">
-                    <img src="${atlasComponents.module}" alt="Learning Module" style="width: 100%; height: auto; display: block; object-fit: contain;" />
+                <div class="atlas-component atlas-module-card-fluent" data-type="module" data-source="fluent-ui" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 1.7s both; transform: translateY(20px);">
+                    <img src="${atlasComponents.module}" alt="Learning Module from Fluent UI Library" style="width: 100%; height: auto; display: block; object-fit: contain;" />
                 </div>
-                <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 1.9s both; transform: translateY(20px);">
-                    <img src="${atlasComponents.module}" alt="Learning Module" style="width: 100%; height: auto; display: block; object-fit: contain;" />
+                <div class="atlas-component atlas-module-card-fluent" data-type="module" data-source="fluent-ui" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 1.9s both; transform: translateY(20px);">
+                    <img src="${atlasComponents.module}" alt="Learning Module from Fluent UI Library" style="width: 100%; height: auto; display: block; object-fit: contain;" />
                 </div>
-                <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 2.1s both; transform: translateY(20px);">
-                    <img src="${atlasComponents.module}" alt="Learning Module" style="width: 100%; height: auto; display: block; object-fit: contain;" />
+                <div class="atlas-component atlas-module-card-fluent" data-type="module" data-source="fluent-ui" style="max-width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: atlasFadeInUp 1s ease-out 2.1s both; transform: translateY(20px);">
+                    <img src="${atlasComponents.module}" alt="Learning Module from Fluent UI Library" style="width: 100%; height: auto; display: block; object-fit: contain;" />
                 </div>
             </div>
         </div>
     </section>`;
 
-    // Insert learning section while preserving footer order
-    // First, check if there's a footer and extract it
-    const footerPattern = /<footer[\s\S]*?<\/footer>/gi;
-    const footerMatch = processedHtml.match(footerPattern);
-    let footerContent = "";
+      // Insert learning section while preserving footer order
+      // First, check if there's a footer and extract it
+      const footerPattern = /<footer[\s\S]*?<\/footer>/gi;
+      const footerMatch = processedHtml.match(footerPattern);
+      let footerContent = "";
 
-    if (footerMatch && footerMatch.length > 0) {
-      footerContent = footerMatch[footerMatch.length - 1]; // Get the last footer
-      // Remove the footer from the original position
-      processedHtml = processedHtml.replace(footerPattern, "");
-      console.log("📍 Footer extracted and will be repositioned at the bottom");
-    }
-
-    // Insert learning section at the TOP after navigation/header
-    // Find insertion point after navigation or header
-    let insertionPoint = processedHtml.indexOf("</nav>");
-    let isNavTag = true;
-    if (insertionPoint === -1) {
-      insertionPoint = processedHtml.indexOf("</header>");
-      isNavTag = false;
-    }
-    if (insertionPoint === -1) {
-      // If no nav/header found, insert after opening body tag
-      insertionPoint = processedHtml.indexOf("<body");
-      if (insertionPoint !== -1) {
-        insertionPoint = processedHtml.indexOf(">", insertionPoint) + 1;
+      if (footerMatch && footerMatch.length > 0) {
+        footerContent = footerMatch[footerMatch.length - 1]; // Get the last footer
+        // Remove the footer from the original position
+        processedHtml = processedHtml.replace(footerPattern, "");
+        console.log(
+          "📍 Footer extracted and will be repositioned at the bottom"
+        );
       }
-    } else {
-      insertionPoint += isNavTag ? 6 : 9; // Move past the closing tag (</nav> = 6, </header> = 9)
+
+      // Insert learning section at the TOP after navigation/header
+      // Find insertion point after navigation or header
+      let insertionPoint = processedHtml.indexOf("</nav>");
+      let isNavTag = true;
+      if (insertionPoint === -1) {
+        insertionPoint = processedHtml.indexOf("</header>");
+        isNavTag = false;
+      }
+      if (insertionPoint === -1) {
+        // If no nav/header found, insert after opening body tag
+        insertionPoint = processedHtml.indexOf("<body");
+        if (insertionPoint !== -1) {
+          insertionPoint = processedHtml.indexOf(">", insertionPoint) + 1;
+        }
+      } else {
+        insertionPoint += isNavTag ? 6 : 9; // Move past the closing tag (</nav> = 6, </header> = 9)
+      }
+
+      if (insertionPoint > 0) {
+        processedHtml =
+          processedHtml.slice(0, insertionPoint) +
+          "\n" +
+          learningSection +
+          "\n" +
+          processedHtml.slice(insertionPoint);
+        console.log(
+          "✅ Added Atlas Learning Path and Module components at the TOP"
+        );
+      } else {
+        // Fallback: add before closing body tag (old behavior)
+        processedHtml = processedHtml.replace(
+          "</body>",
+          learningSection + "\n" + footerContent + "\n</body>"
+        );
+        console.log(
+          "✅ Added Atlas Learning Path and Module components (fallback position)"
+        );
+      }
+
+      // Reposition footer at the very bottom if it was extracted
+      if (footerContent && insertionPoint > 0) {
+        processedHtml = processedHtml.replace(
+          "</body>",
+          footerContent + "\n</body>"
+        );
+        console.log("📍 Footer repositioned at the bottom");
+      }
     }
 
-    if (insertionPoint > 0) {
-      processedHtml =
-        processedHtml.slice(0, insertionPoint) +
-        "\n" +
-        learningSection +
-        "\n" +
-        processedHtml.slice(insertionPoint);
-      console.log(
-        "✅ Added Atlas Learning Path and Module components at the TOP"
-      );
-    } else {
-      // Fallback: add before closing body tag (old behavior)
-      processedHtml = processedHtml.replace(
-        "</body>",
-        learningSection + "\n" + footerContent + "\n</body>"
-      );
-      console.log(
-        "✅ Added Atlas Learning Path and Module components (fallback position)"
-      );
-    }
+    // Count components for verification
+    const heroCount = (processedHtml.match(/atlas-hero-fluent/g) || []).length;
+    const moduleCount = (processedHtml.match(/atlas-module-card-fluent/g) || [])
+      .length;
+    const learningPathCount = (
+      processedHtml.match(/atlas-learning-path-card-figma/g) || []
+    ).length;
 
-    // Reposition footer at the very bottom if it was extracted
-    if (footerContent && insertionPoint > 0) {
-      processedHtml = processedHtml.replace(
-        "</body>",
-        footerContent + "\n</body>"
-      );
-      console.log("📍 Footer repositioned at the bottom");
-    }
+    console.log(
+      `🎯 Atlas components added: Hero: ${heroCount}, Modules: ${moduleCount}, Learning Paths: ${learningPathCount}`
+    );
+
+    return processedHtml;
+  } catch (error) {
+    console.error("❌ Error in addAtlasComponents:", error.message);
+    console.error("📝 HTML type at error:", typeof processedHtml);
+    console.error("📏 HTML length at error:", processedHtml?.length || 0);
+    // Return original HTML if processing fails
+    return html;
   }
-
-  // Count components for verification
-  const heroCount = (processedHtml.match(/atlas-hero-figma/g) || []).length;
-  const moduleCount = (processedHtml.match(/atlas-module-card-figma/g) || [])
-    .length;
-  const learningPathCount = (
-    processedHtml.match(/atlas-learning-path-card-figma/g) || []
-  ).length;
-
-  console.log(
-    `🎯 Atlas components added: Hero: ${heroCount}, Modules: ${moduleCount}, Learning Paths: ${learningPathCount}`
-  );
-
-  return processedHtml;
 }
 
 // Initialize OpenAI client
@@ -445,13 +676,29 @@ Generate ONLY the HTML code (starting with <!DOCTYPE html>).`;
     temperature: 0.7,
   });
 
-  let html = response.choices[0]?.message?.content || "";
+  let html = response.choices[0]?.message?.content;
+
+  // Comprehensive type checking and error handling
+  if (!html) {
+    console.error("❌ OpenAI returned null/undefined content");
+    throw new Error("OpenAI returned no content");
+  }
+
+  if (typeof html !== "string") {
+    console.error("❌ OpenAI returned non-string content:", typeof html, html);
+    throw new Error(`OpenAI returned ${typeof html} instead of string`);
+  }
 
   // Clean up markdown formatting if present
   html = html
     .replace(/```html\n?/g, "")
     .replace(/```\n?$/g, "")
     .trim();
+
+  // Final validation
+  if (!html || typeof html !== "string") {
+    throw new Error("HTML became invalid after cleanup");
+  }
 
   return html;
 }
@@ -515,12 +762,17 @@ module.exports = async function (context, req) {
 
     try {
       html = await generateWithAI(description);
-      if (!html || !html.includes("<!DOCTYPE html>") || html.length < 1000) {
+
+      if (!html || typeof html !== "string") {
+        throw new Error(`AI returned invalid response: ${typeof html}`);
+      }
+
+      if (!html.includes("<!DOCTYPE html>") || html.length < 1000) {
         throw new Error("AI response insufficient or invalid");
       }
 
       // 🎨 Add Atlas components to the generated wireframe
-      html = addAtlasComponents(html, description);
+      html = await addAtlasComponents(html, description);
 
       // ✨ Inject Atlas animations CSS
       html = injectAtlasAnimations(html);
@@ -545,8 +797,9 @@ module.exports = async function (context, req) {
       }
 
       // Count Atlas components for stats
-      const heroCount = (html.match(/atlas-hero-figma/g) || []).length;
-      const moduleCount = (html.match(/atlas-module-card-figma/g) || []).length;
+      const heroCount = (html.match(/atlas-hero-fluent/g) || []).length;
+      const moduleCount = (html.match(/atlas-module-card-fluent/g) || [])
+        .length;
       const learningPathCount = (
         html.match(/atlas-learning-path-card-figma/g) || []
       ).length;
@@ -571,8 +824,8 @@ module.exports = async function (context, req) {
     const processingTime = Date.now() - startTime;
 
     // Count Atlas components for response stats
-    const heroCount = (html.match(/atlas-hero-figma/g) || []).length;
-    const moduleCount = (html.match(/atlas-module-card-figma/g) || []).length;
+    const heroCount = (html.match(/atlas-hero-fluent/g) || []).length;
+    const moduleCount = (html.match(/atlas-module-card-fluent/g) || []).length;
     const learningPathCount = (
       html.match(/atlas-learning-path-card-figma/g) || []
     ).length;
