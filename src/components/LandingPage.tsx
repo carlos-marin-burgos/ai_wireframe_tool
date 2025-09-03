@@ -5,6 +5,7 @@ import Footer from './Footer';
 import ImageUploadZone from './ImageUploadZone';
 import { figmaApi, FigmaFile as ApiFigmaFile, FigmaFrame } from '../services/figmaApi';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
+import FigmaIntegrationModal from './FigmaIntegrationModal';
 
 interface LandingPageProps {
   error: string | null;
@@ -91,18 +92,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
   const [isFigmaModalOpen, setIsFigmaModalOpen] = useState(false);
   const [isGitHubModalOpen, setIsGitHubModalOpen] = useState(false);
   const [githubStatus, setGithubStatus] = useState<{ connected: boolean; login?: string; error?: string }>({ connected: false });
-
-  // Figma modal state
-  const [figmaActiveTab, setFigmaActiveTab] = useState<'import' | 'export' | 'sync'>('import');
-  const [figmaIsConnected, setFigmaIsConnected] = useState(false);
-  const [figmaAccessToken, setFigmaAccessToken] = useState('');
-  const [figmaUrl, setFigmaUrl] = useState('');
-  const [figmaIsLoading, setFigmaIsLoading] = useState(false);
-  const [figmaError, setFigmaError] = useState<string | null>(null);
-  const [figmaSuccess, setFigmaSuccess] = useState<string | null>(null);
-  const [figmaFrames, setFigmaFrames] = useState<FigmaFrame[]>([]);
-  const [figmaSelectedFrames, setFigmaSelectedFrames] = useState<string[]>([]);
-  const [figmaExportFormat, setFigmaExportFormat] = useState<'figma-file' | 'figma-components'>('figma-file');
 
   // Recent/Favorites tab state
   const [activeTab, setActiveTab] = useState<'recent' | 'favorites'>('recent');
@@ -410,7 +399,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
     setShowImageUpload(prev => !prev);
   };
 
-  // Figma Integration handlers
+  // Simple Figma Integration handlers - Enhanced modal handles the rest
   const handleFigmaImport = (html: string, fileName: string) => {
     if (onFigmaImport) {
       onFigmaImport(html, fileName);
@@ -424,132 +413,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
     }
     setIsFigmaModalOpen(false);
   };
-
-  // Clear Figma messages after 5 seconds
-  useEffect(() => {
-    if (figmaError || figmaSuccess) {
-      const timer = setTimeout(() => {
-        setFigmaError(null);
-        setFigmaSuccess(null);
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [figmaError, figmaSuccess]);
-
-  // Figma handlers
-  const handleFigmaConnect = useCallback(async () => {
-    if (!figmaAccessToken.trim()) {
-      setFigmaError('Please enter your Figma access token');
-      return;
-    }
-
-    setFigmaIsLoading(true);
-    setFigmaError(null);
-
-    try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // Mock validation - in real app, this would validate with Figma API
-      if (figmaAccessToken.toLowerCase().includes('figd_') || figmaAccessToken.length > 10) {
-        figmaApi.setAccessToken(figmaAccessToken);
-        setFigmaIsConnected(true);
-        setFigmaSuccess('🔗 Successfully connected to Figma! You can now import designs.');
-
-        // Open Figma in a new tab to show it's working
-        window.open('https://www.figma.com/', '_blank');
-      } else {
-        setFigmaError('Please enter a valid Figma access token starting with "figd_"');
-      }
-    } catch (err) {
-      setFigmaError(err instanceof Error ? err.message : 'Failed to connect to Figma');
-    } finally {
-      setFigmaIsLoading(false);
-    }
-  }, [figmaAccessToken]);
-
-  const handleFigmaLoadFrames = useCallback(async () => {
-    if (!figmaUrl.trim()) {
-      setFigmaError('Please enter a Figma file URL');
-      return;
-    }
-
-    setFigmaIsLoading(true);
-    setFigmaError(null);
-    setFigmaFrames([]);
-
-    try {
-      const fileKey = figmaApi.parseFileUrl(figmaUrl);
-      if (!fileKey) {
-        setFigmaError('Invalid Figma URL. Please use a valid Figma file URL.');
-        return;
-      }
-
-      const fileData = await figmaApi.getFile(fileKey);
-      const extractedFrames = figmaApi.extractFrames(fileData.document);
-
-      setFigmaFrames(extractedFrames);
-      setFigmaSuccess(`📋 Found ${extractedFrames.length} frames in your Figma file. Select which ones to import.`);
-    } catch (err) {
-      setFigmaError(err instanceof Error ? err.message : 'Failed to load Figma file');
-    } finally {
-      setFigmaIsLoading(false);
-    }
-  }, [figmaUrl]);
-
-  const handleFigmaFrameSelect = useCallback((frameId: string) => {
-    setFigmaSelectedFrames(prev =>
-      prev.includes(frameId)
-        ? prev.filter(id => id !== frameId)
-        : [...prev, frameId]
-    );
-  }, []);
-
-  const handleFigmaImportFrames = useCallback(async () => {
-    if (figmaSelectedFrames.length === 0) {
-      setFigmaError('Please select at least one frame to import');
-      return;
-    }
-
-    setFigmaIsLoading(true);
-    setFigmaError(null);
-
-    try {
-      const fileKey = figmaApi.parseFileUrl(figmaUrl);
-      if (!fileKey) {
-        setFigmaError('Invalid Figma URL');
-        return;
-      }
-
-      const selectedFrameObjects = figmaFrames.filter(frame => figmaSelectedFrames.includes(frame.id));
-      const html = await figmaApi.convertFramesToWireframe(selectedFrameObjects, fileKey);
-
-      handleFigmaImport(html, 'Figma Import');
-      setFigmaSuccess('🎉 Figma designs successfully imported and converted to wireframe!');
-      setIsFigmaModalOpen(false);
-    } catch (err) {
-      setFigmaError(err instanceof Error ? err.message : 'Failed to import frames');
-    } finally {
-      setFigmaIsLoading(false);
-    }
-  }, [figmaSelectedFrames, figmaFrames, figmaUrl, handleFigmaImport]);
-
-  const handleFigmaExportAction = useCallback(() => {
-    handleFigmaExport(figmaExportFormat);
-    const fileType = figmaExportFormat === 'figma-file' ? 'HTML file' : 'JSON data file';
-    setFigmaSuccess(`🎉 ${fileType} download started! Check your browser's Downloads folder.`);
-    setTimeout(() => setIsFigmaModalOpen(false), 2000);
-  }, [figmaExportFormat, handleFigmaExport]);
-
-  const handleFigmaDisconnect = useCallback(() => {
-    setFigmaIsConnected(false);
-    setFigmaAccessToken('');
-    setFigmaFrames([]);
-    setFigmaSelectedFrames([]);
-    setFigmaUrl('');
-    figmaApi.setAccessToken('');
-    setFigmaSuccess('🔓 Disconnected from Figma. Your data has been cleared.');
-  }, []);
 
   return (
     <div className="landing-page">
@@ -862,197 +725,13 @@ const LandingPage: React.FC<LandingPageProps> = ({
         </div>
       </div>
 
-      {/* Figma Integration Modal */}
-      {isFigmaModalOpen && (
-        <div className="modal-overlay" onClick={() => setIsFigmaModalOpen(false)}>
-          <div className="modal-content figma-modal" onClick={(e) => e.stopPropagation()}>
-            {/* Modal Header */}
-            <div className="modal-header">
-              <div className="modal-title">
-                <FiLink className="modal-icon" />
-                <h2>Figma Integration Hub</h2>
-              </div>
-              <button className="modal-close-btn" onClick={() => setIsFigmaModalOpen(false)} title="Close modal">
-                <FiX />
-              </button>
-            </div>
-
-            {/* Status Messages */}
-            {figmaError && (
-              <div className="figma-message figma-error">
-                <FiAlertCircle />
-                <span>{figmaError}</span>
-              </div>
-            )}
-
-            {figmaSuccess && (
-              <div className="figma-message figma-success">
-                <FiCheck />
-                <span>{figmaSuccess}</span>
-              </div>
-            )}
-
-            {/* Connection Status */}
-            <div className={`figma-connection-status ${figmaIsConnected ? 'connected' : 'disconnected'}`}>
-              {figmaIsConnected ? (
-                <>
-                  <FiCheck className="status-icon" />
-                  <span>Connected to Figma</span>
-                  <button className="disconnect-btn" onClick={handleFigmaDisconnect}>
-                    Disconnect
-                  </button>
-                </>
-              ) : (
-                <>
-                  <FiAlertCircle className="status-icon" />
-                  <span>Not connected to Figma</span>
-                </>
-              )}
-            </div>
-
-            {/* Tab Navigation */}
-            <div className="figma-tabs">
-              <button
-                className={`figma-tab ${figmaActiveTab === 'import' ? 'active' : ''}`}
-                onClick={() => setFigmaActiveTab('import')}
-              >
-                <FiUpload />
-                Import Designs
-              </button>
-            </div>
-
-            {/* Modal Body */}
-            <div className="modal-body">
-              {/* Import Tab */}
-              {figmaActiveTab === 'import' && (
-                <div className="figma-tab-content">
-                  <div className="tab-description">
-                    <h3>📥 Import from Figma</h3>
-                    <p>Bring your Figma designs into the wireframe tool. Connect to Figma, select frames, and convert them into editable wireframes.</p>
-                  </div>
-                  {!figmaIsConnected ? (
-                    <div className="figma-auth-section">
-                      <h3>Connect to Figma</h3>
-                      <p>Enter your Figma access token to get started.</p>
-
-                      <div className="figma-input-group">
-                        <label htmlFor="figma-token">Figma Access Token</label>
-                        <input
-                          id="figma-token"
-                          type="password"
-                          placeholder="figd_..."
-                          value={figmaAccessToken}
-                          onChange={(e) => setFigmaAccessToken(e.target.value)}
-                          className="figma-input"
-                        />
-                        <small>
-                          <a
-                            href="https://www.figma.com/developers/api#access-tokens"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="figma-link"
-                          >
-                            <FiExternalLink />
-                            How to get your access token
-                          </a>
-                        </small>
-                      </div>
-
-                      <button
-                        className="figma-btn figma-btn-primary"
-                        onClick={handleFigmaConnect}
-                        disabled={figmaIsLoading || !figmaAccessToken.trim()}
-                      >
-                        {figmaIsLoading ? <FiRefreshCw className="spinning" /> : <FiLink />}
-                        {figmaIsLoading ? 'Connecting...' : 'Connect to Figma'}
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="figma-import-section">
-                      <div className="figma-input-group">
-                        <label htmlFor="figma-url">Figma File URL</label>
-                        <input
-                          id="figma-url"
-                          type="url"
-                          placeholder="https://www.figma.com/file/..."
-                          value={figmaUrl}
-                          onChange={(e) => setFigmaUrl(e.target.value)}
-                          className="figma-input"
-                        />
-                      </div>
-
-                      <button
-                        className="figma-btn figma-btn-secondary"
-                        onClick={handleFigmaLoadFrames}
-                        disabled={figmaIsLoading || !figmaUrl.trim()}
-                      >
-                        {figmaIsLoading ? <FiRefreshCw className="spinning" /> : <FiLayers />}
-                        {figmaIsLoading ? 'Loading...' : 'Load Frames'}
-                      </button>
-
-                      {figmaFrames.length > 0 && (
-                        <div className="figma-frames-section">
-                          <h4>Select Frames to Import ({figmaFrames.length} available)</h4>
-                          <div className="figma-frames-grid">
-                            {figmaFrames.map((frame) => (
-                              <div
-                                key={frame.id}
-                                className={`figma-frame-card ${figmaSelectedFrames.includes(frame.id) ? 'selected' : ''}`}
-                                onClick={() => handleFigmaFrameSelect(frame.id)}
-                              >
-                                <div className="frame-preview">
-                                  <FiFileText size={24} />
-                                </div>
-                                <div className="frame-info">
-                                  <h5>{frame.name}</h5>
-                                  <span className="frame-type">{frame.type}</span>
-                                  {frame.absoluteBoundingBox && (
-                                    <span className="frame-size">
-                                      {Math.round(frame.absoluteBoundingBox.width)} × {Math.round(frame.absoluteBoundingBox.height)}
-                                    </span>
-                                  )}
-                                </div>
-                                {figmaSelectedFrames.includes(frame.id) && (
-                                  <div className="frame-selected-indicator">
-                                    <FiCheck />
-                                  </div>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-
-                          <div className="figma-actions">
-                            <button
-                              className="figma-btn figma-btn-outline"
-                              onClick={() => setFigmaSelectedFrames(figmaFrames.map(f => f.id))}
-                            >
-                              Select All
-                            </button>
-                            <button
-                              className="figma-btn figma-btn-outline"
-                              onClick={() => setFigmaSelectedFrames([])}
-                            >
-                              Clear Selection
-                            </button>
-                            <button
-                              className="figma-btn figma-btn-primary"
-                              onClick={handleFigmaImportFrames}
-                              disabled={figmaIsLoading || figmaSelectedFrames.length === 0}
-                            >
-                              {figmaIsLoading ? <FiRefreshCw className="spinning" /> : <FiUpload />}
-                              Import Selected ({figmaSelectedFrames.length})
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Enhanced Figma Integration Modal */}
+      <FigmaIntegrationModal
+        isOpen={isFigmaModalOpen}
+        onClose={() => setIsFigmaModalOpen(false)}
+        onImport={handleFigmaImport}
+        onExport={handleFigmaExport}
+      />
 
       {/* GitHub Connect Modal */}
       {isGitHubModalOpen && (
