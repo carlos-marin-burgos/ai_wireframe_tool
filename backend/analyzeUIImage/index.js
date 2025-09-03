@@ -1,8 +1,14 @@
 // Azure OpenAI configuration
 const { OpenAI } = require("openai");
 
+// Enhanced image analysis utilities
+const ImagePreprocessor = require("../utils/imagePreprocessor");
+const MultiPassAnalyzer = require("../utils/multiPassAnalyzer");
+
 // Initialize OpenAI client with error handling
 let openai = null;
+let imagePreprocessor = null;
+let multiPassAnalyzer = null;
 
 function initializeOpenAI() {
   try {
@@ -57,6 +63,20 @@ function initializeOpenAI() {
     console.log("✅ OpenAI initialized for image analysis");
     console.log("🔑 Using endpoint:", endpoint);
     console.log("🎯 Using deployment:", deployment);
+
+    // Initialize enhancement utilities
+    try {
+      imagePreprocessor = new ImagePreprocessor();
+      multiPassAnalyzer = new MultiPassAnalyzer(openai);
+      console.log("🚀 Image enhancement utilities initialized");
+    } catch (utilError) {
+      console.warn(
+        "⚠️ Image enhancement utilities unavailable:",
+        utilError.message
+      );
+      // Continue without enhancement capabilities
+    }
+
     return true;
   } catch (error) {
     console.error("❌ Failed to initialize OpenAI for image analysis:", error);
@@ -110,17 +130,118 @@ module.exports = async function (context, req) {
       return;
     }
 
-    console.log("🔍 Analyzing UI image with GPT-4V", {
+    console.log("🔍 Analyzing UI image with enhanced processing", {
       correlationId,
       imageSize: image.length,
       hasCustomPrompt: !!prompt,
+      enhancementAvailable: !!imagePreprocessor,
+      multiPassAvailable: !!multiPassAnalyzer,
     });
 
-    // Enhanced prompt for UI component detection
+    // Phase 1: Image Quality Enhancement (if available)
+    let processedImage = image;
+    let imageVariants = { original: image };
+    let enhancementMetadata = null;
+
+    if (imagePreprocessor) {
+      try {
+        console.log("🔧 Phase 1: Enhancing image quality...");
+        const enhancementResult = await imagePreprocessor.enhanceImageQuality(
+          image
+        );
+        processedImage = enhancementResult.enhanced;
+        enhancementMetadata = enhancementResult.metadata;
+
+        // Create multiple analysis variants
+        imageVariants = await imagePreprocessor.createAnalysisVariants(
+          processedImage
+        );
+        console.log(
+          "✅ Image enhancement completed with variants:",
+          Object.keys(imageVariants)
+        );
+      } catch (enhanceError) {
+        console.warn(
+          "⚠️ Image enhancement failed, using original:",
+          enhanceError.message
+        );
+        processedImage = image;
+      }
+    }
+
+    // Phase 2: Multi-Pass Analysis (if available)
+    if (multiPassAnalyzer && imageVariants) {
+      try {
+        console.log("🎯 Phase 2: Performing multi-pass analysis...");
+        const multiPassResults =
+          await multiPassAnalyzer.performMultiPassAnalysis(
+            processedImage,
+            imageVariants,
+            correlationId
+          );
+
+        if (
+          multiPassResults.consolidated &&
+          multiPassResults.confidence > 0.5
+        ) {
+          console.log("✅ Multi-pass analysis successful", {
+            correlationId,
+            confidence: multiPassResults.confidence,
+            componentsFound:
+              multiPassResults.consolidated.components?.length || 0,
+            processingTimeMs: multiPassResults.processingTime,
+          });
+
+          const processingTime = Date.now() - startTime;
+
+          context.res.status = 200;
+          context.res.headers = {
+            ...context.res.headers,
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+          };
+          context.res.body = JSON.stringify({
+            ...multiPassResults.consolidated,
+            correlationId,
+            processingTimeMs: processingTime,
+            source: "multi-pass-gpt4v-enhanced",
+            enhancement: enhancementMetadata,
+            analysisMethod: "multi-pass",
+            passResults: {
+              totalPasses: Object.keys(multiPassResults.passes).length,
+              successfulPasses: Object.values(multiPassResults.passes).filter(
+                (pass) => !pass.error
+              ).length,
+            },
+          });
+          return;
+        } else {
+          console.warn(
+            "⚠️ Multi-pass analysis quality insufficient, falling back to standard analysis"
+          );
+        }
+      } catch (multiPassError) {
+        console.warn(
+          "⚠️ Multi-pass analysis failed, falling back to standard analysis:",
+          multiPassError.message
+        );
+      }
+    }
+
+    // Phase 3: Standard Enhanced Analysis (fallback with preprocessing)
+    console.log("🔍 Phase 3: Performing standard enhanced analysis...");
+
+    // Enhanced prompt for UI component detection with preprocessing context
     const analysisPrompt =
       prompt ||
       `
         Analyze this UI/website screenshot image and provide a detailed breakdown of ALL visible components and layout structure.
+        ${
+          enhancementMetadata
+            ? `\n[IMAGE ENHANCED: Resolution improved by ${
+                enhancementMetadata.improvement?.resolutionGain || "0%"
+              }, optimized for component detection]`
+            : ""
+        }
 
         For EACH component you identify, provide:
         1. **Type**: button, input, card, navigation, header, text, image, form, table, list, modal, dropdown, search, menu, footer, sidebar
@@ -169,7 +290,7 @@ module.exports = async function (context, req) {
         Be VERY thorough - identify every button, input field, card, navigation element, text block, and image you can see.
       `;
 
-    // Call Azure OpenAI GPT-4V
+    // Call Azure OpenAI GPT-4V with enhanced image
     const response = await Promise.race([
       openai.chat.completions.create({
         model: process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o",
@@ -177,7 +298,7 @@ module.exports = async function (context, req) {
           {
             role: "system",
             content:
-              "You are an expert UI/UX analyzer specializing in converting website screenshots into detailed component breakdowns and wireframe descriptions. You have deep knowledge of web design patterns, Microsoft Design System, and modern UI frameworks.",
+              "You are an expert UI/UX analyzer specializing in converting website screenshots into detailed component breakdowns and wireframe descriptions. You have deep knowledge of web design patterns, Microsoft Design System, and modern UI frameworks. You excel at detecting enhanced and preprocessed images.",
           },
           {
             role: "user",
@@ -189,7 +310,7 @@ module.exports = async function (context, req) {
               {
                 type: "image_url",
                 image_url: {
-                  url: image,
+                  url: processedImage, // Use enhanced image
                   detail: "high",
                 },
               },
@@ -238,6 +359,8 @@ module.exports = async function (context, req) {
           componentsFound: parsedResult.components.length,
           layoutType: parsedResult.layout?.type,
           confidence: parsedResult.confidence,
+          enhanced: !!enhancementMetadata,
+          analysisMethod: "standard-enhanced",
         });
 
         context.res.status = 200;
@@ -249,7 +372,11 @@ module.exports = async function (context, req) {
           ...parsedResult,
           correlationId,
           processingTimeMs: processingTime,
-          source: "gpt4v-vision-analysis",
+          source: enhancementMetadata
+            ? "gpt4v-enhanced-analysis"
+            : "gpt4v-vision-analysis",
+          enhancement: enhancementMetadata,
+          analysisMethod: "standard-enhanced",
         });
         return;
       } catch (parseError) {
@@ -270,6 +397,8 @@ module.exports = async function (context, req) {
           correlationId,
           processingTimeMs: processingTime,
           source: "gpt4v-text-fallback",
+          enhancement: enhancementMetadata,
+          analysisMethod: "fallback",
         });
         return;
       }

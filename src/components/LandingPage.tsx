@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import { FiX } from 'react-icons/fi';
 import "./LandingPage.css";
 import Footer from './Footer';
-import ImageUploadZone from './ImageUploadZone';
+import FluentImageUploadModal from './FluentImageUploadModal';
 import { figmaApi, FigmaFile as ApiFigmaFile, FigmaFrame } from '../services/figmaApi';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
 import FigmaIntegrationModal from './FigmaIntegrationModal';
@@ -83,7 +83,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
   const projectsContainerRef = useRef<HTMLDivElement>(null);
 
   // State for image upload modal
-  const [showImageUpload, setShowImageUpload] = useState(false);
+  const [isImageUploadModalOpen, setIsImageUploadModalOpen] = useState(false);
 
   // State for validation error
   const [validationError, setValidationError] = useState<string | null>(null);
@@ -396,7 +396,12 @@ const LandingPage: React.FC<LandingPageProps> = ({
 
   // Toggle image upload modal
   const toggleImageUpload = () => {
-    setShowImageUpload(prev => !prev);
+    setIsImageUploadModalOpen(prev => !prev);
+  };
+
+  // Open image upload modal (for consistency with SplitLayout)
+  const openImageUploadModal = () => {
+    setIsImageUploadModalOpen(true);
   };
 
   // Simple Figma Integration handlers - Enhanced modal handles the rest
@@ -412,6 +417,21 @@ const LandingPage: React.FC<LandingPageProps> = ({
       onFigmaExport(format);
     }
     setIsFigmaModalOpen(false);
+  };
+
+  // Image processing handlers - delegate to parent but close modal
+  const handleImageFile = (file: File) => {
+    if (onImageUpload) {
+      onImageUpload(file);
+    }
+    // Don't close modal immediately in LandingPage - let parent handle it
+  };
+
+  const handleAnalyzeImage = (imageUrl: string, fileName: string) => {
+    if (onAnalyzeImage) {
+      onAnalyzeImage(imageUrl, fileName);
+    }
+    setIsImageUploadModalOpen(false);
   };
 
   return (
@@ -687,40 +707,8 @@ const LandingPage: React.FC<LandingPageProps> = ({
           </form>
 
           {/* Image Upload Zone */}
-          {showImageUpload && onImageUpload && onAnalyzeImage && (
-            <div className="modal-overlay" onClick={() => setShowImageUpload(false)}>
-              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                {/* Modal Header */}
-                <div className="modal-header">
-                  <div className="modal-title">
-                    <FiUpload className="modal-icon" />
-                    <h2>Upload Image to Wireframe</h2>
-                  </div>
-                  <button className="modal-close-btn" onClick={() => setShowImageUpload(false)} title="Close modal">
-                    <FiX />
-                  </button>
-                </div>
-
-                {/* Modal Body */}
-                <div className="modal-body">
-                  <div className="upload-content">
-                    <p className="modal-description">
-                      Upload an image of a UI design, wireframe, or website screenshot to generate a wireframe based on its layout.
-                    </p>
-
-                    <div className="upload-zone-container">
-                      <ImageUploadZone
-                        onImageUpload={onImageUpload}
-                        onAnalyzeImage={onAnalyzeImage}
-                        isAnalyzing={isAnalyzingImage}
-                        className="upload-zone"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+          {/* Inline image upload zone would go here if showImageUpload is true */}
+          {/* Note: Image upload is now handled by FluentImageUploadModal below */}
 
         </div>
       </div>
@@ -731,6 +719,15 @@ const LandingPage: React.FC<LandingPageProps> = ({
         onClose={() => setIsFigmaModalOpen(false)}
         onImport={handleFigmaImport}
         onExport={handleFigmaExport}
+      />
+
+      {/* Image Upload Modal */}
+      <FluentImageUploadModal
+        isOpen={isImageUploadModalOpen}
+        onClose={() => setIsImageUploadModalOpen(false)}
+        onImageUpload={handleImageFile}
+        onAnalyzeImage={handleAnalyzeImage}
+        isAnalyzing={isAnalyzingImage || false}
       />
 
       {/* GitHub Connect Modal */}

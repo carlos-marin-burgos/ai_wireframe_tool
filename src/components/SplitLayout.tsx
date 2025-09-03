@@ -650,7 +650,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   }, [addMessage]);
 
   const toggleImageUpload = useCallback(() => {
-    setShowImageUpload(prev => !prev);
+    setIsImageUploadModalOpen(prev => !prev);
   }, []);
 
   const openImageUploadModal = useCallback(() => {
