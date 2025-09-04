@@ -640,14 +640,100 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     reader.readAsDataURL(file);
   }, [handleImageUpload]);
 
-  const handleAnalyzeImage = useCallback((imageUrl: string, fileName: string) => {
+  const handleAnalyzeImage = useCallback(async (imageUrl: string, fileName: string) => {
     setIsProcessingImage(true);
     addMessage('user', `[Image uploaded: ${fileName}]`);
-    setTimeout(() => {
-      addMessage('ai', '🔍 Analyzing your uploaded image for UI components. Please wait while I detect buttons, inputs, and other elements...');
+    addMessage('ai', '🔍 Analyzing your uploaded image for UI components. Please wait while I detect buttons, inputs, and other elements...');
+
+    try {
+      // Convert base64 URL back to File object for analysis
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const file = new File([blob], fileName, { type: blob.type });
+
+      // Step 1: Analyze the image using our backend
+      const analysisResponse = await fetch("/api/analyzeUIImage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          image: imageUrl, // Send base64 data URL directly as JSON
+          prompt: "Analyze this UI screenshot and detect all components for wireframe generation"
+        }),
+      });
+
+      if (!analysisResponse.ok) {
+        throw new Error(`Image analysis failed: ${analysisResponse.status}`);
+      }
+
+      const imageAnalysis = await analysisResponse.json();
+
+      if (!imageAnalysis.wireframeDescription && !imageAnalysis.components) {
+        throw new Error("Image analysis failed - no wireframe data returned");
+      }
+
+      console.log('🔍 Image analysis result:', imageAnalysis);
+
+      // Step 2: Generate wireframe using the image analysis description
+      const wireframeDescription = imageAnalysis.wireframeDescription ||
+        `Create a wireframe based on the detected components: ${imageAnalysis.components?.map((c: any) => c.type).join(', ') || 'various UI elements'}`;
+
+      console.log('🎯 Generating wireframe with description:', wireframeDescription);
+
+      const wireframeResponse = await fetch("/api/generate-html-wireframe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          description: wireframeDescription,
+          colorScheme: "light",
+        }),
+      });
+
+      if (!wireframeResponse.ok) {
+        throw new Error(`Wireframe generation failed: ${wireframeResponse.status}`);
+      }
+
+      const wireframeResult = await wireframeResponse.json();
+
+      if (!wireframeResult.success) {
+        throw new Error(wireframeResult.error || "Wireframe generation failed");
+      }
+
+      console.log('✅ Wireframe generated successfully');
+
+      // Set the generated wireframe HTML
+      if (setHtmlWireframe && wireframeResult.html) {
+        setHtmlWireframe(wireframeResult.html);
+      }
+
+      const componentsCount = imageAnalysis.components?.length || 0;
+      const confidence = Math.round((imageAnalysis.confidence || 0.85) * 100);
+
+      addMessage('ai', `✅ Successfully analyzed "${fileName}"! Found ${componentsCount} UI components with ${confidence}% confidence. Generated wireframe is ready for editing.`);
+
+      // Add details about detected components if available
+      if (imageAnalysis.components && imageAnalysis.components.length > 0) {
+        const componentTypes = imageAnalysis.components.reduce((acc: Record<string, number>, comp: any) => {
+          acc[comp.type] = (acc[comp.type] || 0) + 1;
+          return acc;
+        }, {});
+
+        const componentSummary = Object.entries(componentTypes)
+          .map(([type, count]) => `${count} ${type}${(count as number) > 1 ? 's' : ''}`)
+          .join(', ');
+
+        addMessage('ai', `🎯 Detected components: ${componentSummary}`);
+      }
+    } catch (error) {
+      console.error('Image analysis failed:', error);
+      addMessage('ai', `❌ Sorry, I couldn't analyze the image: ${error instanceof Error ? error.message : 'Unknown error'}. Please try uploading a clear UI screenshot or wireframe.`);
+    } finally {
       setIsProcessingImage(false);
-    }, 500);
-  }, [addMessage]);
+    }
+  }, [addMessage, setHtmlWireframe]);
 
   const toggleImageUpload = useCallback(() => {
     setIsImageUploadModalOpen(prev => !prev);
