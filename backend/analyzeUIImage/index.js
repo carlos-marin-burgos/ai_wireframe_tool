@@ -4,11 +4,13 @@ const { OpenAI } = require("openai");
 // Enhanced image analysis utilities
 const ImagePreprocessor = require("../utils/imagePreprocessor");
 const MultiPassAnalyzer = require("../utils/multiPassAnalyzer");
+const EnhancedAnalyzer = require("../utils/enhancedAnalyzer");
 
 // Initialize OpenAI client with error handling
 let openai = null;
 let imagePreprocessor = null;
 let multiPassAnalyzer = null;
+let enhancedAnalyzer = null;
 
 function initializeOpenAI() {
   try {
@@ -68,7 +70,9 @@ function initializeOpenAI() {
     try {
       imagePreprocessor = new ImagePreprocessor();
       multiPassAnalyzer = new MultiPassAnalyzer(openai);
+      enhancedAnalyzer = new EnhancedAnalyzer(openai);
       console.log("🚀 Image enhancement utilities initialized");
+      console.log("🧠 Enhanced OpenAI analyzer initialized");
     } catch (utilError) {
       console.warn(
         "⚠️ Image enhancement utilities unavailable:",
@@ -192,6 +196,30 @@ module.exports = async function (context, req) {
             processingTimeMs: multiPassResults.processingTime,
           });
 
+          // Phase 2.5: Enhanced OpenAI Analysis (if available)
+          let finalResults = multiPassResults.consolidated;
+          if (enhancedAnalyzer) {
+            try {
+              console.log("🧠 Applying enhanced OpenAI analysis...");
+              finalResults = await enhancedAnalyzer.performEnhancedAnalysis(
+                processedImage,
+                multiPassResults.consolidated,
+                correlationId
+              );
+              console.log("✅ Enhanced analysis completed", {
+                correlationId,
+                enhancedConfidence: finalResults.confidence,
+                qualityScore: finalResults.qualityScore,
+              });
+            } catch (enhanceError) {
+              console.warn(
+                "⚠️ Enhanced analysis failed, using multi-pass results:",
+                enhanceError.message
+              );
+              finalResults = multiPassResults.consolidated;
+            }
+          }
+
           const processingTime = Date.now() - startTime;
 
           context.res.status = 200;
@@ -200,10 +228,12 @@ module.exports = async function (context, req) {
             "Cache-Control": "no-cache, no-store, must-revalidate",
           };
           context.res.body = JSON.stringify({
-            ...multiPassResults.consolidated,
+            ...finalResults,
             correlationId,
             processingTimeMs: processingTime,
-            source: "multi-pass-gpt4v-enhanced",
+            source: enhancedAnalyzer
+              ? "enhanced-openai-multi-pass"
+              : "multi-pass-gpt4v-enhanced",
             enhancement: enhancementMetadata,
             analysisMethod: "multi-pass",
             passResults: {
@@ -353,14 +383,44 @@ module.exports = async function (context, req) {
           throw new Error("Invalid response structure");
         }
 
+        // Apply enhanced OpenAI analysis to standard results as well
+        let finalStandardResults = parsedResult;
+        if (enhancedAnalyzer) {
+          try {
+            console.log(
+              "🧠 Applying enhanced OpenAI analysis to standard results..."
+            );
+            finalStandardResults =
+              await enhancedAnalyzer.performEnhancedAnalysis(
+                processedImage,
+                parsedResult,
+                correlationId
+              );
+            console.log("✅ Enhanced analysis applied to standard results", {
+              correlationId,
+              enhancedConfidence: finalStandardResults.confidence,
+              qualityScore: finalStandardResults.qualityScore,
+            });
+          } catch (enhanceError) {
+            console.warn(
+              "⚠️ Enhanced analysis failed on standard results:",
+              enhanceError.message
+            );
+            finalStandardResults = parsedResult;
+          }
+        }
+
         console.log("✅ UI image analysis completed successfully", {
           correlationId,
           processingTimeMs: processingTime,
-          componentsFound: parsedResult.components.length,
-          layoutType: parsedResult.layout?.type,
-          confidence: parsedResult.confidence,
+          componentsFound: finalStandardResults.components.length,
+          layoutType: finalStandardResults.layout?.type,
+          confidence: finalStandardResults.confidence,
           enhanced: !!enhancementMetadata,
-          analysisMethod: "standard-enhanced",
+          qualityScore: finalStandardResults.qualityScore,
+          analysisMethod: enhancedAnalyzer
+            ? "enhanced-openai-standard"
+            : "standard-enhanced",
         });
 
         context.res.status = 200;
@@ -369,12 +429,15 @@ module.exports = async function (context, req) {
           "Cache-Control": "no-cache, no-store, must-revalidate",
         };
         context.res.body = JSON.stringify({
-          ...parsedResult,
+          ...finalStandardResults,
           correlationId,
           processingTimeMs: processingTime,
-          source: enhancementMetadata
-            ? "gpt4v-enhanced-analysis"
-            : "gpt4v-vision-analysis",
+          source:
+            enhancedAnalyzer && enhancementMetadata
+              ? "enhanced-openai-gpt4v-analysis"
+              : enhancementMetadata
+              ? "gpt4v-enhanced-analysis"
+              : "gpt4v-vision-analysis",
           enhancement: enhancementMetadata,
           analysisMethod: "standard-enhanced",
         });

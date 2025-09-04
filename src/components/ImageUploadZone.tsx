@@ -55,9 +55,14 @@ const ImageUploadZone: React.FC<ImageUploadZoneProps> = ({
             setPreview(imageUrl);
             setFileName(file.name);
             onImageUpload(file);
+
+            // 🔥 AUTOMATICALLY trigger analysis when image is uploaded
+            if (onAnalyzeImage) {
+                onAnalyzeImage(imageUrl, file.name);
+            }
         };
         reader.readAsDataURL(file);
-    }, [onImageUpload]);
+    }, [onImageUpload, onAnalyzeImage]);
 
     const handleAnalyze = useCallback(() => {
         if (preview && fileName && onAnalyzeImage) {
@@ -110,7 +115,7 @@ const ImageUploadZone: React.FC<ImageUploadZoneProps> = ({
                         ) : (
                             <>
                                 <FiUpload />
-                                Generate Wireframe
+                                ↻ Re-analyze Image
                             </>
                         )}
                     </button>

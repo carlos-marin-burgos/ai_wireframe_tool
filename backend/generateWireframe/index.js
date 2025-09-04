@@ -1,4 +1,5 @@
 const { OpenAI } = require("openai");
+const EnhancedWireframeGenerator = require("../utils/enhancedWireframeGenerator");
 
 // Atlas Top Navigation Component (Node ID: 11530:113245)
 function generateAtlasTopNavigation() {
@@ -544,6 +545,7 @@ async function addAtlasComponents(html, description) {
 
 // Initialize OpenAI client
 let openai = null;
+let enhancedWireframeGenerator = null;
 
 function initializeOpenAI() {
   try {
@@ -642,23 +644,62 @@ function initializeOpenAI() {
 }
 
 // Initialize on startup
-initializeOpenAI();
+const initialized = initializeOpenAI();
+if (initialized && openai) {
+  enhancedWireframeGenerator = new EnhancedWireframeGenerator(openai);
+  console.log("🧠 Enhanced wireframe generator initialized");
+}
 
 // Simple fallback wireframe generator
 // NO MORE FALLBACK FUNCTIONS - AI ONLY!
 
 // AI wireframe generation
-async function generateWithAI(description) {
+async function generateWithAI(description, imageAnalysis = null) {
   if (!openai) {
     throw new Error("OpenAI not initialized");
   }
 
-  const prompt = `Create a complete HTML wireframe based on: "${description}"
+  // Different prompts for uploaded images vs templates
+  let prompt;
+  let systemMessage;
+
+  if (imageAnalysis) {
+    // For uploaded images - NO Microsoft branding
+    systemMessage = `You are an expert frontend developer who creates wireframes that EXACTLY match uploaded images. 
+    NEVER add Microsoft branding, navigation, or footer elements.
+    Use ONLY the colors and layout from the uploaded image.
+    Create clean, accurate HTML that replicates what was shown in the image.`;
+
+    prompt = `Create a complete HTML wireframe based on the uploaded image analysis: "${description}"
+
+CRITICAL REQUIREMENTS FOR UPLOADED IMAGES:
+- NEVER include Microsoft navigation, header, or footer elements
+- Use ONLY colors detected from the uploaded image: ${
+      imageAnalysis.designTokens?.colors?.join(", ") ||
+      "extract colors from image"
+    }
+- Replicate ONLY the components and layout shown in the uploaded image
+- NO Microsoft Learn branding or templates
+- Clean, minimal HTML structure
+- Use exact positioning and styling from the image
+- Include proper semantic HTML and modern CSS
+- Make it responsive but faithful to the original design
+
+EXTRACTED COLORS FROM IMAGE: ${
+      imageAnalysis.designTokens?.colors?.join(", ") || "Use image colors only"
+    }
+
+Generate ONLY the HTML code (starting with <!DOCTYPE html>) that matches the uploaded image.`;
+  } else {
+    // For templates - can include Microsoft branding
+    systemMessage = `You are an expert frontend developer specializing in clean, modern web interfaces.`;
+
+    prompt = `Create a complete HTML wireframe based on: "${description}"
 
 Requirements:
 - Create ONLY what is requested in the description
 - Use clean, modern design with proper semantics
-- Use Segoe UI font family for Microsoft consistency
+- Use Segoe UI font family for consistency
 - Make it responsive and accessible
 - Include semantic HTML and modern CSS
 - Use white backgrounds and dark text for readability
@@ -668,12 +709,16 @@ Requirements:
 IMPORTANT: Generate ONLY the components requested. Do not add learning paths, courses, or modules unless specifically requested.
 
 Generate ONLY the HTML code (starting with <!DOCTYPE html>).`;
+  }
 
   const response = await openai.chat.completions.create({
     model: process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o",
-    messages: [{ role: "user", content: prompt }],
+    messages: [
+      { role: "system", content: systemMessage },
+      { role: "user", content: prompt },
+    ],
     max_tokens: 4000,
-    temperature: 0.7,
+    temperature: 0.1, // Lower temperature for uploaded images for accuracy
   });
 
   let html = response.choices[0]?.message?.content;
@@ -732,13 +777,23 @@ module.exports = async function (context, req) {
       return;
     }
 
-    const { description } = req.body || {};
+    const { description, imageAnalysis } = req.body || {};
 
     if (!description) {
       context.res.status = 400;
       context.res.body = JSON.stringify({ error: "Description is required" });
       return;
     }
+
+    console.log("🎨 Wireframe generation request", {
+      description: description.substring(0, 100) + "...",
+      hasImageAnalysis: !!imageAnalysis,
+      imageAnalysisType: typeof imageAnalysis,
+      componentsCount: imageAnalysis?.components?.length || 0,
+      imageAnalysisKeys: imageAnalysis ? Object.keys(imageAnalysis) : [],
+      designTokens: imageAnalysis?.designTokens,
+      enhancedGeneratorAvailable: !!enhancedWireframeGenerator,
+    });
 
     let html;
     let source = "openai";
@@ -758,10 +813,31 @@ module.exports = async function (context, req) {
         });
         return;
       }
+      // Initialize enhanced generator if needed
+      if (!enhancedWireframeGenerator && openai) {
+        enhancedWireframeGenerator = new EnhancedWireframeGenerator(openai);
+      }
     }
 
+    const correlationId = `wireframe-${Date.now()}-${Math.random()
+      .toString(36)
+      .substr(2, 9)}`;
+
     try {
-      html = await generateWithAI(description);
+      // Use enhanced wireframe generator if available and we have image analysis
+      if (enhancedWireframeGenerator && imageAnalysis) {
+        console.log("🧠 Using enhanced OpenAI wireframe generation");
+        html = await enhancedWireframeGenerator.generateEnhancedWireframe(
+          description,
+          imageAnalysis,
+          correlationId
+        );
+        source = "enhanced-openai-generator";
+      } else {
+        console.log("🔧 Using standard AI wireframe generation");
+        html = await generateWithAI(description, imageAnalysis);
+        source = "standard-openai";
+      }
 
       if (!html || typeof html !== "string") {
         throw new Error(`AI returned invalid response: ${typeof html}`);
@@ -771,29 +847,49 @@ module.exports = async function (context, req) {
         throw new Error("AI response insufficient or invalid");
       }
 
-      // 🎨 Add Atlas components to the generated wireframe
-      html = await addAtlasComponents(html, description);
+      // 🎨 Add Atlas components to the generated wireframe (ONLY for non-uploaded-image wireframes)
+      // Skip Atlas components for uploaded images to preserve accuracy
+      console.log("🔍 Checking if should add Atlas components:", {
+        hasImageAnalysis: !!imageAnalysis,
+        imageAnalysisKeys: imageAnalysis ? Object.keys(imageAnalysis) : [],
+        willSkipAtlas: !!imageAnalysis,
+      });
 
-      // ✨ Inject Atlas animations CSS
-      html = injectAtlasAnimations(html);
+      if (!imageAnalysis) {
+        console.log("📝 No image analysis - adding Atlas components");
+        html = await addAtlasComponents(html, description);
 
-      // 🧭 Always inject Atlas Top Navigation into every wireframe
-      const atlasTopNav = generateAtlasTopNavigation();
+        // ✨ Inject Atlas animations CSS
+        html = injectAtlasAnimations(html);
 
-      // Find the opening body tag and inject the navigation right after it
-      if (html.includes("<body")) {
-        const bodyTagEnd = html.indexOf(">", html.indexOf("<body")) + 1;
-        html =
-          html.slice(0, bodyTagEnd) +
-          "\n" +
-          atlasTopNav +
-          "\n" +
-          html.slice(bodyTagEnd);
-        console.log("🧭 Atlas Top Navigation injected into wireframe body");
+        // 🧭 Always inject Atlas Top Navigation into wireframes (EXCEPT uploaded images)
+        const atlasTopNav = generateAtlasTopNavigation();
+
+        // Find the opening body tag and inject the navigation right after it
+        if (html.includes("<body")) {
+          const bodyTagEnd = html.indexOf(">", html.indexOf("<body")) + 1;
+          html =
+            html.slice(0, bodyTagEnd) +
+            "\n" +
+            atlasTopNav +
+            "\n" +
+            html.slice(bodyTagEnd);
+          console.log("🧭 Atlas Top Navigation injected into wireframe body");
+        } else {
+          // Fallback: prepend if no body tag found
+          html = atlasTopNav + "\n" + html;
+          console.log("🧭 Atlas Top Navigation prepended (fallback)");
+        }
       } else {
-        // Fallback: prepend if no body tag found
-        html = atlasTopNav + "\n" + html;
-        console.log("🧭 Atlas Top Navigation prepended (fallback)");
+        console.log(
+          "📸 Uploaded image detected - skipping Microsoft nav/footer to preserve image accuracy",
+          {
+            hasComponents: !!imageAnalysis.components,
+            componentCount: imageAnalysis.components?.length || 0,
+            hasDesignTokens: !!imageAnalysis.designTokens,
+            colors: imageAnalysis.designTokens?.colors || [],
+          }
+        );
       }
 
       // Count Atlas components for stats

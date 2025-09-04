@@ -674,6 +674,9 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       }
 
       console.log('🔍 Image analysis result:', imageAnalysis);
+      console.log('🎨 Design tokens found:', imageAnalysis.designTokens);
+      console.log('🧩 Components found:', imageAnalysis.components);
+      console.log('📏 Components count:', imageAnalysis.components?.length || 0);
 
       // Step 2: Generate wireframe using the image analysis description
       const wireframeDescription = imageAnalysis.wireframeDescription ||
@@ -689,10 +692,16 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         body: JSON.stringify({
           description: wireframeDescription,
           colorScheme: "light",
+          imageAnalysis: imageAnalysis, // Pass the complete image analysis for enhanced generation
         }),
       });
 
-      if (!wireframeResponse.ok) {
+      console.log('📤 Sending wireframe request with imageAnalysis:', {
+        hasImageAnalysis: !!imageAnalysis,
+        componentsCount: imageAnalysis.components?.length || 0,
+        designTokens: imageAnalysis.designTokens,
+        description: wireframeDescription
+      }); if (!wireframeResponse.ok) {
         throw new Error(`Wireframe generation failed: ${wireframeResponse.status}`);
       }
 
