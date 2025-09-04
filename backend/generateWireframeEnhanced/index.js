@@ -416,7 +416,17 @@ module.exports = async function (context, req) {
       colorScheme,
       fastMode,
       includeAtlas = true,
+      imageAnalysis,
     } = req.body || {};
+
+    console.log("🎨 Enhanced wireframe generation request", {
+      description: description.substring(0, 100) + "...",
+      hasImageAnalysis: !!imageAnalysis,
+      imageAnalysisType: typeof imageAnalysis,
+      componentsCount: imageAnalysis?.components?.length || 0,
+      imageAnalysisKeys: imageAnalysis ? Object.keys(imageAnalysis) : [],
+      designTokens: imageAnalysis?.designTokens,
+    });
 
     if (!description) {
       context.res.status = 400;
@@ -449,9 +459,21 @@ module.exports = async function (context, req) {
       throw new Error("AI response insufficient or invalid");
     }
 
-    // ✨ ALWAYS inject Atlas Navigation as clean topnav
-    console.log("🧭 Injecting clean Atlas Navigation for ALL wireframes...");
-    const atlasNavigation = `
+    // Check if this is for an uploaded image - if so, skip Microsoft components
+    if (imageAnalysis) {
+      console.log(
+        "📸 Uploaded image detected - skipping Microsoft nav/footer to preserve image accuracy"
+      );
+      console.log(
+        "🎨 Using colors from uploaded image:",
+        imageAnalysis.designTokens?.colors
+      );
+    } else {
+      // ✨ ONLY inject Atlas Navigation for template-based wireframes (NOT uploaded images)
+      console.log(
+        "🧭 Injecting clean Atlas Navigation for template-based wireframes..."
+      );
+      const atlasNavigation = `
       <!-- Atlas Navigation - Always Present at TOP -->
       <style>
         .atlas-navigation {
@@ -518,31 +540,46 @@ module.exports = async function (context, req) {
         </div>
       </header>`;
 
-    // Inject navigation right after <body> tag
-    if (html.includes("<body>")) {
-      html = html.replace("<body>", `<body>\n${atlasNavigation}`);
-      console.log("✅ Atlas Navigation injected after <body> tag");
-    } else if (html.includes("<body ")) {
-      const bodyTagMatch = html.match(/<body[^>]*>/);
-      if (bodyTagMatch) {
-        html = html.replace(
-          bodyTagMatch[0],
-          `${bodyTagMatch[0]}\n${atlasNavigation}`
-        );
-        console.log("✅ Atlas Navigation injected after <body ...> tag");
+      // Inject navigation right after <body> tag
+      if (html.includes("<body>")) {
+        html = html.replace("<body>", `<body>\n${atlasNavigation}`);
+        console.log("✅ Atlas Navigation injected after <body> tag");
+      } else if (html.includes("<body ")) {
+        const bodyTagMatch = html.match(/<body[^>]*>/);
+        if (bodyTagMatch) {
+          html = html.replace(
+            bodyTagMatch[0],
+            `${bodyTagMatch[0]}\n${atlasNavigation}`
+          );
+          console.log("✅ Atlas Navigation injected after <body ...> tag");
+        }
+      } else {
+        console.log("⚠️ No <body> tag found, appending navigation to content");
+        html = atlasNavigation + html;
       }
-    } else {
-      console.log("⚠️ No <body> tag found, appending navigation to content");
-      html = atlasNavigation + html;
     }
 
-    // Optionally apply Atlas components
-    if (includeAtlas) {
+    // Conditionally apply Atlas components (skip for uploaded images)
+    if (!imageAnalysis && includeAtlas) {
+      console.log("📝 No image analysis - adding Atlas components");
       html = addAtlasComponents(html, description);
+    } else if (imageAnalysis) {
+      console.log(
+        "📸 Skipping Atlas components for uploaded image to preserve accuracy"
+      );
     }
 
-    // Apply Fluent Playbook components (always enabled for Microsoft consistency)
-    html = addFluentPlaybookComponents(html);
+    // Apply Fluent Playbook components (only for template-based wireframes, NOT uploaded images)
+    if (!imageAnalysis) {
+      html = addFluentPlaybookComponents(html);
+      console.log(
+        "🎨 Applied Fluent Playbook components for template-based wireframe"
+      );
+    } else {
+      console.log(
+        "📸 Skipping Fluent Playbook components for uploaded image to preserve original design"
+      );
+    }
 
     const processingTime = Date.now() - startTime;
 

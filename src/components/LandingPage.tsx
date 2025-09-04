@@ -23,6 +23,7 @@ interface LandingPageProps {
   onGenerateAiSuggestions?: (currentValue: string) => void;
   onImageUpload?: (file: File) => void;
   onAnalyzeImage?: (imageUrl: string, fileName: string) => void;
+  onCancelImageAnalysis?: () => void;
   isAnalyzingImage?: boolean;
   onFigmaImport?: (html: string, fileName: string) => void;
   onFigmaExport?: (format: 'figma-file' | 'figma-components') => void;
@@ -70,6 +71,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
   onGenerateAiSuggestions,
   onImageUpload,
   onAnalyzeImage,
+  onCancelImageAnalysis,
   isAnalyzingImage = false,
   onFigmaImport,
   onFigmaExport,
@@ -84,6 +86,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
 
   // State for image upload modal
   const [isImageUploadModalOpen, setIsImageUploadModalOpen] = useState(false);
+  const [wasAnalysisStarted, setWasAnalysisStarted] = useState(false);
 
   // State for validation error
   const [validationError, setValidationError] = useState<string | null>(null);
@@ -135,6 +138,15 @@ const LandingPage: React.FC<LandingPageProps> = ({
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
+
+  // Close image upload modal when analysis completes
+  useEffect(() => {
+    if (wasAnalysisStarted && !isAnalyzingImage && isImageUploadModalOpen) {
+      // Analysis completed, close the modal
+      setIsImageUploadModalOpen(false);
+      setWasAnalysisStarted(false);
+    }
+  }, [isAnalyzingImage, isImageUploadModalOpen, wasAnalysisStarted]);
 
   // Delete favorite function
   const handleDeleteFavorite = (favoriteId: string) => {
@@ -428,10 +440,11 @@ const LandingPage: React.FC<LandingPageProps> = ({
   };
 
   const handleAnalyzeImage = (imageUrl: string, fileName: string) => {
+    setWasAnalysisStarted(true); // Track that analysis was initiated
     if (onAnalyzeImage) {
       onAnalyzeImage(imageUrl, fileName);
     }
-    setIsImageUploadModalOpen(false);
+    // Don't close modal immediately - let the parent handle modal closing after analysis completes
   };
 
   return (
@@ -727,6 +740,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
         onClose={() => setIsImageUploadModalOpen(false)}
         onImageUpload={handleImageFile}
         onAnalyzeImage={handleAnalyzeImage}
+        onCancel={onCancelImageAnalysis}
         isAnalyzing={isAnalyzingImage || false}
       />
 

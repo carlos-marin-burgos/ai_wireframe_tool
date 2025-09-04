@@ -193,6 +193,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   // Image Upload Modal state
   const [isImageUploadModalOpen, setIsImageUploadModalOpen] = useState(false);
   const [isProcessingImage, setIsProcessingImage] = useState(false);
+  const analysisAbortController = useRef<AbortController | null>(null);
 
   // Left panel collapse state
   const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);
@@ -629,18 +630,15 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   }, [addMessage]);
 
   const handleImageFile = useCallback((file: File) => {
-    setIsProcessingImage(true);
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const imageDataUrl = e.target?.result as string;
-      handleImageUpload(imageDataUrl);
-      setIsImageUploadModalOpen(false);
-      setIsProcessingImage(false);
-    };
-    reader.readAsDataURL(file);
-  }, [handleImageUpload]);
+    // Just store the file info - the ImageUploadZone will handle the automatic analysis
+    console.log('📁 Image file received in SplitLayout:', file.name);
+    // Don't close modal or reset processing state here - let the analysis complete first
+  }, []);
 
   const handleAnalyzeImage = useCallback(async (imageUrl: string, fileName: string) => {
+    // Create new abort controller for this analysis
+    analysisAbortController.current = new AbortController();
+
     setIsProcessingImage(true);
     addMessage('user', `[Image uploaded: ${fileName}]`);
     addMessage('ai', '🔍 Analyzing your uploaded image for UI components. Please wait while I detect buttons, inputs, and other elements...');
@@ -661,6 +659,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
           image: imageUrl, // Send base64 data URL directly as JSON
           prompt: "Analyze this UI screenshot and detect all components for wireframe generation"
         }),
+        signal: analysisAbortController.current.signal,
       });
 
       if (!analysisResponse.ok) {
@@ -694,6 +693,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
           colorScheme: "light",
           imageAnalysis: imageAnalysis, // Pass the complete image analysis for enhanced generation
         }),
+        signal: analysisAbortController.current.signal,
       });
 
       console.log('📤 Sending wireframe request with imageAnalysis:', {
@@ -738,11 +738,30 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       }
     } catch (error) {
       console.error('Image analysis failed:', error);
-      addMessage('ai', `❌ Sorry, I couldn't analyze the image: ${error instanceof Error ? error.message : 'Unknown error'}. Please try uploading a clear UI screenshot or wireframe.`);
+
+      // Handle abort errors differently
+      if (error instanceof Error && error.name === 'AbortError') {
+        addMessage('ai', '🚫 Image analysis was cancelled by user.');
+      } else {
+        addMessage('ai', `❌ Sorry, I couldn't analyze the image: ${error instanceof Error ? error.message : 'Unknown error'}. Please try uploading a clear UI screenshot or wireframe.`);
+      }
     } finally {
       setIsProcessingImage(false);
+      setIsImageUploadModalOpen(false); // Close modal after analysis completes
+      analysisAbortController.current = null; // Clean up abort controller
     }
   }, [addMessage, setHtmlWireframe]);
+
+  // Cancel image analysis handler
+  const handleCancelImageAnalysis = useCallback(() => {
+    if (analysisAbortController.current) {
+      analysisAbortController.current.abort();
+      analysisAbortController.current = null;
+    }
+    setIsProcessingImage(false);
+    setIsImageUploadModalOpen(false);
+    addMessage('ai', '🚫 Image analysis cancelled by user.');
+  }, [addMessage]);
 
   const toggleImageUpload = useCallback(() => {
     setIsImageUploadModalOpen(prev => !prev);
@@ -1486,6 +1505,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         onClose={() => setIsImageUploadModalOpen(false)}
         onImageUpload={handleImageFile}
         onAnalyzeImage={handleAnalyzeImage}
+        onCancel={handleCancelImageAnalysis}
         isAnalyzing={isProcessingImage}
       />
 

@@ -779,14 +779,45 @@ module.exports = async function (context, req) {
 
     const { description, imageAnalysis } = req.body || {};
 
-    if (!description) {
-      context.res.status = 400;
-      context.res.body = JSON.stringify({ error: "Description is required" });
-      return;
+    // Normalize and validate description (avoid substring on non-string)
+    let normalizedDescription = "";
+    if (typeof description === "string") {
+      normalizedDescription = description;
+    } else if (description && typeof description === "object") {
+      // Prefer common fields if provided
+      if (typeof description.text === "string") {
+        normalizedDescription = description.text;
+      } else if (typeof description.description === "string") {
+        normalizedDescription = description.description;
+      } else {
+        try {
+          normalizedDescription = JSON.stringify(description);
+        } catch {
+          normalizedDescription = String(description);
+        }
+      }
+    } else if (description != null) {
+      normalizedDescription = String(description);
     }
 
+    if (
+      !normalizedDescription ||
+      typeof normalizedDescription !== "string" ||
+      normalizedDescription.trim().length === 0
+    ) {
+      context.res.status = 400;
+      context.res.body = JSON.stringify({
+        error: "Description is required (non-empty string)",
+      });
+      return;
+    }
+    normalizedDescription = normalizedDescription.trim();
+    const previewDesc = `${normalizedDescription.slice(0, 100)}${
+      normalizedDescription.length > 100 ? "..." : ""
+    }`;
+
     console.log("🎨 Wireframe generation request", {
-      description: description.substring(0, 100) + "...",
+      description: previewDesc,
       hasImageAnalysis: !!imageAnalysis,
       imageAnalysisType: typeof imageAnalysis,
       componentsCount: imageAnalysis?.components?.length || 0,
@@ -828,14 +859,14 @@ module.exports = async function (context, req) {
       if (enhancedWireframeGenerator && imageAnalysis) {
         console.log("🧠 Using enhanced OpenAI wireframe generation");
         html = await enhancedWireframeGenerator.generateEnhancedWireframe(
-          description,
+          normalizedDescription,
           imageAnalysis,
           correlationId
         );
         source = "enhanced-openai-generator";
       } else {
         console.log("🔧 Using standard AI wireframe generation");
-        html = await generateWithAI(description, imageAnalysis);
+        html = await generateWithAI(normalizedDescription, imageAnalysis);
         source = "standard-openai";
       }
 
@@ -857,7 +888,7 @@ module.exports = async function (context, req) {
 
       if (!imageAnalysis) {
         console.log("📝 No image analysis - adding Atlas components");
-        html = await addAtlasComponents(html, description);
+        html = await addAtlasComponents(html, normalizedDescription);
 
         // ✨ Inject Atlas animations CSS
         html = injectAtlasAnimations(html);

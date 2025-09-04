@@ -19,6 +19,26 @@
   text-align: center;
 }
 
+/* Timing Information */
+.fluent-timing-info {
+  padding: 12px 16px;
+  background: #faf9f8;
+  border: 1px solid #edebe9;
+  border-radius: 6px;
+  margin: 8px 0;
+}
+
+.timing-info-content {
+  font-size: 13px;
+  color: #605e5c;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.timing-info-content strong {
+  color: #323130;
+}
+
 .fluent-upload-zone-container {
   display: flex;
   justify-content: center;
@@ -133,7 +153,7 @@
 /* Analyzing Status */
 .fluent-analyzing-status {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   gap: 12px;
   padding: 16px;
@@ -148,6 +168,41 @@
 .fluent-analyzing-status .fluent-spinner {
   border-color: #0078d4;
   border-top-color: transparent;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.analyzing-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.analyzing-subtext {
+  display: block;
+  margin-top: 8px;
+  opacity: 0.8;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+/* Button Styles */
+.fluent-button-danger {
+  background-color: #d13438 !important;
+  color: white !important;
+  border-color: #d13438 !important;
+}
+
+.fluent-button-danger:hover {
+  background-color: #b02e31 !important;
+  border-color: #b02e31 !important;
+}
+
+.fluent-button-danger:active {
+  background-color: #9c2629 !important;
+  border-color: #9c2629 !important;
 }
 
 /* Image Preview */
@@ -274,6 +329,27 @@
 
 /* Dark Mode Support */
 @media (prefers-color-scheme: dark) {
+  .fluent-timing-info {
+    background: #2d2d30;
+    border-color: #454545;
+  }
+
+  .timing-info-content {
+    color: #cccccc;
+  }
+
+  .timing-info-content strong {
+    color: #ffffff;
+  }
+
+  .analyzing-text {
+    color: #4f94cd;
+  }
+
+  .analyzing-subtext {
+    color: #9bb3d1;
+  }
+
   .fluent-upload-zone {
     background: #2d2d30;
     border-color: #454545;
