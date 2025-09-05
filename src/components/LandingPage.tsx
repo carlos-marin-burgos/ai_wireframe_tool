@@ -1,5 +1,28 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import { FiX } from 'react-icons/fi';
+import {
+  FiX,
+  FiPlus,
+  FiFolder,
+  FiLoader,
+  FiSend,
+  FiStopCircle,
+  FiCpu,
+  FiImage,
+  FiLink,
+  FiFigma,
+  FiZap,
+  FiGithub,
+  FiTrash,
+  FiUpload,
+  FiDownload,
+  FiRefreshCw,
+  FiCheck,
+  FiAlertCircle,
+  FiFileText,
+  FiLayers,
+  FiSettings,
+  FiExternalLink,
+} from 'react-icons/fi';
 import "./LandingPage.css";
 import Footer from './Footer';
 import FluentImageUploadModal from './FluentImageUploadModal';
@@ -31,30 +54,6 @@ interface LandingPageProps {
   onFigmaModalOpen?: () => void;
 }
 
-import {
-  FiPlus,
-  FiFolder,
-  FiLoader,
-  FiSend,
-  FiStopCircle,
-  FiCpu,
-  FiImage,
-  FiLink,
-  FiFigma,
-  FiZap,
-  FiGithub,
-  FiTrash,
-  FiUpload,
-  FiDownload,
-  FiRefreshCw,
-  FiCheck,
-  FiAlertCircle,
-  FiFileText,
-  FiLayers,
-  FiSettings,
-  FiExternalLink,
-} from "react-icons/fi";
-
 const LandingPage: React.FC<LandingPageProps> = ({
   error,
   savedWireframesCount,
@@ -78,6 +77,8 @@ const LandingPage: React.FC<LandingPageProps> = ({
   onOpenWireframe,
   onFigmaModalOpen,
 }) => {
+  console.log('🔄 LandingPage render start');
+
   // Create ref for textarea autofocus
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -117,13 +118,23 @@ const LandingPage: React.FC<LandingPageProps> = ({
   // Load favorites and recents from localStorage
   useEffect(() => {
     const loadFavorites = () => {
-      const savedFavorites = JSON.parse(localStorage.getItem('designetica_favorites') || '[]');
-      setFavorites(savedFavorites);
+      try {
+        const savedFavorites = JSON.parse(localStorage.getItem('designetica_favorites') || '[]');
+        setFavorites(savedFavorites);
+      } catch (error) {
+        console.warn('Failed to load favorites from localStorage:', error);
+        setFavorites([]);
+      }
     };
 
     const loadRecents = () => {
-      const savedRecents = JSON.parse(localStorage.getItem('designetica_recents') || '[]');
-      setRecents(savedRecents);
+      try {
+        const savedRecents = JSON.parse(localStorage.getItem('designetica_recents') || '[]');
+        setRecents(savedRecents);
+      } catch (error) {
+        console.warn('Failed to load recents from localStorage:', error);
+        setRecents([]);
+      }
     };
 
     loadFavorites();
@@ -199,13 +210,18 @@ const LandingPage: React.FC<LandingPageProps> = ({
       createdAt: new Date().toISOString()
     };
 
-    const currentFavorites = JSON.parse(localStorage.getItem('designetica_favorites') || '[]');
-    const updatedFavorites = [...currentFavorites, newFavorite];
+    try {
+      const currentFavorites = JSON.parse(localStorage.getItem('designetica_favorites') || '[]');
+      const updatedFavorites = [...currentFavorites, newFavorite];
 
-    setFavorites(updatedFavorites);
-    localStorage.setItem('designetica_favorites', JSON.stringify(updatedFavorites));
+      setFavorites(updatedFavorites);
+      localStorage.setItem('designetica_favorites', JSON.stringify(updatedFavorites));
 
-    alert(`"${projectName}" has been added to your favorites!`);
+      alert(`"${projectName}" has been added to your favorites!`);
+    } catch (error) {
+      console.warn('Failed to add to favorites:', error);
+      alert('Failed to add to favorites. Please try again.');
+    }
   };
 
   // Add to recents utility function (can be called from parent)
@@ -219,19 +235,23 @@ const LandingPage: React.FC<LandingPageProps> = ({
       createdAt: new Date().toISOString()
     };
 
-    const currentRecents = JSON.parse(localStorage.getItem('designetica_recents') || '[]');
+    try {
+      const currentRecents = JSON.parse(localStorage.getItem('designetica_recents') || '[]');
 
-    // Avoid duplicates by checking if a recent with the same name exists
-    const existingIndex = currentRecents.findIndex((recent: any) => recent.name === name);
-    if (existingIndex !== -1) {
-      currentRecents.splice(existingIndex, 1); // Remove existing
+      // Avoid duplicates by checking if a recent with the same name exists
+      const existingIndex = currentRecents.findIndex((recent: any) => recent.name === name);
+      if (existingIndex !== -1) {
+        currentRecents.splice(existingIndex, 1); // Remove existing
+      }
+
+      // Add to beginning of array (most recent first)
+      const updatedRecents = [newRecent, ...currentRecents].slice(0, 10); // Keep only last 10
+
+      setRecents(updatedRecents);
+      localStorage.setItem('designetica_recents', JSON.stringify(updatedRecents));
+    } catch (error) {
+      console.warn('Failed to add to recents:', error);
     }
-
-    // Add to beginning of array (most recent first)
-    const updatedRecents = [newRecent, ...currentRecents].slice(0, 10); // Keep only last 10
-
-    setRecents(updatedRecents);
-    localStorage.setItem('designetica_recents', JSON.stringify(updatedRecents));
   }, []);
 
   // Expose addToRecents function to parent
@@ -447,6 +467,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
     // Don't close modal immediately - let the parent handle modal closing after analysis completes
   };
 
+  console.log('🔄 LandingPage about to render JSX');
   return (
     <div className="landing-page">
       <div className="landing-container">
@@ -459,7 +480,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
               </div>
               <div className="announcement-text">
                 <h3>🎉 New: Designetica Figma Plugin!</h3>
-                <p>Generate AI wireframes directly in Figma. Perfect for designers who want to stay in their workflow.</p>
+                <p>Generate AI wireframes directly in Figma.</p>
               </div>
               <div className="announcement-action">
                 <a

@@ -1,0 +1,53 @@
+{
+  "imported": "2025-09-05T20:41:08.107Z",
+  "sections": [
+    {
+      "name": "Hero Sections",
+      "nodeId": "4302:1228097",
+      "count": 1,
+      "htmlFile": "components-hero-sections.html",
+      "bodyFile": "body-hero-sections.html",
+      "warnings": []
+    },
+    {
+      "name": "Forms",
+      "nodeId": "4303:636742",
+      "count": 1,
+      "htmlFile": "components-forms.html",
+      "bodyFile": "body-forms.html",
+      "warnings": []
+    },
+    {
+      "name": "Navigation",
+      "nodeId": "4302:1142033",
+      "count": 1,
+      "htmlFile": "components-navigation.html",
+      "bodyFile": "body-navigation.html",
+      "warnings": []
+    },
+    {
+      "name": "Page Headers",
+      "nodeId": "3312:105535",
+      "count": 1,
+      "htmlFile": "components-page-headers.html",
+      "bodyFile": "body-page-headers.html",
+      "warnings": []
+    },
+    {
+      "name": "Call to Actions",
+      "nodeId": "4302:1373485",
+      "count": 1,
+      "htmlFile": "components-call-to-actions.html",
+      "bodyFile": "body-call-to-actions.html",
+      "warnings": []
+    },
+    {
+      "name": "Mobile Navigation",
+      "nodeId": "4302:1085774",
+      "count": 1,
+      "htmlFile": "components-mobile-navigation.html",
+      "bodyFile": "body-mobile-navigation.html",
+      "warnings": []
+    }
+  ]
+}

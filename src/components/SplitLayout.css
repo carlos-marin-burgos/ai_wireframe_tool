@@ -326,11 +326,13 @@
 /* Wireframe container styles */
 .wireframe-container {
   flex: 1;
-  overflow: visible; /* Allow content to expand */
+  overflow: auto; /* Allow scrolling if content exceeds container */
   padding: 15px;
   padding-bottom: 15px; /* Reduced padding for more wireframe space */
   height: 100%; /* Fill the available flex space completely */
   background: transparent;
+  min-width: 0; /* Allow shrinking when needed */
+  max-width: 100%; /* Don't exceed parent */
 }
 
 .wireframe-content {
@@ -342,18 +344,22 @@
   padding: 15px;
   box-shadow: none;
   overflow: auto;
+  max-width: 100%; /* Ensure content doesn't exceed container */
+  box-sizing: border-box; /* Include padding in width calculation */
 }
 
 .wireframe-panel {
   height: calc(100% - 80px); /* Reduced from 100px for more wireframe space */
-  width: calc(100% - 60px); /* Account for margins with extra right margin */
+  width: 100%; /* Take full width of parent right-pane */
   background: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  overflow: auto; /* Changed from hidden to auto to prevent cut-off */
+  overflow: hidden; /* Prevent panel itself from expanding */
   display: flex;
   flex-direction: column;
-  margin: 30px 40px 70px 20px; /* Increased top margin from 10px to 30px for better spacing */
+  margin: 30px 20px 70px 20px; /* Consistent margins */
+  min-width: 0; /* Prevent flex item from growing beyond container */
+  max-width: 100%; /* Ensure panel doesn't exceed parent */
 }
 
 /* Wireframe Name Header */

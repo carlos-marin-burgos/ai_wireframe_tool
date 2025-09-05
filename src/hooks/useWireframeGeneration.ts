@@ -91,10 +91,21 @@ export const useWireframeGeneration = () => {
       theme: string = "microsoftlearn",
       colorScheme: string = "primary",
       skipCache: boolean = false,
-      fastMode: boolean = false // New parameter for fast mode
+      fastMode: boolean = false, // New parameter for fast mode
+      imageAnalysis: any = null // New parameter for image analysis data
     ) => {
       // Cancel any ongoing request
       cancelGeneration();
+
+      // Ensure description is a valid string
+      if (typeof description !== "string") {
+        console.error(
+          "❌ Description must be a string, received:",
+          typeof description,
+          description
+        );
+        throw new Error("Description must be a string");
+      }
 
       console.log("🎨 Generating wireframe with enhanced fallback support:", {
         description: description.substring(0, 100) + "...",
@@ -191,39 +202,27 @@ export const useWireframeGeneration = () => {
           theme,
           colorScheme,
           fastMode: shouldUseFastMode,
+          hasImageAnalysis: !!imageAnalysis,
           timestamp: Date.now(),
         });
 
         let data: WireframeResponse;
         let usingEnhanced = true;
 
-        try {
-          // Try enhanced endpoint first (component-driven)
-          data = await api.post<WireframeResponse>(
-            API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME_ENHANCED +
-              `?t=${Date.now()}`,
-            { description, theme, colorScheme, fastMode: shouldUseFastMode },
-            {
-              signal: abortController.signal,
-              headers: {
-                "Cache-Control": "no-cache, no-store, must-revalidate",
-                Pragma: "no-cache",
-                Expires: "0",
-              },
-            }
+        if (imageAnalysis) {
+          // Use the image-specific endpoint when image analysis is available
+          console.log(
+            "🖼️ Using image-based wireframe generation with extracted colors:",
+            imageAnalysis.designTokens?.colors
           );
-          console.log("✅ Enhanced endpoint succeeded");
-        } catch (enhancedError) {
-          console.warn(
-            "⚠️ Enhanced endpoint failed, falling back to original:",
-            enhancedError
-          );
-          usingEnhanced = false;
 
-          // Fallback to original endpoint
           data = await api.post<WireframeResponse>(
-            API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME + `?t=${Date.now()}`,
-            { description, theme, colorScheme, fastMode: shouldUseFastMode },
+            "/api/generate-html-wireframe" + `?t=${Date.now()}`,
+            {
+              description,
+              colorScheme,
+              imageAnalysis,
+            },
             {
               signal: abortController.signal,
               headers: {
@@ -233,7 +232,47 @@ export const useWireframeGeneration = () => {
               },
             }
           );
-          console.log("✅ Original endpoint succeeded");
+          console.log("✅ Image-based endpoint succeeded");
+        } else {
+          // Use the regular text-based endpoints
+          try {
+            // Try enhanced endpoint first (component-driven)
+            data = await api.post<WireframeResponse>(
+              API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME_ENHANCED +
+                `?t=${Date.now()}`,
+              { description, theme, colorScheme, fastMode: shouldUseFastMode },
+              {
+                signal: abortController.signal,
+                headers: {
+                  "Cache-Control": "no-cache, no-store, must-revalidate",
+                  Pragma: "no-cache",
+                  Expires: "0",
+                },
+              }
+            );
+            console.log("✅ Enhanced endpoint succeeded");
+          } catch (enhancedError) {
+            console.warn(
+              "⚠️ Enhanced endpoint failed, falling back to original:",
+              enhancedError
+            );
+            usingEnhanced = false;
+
+            // Fallback to original endpoint
+            data = await api.post<WireframeResponse>(
+              API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME + `?t=${Date.now()}`,
+              { description, theme, colorScheme, fastMode: shouldUseFastMode },
+              {
+                signal: abortController.signal,
+                headers: {
+                  "Cache-Control": "no-cache, no-store, must-revalidate",
+                  Pragma: "no-cache",
+                  Expires: "0",
+                },
+              }
+            );
+            console.log("✅ Original endpoint succeeded");
+          }
         }
 
         console.log("📥 API response received:", {

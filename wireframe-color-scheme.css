@@ -1,0 +1,146 @@
+/* Designetica Wireframe Color Scheme 
+   Updated to match Figma Lookscout Low-Fi UX Hero colors
+*/
+
+:root {
+  /* Figma Lookscout Color Palette */
+  --wf-neutral-50: #f9fbfd; /* Neutral/50 - Main background */
+  --wf-neutral-600: #e6e9ec; /* Neutral/600 - Secondary buttons */
+  --wf-neutral-700: #d1d9e2; /* Neutral/700 - Placeholders and borders */
+  --wf-neutral-900: #7c8b9d; /* Neutral/900 - Text color */
+  --wf-blue-500: #437ef7; /* Blue/500 - Primary color */
+  --wf-white: #ffffff; /* Base/White */
+  --wf-gray-50: #5f6d7e; /* Gray/50 - Logo placeholder */
+
+  /* Gradients from Figma */
+  --wf-gradient-primary: linear-gradient(45deg, #155b75 14.64%, #088ab2 85.36%);
+
+  /* Legacy compatibility with existing wireframe styles */
+  --wireframe-bg: var(--wf-neutral-50);
+  --wireframe-header: var(--wf-neutral-700);
+  --wireframe-text: var(--wf-neutral-900);
+  --wireframe-primary: var(--wf-blue-500);
+}
+
+/* Component Styling Classes */
+.text-placeholder-heading {
+  background: var(--wf-neutral-700);
+  height: 12px;
+  border-radius: 3px;
+  margin: 8px 0;
+  display: block;
+  width: 65%;
+  border: none;
+}
+
+.text-placeholder-line {
+  background: var(--wf-neutral-700);
+  height: 8px;
+  border-radius: 3px;
+  margin: 6px 0;
+  display: block;
+  width: 88%;
+  border: none;
+}
+
+.text-placeholder-button {
+  background: var(--wf-blue-500);
+  height: 32px;
+  width: 80px;
+  border-radius: 6px;
+  display: inline-block;
+  border: none;
+}
+
+.wireframe-component {
+  background: var(--wf-white);
+  border: 1px solid var(--wf-neutral-600);
+  border-radius: 8px;
+  padding: 12px;
+  margin: 4px 0;
+  box-shadow: 0 1px 3px rgba(124, 139, 157, 0.1);
+}
+
+.wireframe-image {
+  background: var(--wf-neutral-700);
+  border: none;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--wf-white);
+  font-size: 10px;
+  min-height: 40px;
+  opacity: 0.8;
+}
+
+.actual-text {
+  font: 12px/1.4 system-ui, Arial, sans-serif;
+  color: var(--wf-neutral-900);
+  opacity: 0.9;
+}
+
+/* Color Harmony Reference - Updated to Figma Lookscout */
+/*
+FIGMA LOOKSCOUT COLORS:
+  --wf-neutral-50: #f9fbfd (main background)
+  --wf-neutral-600: #e6e9ec (secondary buttons)
+  --wf-neutral-700: #d1d9e2 (placeholders and borders)
+  --wf-neutral-900: #7c8b9d (text color)
+  --wf-blue-500: #437ef7 (primary interaction color)
+  --wf-white: #ffffff (base white)
+  --wf-gray-50: #5f6d7e (logo placeholder)
+
+This maintains visual hierarchy while precisely matching the Figma Lookscout design system.
+*/
+
+/* Enhanced Figma-specific styling */
+body {
+  background: var(--wf-neutral-50);
+  margin: 0;
+  padding: 20px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.primary-button {
+  background: var(--wf-blue-500);
+  color: var(--wf-white);
+  border-radius: 6px;
+  padding: 8px 16px;
+  border: none;
+  font-size: 14px;
+}
+
+.secondary-button {
+  background: var(--wf-neutral-600);
+  color: var(--wf-neutral-900);
+  border-radius: 6px;
+  padding: 8px 16px;
+  border: none;
+  font-size: 14px;
+}
+
+/* Figma-specific component improvements */
+.wireframe-component[data-node-type="component_set"] {
+  border: 2px dashed var(--wf-neutral-600);
+  background: var(--wf-neutral-50);
+}
+
+.wireframe-component[data-node-type="instance"] {
+  border: 1px solid var(--wf-neutral-600);
+  background: var(--wf-white);
+}
+
+.wireframe-component[data-node-type="frame"] {
+  border: 1px solid var(--wf-neutral-700);
+  background: transparent;
+}
+
+/* Remove harsh black borders - use subtle Figma-style borders */
+* {
+  box-sizing: border-box;
+}
+
+div[class*="wireframe-"]:not(.wireframe-image) {
+  border-color: var(--wf-neutral-600) !important;
+}

@@ -653,6 +653,133 @@ if (initialized && openai) {
 // Simple fallback wireframe generator
 // NO MORE FALLBACK FUNCTIONS - AI ONLY!
 
+// Function to inject low-fidelity wireframe CSS
+function injectLowFidelityCSS(html) {
+  const lowFidelityCSS = `
+<style>
+/* Low-Fidelity Wireframe Styles */
+/* Palette aligned with Learn light blues */
+:root {
+  --wf-blue-50: #f2f9ff;
+  --wf-blue-75: #eaf4ff;
+  --wf-blue-100: #e2f0ff;
+  --wf-blue-150: #d6ecff;
+  --wf-blue-200: #c7e3ff;
+  --wf-blue-250: #b9dcff;
+  --wf-blue-border: #a8d2ff;
+  --wf-blue-accent: #0078d4;
+  --wf-text-muted: #2f3b4a;
+}
+
+.text-placeholder-heading {
+  background: var(--wf-blue-200);
+  height: 14px;
+  border-radius: 2px;
+  margin: 8px 0;
+  display: block;
+  width: 60%;
+  position: relative;
+}
+
+.text-placeholder-line {
+  background: var(--wf-blue-150);
+  height: 6px;
+  border-radius: 3px;
+  margin: 6px 0 0 0;
+  display: block;
+  width: 92%;
+}
+
+.text-placeholder-button {
+  background: var(--wf-blue-250);
+  height: 8px;
+  width: 80px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.wireframe-component {
+  background: var(--wf-blue-75);
+  border: 1px solid var(--wf-blue-border);
+  border-radius: 6px;
+  padding: 16px;
+  margin: 8px 0;
+}
+
+.wireframe-component.secondary {
+  background: var(--wf-blue-100);
+}
+
+.wireframe-nav {
+  background: var(--wf-blue-75);
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--wf-blue-border);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.wireframe-button {
+  background: var(--wf-blue-100);
+  border: 1px solid var(--wf-blue-border);
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wireframe-image {
+  background: var(--wf-blue-150);
+  border: 1px solid var(--wf-blue-border);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--wf-blue-accent);
+  font-size: 14px;
+  min-height: 120px;
+}
+
+.wireframe-card {
+  background: #ffffff;
+  border: 1px solid var(--wf-blue-border);
+  border-radius: 6px;
+  padding: 16px;
+  margin: 8px 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* Override any earlier grey styles accidentally produced by model */
+style + style .text-placeholder-line,
+style + style .text-placeholder-heading,
+style + style .text-placeholder-button { background: inherit; }
+
+/* Paragraph simulation: create natural ragged edges */
+.wireframe-component .text-placeholder-heading + .text-placeholder-line { width: 95%; }
+.wireframe-component .text-placeholder-heading + .text-placeholder-line + .text-placeholder-line { width: 88%; }
+.wireframe-component .text-placeholder-heading + .text-placeholder-line + .text-placeholder-line + .text-placeholder-line { width: 76%; }
+
+/* Generic variation for any consecutive lines */
+.wireframe-component .text-placeholder-line:nth-of-type(4n+1) { width: 93%; }
+.wireframe-component .text-placeholder-line:nth-of-type(4n+2) { width: 87%; }
+.wireframe-component .text-placeholder-line:nth-of-type(4n+3) { width: 74%; }
+.wireframe-component .text-placeholder-line:nth-of-type(4n) { width: 60%; }
+</style>`;
+
+  // Insert CSS in the head section
+  if (html.includes("<head>")) {
+    html = html.replace("<head>", "<head>" + lowFidelityCSS);
+  } else if (html.includes("<!DOCTYPE html>")) {
+    html = html.replace("<!DOCTYPE html>", "<!DOCTYPE html>" + lowFidelityCSS);
+  } else {
+    html = lowFidelityCSS + html;
+  }
+
+  return html;
+}
+
 // AI wireframe generation
 async function generateWithAI(description, imageAnalysis = null) {
   if (!openai) {
@@ -664,51 +791,80 @@ async function generateWithAI(description, imageAnalysis = null) {
   let systemMessage;
 
   if (imageAnalysis) {
-    // For uploaded images - NO Microsoft branding
-    systemMessage = `You are an expert frontend developer who creates wireframes that EXACTLY match uploaded images. 
-    NEVER add Microsoft branding, navigation, or footer elements.
-    Use ONLY the colors and layout from the uploaded image.
-    Create clean, accurate HTML that replicates what was shown in the image.`;
+    // For uploaded images - create low-fidelity wireframe version
+    systemMessage = `You are an expert wireframe designer who creates low-fidelity wireframes in Microsoft Learn documentation style.
+    Transform uploaded designs into clean, minimal wireframe versions.
+    Use light blue components and gray text placeholders for a professional wireframe aesthetic.`;
 
-    prompt = `Create a complete HTML wireframe based on the uploaded image analysis: "${description}"
+    prompt = `Create a low-fidelity wireframe replica of the uploaded design using Microsoft Learn documentation style.
 
-CRITICAL REQUIREMENTS FOR UPLOADED IMAGES:
-- NEVER include Microsoft navigation, header, or footer elements
-- Use ONLY colors detected from the uploaded image: ${
-      imageAnalysis.designTokens?.colors?.join(", ") ||
-      "extract colors from image"
-    }
-- Replicate ONLY the components and layout shown in the uploaded image
-- NO Microsoft Learn branding or templates
-- Clean, minimal HTML structure
-- Use exact positioning and styling from the image
-- Include proper semantic HTML and modern CSS
-- Make it responsive but faithful to the original design
+CRITICAL: Use these EXACT CSS classes in your HTML:
 
-EXTRACTED COLORS FROM IMAGE: ${
-      imageAnalysis.designTokens?.colors?.join(", ") || "Use image colors only"
-    }
+1. ALL COMPONENTS must use: class="wireframe-component"
+2. NAVIGATION elements: class="wireframe-nav" 
+3. BUTTONS: class="wireframe-button"
+4. IMAGES/PLACEHOLDERS: class="wireframe-image"
+5. TEXT HEADINGS: class="text-placeholder-heading"
+6. TEXT LINES: class="text-placeholder-line"
+7. BUTTON TEXT: class="text-placeholder-button"
 
-Generate ONLY the HTML code (starting with <!DOCTYPE html>) that matches the uploaded image.`;
+WIREFRAME TRANSFORMATION RULES:
+- Convert ALL text to placeholder bars unless user specifies exact content
+- Use light blue (#E3F2FD) component backgrounds via wireframe-component class
+- Replace images with placeholder boxes using wireframe-image class
+- Make buttons wireframe-style with wireframe-button class
+
+EXAMPLE TRANSFORMATIONS:
+- Original heading "Welcome" → <div class="text-placeholder-heading"></div>
+- Original paragraph → <div class="text-placeholder-line"></div><div class="text-placeholder-line"></div>
+- Original button → <div class="wireframe-button"><div class="text-placeholder-button"></div></div>
+- Original image → <div class="wireframe-image">Image Placeholder</div>
+
+USER CONTENT RULES:
+- If description mentions specific text: Show actual text
+- If no specific text given: Use placeholder bars
+- Maintain layout structure but simplify styling
+
+Generate ONLY the HTML code (starting with <!DOCTYPE html>) using these exact classes.`;
   } else {
-    // For templates - can include Microsoft branding
-    systemMessage = `You are an expert frontend developer specializing in clean, modern web interfaces.`;
+    // For text descriptions - create low-fidelity wireframes
+    systemMessage = `You are an expert wireframe designer specializing in low-fidelity Microsoft Learn-style wireframes.`;
 
-    prompt = `Create a complete HTML wireframe based on: "${description}"
+    prompt = `Create a low-fidelity wireframe based on: "${description}"
 
-Requirements:
-- Create ONLY what is requested in the description
-- Use clean, modern design with proper semantics
-- Use Segoe UI font family for consistency
-- Make it responsive and accessible
-- Include semantic HTML and modern CSS
-- Use white backgrounds and dark text for readability
-- If it's a hero section, make it prominent and engaging
-- If it's navigation, use dark text on light backgrounds
+CRITICAL: Use these EXACT CSS classes in your HTML:
 
-IMPORTANT: Generate ONLY the components requested. Do not add learning paths, courses, or modules unless specifically requested.
+1. ALL COMPONENTS: class="wireframe-component"
+2. NAVIGATION: class="wireframe-nav"
+3. BUTTONS: class="wireframe-button" 
+4. IMAGES: class="wireframe-image"
+5. HEADING TEXT: class="text-placeholder-heading"
+6. BODY TEXT: class="text-placeholder-line"
+7. BUTTON TEXT: class="text-placeholder-button"
 
-Generate ONLY the HTML code (starting with <!DOCTYPE html>).`;
+WIREFRAME CONSTRUCTION RULES:
+- Wrap all sections in <div class="wireframe-component">
+- Convert text to placeholder bars unless user specifies exact content
+- Use wireframe-button for all buttons
+- Use wireframe-image for all images/media
+- Use wireframe-nav for navigation areas
+
+CONTENT INTERPRETATION:
+- User says "login form" → Create form with wireframe-component wrapper, placeholder labels
+- User says "welcome message with 'Hello World'" → Show actual "Hello World" text
+- User says "three buttons" → Create 3 wireframe-button elements with text-placeholder-button
+- User says "hero section" → Large wireframe-component with placeholder content
+
+EXAMPLE OUTPUT STRUCTURE:
+<div class="wireframe-component">
+  <div class="text-placeholder-heading"></div>
+  <div class="text-placeholder-line"></div>
+  <div class="wireframe-button">
+    <div class="text-placeholder-button"></div>
+  </div>
+</div>
+
+Generate ONLY the HTML code (starting with <!DOCTYPE html>) using these exact classes for a clean wireframe.`;
   }
 
   const response = await openai.chat.completions.create({
@@ -739,6 +895,12 @@ Generate ONLY the HTML code (starting with <!DOCTYPE html>).`;
     .replace(/```html\n?/g, "")
     .replace(/```\n?$/g, "")
     .trim();
+
+  // Inject low-fidelity wireframe CSS if not already present
+  // Previous logic only injected when 'wireframe-component' missing which failed once HTML had classes but no styles
+  if (html && !html.includes("Low-Fidelity Wireframe Styles")) {
+    html = injectLowFidelityCSS(html);
+  }
 
   // Final validation
   if (!html || typeof html !== "string") {
@@ -826,6 +988,17 @@ module.exports = async function (context, req) {
       enhancedGeneratorAvailable: !!enhancedWireframeGenerator,
     });
 
+    // Low-fidelity mode flag (default ON). Set LOW_FIDELITY_MODE=false to re-enable Atlas branding/animations.
+    const lowFidelityMode =
+      (process.env.LOW_FIDELITY_MODE || "true").toLowerCase() !== "false";
+    if (lowFidelityMode) {
+      console.log("🟦 Low-fidelity mode ACTIVE (Atlas branding suppressed)");
+    } else {
+      console.log(
+        "🟨 Low-fidelity mode DISABLED (Atlas branding/components may be injected)"
+      );
+    }
+
     let html;
     let source = "openai";
 
@@ -887,33 +1060,34 @@ module.exports = async function (context, req) {
       });
 
       if (!imageAnalysis) {
-        console.log("📝 No image analysis - adding Atlas components");
-        html = await addAtlasComponents(html, normalizedDescription);
-
-        // ✨ Inject Atlas animations CSS
-        html = injectAtlasAnimations(html);
-
-        // 🧭 Always inject Atlas Top Navigation into wireframes (EXCEPT uploaded images)
-        const atlasTopNav = generateAtlasTopNavigation();
-
-        // Find the opening body tag and inject the navigation right after it
-        if (html.includes("<body")) {
-          const bodyTagEnd = html.indexOf(">", html.indexOf("<body")) + 1;
-          html =
-            html.slice(0, bodyTagEnd) +
-            "\n" +
-            atlasTopNav +
-            "\n" +
-            html.slice(bodyTagEnd);
-          console.log("🧭 Atlas Top Navigation injected into wireframe body");
+        if (lowFidelityMode) {
+          console.log(
+            "ℹ️ Low-fidelity mode: Skipping Atlas components, animations, and top navigation"
+          );
         } else {
-          // Fallback: prepend if no body tag found
-          html = atlasTopNav + "\n" + html;
-          console.log("🧭 Atlas Top Navigation prepended (fallback)");
+          console.log(
+            "📝 No image analysis - adding Atlas components (branding enabled)"
+          );
+          html = await addAtlasComponents(html, normalizedDescription);
+          html = injectAtlasAnimations(html);
+          const atlasTopNav = generateAtlasTopNavigation();
+          if (html.includes("<body")) {
+            const bodyTagEnd = html.indexOf(">", html.indexOf("<body")) + 1;
+            html =
+              html.slice(0, bodyTagEnd) +
+              "\n" +
+              atlasTopNav +
+              "\n" +
+              html.slice(bodyTagEnd);
+            console.log("🧭 Atlas Top Navigation injected into wireframe body");
+          } else {
+            html = atlasTopNav + "\n" + html;
+            console.log("🧭 Atlas Top Navigation prepended (fallback)");
+          }
         }
       } else {
         console.log(
-          "📸 Uploaded image detected - skipping Microsoft nav/footer to preserve image accuracy",
+          "📸 Uploaded image detected - skipping additional branding for accuracy",
           {
             hasComponents: !!imageAnalysis.components,
             componentCount: imageAnalysis.components?.length || 0,

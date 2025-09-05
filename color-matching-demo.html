@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figma Component Color Matching Demo</title>
+    <link rel="stylesheet" href="wireframe-color-scheme.css">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f9fbfb;
+            color: #323130;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .demo-section {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .color-sample {
+            text-align: center;
+            padding: 16px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .color-before {
+            background: #eaf4ff;
+            color: #174b74;
+        }
+
+        .color-after {
+            background: #f3f2f1;
+            color: #323130;
+        }
+
+        .import-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .import-demo {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .import-form {
+            background: var(--wf-neutral-75);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--wf-neutral-border);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 500;
+            color: var(--wf-accent);
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--wf-neutral-border);
+            border-radius: 4px;
+            background: white;
+            color: var(--wf-accent);
+        }
+
+        button {
+            background: var(--wf-accent);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        button:hover {
+            background: #161616;
+        }
+
+        .results-panel {
+            background: white;
+            border: 1px solid var(--wf-neutral-border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .results-header {
+            background: var(--wf-neutral-150);
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--wf-neutral-border);
+            font-weight: 500;
+        }
+
+        .results-content {
+            padding: 20px;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        #importedComponent {
+            border: none;
+            width: 100%;
+            min-height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="demo-container">
+        <header class="demo-section">
+            <h1>🎨 Figma Component Color Matching</h1>
+            <p>Your Figma components now match the exact Lookscout Low-Fi UX Hero color scheme! The colors have been
+                precisely matched to maintain design consistency with the original Figma design system.</p>
+        </header>
+
+        <section class="demo-section">
+            <h2>Figma Lookscout Color Palette</h2>
+            <p>Here are the exact colors from the Figma Lookscout Low-Fi UX Hero design system:</p>
+
+            <div class="color-palette">
+                <div class="color-sample color-before">
+                    <strong>Neutral/50 (Background)</strong><br>
+                    <code>--wf-neutral-50: #F9FBFD</code><br>
+                    <small>Main background color</small>
+                </div>
+                <div class="color-sample color-after">
+                    <strong>Blue/500 (Primary)</strong><br>
+                    <code>--wf-blue-500: #437EF7</code><br>
+                    <small>Primary interaction color</small>
+                </div>
+            </div>
+
+            <details style="margin-top: 20px;">
+                <summary style="cursor: pointer; font-weight: 500;">View Complete Figma Color Mapping</summary>
+                <div
+                    style="margin-top: 12px; font-family: monospace; font-size: 14px; background: #f8f9fa; padding: 16px; border-radius: 4px;">
+                    <strong>Figma Lookscout Color Variables:</strong><br>
+                    --wf-neutral-50: #F9FBFD (main background)<br>
+                    --wf-neutral-600: #E6E9EC (secondary buttons)<br>
+                    --wf-neutral-700: #D1D9E2 (placeholders and borders)<br>
+                    --wf-neutral-900: #7C8B9D (text color)<br>
+                    --wf-blue-500: #437EF7 (primary color)<br>
+                    --wf-white: #FFFFFF (base white)<br>
+                    --wf-gray-50: #5F6D7E (logo placeholder)
+                </div>
+            </details>
+        </section>
+
+        <section class="demo-section">
+            <h2>Live Import Demo</h2>
+            <p>Test the updated color scheme by importing a Figma component:</p>
+
+            <div class="import-demo">
+                <div class="import-form">
+                    <h3>Import Component</h3>
+                    <div class="form-group">
+                        <label for="componentSelect">Select Component:</label>
+                        <select id="componentSelect">
+                            <option value="4306:7969">Hero Section (Primary)</option>
+                            <option value="4306:7965">Navigation Header</option>
+                            <option value="4306:7973">Feature Cards</option>
+                            <option value="4306:7977">Call to Action</option>
+                            <option value="4306:7981">Contact Form</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fileName">File Name:</label>
+                        <input type="text" id="fileName" value="neutral-color-demo" placeholder="Enter filename">
+                    </div>
+                    <button onclick="importComponent()">Import with Neutral Colors</button>
+                    <div id="importStatus" style="margin-top: 12px; font-size: 14px;"></div>
+                </div>
+
+                <div class="results-panel">
+                    <div class="results-header">
+                        Imported Component Preview
+                    </div>
+                    <div class="results-content">
+                        <iframe id="importedComponent" src="about:blank"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Integration Benefits</h2>
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 16px;">
+                <div class="wireframe-component">
+                    <h4>🎯 Visual Consistency</h4>
+                    <p>Figma components now seamlessly blend with your existing wireframe generator, maintaining a
+                        unified visual language.</p>
+                </div>
+                <div class="wireframe-component">
+                    <h4>⚡ Streamlined Workflow</h4>
+                    <p>No more manual color adjustments. Import components and they automatically match your design
+                        system.</p>
+                </div>
+                <div class="wireframe-component">
+                    <h4>🔧 Easy Maintenance</h4>
+                    <p>Update colors in one place (wireframe-color-scheme.css) and all components stay synchronized.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        async function importComponent() {
+            const componentSelect = document.getElementById('componentSelect');
+            const fileName = document.getElementById('fileName');
+            const status = document.getElementById('importStatus');
+            const iframe = document.getElementById('importedComponent');
+
+            const nodeId = componentSelect.value;
+            const name = fileName.value || 'neutral-color-demo';
+
+            status.innerHTML = '⏳ Importing component with neutral colors...';
+            status.style.color = '#616161';
+
+            try {
+                const response = await fetch('http://localhost:7072/api/figma-wireframe-import', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        fileId: 'T8nJZBzUNgkeEOdV2IYQHd',
+                        nodeId: nodeId,
+                        fileName: name
+                    })
+                });
+
+                if (response.ok) {
+                    const html = await response.text();
+
+                    // Create a blob URL for the iframe
+                    const blob = new Blob([html], { type: 'text/html' });
+                    const url = URL.createObjectURL(blob);
+                    iframe.src = url;
+
+                    status.innerHTML = '✅ Component imported successfully with neutral colors!';
+                    status.style.color = '#107c10';
+                } else {
+                    throw new Error('Import failed');
+                }
+            } catch (error) {
+                status.innerHTML = '❌ Import failed. Make sure Azure Functions is running on port 7072.';
+                status.style.color = '#d13438';
+                console.error('Import error:', error);
+            }
+        }
+
+        // Auto-import the first component on page load
+        window.addEventListener('load', () => {
+            setTimeout(importComponent, 1000);
+        });
+    </script>
+</body>
+
+</html>

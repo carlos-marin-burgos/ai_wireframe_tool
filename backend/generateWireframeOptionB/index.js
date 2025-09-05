@@ -51,35 +51,43 @@ module.exports = async function (context, req) {
     });
 
     // Create system prompt for Option B
-    const systemPrompt = `You are an expert wireframe generator that creates modern, responsive HTML wireframes with semantic structure. 
+    const systemPrompt = `You are an expert wireframe designer creating low-fidelity, professional wireframes using Microsoft Learn's wireframe design principles.
 
-IMPORTANT: This is Option B implementation - you will generate clean HTML structure, and Atlas components will be injected with EXACT FIGMA COLORS afterwards.
+CRITICAL WIREFRAME STYLE REQUIREMENTS:
+🎨 LOW-FIDELITY AESTHETIC: Use light blue (#E3F2FD, #BBDEFB) for component backgrounds and containers
+📏 TEXT PLACEHOLDERS: Replace generic text with gray horizontal lines (unless user specifies exact text to include)
+🔤 USER-SPECIFIED TEXT: If the user explicitly mentions specific text, button labels, or content - include that exact text
+🎯 COMPONENT STYLE: Light blue backgrounds with subtle borders, minimal shadows
+📱 LAYOUT: Clean, spacious, wireframe-like appearance
+
+TEXT HANDLING RULES:
+- For headings without specific text: Use 2-3 gray bars of varying lengths
+- For paragraphs without specific text: Use 3-5 gray lines of varying lengths  
+- For buttons without specific text: Use short gray bar or user's specified label
+- For navigation without specific text: Use short gray bars
+- EXCEPTION: If user asks for specific text like "Login button" or "Welcome message" - include that exact text
+
+COLOR PALETTE (Microsoft Learn wireframe style):
+- Component backgrounds: #E3F2FD, #BBDEFB (light blue)
+- Text placeholder lines: #BDBDBD, #E0E0E0 (light gray bars)
+- Borders: #90CAF9 (soft blue)
+- Actual text (when specified): #333333
+- Backgrounds: #FAFAFA, #FFFFFF (clean whites/grays)
+
+AVOID high-fidelity elements like:
+❌ Colorful designs, gradients, or vivid colors
+❌ Lorem ipsum or generic "placeholder text"  
+❌ Stock photos or detailed imagery
+❌ Complex styling or decorative elements
 
 Generate a complete HTML wireframe that includes:
-1. Semantic HTML5 structure with proper tags
-2. Clean, minimal CSS for layout and basic styling
-3. Responsive design principles
-4. Appropriate sections for the content type
-
-For LEARNING PLATFORMS specifically, include these component placeholders:
-- Hero section (will be replaced with exact Atlas colors)
-- Learning path cards (will be replaced with exact Atlas colors)  
-- Module cards (will be replaced with exact Atlas colors)
-- Navigation (will be replaced with exact Atlas colors)
-- Form inputs (will be replaced with exact Atlas colors)
-- Buttons (will be replaced with exact Atlas colors)
-
-Use semantic class names like:
-- "hero-section" for hero areas
-- "learning-path-card" for learning paths
-- "module-card" for individual modules
-- "navigation-main" for main navigation
-- "form-input" for form inputs
-- "button-primary" and "button-secondary" for buttons
-
-The HTML should be clean and well-structured. Don't worry about specific colors or detailed styling - the Atlas color injection will handle exact visual design.
-
-Return only valid HTML with embedded CSS.`;
+- DOCTYPE html declaration
+- Proper semantic HTML5 structure  
+- Inline CSS with low-fidelity wireframe styling
+- Light blue component backgrounds
+- Gray placeholder bars instead of generic text
+- Responsive design principles
+- Clean, minimal wireframe aesthetic`;
 
     // Generate wireframe with OpenAI
     const completion = await openai.chat.completions.create({

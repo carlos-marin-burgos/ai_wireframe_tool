@@ -34,7 +34,7 @@ interface SavedWireframe {
 }
 
 interface ToastData {
-  id: number;
+  id: string;
   message: string;
   type: 'success' | 'info' | 'warning' | 'error';
 }
@@ -57,6 +57,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   const [showLandingPage, setShowLandingPage] = useState(true);
   const [isAnalyzingImage, setIsAnalyzingImage] = useState(false);
   const imageAnalysisAbortController = useRef<AbortController | null>(null);
+  const [imageAnalysisData, setImageAnalysisData] = useState<any>(null);
   const [toasts, setToasts] = useState<ToastData[]>([]);
   const [fastMode, setFastMode] = useState(false);
   const [showFigmaIntegration, setShowFigmaIntegration] = useState(false);
@@ -144,7 +145,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   // Use our enhanced wireframe generation hook
   const {
     generateWireframe,
-    isLoading: loading,
+    isLoading: wireframeLoading,
     loadingStage,
     error,
     fallback,
@@ -179,16 +180,21 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     }
   }, [htmlWireframe]);
 
+  // Generate unique IDs to prevent React key collisions
+  const generateUniqueId = () => {
+    return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  };
+
   const showToast = (message: string, type: ToastData['type'] = 'success') => {
     const newToast: ToastData = {
-      id: Date.now(),
+      id: generateUniqueId(),
       message,
       type
     };
     setToasts(prev => [...prev, newToast]);
   };
 
-  const removeToast = (id: number) => {
+  const removeToast = (id: string) => {
     setToasts(prev => prev.filter(toast => toast.id !== id));
   };
 
@@ -203,7 +209,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     if (!htmlWireframe || !saveTitle.trim()) return;
 
     const newWireframe: SavedWireframe = {
-      id: Date.now().toString(),
+      id: generateUniqueId(),
       name: saveTitle.trim(),
       description: description,
       html: htmlWireframe,
@@ -318,7 +324,8 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
         designTheme,
         colorScheme,
         true,  // skipCache: true to force fresh generation for debugging
-        fastMode  // Pass fast mode preference
+        fastMode,  // Pass fast mode preference
+        imageAnalysisData  // Pass image analysis for color extraction
       );
 
       console.log('✅ Wireframe generation result:', {
@@ -380,7 +387,10 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
       const result = await generateWireframe(
         suggestion,
         designTheme,
-        colorScheme
+        colorScheme,
+        false,  // skipCache
+        fastMode,  // fastMode
+        imageAnalysisData  // imageAnalysis
       );
 
       if (result && result.html) {
@@ -444,7 +454,10 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
       const result = await generateWireframe(
         description,
         designTheme,
-        colorScheme
+        colorScheme,
+        false,  // skipCache
+        fastMode,  // fastMode
+        imageAnalysisData  // imageAnalysis
       );
 
       return result.html || '';
@@ -1002,7 +1015,10 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
       const result = await generateWireframe(
         description,
         themeToUse,
-        schemeToUse
+        schemeToUse,
+        false,  // skipCache
+        fastMode,  // fastMode
+        imageAnalysisData  // imageAnalysis
       );
 
       if (result && result.html) {
@@ -1126,6 +1142,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     setHtmlWireframe("");
     setShowLandingPage(true);
     setDescription("");
+    setImageAnalysisData(null); // Clear image analysis data
   };
 
   const handleAnalyzeImage = async (imageUrl: string, fileName: string) => {
@@ -1169,84 +1186,58 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
       console.log('🧩 Components found:', imageAnalysis.components);
       console.log('📏 Components count:', imageAnalysis.components?.length || 0);
 
-      // Step 2: Generate wireframe using the image analysis description
-      const wireframeDescription = imageAnalysis.wireframeDescription ||
-        `Create a wireframe based on the detected components: ${imageAnalysis.components?.map((c: any) => c.type).join(', ') || 'various UI elements'}`;
+      // Store the image analysis data for use in wireframe generation
+      setImageAnalysisData(imageAnalysis);
 
-      console.log('🎯 Generating wireframe with description:', wireframeDescription);
+      // Create a user-friendly description based on the image analysis
+      const componentsList = imageAnalysis.components?.map((c: any) => c.type).join(', ') || 'various UI elements';
+      const userFriendlyDescription = `Recreate this design with ${imageAnalysis.components?.length || 0} components: ${componentsList}`;
 
-      // Set the description for UI display
-      setDescription(`Generated from uploaded image: ${fileName}`);
+      setDescription(userFriendlyDescription);
 
-      const wireframeResponse = await fetch("/api/generate-html-wireframe", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          description: wireframeDescription,
-          colorScheme: colorScheme || "light",
-          imageAnalysis: imageAnalysis, // Pass the complete image analysis for enhanced generation
-        }),
-        signal: imageAnalysisAbortController.current.signal,
-      });
+      console.log('✅ Image analysis complete. Colors extracted:',
+        imageAnalysis.designTokens?.colors || 'No colors found');
+      console.log('🎯 Ready to generate wireframe with extracted colors and layout');
+      console.log('📋 Original wireframe description from API:', imageAnalysis.wireframeDescription);
+      console.log('📋 Type of wireframeDescription:', typeof imageAnalysis.wireframeDescription);
 
-      console.log('📤 Sending wireframe request with imageAnalysis:', {
-        hasImageAnalysis: !!imageAnalysis,
-        componentsCount: imageAnalysis.components?.length || 0,
-        designTokens: imageAnalysis.designTokens,
-        description: wireframeDescription
-      });
+      // Ensure we have a valid string description
+      const validDescription = typeof imageAnalysis.wireframeDescription === 'string' && imageAnalysis.wireframeDescription.trim()
+        ? imageAnalysis.wireframeDescription
+        : userFriendlyDescription;
 
-      if (!wireframeResponse.ok) {
-        const errorText = await wireframeResponse.text();
-        console.error('❌ Wireframe response not OK:', wireframeResponse.status, errorText);
-        throw new Error(`Wireframe generation failed: ${wireframeResponse.status}`);
-      }
+      console.log('📝 Using description for generation:', validDescription);
 
-      const wireframeResult = await wireframeResponse.json();
-      console.log('📥 Wireframe response received:', {
-        hasHtml: !!wireframeResult.html,
-        htmlLength: wireframeResult.html?.length || 0,
-        source: wireframeResult.source,
-        processingTime: wireframeResult.processingTimeMs,
-        success: wireframeResult.success,
-        error: wireframeResult.error
-      });
+      // Automatically trigger wireframe generation with the extracted data
+      console.log('🚀 Starting automatic wireframe generation...');
+      try {
+        const result = await generateWireframe(
+          validDescription,
+          designTheme,
+          colorScheme,
+          true,  // skipCache
+          fastMode,  // fastMode  
+          imageAnalysis  // Use the full image analysis data
+        );
 
-      // Check for explicit error response
-      if (wireframeResult.success === false) {
-        throw new Error(wireframeResult.error || wireframeResult.message || "Wireframe generation failed");
-      }
+        console.log('📊 Wireframe generation result:', result);
 
-      // Check if we have the expected HTML content
-      if (!wireframeResult.html) {
-        throw new Error("No wireframe HTML content received from backend");
-      }
-
-      console.log('✅ Wireframe generated successfully');
-
-      // Generate and show wireframe
-      if (wireframeResult.html) {
-        handleWireframeGenerated(wireframeResult.html);
-      }
-
-      const componentsCount = imageAnalysis.components?.length || 0;
-      const confidence = Math.round((imageAnalysis.confidence || 0.85) * 100);
-
-      // Show success message with component details
-      if (imageAnalysis.components && imageAnalysis.components.length > 0) {
-        const componentTypes = imageAnalysis.components.reduce((acc: Record<string, number>, comp: any) => {
-          acc[comp.type] = (acc[comp.type] || 0) + 1;
-          return acc;
-        }, {});
-
-        const componentSummary = Object.entries(componentTypes)
-          .map(([type, count]) => `${count} ${type}${(count as number) > 1 ? 's' : ''}`)
-          .join(', ');
-
-        console.log(`🎯 Detected components: ${componentSummary}`);
-      }
+        if (result && result.html) {
+          console.log('✅ Wireframe generated successfully, processing...');
+          handleWireframeGenerated(result.html);
+          setShowLandingPage(false);
+          console.log('🎯 Switched to wireframe view');
+        } else {
+          console.warn('⚠️ Wireframe generation returned empty result');
+          showToast('Wireframe generation completed but returned empty result. Please try manually.', 'warning');
+        }
+      } catch (wireframeError) {
+        console.error('❌ Automatic wireframe generation failed:', wireframeError);
+        showToast(`Automatic wireframe generation failed: ${wireframeError instanceof Error ? wireframeError.message : 'Unknown error'}. You can still generate manually.`, 'error');
+        // Still allow user to manually trigger generation
+      }      // Image analysis is complete - user can now generate wireframe with colors
+      // The wireframe generation will happen when the user clicks "Generate" button
+      // and will use the stored imageAnalysisData
 
     } catch (error) {
       console.error('Error analyzing image:', error);
@@ -1458,7 +1449,10 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
       const result = await generateWireframe(
         description,
         designTheme,
-        colorScheme
+        colorScheme,
+        false,  // skipCache
+        fastMode,  // fastMode
+        imageAnalysisData  // imageAnalysis
       );
 
       if (result && result.html) {
@@ -1506,7 +1500,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
             }
           }}
           onSubmit={handleSubmit}
-          loading={loading}
+          loading={wireframeLoading}
           handleStop={handleStop}
           showAiSuggestions={showAiSuggestions}
           aiSuggestions={aiSuggestions}
@@ -1526,7 +1520,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           description={description}
           setDescription={setDescription}
           handleSubmit={handleSubmit}
-          loading={loading}
+          loading={wireframeLoading}
           loadingStage={loadingStage}
           fallback={fallback}
           processingTime={processingTime}

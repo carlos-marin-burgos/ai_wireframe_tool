@@ -1,0 +1,169 @@
+.copilot-loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  min-height: 120px;
+}
+
+.copilot-loader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 12px;
+}
+
+/* Dots - circular elements */
+.copilot-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5e5bff 0%, #7b79ff 100%);
+  opacity: 0;
+  transform: scale(0.3);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.copilot-dot.active {
+  opacity: 1;
+  transform: scale(1);
+  animation: copilotPulse 1.5s ease-in-out infinite;
+}
+
+/* Bars - rectangular elements */
+.copilot-bar {
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #7b79ff 0%, #9a98ff 100%);
+  opacity: 0;
+  width: 0;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.copilot-bar-1 {
+  background: linear-gradient(135deg, #7b79ff 0%, #9a98ff 100%);
+}
+
+.copilot-bar-2 {
+  background: linear-gradient(135deg, #8987ff 0%, #a8a6ff 100%);
+}
+
+.copilot-bar-3 {
+  background: linear-gradient(135deg, #9896ff 0%, #b6b4ff 100%);
+}
+
+.copilot-bar.active {
+  opacity: 1;
+}
+
+.copilot-bar-1.active {
+  width: 48px;
+  animation: copilotBarPulse 1.5s ease-in-out infinite;
+}
+
+.copilot-bar-2.active {
+  width: 72px;
+  animation: copilotBarPulse 1.5s ease-in-out infinite 0.2s;
+}
+
+.copilot-bar-3.active {
+  width: 56px;
+  animation: copilotBarPulse 1.5s ease-in-out infinite 0.4s;
+}
+
+/* Specific positioning for dots */
+.copilot-dot-1 {
+  animation-delay: 0s;
+}
+
+.copilot-dot-2 {
+  animation-delay: 0.15s;
+}
+
+.copilot-dot-3 {
+  animation-delay: 0.3s;
+}
+
+/* Animations */
+@keyframes copilotPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+@keyframes copilotBarPulse {
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scaleX(1.1);
+    opacity: 1;
+  }
+}
+
+/* Message styles */
+.copilot-loader-message {
+  margin-top: 20px;
+  color: #605e5c;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.copilot-loader-stage {
+  margin-top: 8px;
+  color: #8a8886;
+  font-size: 12px;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+  .copilot-loader-message {
+    color: #d2d0ce;
+  }
+
+  .copilot-loader-stage {
+    color: #a19f9d;
+  }
+}
+
+/* Alternative gradient theme for Microsoft Learn colors */
+.copilot-loader.ms-learn .copilot-dot {
+  background: linear-gradient(135deg, #0078d4 0%, #40a9ff 100%);
+}
+
+.copilot-loader.ms-learn .copilot-bar-1 {
+  background: linear-gradient(135deg, #0078d4 0%, #40a9ff 100%);
+}
+
+.copilot-loader.ms-learn .copilot-bar-2 {
+  background: linear-gradient(135deg, #106ebe 0%, #5cb3ff 100%);
+}
+
+.copilot-loader.ms-learn .copilot-bar-3 {
+  background: linear-gradient(135deg, #005a9e 0%, #69b7ff 100%);
+}

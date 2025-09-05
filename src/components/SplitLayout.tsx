@@ -260,7 +260,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   // Add message to conversation
   const addMessage = useCallback((type: 'user' | 'ai', content: string) => {
     const newMessage = {
-      id: Date.now().toString(),
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       type,
       content,
       timestamp: new Date()
@@ -707,15 +707,33 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
       const wireframeResult = await wireframeResponse.json();
 
-      if (!wireframeResult.success) {
+      console.log('📋 Wireframe generation response:', wireframeResult);
+
+      // Handle different response formats
+      if (wireframeResult.html) {
+        // New format: response has html property directly
+        console.log('✅ Wireframe generated successfully (direct HTML format)');
+
+        // Set the generated wireframe HTML
+        if (setHtmlWireframe) {
+          setHtmlWireframe(wireframeResult.html);
+        }
+      } else if (wireframeResult.success === false) {
+        // Old format: response has success field
+        console.error('❌ Wireframe generation failed:', wireframeResult.error);
         throw new Error(wireframeResult.error || "Wireframe generation failed");
-      }
+      } else if (wireframeResult.success || wireframeResult.wireframe) {
+        // Old format: response has success field or wireframe property
+        console.log('✅ Wireframe generated successfully (legacy format)');
 
-      console.log('✅ Wireframe generated successfully');
-
-      // Set the generated wireframe HTML
-      if (setHtmlWireframe && wireframeResult.html) {
-        setHtmlWireframe(wireframeResult.html);
+        // Set the generated wireframe HTML
+        if (setHtmlWireframe) {
+          setHtmlWireframe(wireframeResult.wireframe || wireframeResult.html);
+        }
+      } else {
+        // Unknown format
+        console.error('❌ Unknown wireframe response format:', wireframeResult);
+        throw new Error("Unexpected wireframe response format");
       }
 
       const componentsCount = imageAnalysis.components?.length || 0;

@@ -330,39 +330,56 @@ function initializeOpenAI() {
 // Initialize on module load
 initializeOpenAI();
 
-// --- AI wireframe generation using OpenAI ---
+// --- Low-fidelity CSS injection helper (mirrors primary function behavior) ---
+function injectLowFidelityCSS(html) {
+  const marker = "Low-Fidelity Wireframe Styles";
+  if (html.includes(marker)) return html; // already injected
+  const css = `\n<style>\n/* ${marker} */\n:root {\n  --wf-blue-50: #f2f9ff;\n  --wf-blue-75: #eaf4ff;\n  --wf-blue-100: #e2f0ff;\n  --wf-blue-150: #d6ecff;\n  --wf-blue-200: #c7e3ff;\n  --wf-blue-250: #b9dcff;\n  --wf-blue-border: #a8d2ff;\n  --wf-blue-accent: #0078d4;\n  --wf-text-muted: #2f3b4a;\n}\n.text-placeholder-heading {\n  background: var(--wf-blue-200);\n  height: 14px;\n  border-radius: 2px;\n  margin: 8px 0;\n  display: block;\n  width: 60%;\n  position: relative;\n}\n.text-placeholder-line {\n  background: var(--wf-blue-150);\n  height: 6px;\n  border-radius: 3px;\n  margin: 6px 0 0 0;\n  display: block;\n  width: 92%;\n}\n.text-placeholder-button {\n  background: var(--wf-blue-250);\n  height: 8px;\n  width: 80px;\n  border-radius: 3px;\n  display: inline-block;\n}\n.wireframe-component {\n  background: var(--wf-blue-75);\n  border: 1px solid var(--wf-blue-border);\n  border-radius: 6px;\n  padding: 16px;\n  margin: 8px 0;\n}\n.wireframe-component.secondary {\n  background: var(--wf-blue-100);\n}\n.wireframe-nav {\n  background: var(--wf-blue-75);\n  padding: 12px 20px;\n  border-bottom: 1px solid var(--wf-blue-border);\n  display: flex;\n  align-items: center;\n  gap: 20px;\n}\n.wireframe-button {\n  background: var(--wf-blue-100);\n  border: 1px solid var(--wf-blue-border);\n  padding: 8px 16px;\n  border-radius: 4px;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n}\n.wireframe-image {\n  background: var(--wf-blue-150);\n  border: 1px solid var(--wf-blue-border);\n  border-radius: 4px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  color: var(--wf-blue-accent);\n  font-size: 14px;\n  min-height: 120px;\n}\n.wireframe-card {\n  background: #ffffff;\n  border: 1px solid var(--wf-blue-border);\n  border-radius: 6px;\n  padding: 16px;\n  margin: 8px 0;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);\n}\n/* Override any earlier grey styles accidentally produced by model */\nstyle + style .text-placeholder-line,\nstyle + style .text-placeholder-heading,\nstyle + style .text-placeholder-button { background: inherit; }\n/* Paragraph simulation: create natural ragged edges */\n.wireframe-component .text-placeholder-heading + .text-placeholder-line { width: 95%; }\n.wireframe-component .text-placeholder-heading + .text-placeholder-line + .text-placeholder-line { width: 88%; }\n.wireframe-component .text-placeholder-heading + .text-placeholder-line + .text-placeholder-line + .text-placeholder-line { width: 76%; }\n/* Generic variation for any consecutive lines */\n.wireframe-component .text-placeholder-line:nth-of-type(4n+1) { width: 93%; }\n.wireframe-component .text-placeholder-line:nth-of-type(4n+2) { width: 87%; }\n.wireframe-component .text-placeholder-line:nth-of-type(4n+3) { width: 74%; }\n.wireframe-component .text-placeholder-line:nth-of-type(4n) { width: 60%; }\n</style>`;
+  if (html.includes("<head")) {
+    return html.replace(/<head[^>]*>/i, (m) => m + css);
+  }
+  return `<!DOCTYPE html><head>${css}</head>` + html;
+}
+
+// --- AI wireframe generation using OpenAI (supports low-fidelity mode) ---
 async function generateWithAI(description, options = {}) {
   if (!openai) throw new Error("OpenAI not initialized");
 
+  const lowFidelityMode =
+    (process.env.LOW_FIDELITY_MODE || "true").toLowerCase() !== "false";
   const theme = options.theme || "professional";
   const colorScheme = options.colorScheme || "blue";
   const fastMode = options.fastMode !== false;
 
-  const prompt = `Create a complete, modern HTML wireframe for: ${description}\n\nRequirements:\n- Use modern CSS with flexbox/grid\n- Include semantic HTML structure\n- ${theme} theme with ${colorScheme} color scheme\n- Mobile-responsive design\n- Include proper meta tags and DOCTYPE\n- Use inline CSS for complete standalone file\n- Create sections for: header, main content, and footer (navigation will be provided separately)\n- DO NOT create any navigation elements (nav, header with navigation) as navigation is provided\n- IMPORTANT: Color contrast rules - ALWAYS use dark text (#333 or #000) on light backgrounds (#fff, #f8f9fa, #E8E6DF). For headers with #E8E6DF background, use black text (#333 or #000) for optimal readability.\n- Avoid opacity values below 0.9 for text to ensure readability\n${
-    fastMode
-      ? "- Keep it simple and fast to load"
-      : "- Include rich interactions and detailed styling"
-  }\n\nReturn only the complete HTML code, no explanations.`;
+  let prompt;
+  let systemMessage;
+
+  if (lowFidelityMode) {
+    systemMessage =
+      "You create LOW-FIDELITY Microsoft Learn style wireframes with placeholder bars and specific CSS classes.";
+    prompt = `Create a LOW-FIDELITY wireframe for: "${description}"\n\nSTRICT CLASS RULES:\n1. Wrap logical groups in <div class=\"wireframe-component\">\n2. Navigation areas: wireframe-nav\n3. Buttons: wireframe-button (with nested <div class=\"text-placeholder-button\"></div> if text unspecified)\n4. Images/media: wireframe-image\n5. Headings: text-placeholder-heading (unless exact heading text explicitly provided)\n6. Body text lines: text-placeholder-line\n7. Actual user-specified text must be preserved EXACTLY if quoted or clearly specified in description.\n\nTRANSFORM RULES:\n- If description says "login form" create username + password inputs and a submit button using components above.\n- Use placeholder bars for any unspecified text.\n- Do NOT add branding, Microsoft logos, Fluent UI components, complex gradients, animations, or Atlas components. Pure wireframe only.\n- Keep structure semantic where possible but minimal (divs acceptable).\n\nOUTPUT:\nReturn ONLY full standalone HTML starting with <!DOCTYPE html>.`;
+  } else {
+    systemMessage =
+      "You are a professional web developer producing clean, modern HTML wireframes.";
+    prompt = `Create a complete, modern HTML wireframe for: ${description}\n\nRequirements:\n- Use modern CSS with flexbox/grid\n- Include semantic HTML structure\n- ${theme} theme with ${colorScheme} color scheme\n- Mobile-responsive design\n- Include proper meta tags and DOCTYPE\n- Create sections for: header, main content, and footer (navigation provided separately)\n- DO NOT create any navigation elements (nav, header with navigation)\n${
+      fastMode
+        ? "- Keep it simple and fast to load"
+        : "- Include richer styling"
+    }\nReturn only the complete HTML code.`;
+  }
 
   const deployment = process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o";
-
   const completion = await openai.chat.completions.create({
     messages: [
-      {
-        role: "system",
-        content:
-          "You are a professional web developer who creates clean, modern HTML wireframes. Return only valid HTML code.",
-      },
+      { role: "system", content: systemMessage },
       { role: "user", content: prompt },
     ],
     model: deployment,
     max_tokens: 4000,
-    temperature: 0.7,
+    temperature: lowFidelityMode ? 0.2 : 0.7,
   });
 
   const html = completion.choices?.[0]?.message?.content || "";
-
-  // Comprehensive markdown cleanup
   const cleanedHtml = html
     .replace(/```html\n?/g, "")
     .replace(/```javascript\n?/g, "")
@@ -371,14 +388,11 @@ async function generateWithAI(description, options = {}) {
     .replace(/`{3,}/g, "")
     .trim();
 
-  console.log("🧹 OpenAI Response Cleanup (ENHANCED):");
-  console.log("Raw response length:", html.length);
-  console.log("Cleaned response length:", cleanedHtml.length);
-  console.log(
-    "First 100 chars of cleaned response:",
-    cleanedHtml.substring(0, 100)
-  );
-
+  console.log("🧹 OpenAI Response Cleanup (ENHANCED):", {
+    lowFidelityMode,
+    rawLength: html.length,
+    cleanedLength: cleanedHtml.length,
+  });
   return cleanedHtml;
 }
 
@@ -419,6 +433,9 @@ module.exports = async function (context, req) {
       imageAnalysis,
     } = req.body || {};
 
+    const lowFidelityMode =
+      (process.env.LOW_FIDELITY_MODE || "true").toLowerCase() !== "false";
+
     console.log("🎨 Enhanced wireframe generation request", {
       description: description.substring(0, 100) + "...",
       hasImageAnalysis: !!imageAnalysis,
@@ -426,6 +443,7 @@ module.exports = async function (context, req) {
       componentsCount: imageAnalysis?.components?.length || 0,
       imageAnalysisKeys: imageAnalysis ? Object.keys(imageAnalysis) : [],
       designTokens: imageAnalysis?.designTokens,
+      lowFidelityMode,
     });
 
     if (!description) {
@@ -448,137 +466,49 @@ module.exports = async function (context, req) {
       }
     }
 
-    // Generate base wireframe
+    // Generate base wireframe HTML first
     let html = await generateWithAI(description, {
       theme,
       colorScheme,
       fastMode,
     });
 
-    if (!html || !html.includes("<!DOCTYPE html>") || html.length < 500) {
+    if (!html || !html.includes("<!DOCTYPE html>")) {
       throw new Error("AI response insufficient or invalid");
     }
 
-    // Check if this is for an uploaded image - if so, skip Microsoft components
-    if (imageAnalysis) {
-      console.log(
-        "📸 Uploaded image detected - skipping Microsoft nav/footer to preserve image accuracy"
-      );
-      console.log(
-        "🎨 Using colors from uploaded image:",
-        imageAnalysis.designTokens?.colors
-      );
-    } else {
-      // ✨ ONLY inject Atlas Navigation for template-based wireframes (NOT uploaded images)
-      console.log(
-        "🧭 Injecting clean Atlas Navigation for template-based wireframes..."
-      );
-      const atlasNavigation = `
-      <!-- Atlas Navigation - Always Present at TOP -->
-      <style>
-        .atlas-navigation {
-          /* No animations - static navigation */
-        }
-        
-        .atlas-navigation nav a:hover {
-          color: #0078d4 !important;
-          border-bottom-color: #0078d4 !important;
-        }
-        
-        .atlas-navigation img:hover {
-          transform: scale(1.05);
-          transition: transform 0.2s ease;
-        }
-      </style>
-      
-      <header class="atlas-navigation" style="
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 24px;
-        background: #ffffff !important;
-        background-color: #ffffff !important;
-        border-bottom: 1px solid #e1e5e9;
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        margin: 0;
-      ">
-        <!-- Logo & Brand -->
-        <div style="display: flex; align-items: center; gap: 16px;">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <!-- Microsoft Logo -->
-            <div style="position: relative; width: 20px; height: 20px;">
-              <div style="position: absolute; top: 0; left: 0; width: 9px; height: 9px; background: #F26522;"></div>
-              <div style="position: absolute; top: 0; right: 0; width: 9px; height: 9px; background: #8DC63F;"></div>
-              <div style="position: absolute; bottom: 0; left: 0; width: 9px; height: 9px; background: #00AEEF;"></div>
-              <div style="position: absolute; bottom: 0; right: 0; width: 9px; height: 9px; background: #FFC20E;"></div>
-            </div>
-            <span style="font-size: 18px; font-weight: 600; color: #323130; margin-left: 8px;">Learn</span>
-          </div>
-          
-          <!-- Navigation Menu -->
-          <nav style="display: flex; gap: 24px; margin-left: 32px;">
-            <a href="#" style="color: #323130; text-decoration: none; font-weight: 500; padding: 8px 0; border-bottom: 2px solid transparent; transition: all 0.2s;">Browse</a>
-            <a href="#" style="color: #323130; text-decoration: none; font-weight: 500; padding: 8px 0; border-bottom: 2px solid transparent; transition: all 0.2s;">Reference</a>
-            <a href="#" style="color: #0078d4; text-decoration: none; font-weight: 500; padding: 8px 0; border-bottom: 2px solid #0078d4; transition: all 0.2s;">Learn</a>
-            <a href="#" style="color: #323130; text-decoration: none; font-weight: 500; padding: 8px 0; border-bottom: 2px solid transparent; transition: all 0.2s;">Q&A</a>
-          </nav>
-        </div>
-        
-        <!-- User Section -->
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <!-- User Avatar with Mina image -->
-          <img src="mina.png" alt="Mina" style="
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #e1e1e1;
-          " />
-        </div>
-      </header>`;
-
-      // Inject navigation right after <body> tag
-      if (html.includes("<body>")) {
-        html = html.replace("<body>", `<body>\n${atlasNavigation}`);
-        console.log("✅ Atlas Navigation injected after <body> tag");
-      } else if (html.includes("<body ")) {
-        const bodyTagMatch = html.match(/<body[^>]*>/);
-        if (bodyTagMatch) {
-          html = html.replace(
-            bodyTagMatch[0],
-            `${bodyTagMatch[0]}\n${atlasNavigation}`
-          );
-          console.log("✅ Atlas Navigation injected after <body ...> tag");
-        }
-      } else {
-        console.log("⚠️ No <body> tag found, appending navigation to content");
-        html = atlasNavigation + html;
-      }
-    }
-
     // Conditionally apply Atlas components (skip for uploaded images)
-    if (!imageAnalysis && includeAtlas) {
-      console.log("📝 No image analysis - adding Atlas components");
-      html = addAtlasComponents(html, description);
-    } else if (imageAnalysis) {
-      console.log(
-        "📸 Skipping Atlas components for uploaded image to preserve accuracy"
-      );
+    if (!lowFidelityMode) {
+      if (!imageAnalysis && includeAtlas) {
+        console.log("📝 Branding mode: adding Atlas components");
+        html = addAtlasComponents(html, description);
+      } else if (imageAnalysis) {
+        console.log(
+          "📸 Skipping Atlas components for uploaded image to preserve accuracy"
+        );
+      }
+    } else {
+      console.log("ℹ️ Low-fidelity mode: Skipping Atlas components");
     }
 
     // Apply Fluent Playbook components (only for template-based wireframes, NOT uploaded images)
-    if (!imageAnalysis) {
+    if (!imageAnalysis && !lowFidelityMode) {
       html = addFluentPlaybookComponents(html);
-      console.log(
-        "🎨 Applied Fluent Playbook components for template-based wireframe"
-      );
+      console.log("🎨 Applied Fluent Playbook components (branding mode)");
+    } else if (lowFidelityMode) {
+      console.log("ℹ️ Low-fidelity mode: Skipping Fluent Playbook components");
     } else {
-      console.log(
-        "📸 Skipping Fluent Playbook components for uploaded image to preserve original design"
-      );
+      console.log("📸 Uploaded image: skipping Fluent components");
+    }
+
+    // Inject low-fidelity CSS if in that mode
+    if (lowFidelityMode) {
+      html = injectLowFidelityCSS(html);
+      if (!/wireframe-component/.test(html)) {
+        console.warn(
+          "⚠️ Low-fidelity expected classes missing; AI output may not respect prompt."
+        );
+      }
     }
 
     const processingTime = Date.now() - startTime;
@@ -599,7 +529,8 @@ module.exports = async function (context, req) {
         theme: theme || "professional",
         colorScheme: colorScheme || "blue",
         fastMode: fastMode !== false,
-        includeAtlas: includeAtlas !== false,
+        includeAtlas: includeAtlas !== false && !lowFidelityMode,
+        lowFidelityMode,
         atlasComponents: atlasStats,
         generatedAt: new Date().toISOString(),
         processingTimeMs: processingTime,
