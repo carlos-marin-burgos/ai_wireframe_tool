@@ -1,0 +1,84 @@
+/* Wireframe Loading Spinner - Overlay */
+.wireframe-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  border-radius: 12px;
+}
+
+/* Spinner Sizes */
+.wireframe-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.wireframe-spinner-small .spinner-circle {
+  width: 24px;
+  height: 24px;
+  border-width: 3px;
+}
+
+.wireframe-spinner-medium .spinner-circle {
+  width: 40px;
+  height: 40px;
+  border-width: 4px;
+}
+
+.wireframe-spinner-large .spinner-circle {
+  width: 56px;
+  height: 56px;
+  border-width: 5px;
+}
+
+/* Spinner Circle */
+.spinner-circle {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #0078d4;
+  border-radius: 50%;
+  animation: wireframeSpinRotate 1s linear infinite;
+}
+
+/* Loading Message */
+.wireframe-loading-message {
+  color: #323130;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 8px;
+  padding: 0 24px;
+  max-width: 400px;
+  line-height: 1.4;
+}
+
+/* Spinner Animation */
+@keyframes wireframeSpinRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Button Spinner (for send buttons) */
+.wireframe-button-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ffffff40;
+  border-top: 2px solid #ffffff;
+  border-radius: 50%;
+  animation: wireframeSpinRotate 1s linear infinite;
+  display: inline-block;
+}

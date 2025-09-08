@@ -55,7 +55,7 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
 
     return (
         <div className="simple-drag-wireframe">
-            <div ref={containerRef} className="dragula-container"></div>
+            <div ref={containerRef} className="wireframe-content dragula-container"></div>
         </div>
     );
 };

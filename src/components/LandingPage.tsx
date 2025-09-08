@@ -1,6 +1,39 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
+import { FiX } from 'react-icons/fi';
+import "./LandingPage.css";
+import Footer from './Footer';
+import ImageUploadZone from './ImageUploadZone';
+import LoadingOverlay from './LoadingOverlay';
+import WireframeButtonSpinner from './WireframeButtonSpinner';
+import { figmaApi, FigmaFile as ApiFigmaFile, FigmaFrame } from '../services/figmaApi';
+import DeleteConfirmationModal from './DeleteConfirmationModal';
+import FigmaIntegrationModal from './FigmaIntegrationModal';
+
+interface LandingPageProps {
+  error: string | null;
+  savedWireframesCount: number;
+  onLoadClick: () => void;
+  description: string;
+  onDescriptionChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onSubmit: (e: React.FormEvent, overrideDescription?: string) => void;
+  loading: boolean;
+  loadingStage?: string;
+  handleStop: () => void;
+  showAiSuggestions: boolean;
+  aiSuggestions: string[];
+  suggestionLoading: boolean;
+  onAiSuggestionClick: (suggestion: string) => void;
+  onGenerateAiSuggestions?: (currentValue: string) => void;
+  onImageUpload?: (file: File) => void;
+  onAnalyzeImage?: (imageUrl: string, fileName: string) => void;
+  isAnalyzingImage?: boolean;
+  onFigmaImport?: (html: string, fileName: string) => void;
+  onFigmaExport?: (format: 'figma-file' | 'figma-components') => void;
+  onOpenWireframe?: (html: string, description: string) => void;
+  onFigmaModalOpen?: () => void;
+}
+
 import {
-  FiX,
   FiPlus,
   FiFolder,
   FiLoader,
@@ -22,37 +55,7 @@ import {
   FiLayers,
   FiSettings,
   FiExternalLink,
-} from 'react-icons/fi';
-import "./LandingPage.css";
-import Footer from './Footer';
-import FluentImageUploadModal from './FluentImageUploadModal';
-import { figmaApi, FigmaFile as ApiFigmaFile, FigmaFrame } from '../services/figmaApi';
-import DeleteConfirmationModal from './DeleteConfirmationModal';
-import FigmaIntegrationModal from './FigmaIntegrationModal';
-
-interface LandingPageProps {
-  error: string | null;
-  savedWireframesCount: number;
-  onLoadClick: () => void;
-  description: string;
-  onDescriptionChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  onSubmit: (e: React.FormEvent, overrideDescription?: string) => void;
-  loading: boolean;
-  handleStop: () => void;
-  showAiSuggestions: boolean;
-  aiSuggestions: string[];
-  suggestionLoading: boolean;
-  onAiSuggestionClick: (suggestion: string) => void;
-  onGenerateAiSuggestions?: (currentValue: string) => void;
-  onImageUpload?: (file: File) => void;
-  onAnalyzeImage?: (imageUrl: string, fileName: string) => void;
-  onCancelImageAnalysis?: () => void;
-  isAnalyzingImage?: boolean;
-  onFigmaImport?: (html: string, fileName: string) => void;
-  onFigmaExport?: (format: 'figma-file' | 'figma-components') => void;
-  onOpenWireframe?: (html: string, description: string) => void;
-  onFigmaModalOpen?: () => void;
-}
+} from "react-icons/fi";
 
 const LandingPage: React.FC<LandingPageProps> = ({
   error,
@@ -62,6 +65,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
   onDescriptionChange,
   onSubmit,
   loading,
+  loadingStage,
   handleStop,
   showAiSuggestions,
   aiSuggestions,
@@ -70,15 +74,12 @@ const LandingPage: React.FC<LandingPageProps> = ({
   onGenerateAiSuggestions,
   onImageUpload,
   onAnalyzeImage,
-  onCancelImageAnalysis,
   isAnalyzingImage = false,
   onFigmaImport,
   onFigmaExport,
   onOpenWireframe,
   onFigmaModalOpen,
 }) => {
-  console.log('🔄 LandingPage render start');
-
   // Create ref for textarea autofocus
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -86,8 +87,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
   const projectsContainerRef = useRef<HTMLDivElement>(null);
 
   // State for image upload modal
-  const [isImageUploadModalOpen, setIsImageUploadModalOpen] = useState(false);
-  const [wasAnalysisStarted, setWasAnalysisStarted] = useState(false);
+  const [showImageUpload, setShowImageUpload] = useState(false);
 
   // State for validation error
   const [validationError, setValidationError] = useState<string | null>(null);
@@ -118,23 +118,13 @@ const LandingPage: React.FC<LandingPageProps> = ({
   // Load favorites and recents from localStorage
   useEffect(() => {
     const loadFavorites = () => {
-      try {
-        const savedFavorites = JSON.parse(localStorage.getItem('designetica_favorites') || '[]');
-        setFavorites(savedFavorites);
-      } catch (error) {
-        console.warn('Failed to load favorites from localStorage:', error);
-        setFavorites([]);
-      }
+      const savedFavorites = JSON.parse(localStorage.getItem('designetica_favorites') || '[]');
+      setFavorites(savedFavorites);
     };
 
     const loadRecents = () => {
-      try {
-        const savedRecents = JSON.parse(localStorage.getItem('designetica_recents') || '[]');
-        setRecents(savedRecents);
-      } catch (error) {
-        console.warn('Failed to load recents from localStorage:', error);
-        setRecents([]);
-      }
+      const savedRecents = JSON.parse(localStorage.getItem('designetica_recents') || '[]');
+      setRecents(savedRecents);
     };
 
     loadFavorites();
@@ -149,15 +139,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
-
-  // Close image upload modal when analysis completes
-  useEffect(() => {
-    if (wasAnalysisStarted && !isAnalyzingImage && isImageUploadModalOpen) {
-      // Analysis completed, close the modal
-      setIsImageUploadModalOpen(false);
-      setWasAnalysisStarted(false);
-    }
-  }, [isAnalyzingImage, isImageUploadModalOpen, wasAnalysisStarted]);
 
   // Delete favorite function
   const handleDeleteFavorite = (favoriteId: string) => {
@@ -210,18 +191,13 @@ const LandingPage: React.FC<LandingPageProps> = ({
       createdAt: new Date().toISOString()
     };
 
-    try {
-      const currentFavorites = JSON.parse(localStorage.getItem('designetica_favorites') || '[]');
-      const updatedFavorites = [...currentFavorites, newFavorite];
+    const currentFavorites = JSON.parse(localStorage.getItem('designetica_favorites') || '[]');
+    const updatedFavorites = [...currentFavorites, newFavorite];
 
-      setFavorites(updatedFavorites);
-      localStorage.setItem('designetica_favorites', JSON.stringify(updatedFavorites));
+    setFavorites(updatedFavorites);
+    localStorage.setItem('designetica_favorites', JSON.stringify(updatedFavorites));
 
-      alert(`"${projectName}" has been added to your favorites!`);
-    } catch (error) {
-      console.warn('Failed to add to favorites:', error);
-      alert('Failed to add to favorites. Please try again.');
-    }
+    alert(`"${projectName}" has been added to your favorites!`);
   };
 
   // Add to recents utility function (can be called from parent)
@@ -235,23 +211,19 @@ const LandingPage: React.FC<LandingPageProps> = ({
       createdAt: new Date().toISOString()
     };
 
-    try {
-      const currentRecents = JSON.parse(localStorage.getItem('designetica_recents') || '[]');
+    const currentRecents = JSON.parse(localStorage.getItem('designetica_recents') || '[]');
 
-      // Avoid duplicates by checking if a recent with the same name exists
-      const existingIndex = currentRecents.findIndex((recent: any) => recent.name === name);
-      if (existingIndex !== -1) {
-        currentRecents.splice(existingIndex, 1); // Remove existing
-      }
-
-      // Add to beginning of array (most recent first)
-      const updatedRecents = [newRecent, ...currentRecents].slice(0, 10); // Keep only last 10
-
-      setRecents(updatedRecents);
-      localStorage.setItem('designetica_recents', JSON.stringify(updatedRecents));
-    } catch (error) {
-      console.warn('Failed to add to recents:', error);
+    // Avoid duplicates by checking if a recent with the same name exists
+    const existingIndex = currentRecents.findIndex((recent: any) => recent.name === name);
+    if (existingIndex !== -1) {
+      currentRecents.splice(existingIndex, 1); // Remove existing
     }
+
+    // Add to beginning of array (most recent first)
+    const updatedRecents = [newRecent, ...currentRecents].slice(0, 10); // Keep only last 10
+
+    setRecents(updatedRecents);
+    localStorage.setItem('designetica_recents', JSON.stringify(updatedRecents));
   }, []);
 
   // Expose addToRecents function to parent
@@ -428,12 +400,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
 
   // Toggle image upload modal
   const toggleImageUpload = () => {
-    setIsImageUploadModalOpen(prev => !prev);
-  };
-
-  // Open image upload modal (for consistency with SplitLayout)
-  const openImageUploadModal = () => {
-    setIsImageUploadModalOpen(true);
+    setShowImageUpload(prev => !prev);
   };
 
   // Simple Figma Integration handlers - Enhanced modal handles the rest
@@ -451,49 +418,24 @@ const LandingPage: React.FC<LandingPageProps> = ({
     setIsFigmaModalOpen(false);
   };
 
-  // Image processing handlers - delegate to parent but close modal
-  const handleImageFile = (file: File) => {
-    if (onImageUpload) {
-      onImageUpload(file);
-    }
-    // Don't close modal immediately in LandingPage - let parent handle it
-  };
-
-  const handleAnalyzeImage = (imageUrl: string, fileName: string) => {
-    setWasAnalysisStarted(true); // Track that analysis was initiated
-    if (onAnalyzeImage) {
-      onAnalyzeImage(imageUrl, fileName);
-    }
-    // Don't close modal immediately - let the parent handle modal closing after analysis completes
-  };
-
-  console.log('🔄 LandingPage about to render JSX');
   return (
     <div className="landing-page">
       <div className="landing-container">
         <div className="landing-content">
-          {/* Figma Plugin Announcement Banner - Positioned at the very top */}
-          <div className="figma-plugin-announcement">
-            <div className="announcement-content">
-              <div className="announcement-icon">
-                <FiFigma />
-              </div>
-              <div className="announcement-text">
-                <h3>🎉 New: Designetica Figma Plugin!</h3>
-                <p>Generate AI wireframes directly in Figma.</p>
-              </div>
-              <div className="announcement-action">
-                <a
-                  href="figma://plugin/1543300122157762658"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="figma-plugin-btn"
-                >
-                  <FiFigma />
-                  Open in Figma
-                </a>
-              </div>
-            </div>
+          {/* Figma Plugin Announcement Banner - Compact single line */}
+          <div className="figma-plugin-announcement-compact">
+            <span className="announcement-text">
+              🎉 <strong>New:</strong> Designetica Figma Plugin - Generate AI wireframes directly in Figma
+            </span>
+            <a
+              href="figma://plugin/1543300122157762658"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="figma-plugin-btn-compact"
+            >
+              <FiFigma />
+              Open Plugin
+            </a>
           </div>
 
           <h1 className="main-heading">What will you <span className="design-word">design</span> today?</h1>
@@ -545,7 +487,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
                   title={loading ? "Generating..." : "Generate Wireframe"}
                 >
                   {loading ? (
-                    <FiLoader className="loading-spinner" />
+                    <WireframeButtonSpinner />
                   ) : (
                     <FiSend className="send-icon" />
                   )}
@@ -741,8 +683,40 @@ const LandingPage: React.FC<LandingPageProps> = ({
           </form>
 
           {/* Image Upload Zone */}
-          {/* Inline image upload zone would go here if showImageUpload is true */}
-          {/* Note: Image upload is now handled by FluentImageUploadModal below */}
+          {showImageUpload && onImageUpload && onAnalyzeImage && (
+            <div className="modal-overlay" onClick={() => setShowImageUpload(false)}>
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                {/* Modal Header */}
+                <div className="modal-header">
+                  <div className="modal-title">
+                    <FiUpload className="modal-icon" />
+                    <h2>Upload Image to Wireframe</h2>
+                  </div>
+                  <button className="modal-close-btn" onClick={() => setShowImageUpload(false)} title="Close modal">
+                    <FiX />
+                  </button>
+                </div>
+
+                {/* Modal Body */}
+                <div className="modal-body">
+                  <div className="upload-content">
+                    <p className="modal-description">
+                      Upload an image of a UI design, wireframe, or website screenshot to generate a wireframe based on its layout.
+                    </p>
+
+                    <div className="upload-zone-container">
+                      <ImageUploadZone
+                        onImageUpload={onImageUpload}
+                        onAnalyzeImage={onAnalyzeImage}
+                        isAnalyzing={isAnalyzingImage}
+                        className="upload-zone"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
         </div>
       </div>
@@ -753,16 +727,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
         onClose={() => setIsFigmaModalOpen(false)}
         onImport={handleFigmaImport}
         onExport={handleFigmaExport}
-      />
-
-      {/* Image Upload Modal */}
-      <FluentImageUploadModal
-        isOpen={isImageUploadModalOpen}
-        onClose={() => setIsImageUploadModalOpen(false)}
-        onImageUpload={handleImageFile}
-        onAnalyzeImage={handleAnalyzeImage}
-        onCancel={onCancelImageAnalysis}
-        isAnalyzing={isAnalyzingImage || false}
       />
 
       {/* GitHub Connect Modal */}

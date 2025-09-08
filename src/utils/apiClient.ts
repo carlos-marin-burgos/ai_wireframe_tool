@@ -113,8 +113,8 @@ async function fetchWithRetry(
     try {
       const response = await fetch(url, {
         ...options,
-        // Add timeout to prevent hanging requests - increased for AI processing
-        signal: AbortSignal.timeout(90000), // 90 second timeout for AI wireframe generation
+        // Add timeout to prevent hanging requests
+        signal: AbortSignal.timeout(30000), // 30 second timeout
       });
 
       // Check if the response is ok (status in the range 200-299)

@@ -1,0 +1,209 @@
+import React, { useEffect, useRef, useState } from 'react';
+import './WireframeRenderer.css';
+
+interface WireframeRendererProps {
+  htmlContent: string;
+  theme?: string;
+}
+
+const WireframeRenderer: React.FC<WireframeRendererProps> = ({
+  htmlContent,
+  theme = 'microsoftlearn'
+}) => {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [height, setHeight] = useState<number>(500);
+  const [renderKey, setRenderKey] = useState<number>(Date.now());
+  const [error, setError] = useState<string | null>(null);
+  const [showHint, setShowHint] = useState(true);
+
+  // Function to sanitize HTML content
+  const sanitizeHTML = (html: string | null | undefined): string => {
+    if (!html || typeof html !== 'string') {
+      console.warn('WireframeRenderer: Received invalid HTML content', typeof html);
+      return '';
+    }
+
+    try {
+      const htmlString = String(html);
+      let sanitized = htmlString.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+      sanitized = sanitized.replace(/\s+on\w+\s*=\s*["']?[^"']*["']?/gi, '');
+      sanitized = sanitized.replace(/javascript:\s*[^"']*["']/gi, '');
+      return sanitized;
+    } catch (error) {
+      console.error('Error sanitizing HTML:', error);
+      return '';
+    }
+  };
+
+  useEffect(() => {
+    if (htmlContent && typeof htmlContent === 'string') {
+      setError(null);
+      
+      if (iframeRef.current) {
+        try {
+          const iframe = iframeRef.current;
+          
+          // Create a document for the iframe
+          const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+          
+          if (iframeDoc) {
+            // Open the document
+            iframeDoc.open();
+            
+            // Write the HTML content to the iframe
+            iframeDoc.write(`
+              <!DOCTYPE html>
+              <html>
+                <head>
+                  <style>
+                    /* Base styles for iframe content */
+                    body {
+                      margin: 0;
+                      padding: 0;
+                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+                    }
+                    
+                    /* Microsoft Learn theme styles - ONLY applied within the iframe */
+                    .ms-learn-container {
+                      width: 100%;
+                      max-width: 1200px;
+                      margin: 0 auto;
+                      padding: 16px;
+                      font-family: 'Segoe UI', sans-serif;
+                    }
+                    
+                    .ms-learn-header {
+                      padding: 16px 0;
+                      border-bottom: 1px solid #e0e0e0;
+                    }
+                    
+                    .ms-learn-title {
+                      font-size: 24px;
+                      font-weight: 600;
+                      margin: 0;
+                    }
+                    
+                    .ms-learn-card {
+                      border: 1px solid #e0e0e0;
+                      border-radius: 4px;
+                      padding: 16px;
+                      margin: 16px 0;
+                      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                    }
+                    
+                    .ms-learn-button {
+                      background-color: #0078d4;
+                      color: white;
+                      border: none;
+                      border-radius: 2px;
+                      padding: 8px 16px;
+                      font-size: 14px;
+                      cursor: pointer;
+                    }
+                  </style>
+                </head>
+                <body>
+                  <div class="wireframe-content ${theme}-theme">
+                    ${sanitizeHTML(htmlContent)}
+                  </div>
+                </body>
+              </html>
+            `);
+            
+            // Close the document
+            iframeDoc.close();
+          }
+        } catch (err) {
+          setError("Error rendering content: " + (err instanceof Error ? err.message : String(err)));
+        }
+      }
+    } else {
+      setError("Invalid HTML content received");
+    }
+    
+    // Update the key to force re-render
+    setRenderKey(Date.now());
+  }, [htmlContent, theme]);
+
+  useEffect(() => {
+    if (iframeRef.current) {
+      const iframe = iframeRef.current;
+      
+      // Handle iframe resize
+      const handleIframeLoad = () => {
+        try {
+          const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+          if (iframeDoc && iframeDoc.body) {
+            const newHeight = Math.max(
+              iframeDoc.body.scrollHeight,
+              iframeDoc.documentElement.scrollHeight,
+              500
+            );
+            setHeight(newHeight);
+          }
+        } catch (err) {
+          console.error('Error resizing iframe:', err);
+        }
+      };
+      
+      // Add load event listener
+      iframe.addEventListener('load', handleIframeLoad);
+      
+      // Set up a resize observer if available
+      if (typeof ResizeObserver !== 'undefined') {
+        const resizeObserver = new ResizeObserver(() => {
+          handleIframeLoad();
+        });
+        
+        resizeObserver.observe(iframe);
+        
+        return () => {
+          iframe.removeEventListener('load', handleIframeLoad);
+          resizeObserver.disconnect();
+        };
+      }
+      
+      return () => {
+        iframe.removeEventListener('load', handleIframeLoad);
+      };
+    }
+  }, [renderKey]);
+
+  // Function to dismiss the hint
+  const dismissHint = () => setShowHint(false);
+
+  return (
+    <div>
+      {showHint && (
+        <div className="wireframe-interactive-hint">
+          <span>💡 Click buttons and links to generate new pages</span>
+          <button
+            className="hint-close-button"
+            onClick={dismissHint}
+            aria-label="Close hint"
+          >×</button>
+        </div>
+      )}
+      
+      <div className="wireframe-renderer">
+        {error ? (
+          <div className="wireframe-error">
+            <p>Unable to render wireframe: {error}</p>
+            <p>Please try generating the wireframe again.</p>
+          </div>
+        ) : (
+          <iframe
+            key={renderKey}
+            ref={iframeRef}
+            title="Wireframe Preview"
+            sandbox="allow-same-origin allow-scripts"
+            className="wireframe-iframe"
+            height={height}
+          />
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default WireframeRenderer;

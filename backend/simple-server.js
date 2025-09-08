@@ -713,8 +713,17 @@ REQUIREMENTS:
 7. ADD interactive elements where appropriate (hover states, focus styles)
 8. USE the specified color scheme throughout
 9. ENSURE accessibility (proper labels, contrast, semantic HTML)
-10. INCLUDE realistic placeholder content that matches the context
-11. MAKE it look polished and production-ready
+10. INCLUDE realistic, specific content that matches the context - NO PLACEHOLDER DIVS OR EMPTY ELEMENTS
+11. MAKE it look polished and production-ready with REAL TEXT, NUMBERS, and CONTENT
+
+CONTENT REQUIREMENTS:
+- NO placeholder divs, placeholder text, or empty elements
+- Use REAL content like actual numbers, text, labels, and data
+- For dashboards: include real metrics like "1,247 Users", "$45,892 Revenue", "328 Orders"
+- For forms: include real labels like "First Name", "Email Address", "Password"
+- For tables: include real column headers and sample data rows
+- For navigation: include real menu items and links
+- Make everything look like a working, production interface
 
 MICROSOFT LEARN HEADER TEMPLATE (ALWAYS INCLUDE FIRST):
 <header style="background: #ffffff; color: #000000; padding: 12px 24px; border-bottom: 1px solid #e5e5e5; font-family: 'Segoe UI', system-ui, sans-serif;">
@@ -780,7 +789,7 @@ Return ONLY the HTML code with inline CSS. No markdown formatting, no explanatio
           {
             role: "system",
             content:
-              "You are an expert frontend developer and UI/UX designer who creates beautiful, production-ready HTML interfaces with inline CSS. You analyze user requirements and generate complete, functional wireframes that match exactly what users describe. You are creative, thorough, and build realistic interfaces that look professional and polished.",
+              "You are an expert frontend developer and UI/UX designer who creates beautiful, production-ready HTML interfaces with inline CSS. You analyze user requirements and generate complete, functional wireframes that match exactly what users describe. You NEVER use placeholder content - you always generate real, meaningful content with actual text, numbers, and data. You are creative, thorough, and build realistic interfaces that look professional and polished with real content.",
           },
           {
             role: "user",

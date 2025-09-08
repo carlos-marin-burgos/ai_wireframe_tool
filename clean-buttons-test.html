@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Button Page</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #FAFAFA;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    button {
+      background: #0078d4;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:focus,
+    button:hover {
+      outline: none;
+      background-color: #005a9e;
+    }
+  </style>
+
+  <link rel="stylesheet"
+    href="https://unpkg.com/@fluentui/web-components/dist/fluent-design-system.css?v=1757362182559">
+  <script type="module"
+    src="https://unpkg.com/@fluentui/web-components/dist/web-components.min.js?v=1757362182559"></script>
+  <script>
+    // Force Fluent components to register immediately
+    window.addEventListener('DOMContentLoaded', () => {
+      console.log('🚀 FLUENT COMPONENTS LOADING - Cache Bust: 1757362182559');
+      // Force re-register all Fluent components
+      if (window.fluentDesignSystem) {
+        console.log('✅ Fluent Design System is available');
+      }
+    });
+  </script>
+  <style>
+    /* FORCE Fluent components to display properly */
+    fluent-button,
+    fluent-text-field,
+    fluent-text-area,
+    fluent-select,
+    fluent-checkbox {
+      display: inline-block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+
+    /* Hide any remaining standard HTML form elements */
+    input:not([type="hidden"]),
+    button:not(.fluent-converted),
+    textarea:not(.fluent-converted),
+    select:not(.fluent-converted) {
+      display: none !important;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div
+    style="display: flex; align-items: center; padding: 12px 24px; background: white; border-bottom: 1px solid #e1e5e9;">
+    <!-- Microsoft logo -->
+    <a href="https://www.microsoft.com" aria-label="Microsoft"
+      style="display: flex; align-items: center; margin-right: 16px; text-decoration: none;">
+      <svg aria-hidden="true" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"
+        style="width: 24px; height: 24px;">
+        <path d="M11.5216 0.5H0V11.9067H11.5216V0.5Z" fill="#f25022" />
+        <path d="M24.2418 0.5H12.7202V11.9067H24.2418V0.5Z" fill="#7fba00" />
+        <path d="M11.5216 13.0933H0V24.5H11.5216V13.0933Z" fill="#00a4ef" />
+        <path d="M24.2418 13.0933H12.7202V24.5H24.2418V13.0933Z" fill="#ffb900" />
+      </svg>
+    </a>
+
+    <!-- Divider -->
+    <div style="width: 1px; height: 24px; background: #e1e5e9; margin-right: 16px;"></div>
+
+    <!-- Brand -->
+    <a href="#" class="ms-learn-brand">
+      <span>Microsoft Learn</span>
+    </a>
+
+    <!-- Navigation -->
+    <nav aria-label="site header navigation" class="wireframe-nav">
+      <a href="#" class="wireframe-nav-link">Documentation</a>
+      <a href="#" class="wireframe-nav-link">Training</a>
+      <a href="#" class="wireframe-nav-link">Certifications</a>
+    </nav>
+  </div>
+
+  <div class="button-group">
+    <fluent-button aria-label="Button 1">Button 1</fluent-button>
+    <fluent-button aria-label="Button 2">Button 2</fluent-button>
+    <fluent-button aria-label="Button 3">Button 3</fluent-button>
+  </div>
+</body>
+
+</html>

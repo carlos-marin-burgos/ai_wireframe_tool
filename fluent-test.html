@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluent UI Test</title>
+
+    <!-- Fluent UI Web Components CDN -->
+    <link rel="stylesheet" href="https://unpkg.com/@fluentui/web-components/dist/fluent-design-system.css">
+    <script type="module" src="https://unpkg.com/@fluentui/web-components/dist/web-components.min.js"></script>
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            padding: 20px;
+            background-color: #FAFAFA;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #E3F2FD;
+            justify-content: center;
+        }
+
+        /* Force Fluent components to display properly */
+        fluent-button {
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Fluent UI Web Components Test</h1>
+
+    <h2>Three Buttons Test:</h2>
+    <div class="button-group">
+        <fluent-button>Button 1</fluent-button>
+        <fluent-button>Button 2</fluent-button>
+        <fluent-button>Button 3</fluent-button>
+    </div>
+
+    <h2>Other Fluent Components:</h2>
+    <div style="margin: 20px 0;">
+        <fluent-button appearance="accent">Primary Button</fluent-button>
+        <fluent-button appearance="neutral">Secondary Button</fluent-button>
+        <fluent-button appearance="outline">Outline Button</fluent-button>
+    </div>
+
+    <div style="margin: 20px 0;">
+        <fluent-text-field placeholder="Test input"></fluent-text-field>
+    </div>
+
+    <script>
+        // Debug script to check Fluent UI loading
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 FLUENT COMPONENTS TEST - DOMContentLoaded');
+            console.log('Fluent Design System available:', !!window.fluentDesignSystem);
+
+            // Check if components are defined
+            setTimeout(() => {
+                console.log('fluent-button defined:', !!customElements.get('fluent-button'));
+                console.log('fluent-text-field defined:', !!customElements.get('fluent-text-field'));
+
+                // Count fluent-button elements
+                const buttons = document.querySelectorAll('fluent-button');
+                console.log('Found', buttons.length, 'fluent-button elements');
+
+                buttons.forEach((btn, i) => {
+                    console.log(`Button ${i + 1}:`, btn.outerHTML);
+                });
+            }, 2000);
+        });
+    </script>
+</body>
+
+</html>

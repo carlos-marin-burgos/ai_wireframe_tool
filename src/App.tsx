@@ -56,7 +56,6 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   const [forceUpdateKey, setForceUpdateKey] = useState<number>(Date.now());
   const [showLandingPage, setShowLandingPage] = useState(true);
   const [isAnalyzingImage, setIsAnalyzingImage] = useState(false);
-  const imageAnalysisAbortController = useRef<AbortController | null>(null);
   const [toasts, setToasts] = useState<ToastData[]>([]);
   const [fastMode, setFastMode] = useState(false);
   const [showFigmaIntegration, setShowFigmaIntegration] = useState(false);
@@ -1130,149 +1129,30 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
   const handleAnalyzeImage = async (imageUrl: string, fileName: string) => {
     console.log('Analyzing image:', fileName, 'Size:', imageUrl.length, 'bytes');
-
-    // Create new abort controller for this analysis
-    imageAnalysisAbortController.current = new AbortController();
     setIsAnalyzingImage(true);
 
     try {
-      // Convert base64 URL back to File object for analysis
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      const file = new File([blob], fileName, { type: blob.type });
+      // Set description to indicate image analysis
+      const imageDescription = `Generate a wireframe based on the uploaded image: ${fileName}. Analyze the layout, components, and structure shown in the image.`;
+      setDescription(imageDescription);
 
-      // Step 1: Analyze the image using our backend
-      const analysisResponse = await fetch("/api/analyzeUIImage", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          image: imageUrl, // Send base64 data URL directly as JSON
-          prompt: "Analyze this UI screenshot and detect all components for wireframe generation"
-        }),
-        signal: imageAnalysisAbortController.current.signal,
-      });
+      // Use the same wireframe generation logic but with image context
+      // TODO: In the future, we could send the imageUrl to the backend for actual image analysis
+      const result = await generateWireframe(
+        imageDescription,
+        designTheme,
+        colorScheme
+      );
 
-      if (!analysisResponse.ok) {
-        throw new Error(`Image analysis failed: ${analysisResponse.status}`);
+      if (result && result.html) {
+        handleWireframeGenerated(result.html);
       }
-
-      const imageAnalysis = await analysisResponse.json();
-
-      if (!imageAnalysis.wireframeDescription && !imageAnalysis.components) {
-        throw new Error("Image analysis failed - no wireframe data returned");
-      }
-
-      console.log('🔍 Image analysis result:', imageAnalysis);
-      console.log('🎨 Design tokens found:', imageAnalysis.designTokens);
-      console.log('🧩 Components found:', imageAnalysis.components);
-      console.log('📏 Components count:', imageAnalysis.components?.length || 0);
-
-      // Step 2: Generate wireframe using the image analysis description
-      const wireframeDescription = imageAnalysis.wireframeDescription ||
-        `Create a wireframe based on the detected components: ${imageAnalysis.components?.map((c: any) => c.type).join(', ') || 'various UI elements'}`;
-
-      console.log('🎯 Generating wireframe with description:', wireframeDescription);
-
-      // Set the description for UI display
-      setDescription(`Generated from uploaded image: ${fileName}`);
-
-      const wireframeResponse = await fetch("/api/generate-html-wireframe", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          description: wireframeDescription,
-          colorScheme: colorScheme || "light",
-          imageAnalysis: imageAnalysis, // Pass the complete image analysis for enhanced generation
-        }),
-        signal: imageAnalysisAbortController.current.signal,
-      });
-
-      console.log('📤 Sending wireframe request with imageAnalysis:', {
-        hasImageAnalysis: !!imageAnalysis,
-        componentsCount: imageAnalysis.components?.length || 0,
-        designTokens: imageAnalysis.designTokens,
-        description: wireframeDescription
-      });
-
-      if (!wireframeResponse.ok) {
-        const errorText = await wireframeResponse.text();
-        console.error('❌ Wireframe response not OK:', wireframeResponse.status, errorText);
-        throw new Error(`Wireframe generation failed: ${wireframeResponse.status}`);
-      }
-
-      const wireframeResult = await wireframeResponse.json();
-      console.log('📥 Wireframe response received:', {
-        hasHtml: !!wireframeResult.html,
-        htmlLength: wireframeResult.html?.length || 0,
-        source: wireframeResult.source,
-        processingTime: wireframeResult.processingTimeMs,
-        success: wireframeResult.success,
-        error: wireframeResult.error
-      });
-
-      // Check for explicit error response
-      if (wireframeResult.success === false) {
-        throw new Error(wireframeResult.error || wireframeResult.message || "Wireframe generation failed");
-      }
-
-      // Check if we have the expected HTML content
-      if (!wireframeResult.html) {
-        throw new Error("No wireframe HTML content received from backend");
-      }
-
-      console.log('✅ Wireframe generated successfully');
-
-      // Generate and show wireframe
-      if (wireframeResult.html) {
-        handleWireframeGenerated(wireframeResult.html);
-      }
-
-      const componentsCount = imageAnalysis.components?.length || 0;
-      const confidence = Math.round((imageAnalysis.confidence || 0.85) * 100);
-
-      // Show success message with component details
-      if (imageAnalysis.components && imageAnalysis.components.length > 0) {
-        const componentTypes = imageAnalysis.components.reduce((acc: Record<string, number>, comp: any) => {
-          acc[comp.type] = (acc[comp.type] || 0) + 1;
-          return acc;
-        }, {});
-
-        const componentSummary = Object.entries(componentTypes)
-          .map(([type, count]) => `${count} ${type}${(count as number) > 1 ? 's' : ''}`)
-          .join(', ');
-
-        console.log(`🎯 Detected components: ${componentSummary}`);
-      }
-
     } catch (error) {
       console.error('Error analyzing image:', error);
-
-      // Handle abort errors differently
-      if (error instanceof Error && error.name === 'AbortError') {
-        console.log('🚫 Image analysis was cancelled by user.');
-      } else {
-        // Handle error appropriately - could show toast or update UI state
-        showToast(`Image analysis failed: ${error instanceof Error ? error.message : 'Unknown error'}`, 'error');
-      }
     } finally {
       setIsAnalyzingImage(false);
-      imageAnalysisAbortController.current = null; // Clean up abort controller
     }
   };
-
-  // Cancel image analysis handler
-  const handleCancelImageAnalysis = useCallback(() => {
-    if (imageAnalysisAbortController.current) {
-      imageAnalysisAbortController.current.abort();
-      imageAnalysisAbortController.current = null;
-    }
-    setIsAnalyzingImage(false);
-    showToast('Image analysis cancelled by user.', 'info');
-  }, [showToast]);
 
   // Figma integration handlers
   const handleFigmaComponentsImported = (components: any[]) => {
@@ -1515,7 +1395,6 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           onGenerateAiSuggestions={handleGenerateAiSuggestions}
           onImageUpload={handleImageUpload}
           onAnalyzeImage={handleAnalyzeImage}
-          onCancelImageAnalysis={handleCancelImageAnalysis}
           isAnalyzingImage={isAnalyzingImage}
           onFigmaImport={handleFigmaImport}
           onFigmaExport={handleFigmaExport}

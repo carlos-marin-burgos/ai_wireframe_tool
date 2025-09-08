@@ -307,6 +307,23 @@ DESIGN ANALYSIS & REQUIREMENTS:
 ♿ Accessibility Focus: ${designAnalysis.accessibilityFocus.join(", ")}
 🎨 Complexity Level: ${designAnalysis.designComplexity}
 ⚡ Interaction Level: ${designAnalysis.interactionLevel}
+🎛️ Components Detected: ${designAnalysis.recommendedComponents.join(", ")}
+
+${
+  designAnalysis.recommendedComponents.some((c) => c.includes("button"))
+    ? `🚨 BUTTON DETECTION: User specifically requested buttons - create functional button elements!
+${
+  designAnalysis.recommendedComponents.filter((c) => c.includes("button-count"))
+    .length > 0
+    ? `Exact count required: ${
+        designAnalysis.recommendedComponents
+          .find((c) => c.includes("button-count"))
+          ?.replace("button-count-", "") || "multiple"
+      } buttons`
+    : "Multiple buttons detected in request"
+}`
+    : ""
+}
 
 DESIGN SYSTEM & BRANDING:
 ✨ Theme: ${designTheme} design system (LOW-FIDELITY WIREFRAME STYLE)
@@ -324,9 +341,17 @@ LOW-FIDELITY WIREFRAME REQUIREMENTS:
 TEXT HANDLING STRATEGY:
 - Generic headings → 2-3 gray bars of varying widths (width: 60%, 80%, 45%)
 - Generic paragraphs → 3-5 gray lines (width: 100%, 85%, 92%, 70%)  
-- Generic buttons → Short gray bar or user's specified label
+- Generic buttons → Short gray bar UNLESS user specifies button count or labels
 - Generic navigation → Short gray bars for menu items
 - User-specified content → Include the exact text requested
+
+🚨 CRITICAL EXCEPTION FOR INTERACTIVE ELEMENTS:
+When user specifically mentions interactive elements (buttons, forms, inputs), create FUNCTIONAL elements:
+- "three buttons" → Create 3 actual buttons with labels like "Button 1", "Button 2", "Button 3"
+- "login form" → Create actual form with email/password fields and submit button
+- "search bar" → Create actual input field with search button
+- "navigation menu" → Create actual clickable menu items
+- Numbers matter: "two buttons" = exactly 2 buttons, "five links" = exactly 5 links
 
 COMPONENT STYLING:
 - Backgrounds: #E3F2FD (light blue), #BBDEFB (medium blue), #FAFAFA (light gray)
@@ -407,11 +432,24 @@ Use these CSS patterns for text placeholders:
 }
 
 EXAMPLE PLACEHOLDER HTML:
-<!-- Instead of "Welcome to our website" use: -->
+<!-- For generic content, use placeholders: -->
 <div class="text-placeholder-heading medium"></div>
-
-<!-- Instead of paragraph text use: -->
 <div class="text-placeholder-line full"></div>
+
+<!-- But for user-specified interactive elements, create functional elements: -->
+<!-- User says "three buttons" → Create actual buttons: -->
+<div class="button-group" style="display: flex; gap: 12px; margin: 16px 0;">
+  <button style="background: #0078d4; color: white; padding: 8px 16px; border: none; border-radius: 4px;">Button 1</button>
+  <button style="background: #0078d4; color: white; padding: 8px 16px; border: none; border-radius: 4px;">Button 2</button>
+  <button style="background: #0078d4; color: white; padding: 8px 16px; border: none; border-radius: 4px;">Button 3</button>
+</div>
+
+<!-- User says "contact form" → Create actual form: -->
+<form style="background: #E3F2FD; padding: 16px; border-radius: 4px;">
+  <input type="email" placeholder="Email" style="width: 100%; padding: 8px; margin-bottom: 8px;">
+  <textarea placeholder="Message" style="width: 100%; padding: 8px; margin-bottom: 8px;"></textarea>
+  <button type="submit" style="background: #0078d4; color: white; padding: 8px 16px; border: none;">Send</button>
+</form>
 <div class="text-placeholder-line medium"></div>
 <div class="text-placeholder-line short"></div>
 

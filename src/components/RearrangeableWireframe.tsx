@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './RearrangeableWireframe.css';
 import dragula, { Drake } from 'dragula';
 import 'dragula/dist/dragula.css';
@@ -387,7 +387,7 @@ const RearrangeableWireframe: React.FC<RearrangeableWireframeProps> = ({
             {/* Main Wireframe Content */}
             <div className="wireframe-content-area">
                 <div
-                    className={`wireframe-grid ${isDragging ? 'dragging-active' : ''}`}
+                    className={`wireframe-content wireframe-grid ${isDragging ? 'dragging-active' : ''}`}
                     dangerouslySetInnerHTML={{
                         __html: draggableItems.length > 0
                             ? generateHtmlFromItems(draggableItems)

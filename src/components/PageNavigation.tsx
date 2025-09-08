@@ -72,7 +72,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                     {/* Show minimal toolbar even when no pages */}
                     <div className="page-toolbar">
                         <button
-                            className="toolbar-btn"
+                            className="toolbar-btn fluent-converted"
                             onClick={onAddPage}
                             onMouseEnter={(e) => showTooltip(e, "Add new page")}
                             onMouseLeave={hideTooltip}
@@ -82,7 +82,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         </button>
 
                         <button
-                            className="icon-btn"
+                            className="icon-btn fluent-converted"
                             title="Dev Playbooks"
                             onClick={() => {
                                 console.log('📚 Dev Playbooks button clicked!');
@@ -93,7 +93,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         </button>
 
                         <button
-                            className="icon-btn"
+                            className="icon-btn fluent-converted"
                             title="Figma Components"
                             onClick={() => {
                                 console.log('🎨 Figma Components button clicked!');
@@ -104,17 +104,18 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         </button>
 
                         <button
-                            className="icon-btn"
+                            className="icon-btn fluent-converted"
                             title="Component Library (Legacy)"
                             onClick={() => {
                                 console.log('🎨 Component Library button clicked!');
                                 onOpenLibrary && onOpenLibrary();
                             }}
                         >
-                            <FiPackage /></button>
+                            <FiPackage />
+                        </button>
 
                         <button
-                            className="toolbar-btn"
+                            className="toolbar-btn fluent-converted"
                             onClick={onAddToFavorites}
                             onMouseEnter={(e) => showTooltip(e, "Add to favorites")}
                             onMouseLeave={hideTooltip}
@@ -124,7 +125,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         </button>
 
                         <button
-                            className="toolbar-btn"
+                            className="toolbar-btn fluent-converted"
                             onClick={onSave}
                             onMouseEnter={(e) => showTooltip(e, "Save wireframe")}
                             onMouseLeave={hideTooltip}
@@ -146,7 +147,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         {pages.map((page, index) => (
                             <React.Fragment key={page.id}>
                                 <button
-                                    className={`breadcrumb-item ${currentPageId === page.id ? 'active' : ''}`}
+                                    className={`breadcrumb-item fluent-converted ${currentPageId === page.id ? 'active' : ''}`}
                                     onClick={() => onPageSwitch(page.id)}
                                     title={`${page.name} - ${page.description}`}
                                 >
@@ -163,7 +164,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                 {/* New Icon Toolbar */}
                 <div className="page-toolbar">
                     <button
-                        className="toolbar-btn"
+                        className="toolbar-btn fluent-converted"
                         onClick={onAddPage}
                         onMouseEnter={(e) => showTooltip(e, "Add new page")}
                         onMouseLeave={hideTooltip}
@@ -173,7 +174,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                     </button>
 
                     <button
-                        className="toolbar-btn"
+                        className="toolbar-btn fluent-converted"
                         onClick={onOpenDevPlaybooks}
                         onMouseEnter={(e) => showTooltip(e, "Dev Playbooks")}
                         onMouseLeave={hideTooltip}
@@ -183,7 +184,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                     </button>
 
                     <button
-                        className="toolbar-btn"
+                        className="toolbar-btn fluent-converted"
                         onClick={onOpenFigmaComponents}
                         onMouseEnter={(e) => showTooltip(e, "Figma Components")}
                         onMouseLeave={hideTooltip}
@@ -193,7 +194,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                     </button>
 
                     <button
-                        className="toolbar-btn"
+                        className="toolbar-btn fluent-converted"
                         onClick={onImageUpload}
                         onMouseEnter={(e) => showTooltip(e, "Upload Image")}
                         onMouseLeave={hideTooltip}
@@ -203,7 +204,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                     </button>
 
                     <button
-                        className="toolbar-btn"
+                        className="toolbar-btn fluent-converted"
                         onClick={onAddToFavorites}
                         onMouseEnter={(e) => showTooltip(e, "Add to favorites")}
                         onMouseLeave={hideTooltip}
@@ -213,7 +214,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                     </button>
 
                     <button
-                        className="toolbar-btn"
+                        className="toolbar-btn fluent-converted"
                         onClick={onSave}
                         onMouseEnter={(e) => showTooltip(e, "Save wireframe")}
                         onMouseLeave={hideTooltip}

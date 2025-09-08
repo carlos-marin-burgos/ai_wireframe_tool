@@ -520,16 +520,73 @@ Provide JSON response with:
   getBasicDesignAnalysis(description) {
     const desc = description.toLowerCase();
 
+    // Extract specific components mentioned by user
+    const recommendedComponents = ["header", "main", "footer"];
+    const keyFeatures = [];
+
+    // Detect specific interactive elements
+    if (desc.includes("button")) {
+      recommendedComponents.push("buttons");
+      keyFeatures.push("interactive-elements");
+
+      // Extract number of buttons if specified
+      const buttonMatch = desc.match(/(\w+)\s+button/);
+      if (buttonMatch) {
+        const numbers = {
+          one: 1,
+          two: 2,
+          three: 3,
+          four: 4,
+          five: 5,
+          six: 6,
+          seven: 7,
+          eight: 8,
+          nine: 9,
+          ten: 10,
+        };
+        const count = numbers[buttonMatch[1]] || parseInt(buttonMatch[1]) || 1;
+        recommendedComponents.push(`button-count-${count}`);
+      }
+    }
+
+    if (desc.includes("form")) {
+      recommendedComponents.push("forms");
+      keyFeatures.push("forms");
+    }
+
+    if (desc.includes("hero")) {
+      recommendedComponents.push("hero-section");
+      keyFeatures.push("hero");
+    }
+
+    if (
+      desc.includes("navigation") ||
+      desc.includes("nav") ||
+      desc.includes("menu")
+    ) {
+      recommendedComponents.push("navigation");
+      keyFeatures.push("navigation");
+    }
+
+    if (desc.includes("search")) {
+      recommendedComponents.push("search");
+      keyFeatures.push("search");
+    }
+
     return {
       primaryPurpose: desc.includes("dashboard")
         ? "data-visualization"
+        : desc.includes("hero") || desc.includes("landing")
+        ? "marketing"
         : "content-display",
       userTypes: ["general-users"],
-      keyFeatures: desc.includes("form") ? ["forms"] : ["content"],
-      designComplexity: "moderate",
-      recommendedComponents: ["header", "main", "footer"],
-      layoutPattern: "standard",
-      interactionLevel: "interactive",
+      keyFeatures: keyFeatures.length > 0 ? keyFeatures : ["content"],
+      designComplexity: keyFeatures.length > 2 ? "complex" : "moderate",
+      recommendedComponents,
+      layoutPattern: desc.includes("hero") ? "hero-layout" : "standard",
+      interactionLevel: keyFeatures.includes("interactive-elements")
+        ? "interactive"
+        : "static",
       dataRequirements: ["text"],
       responsiveNeeds: ["mobile", "desktop"],
       accessibilityFocus: ["keyboard-navigation", "screen-reader"],

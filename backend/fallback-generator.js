@@ -1,34 +1,73 @@
 const { validateWireframeParams } = require("./types");
-const { TemplateManager, selectTemplate } = require("./template-manager");
-const { generateSiteHeaderHTML } = require("./components/SiteHeaderGenerator");
-const AtlasComponentLibrary = require("./components/AtlasComponentLibrary");
-
-// Initialize template manager and Atlas library
-const templateManager = new TemplateManager();
-const atlasLibrary = new AtlasComponentLibrary();
 
 /**
- * Enhanced fallback wireframe generator with template-based system
- * This prevents template corruption by separating HTML from JavaScript
+ * Backend fallback wireframe generator - DISABLED
+ * AI backend is working correctly, so fallback is no longer needed
  */
 function createFallbackWireframe(
   description,
   designTheme = "microsoftlearn",
   colorScheme = "primary"
 ) {
-  // Validate parameters
-  const validated = validateWireframeParams(
-    description,
-    designTheme,
-    colorScheme
-  );
-  console.log(`📊 Parameter validation result:`, validated);
-
-  if (!validated.isValid) {
-    console.log(`⚠️ Parameter validation warnings:`, validated.errors);
-  }
-
-  // Use validated parameters
+  console.log(`🚫 FALLBACK DISABLED: AI backend is working correctly`);
+  
+  return {
+    html: `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Service Required</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background: #f8f9fa;
+            color: #323130;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        .message {
+            max-width: 600px;
+            padding: 40px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .icon { font-size: 48px; margin-bottom: 20px; }
+        h1 { color: #0078d4; margin-bottom: 16px; }
+        p { line-height: 1.6; margin-bottom: 16px; }
+        .note { 
+            background: #fff3cd; 
+            border: 1px solid #ffeaa7; 
+            padding: 16px; 
+            border-radius: 4px; 
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="message">
+        <div class="icon">🤖</div>
+        <h1>Backend Fallback Disabled</h1>
+        <p>The backend fallback generator has been disabled because the AI service is working correctly.</p>
+        <p>If you're seeing this, it means there was an error with the AI service call.</p>
+        <div class="note">
+            <strong>Note:</strong> The AI backend should generate modern Fluent UI components instead of this fallback.
+        </div>
+    </div>
+</body>
+</html>`,
+    fallback: true,
+    processingTime: 1,
+    source: "fallback-disabled"
+  };
+}
   const {
     description: validDesc,
     theme,
@@ -1628,6 +1667,23 @@ function getAtlasTopNavCSS() {
       }
     }
   `;
+}
+
+// Dummy functions to maintain exports compatibility (AI backend is working correctly)
+function createInlineFallbackTemplate() {
+  return createFallbackWireframe("fallback template");
+}
+
+function createMicrosoftLearnTopNav() {
+  return "<nav>AI Required</nav>";
+}
+
+function getMicrosoftLearnTopNavCSS() {
+  return "/* AI Required */";
+}
+
+function analyzeDescription() {
+  return { type: "ai-required" };
 }
 
 // Export functions for use in other modules

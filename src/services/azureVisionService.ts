@@ -120,7 +120,7 @@ export async function analyzeImageWithGPTVision(
     }
 
     // Now generate wireframe using the image analysis
-    const wireframeResponse = await fetch("/api/generate-html-wireframe", {
+    const wireframeResponse = await fetch("/api/generate-wireframe", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

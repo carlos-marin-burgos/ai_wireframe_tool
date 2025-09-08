@@ -2,6 +2,8 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import "./SplitLayout.css";
 import SuggestionSourceIndicator from "./SuggestionSourceIndicator";
 import LoadingOverlay from "./LoadingOverlay";
+import WireframeLoadingSpinner from "./WireframeLoadingSpinner";
+import WireframeButtonSpinner from "./WireframeButtonSpinner";
 import AddPagesModal from "./AddPagesModal";
 import FluentSaveWireframeModal, { SavedWireframe } from "./FluentSaveWireframeModal";
 import FluentImageUploadModal from "./FluentImageUploadModal";
@@ -193,7 +195,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   // Image Upload Modal state
   const [isImageUploadModalOpen, setIsImageUploadModalOpen] = useState(false);
   const [isProcessingImage, setIsProcessingImage] = useState(false);
-  const analysisAbortController = useRef<AbortController | null>(null);
 
   // Left panel collapse state
   const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);
@@ -260,7 +261,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   // Add message to conversation
   const addMessage = useCallback((type: 'user' | 'ai', content: string) => {
     const newMessage = {
-      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: Date.now().toString(),
       type,
       content,
       timestamp: new Date()
@@ -630,159 +631,28 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   }, [addMessage]);
 
   const handleImageFile = useCallback((file: File) => {
-    // Just store the file info - the ImageUploadZone will handle the automatic analysis
-    console.log('📁 Image file received in SplitLayout:', file.name);
-    // Don't close modal or reset processing state here - let the analysis complete first
-  }, []);
+    setIsProcessingImage(true);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imageDataUrl = e.target?.result as string;
+      handleImageUpload(imageDataUrl);
+      setIsImageUploadModalOpen(false);
+      setIsProcessingImage(false);
+    };
+    reader.readAsDataURL(file);
+  }, [handleImageUpload]);
 
-  const handleAnalyzeImage = useCallback(async (imageUrl: string, fileName: string) => {
-    // Create new abort controller for this analysis
-    analysisAbortController.current = new AbortController();
-
+  const handleAnalyzeImage = useCallback((imageUrl: string, fileName: string) => {
     setIsProcessingImage(true);
     addMessage('user', `[Image uploaded: ${fileName}]`);
-    addMessage('ai', '🔍 Analyzing your uploaded image for UI components. Please wait while I detect buttons, inputs, and other elements...');
-
-    try {
-      // Convert base64 URL back to File object for analysis
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      const file = new File([blob], fileName, { type: blob.type });
-
-      // Step 1: Analyze the image using our backend
-      const analysisResponse = await fetch("/api/analyzeUIImage", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          image: imageUrl, // Send base64 data URL directly as JSON
-          prompt: "Analyze this UI screenshot and detect all components for wireframe generation"
-        }),
-        signal: analysisAbortController.current.signal,
-      });
-
-      if (!analysisResponse.ok) {
-        throw new Error(`Image analysis failed: ${analysisResponse.status}`);
-      }
-
-      const imageAnalysis = await analysisResponse.json();
-
-      if (!imageAnalysis.wireframeDescription && !imageAnalysis.components) {
-        throw new Error("Image analysis failed - no wireframe data returned");
-      }
-
-      console.log('🔍 Image analysis result:', imageAnalysis);
-      console.log('🎨 Design tokens found:', imageAnalysis.designTokens);
-      console.log('🧩 Components found:', imageAnalysis.components);
-      console.log('📏 Components count:', imageAnalysis.components?.length || 0);
-
-      // Step 2: Generate wireframe using the image analysis description
-      const wireframeDescription = imageAnalysis.wireframeDescription ||
-        `Create a wireframe based on the detected components: ${imageAnalysis.components?.map((c: any) => c.type).join(', ') || 'various UI elements'}`;
-
-      console.log('🎯 Generating wireframe with description:', wireframeDescription);
-
-      const wireframeResponse = await fetch("/api/generate-html-wireframe", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          description: wireframeDescription,
-          colorScheme: "light",
-          imageAnalysis: imageAnalysis, // Pass the complete image analysis for enhanced generation
-        }),
-        signal: analysisAbortController.current.signal,
-      });
-
-      console.log('📤 Sending wireframe request with imageAnalysis:', {
-        hasImageAnalysis: !!imageAnalysis,
-        componentsCount: imageAnalysis.components?.length || 0,
-        designTokens: imageAnalysis.designTokens,
-        description: wireframeDescription
-      }); if (!wireframeResponse.ok) {
-        throw new Error(`Wireframe generation failed: ${wireframeResponse.status}`);
-      }
-
-      const wireframeResult = await wireframeResponse.json();
-
-      console.log('📋 Wireframe generation response:', wireframeResult);
-
-      // Handle different response formats
-      if (wireframeResult.html) {
-        // New format: response has html property directly
-        console.log('✅ Wireframe generated successfully (direct HTML format)');
-
-        // Set the generated wireframe HTML
-        if (setHtmlWireframe) {
-          setHtmlWireframe(wireframeResult.html);
-        }
-      } else if (wireframeResult.success === false) {
-        // Old format: response has success field
-        console.error('❌ Wireframe generation failed:', wireframeResult.error);
-        throw new Error(wireframeResult.error || "Wireframe generation failed");
-      } else if (wireframeResult.success || wireframeResult.wireframe) {
-        // Old format: response has success field or wireframe property
-        console.log('✅ Wireframe generated successfully (legacy format)');
-
-        // Set the generated wireframe HTML
-        if (setHtmlWireframe) {
-          setHtmlWireframe(wireframeResult.wireframe || wireframeResult.html);
-        }
-      } else {
-        // Unknown format
-        console.error('❌ Unknown wireframe response format:', wireframeResult);
-        throw new Error("Unexpected wireframe response format");
-      }
-
-      const componentsCount = imageAnalysis.components?.length || 0;
-      const confidence = Math.round((imageAnalysis.confidence || 0.85) * 100);
-
-      addMessage('ai', `✅ Successfully analyzed "${fileName}"! Found ${componentsCount} UI components with ${confidence}% confidence. Generated wireframe is ready for editing.`);
-
-      // Add details about detected components if available
-      if (imageAnalysis.components && imageAnalysis.components.length > 0) {
-        const componentTypes = imageAnalysis.components.reduce((acc: Record<string, number>, comp: any) => {
-          acc[comp.type] = (acc[comp.type] || 0) + 1;
-          return acc;
-        }, {});
-
-        const componentSummary = Object.entries(componentTypes)
-          .map(([type, count]) => `${count} ${type}${(count as number) > 1 ? 's' : ''}`)
-          .join(', ');
-
-        addMessage('ai', `🎯 Detected components: ${componentSummary}`);
-      }
-    } catch (error) {
-      console.error('Image analysis failed:', error);
-
-      // Handle abort errors differently
-      if (error instanceof Error && error.name === 'AbortError') {
-        addMessage('ai', '🚫 Image analysis was cancelled by user.');
-      } else {
-        addMessage('ai', `❌ Sorry, I couldn't analyze the image: ${error instanceof Error ? error.message : 'Unknown error'}. Please try uploading a clear UI screenshot or wireframe.`);
-      }
-    } finally {
+    setTimeout(() => {
+      addMessage('ai', '🔍 Analyzing your uploaded image for UI components. Please wait while I detect buttons, inputs, and other elements...');
       setIsProcessingImage(false);
-      setIsImageUploadModalOpen(false); // Close modal after analysis completes
-      analysisAbortController.current = null; // Clean up abort controller
-    }
-  }, [addMessage, setHtmlWireframe]);
-
-  // Cancel image analysis handler
-  const handleCancelImageAnalysis = useCallback(() => {
-    if (analysisAbortController.current) {
-      analysisAbortController.current.abort();
-      analysisAbortController.current = null;
-    }
-    setIsProcessingImage(false);
-    setIsImageUploadModalOpen(false);
-    addMessage('ai', '🚫 Image analysis cancelled by user.');
+    }, 500);
   }, [addMessage]);
 
   const toggleImageUpload = useCallback(() => {
-    setIsImageUploadModalOpen(prev => !prev);
+    setShowImageUpload(prev => !prev);
   }, []);
 
   const openImageUploadModal = useCallback(() => {
@@ -803,9 +673,10 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       : htmlWireframe;
 
     if (currentContent) {
-      const intelligentName = generateWireframeName(currentContent);
+      const intelligentName = generateWireframeName(description, currentContent);
       setWireframeName(intelligentName);
       console.log('🧠 Generated intelligent wireframe name:', intelligentName);
+      console.log('📝 Based on description:', description.substring(0, 100) + '...');
 
       // Automatically add to recents when wireframe is first generated (only once)
       if (!addedToRecents) {
@@ -908,10 +779,11 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         : htmlWireframe;
 
       if (currentContent && currentContent.length > 500) { // Only for substantial content
-        const newName = generateWireframeName(currentContent);
+        const newName = generateWireframeName(description, currentContent);
         if (newName !== wireframeName) {
           setWireframeName(newName);
           console.log('🔄 Updated wireframe name to:', newName);
+          console.log('📝 Based on description:', description.substring(0, 100) + '...');
         }
       }
     }
@@ -1113,9 +985,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         title={isLeftPanelCollapsed ? 'Expand panel' : 'Collapse panel'}
       >
         {isLeftPanelCollapsed ? <FiChevronRight /> : <FiChevronLeft />}
-      </button>
-
-      {/* Left: Chat Interface */}
+      </button>      {/* Left: Chat Interface */}
       <div className={`left-pane ${isLeftPanelCollapsed ? 'collapsed' : ''}`}>
         {/* Chat Messages Area */}
         <div className="chat-messages" ref={chatMessagesRef}>
@@ -1230,7 +1100,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                 className="chat-send-btn"
               >
                 {loading ? (
-                  <FiLoader className="loading-spinner" />
+                  <WireframeButtonSpinner />
                 ) : (
                   <FiSend />
                 )}
@@ -1403,7 +1273,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
             >
               {loading ? (
                 <>
-                  <FiLoader className="loading-spinner" />
+                  <WireframeButtonSpinner />
                   Generating...
                 </>
               ) : (
@@ -1459,9 +1329,10 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
             )}
 
             {/* Loading overlay for AI processing */}
-            <LoadingOverlay
+            <WireframeLoadingSpinner
               isVisible={loading}
               message={loadingStage || (loading ? "Creating your wireframe..." : "")}
+              size="medium"
             />
           </div>
         )}
@@ -1523,7 +1394,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         onClose={() => setIsImageUploadModalOpen(false)}
         onImageUpload={handleImageFile}
         onAnalyzeImage={handleAnalyzeImage}
-        onCancel={handleCancelImageAnalysis}
         isAnalyzing={isProcessingImage}
       />
 

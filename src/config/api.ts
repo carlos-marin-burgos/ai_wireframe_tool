@@ -49,16 +49,16 @@ export const API_CONFIG = {
   ],
 
   ENDPOINTS: {
-    // NUCLEAR OPTION: Single endpoint that works no matter what
-    GENERATE_WIREFRAME: "/api/generate-wireframe",
-    GENERATE_WIREFRAME_ENHANCED: "/api/generate-wireframe-enhanced",
-    GENERATE_FLUENT_WIREFRAME: "/api/generate-fluent-wireframe",
-    GENERATE_SUGGESTIONS: "/api/generate-suggestions",
-    GET_TEMPLATE: "/api/get-template",
-    COMPONENT_LIBRARY: "/api/component-library",
-    FLUENT_COMPONENTS: "/api/fluent-components",
-    FLUENT_COMPONENTS_SEARCH: "/api/fluent-components/search",
-    HEALTH: "/api/health",
+    // ESSENTIAL ENDPOINTS ONLY - Cleaned up for maintainability
+    GENERATE_WIREFRAME: "/api/generate-html-wireframe", // Original endpoint that generates correct buttons
+    GENERATE_SUGGESTIONS: "/api/generate-suggestions", // AI suggestions
+    HEALTH: "/api/health", // Health checks
+    // Optional endpoints (comment out if unused)
+    FIGMA_IMPORT: "/api/figma/import", // Figma integration
+    FIGMA_COMPONENTS: "/api/figma/components", // Figma components
+    ANALYZE_IMAGE: "/api/analyzeUIImage", // Image analysis
+    GITHUB_AUTH_START: "/api/github/auth/start", // GitHub OAuth
+    GITHUB_AUTH_CALLBACK: "/api/github/auth/callback", // GitHub OAuth
   },
 
   // Port configuration
@@ -78,7 +78,7 @@ export const verifyBackendAI = async (baseUrl: string): Promise<boolean> => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-    const response = await fetch(`${baseUrl}/api/generate-wireframe`, {
+    const response = await fetch(`${baseUrl}/api/generate-html-wireframe`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

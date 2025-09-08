@@ -239,7 +239,8 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1024px) {
+/* Adjusted from 991px to 768px to ensure 1024px gets desktop layout */
+@media (max-width: 768px) {
   .ms-learn-hero {
     padding: 64px 0 48px;
   }

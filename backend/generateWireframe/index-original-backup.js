@@ -454,7 +454,6 @@ const aiEngine = new EnhancedAIEngine();
 const contextManager = new AIContextManager();
 
 // Initialize OpenAI client with proper error handling
-let openai = null;
 let openaiInitializationAttempts = 0;
 let lastOpenaiError = null;
 

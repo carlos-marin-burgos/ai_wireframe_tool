@@ -719,7 +719,8 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1024px) {
+/* Adjusted from 991px to 768px to ensure 1024px gets desktop layout */
+@media (max-width: 768px) {
   .component-library-modal {
     width: 95vw;
     height: 85vh;

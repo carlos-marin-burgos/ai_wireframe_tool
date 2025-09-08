@@ -176,7 +176,6 @@
 .chat-messages {
   flex: 1;
   padding: 16px;
-  padding-bottom: 20px; /* Moderate bottom padding for AI suggestions spacing */
   overflow-y: auto;
   background: linear-gradient(
     135deg,
@@ -243,23 +242,8 @@
 .right-pane {
   flex: 1;
   margin-left: 300px;
-  padding: 0;
-  padding-top: 10px;
-  background: radial-gradient(
-      circle at 20% 80%,
-      rgba(255, 255, 255, 0.15) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 20%,
-      rgba(255, 255, 255, 0.1) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 40% 40%,
-      rgba(32, 201, 151, 0.1) 0%,
-      transparent 50%
-    );
+  padding: 10px 0 0;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
   width: calc(100% - 300px);
   height: 100vh;
   overflow-y: auto;
@@ -326,13 +310,11 @@
 /* Wireframe container styles */
 .wireframe-container {
   flex: 1;
-  overflow: auto; /* Allow scrolling if content exceeds container */
+  overflow: visible; /* Allow content to expand */
   padding: 15px;
   padding-bottom: 15px; /* Reduced padding for more wireframe space */
   height: 100%; /* Fill the available flex space completely */
   background: transparent;
-  min-width: 0; /* Allow shrinking when needed */
-  max-width: 100%; /* Don't exceed parent */
 }
 
 .wireframe-content {
@@ -344,22 +326,18 @@
   padding: 15px;
   box-shadow: none;
   overflow: auto;
-  max-width: 100%; /* Ensure content doesn't exceed container */
-  box-sizing: border-box; /* Include padding in width calculation */
 }
 
 .wireframe-panel {
   height: calc(100% - 80px); /* Reduced from 100px for more wireframe space */
-  width: 100%; /* Take full width of parent right-pane */
+  width: calc(100% - 60px); /* Account for margins with extra right margin */
   background: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden; /* Prevent panel itself from expanding */
+  overflow: auto; /* Changed from hidden to auto to prevent cut-off */
   display: flex;
   flex-direction: column;
-  margin: 30px 20px 70px 20px; /* Consistent margins */
-  min-width: 0; /* Prevent flex item from growing beyond container */
-  max-width: 100%; /* Ensure panel doesn't exceed parent */
+  margin: 30px 40px 70px 20px; /* Increased top margin from 10px to 30px for better spacing */
 }
 
 /* Wireframe Name Header */
@@ -943,16 +921,17 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.8);
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
+  background: rgba(255, 255, 255, 0.95);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 100;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: all 0.3s ease;
+  border-radius: 12px;
 }
 
 .loading-overlay.visible {
@@ -960,10 +939,26 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 }
 
 .loading-message {
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   color: #374151;
-  font-weight: 500;
+  font-weight: 600;
   text-align: center;
+  font-size: 1rem;
+  line-height: 1.5;
+  padding: 0 2rem;
+  max-width: 400px;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .loading-progress-container {
@@ -1008,6 +1003,16 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   }
 }
 
+/* Simple Loading Spinner */
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #0078d4;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
 /* Pulsing animation for the loading dot */
 .loading-dot {
   display: inline-block;
@@ -1039,7 +1044,6 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   border-radius: 8px;
   padding: 12px 16px;
   margin-top: 12px;
-  margin-bottom: 16px; /* Extra bottom margin for spacing */
   position: relative;
   overflow: hidden;
 }
@@ -1105,7 +1109,6 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   border-radius: 8px;
   padding: 10px 12px;
   margin-top: 10px;
-  margin-bottom: 16px; /* Increased bottom margin for proper spacing */
   max-height: 240px;
   overflow-y: auto; /* scroll just this panel */
   box-sizing: border-box;
@@ -1114,7 +1117,6 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 /* Simple stack container for label + panel */
 .ai-suggestions-container {
   margin-top: 12px;
-  margin-bottom: 24px; /* Increased bottom margin for better spacing */
 }
 .ai-suggestions-panel::-webkit-scrollbar {
   width: 8px;
@@ -1133,13 +1135,6 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 @media (max-width: 480px) {
   .ai-suggestions-panel {
     max-height: 110px;
-  }
-}
-
-/* Targeted fix for medium screens where AI suggestions get cut off */
-@media (max-width: 1024px) {
-  .ai-suggestions-container {
-    margin-bottom: 30px; /* Moderate bottom margin for smaller screens */
   }
 }
 
@@ -1554,7 +1549,7 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   .left-pane {
     width: 280px;
     min-width: 260px;
-    /*padding: 1.5rem;*/
+    padding: 1.5rem;
   }
 
   .right-pane {
@@ -1572,7 +1567,7 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   }
 }
 
-@media (max-width: 991px) {
+@media (max-width: 768px) {
   .split-layout {
     flex-direction: column;
     height: auto;
@@ -1701,7 +1696,7 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 
   /* Chat Input Mobile Responsiveness */
   .chat-input-container {
-    padding: 10px;
+    padding: 16px;
   }
 
   .chat-input {
@@ -2747,7 +2742,7 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 
 .chat-input {
   width: 100%;
-  min-height: 100px;
+  min-height: 120px;
   /* Leave room for the send button on the right (40px) + gaps */
   padding: 16px 64px 16px 20px;
   border: none;
@@ -2859,7 +2854,7 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 /* Chat Input Container - Microsoft Fluent Design */
 .chat-input-container {
   flex: 0 0 auto; /* fixed at bottom */
-  padding: 10px;
+  padding: 20px;
   border-top: 1px solid #e1e5e9;
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   max-height: 45vh; /* keep room for messages */

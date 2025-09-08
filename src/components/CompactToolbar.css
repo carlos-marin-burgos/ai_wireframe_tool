@@ -220,7 +220,7 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 991px) {
+@media (max-width: 768px) {
   .compact-toolbar {
     position: relative;
     top: auto;

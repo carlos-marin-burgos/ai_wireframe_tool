@@ -412,7 +412,9 @@
   }
 }
 
-@media (max-width: 1024px) {
+/* Standardized breakpoint set: 480, 640, 768, 992, 1200, 1440
+   Adjusted former 991px rules to 768px so 1024px gets desktop treatment */
+@media (max-width: 768px) {
   .ms-learn-nav-items {
     gap: var(--ms-spacing-sm);
   }
@@ -420,10 +422,7 @@
   .ms-learn-search-input {
     width: 200px;
   }
-
-  .ms-learn-wordmark {
-    display: none; /* Hide "Microsoft Learn" text on medium screens */
-  }
+  /* NOTE: wordmark now remains visible until <768px for better desktop at 1024 */
 }
 
 @media (max-width: 768px) {
@@ -441,6 +440,11 @@
 
   .ms-learn-mobile-menu {
     display: block;
+  }
+
+  .ms-learn-wordmark {
+    /* moved from previous 1024 block */
+    display: none;
   }
 
   .ms-learn-nav-container {

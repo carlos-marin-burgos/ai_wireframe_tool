@@ -1,0 +1,249 @@
+.simple-ai-wireframe {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+.input-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.input-section h2 {
+  color: #0078d4;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.input-section p {
+  color: #605e5c;
+  margin: 0 0 1.5rem 0;
+  font-size: 1.1rem;
+}
+
+.input-group {
+  margin-bottom: 1.5rem;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #323130;
+  font-size: 1rem;
+}
+
+.input-group textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 1rem;
+  border: 2px solid #e1dfdd;
+  border-radius: 8px;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.input-group textarea:focus {
+  outline: none;
+  border-color: #0078d4;
+  box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.1);
+}
+
+.input-group textarea:disabled {
+  background-color: #f3f2f1;
+  color: #a19f9d;
+  cursor: not-allowed;
+}
+
+.input-group textarea::placeholder {
+  color: #a19f9d;
+  font-style: italic;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.generate-btn,
+.clear-btn {
+  padding: 0.875rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 180px;
+  justify-content: center;
+}
+
+.generate-btn {
+  background: #0078d4;
+  color: white;
+}
+
+.generate-btn:hover:not(:disabled) {
+  background: #106ebe;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 120, 212, 0.3);
+}
+
+.generate-btn:disabled {
+  background: #e1dfdd;
+  color: #a19f9d;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.clear-btn {
+  background: transparent;
+  color: #605e5c;
+  border: 2px solid #e1dfdd;
+}
+
+.clear-btn:hover:not(:disabled) {
+  background: #f3f2f1;
+  border-color: #d2d0ce;
+}
+
+.clear-btn:disabled {
+  color: #a19f9d;
+  border-color: #e1dfdd;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background: #fef6f6;
+  color: #c50f1f;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ffc9c9;
+  margin-top: 1rem;
+  font-weight: 500;
+}
+
+.loading-section {
+  background: white;
+  padding: 3rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #e1dfdd;
+  border-top: 4px solid #0078d4;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-section p {
+  color: #605e5c;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.preview-section {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.preview-header {
+  background: #f8f9fa;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #e1dfdd;
+}
+
+.preview-header h3 {
+  color: #0078d4;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.preview-header p {
+  color: #605e5c;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.preview-content {
+  /* Reset styles to prevent conflicts */
+  all: initial;
+  font-family: "Segoe UI", system-ui, sans-serif;
+
+  /* Container styles */
+  display: block;
+  min-height: 400px;
+  width: 100%;
+
+  /* Ensure generated content displays properly */
+  background: white;
+  color: #323130;
+  line-height: 1.5;
+}
+
+/* Ensure AI-generated content styles are preserved */
+.preview-content * {
+  box-sizing: border-box;
+}
+
+.preview-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+.preview-content table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .simple-ai-wireframe {
+    padding: 1rem;
+  }
+
+  .input-section {
+    padding: 1.5rem;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  .generate-btn,
+  .clear-btn {
+    width: 100%;
+    min-width: auto;
+  }
+}

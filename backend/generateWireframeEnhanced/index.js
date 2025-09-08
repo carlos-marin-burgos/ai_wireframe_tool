@@ -2,6 +2,11 @@
 // Purpose: Generate an HTML wireframe via OpenAI and optionally inject Atlas components
 
 const { OpenAI } = require("openai");
+const {
+  fluentCommunityLibrary,
+  generateFluentWireframeHTML,
+  analyzeDescriptionForComponents,
+} = require("../fluent-community-library");
 
 // Fluent UI Playbook imports and utilities
 const fluentPlaybook = {
@@ -330,43 +335,52 @@ function initializeOpenAI() {
 // Initialize on module load
 initializeOpenAI();
 
-// --- Low-fidelity CSS injection helper (mirrors primary function behavior) ---
-function injectLowFidelityCSS(html) {
-  const marker = "Low-Fidelity Wireframe Styles";
-  if (html.includes(marker)) return html; // already injected
-  const css = `\n<style>\n/* ${marker} */\n:root {\n  --wf-blue-50: #f2f9ff;\n  --wf-blue-75: #eaf4ff;\n  --wf-blue-100: #e2f0ff;\n  --wf-blue-150: #d6ecff;\n  --wf-blue-200: #c7e3ff;\n  --wf-blue-250: #b9dcff;\n  --wf-blue-border: #a8d2ff;\n  --wf-blue-accent: #0078d4;\n  --wf-text-muted: #2f3b4a;\n}\n.text-placeholder-heading {\n  background: var(--wf-blue-200);\n  height: 14px;\n  border-radius: 2px;\n  margin: 8px 0;\n  display: block;\n  width: 60%;\n  position: relative;\n}\n.text-placeholder-line {\n  background: var(--wf-blue-150);\n  height: 6px;\n  border-radius: 3px;\n  margin: 6px 0 0 0;\n  display: block;\n  width: 92%;\n}\n.text-placeholder-button {\n  background: var(--wf-blue-250);\n  height: 8px;\n  width: 80px;\n  border-radius: 3px;\n  display: inline-block;\n}\n.wireframe-component {\n  background: var(--wf-blue-75);\n  border: 1px solid var(--wf-blue-border);\n  border-radius: 6px;\n  padding: 16px;\n  margin: 8px 0;\n}\n.wireframe-component.secondary {\n  background: var(--wf-blue-100);\n}\n.wireframe-nav {\n  background: var(--wf-blue-75);\n  padding: 12px 20px;\n  border-bottom: 1px solid var(--wf-blue-border);\n  display: flex;\n  align-items: center;\n  gap: 20px;\n}\n.wireframe-button {\n  background: var(--wf-blue-100);\n  border: 1px solid var(--wf-blue-border);\n  padding: 8px 16px;\n  border-radius: 4px;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n}\n.wireframe-image {\n  background: var(--wf-blue-150);\n  border: 1px solid var(--wf-blue-border);\n  border-radius: 4px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  color: var(--wf-blue-accent);\n  font-size: 14px;\n  min-height: 120px;\n}\n.wireframe-card {\n  background: #ffffff;\n  border: 1px solid var(--wf-blue-border);\n  border-radius: 6px;\n  padding: 16px;\n  margin: 8px 0;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);\n}\n/* Override any earlier grey styles accidentally produced by model */\nstyle + style .text-placeholder-line,\nstyle + style .text-placeholder-heading,\nstyle + style .text-placeholder-button { background: inherit; }\n/* Paragraph simulation: create natural ragged edges */\n.wireframe-component .text-placeholder-heading + .text-placeholder-line { width: 95%; }\n.wireframe-component .text-placeholder-heading + .text-placeholder-line + .text-placeholder-line { width: 88%; }\n.wireframe-component .text-placeholder-heading + .text-placeholder-line + .text-placeholder-line + .text-placeholder-line { width: 76%; }\n/* Generic variation for any consecutive lines */\n.wireframe-component .text-placeholder-line:nth-of-type(4n+1) { width: 93%; }\n.wireframe-component .text-placeholder-line:nth-of-type(4n+2) { width: 87%; }\n.wireframe-component .text-placeholder-line:nth-of-type(4n+3) { width: 74%; }\n.wireframe-component .text-placeholder-line:nth-of-type(4n) { width: 60%; }\n</style>`;
-  if (html.includes("<head")) {
-    return html.replace(/<head[^>]*>/i, (m) => m + css);
-  }
-  return `<!DOCTYPE html><head>${css}</head>` + html;
-}
-
-// --- AI wireframe generation using OpenAI (supports low-fidelity mode) ---
+// --- AI wireframe generation using OpenAI ---
 async function generateWithAI(description, options = {}) {
   if (!openai) throw new Error("OpenAI not initialized");
 
-  const lowFidelityMode =
-    (process.env.LOW_FIDELITY_MODE || "true").toLowerCase() !== "false";
-  const theme = options.theme || "professional";
-  const colorScheme = options.colorScheme || "blue";
-  const fastMode = options.fastMode !== false;
+  const theme = options.theme || "microsoftlearn";
+  const colorScheme = options.colorScheme || "primary";
 
-  let prompt;
-  let systemMessage;
+  const systemMessage =
+    "You are an expert UI/UX designer creating HTML wireframes using Microsoft Fluent Web Components for Microsoft Learn platform.";
 
-  if (lowFidelityMode) {
-    systemMessage =
-      "You create LOW-FIDELITY Microsoft Learn style wireframes with placeholder bars and specific CSS classes.";
-    prompt = `Create a LOW-FIDELITY wireframe for: "${description}"\n\nSTRICT CLASS RULES:\n1. Wrap logical groups in <div class=\"wireframe-component\">\n2. Navigation areas: wireframe-nav\n3. Buttons: wireframe-button (with nested <div class=\"text-placeholder-button\"></div> if text unspecified)\n4. Images/media: wireframe-image\n5. Headings: text-placeholder-heading (unless exact heading text explicitly provided)\n6. Body text lines: text-placeholder-line\n7. Actual user-specified text must be preserved EXACTLY if quoted or clearly specified in description.\n\nTRANSFORM RULES:\n- If description says "login form" create username + password inputs and a submit button using components above.\n- Use placeholder bars for any unspecified text.\n- Do NOT add branding, Microsoft logos, Fluent UI components, complex gradients, animations, or Atlas components. Pure wireframe only.\n- Keep structure semantic where possible but minimal (divs acceptable).\n\nOUTPUT:\nReturn ONLY full standalone HTML starting with <!DOCTYPE html>.`;
-  } else {
-    systemMessage =
-      "You are a professional web developer producing clean, modern HTML wireframes.";
-    prompt = `Create a complete, modern HTML wireframe for: ${description}\n\nRequirements:\n- Use modern CSS with flexbox/grid\n- Include semantic HTML structure\n- ${theme} theme with ${colorScheme} color scheme\n- Mobile-responsive design\n- Include proper meta tags and DOCTYPE\n- Create sections for: header, main content, and footer (navigation provided separately)\n- DO NOT create any navigation elements (nav, header with navigation)\n${
-      fastMode
-        ? "- Keep it simple and fast to load"
-        : "- Include richer styling"
-    }\nReturn only the complete HTML code.`;
-  }
+  const prompt = `Create a complete HTML wireframe for Microsoft Learn platform based on: "${description}"
+
+CRITICAL: You MUST use Microsoft Fluent Web Components for ALL interactive elements.
+
+Required Web Components to use:
+- <fluent-button> for buttons (appearance="accent" for primary, "neutral" for secondary)
+- <fluent-text-field> for text inputs 
+- <fluent-text-area> for text areas
+- <fluent-checkbox> for checkboxes
+- <fluent-radio-group> and <fluent-radio> for radio buttons
+- <fluent-select> for dropdowns
+- <fluent-card> for content cards
+- <fluent-tabs> and <fluent-tab> for tab navigation
+- <fluent-breadcrumb> for breadcrumbs
+- <fluent-progress-ring> for loading states
+- <fluent-badge> for status indicators
+
+HTML Structure Requirements:
+- Include these CDN resources in <head>:
+  <script type="module" src="https://unpkg.com/@fluentui/web-components/dist/web-components.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/@fluentui/web-components/dist/fluent-design-system.css">
+
+- Use Microsoft Learn design (Segoe UI font, #0078d4 primary color)
+- Include responsive layout with header, main content, and footer
+- Use semantic HTML with proper accessibility
+- Include comprehensive inline CSS styling with Fluent Design System tokens
+- Apply Microsoft Design System principles
+
+CSS Design Tokens to use:
+- Colors: var(--accent-fill-rest), var(--neutral-fill-rest), var(--neutral-stroke-rest)
+- Typography: font-family: 'Segoe UI', 'Segoe UI Web', system-ui, sans-serif
+- Spacing: 8px, 16px, 24px, 32px (multiples of 8)
+- Border radius: 4px, 8px
+- Shadows: 0 2px 4px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.12)
+
+Generate ONLY the HTML code (starting with <!DOCTYPE html>).`;
 
   const deployment = process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o";
   const completion = await openai.chat.completions.create({
@@ -375,8 +389,8 @@ async function generateWithAI(description, options = {}) {
       { role: "user", content: prompt },
     ],
     model: deployment,
-    max_tokens: 4000,
-    temperature: lowFidelityMode ? 0.2 : 0.7,
+    max_tokens: 3000,
+    temperature: 0.7,
   });
 
   const html = completion.choices?.[0]?.message?.content || "";
@@ -389,7 +403,6 @@ async function generateWithAI(description, options = {}) {
     .trim();
 
   console.log("🧹 OpenAI Response Cleanup (ENHANCED):", {
-    lowFidelityMode,
     rawLength: html.length,
     cleanedLength: cleanedHtml.length,
   });
@@ -428,23 +441,22 @@ module.exports = async function (context, req) {
       description,
       theme,
       colorScheme,
-      fastMode,
       includeAtlas = true,
       imageAnalysis,
     } = req.body || {};
 
-    const lowFidelityMode =
-      (process.env.LOW_FIDELITY_MODE || "true").toLowerCase() !== "false";
-
-    console.log("🎨 Enhanced wireframe generation request", {
-      description: description.substring(0, 100) + "...",
-      hasImageAnalysis: !!imageAnalysis,
-      imageAnalysisType: typeof imageAnalysis,
-      componentsCount: imageAnalysis?.components?.length || 0,
-      imageAnalysisKeys: imageAnalysis ? Object.keys(imageAnalysis) : [],
-      designTokens: imageAnalysis?.designTokens,
-      lowFidelityMode,
-    });
+    console.log(
+      "🎨 Enhanced wireframe generation request (Fluent Components Required)",
+      {
+        description: description.substring(0, 100) + "...",
+        hasImageAnalysis: !!imageAnalysis,
+        fluentMode: "mandatory",
+        imageAnalysisType: typeof imageAnalysis,
+        componentsCount: imageAnalysis?.components?.length || 0,
+        imageAnalysisKeys: imageAnalysis ? Object.keys(imageAnalysis) : [],
+        designTokens: imageAnalysis?.designTokens,
+      }
+    );
 
     if (!description) {
       context.res.status = 400;
@@ -466,77 +478,112 @@ module.exports = async function (context, req) {
       }
     }
 
-    // Generate base wireframe HTML first
-    let html = await generateWithAI(description, {
-      theme,
-      colorScheme,
-      fastMode,
+    // 🎨 FLUENT COMMUNITY LIBRARY GENERATION (Always Active)
+    console.log("🎨 Generating with Microsoft Fluent Community Components", {
+      description: description.substring(0, 50) + "...",
+      fluentLibrary: fluentCommunityLibrary.libraryName,
     });
 
-    if (!html || !html.includes("<!DOCTYPE html>")) {
-      throw new Error("AI response insufficient or invalid");
-    }
+    try {
+      const fluentStartTime = Date.now();
 
-    // Conditionally apply Atlas components (skip for uploaded images)
-    if (!lowFidelityMode) {
+      // Analyze description to determine optimal components
+      const componentAnalysis = analyzeDescriptionForComponents(description);
+
+      // Generate wireframe using Fluent Community components
+      let html = generateFluentWireframeHTML(description, componentAnalysis);
+
+      // Apply Fluent Playbook enhancements
+      html = addFluentPlaybookComponents(html);
+
+      const processingTime = Date.now() - fluentStartTime;
+
+      console.log("✅ Enhanced Fluent Community wireframe generated", {
+        processingTimeMs: processingTime,
+        htmlLength: html.length,
+        components: componentAnalysis,
+      });
+
+      context.res.status = 200;
+      context.res.body = {
+        success: true,
+        html,
+        metadata: {
+          theme: componentAnalysis.theme,
+          colorScheme: componentAnalysis.theme,
+          fluentMode: "mandatory",
+          fluentComponents: componentAnalysis,
+          libraryInfo: {
+            name: fluentCommunityLibrary.libraryName,
+            figmaFileId: fluentCommunityLibrary.figmaFileId,
+            baseNodeId: fluentCommunityLibrary.baseNodeId,
+          },
+          generatedAt: new Date().toISOString(),
+          processingTimeMs: processingTime,
+          descriptionPreview: description.substring(0, 200),
+        },
+      };
+      return;
+    } catch (error) {
+      console.error(
+        "❌ Fluent Community generation failed, using AI with Fluent requirements:",
+        error
+      );
+
+      // Fallback to AI generation with mandatory Fluent components
+      let html = await generateWithAI(description, {
+        theme,
+        colorScheme,
+      });
+
+      if (!html || !html.includes("<!DOCTYPE html>")) {
+        throw new Error("AI response insufficient or invalid");
+      }
+
+      // Apply Atlas components (skip for uploaded images)
       if (!imageAnalysis && includeAtlas) {
-        console.log("📝 Branding mode: adding Atlas components");
+        console.log("📝 Adding Atlas components");
         html = addAtlasComponents(html, description);
       } else if (imageAnalysis) {
         console.log(
           "📸 Skipping Atlas components for uploaded image to preserve accuracy"
         );
       }
-    } else {
-      console.log("ℹ️ Low-fidelity mode: Skipping Atlas components");
-    }
 
-    // Apply Fluent Playbook components (only for template-based wireframes, NOT uploaded images)
-    if (!imageAnalysis && !lowFidelityMode) {
-      html = addFluentPlaybookComponents(html);
-      console.log("🎨 Applied Fluent Playbook components (branding mode)");
-    } else if (lowFidelityMode) {
-      console.log("ℹ️ Low-fidelity mode: Skipping Fluent Playbook components");
-    } else {
-      console.log("📸 Uploaded image: skipping Fluent components");
-    }
-
-    // Inject low-fidelity CSS if in that mode
-    if (lowFidelityMode) {
-      html = injectLowFidelityCSS(html);
-      if (!/wireframe-component/.test(html)) {
-        console.warn(
-          "⚠️ Low-fidelity expected classes missing; AI output may not respect prompt."
-        );
+      // Apply Fluent Playbook components (only for template-based wireframes, NOT uploaded images)
+      if (!imageAnalysis) {
+        html = addFluentPlaybookComponents(html);
+        console.log("🎨 Applied Fluent Playbook components");
+      } else {
+        console.log("📸 Uploaded image: skipping Fluent components");
       }
+
+      const processingTime = Date.now() - startTime;
+
+      // Stats
+      const atlasStats = {
+        hero: (html.match(/atlas-hero-figma/g) || []).length,
+        modules: (html.match(/atlas-module-card-figma/g) || []).length,
+        learningPaths: (html.match(/atlas-learning-path-card-figma/g) || [])
+          .length,
+      };
+
+      context.res.status = 200;
+      context.res.body = {
+        success: true,
+        html,
+        metadata: {
+          theme: theme || "microsoftlearn",
+          colorScheme: colorScheme || "primary",
+          includeAtlas: includeAtlas !== false,
+          fluentMode: "ai-enforced",
+          atlasComponents: atlasStats,
+          generatedAt: new Date().toISOString(),
+          processingTimeMs: processingTime,
+          descriptionPreview: description.substring(0, 200),
+        },
+      };
     }
-
-    const processingTime = Date.now() - startTime;
-
-    // Stats
-    const atlasStats = {
-      hero: (html.match(/atlas-hero-figma/g) || []).length,
-      modules: (html.match(/atlas-module-card-figma/g) || []).length,
-      learningPaths: (html.match(/atlas-learning-path-card-figma/g) || [])
-        .length,
-    };
-
-    context.res.status = 200;
-    context.res.body = {
-      success: true,
-      html,
-      metadata: {
-        theme: theme || "professional",
-        colorScheme: colorScheme || "blue",
-        fastMode: fastMode !== false,
-        includeAtlas: includeAtlas !== false && !lowFidelityMode,
-        lowFidelityMode,
-        atlasComponents: atlasStats,
-        generatedAt: new Date().toISOString(),
-        processingTimeMs: processingTime,
-        descriptionPreview: description.substring(0, 200),
-      },
-    };
   } catch (error) {
     console.error("❌ Enhanced wireframe generation failed:", error);
     context.res.status = 500;
