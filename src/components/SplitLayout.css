@@ -1108,15 +1108,16 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 10px 12px;
-  margin-top: 10px;
-  max-height: 240px;
+  margin-top: 8px; /* Small margin from chat input */
+  max-height: 120px; /* Reduced to fit better inside container */
   overflow-y: auto; /* scroll just this panel */
   box-sizing: border-box;
 }
 
 /* Simple stack container for label + panel */
 .ai-suggestions-container {
-  margin-top: 12px;
+  order: 2; /* Place below the chat input wrapper */
+  margin-top: 0;
 }
 .ai-suggestions-panel::-webkit-scrollbar {
   width: 8px;
@@ -1134,7 +1135,7 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 
 @media (max-width: 480px) {
   .ai-suggestions-panel {
-    max-height: 110px;
+    max-height: 90px; /* Reduced for mobile to fit inside container */
   }
 }
 
@@ -1549,7 +1550,6 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   .left-pane {
     width: 280px;
     min-width: 260px;
-    padding: 1.5rem;
   }
 
   .right-pane {
@@ -1564,6 +1564,18 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 
   .split-layout.left-panel-collapsed .panel-toggle-btn {
     left: 20px;
+  }
+
+  /* Textarea responsive sizing */
+  .chat-input {
+    min-height: 70px;
+  }
+}
+
+@media (max-width: 1024px) {
+  /* Tablet Screens */
+  .chat-input {
+    min-height: 65px;
   }
 }
 
@@ -1694,13 +1706,8 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
     font-size: 16px;
   }
 
-  /* Chat Input Mobile Responsiveness */
-  .chat-input-container {
-    padding: 16px;
-  }
-
   .chat-input {
-    min-height: 100px;
+    min-height: 60px;
     padding: 14px 56px 14px 16px;
     font-size: 13px;
   }
@@ -2726,6 +2733,7 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 
 /* Chat Input Wrapper - Microsoft Fluent Design */
 .chat-input-wrapper {
+  order: 1; /* Place above the AI suggestions */
   position: relative; /* Anchor the absolute-positioned send button to this wrapper */
   background: #ffffff;
   border-radius: 12px;
@@ -2742,7 +2750,7 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 
 .chat-input {
   width: 100%;
-  min-height: 120px;
+  min-height: 80px;
   /* Leave room for the send button on the right (40px) + gaps */
   padding: 16px 64px 16px 20px;
   border: none;
@@ -2857,7 +2865,10 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   padding: 20px;
   border-top: 1px solid #e1e5e9;
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  max-height: 45vh; /* keep room for messages */
+  max-height: 55vh; /* keep room for messages */
   overflow: hidden; /* contain internal scroll areas */
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }

@@ -3,15 +3,22 @@ const {
   fluentCommunityLibrary,
   generateFluentWireframeHTML,
   analyzeDescriptionForComponents,
+  generateFluentDashboardGrid,
+  generateFluentMetricCard,
+  generateFluentChartWidget,
+  generateFluentProgressWidget,
+  generateFluentActivityFeed,
 } = require("../fluent-community-library");
 
 // Import missing dependencies
 const AtlasComponentLibrary = require("../components/AtlasComponentLibrary");
+const PlaceholderGenerator = require("../utils/placeholderGenerator");
 const analyticsLogger = require("../utils/analytics-logger");
 const { fixWireframeImages } = require("../utils/imagePlaceholders");
 
-// Initialize Atlas Library
+// Initialize libraries
 const atlasLibrary = new AtlasComponentLibrary();
+const placeholderGen = new PlaceholderGenerator();
 
 // Logger utility
 const logger = {
@@ -1217,15 +1224,26 @@ async function generateWireframeFromDescription(
     } else if (
       desc.includes("dashboard") ||
       desc.includes("chart") ||
-      desc.includes("analytics")
+      desc.includes("analytics") ||
+      desc.includes("metrics") ||
+      desc.includes("widget")
     ) {
-      const dashboardHtml = generateDashboardWireframe(
+      // Enhanced dashboard detection with Fluent vs Atlas choice
+      const useFluentComponents =
+        desc.includes("modern") ||
+        desc.includes("interactive") ||
+        desc.includes("fluent") ||
+        desc.includes("advanced");
+
+      const dashboardHtml = generateHybridDashboard(
         description,
-        colorScheme
+        useFluentComponents
       );
       return {
         html: useExistingHeroComponent(dashboardHtml, description),
-        source: "pattern-dashboard",
+        source: useFluentComponents
+          ? "pattern-dashboard-fluent"
+          : "pattern-dashboard-atlas",
         aiGenerated: false,
       };
     } else if (
@@ -1533,15 +1551,98 @@ function generateFormWireframe(description, colorScheme) {
 
 // Dashboard-focused wireframe
 function generateDashboardWireframe(description, colorScheme) {
+  // Generate contextual placeholder data
+  const dashboardTitle = placeholderGen.generateContextualText(
+    "dashboard-title",
+    { title: description }
+  );
+  const metrics = placeholderGen.generateContextualText("metric-cards");
+  const activityData = placeholderGen.generateContextualText("activity-feed", {
+    count: 4,
+  });
+  const tableData = placeholderGen.generateContextualText("course-table", {
+    rowCount: 6,
+  });
+
   // Use Atlas Component Library for the site header
   const siteHeader = atlasLibrary.generateComponent("site-header");
+
+  // Create dashboard widgets using Atlas components
+  const metricsGrid = atlasLibrary.generateComponent("dashboard-grid", {
+    widgets: [
+      {
+        type: "metric-card",
+        options: {
+          title: "Total Learners",
+          value: metrics.totalUsers.value,
+          trend: metrics.totalUsers.trend,
+          trendDirection: metrics.totalUsers.trendDirection,
+        },
+      },
+      {
+        type: "metric-card",
+        options: {
+          title: "Active Sessions",
+          value: metrics.activeSessions.value,
+          trend: metrics.activeSessions.trend,
+          trendDirection: metrics.activeSessions.trendDirection,
+        },
+      },
+      {
+        type: "metric-card",
+        options: {
+          title: "Completion Rate",
+          value: metrics.completionRate.value,
+          trend: metrics.completionRate.trend,
+          trendDirection: metrics.completionRate.trendDirection,
+        },
+      },
+      {
+        type: "chart-widget",
+        options: {
+          title: "Learning Progress",
+          type: "line",
+          height: "160px",
+        },
+      },
+    ],
+  });
+
+  // Create additional widgets
+  const progressWidget = atlasLibrary.generateComponent("progress-widget", {
+    title: "Monthly Goals",
+    value: 78,
+    max: 100,
+    label: "78% Complete",
+  });
+
+  const chartWidget = atlasLibrary.generateComponent("chart-widget", {
+    title: "Course Enrollment Trends",
+    type: "bar",
+    height: "220px",
+  });
+
+  const activityFeed = atlasLibrary.generateComponent("activity-feed", {
+    title: "Recent Learning Activity",
+    items: activityData,
+  });
+
+  const dataTable = atlasLibrary.generateComponent("data-table", {
+    title: "Course Progress Overview",
+    headers: tableData.headers,
+    rows: tableData.rows,
+  });
 
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Microsoft Learn - ${description}</title>
+    <title>Microsoft Learn - ${dashboardTitle}</title>
+    
+    <!-- Fluent UI Web Components -->
+    <script type="module" src="https://unpkg.com/@fluentui/web-components"></script>
+    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -1556,162 +1657,78 @@ function generateDashboardWireframe(description, colorScheme) {
             padding: 0 24px; 
         }
         .page-title { 
-            font-size: 28px; 
+            font-size: 32px; 
             font-weight: 600; 
             color: #171717; 
-            margin-bottom: 24px; 
+            margin-bottom: 8px; 
         }
-        .dashboard-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(250px, 300px)); 
-            gap: 1rem; 
-            margin-bottom: 2rem; 
-            justify-content: start;
+        .page-subtitle {
+            font-size: 16px;
+            color: #605e5c;
+            margin-bottom: 32px;
         }
-        .card { 
-            background: white; 
-            padding: 1rem; 
-            border-radius: 4px; 
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
-            border: 1px solid #e1dfdd;
-            max-width: 300px;
-            width: 100%;
+        .dashboard-section {
+            margin-bottom: 32px;
         }
-        .card-title { 
-            font-size: 1rem; 
-            font-weight: 600; 
-            color: #0078d4; 
-            margin-bottom: 0.5rem; 
-            line-height: 1.3;
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #171717;
+            margin-bottom: 16px;
         }
-        .metric { 
-            font-size: 1.5rem; 
-            font-weight: 600; 
-            color: #0078d4; 
-            margin-bottom: 0.25rem; 
+        .widgets-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
         }
-        .metric-label { 
-            font-size: 0.8125rem; 
-            color: #605e5c; 
+        .chart-progress-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
         }
-        .chart-placeholder { 
-            height: 200px; 
-            background: #E8E6DF; 
-            border: 2px dashed #605e5c; 
-            border-radius: 8px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            color: #605e5c; 
-            font-weight: 500; 
+        @media (max-width: 1024px) {
+            .widgets-row {
+                grid-template-columns: 1fr;
+            }
+            .chart-progress-grid {
+                grid-template-columns: 1fr;
+            }
         }
-        .table-container { 
-            background: white; 
-            border-radius: 8px; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08); 
-            border: 1px solid #e1dfdd; 
-            overflow: hidden; 
-        }
-        .table-header { 
-            padding: 20px 24px; 
-            border-bottom: 1px solid #e1dfdd; 
-            font-weight: 600; 
-            color: #171717; 
-        }
-        .table { 
-            width: 100%; 
-            border-collapse: collapse; 
-        }
-        .table th, .table td { 
-            padding: 12px 24px; 
-            text-align: left; 
-            border-bottom: 1px solid #f3f2f1; 
-        }
-        .table th { 
-            background: #f8f9fa; 
-            font-weight: 600; 
-            color: #171717; 
-            font-size: 14px; 
-        }
-        .table td { 
-            color: #505050; 
-            font-size: 14px; 
-        }
-        .status { 
-            padding: 4px 8px; 
-            border-radius: 12px; 
-            font-size: 12px; 
-            font-weight: 500; 
-        }
-        .status.active { 
-            background: #d1fae5; 
-            color: #065f46; 
-        }
-        .status.pending { 
-            background: #fef3c7; 
-            color: #92400e; 
+        @media (max-width: 768px) {
+            .main {
+                padding: 0 16px;
+                margin: 20px auto;
+            }
+            .page-title {
+                font-size: 28px;
+            }
         }
     </style>
 </head>
 <body>
     ${siteHeader}
     <main class="main">
-        <h1 class="page-title">${description}</h1>
+        <h1 class="page-title">${dashboardTitle}</h1>
+        <p class="page-subtitle">Monitor learning progress, track achievements, and analyze engagement metrics across your organization.</p>
         
-        <div class="dashboard-grid">
-            <div class="card">
-                <div class="card-title">Total Users</div>
-                <div class="metric">2,847</div>
-                <div class="metric-label">+12% from last month</div>
+        <div class="dashboard-section">
+            <h2 class="section-title">Key Metrics</h2>
+            ${metricsGrid}
+        </div>
+        
+        <div class="widgets-row">
+            <div class="chart-progress-grid">
+                ${chartWidget}
+                ${progressWidget}
             </div>
-            <div class="card">
-                <div class="card-title">Active Sessions</div>
-                <div class="metric">1,423</div>
-                <div class="metric-label">Currently online</div>
-            </div>
-            <div class="card">
-                <div class="card-title">Completion Rate</div>
-                <div class="metric">87%</div>
-                <div class="metric-label">+5% improvement</div>
-            </div>
-            <div class="card">
-                <div class="card-title">Performance Chart</div>
-                <div class="chart-placeholder">📊 Chart Visualization</div>
+            <div>
+                ${activityFeed}
             </div>
         </div>
         
-        <div class="table-container">
-            <div class="table-header">Recent Activity</div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>User</th>
-                        <th>Action</th>
-                        <th>Status</th>
-                        <th>Time</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>John Doe</td>
-                        <td>Completed Module 1</td>
-                        <td><span class="status active">Active</span></td>
-                        <td>2 minutes ago</td>
-                    </tr>
-                    <tr>
-                        <td>Jane Smith</td>
-                        <td>Started Assessment</td>
-                        <td><span class="status pending">Pending</span></td>
-                        <td>5 minutes ago</td>
-                    </tr>
-                    <tr>
-                        <td>Mike Johnson</td>
-                        <td>Downloaded Certificate</td>
-                        <td><span class="status active">Active</span></td>
-                        <td>10 minutes ago</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="dashboard-section">
+            ${dataTable}
         </div>
     </main>
 </body>
@@ -2649,9 +2666,147 @@ function getPerformanceStats() {
   };
 }
 
+// Hybrid Dashboard Generation using both Atlas and Fluent components
+function generateHybridDashboard(description, useFluentComponents = false) {
+  const dashboardTitle = placeholderGen.generateContextualText(
+    "dashboard-title",
+    { title: description }
+  );
+  const metrics = placeholderGen.generateContextualText("metric-cards");
+  const activityData = placeholderGen.generateContextualText("activity-feed", {
+    count: 4,
+  });
+
+  // Use Atlas for structure and layout, Fluent for interactive components
+  const siteHeader = atlasLibrary.generateComponent("site-header");
+
+  if (useFluentComponents) {
+    // Generate using Fluent Web Components for modern dashboard
+    const fluentWidgets = [
+      {
+        type: "metric",
+        title: "Total Learners",
+        value: metrics.totalUsers.value,
+        trend: metrics.totalUsers.trend,
+        icon: "👥",
+      },
+      {
+        type: "metric",
+        title: "Active Sessions",
+        value: metrics.activeSessions.value,
+        trend: metrics.activeSessions.trend,
+        icon: "🎯",
+      },
+      {
+        type: "chart",
+        title: "Performance Overview",
+        type: "line",
+        height: "200px",
+      },
+      {
+        type: "progress",
+        title: "Goal Progress",
+        value: 78,
+        max: 100,
+        type: "ring",
+      },
+    ];
+
+    const fluentDashboardGrid = generateFluentDashboardGrid(fluentWidgets);
+    const fluentActivityFeed = generateFluentActivityFeed({
+      title: "Recent Activity",
+      items: activityData,
+    });
+
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft Learn - ${dashboardTitle}</title>
+    
+    <!-- Fluent UI Web Components -->
+    <script type="module" src="https://unpkg.com/@fluentui/web-components"></script>
+    
+    <style>
+        :root {
+            --neutral-foreground-rest: #242424;
+            --neutral-background-1: #ffffff;
+            --neutral-fill-secondary-rest: #f5f5f5;
+            --neutral-stroke-rest: #e1e1e1;
+            --neutral-stroke-divider-rest: #e1e1e1;
+            --accent-foreground-rest: #0078d4;
+            --accent-fill-rest: #0078d4;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            background: #f8f9fa; 
+            color: var(--neutral-foreground-rest); 
+            line-height: 1.5; 
+        }
+        .main { 
+            max-width: 1400px; 
+            margin: 40px auto; 
+            padding: 0 24px; 
+        }
+        .page-title { 
+            font-size: 32px; 
+            font-weight: 600; 
+            margin-bottom: 8px; 
+        }
+        .page-subtitle {
+            font-size: 16px;
+            color: #605e5c;
+            margin-bottom: 32px;
+        }
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 24px;
+        }
+        @media (max-width: 1024px) {
+            .dashboard-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    ${siteHeader}
+    <main class="main">
+        <h1 class="page-title">${dashboardTitle}</h1>
+        <p class="page-subtitle">Advanced dashboard powered by Fluent Web Components for modern interaction patterns.</p>
+        
+        <div class="dashboard-layout">
+            <div>
+                ${fluentDashboardGrid}
+            </div>
+            <div>
+                ${fluentActivityFeed}
+            </div>
+        </div>
+    </main>
+</body>
+</html>`;
+  } else {
+    // Use Atlas components for traditional dashboard layout
+    return generateDashboardWireframe(description);
+  }
+}
+
 // Export the generateWireframeFromDescription function for use by other modules
 module.exports.generateWireframeFromDescription =
   generateWireframeFromDescription;
+
+// Export enhanced dashboard functions
+module.exports.generateHybridDashboard = generateHybridDashboard;
+module.exports.generateDashboardWireframe = generateDashboardWireframe;
+
+// Export component libraries
+module.exports.AtlasComponentLibrary = AtlasComponentLibrary;
+module.exports.PlaceholderGenerator = PlaceholderGenerator;
 
 // Export performance stats function
 module.exports.getPerformanceStats = getPerformanceStats;

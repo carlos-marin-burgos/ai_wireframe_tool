@@ -155,6 +155,7 @@
   max-width: 600px;
   margin: 0 0 1rem 0;
   background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+  border: 1px solid #94a3b8;
   border-radius: 6px;
   padding: 0.5rem 0.75rem;
   display: flex;
@@ -1334,7 +1335,7 @@
   border: 1px solid #d1d9e0;
   border-radius: 0;
   margin-top: 0;
-  height: 280px; /* Fixed height matching empty state */
+  height: 200px; /* Reduced height from 280px to 200px */
   overflow-y: auto; /* Enable vertical scrolling */
   overflow-x: hidden; /* Hide horizontal scrolling */
   position: relative;

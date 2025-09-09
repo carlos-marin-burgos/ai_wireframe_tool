@@ -83,6 +83,15 @@ const removeWireframePlaceholders = (html: string): string => {
     /\.[^{]*\{[^}]*background-color:\s*#[a-fA-F0-9]{3,6}[^}]*\}/gi,
     ""
   );
+  // Remove wireframe-specific patterns
+  html = html.replace(/\.[^{]*wireframe[^{]*\{[^}]*background[^}]*\}/gi, "");
+  html = html.replace(/\.[^{]*component[^{]*\{[^}]*background[^}]*\}/gi, "");
+  html = html.replace(/\.[^{]*rectangle[^{]*\{[^}]*\}/gi, "");
+  html = html.replace(/\.[^{]*box[^{]*\{[^}]*background[^}]*\}/gi, "");
+  // Remove specific low-fi patterns
+  html = html.replace(/\.[^{]*mockup[^{]*\{[^}]*\}/gi, "");
+  html = html.replace(/\.[^{]*sketch[^{]*\{[^}]*\}/gi, "");
+  html = html.replace(/\.[^{]*proto[^{]*\{[^}]*\}/gi, "");
 
   // Replace wireframe placeholder elements with actual content
   html = html.replace(
@@ -106,11 +115,30 @@ const removeWireframePlaceholders = (html: string): string => {
     "<p>Sample content</p>"
   );
 
+  // Replace wireframe-specific elements
+  html = html.replace(
+    /<div[^>]*class="[^"]*wireframe[^"]*"[^>]*><\/div>/gi,
+    "<p>Sample content</p>"
+  );
+
+  html = html.replace(
+    /<div[^>]*class="[^"]*component[^"]*"[^>]*><\/div>/gi,
+    "<div class='content-block'><p>Content</p></div>"
+  );
+
+  html = html.replace(
+    /<div[^>]*class="[^"]*rectangle[^"]*"[^>]*><\/div>/gi,
+    "<p>Sample content</p>"
+  );
+
   // Replace empty divs that might be placeholders
   html = html.replace(/<div[^>]*class="[^"]*"[^>]*><\/div>/gi, (match) => {
     // Only replace if it looks like a placeholder (has width/height styles or placeholder in class)
     if (
       match.includes("placeholder") ||
+      match.includes("wireframe") ||
+      match.includes("component") ||
+      match.includes("rectangle") ||
       match.includes("width") ||
       match.includes("height")
     ) {
@@ -118,22 +146,6 @@ const removeWireframePlaceholders = (html: string): string => {
     }
     return match;
   });
-
-  // Replace wireframe placeholder elements with actual content
-  html = html.replace(
-    /<div class="text-placeholder-heading[^"]*"><\/div>/g,
-    "<h2>Microsoft Learn - Azure Platform</h2>"
-  );
-
-  html = html.replace(
-    /<div class="text-placeholder-line[^"]*"><\/div>/g,
-    "<p>Learn Microsoft Azure with hands-on tutorials, documentation, and interactive examples.</p>"
-  );
-
-  html = html.replace(
-    /<h1 class="text-placeholder[^"]*"><\/h1>/g,
-    "<h1>Welcome to Microsoft Learn</h1>"
-  );
 
   return html;
 }; // Helper function to ensure HTML content is always a string and apply fixes

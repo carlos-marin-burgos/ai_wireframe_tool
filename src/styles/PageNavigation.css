@@ -292,8 +292,6 @@
   margin-left: auto;
   padding: 4px;
   background: rgba(255, 255, 255, 0.9);
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 /* Base button styles */
@@ -302,12 +300,12 @@
   display: flex !important;
   align-items: center;
   justify-content: center;
-  width: 36px !important;
-  height: 36px !important;
+  width: 26px !important;
+  height: 26px !important;
   background: #ffffff !important;
-  border: 2px solid #0078d4 !important;
+  border: 1px solid #0078d4 !important;
   color: #0078d4 !important;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 16px !important;
@@ -351,7 +349,7 @@
   background: #e3f2fd !important;
   border-color: #1976d2 !important;
   color: #1976d2 !important;
-  border-width: 3px !important;
+  border-width: 1px !important;
 }
 
 .toolbar-btn[aria-label="Dev Playbooks"]:hover {
@@ -364,7 +362,7 @@
   background: #f3e5f5 !important;
   border-color: #7b1fa2 !important;
   color: #7b1fa2 !important;
-  border-width: 3px !important;
+  border-width: 1px !important;
 }
 
 .toolbar-btn[aria-label="Figma Components"]:hover {
@@ -377,7 +375,7 @@
   background: #fff3e0 !important;
   border-color: #f57c00 !important;
   color: #f57c00 !important;
-  border-width: 3px !important;
+  border-width: 1px !important;
 }
 
 .toolbar-btn[aria-label="Component Library"]:hover {
@@ -390,7 +388,7 @@
   background: #e8f5e8 !important;
   border-color: #4caf50 !important;
   color: #4caf50 !important;
-  border-width: 3px !important;
+  border-width: 1px !important;
 }
 
 .toolbar-btn[aria-label="Save"]:hover {
@@ -403,7 +401,7 @@
   background: #fff9c4 !important;
   border-color: #ff9800 !important;
   color: #ff9800 !important;
-  border-width: 3px !important;
+  border-width: 1px !important;
 }
 
 .toolbar-btn[aria-label="Add Page"]:hover {

@@ -186,6 +186,25 @@ class AtlasComponentLibrary {
       case "grid":
         return this.generateGrid(options);
 
+      // Dashboard Components
+      case "metric-card":
+        return this.generateMetricCard(options);
+
+      case "chart-widget":
+        return this.generateChartWidget(options);
+
+      case "progress-widget":
+        return this.generateProgressWidget(options);
+
+      case "activity-feed":
+        return this.generateActivityFeed(options);
+
+      case "data-table":
+        return this.generateDataTable(options);
+
+      case "dashboard-grid":
+        return this.generateDashboardGrid(options);
+
       default:
         return `<!-- Unknown component: ${type} -->`;
     }
@@ -590,6 +609,290 @@ class AtlasComponentLibrary {
           <p style="margin: 0; color: #ccc;">${copyright}</p>
         </div>
       </footer>
+    `;
+  }
+
+  // Dashboard Widget Components
+  generateMetricCard(options = {}) {
+    const title = options.title || "Metric Title";
+    const value = options.value || "0";
+    const trend = options.trend || "+0%";
+    const trendDirection = options.trendDirection || "up"; // up, down, neutral
+    const className = options.className || "";
+
+    const trendColor =
+      trendDirection === "up"
+        ? "#107c10"
+        : trendDirection === "down"
+        ? "#d13438"
+        : "#605e5c";
+    const trendIcon =
+      trendDirection === "up" ? "↗" : trendDirection === "down" ? "↘" : "→";
+
+    return `
+      <div class="atlas-metric-card ${className}" style="
+        background: white; 
+        padding: 20px; 
+        border-radius: 8px; 
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08); 
+        border: 1px solid #e1dfdd;
+        min-width: 200px;
+      ">
+        <div style="font-size: 14px; color: #605e5c; margin-bottom: 8px; font-weight: 500;">
+          ${title}
+        </div>
+        <div style="font-size: 28px; font-weight: 600; color: #0078d4; margin-bottom: 4px;">
+          ${value}
+        </div>
+        <div style="font-size: 12px; color: ${trendColor}; display: flex; align-items: center; gap: 4px;">
+          <span>${trendIcon}</span>
+          <span>${trend}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  generateChartWidget(options = {}) {
+    const title = options.title || "Chart Title";
+    const type = options.type || "line"; // line, bar, pie, donut, area
+    const height = options.height || "200px";
+    const className = options.className || "";
+
+    const chartEmoji = {
+      line: "📈",
+      bar: "📊",
+      pie: "🥧",
+      donut: "🍩",
+      area: "📊",
+    };
+
+    return `
+      <div class="atlas-chart-widget ${className}" style="
+        background: white; 
+        padding: 20px; 
+        border-radius: 8px; 
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08); 
+        border: 1px solid #e1dfdd;
+      ">
+        <div style="font-size: 16px; font-weight: 600; color: #171717; margin-bottom: 16px;">
+          ${title}
+        </div>
+        <div style="
+          height: ${height}; 
+          background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); 
+          border: 2px dashed #605e5c; 
+          border-radius: 8px; 
+          display: flex; 
+          align-items: center; 
+          justify-content: center; 
+          color: #605e5c; 
+          font-size: 24px;
+          flex-direction: column;
+          gap: 8px;
+        ">
+          <span>${chartEmoji[type] || "📊"}</span>
+          <span style="font-size: 14px; font-weight: 500;">${
+            type.charAt(0).toUpperCase() + type.slice(1)
+          } Chart</span>
+        </div>
+      </div>
+    `;
+  }
+
+  generateProgressWidget(options = {}) {
+    const title = options.title || "Progress";
+    const value = options.value || 50;
+    const max = options.max || 100;
+    const label = options.label || `${value}%`;
+    const className = options.className || "";
+
+    const percentage = (value / max) * 100;
+
+    return `
+      <div class="atlas-progress-widget ${className}" style="
+        background: white; 
+        padding: 20px; 
+        border-radius: 8px; 
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08); 
+        border: 1px solid #e1dfdd;
+      ">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span style="font-size: 14px; font-weight: 500; color: #171717;">${title}</span>
+          <span style="font-size: 14px; font-weight: 600; color: #0078d4;">${label}</span>
+        </div>
+        <div style="
+          width: 100%; 
+          height: 8px; 
+          background: #f3f2f1; 
+          border-radius: 4px; 
+          overflow: hidden;
+        ">
+          <div style="
+            width: ${percentage}%; 
+            height: 100%; 
+            background: linear-gradient(90deg, #0078d4 0%, #106ebe 100%); 
+            border-radius: 4px;
+            transition: width 0.3s ease;
+          "></div>
+        </div>
+      </div>
+    `;
+  }
+
+  generateActivityFeed(options = {}) {
+    const title = options.title || "Recent Activity";
+    const items = options.items || [
+      {
+        user: "Sarah Chen",
+        action: "completed Azure Fundamentals",
+        time: "2 minutes ago",
+        type: "success",
+      },
+      {
+        user: "Mike Rodriguez",
+        action: "started Data Science path",
+        time: "15 minutes ago",
+        type: "info",
+      },
+      {
+        user: "Emma Thompson",
+        action: "earned certification",
+        time: "1 hour ago",
+        type: "achievement",
+      },
+    ];
+    const className = options.className || "";
+
+    const getActivityIcon = (type) => {
+      switch (type) {
+        case "success":
+          return "✅";
+        case "achievement":
+          return "🏆";
+        case "info":
+          return "ℹ️";
+        case "warning":
+          return "⚠️";
+        default:
+          return "📝";
+      }
+    };
+
+    const feedItems = items
+      .map(
+        (item) => `
+      <div style="
+        display: flex; 
+        align-items: flex-start; 
+        gap: 12px; 
+        padding: 12px 0; 
+        border-bottom: 1px solid #f3f2f1;
+      ">
+        <span style="font-size: 16px;">${getActivityIcon(item.type)}</span>
+        <div style="flex: 1;">
+          <div style="font-size: 14px; color: #171717; margin-bottom: 2px;">
+            <strong>${item.user}</strong> ${item.action}
+          </div>
+          <div style="font-size: 12px; color: #605e5c;">${item.time}</div>
+        </div>
+      </div>
+    `
+      )
+      .join("");
+
+    return `
+      <div class="atlas-activity-feed ${className}" style="
+        background: white; 
+        padding: 20px; 
+        border-radius: 8px; 
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08); 
+        border: 1px solid #e1dfdd;
+      ">
+        <div style="font-size: 16px; font-weight: 600; color: #171717; margin-bottom: 16px;">
+          ${title}
+        </div>
+        <div>
+          ${feedItems}
+        </div>
+      </div>
+    `;
+  }
+
+  generateDataTable(options = {}) {
+    const title = options.title || "Data Table";
+    const headers = options.headers || ["Name", "Status", "Progress", "Date"];
+    const rows = options.rows || [
+      ["Azure Fundamentals", "In Progress", "75%", "Today"],
+      ["Data Analytics", "Completed", "100%", "Yesterday"],
+      ["AI Engineer", "Not Started", "0%", "Pending"],
+    ];
+    const className = options.className || "";
+
+    const headerCells = headers
+      .map(
+        (header) =>
+          `<th style="padding: 12px 16px; text-align: left; font-weight: 600; color: #171717; background: #f8f9fa; border-bottom: 1px solid #e1dfdd;">${header}</th>`
+      )
+      .join("");
+
+    const tableRows = rows
+      .map(
+        (row) =>
+          `<tr style="border-bottom: 1px solid #f3f2f1;">
+        ${row
+          .map(
+            (cell) =>
+              `<td style="padding: 12px 16px; color: #605e5c; font-size: 14px;">${cell}</td>`
+          )
+          .join("")}
+      </tr>`
+      )
+      .join("");
+
+    return `
+      <div class="atlas-data-table ${className}" style="
+        background: white; 
+        border-radius: 8px; 
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08); 
+        border: 1px solid #e1dfdd;
+        overflow: hidden;
+      ">
+        <div style="padding: 20px 20px 12px; font-size: 16px; font-weight: 600; color: #171717; border-bottom: 1px solid #f3f2f1;">
+          ${title}
+        </div>
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr>${headerCells}</tr>
+          </thead>
+          <tbody>
+            ${tableRows}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  generateDashboardGrid(options = {}) {
+    const widgets = options.widgets || [];
+    const columns = options.columns || "repeat(auto-fit, minmax(280px, 1fr))";
+    const gap = options.gap || "20px";
+    const className = options.className || "";
+
+    const widgetHTML = widgets
+      .map((widget) => {
+        return this.generateComponent(widget.type, widget.options);
+      })
+      .join("");
+
+    return `
+      <div class="atlas-dashboard-grid ${className}" style="
+        display: grid; 
+        grid-template-columns: ${columns}; 
+        gap: ${gap}; 
+        margin-bottom: 20px;
+      ">
+        ${widgetHTML}
+      </div>
     `;
   }
 

@@ -50,6 +50,16 @@ const fluentCommunityLibrary = {
       compact: "8664-7003", // Compact card variant
     },
 
+    // Dashboard Components (using Fluent Web Components)
+    dashboard: {
+      metricCard: "fluent-card", // Metric display card
+      chartContainer: "fluent-card", // Chart container
+      progressRing: "fluent-progress-ring", // Circular progress
+      progressBar: "fluent-progress", // Linear progress
+      dataGrid: "fluent-data-grid", // Data table
+      accordion: "fluent-accordion", // Collapsible sections
+    },
+
     // Feedback & Communication
     feedback: {
       messageBar: "8664-7010", // Information/warning/error bar
@@ -414,8 +424,205 @@ function analyzeDescriptionForComponents(description) {
   return analysis;
 }
 
+// Generate Fluent Dashboard Components
+function generateFluentDashboardGrid(widgets = [], options = {}) {
+  const containerClass = options.className || "";
+  const gap = options.gap || "16px";
+
+  const widgetHTML = widgets
+    .map((widget) => {
+      switch (widget.type) {
+        case "metric":
+          return generateFluentMetricCard(widget);
+        case "chart":
+          return generateFluentChartWidget(widget);
+        case "progress":
+          return generateFluentProgressWidget(widget);
+        case "activity":
+          return generateFluentActivityFeed(widget);
+        default:
+          return generateFluentMetricCard(widget);
+      }
+    })
+    .join("\n");
+
+  return `
+    <div class="fluent-dashboard-grid ${containerClass}" style="
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: ${gap};
+      margin: 24px 0;
+    ">
+      ${widgetHTML}
+    </div>
+  `;
+}
+
+function generateFluentMetricCard(options = {}) {
+  const title = options.title || "Metric";
+  const value = options.value || "0";
+  const trend = options.trend || "+0%";
+  const icon = options.icon || "📊";
+
+  return `
+    <fluent-card style="padding: 20px; height: fit-content;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+        <span style="font-size: 14px; color: var(--neutral-foreground-rest); font-weight: 500;">
+          ${title}
+        </span>
+        <span style="font-size: 18px;">${icon}</span>
+      </div>
+      <div style="font-size: 28px; font-weight: 600; color: var(--accent-foreground-rest); margin-bottom: 8px;">
+        ${value}
+      </div>
+      <div style="font-size: 12px; color: var(--neutral-foreground-rest); opacity: 0.8;">
+        ${trend}
+      </div>
+    </fluent-card>
+  `;
+}
+
+function generateFluentChartWidget(options = {}) {
+  const title = options.title || "Chart";
+  const type = options.type || "line";
+  const height = options.height || "200px";
+
+  const chartEmojis = {
+    line: "📈",
+    bar: "📊",
+    pie: "🥧",
+    donut: "🍩",
+    area: "📊",
+  };
+
+  return `
+    <fluent-card style="padding: 20px; height: fit-content;">
+      <div style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: var(--neutral-foreground-rest);">
+        ${title}
+      </div>
+      <div style="
+        height: ${height};
+        background: var(--neutral-fill-secondary-rest);
+        border: 2px dashed var(--neutral-stroke-rest);
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        color: var(--neutral-foreground-rest);
+      ">
+        <span style="font-size: 32px;">${chartEmojis[type] || "📊"}</span>
+        <span style="font-size: 14px; opacity: 0.8;">${
+          type.charAt(0).toUpperCase() + type.slice(1)
+        } Chart</span>
+      </div>
+    </fluent-card>
+  `;
+}
+
+function generateFluentProgressWidget(options = {}) {
+  const title = options.title || "Progress";
+  const value = options.value || 50;
+  const max = options.max || 100;
+  const type = options.type || "bar"; // bar or ring
+
+  if (type === "ring") {
+    return `
+      <fluent-card style="padding: 20px; text-align: center; height: fit-content;">
+        <div style="font-size: 14px; font-weight: 500; margin-bottom: 16px; color: var(--neutral-foreground-rest);">
+          ${title}
+        </div>
+        <fluent-progress-ring value="${value}" max="${max}" style="margin: 16px auto;"></fluent-progress-ring>
+        <div style="font-size: 18px; font-weight: 600; color: var(--accent-foreground-rest);">
+          ${Math.round((value / max) * 100)}%
+        </div>
+      </fluent-card>
+    `;
+  }
+
+  return `
+    <fluent-card style="padding: 20px; height: fit-content;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+        <span style="font-size: 14px; font-weight: 500; color: var(--neutral-foreground-rest);">
+          ${title}
+        </span>
+        <span style="font-size: 14px; font-weight: 600; color: var(--accent-foreground-rest);">
+          ${Math.round((value / max) * 100)}%
+        </span>
+      </div>
+      <fluent-progress value="${value}" max="${max}" style="width: 100%;"></fluent-progress>
+    </fluent-card>
+  `;
+}
+
+function generateFluentActivityFeed(options = {}) {
+  const title = options.title || "Activity";
+  const items = options.items || [
+    { user: "Sarah Chen", action: "completed module", time: "2 min ago" },
+    { user: "Mike Rodriguez", action: "started course", time: "15 min ago" },
+    { user: "Emma Thompson", action: "earned badge", time: "1 hour ago" },
+  ];
+
+  const activityItems = items
+    .map(
+      (item) => `
+    <div style="
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--neutral-stroke-divider-rest);
+    ">
+      <div style="
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--accent-fill-rest);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 12px;
+      ">
+        ${item.user
+          .split(" ")
+          .map((n) => n[0])
+          .join("")}
+      </div>
+      <div style="flex: 1;">
+        <div style="font-size: 14px; color: var(--neutral-foreground-rest);">
+          <strong>${item.user}</strong> ${item.action}
+        </div>
+        <div style="font-size: 12px; color: var(--neutral-foreground-rest); opacity: 0.7;">
+          ${item.time}
+        </div>
+      </div>
+    </div>
+  `
+    )
+    .join("");
+
+  return `
+    <fluent-card style="padding: 20px; height: fit-content;">
+      <div style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: var(--neutral-foreground-rest);">
+        ${title}
+      </div>
+      <div>
+        ${activityItems}
+      </div>
+    </fluent-card>
+  `;
+}
+
 module.exports = {
   fluentCommunityLibrary,
   generateFluentWireframeHTML,
   analyzeDescriptionForComponents,
+  generateFluentDashboardGrid,
+  generateFluentMetricCard,
+  generateFluentChartWidget,
+  generateFluentProgressWidget,
+  generateFluentActivityFeed,
 };
