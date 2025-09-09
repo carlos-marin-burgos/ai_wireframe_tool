@@ -2,8 +2,6 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import "./SplitLayout.css";
 import SuggestionSourceIndicator from "./SuggestionSourceIndicator";
 import LoadingOverlay from "./LoadingOverlay";
-import WireframeToolbar from "./WireframeToolbar";
-import CompactToolbar from "./CompactToolbar";
 import AddPagesModal from "./AddPagesModal";
 import FluentSaveWireframeModal, { SavedWireframe } from "./FluentSaveWireframeModal";
 import FluentImageUploadModal from "./FluentImageUploadModal";
@@ -1159,18 +1157,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                 <h3 className="wireframe-title">{wireframeName}</h3>
               </div>
             )}
-
-            <CompactToolbar
-              onFigmaIntegration={handleFigmaIntegration}
-              onSave={enhancedOnSave}
-              onOpenLibrary={handleOpenLibrary}
-              onAddPages={handleAddPages}
-              onViewHtmlCode={handleViewHtmlCode}
-              onExportPowerPoint={() => console.log('Export PowerPoint')}
-              onPresentationMode={handlePresentationMode}
-              onShareUrl={() => console.log('Share URL')}
-              onImportHtml={handleImportHtml}
-            />
 
             {/* Always show PageNavigation when we have a wireframe */}
             <PageNavigation
