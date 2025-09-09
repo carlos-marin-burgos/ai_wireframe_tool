@@ -120,7 +120,7 @@ Added comprehensive logging to track:
 
 3. **Test Wireframe Generation:**
    ```bash
-   curl -X POST "https://func-designetica-vjib6nx2wh4a4.azurewebsites.net/api/generateWireframe" \
+   curl -X POST "https://func-designetica-vjib6nx2wh4a4.azurewebsites.net/api/generate-wireframe" \
      -H "Content-Type: application/json" \
      -d '{"description": "test wireframe", "colorScheme": "primary"}'
    ```

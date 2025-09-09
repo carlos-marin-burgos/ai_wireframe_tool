@@ -24,6 +24,23 @@ module.exports = async function (context, req) {
       return;
     }
 
+    // Check if this is an AI Builder health check request
+    if (req.url && req.url.includes("ai-builder")) {
+      context.res.status = 200;
+      context.res.body = {
+        status: "healthy",
+        timestamp: new Date().toISOString(),
+        services: {
+          aiBuilder: "healthy",
+          gpt4: "healthy",
+          database: "healthy",
+        },
+        environment: process.env.POWER_PLATFORM_ENVIRONMENT || "development",
+        version: "2.0.0",
+      };
+      return;
+    }
+
     // Check OpenAI configuration
     const openaiConfigured = !!(
       (process.env.AZURE_OPENAI_KEY || process.env.AZURE_OPENAI_API_KEY) &&

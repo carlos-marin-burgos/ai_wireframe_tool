@@ -7,7 +7,7 @@ echo "=========================================="
 echo ""
 echo "📝 Test 1: Initial Dashboard Request (Baseline)"
 echo "Request: Create a modern dashboard for project management"
-RESPONSE1=$(curl -s -X POST http://localhost:5001/api/generateWireframe \
+RESPONSE1=$(curl -s -X POST http://localhost:5001/api/generate-wireframe \
   -H "Content-Type: application/json" \
   -d '{"description": "Create a modern dashboard for project management", "sessionId": "test_sequence_001", "useContextAwareness": true}')
 
@@ -20,7 +20,7 @@ sleep 2
 echo ""
 echo "📝 Test 2: Enhanced Dashboard Request (Building Context)"
 echo "Request: Add more metrics and charts to the dashboard"
-RESPONSE2=$(curl -s -X POST http://localhost:5001/api/generateWireframe \
+RESPONSE2=$(curl -s -X POST http://localhost:5001/api/generate-wireframe \
   -H "Content-Type: application/json" \
   -d '{"description": "Add more metrics and charts to the dashboard", "sessionId": "test_sequence_001", "useContextAwareness": true, "conversationContext": {"previousRequest": "dashboard"}}')
 
@@ -34,7 +34,7 @@ sleep 2
 echo ""
 echo "📝 Test 3: Style Consistency Request (Learning Preferences)"
 echo "Request: Create a user profile page that matches the dashboard style"
-RESPONSE3=$(curl -s -X POST http://localhost:5001/api/generateWireframe \
+RESPONSE3=$(curl -s -X POST http://localhost:5001/api/generate-wireframe \
   -H "Content-Type: application/json" \
   -d '{"description": "Create a user profile page that matches the dashboard style", "sessionId": "test_sequence_001", "useContextAwareness": true, "conversationContext": {"designHistory": ["dashboard", "metrics"]}}')
 

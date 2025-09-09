@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * Fluent UI Component Loader
  * Loads and manages Fluent UI components from the library
@@ -251,3 +252,5 @@ class FluentComponentLoader {
 // Export singleton instance
 export const fluentComponentLoader = new FluentComponentLoader();
 export default fluentComponentLoader;
+=======
+>>>>>>> c45591cd7c4527069b42e97fad093bcdd3b64ed7

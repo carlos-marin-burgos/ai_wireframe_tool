@@ -26,10 +26,17 @@ check_deployment_status() {
 # Initial check
 check_deployment_status
 
+<<<<<<< HEAD
 # Monitor every 30 seconds
 while true; do
     sleep 30
     check_deployment_status
+=======
+# Test wireframe generation
+test_wireframe() {
+    local url="$1/api/generate-wireframe"
+    local test_payload='{"description": "test wireframe", "colorScheme": "primary"}'
+>>>>>>> c45591cd7c4527069b42e97fad093bcdd3b64ed7
     
     # Check if we have resources deployed
     RESOURCE_COUNT=$(az resource list --resource-group rg-Designetica --query "length(@)" --output tsv)

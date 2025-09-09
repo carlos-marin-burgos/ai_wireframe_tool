@@ -626,62 +626,109 @@ function analyzeRequiredComponents(description) {
     interactionTypes: [],
     layoutTypes: [],
     dataTypes: [],
-    requiredSections: []
+    requiredSections: [],
   };
 
   const desc = description.toLowerCase();
 
   // Component analysis
-  if (desc.includes('button') || desc.includes('submit') || desc.includes('click')) {
-    analysis.componentTypes.push('buttons');
+  if (
+    desc.includes("button") ||
+    desc.includes("submit") ||
+    desc.includes("click")
+  ) {
+    analysis.componentTypes.push("buttons");
   }
-  if (desc.includes('form') || desc.includes('input') || desc.includes('textbox') || desc.includes('field')) {
-    analysis.componentTypes.push('forms', 'inputs');
+  if (
+    desc.includes("form") ||
+    desc.includes("input") ||
+    desc.includes("textbox") ||
+    desc.includes("field")
+  ) {
+    analysis.componentTypes.push("forms", "inputs");
   }
-  if (desc.includes('table') || desc.includes('list') || desc.includes('grid')) {
-    analysis.componentTypes.push('data-display');
+  if (
+    desc.includes("table") ||
+    desc.includes("list") ||
+    desc.includes("grid")
+  ) {
+    analysis.componentTypes.push("data-display");
   }
-  if (desc.includes('chart') || desc.includes('graph') || desc.includes('metric') || desc.includes('dashboard')) {
-    analysis.componentTypes.push('data-visualization');
+  if (
+    desc.includes("chart") ||
+    desc.includes("graph") ||
+    desc.includes("metric") ||
+    desc.includes("dashboard")
+  ) {
+    analysis.componentTypes.push("data-visualization");
   }
-  if (desc.includes('navigation') || desc.includes('menu') || desc.includes('nav')) {
-    analysis.componentTypes.push('navigation');
+  if (
+    desc.includes("navigation") ||
+    desc.includes("menu") ||
+    desc.includes("nav")
+  ) {
+    analysis.componentTypes.push("navigation");
   }
-  if (desc.includes('search') || desc.includes('filter')) {
-    analysis.componentTypes.push('search');
+  if (desc.includes("search") || desc.includes("filter")) {
+    analysis.componentTypes.push("search");
   }
-  if (desc.includes('card') || desc.includes('content') || desc.includes('article')) {
-    analysis.componentTypes.push('content-cards');
+  if (
+    desc.includes("card") ||
+    desc.includes("content") ||
+    desc.includes("article")
+  ) {
+    analysis.componentTypes.push("content-cards");
   }
 
   // Content analysis
-  if (desc.includes('user') || desc.includes('profile') || desc.includes('account')) {
-    analysis.contentTypes.push('user-content');
+  if (
+    desc.includes("user") ||
+    desc.includes("profile") ||
+    desc.includes("account")
+  ) {
+    analysis.contentTypes.push("user-content");
   }
-  if (desc.includes('product') || desc.includes('service') || desc.includes('feature')) {
-    analysis.contentTypes.push('product-content');
+  if (
+    desc.includes("product") ||
+    desc.includes("service") ||
+    desc.includes("feature")
+  ) {
+    analysis.contentTypes.push("product-content");
   }
-  if (desc.includes('learn') || desc.includes('course') || desc.includes('tutorial') || desc.includes('training')) {
-    analysis.contentTypes.push('learning-content');
+  if (
+    desc.includes("learn") ||
+    desc.includes("course") ||
+    desc.includes("tutorial") ||
+    desc.includes("training")
+  ) {
+    analysis.contentTypes.push("learning-content");
   }
 
   // Layout analysis
-  if (desc.includes('sidebar') || desc.includes('side nav')) {
-    analysis.layoutTypes.push('sidebar');
+  if (desc.includes("sidebar") || desc.includes("side nav")) {
+    analysis.layoutTypes.push("sidebar");
   }
-  if (desc.includes('header') || desc.includes('top nav')) {
-    analysis.layoutTypes.push('header-nav');
+  if (desc.includes("header") || desc.includes("top nav")) {
+    analysis.layoutTypes.push("header-nav");
   }
-  if (desc.includes('grid') || desc.includes('columns')) {
-    analysis.layoutTypes.push('grid-layout');
+  if (desc.includes("grid") || desc.includes("columns")) {
+    analysis.layoutTypes.push("grid-layout");
   }
 
   // Data analysis
-  if (desc.includes('real-time') || desc.includes('live') || desc.includes('update')) {
-    analysis.dataTypes.push('real-time');
+  if (
+    desc.includes("real-time") ||
+    desc.includes("live") ||
+    desc.includes("update")
+  ) {
+    analysis.dataTypes.push("real-time");
   }
-  if (desc.includes('progress') || desc.includes('completion') || desc.includes('status')) {
-    analysis.dataTypes.push('progress-tracking');
+  if (
+    desc.includes("progress") ||
+    desc.includes("completion") ||
+    desc.includes("status")
+  ) {
+    analysis.dataTypes.push("progress-tracking");
   }
 
   return analysis;
@@ -695,13 +742,13 @@ function createWireframePrompt(
 ) {
   // Get the official site header from Atlas Component Library - ONLY source for components
   const officialSiteHeader = atlasLibrary.generateComponent("site-header");
-  
+
   // Analyze what components are needed
   const componentAnalysis = analyzeRequiredComponents(description);
-  
+
   // Build component requirements based on analysis
   let componentRequirements = "";
-  if (componentAnalysis.componentTypes.includes('forms')) {
+  if (componentAnalysis.componentTypes.includes("forms")) {
     componentRequirements += `
 FORM COMPONENTS REQUIRED:
 - <fluent-text-field> for all text inputs with proper labels
@@ -712,8 +759,8 @@ FORM COMPONENTS REQUIRED:
 - Form validation states and error messages
 `;
   }
-  
-  if (componentAnalysis.componentTypes.includes('data-display')) {
+
+  if (componentAnalysis.componentTypes.includes("data-display")) {
     componentRequirements += `
 DATA DISPLAY COMPONENTS REQUIRED:
 - <fluent-data-grid> or table structure for tabular data
@@ -723,8 +770,8 @@ DATA DISPLAY COMPONENTS REQUIRED:
 - Search functionality with <fluent-text-field>
 `;
   }
-  
-  if (componentAnalysis.componentTypes.includes('data-visualization')) {
+
+  if (componentAnalysis.componentTypes.includes("data-visualization")) {
     componentRequirements += `
 DASHBOARD/ANALYTICS COMPONENTS REQUIRED:
 - Metric cards with <fluent-card> showing numbers and trends
@@ -735,8 +782,8 @@ DASHBOARD/ANALYTICS COMPONENTS REQUIRED:
 - Export/download buttons
 `;
   }
-  
-  if (componentAnalysis.componentTypes.includes('navigation')) {
+
+  if (componentAnalysis.componentTypes.includes("navigation")) {
     componentRequirements += `
 NAVIGATION COMPONENTS REQUIRED:
 - <fluent-anchor> for all navigation links
@@ -755,9 +802,21 @@ COMPONENT COMPLETENESS REQUIREMENTS:
 ${componentRequirements}
 
 MANDATORY: Include ALL these components based on the description analysis:
-${componentAnalysis.componentTypes.length > 0 ? `- Component Types: ${componentAnalysis.componentTypes.join(', ')}` : ''}
-${componentAnalysis.contentTypes.length > 0 ? `- Content Types: ${componentAnalysis.contentTypes.join(', ')}` : ''}
-${componentAnalysis.interactionTypes.length > 0 ? `- Interaction Types: ${componentAnalysis.interactionTypes.join(', ')}` : ''}
+${
+  componentAnalysis.componentTypes.length > 0
+    ? `- Component Types: ${componentAnalysis.componentTypes.join(", ")}`
+    : ""
+}
+${
+  componentAnalysis.contentTypes.length > 0
+    ? `- Content Types: ${componentAnalysis.contentTypes.join(", ")}`
+    : ""
+}
+${
+  componentAnalysis.interactionTypes.length > 0
+    ? `- Interaction Types: ${componentAnalysis.interactionTypes.join(", ")}`
+    : ""
+}
 
 Create a complete, responsive HTML wireframe based on this description: "${description}"
 
@@ -1153,9 +1212,9 @@ async function generateWireframeWithOpenAI(
 
     // Analyze the required components for the description
     const componentAnalysis = analyzeRequiredComponents(description);
-    logger.info('🔍 Component analysis completed:', {
+    logger.info("🔍 Component analysis completed:", {
       correlationId,
-      componentAnalysis
+      componentAnalysis,
     });
 
     // Generate sophisticated context-aware prompt with component analysis
@@ -1255,13 +1314,17 @@ async function generateWireframeWithOpenAI(
         });
 
         // Validate and enhance the wireframe to ensure all necessary components are included
-        const enhancedHtml = validateAndEnhanceWireframe(html, description, componentAnalysis);
-        
+        const enhancedHtml = validateAndEnhanceWireframe(
+          html,
+          description,
+          componentAnalysis
+        );
+
         logger.info("🔧 Wireframe validation and enhancement completed", {
           correlationId,
           originalLength: html.length,
           enhancedLength: enhancedHtml.length,
-          wasEnhanced: enhancedHtml.length > html.length
+          wasEnhanced: enhancedHtml.length > html.length,
         });
 
         return enhancedHtml;

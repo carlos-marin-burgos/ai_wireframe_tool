@@ -1033,7 +1033,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userInput: input.trim() }), // Changed from 'description' to 'userInput'
+        body: JSON.stringify({ description: input.trim() }), // Backend expects 'description' parameter
         signal: controller.signal
       });
 

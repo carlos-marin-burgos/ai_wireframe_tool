@@ -243,7 +243,29 @@ const generateLandingPage = (
     </style>
 </head>
 <body>
+<<<<<<< HEAD
     ${getMicrosoftLearnHeader(colors)}
+=======
+    <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
+        <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
+            <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
+                <img src="dist/windowsLogo.png">
+                <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
+            </div>
+            <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Documentation</a>
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Learning Paths</a>
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Certifications</a>
+                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Q&A</a>
+                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Sign in</button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="fallback-notice">
+        <strong>⚡ Smart Template:</strong> This wireframe was generated using intelligent templates while the AI service is temporarily unavailable.
+    </div>
+>>>>>>> c45591cd7c4527069b42e97fad093bcdd3b64ed7
 
     <section class="hero">
         <div class="container">
@@ -398,7 +420,11 @@ const generateDashboard = (
     <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
         <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
             <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
+<<<<<<< HEAD
               <img src="/windowsLogo.png" alt="Microsoft Logo" width="24" height="24">
+=======
+              <img src="dist/windowsLogo.png">
+>>>>>>> c45591cd7c4527069b42e97fad093bcdd3b64ed7
                 <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
             </div>
             <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
@@ -582,7 +608,11 @@ const generateForm = (
     <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
         <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
             <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
+<<<<<<< HEAD
                <img src="/windowsLogo.png" alt="Microsoft Logo" width="24" height="24">
+=======
+               <img src="dist/windowsLogo.png">
+>>>>>>> c45591cd7c4527069b42e97fad093bcdd3b64ed7
                 <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
             </div>
             <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">

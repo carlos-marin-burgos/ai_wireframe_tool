@@ -2,6 +2,7 @@
 .compact-toolbar {
   display: flex;
   align-items: center;
+<<<<<<< HEAD
   justify-content: flex-end; /* Move buttons to the right */
   background: #ffffff;
   border-bottom: 1px solid #e1dfdd;
@@ -12,6 +13,15 @@
   z-index: 50; /* Reduced z-index */
   width: 100%;
   box-sizing: border-box;
+=======
+  background: #ffffff;
+  border-bottom: 1px solid #e1dfdd;
+  padding: 8px 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+>>>>>>> c45591cd7c4527069b42e97fad093bcdd3b64ed7
 }
 
 .compact-toolbar-buttons {
@@ -49,6 +59,7 @@
 
 .compact-btn:focus {
   outline: none;
+<<<<<<< HEAD
   box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
 }
 
@@ -60,11 +71,26 @@
 }
 
 .compact-btn.enhanced-active:hover {
+=======
+  border-color: #0078d4;
+  box-shadow: 0 0 0 1px #0078d4;
+}
+
+/* Primary button (Save) */
+.compact-btn-primary {
+  background: #0078d4;
+  color: white;
+  border-color: #0078d4;
+}
+
+.compact-btn-primary:hover {
+>>>>>>> c45591cd7c4527069b42e97fad093bcdd3b64ed7
   background: #106ebe;
   border-color: #106ebe;
   color: white;
 }
 
+<<<<<<< HEAD
 /* Edit toggle button */
 .compact-btn.edit-toggle {
   transition: all 0.3s ease;
@@ -93,6 +119,11 @@
   background: #b91c1c;
   border-color: #b91c1c;
   color: white;
+=======
+.compact-btn-primary:active {
+  background: #005a9e;
+  border-color: #005a9e;
+>>>>>>> c45591cd7c4527069b42e97fad093bcdd3b64ed7
 }
 
 /* Export dropdown */
@@ -109,7 +140,11 @@
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   min-width: 160px;
+<<<<<<< HEAD
   z-index: 10001; /* Higher than modals (10000) but lower than tooltips (10002) */
+=======
+  z-index: 1000;
+>>>>>>> c45591cd7c4527069b42e97fad093bcdd3b64ed7
   padding: 4px;
   margin-top: 2px;
 }
@@ -143,6 +178,7 @@
   white-space: nowrap;
 }
 
+<<<<<<< HEAD
 /* Removed CSS-based tooltips - now using JavaScript tooltips for better z-index control */
 
 /* Custom tooltip styles - Updated to black background */
@@ -199,12 +235,22 @@
 .custom-tooltip {
   position: fixed;
   z-index: 10002;
+=======
+/* Tooltip styles - using CSS only for better performance */
+.compact-btn::before {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+>>>>>>> c45591cd7c4527069b42e97fad093bcdd3b64ed7
   background: #323130;
   color: white;
   padding: 6px 8px;
   border-radius: 4px;
   font-size: 12px;
   white-space: nowrap;
+<<<<<<< HEAD
   pointer-events: none;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   transform: translateX(-50%);
@@ -240,6 +286,38 @@
     z-index: 10;
     width: 100%;
     box-sizing: border-box;
+=======
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 1001;
+  margin-bottom: 4px;
+}
+
+.compact-btn::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: #323130;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 1001;
+}
+
+.compact-btn:hover::before,
+.compact-btn:hover::after {
+  opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .compact-toolbar {
+    padding: 6px 8px;
+>>>>>>> c45591cd7c4527069b42e97fad093bcdd3b64ed7
   }
 
   .compact-toolbar-buttons {
