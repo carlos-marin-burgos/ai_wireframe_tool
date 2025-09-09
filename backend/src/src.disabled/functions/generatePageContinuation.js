@@ -1,4 +1,14 @@
-const React = require('react');
+import React from 'react';
+  
+  const GeneratePageContinuation = () =>  {
+	return (
+	  <div>
+	  </div>
+	);
+  }
+  
+  export default GeneratePageContinuation;
+  const React = require('react');
   
   const GeneratePageContinuation = () =>  {
 	return (
