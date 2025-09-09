@@ -14,13 +14,29 @@ export function generateWireframeName(
   description: string,
   htmlContent?: string
 ): string {
-  const analysis = analyzeWireframe(description, htmlContent);
+  // Use description as primary source of truth
+  if (description && description.trim()) {
+    const descriptionBased = extractMainConceptFromDescription(description);
+    if (descriptionBased) {
+      return toTitleCase(descriptionBased + " Wireframe");
+    }
+  }
 
-  // Generate name based on analysis
+  // Only analyze HTML content if description is empty or very generic
+  if (!description || description.trim().length < 10) {
+    const analysis = analyzeWireframe(description || "", htmlContent);
+    return generateNameFromAnalysis(analysis, description);
+  }
+
+  // Default fallback
+  return "Custom Wireframe";
+}
+
+function generateNameFromAnalysis(analysis: WireframeAnalysis, description: string): string {
   const nameParts: string[] = [];
 
-  // Add industry/domain if detected
-  if (analysis.industry) {
+  // Only add industry if it's very specific and confident
+  if (analysis.industry && isHighConfidenceIndustry(analysis.industry, description)) {
     nameParts.push(analysis.industry);
   }
 
@@ -29,14 +45,14 @@ export function generateWireframeName(
     nameParts.push(analysis.purpose);
   }
 
-  // Add layout type if specific
-  if (analysis.layout && analysis.layout !== "standard") {
+  // Add layout type if specific and not redundant
+  if (analysis.layout && analysis.layout !== "standard" && analysis.layout !== "grid") {
     nameParts.push(analysis.layout);
   }
 
   // Fallback to description-based name
   if (nameParts.length === 0) {
-    nameParts.push(extractMainConcept(description));
+    nameParts.push(extractMainConcept(description || "Custom"));
   }
 
   // Join with appropriate connector
@@ -53,6 +69,53 @@ export function generateWireframeName(
 
   // Capitalize appropriately
   return toTitleCase(name);
+}
+
+function isHighConfidenceIndustry(industry: string, description: string): boolean {
+  // Only include industry if it's explicitly mentioned in description
+  const desc = description.toLowerCase();
+  
+  switch (industry) {
+    case "ecommerce":
+      return desc.includes("ecommerce") || desc.includes("e-commerce") || 
+             (desc.includes("shop") && desc.includes("product"));
+    case "education":
+      return desc.includes("education") || desc.includes("learn") || desc.includes("course");
+    case "healthcare":
+      return desc.includes("health") || desc.includes("medical") || desc.includes("doctor");
+    default:
+      return false;
+  }
+}
+
+function extractMainConceptFromDescription(description: string): string {
+  // Extract key concepts from the user's description
+  const desc = description.toLowerCase().trim();
+  
+  // Look for specific wireframe types mentioned in description
+  if (desc.includes("dashboard")) return "Dashboard";
+  if (desc.includes("landing") || desc.includes("homepage")) return "Landing Page";
+  if (desc.includes("login") || desc.includes("sign in")) return "Login Page";
+  if (desc.includes("contact")) return "Contact Form";
+  if (desc.includes("profile")) return "Profile Page";
+  if (desc.includes("search")) return "Search Page";
+  if (desc.includes("checkout")) return "Checkout Page";
+  if (desc.includes("product")) return "Product Page";
+  if (desc.includes("about")) return "About Page";
+  if (desc.includes("blog")) return "Blog Page";
+  if (desc.includes("portfolio")) return "Portfolio";
+  
+  // Extract first meaningful concept
+  const words = desc
+    .replace(/[^\w\s]/g, " ")
+    .split(/\s+/)
+    .filter(word => word.length > 2 && !['the', 'and', 'for', 'with', 'create', 'make', 'build', 'design', 'wireframe'].includes(word));
+  
+  if (words.length > 0) {
+    return words.slice(0, 2).join(" ");
+  }
+  
+  return "Custom";
 }
 
 function analyzeWireframe(

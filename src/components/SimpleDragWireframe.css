@@ -2,11 +2,40 @@
   width: 100%;
   max-width: 100%;
   overflow-x: auto;
+  background: #ffffff;
+  border-radius: 8px;
 }
 
 .dragula-container {
   min-height: 400px;
   padding: 5px 20px 20px;
+  position: relative;
+}
+
+/* Error state styling */
+.dragula-container .wireframe-error {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  color: #856404;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.dragula-container .wireframe-error strong {
+  color: #dc3545;
+}
+
+/* HTML parsing error styling */
+.dragula-container .html-parse-error {
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  color: #721c24;
+  font-family: "Segoe UI", sans-serif;
 }
 
 /* Make ALL elements in the container visible and draggable */
@@ -150,4 +179,17 @@
   visibility: visible !important;
   background-color: #007bff !important; /* Example color */
   color: white !important;
+}
+
+/* Prevent error messages from being draggable */
+.dragula-container .wireframe-error,
+.dragula-container .html-parse-error {
+  cursor: default !important;
+  border: 1px solid #ffeaa7 !important;
+  background: #fff3cd !important;
+}
+
+.dragula-container .html-parse-error {
+  border: 1px solid #f5c6cb !important;
+  background: #f8d7da !important;
 }

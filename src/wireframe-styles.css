@@ -873,10 +873,6 @@ ul ul ul {
   .split-layout {
     grid-template-columns: 300px 1fr;
   }
-
-  .left-pane {
-    padding: 16px;
-  }
 }
 
 @media (max-width: 768px) {

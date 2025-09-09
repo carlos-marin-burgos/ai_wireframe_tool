@@ -175,7 +175,7 @@
 /* Chat Messages Area - Microsoft Fluent Design */
 .chat-messages {
   flex: 1;
-  padding: 16px;
+  padding: 12px;
   overflow-y: auto;
   background: linear-gradient(
     135deg,
@@ -187,7 +187,8 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+  max-height: calc(100vh - 200px); /* Prevent excessive height */
 }
 
 /* Enhanced Message Styling - Microsoft Fluent Design */
@@ -244,21 +245,7 @@
   margin-left: 300px;
   padding: 0;
   padding-top: 10px;
-  background: radial-gradient(
-      circle at 20% 80%,
-      rgba(255, 255, 255, 0.15) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 20%,
-      rgba(255, 255, 255, 0.1) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 40% 40%,
-      rgba(32, 201, 151, 0.1) 0%,
-      transparent 50%
-    );
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   width: calc(100% - 300px);
   height: 100vh;
   overflow-y: auto;
@@ -1102,107 +1089,8 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   box-sizing: border-box;
 }
 
-/* Simple stack container for label + panel */
-.ai-suggestions-container {
-  margin-top: 12px;
-}
-.ai-suggestions-panel::-webkit-scrollbar {
-  width: 8px;
-}
-.ai-suggestions-panel::-webkit-scrollbar-track {
-  background: transparent;
-}
-.ai-suggestions-panel::-webkit-scrollbar-thumb {
-  background: #d1d5db;
-  border-radius: 8px;
-}
-.ai-suggestions-panel::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
-}
-
-@media (max-width: 480px) {
-  .ai-suggestions-panel {
-    max-height: 110px;
-  }
-}
-
-.ai-suggestions-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #323130;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 4px; /* small separation without stealing height */
-  font-family: "Segoe UI", sans-serif;
-}
-
-.ai-icon {
-  color: #0078d4;
-  font-size: 14px;
-}
-
-.ai-suggestions-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  grid-row: 2;
-}
-
-/* Placeholder layout to avoid jumpiness while suggestions load */
-.ai-suggestions-placeholder {
-  display: flex;
-  gap: 8px;
-  grid-row: 2;
-}
-
-.ai-suggestions-placeholder .skeleton-pill {
-  height: 28px;
-  width: 160px;
-  border-radius: 16px;
-  background: linear-gradient(90deg, #eee 25%, #f5f5f5 37%, #eee 63%);
-  background-size: 400% 100%;
-  animation: shimmer 1.2s ease-in-out infinite;
-  border: 1px solid #e5e7eb;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: 100% 0;
-  }
-  100% {
-    background-position: 0 0;
-  }
-}
-
-.ai-suggestion-pill {
-  background: #ffffff;
-  border: 1px solid #d1d1d1;
-  border-radius: 16px;
-  padding: 6px 12px;
-  font-size: 13px;
-  color: #323130;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-weight: 400;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-  position: relative;
-  overflow: hidden;
-  font-family: "Segoe UI", sans-serif;
-}
-
-.ai-suggestion-pill:hover {
-  background: #ffffff;
-  border-color: #0078d4;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 120, 212, 0.2);
-  color: #0078d4;
-}
+/* Removed - Consolidated into chat-input-container */
+/* Old ai-suggestions-container styles replaced with ai-suggestions-integrated */
 
 .ai-suggestion-pill:active {
   transform: translateY(0);
@@ -1555,7 +1443,60 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   }
 }
 
-@media (max-width: 991px) {
+/* Tablet and small desktop adjustments */
+@media (max-width: 992px) {
+  .left-pane {
+    width: 260px;
+    min-width: 240px;
+  }
+
+  .right-pane {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+  }
+
+  .panel-toggle-btn {
+    left: 260px;
+  }
+
+  .wireframe-panel {
+    margin: 20px 20px 50px 10px;
+  }
+
+  .tab-btn,
+  .wireframe-action-btn {
+    padding: 6px 8px;
+    font-size: 0.8rem;
+  }
+}
+
+/* iPad landscape and similar devices */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .left-pane {
+    width: 280px;
+    min-width: 260px;
+  }
+
+  .right-pane {
+    margin-left: 280px;
+    width: calc(100% - 280px);
+  }
+
+  .wireframe-panel {
+    margin: 25px 30px 60px 15px;
+  }
+
+  .ai-suggestions-buttons {
+    gap: 0.4rem;
+  }
+
+  .ai-suggestion-pill {
+    padding: 5px 8px;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
   .split-layout {
     flex-direction: column;
     height: auto;
@@ -1573,14 +1514,15 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
     left: 0;
     z-index: 1;
     box-shadow: none;
+    border-right: none;
+    border-bottom: 1px solid #e1e1e1;
   }
 
   .right-pane {
     margin-left: 0;
     width: 100%;
     height: auto;
-    min-height: 70vh;
-    padding-top: 10px;
+    min-height: 60vh;
     position: relative;
     z-index: 1;
   }
@@ -1588,6 +1530,7 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   .wireframe-panel {
     position: relative;
     overflow: visible;
+    margin: 0;
   }
 
   /* Hide toggle button on mobile since panels stack */
@@ -1597,12 +1540,11 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 
   /* Ensure wireframe container takes full width */
   .wireframe-container {
-    flex: 1; /* Maintain flex behavior on mobile */
-    height: 100%; /* Maintain full height on mobile */
+    flex: 1;
+    height: 100%;
     padding: 10px;
-    padding-bottom: 0px; /* Add extra bottom padding for mobile */
     position: relative;
-    background: #fafafa; /* Maintain background consistency */
+    background: #fafafa;
   }
 
   .tab-content {
@@ -1663,34 +1605,92 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   }
 }
 
+/* Large phones in landscape mode */
+@media (max-width: 576px) {
+  .split-layout {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .left-pane {
+    position: relative;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    top: 0;
+    left: 0;
+    padding: 1.25rem;
+  }
+
+  .right-pane {
+    margin-left: 0;
+    width: 100%;
+    height: auto;
+    min-height: 60vh;
+  }
+
+  .panel-toggle-btn {
+    display: none;
+  }
+
+  .wireframe-panel {
+    margin: 0 0.5rem 1rem;
+    height: auto;
+  }
+
+  .tab-btn,
+  .wireframe-action-btn {
+    font-size: 0.75rem;
+    padding: 5px 6px;
+  }
+
+  .ai-suggestions-buttons {
+    gap: 0.3rem;
+  }
+
+  .ai-suggestion-pill {
+    padding: 4px 6px;
+    font-size: 0.65rem;
+  }
+}
+
 @media (max-width: 480px) {
   .left-pane {
-    padding: 1rem;
+    padding: 0; /* Remove extra padding */
+  }
+
+  /* Chat Messages Mobile Responsiveness */
+  .chat-messages {
+    padding: 8px;
+    gap: 8px;
+    max-height: calc(100vh - 180px); /* Better height calculation for mobile */
   }
 
   /* Chat Header Mobile Responsiveness */
   .chat-header {
-    padding: 16px;
+    padding: 12px;
   }
 
   .chat-header-icon {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
   }
 
   .chat-header-title {
-    font-size: 16px;
+    font-size: 15px;
   }
 
   /* Chat Input Mobile Responsiveness */
   .chat-input-container {
-    padding: 16px;
+    padding: 12px;
+    max-height: 35vh; /* More compact for mobile */
   }
 
   .chat-input {
-    min-height: 100px;
-    padding: 14px 56px 14px 16px;
+    min-height: 60px; /* Much smaller for mobile - reduced from 100px */
+    padding: 10px 50px 10px 14px;
     font-size: 13px;
+    line-height: 1.3;
   }
 
   .chat-send-btn {
@@ -2839,13 +2839,192 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   box-shadow: 0 4px 8px rgba(216, 59, 1, 0.3);
 }
 
-/* Chat Input Container - Microsoft Fluent Design */
+/* Chat Input Container - Microsoft Fluent Design with Integrated AI Suggestions */
 .chat-input-container {
   flex: 0 0 auto; /* fixed at bottom */
-  padding: 20px;
+  padding: 16px;
   border-top: 1px solid #e1e5e9;
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  max-height: 45vh; /* keep room for messages */
+  max-height: 40vh; /* Reduced from 45vh for better space usage */
   overflow: hidden; /* contain internal scroll areas */
   position: relative;
+}
+
+/* Integrated AI Suggestions within Chat Input Container */
+.ai-suggestions-integrated {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e9ecef;
+  background: rgba(240, 248, 255, 0.5);
+  border-radius: 8px;
+  padding: 12px;
+  transition: all 0.3s ease;
+}
+
+.ai-suggestions-integrated .ai-suggestions-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #323130;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.ai-suggestions-integrated .ai-icon {
+  color: #0078d4;
+  font-size: 14px;
+}
+
+.ai-suggestions-integrated .ai-suggestions-panel {
+  max-height: 120px;
+  overflow-y: auto;
+  background: transparent;
+}
+
+.ai-suggestions-integrated .ai-suggestions-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ai-suggestions-integrated .ai-suggestions-placeholder {
+  display: flex;
+  gap: 8px;
+}
+
+.ai-suggestions-integrated .ai-suggestions-placeholder .skeleton-pill {
+  height: 28px;
+  width: 160px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #eee 25%, #f5f5f5 37%, #eee 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.2s ease-in-out infinite;
+  border: 1px solid #e5e7eb;
+}
+
+.ai-suggestions-integrated .ai-suggestion-pill {
+  background: #ffffff;
+  border: 1px solid #d1d1d1;
+  border-radius: 16px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: #323130;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.ai-suggestions-integrated .ai-suggestion-pill:hover {
+  background: #ffffff;
+  border-color: #0078d4;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 120, 212, 0.2);
+  color: #0078d4;
+}
+
+.ai-suggestions-integrated .ai-badge {
+  background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%);
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Scrollbar styling for integrated suggestions */
+.ai-suggestions-integrated .ai-suggestions-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ai-suggestions-integrated .ai-suggestions-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ai-suggestions-integrated .ai-suggestions-panel::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 6px;
+}
+
+.ai-suggestions-integrated
+  .ai-suggestions-panel::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Responsive styles for integrated AI suggestions */
+@media (max-width: 768px) {
+  /* Chat Messages Tablet Responsiveness */
+  .chat-messages {
+    padding: 10px;
+    gap: 9px;
+    max-height: calc(100vh - 190px); /* Better height for tablet */
+  }
+
+  /* Chat Header Tablet Responsiveness */
+  .chat-header {
+    padding: 14px;
+  }
+
+  /* Chat Input Responsive - Tablets */
+  .chat-input {
+    min-height: 80px; /* Reduced from default 120px */
+    padding: 12px 56px 12px 16px;
+    font-size: 13px;
+  }
+
+  .chat-input-container {
+    padding: 14px;
+    max-height: 38vh; /* Optimized for tablet */
+  }
+
+  .ai-suggestions-integrated {
+    padding: 8px;
+    margin-top: 8px;
+  }
+
+  .ai-suggestions-integrated .ai-suggestions-panel {
+    max-height: 100px;
+  }
+
+  .ai-suggestions-integrated .ai-suggestion-pill {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* More compact chat input for mobile phones */
+  .chat-input-container {
+    padding: 12px; /* Even more compact */
+  }
+
+  .ai-suggestions-integrated {
+    padding: 6px;
+    margin-top: 6px;
+  }
+
+  .ai-suggestions-integrated .ai-suggestions-panel {
+    max-height: 60px; /* Very compact for mobile */
+  }
+
+  .ai-suggestions-integrated .ai-suggestion-pill {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  .ai-suggestions-integrated .ai-suggestions-buttons {
+    gap: 6px;
+  }
 }
