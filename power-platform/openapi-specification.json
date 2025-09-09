@@ -1,0 +1,535 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Designetica AI Wireframe Connector",
+    "description": "Advanced AI-powered wireframe generation with image analysis, component detection, and Power Platform integration",
+    "version": "2.0.0",
+    "contact": {
+      "name": "Designetica API Support",
+      "email": "support@designetica.com"
+    }
+  },
+  "host": "func-designetica-prod-xabnur6oyusju.azurewebsites.net",
+  "basePath": "/api",
+  "schemes": ["https"],
+  "consumes": ["application/json", "multipart/form-data"],
+  "produces": ["application/json"],
+  "securityDefinitions": {
+    "oauth2_auth": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://login.microsoftonline.com/common/oauth2/authorize",
+      "tokenUrl": "https://login.microsoftonline.com/common/oauth2/token",
+      "scopes": {
+        "https://graph.microsoft.com/.default": "Access Microsoft Graph"
+      }
+    }
+  },
+  "security": [{ "oauth2_auth": ["https://graph.microsoft.com/.default"] }],
+  "paths": {
+    "/generate-wireframe": {
+      "post": {
+        "summary": "Generate AI-powered wireframe from description",
+        "description": "Creates professional wireframes using GPT-4o with context-aware generation",
+        "operationId": "GenerateWireframe",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "description": "Wireframe description",
+                  "x-ms-summary": "Description"
+                },
+                "colorScheme": {
+                  "type": "string",
+                  "enum": ["primary", "secondary", "dark", "light"],
+                  "default": "primary",
+                  "description": "Color scheme to use",
+                  "x-ms-summary": "Color Scheme"
+                },
+                "sessionId": {
+                  "type": "string",
+                  "description": "Session ID for context awareness",
+                  "x-ms-summary": "Session ID"
+                },
+                "imageAnalysis": {
+                  "type": "object",
+                  "description": "Image analysis data from AI Builder",
+                  "x-ms-summary": "Image Analysis"
+                },
+                "useAI": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Use AI generation",
+                  "x-ms-summary": "Use AI"
+                }
+              },
+              "required": ["description"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Wireframe generated successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "html": {
+                  "type": "string",
+                  "description": "Generated wireframe HTML"
+                },
+                "aiGenerated": {
+                  "type": "boolean",
+                  "description": "Whether AI was used"
+                },
+                "source": {
+                  "type": "string",
+                  "description": "Generation source"
+                },
+                "processingTimeMs": {
+                  "type": "number",
+                  "description": "Processing time in milliseconds"
+                },
+                "correlationId": {
+                  "type": "string",
+                  "description": "Request correlation ID"
+                },
+                "confidence": {
+                  "type": "number",
+                  "description": "AI confidence score"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analyze-wireframe-image": {
+      "post": {
+        "summary": "Analyze wireframe image with AI Builder integration",
+        "description": "Detects components, layout patterns, and design elements from uploaded wireframe images",
+        "operationId": "AnalyzeWireframeImage",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "image",
+            "in": "formData",
+            "type": "file",
+            "required": true,
+            "description": "Wireframe image to analyze",
+            "x-ms-summary": "Wireframe Image"
+          },
+          {
+            "name": "includeComponentDetection",
+            "in": "formData",
+            "type": "boolean",
+            "default": true,
+            "description": "Include component detection",
+            "x-ms-summary": "Detect Components"
+          },
+          {
+            "name": "includeLayoutAnalysis",
+            "in": "formData",
+            "type": "boolean",
+            "default": true,
+            "description": "Include layout analysis",
+            "x-ms-summary": "Analyze Layout"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Image analysis completed",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "components": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": { "type": "string" },
+                      "confidence": { "type": "number" },
+                      "boundingBox": {
+                        "type": "object",
+                        "properties": {
+                          "x": { "type": "number" },
+                          "y": { "type": "number" },
+                          "width": { "type": "number" },
+                          "height": { "type": "number" }
+                        }
+                      }
+                    }
+                  }
+                },
+                "layout": {
+                  "type": "object",
+                  "properties": {
+                    "type": { "type": "string" },
+                    "columns": { "type": "number" },
+                    "sections": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    }
+                  }
+                },
+                "designTokens": {
+                  "type": "object",
+                  "properties": {
+                    "colors": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    },
+                    "fonts": { "type": "array", "items": { "type": "string" } },
+                    "spacing": {
+                      "type": "array",
+                      "items": { "type": "number" }
+                    }
+                  }
+                },
+                "confidence": { "type": "number" },
+                "wireframeDescription": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/compare-wireframes": {
+      "post": {
+        "summary": "Compare two wireframes for similarity",
+        "description": "Analyzes visual and structural similarity between two wireframes",
+        "operationId": "CompareWireframes",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "originalImage",
+            "in": "formData",
+            "type": "file",
+            "required": true,
+            "description": "Original wireframe image",
+            "x-ms-summary": "Original Wireframe"
+          },
+          {
+            "name": "generatedImage",
+            "in": "formData",
+            "type": "file",
+            "required": true,
+            "description": "Generated wireframe image",
+            "x-ms-summary": "Generated Wireframe"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comparison completed",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "similarity": {
+                  "type": "object",
+                  "properties": {
+                    "overall": { "type": "number" },
+                    "layout": { "type": "number" },
+                    "components": { "type": "number" },
+                    "styling": { "type": "number" }
+                  }
+                },
+                "differences": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": { "type": "string" },
+                      "description": { "type": "string" },
+                      "severity": { "type": "string" }
+                    }
+                  }
+                },
+                "recommendations": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/generate-variations": {
+      "post": {
+        "summary": "Generate wireframe variations",
+        "description": "Creates multiple variations of a wireframe with different layouts and styling",
+        "operationId": "GenerateVariations",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "baseWireframe": {
+                  "type": "string",
+                  "description": "Base wireframe HTML or description"
+                },
+                "variationTypes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["color", "layout", "responsive", "component"]
+                  },
+                  "description": "Types of variations to generate"
+                },
+                "count": {
+                  "type": "number",
+                  "default": 3,
+                  "minimum": 1,
+                  "maximum": 10,
+                  "description": "Number of variations to generate"
+                }
+              },
+              "required": ["baseWireframe"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Variations generated successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "variations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "html": { "type": "string" },
+                      "description": { "type": "string" },
+                      "variationType": { "type": "string" },
+                      "previewUrl": { "type": "string" }
+                    }
+                  }
+                },
+                "originalId": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/batch-process": {
+      "post": {
+        "summary": "Batch process multiple wireframe requests",
+        "description": "Process multiple wireframe generation requests in batch for efficiency",
+        "operationId": "BatchProcess",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "requests": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "description": { "type": "string" },
+                      "colorScheme": { "type": "string" },
+                      "priority": {
+                        "type": "string",
+                        "enum": ["low", "normal", "high"]
+                      }
+                    }
+                  },
+                  "maxItems": 50
+                },
+                "processingMode": {
+                  "type": "string",
+                  "enum": ["parallel", "sequential"],
+                  "default": "parallel"
+                }
+              },
+              "required": ["requests"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Batch processing completed",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "success": { "type": "boolean" },
+                      "html": { "type": "string" },
+                      "error": { "type": "string" },
+                      "processingTimeMs": { "type": "number" }
+                    }
+                  }
+                },
+                "summary": {
+                  "type": "object",
+                  "properties": {
+                    "total": { "type": "number" },
+                    "successful": { "type": "number" },
+                    "failed": { "type": "number" },
+                    "totalProcessingTimeMs": { "type": "number" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ai-suggestions": {
+      "post": {
+        "summary": "Get AI-powered wireframe improvement suggestions",
+        "description": "Analyzes existing wireframes and provides intelligent suggestions for improvement",
+        "operationId": "GetAISuggestions",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "wireframeHtml": {
+                  "type": "string",
+                  "description": "Current wireframe HTML"
+                },
+                "targetAudience": {
+                  "type": "string",
+                  "description": "Target audience for the wireframe"
+                },
+                "businessGoals": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "description": "Business objectives"
+                },
+                "currentPainPoints": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "description": "Known issues or pain points"
+                }
+              },
+              "required": ["wireframeHtml"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Suggestions generated successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "suggestions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "category": { "type": "string" },
+                      "title": { "type": "string" },
+                      "description": { "type": "string" },
+                      "impact": {
+                        "type": "string",
+                        "enum": ["low", "medium", "high"]
+                      },
+                      "effort": {
+                        "type": "string",
+                        "enum": ["low", "medium", "high"]
+                      },
+                      "priority": { "type": "number" },
+                      "implementationSteps": {
+                        "type": "array",
+                        "items": { "type": "string" }
+                      }
+                    }
+                  }
+                },
+                "overallScore": { "type": "number" },
+                "improvementAreas": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health check endpoint",
+        "description": "Check the health status of the API",
+        "operationId": "HealthCheck",
+        "responses": {
+          "200": {
+            "description": "Service is healthy",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": { "type": "string" },
+                "timestamp": { "type": "string" },
+                "version": { "type": "string" },
+                "aiCapabilities": {
+                  "type": "object",
+                  "properties": {
+                    "openaiConnected": { "type": "boolean" },
+                    "imageAnalysisAvailable": { "type": "boolean" },
+                    "aiBuilderIntegration": { "type": "boolean" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "WireframeComponent": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string" },
+        "properties": { "type": "object" },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/WireframeComponent" }
+        }
+      }
+    },
+    "DesignToken": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "string" },
+        "category": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+    "AnalysisResult": {
+      "type": "object",
+      "properties": {
+        "confidence": { "type": "number" },
+        "processingTime": { "type": "number" },
+        "metadata": { "type": "object" }
+      }
+    }
+  }
+}

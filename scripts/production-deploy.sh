@@ -1,0 +1,175 @@
+#!/bin/bash
+
+# Designetica - Simple Single Environment Deployment
+# This script manages your ONE production environment
+
+set -e
+
+# Colors for output
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+ACTION=${1:-"status"}
+
+echo -e "${BLUE}🚀 Designetica - Single Environment Manager${NC}"
+echo "=============================================="
+
+# Function to show current status
+show_status() {
+    echo -e "${YELLOW}📊 Production Environment Status:${NC}"
+    echo ""
+    
+    echo -e "${GREEN}🌟 PRODUCTION URLs:${NC}"
+    echo "  Frontend: https://brave-island-04ba9f70f.2.azurestaticapps.net"
+    echo "  Backend:  https://func-designetica-vdlmicyosd4ua.azurewebsites.net"
+    echo ""
+    
+    echo -e "${YELLOW}🧪 Testing Production Health:${NC}"
+    
+    # Test frontend
+    echo -n "  Frontend status: "
+    if curl -s -w "%{http_code}" -o /dev/null https://brave-island-04ba9f70f.2.azurestaticapps.net | grep -q "200"; then
+        echo -e "${GREEN}✅ Online${NC}"
+    else
+        echo -e "${RED}❌ Offline${NC}"
+    fi
+    
+    # Test backend
+    echo -n "  Backend status:  "
+    if curl -s -w "%{http_code}" -o /dev/null https://func-designetica-vdlmicyosd4ua.azurewebsites.net/api/health | grep -q "200"; then
+        echo -e "${GREEN}✅ Online${NC}"
+    else
+        echo -e "${RED}❌ Offline${NC}"
+    fi
+    
+    echo ""
+    echo -e "${YELLOW}⚙️  Environment Info:${NC}"
+    azd env list
+}
+
+# Function to deploy
+deploy_production() {
+    echo -e "${YELLOW}🚀 Deploying to Production...${NC}"
+    echo ""
+    
+    # Ensure we're using the right environment
+    azd env select designetica
+    
+    # Build the frontend
+    echo -e "${YELLOW}📦 Building frontend...${NC}"
+    npm run build
+    
+    # Deploy everything
+    echo -e "${YELLOW}☁️  Deploying to Azure...${NC}"
+    azd up -e designetica
+    
+    echo ""
+    echo -e "${GREEN}✅ Deployment completed!${NC}"
+    echo ""
+    echo -e "${BLUE}🌐 Your application is live at:${NC}"
+    echo "   https://brave-island-04ba9f70f.2.azurestaticapps.net"
+}
+
+# Function to quick deploy (just code, no infrastructure)
+quick_deploy() {
+    echo -e "${YELLOW}⚡ Quick Deploy (code only)...${NC}"
+    echo ""
+    
+    # Ensure we're using the right environment
+    azd env select designetica
+    
+    # Build the frontend
+    echo -e "${YELLOW}📦 Building frontend...${NC}"
+    npm run build
+    
+    # Deploy just the code
+    echo -e "${YELLOW}☁️  Deploying code to Azure...${NC}"
+    azd deploy -e designetica
+    
+    echo ""
+    echo -e "${GREEN}✅ Quick deployment completed!${NC}"
+    echo ""
+    echo -e "${BLUE}🌐 Your application is live at:${NC}"
+    echo "   https://brave-island-04ba9f70f.2.azurestaticapps.net"
+}
+
+# Function to test the production site
+test_production() {
+    echo -e "${YELLOW}🧪 Testing Production Application:${NC}"
+    echo ""
+    
+    echo "Opening production site in browser..."
+    open "https://brave-island-04ba9f70f.2.azurestaticapps.net"
+    
+    echo ""
+    echo -e "${YELLOW}🔍 Manual Test Checklist:${NC}"
+    echo "  1. ✅ Does the site load correctly?"
+    echo "  2. ✅ Can you generate a wireframe?"
+    echo "  3. ✅ Do the AI suggestions work?"
+    echo "  4. ✅ Can you save/load wireframes?"
+    echo ""
+    echo "If any test fails, run: $0 deploy"
+}
+
+# Function to show logs
+show_logs() {
+    echo -e "${YELLOW}📋 Recent Backend Logs:${NC}"
+    echo ""
+    echo "Function App: func-designetica-vjib6nx2wh4a4"
+    echo "Portal URL: https://portal.azure.com"
+    echo ""
+    echo "To view logs, visit the Azure Portal and navigate to:"
+    echo "Function Apps > func-designetica-vjib6nx2wh4a4 > Monitor > Logs"
+}
+
+# Function to show help
+show_help() {
+    echo "Usage: $0 [action]"
+    echo ""
+    echo "Actions:"
+    echo "  status       - Show production status and health (default)"
+    echo "  deploy       - Full deployment (infrastructure + code)"
+    echo "  quick        - Quick deploy (code only, faster)"
+    echo "  test         - Open production site and show test checklist"
+    echo "  logs         - Show how to access backend logs"
+    echo "  help         - Show this help"
+    echo ""
+    echo "Examples:"
+    echo "  $0              # Show status"
+    echo "  $0 deploy       # Full deployment"
+    echo "  $0 quick        # Quick code deployment"
+    echo "  $0 test         # Test production site"
+    echo ""
+    echo -e "${GREEN}🌐 Production URL: https://brave-island-04ba9f70f.2.azurestaticapps.net${NC}"
+}
+
+# Main logic
+case $ACTION in
+    "status")
+        show_status
+        ;;
+    "deploy")
+        deploy_production
+        ;;
+    "quick")
+        quick_deploy
+        ;;
+    "test")
+        test_production
+        ;;
+    "logs")
+        show_logs
+        ;;
+    "help")
+        show_help
+        ;;
+    *)
+        echo -e "${RED}❌ Unknown action: $ACTION${NC}"
+        echo ""
+        show_help
+        exit 1
+        ;;
+esac

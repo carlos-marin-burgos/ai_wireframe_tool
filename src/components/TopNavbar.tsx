@@ -1,12 +1,28 @@
 import React from 'react';
+import { FiLogOut, FiFigma, FiCode, FiShare2, FiMonitor, FiDownload, FiSave } from 'react-icons/fi';
 import './TopNavbar.css';
 
 interface TopNavbarProps {
     onLogoClick?: () => void;
+    onLogout?: () => void;
+    // Toolbar actions
+    onSave?: () => void;
+    onFigmaIntegration?: () => void;
+    onViewHtmlCode?: () => void;
+    onShareUrl?: () => void;
+    onPresentationMode?: () => void;
+    onDownloadWireframe?: () => void;
 }
 
 const TopNavbar: React.FC<TopNavbarProps> = ({
-    onLogoClick
+    onLogoClick,
+    onLogout,
+    onSave,
+    onFigmaIntegration,
+    onViewHtmlCode,
+    onShareUrl,
+    onPresentationMode,
+    onDownloadWireframe
 }) => {
     return (
         <nav className="top-nav">
@@ -26,6 +42,53 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
                 </button>
             </div>
             <div className="navbar-right">
+                {/* Moved Toolbar */}
+                <div className="navbar-toolbar">
+                    <button
+                        className="navbar-toolbar-btn save-btn"
+                        onClick={onSave}
+                        title="Save Wireframe"
+                    >
+                        <FiSave />
+                    </button>
+                    <button
+                        className="navbar-toolbar-btn"
+                        onClick={onFigmaIntegration}
+                        title="Figma Integration"
+                    >
+                        <FiFigma />
+                    </button>
+                    <button
+                        className="navbar-toolbar-btn"
+                        onClick={onViewHtmlCode}
+                        title="View & Import HTML"
+                    >
+                        <FiCode />
+                    </button>
+                    <button
+                        className="navbar-toolbar-btn"
+                        onClick={onShareUrl}
+                        title="Share URL"
+                    >
+                        <FiShare2 />
+                    </button>
+                    <button
+                        className="navbar-toolbar-btn"
+                        onClick={onPresentationMode}
+                        title="Presentation Mode"
+                    >
+                        <FiMonitor />
+                    </button>
+                    <button
+                        className="navbar-toolbar-btn"
+                        onClick={onDownloadWireframe}
+                        title="Download Wireframe"
+                    >
+                        <FiDownload />
+                    </button>
+                </div>
+
+                {/* Logo only - logout removed for Microsoft internal use */}
                 <img src="/cxsLogo.png" alt="CXS Logo" className="navbar-cxs-logo" />
             </div>
         </nav>

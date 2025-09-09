@@ -1,0 +1,131 @@
+<step title="BackgroundTrace" date="2025-08-08T08:36:54.646" instance="76dc4c" url="/api/zipdeploy" method="POST" >
+  <step title="Updating shutdown sentinel last write time" date="2025-08-08T08:36:54.709" SemaphoreCount="6" /><!-- duration: 47ms -->
+  <step title="LockFile &apos;C:\home\site\locks\deployments.lock&apos; acquired" date="2025-08-08T08:36:54.803" /><!-- duration: 31ms -->
+  <step title="Creating temporary deployment" date="2025-08-08T08:36:54.881" /><!-- duration: 250ms -->
+  <step title="Performing fetch based deployment" date="2025-08-08T08:36:55.178" >
+    <step title="Fetching changes." date="2025-08-08T08:36:55.537" /><!-- duration: 47ms -->
+    <step title="Starting LocalZipHandler" date="2025-08-08T08:36:55.615" /><!-- duration: 47ms -->
+    <step title="Cleaning up temp folders from previous zip deployments and extracting pushed zip file C:\local\Temp\zipdeploy\tjrlotzx.zip (10.94 MB) to C:\local\Temp\zipdeploy\extracted" date="2025-08-08T08:36:55.896" /><!-- duration: 47ms -->
+    <step title="Cleaning up temp folders from previous zip deployments and extracting pushed zip file C:\local\Temp\zipdeploy\tjrlotzx.zip (10.94 MB) to C:\local\Temp\zipdeploy\extracted" date="2025-08-08T08:36:55.990" >
+      <step title="Renaming extractTargetDirectory(C:\local\Temp\zipdeploy\extracted) to tempDirectory(C:\local\Temp\zipdeploy\zpc532au.b3z)" date="2025-08-08T08:36:56.021" /><!-- duration: 63ms -->
+      <step title="Extracting 7549 entries to C:\local\Temp\zipdeploy\extracted directory" date="2025-08-08T08:36:56.193" >
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\ai\advanced-prompt-engine.js ..." date="2025-08-08T08:36:56.240" /><!-- duration: 47ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\ai\ai-context-manager.js ..." date="2025-08-08T08:36:56.318" /><!-- duration: 47ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\ai\ai-enhanced-wireframe-generator.js ..." date="2025-08-08T08:36:56.412" /><!-- duration: 31ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\ai\enhanced-ai-engine.js ..." date="2025-08-08T08:36:56.490" /><!-- duration: 78ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\ai\real-time-refinement-engine.js ..." date="2025-08-08T08:36:56.599" /><!-- duration: 47ms -->
+        <step title="Omitting extracting file traces ..." date="2025-08-08T08:36:56.678" /><!-- duration: 47ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\utils\analytics-logger.js ..." date="2025-08-08T08:37:04.728" /><!-- duration: 47ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\utils\api-validation.js ..." date="2025-08-08T08:37:04.806" /><!-- duration: 47ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\utils\performance-wireframe-generator.js ..." date="2025-08-08T08:37:04.900" /><!-- duration: 31ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\utils\secure-openai.js ..." date="2025-08-08T08:37:04.978" /><!-- duration: 31ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\utils\wireframe-generator.js ..." date="2025-08-08T08:37:05.056" /><!-- duration: 47ms -->
+      </step><!-- duration: 8941ms -->
+    </step><!-- duration: 9191ms -->
+    <step title="Before sending BuildRequestReceived status to /api/updatedeploystatus" date="2025-08-08T08:37:05.275" /><!-- duration: 47ms -->
+    <step title="DeploymentManager.Deploy(id:09a85bb48d75448ebc2e34d439019c67)" date="2025-08-08T08:37:05.400" >
+      <step title="Collecting changeset information" date="2025-08-08T08:37:05.509" /><!-- duration: 313ms -->
+      <step title="Updating submodules" date="2025-08-08T08:37:05.853" >
+        <step title="Updating submodules." date="2025-08-08T08:37:06.244" /><!-- duration: 31ms -->
+      </step><!-- duration: 469ms -->
+      <step title="Preparing deployment for commit id &apos;09a85bb48d&apos;." date="2025-08-08T08:37:06.744" /><!-- duration: 31ms -->
+      <step title="Determining deployment builder" date="2025-08-08T08:37:07.103" >
+        <step title="Builder is BasicBuilder" date="2025-08-08T08:37:07.134" /><!-- duration: 47ms -->
+      </step><!-- duration: 109ms -->
+      <step title="Copying SSH keys" date="2025-08-08T08:37:07.400" /><!-- duration: 47ms -->
+      <step title="Building" date="2025-08-08T08:37:07.494" >
+        <step title="Generating deployment script." date="2025-08-08T08:37:07.853" /><!-- duration: 31ms -->
+        <step title="Generating deployment script" date="2025-08-08T08:37:07.931" >
+          <step title="Using cached version of the deployment script for command: -y --no-dot-deployment -r &quot;C:\local\Temp\zipdeploy\extracted&quot; -o &quot;C:\home\site\deployments\tools&quot; --basic --sitePath &quot;C:\local\Temp\zipdeploy\extracted&quot;" date="2025-08-08T08:37:08.056" /><!-- duration: 31ms -->
+          <step title="Using cached version of deployment script (command: &apos;azure -y --no-dot-deployment -r &quot;C:\local\Temp\zipdeploy\extracted&quot; -o &quot;C:\home\site\deployments\tools&quot; --basic --sitePath &quot;C:\local\Temp\zipdeploy\extracted&quot;&apos;)." date="2025-08-08T08:37:08.166" /><!-- duration: 31ms -->
+        </step><!-- duration: 312ms -->
+        <step title="Running deployment command..." date="2025-08-08T08:37:08.619" /><!-- duration: 47ms -->
+        <step title="Command: &quot;C:\home\site\deployments\tools\deploy.cmd&quot;" date="2025-08-08T08:37:08.744" /><!-- duration: 47ms -->
+        <step title="Executing external process" date="2025-08-08T08:37:08.838" type="process" path="starter.cmd" arguments="&quot;C:\home\site\deployments\tools\deploy.cmd&quot;" >
+          <step title="Handling Basic Web Site deployment." date="2025-08-08T08:37:09.166" /><!-- duration: 31ms -->
+          <step title="Creating app_offline.htm" date="2025-08-08T08:37:13.322" /><!-- duration: 47ms -->
+          <step title="KuduSync.NET from: &apos;C:\local\Temp\zipdeploy\extracted&apos; to: &apos;C:\home\site\wwwroot&apos;" date="2025-08-08T08:37:13.463" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;package.json&apos;" date="2025-08-08T08:37:13.572" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;package.json.backup&apos;" date="2025-08-08T08:37:13.713" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\.package-lock.json&apos;" date="2025-08-08T08:37:13.838" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\.bin\is-docker&apos;" date="2025-08-08T08:37:13.963" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\.bin\is-inside-container&apos;" date="2025-08-08T08:37:14.088" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\.bin\openai&apos;" date="2025-08-08T08:37:14.197" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\.bin\semver&apos;" date="2025-08-08T08:37:14.322" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\.bin\uuid&apos;" date="2025-08-08T08:37:14.447" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\LICENSE&apos;" date="2025-08-08T08:37:14.556" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\package.json&apos;" date="2025-08-08T08:37:14.697" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\browser\AbortError.d.ts.map&apos;" date="2025-08-08T08:37:14.822" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\browser\AbortError.js&apos;" date="2025-08-08T08:37:14.931" /><!-- duration: 63ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\browser\AbortSignalLike.d.ts.map&apos;" date="2025-08-08T08:37:15.072" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\browser\AbortSignalLike.js&apos;" date="2025-08-08T08:37:15.197" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\browser\index.d.ts.map&apos;" date="2025-08-08T08:37:15.338" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\browser\index.js&apos;" date="2025-08-08T08:37:15.463" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\browser\package.json&apos;" date="2025-08-08T08:37:15.635" /><!-- duration: 62ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\commonjs\AbortError.d.ts.map&apos;" date="2025-08-08T08:37:15.791" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\commonjs\AbortError.js&apos;" date="2025-08-08T08:37:15.916" /><!-- duration: 62ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\commonjs\AbortSignalLike.d.ts.map&apos;" date="2025-08-08T08:37:16.056" /><!-- duration: 62ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\commonjs\AbortSignalLike.js&apos;" date="2025-08-08T08:37:16.197" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\commonjs\index.d.ts.map&apos;" date="2025-08-08T08:37:16.306" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\commonjs\index.js&apos;" date="2025-08-08T08:37:16.447" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\commonjs\package.json&apos;" date="2025-08-08T08:37:16.838" /><!-- duration: 78ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\commonjs\tsdoc-metadata.json&apos;" date="2025-08-08T08:37:16.994" /><!-- duration: 63ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\esm\AbortError.d.ts.map&apos;" date="2025-08-08T08:37:17.150" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\esm\AbortError.js&apos;" date="2025-08-08T08:37:17.260" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\esm\AbortSignalLike.d.ts.map&apos;" date="2025-08-08T08:37:17.385" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\esm\AbortSignalLike.js&apos;" date="2025-08-08T08:37:17.510" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\esm\index.d.ts.map&apos;" date="2025-08-08T08:37:17.620" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\esm\index.js&apos;" date="2025-08-08T08:37:17.745" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\esm\package.json&apos;" date="2025-08-08T08:37:17.870" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\react-native\AbortError.d.ts.map&apos;" date="2025-08-08T08:37:17.979" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\react-native\AbortError.js&apos;" date="2025-08-08T08:37:18.104" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\react-native\AbortSignalLike.d.ts.map&apos;" date="2025-08-08T08:37:18.229" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\react-native\AbortSignalLike.js&apos;" date="2025-08-08T08:37:18.338" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\react-native\index.d.ts.map&apos;" date="2025-08-08T08:37:18.463" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\react-native\index.js&apos;" date="2025-08-08T08:37:18.573" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\abort-controller\dist\react-native\package.json&apos;" date="2025-08-08T08:37:18.714" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\core-auth\LICENSE&apos;" date="2025-08-08T08:37:18.823" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\core-auth\package.json&apos;" date="2025-08-08T08:37:18.964" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\core-auth\dist\browser\azureKeyCredential.js&apos;" date="2025-08-08T08:37:19.074" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\core-auth\dist\browser\azureNamedKeyCredential.js&apos;" date="2025-08-08T08:37:19.199" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\core-auth\dist\browser\azureSASCredential.js&apos;" date="2025-08-08T08:37:19.324" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\core-auth\dist\browser\index.js&apos;" date="2025-08-08T08:37:19.433" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\core-auth\dist\browser\keyCredential.js&apos;" date="2025-08-08T08:37:19.558" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\core-auth\dist\browser\package.json&apos;" date="2025-08-08T08:37:19.683" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\core-auth\dist\browser\tokenCredential.js&apos;" date="2025-08-08T08:37:19.792" /><!-- duration: 47ms -->
+          <step title="Omitting next output lines..." date="2025-08-08T08:37:19.917" /><!-- duration: 31ms -->
+          <step title="Processed 276 files..." date="2025-08-08T08:37:35.777" /><!-- duration: 63ms -->
+          <step title="Processed 501 files..." date="2025-08-08T08:37:55.811" /><!-- duration: 63ms -->
+          <step title="Processed 726 files..." date="2025-08-08T08:38:15.827" /><!-- duration: 63ms -->
+          <step title="Processed 953 files..." date="2025-08-08T08:38:35.858" /><!-- duration: 62ms -->
+          <step title="Processed 1180 files..." date="2025-08-08T08:38:55.905" /><!-- duration: 63ms -->
+          <step title="Processed 1399 files..." date="2025-08-08T08:39:15.899" /><!-- duration: 47ms -->
+          <step title="Processed 1618 files..." date="2025-08-08T08:39:35.900" /><!-- duration: 63ms -->
+          <step title="Processed 1833 files..." date="2025-08-08T08:39:55.902" /><!-- duration: 63ms -->
+          <step title="Processed 2045 files..." date="2025-08-08T08:40:15.888" /><!-- duration: 47ms -->
+        </step><!-- duration: 201677ms -->
+        <step title="LockFile &apos;C:\home\site\locks\deployments.lock&apos; released" date="2025-08-08T08:40:30.532" /><!-- duration: 47ms -->
+ was being aborted." date="2025-08-08T08:40:30.579" /><!-- duration: 47ms -->
+        <step title="Deleting shutdown sentinel file" date="2025-08-08T08:40:30.688" SemaphoreCount="8"         <step title="Thread was being aborted. DEPLOYMENTINFO: deploymentPath = Functions App ZipDeploy. Extract zip. , deployer = ZipDeploy, os = windows, sku = Dynamic, language = node, siteName = func-prod-fresh-u62277mynzfg4, slotName = Production, siteHostName = func-prod-fresh-u62277mynzfg4.azurewebsites.net, deploymentStatus = Error" date="2025-08-08T08:40:30.719"         <step title="Error occurred" date="2025-08-08T08:40:30.797" type="error" text="Thread was being aborted." stackTrace="   at System.Threading.Monitor.ObjWait(Boolean exitContext, Int32 millisecondsTimeout, Object obj)
+   at System.Threading.Monitor.Wait(Object obj, Int32 millisecondsTimeout, Boolean exitContext)
+   at System.Threading.Monitor.Wait(Object obj, Int32 millisecondsTimeout)
+   at System.Threading.ManualResetEventSlim.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   at System.Threading.Tasks.Task.SpinThenBlockingWait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   at System.Threading.Tasks.Task.InternalWait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   at System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   at Kudu.Core.Deployment.FetchDeploymentManager.&lt;&gt;c__DisplayClass12_1.&lt;PerformBackgroundDeployment&gt;b__3()
+   at Kudu.Contracts.Infrastructure.LockExtensions.TryLockOperation(IOperationLock lockObj, Action operation, String operationName, TimeSpan timeout)
+   at Kudu.Contracts.Infrastructure.LockExtensions.LockOperation(IOperationLock lockObj, Action operation, String operationName, TimeSpan timeout)
+   at Kudu.Core.Deployment.FetchDeploymentManager.&lt;&gt;c__DisplayClass12_0.&lt;PerformBackgroundDeployment&gt;b__1()" /><!-- duration: 47ms -->
+occurred" date="2025-08-08T08:40:30.860" type="error" text="Thread was being aborted." stackTrace="   at System.Threading.Monitor.ObjWait(Boolean exitContext, Int32 millisecondsTimeout, Object obj)
+   at System.Threading.Monitor.Wait(Object obj, Int32 millisecondsTimeout, Boolean exitContext)
+   at System.Threading.Monitor.Wait(Object obj, Int32 millisecondsTimeout)
+   at System.Threading.ManualResetEventSlim.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   at System.Threading.Tasks.Task.SpinThenBlockingWait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   at System.Threading.Tasks.Task.InternalWait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at Kudu.Core.Infrastructure.Executable.ExecuteInternal(ITracer tracer, Func`2 onWriteOutput, Func`2 onWriteError, Encoding encoding, String arguments, Object[] args)
+   at Kudu.Core.Infrastructure.Executable.ExecuteWithProgressWriter(ILogger logger, ITracer tracer, String arguments, Object[] args)
+   at Kudu.Core.Deployment.Generator.ExternalCommandBuilder.RunCommand(DeploymentContext context, String command, Boolean ignoreManifest, String message)" /><!-- duration: 47ms -->
+      </step><!-- duration: 203429ms -->

@@ -1,21 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
 import "./wireframe-styles.css";
 import "./styles/microsoftlearn-card.css";
 import "./styles/suggestion-indicator.css";
+import "./styles/suggestion-performance.css";
 import "./styles/atlas-design-system.css";
 import LandingPage from "./components/LandingPage";
 import SplitLayout from "./components/SplitLayout";
-import TopNavbar from "./components/TopNavbar";
+import TopNavbarApp from "./components/TopNavbarApp";
+import TopNavbarLanding from "./components/TopNavbarLanding";
 import SaveDialog from "./components/SaveDialog";
 import LoadDialog from "./components/LoadDialog";
 import Toast from "./components/Toast";
+import AzureAuth from "./components/AzureAuth";
+import FigmaIntegration from "./components/FigmaIntegration";
+import FigmaIntegrationModal from "./components/FigmaIntegrationModal";
 import { API_CONFIG, getApiUrl } from "./config/api";
 // All API calls are now handled by the wireframe generation hook
 import { useWireframeGeneration } from './hooks/useWireframeGeneration';
 import { PerformanceTracker } from "./utils/performance";
 import { generateHeroHTML } from "./components/HeroGenerator";
+import { processWireframeForProduction } from './utils/wireframeProcessor';
 import { PerformanceMonitor, usePerformanceMonitor } from "./components/PerformanceMonitor";
+import { getInstantSuggestions, shouldUseAI } from "./utils/fastSuggestions";
+import { getCachedSuggestions, cacheSuggestions } from "./utils/suggestionCache";
 
 interface SavedWireframe {
   id: string;
@@ -31,7 +39,7 @@ interface ToastData {
   type: 'success' | 'info' | 'warning' | 'error';
 }
 
-function AppContent() {
+function AppContent({ onLogout }: { onLogout?: () => void }) {
   const [description, setDescription] = useState("");
   const [htmlWireframe, setHtmlWireframe] = useState("");
   const [savedWireframes, setSavedWireframes] = useState<SavedWireframe[]>([]);
@@ -50,6 +58,84 @@ function AppContent() {
   const [isAnalyzingImage, setIsAnalyzingImage] = useState(false);
   const [toasts, setToasts] = useState<ToastData[]>([]);
   const [fastMode, setFastMode] = useState(false);
+  const [showFigmaIntegration, setShowFigmaIntegration] = useState(false);
+  const [showTopToolbarFigmaImport, setShowTopToolbarFigmaImport] = useState(false);
+
+  // Toolbar function refs
+  const figmaIntegrationRef = useRef<(() => void) | null>(null);
+  const componentLibraryRef = useRef<(() => void) | null>(null);
+  const devPlaybooksRef = useRef<(() => void) | null>(null);
+  const figmaComponentsRef = useRef<(() => void) | null>(null);
+  const viewHtmlCodeRef = useRef<(() => void) | null>(null);
+  const downloadWireframeRef = useRef<(() => void) | null>(null);
+  const presentationModeRef = useRef<(() => void) | null>(null);
+  const enhancedSaveRef = useRef<(() => void) | null>(null);
+
+  // Toolbar handler functions for header
+  const handleToolbarFigma = () => {
+    console.log('🎨 TOP TOOLBAR FIGMA BUTTON CLICKED - Opening Figma import (like landing page)...');
+    setShowTopToolbarFigmaImport(true);
+  };
+
+  // Set up the component library ref for Pages toolbar 
+  useEffect(() => {
+    figmaIntegrationRef.current = () => {
+      console.log('🎨 PAGES TOOLBAR COMPONENT LIBRARY BUTTON CLICKED - Opening Component Library...');
+      if (componentLibraryRef.current) {
+        componentLibraryRef.current();
+      } else {
+        console.warn('Component Library function not available');
+      }
+    };
+  }, []);
+
+  // Set up the dev playbooks ref for toolbar
+  useEffect(() => {
+    devPlaybooksRef.current = () => {
+      console.log('📚 DEV PLAYBOOKS BUTTON CLICKED - Opening Dev Playbooks...');
+      // Dev playbooks functionality would be handled by SplitLayout
+    };
+  }, []);
+
+  // Set up the figma components ref for toolbar
+  useEffect(() => {
+    figmaComponentsRef.current = () => {
+      console.log('🎨 FIGMA COMPONENTS BUTTON CLICKED - Opening Figma Components...');
+      // Figma components functionality would be handled by SplitLayout
+    };
+  }, []);
+
+  const handleToolbarHtmlCode = () => {
+    if (viewHtmlCodeRef.current) {
+      viewHtmlCodeRef.current();
+    } else {
+      console.log('HTML code viewer function not available');
+    }
+  };
+
+  const handleToolbarDownload = () => {
+    if (downloadWireframeRef.current) {
+      downloadWireframeRef.current();
+    } else {
+      console.log('Download wireframe function not available');
+    }
+  };
+
+  const handleToolbarPresentation = () => {
+    if (presentationModeRef.current) {
+      presentationModeRef.current();
+    } else {
+      console.log('Presentation mode function not available');
+    }
+  };
+
+  const handleEnhancedSave = () => {
+    if (enhancedSaveRef.current) {
+      enhancedSaveRef.current();
+    } else {
+      console.log('Enhanced save function not available');
+    }
+  };
 
   // Performance monitoring
   const performanceMonitor = usePerformanceMonitor();
@@ -145,6 +231,13 @@ function AppContent() {
     console.log('Wireframe Loaded!', `"${wireframe.name}" has been loaded.`);
   };
 
+  // Function to open wireframe from recent/favorites
+  const openWireframe = (html: string, description: string) => {
+    handleWireframeGenerated(html);
+    setDescription(description);
+    console.log('Wireframe opened from recent/favorites');
+  };
+
   const deleteWireframe = (id: string) => {
     const wireframe = savedWireframes.find(w => w.id === id);
     const updated = savedWireframes.filter((w) => w.id !== id);
@@ -185,7 +278,22 @@ function AppContent() {
 
     // Only set non-empty HTML
     if (safeHtml && safeHtml.length > 0) {
-      setHtmlWireframe(safeHtml);
+      // Process the wireframe to fix images and Microsoft branding
+      const processedHtml = processWireframeForProduction(safeHtml);
+      setHtmlWireframe(processedHtml);
+
+      // Add to recents
+      try {
+        const addToRecents = (window as any).addToRecents;
+        if (addToRecents && description) {
+          const recentName = description.length > 50 ?
+            description.substring(0, 47) + "..." :
+            description;
+          addToRecents(recentName, "Wireframe created", processedHtml);
+        }
+      } catch (error) {
+        console.log("Could not add to recents:", error);
+      }
     } else {
       setHtmlWireframe(""); // Set empty string
     }
@@ -309,20 +417,20 @@ function AppContent() {
       const updatedHtml = insertComponentIntoWireframe(htmlWireframe, componentHtml);
       console.log("🔧 App.tsx: Updating existing wireframe, new length:", updatedHtml.length);
       setHtmlWireframe(updatedHtml);
-      console.log("🔧 App.tsx: Added to existing wireframe");
+      console.log("🔧 App.tsx: ✅ Component added as overlay in top-right!");
     } else {
       // Create a new wireframe with just this component
       const newWireframe = createWireframeWithComponent(componentHtml);
       console.log("🔧 App.tsx: Creating new wireframe, length:", newWireframe.length);
       setHtmlWireframe(newWireframe);
-      console.log("🔧 App.tsx: Created new wireframe with component");
+      console.log("🔧 App.tsx: ✅ Created new wireframe with component overlay!");
     }
 
     // Force a re-render to ensure the wireframe updates
     setForceUpdateKey(Date.now());
 
-    // Show toast notification with drag instructions
-    showToast(`✨ Added ${component.name}! Hover over components to see drag handles, then drag to reposition.`, 'success');
+    // Show success notification
+    showToast("Component added successfully!", 'success');
   };
 
   // Handler for generating page content using AI
@@ -351,10 +459,10 @@ function AppContent() {
     // If the component has htmlCode property, use it directly (this is the real component HTML)
     if (component.htmlCode) {
       console.log("🔧 generateComponentHtml: Using component.htmlCode");
-      // Enhance the HTML to make it draggable within the wireframe
+      // Use the HTML directly without any modifications
       let html = component.htmlCode;
 
-      // Wrap the component in a draggable container if it's not already a single element
+      // Wrap the component if it's not already a single element
       if (html.trim().startsWith('<') && html.trim().endsWith('>')) {
         // Check if it's already a single element or multiple elements
         const parser = new DOMParser();
@@ -362,14 +470,14 @@ function AppContent() {
         const bodyChildren = doc.body.children;
 
         if (bodyChildren.length === 1) {
-          // Single element - add draggable attributes to it
+          // Single element - add basic styling
           const element = bodyChildren[0] as HTMLElement;
-          element.setAttribute('data-draggable', 'true');
+          element.setAttribute('data-user-added', 'true');
           element.classList.add('atlas-component');
           html = element.outerHTML;
         } else {
-          // Multiple elements - wrap in a draggable container
-          html = `<div class="atlas-component component-container" data-draggable="true" style="display: inline-block; margin: 8px;">${html}</div>`;
+          // Multiple elements - wrap in a container
+          html = `<div class="atlas-component component-container" data-user-added="true" style="display: inline-block; margin: 8px;">${html}</div>`;
         }
       }
 
@@ -467,7 +575,7 @@ function AppContent() {
 
       // Atlas Button Components
       case 'atlas-button-primary':
-        return `<button class="button button-primary button-lg atlas-component" data-draggable="true" style="margin: 10px; padding: 12px 24px; background: #0078d4; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Primary Button'}</button>`;
+        return `<button class="button button-primary button-lg atlas-component" data-user-added="true" style="margin: 10px; padding: 12px 24px; background: #E8E6DE; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Primary Button'}</button>`;
 
       case 'atlas-button-primary-filled':
         return `<button class="button button-primary-filled" style="margin: 10px; padding: 12px 24px; background: #0078d4; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Primary Filled Button'}</button>`;
@@ -609,7 +717,7 @@ function AppContent() {
           showSecondaryButton: true,
           secondaryCtaText: "Learn More",
           backgroundColor: "#E8E6DF",
-          heroImageUrl: "https://learn.microsoft.com/media/learn/home/hero-learn.svg"
+          heroImageUrl: "hero-learn.svg"
         });
 
       case 'atlas-banner':
@@ -631,7 +739,7 @@ function AppContent() {
         </div>`;
 
       case 'atlas-card':
-        return `<div class="card atlas-component" data-draggable="true" style="margin: 10px; padding: 20px; border: 1px solid #e1dfdd; border-radius: 8px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        return `<div class="card atlas-component" data-user-added="true" style="margin: 10px; padding: 20px; border: 1px solid #e1dfdd; border-radius: 8px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
           <h4 style="margin: 0 0 10px 0; color: #323130;">💳 Card Title</h4>
           <p style="margin: 0; color: #605e5c;">Card content goes here. This is a Microsoft Learn styled card component.</p>
         </div>`;
@@ -652,51 +760,226 @@ function AppContent() {
   };
 
   const insertComponentIntoWireframe = (existingHtml: string, componentHtml: string) => {
-    // Find a good insertion point in the existing wireframe
-    const containerMatch = existingHtml.match(/<div[^>]*class="[^"]*wireframe-container[^"]*"[^>]*>/);
-    if (containerMatch) {
-      const insertionPoint = existingHtml.indexOf('</div>', containerMatch.index! + containerMatch[0].length);
-      if (insertionPoint !== -1) {
-        return existingHtml.slice(0, insertionPoint) + componentHtml + existingHtml.slice(insertionPoint);
+    console.log("🔧 insertComponentIntoWireframe: Adding component to Fluent UI layout");
+
+    // Check if we have an existing wireframe with Fluent UI layout structure
+    const hasFluentGrid = existingHtml.includes('fluent-container') || existingHtml.includes('fluent-row') || existingHtml.includes('fluent-col');
+
+    if (hasFluentGrid) {
+      // Find the first available Fluent UI column or create a new one
+      const colRegex = /<div class="col-[^"]*"[^>]*>/g;
+      const columns = existingHtml.match(colRegex);
+
+      if (columns && columns.length > 0) {
+        // Find an empty column or the last column to append to
+        const firstColMatch = existingHtml.match(/<div class="col-[^"]*"[^>]*>[\s]*<\/div>/);
+
+        if (firstColMatch) {
+          // Found an empty column, insert the component there
+          return existingHtml.replace(
+            firstColMatch[0],
+            firstColMatch[0].replace('</div>', `
+              <div class="atlas-component-wrapper" data-user-added="true">
+                ${componentHtml}
+              </div>
+            </div>`)
+          );
+        } else {
+          // Find the last closing div of a column and insert before it
+          const lastColEndMatch = existingHtml.match(/(<div class="col-[^"]*"[^>]*>)([\s\S]*?)(<\/div>)(?![\s\S]*<div class="col-)/);
+
+          if (lastColEndMatch) {
+            const beforeClosing = lastColEndMatch[0];
+            const newContent = beforeClosing.replace(
+              lastColEndMatch[3],
+              `
+              <div class="atlas-component-wrapper mb-3" data-user-added="true">
+                ${componentHtml}
+              </div>
+            ${lastColEndMatch[3]}`
+            );
+            return existingHtml.replace(beforeClosing, newContent);
+          }
+        }
+      }
+
+      // If no suitable column found, add a new row with the component
+      const lastRowMatch = existingHtml.match(/(<div class="row[^"]*"[^>]*>[\s\S]*?<\/div>)(?![\s\S]*<div class="row)/);
+
+      if (lastRowMatch) {
+        const insertAfterRow = lastRowMatch[0];
+        const newRow = `
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <div class="atlas-component-wrapper" data-user-added="true">
+                ${componentHtml}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-4 border border-dashed rounded text-center text-muted">
+                <p class="mb-0">Drop zone for additional components</p>
+              </div>
+            </div>
+          </div>`;
+
+        return existingHtml.replace(insertAfterRow, insertAfterRow + newRow);
       }
     }
 
-    // Fallback: append to the end of the body
-    const bodyEndIndex = existingHtml.lastIndexOf('</body>');
-    if (bodyEndIndex !== -1) {
-      return existingHtml.slice(0, bodyEndIndex) + componentHtml + existingHtml.slice(bodyEndIndex);
+    // If no Fluent UI structure found, wrap the component and append
+    const componentWrapper = `
+      <div class="atlas-component-wrapper mt-4" data-user-added="true" style="
+        background: rgba(255, 255, 255, 0.95);
+        border: 2px solid #0078d4;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 15px 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        animation: atlasSlideIn 0.6s ease-out;
+      ">
+        ${componentHtml}
+      </div>
+      
+      <style>
+        @keyframes atlasSlideIn {
+          0% { transform: translateY(-20px) scale(0.95); opacity: 0; }
+          100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        .atlas-component-wrapper:hover {
+          transform: scale(1.02);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+      </style>`;
+
+    // Insert before closing body tag
+    const bodyCloseMatch = existingHtml.match(/<\/body>/);
+    if (bodyCloseMatch) {
+      return existingHtml.replace('</body>', componentWrapper + '\n</body>');
     }
 
-    // Final fallback: just append
-    return existingHtml + componentHtml;
-  };
-
-  const createWireframeWithComponent = (componentHtml: string) => {
+    // Fallback: append to end
+    return existingHtml + componentWrapper;
+  }; const createWireframeWithComponent = (componentHtml: string) => {
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Component Wireframe</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/11.0.0/css/fabric.min.css" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .wireframe-container { padding: 20px; min-height: 400px; }
+      body { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; }
+      .fluent-container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+      .fluent-row { display: flex; flex-wrap: wrap; margin: 0 -8px; }
+      .fluent-col { flex: 1; padding: 0 8px; min-width: 0; }
+    </style>
+    <style>
+        body { 
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+          background-color: #f8f9fa;
+          padding: 20px;
+        }
+        .wireframe-container { 
+          background: white;
+          border-radius: 8px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+          padding: 30px;
+          min-height: 400px; 
+        }
         .button { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; }
         .button-primary { background: #0078d4; color: white; }
         .button-secondary { background: #f3f2f1; color: #323130; border: 1px solid #e1dfdd; }
         .button-lg { padding: 12px 24px; }
         .button-search { display: inline-flex; align-items: center; gap: 8px; }
+        
+        /* Component entry animation */
+        @keyframes atlasSlideIn {
+          0% { transform: translateY(-20px) scale(0.95); opacity: 0; }
+          100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        .atlas-component-wrapper {
+          animation: atlasSlideIn 0.6s ease-out;
+          transition: all 0.3s ease;
+          background: rgba(255, 255, 255, 0.95);
+          border: 2px solid #0078d4;
+          border-radius: 8px;
+          padding: 15px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          min-height: 80px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .atlas-component-wrapper:hover {
+          transform: scale(1.02);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+        .atlas-component-wrapper .atlas-component {
+          margin: 0 !important;
+        }
     </style>
 </head>
 <body>
-    <div class="wireframe-container">
-        <h1>Component Library Wireframe</h1>
-        <p>Components added from the library:</p>
-        ${componentHtml}
+    <div style="width: 100%; padding: 0 16px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        <div class="wireframe-container">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h1 class="h3 text-primary mb-1">Component Library Wireframe</h1>
+                    <p style="color: #605e5c; font-size: 14px;">Components are added to the Fluent UI layout and can be rearranged using drag & drop.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="atlas-component-wrapper" data-user-added="true">
+                        ${componentHtml}
+                    </div>
+                </div>
+                <div class="col-md-8 mb-3">
+                    <div class="p-4 border border-dashed rounded text-center text-muted">
+                        <h5>Drop Zone</h5>
+                        <p class="mb-0">Add more components from the library or drag existing ones to rearrange.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>`;
+  };
+
+  const injectCSSIntoWireframe = (html: string, css: string) => {
+    console.log('🎨 Injecting CSS into wireframe');
+
+    // Look for existing <style> tag in the head
+    const styleRegex = /(<head>[\s\S]*?)(<\/head>)/i;
+    const styleMatch = html.match(styleRegex);
+
+    if (styleMatch) {
+      // Check if there's already a <style> tag
+      const existingStyleRegex = /(<style>[\s\S]*?<\/style>)/i;
+      const existingStyleMatch = styleMatch[1].match(existingStyleRegex);
+
+      if (existingStyleMatch) {
+        // Append to existing style tag
+        const updatedStyle = existingStyleMatch[1].replace('</style>', `\n${css}\n</style>`);
+        return html.replace(existingStyleMatch[1], updatedStyle);
+      } else {
+        // Add new style tag before closing head
+        const newHead = styleMatch[1] + `\n<style>\n${css}\n</style>\n`;
+        return html.replace(styleMatch[1], newHead);
+      }
+    } else {
+      // If no head found, try to add after <head> tag
+      const headOpenRegex = /<head[^>]*>/i;
+      const headOpenMatch = html.match(headOpenRegex);
+
+      if (headOpenMatch) {
+        return html.replace(headOpenMatch[0], `${headOpenMatch[0]}\n<style>\n${css}\n</style>`);
+      }
+    }
+
+    // Fallback: add style tag at the beginning of the document
+    return `<style>\n${css}\n</style>\n${html}`;
   };
 
   const handleDesignChange = async (_newTheme?: string, newScheme?: string) => {
@@ -774,29 +1057,57 @@ function AppContent() {
       // Always return fallback suggestions when API fails
       return API_CONFIG.FALLBACK_SUGGESTIONS;
     }
-  }; const handleGenerateAiSuggestions = async (input: string) => {
-    // 100% AI-driven suggestions - trigger for any meaningful input (3+ characters)
-    const shouldShowSuggestions = input.trim().length >= 3;
+  };
+
+  const handleGenerateAiSuggestions = useCallback(async (input: string) => {
+    // Immediate feedback with fast local suggestions
+    const shouldShowSuggestions = input.trim().length >= 2;
 
     if (shouldShowSuggestions) {
-      setSuggestionLoading(true);
-      try {
-        const suggestions = await generateSmartSuggestions(input);
-        setAiSuggestions(suggestions);
-        setShowAiSuggestions(suggestions.length > 0);
-      } catch (error) {
-        console.warn('Unable to generate AI suggestions, continuing without them');
-        setAiSuggestions([]);
-        setShowAiSuggestions(false);
-      } finally {
+      // 1. Show instant suggestions immediately (no loading state)
+      const instantSuggestions = getInstantSuggestions(input);
+      if (instantSuggestions.length > 0) {
+        setAiSuggestions(instantSuggestions);
+        setShowAiSuggestions(true);
         setSuggestionLoading(false);
+      }
+
+      // 2. Check cache for better suggestions
+      const cached = getCachedSuggestions(input);
+      if (cached && cached.suggestions.length > 0) {
+        setAiSuggestions(cached.suggestions);
+        setShowAiSuggestions(true);
+        setSuggestionLoading(false);
+        return; // Use cached suggestions, no need for AI call
+      }
+
+      // 3. Only use AI for complex inputs or when no instant suggestions available
+      if (shouldUseAI(input) || instantSuggestions.length === 0) {
+        if (instantSuggestions.length === 0) {
+          setSuggestionLoading(true); // Only show loading if no instant suggestions
+        }
+
+        try {
+          const aiSuggestions = await generateSmartSuggestions(input);
+          if (aiSuggestions.length > 0) {
+            setAiSuggestions(aiSuggestions);
+            setShowAiSuggestions(true);
+            // Cache the AI results for future use
+            cacheSuggestions(input, aiSuggestions, 'ai');
+          }
+        } catch (error) {
+          console.warn('AI suggestions failed, keeping instant suggestions');
+          // Keep the instant suggestions that are already showing
+        } finally {
+          setSuggestionLoading(false);
+        }
       }
     } else {
       setAiSuggestions([]);
       setShowAiSuggestions(false);
       setSuggestionLoading(false);
     }
-  };
+  }, []);
 
   const handleMultiStep = () => {
     // Stub for future multi-step functionality
@@ -844,6 +1155,110 @@ function AppContent() {
   };
 
   // Figma integration handlers
+  const handleFigmaComponentsImported = (components: any[]) => {
+    console.log('Figma components imported:', components);
+
+    if (components.length === 0) {
+      showToast('No components were imported', 'warning');
+      return;
+    }
+
+    // Create HTML from imported components
+    let combinedHtml = '';
+    components.forEach((component, index) => {
+      if (component.wireframeHtml) {
+        combinedHtml += `
+          <div class="figma-imported-component" data-component-name="${component.componentName}" style="margin: 20px 0; padding: 20px; border: 2px solid #0078d4; border-radius: 8px; background: rgba(255,255,255,0.95);">
+            <h4 style="margin: 0 0 15px 0; color: #0078d4; font-size: 16px;">📦 ${component.componentName}</h4>
+            ${component.wireframeHtml}
+          </div>
+        `;
+      }
+    });
+
+    if (combinedHtml) {
+      if (htmlWireframe) {
+        // Add to existing wireframe
+        const updatedHtml = insertComponentIntoWireframe(htmlWireframe, combinedHtml);
+        setHtmlWireframe(updatedHtml);
+        showToast(`Added ${components.length} Figma component(s) to wireframe`, 'success');
+      } else {
+        // Create new wireframe with imported components
+        const newWireframe = createWireframeWithComponent(combinedHtml);
+        setHtmlWireframe(newWireframe);
+        setShowLandingPage(false);
+        showToast(`Created wireframe with ${components.length} Figma component(s)`, 'success');
+      }
+      setForceUpdateKey(Date.now());
+    } else {
+      showToast('Failed to process imported components', 'error');
+    }
+
+    setShowFigmaIntegration(false);
+  };
+
+  // Handler for adding components directly to wireframe
+  const handleAddToWireframe = (componentData: any[]) => {
+    console.log('🔧 Adding components to wireframe:', componentData);
+
+    if (componentData.length === 0) {
+      showToast('No components selected to add to wireframe', 'warning');
+      return;
+    }
+
+    // Process each component separately to ensure individual placement
+    let updatedHtml = htmlWireframe;
+    let componentsAdded = 0;
+    let allComponentCSS = ''; // Collect all CSS from components
+
+    componentData.forEach((component) => {
+      console.log('🔧 Processing component:', component.name, 'content:', component.content);
+
+      if (component.content) {
+        // Collect CSS from component
+        if (component.css && component.css.trim()) {
+          allComponentCSS += `\n/* CSS for ${component.name} */\n${component.css}\n`;
+          console.log('🎨 Collected CSS for component:', component.name);
+        }
+
+        // Create individual component HTML
+        const componentHtml = `
+          <div class="figma-imported-component" data-component-id="${component.id}" style="margin: 10px 0;">
+            ${component.content}
+          </div>
+        `;
+
+        console.log('🔧 Individual component HTML:', componentHtml);
+
+        if (updatedHtml && updatedHtml.trim() !== '') {
+          // Add to existing wireframe individually
+          updatedHtml = insertComponentIntoWireframe(updatedHtml, componentHtml);
+        } else {
+          // Create new wireframe with first component
+          updatedHtml = createWireframeWithComponent(componentHtml);
+          setShowLandingPage(false);
+        }
+        componentsAdded++;
+      }
+    });
+
+    // Inject collected CSS into the wireframe
+    if (allComponentCSS.trim()) {
+      console.log('🎨 Injecting component CSS into wireframe');
+      updatedHtml = injectCSSIntoWireframe(updatedHtml, allComponentCSS);
+    }
+
+    if (componentsAdded > 0) {
+      setHtmlWireframe(updatedHtml);
+      showToast(`Added ${componentsAdded} component(s) to wireframe`, 'success');
+      setForceUpdateKey(Date.now());
+    } else {
+      showToast('Failed to process component data', 'error');
+    }
+
+    setShowFigmaIntegration(false);
+  };
+
   const handleFigmaImport = (html: string, fileName: string) => {
     console.log('Figma file imported:', fileName);
     setHtmlWireframe(html);
@@ -852,9 +1267,54 @@ function AppContent() {
     showToast(`Figma design imported: ${fileName}`, 'success');
   };
 
-  const handleFigmaExport = (format: 'figma-file' | 'figma-components') => {
-    console.log('Exporting to Figma format:', format);
-    showToast(`Exported to ${format}`, 'success');
+  const handleFigmaExport = async (format: 'figma-file' | 'figma-components') => {
+    console.log('Exporting wireframe:', format);
+
+    if (!htmlWireframe || htmlWireframe.trim() === '') {
+      showToast('No wireframe to export. Please create a wireframe first.', 'error');
+      return;
+    }
+
+    try {
+      // Import the export service
+      const { wireframeExportService } = await import('./services/wireframeExport');
+
+      let result;
+
+      if (format === 'figma-file') {
+        // Export as standalone HTML file
+        result = await wireframeExportService.exportAsHTML(htmlWireframe, {
+          format: 'html',
+          filename: wireframeExportService.generateFilename('wireframe', 'html'),
+          includeStyles: true,
+          includeInteractivity: true
+        });
+      } else if (format === 'figma-components') {
+        // Export as JSON data for component library
+        result = await wireframeExportService.exportAsJSON(htmlWireframe, {
+          description: description,
+          theme: designTheme,
+          colorScheme: colorScheme,
+          exportedAt: new Date().toISOString()
+        }, {
+          format: 'figma-components',
+          filename: wireframeExportService.generateFilename('wireframe-components', 'json')
+        });
+      }
+
+      if (result?.success) {
+        showToast(
+          `✅ Wireframe exported successfully as ${result.filename}! 
+          ${result.size ? `(${Math.round(result.size / 1024)} KB)` : ''}`,
+          'success'
+        );
+      } else {
+        showToast(`❌ Export failed: ${result?.error || 'Unknown error'}`, 'error');
+      }
+    } catch (error) {
+      console.error('Export error:', error);
+      showToast('❌ Export failed. Please try again.', 'error');
+    }
   };
 
   // Demo wireframe handler
@@ -891,34 +1351,24 @@ function AppContent() {
     }
   };
 
-  // Demo image generate handler (for modal demo tab)
-  const handleDemoGenerate = async (imagePath: string, description: string) => {
-    console.log('Demo image generate requested:', imagePath, description);
-
-    try {
-      setDescription(description);
-      showToast('Generating wireframe from demo image...', 'info');
-
-      const result = await generateWireframe(
-        description,
-        designTheme,
-        colorScheme
-      );
-
-      if (result && result.html) {
-        handleWireframeGenerated(result.html);
-        showToast('Demo wireframe generated!', 'success');
-      }
-    } catch (error) {
-      console.error('Error generating demo wireframe:', error);
-      showToast('Failed to generate demo wireframe', 'error');
-    }
-  }; return (
-    <div className={`app-content with-navbar`}>
-      {/* Always show Designetica TopNavbar */}
-      <TopNavbar
-        onLogoClick={handleBackToLanding}
-      />
+  return (
+    <div className={`app-content`}>
+      {/* Conditional TopNavbar based on landing page state */}
+      {showLandingPage && !htmlWireframe ? (
+        <TopNavbarLanding
+          onLogoClick={handleBackToLanding}
+          onLogout={onLogout}
+        />
+      ) : (
+        <TopNavbarApp
+          onLogoClick={handleBackToLanding}
+          onLogout={onLogout}
+          onFigmaIntegration={handleToolbarFigma}
+          onViewHtmlCode={handleToolbarHtmlCode}
+          onPresentationMode={handleToolbarPresentation}
+          onDownloadWireframe={handleToolbarDownload}
+        />
+      )}
 
       {showLandingPage && !htmlWireframe ? (
         <LandingPage
@@ -948,7 +1398,7 @@ function AppContent() {
           isAnalyzingImage={isAnalyzingImage}
           onFigmaImport={handleFigmaImport}
           onFigmaExport={handleFigmaExport}
-          onDemoGenerate={handleDemoGenerate}
+          onOpenWireframe={openWireframe}
         />
       ) : (
         <SplitLayout
@@ -972,6 +1422,7 @@ function AppContent() {
           htmlWireframe={htmlWireframe}
           setHtmlWireframe={setHtmlWireframe}
           onSave={() => setShowSaveDialog(true)}
+          onEnhancedSave={enhancedSaveRef}
           onMultiStep={handleMultiStep}
           designTheme={designTheme}
           colorScheme={colorScheme}
@@ -982,6 +1433,14 @@ function AppContent() {
           onBackToLanding={handleBackToLanding}
           onAddComponent={handleAddComponent}
           onGeneratePageContent={handleGeneratePageContent}
+          onFigmaExport={handleFigmaExport}
+          onFigmaIntegration={figmaIntegrationRef}
+          onComponentLibrary={componentLibraryRef}
+          onDevPlaybooks={devPlaybooksRef}
+          onFigmaComponents={figmaComponentsRef}
+          onViewHtmlCode={viewHtmlCodeRef}
+          onDownloadWireframe={downloadWireframeRef}
+          onPresentationMode={presentationModeRef}
         />
       )}
 
@@ -1013,13 +1472,135 @@ function AppContent() {
         />
       ))}
 
+      {/* Figma Integration Modal */}
+      {/* This modal is used for both:
+          - Top toolbar Figma button (design import)  
+          - Pages toolbar Figma button (component browser) */}
+      {(() => {
+        console.log('🔍 App.tsx render: showFigmaIntegration =', showFigmaIntegration);
+        return null;
+      })()}
+      {showFigmaIntegration && (
+        <div className="figma-modal-overlay">
+          <FigmaIntegration
+            onComponentsImported={handleFigmaComponentsImported}
+            onAddToWireframe={handleAddToWireframe}
+            onClose={() => setShowFigmaIntegration(false)}
+            designSystem="auto"
+            mode="add-to-wireframe"
+          />
+        </div>
+      )}
+
+      {showTopToolbarFigmaImport && (
+        <FigmaIntegrationModal
+          isOpen={showTopToolbarFigmaImport}
+          onClose={() => setShowTopToolbarFigmaImport(false)}
+          onImport={(html, fileName, tokens) => {
+            // Handle the import with design tokens
+            handleFigmaImport(html, fileName);
+            if (tokens) {
+              console.log('Design tokens extracted:', tokens);
+              // You can add token handling logic here if needed
+            }
+            setShowTopToolbarFigmaImport(false);
+          }}
+          onExport={(format) => {
+            console.log('Figma export requested:', format);
+            // Handle export functionality
+            setShowTopToolbarFigmaImport(false);
+          }}
+          onTokensExtracted={(tokens) => {
+            console.log('Design tokens extracted:', tokens);
+            // Handle token extraction
+          }}
+          onFileProcessed={(file, data) => {
+            console.log('File processed:', file.name, data);
+            // Handle file processing
+          }}
+        />
+      )}
+
     </div>
   );
 }
 
-// Main App component  
+// Main App component with Azure authentication
 function App() {
-  return <AppContent />;
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Check if we're running in local development
+    const isLocalDev = window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1' ||
+      window.location.port !== '';
+
+    if (isLocalDev) {
+      // In local development, bypass authentication for testing
+      console.log('🔧 Development mode: Bypassing Azure authentication');
+      setIsAuthenticated(true);
+      setLoading(false);
+      return;
+    }
+
+    // In production (Azure), check Azure authentication status
+    console.log('🔐 Production mode: Checking Azure authentication');
+    fetch('/.auth/me')
+      .then(response => response.json())
+      .then(data => {
+        console.log('🔐 Azure auth response:', data);
+        if (data.clientPrincipal) {
+          setIsAuthenticated(true);
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log('🔐 Azure auth check failed:', error);
+        setLoading(false);
+      });
+  }, []);
+
+  const handleAuthSuccess = () => {
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    // Check if we're in production before attempting logout
+    const isLocalDev = window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1' ||
+      window.location.port !== '';
+
+    if (isLocalDev) {
+      // In local development, just reload the page
+      window.location.reload();
+    } else {
+      // In production, redirect to Azure logout
+      window.location.href = '/.auth/logout';
+    }
+  };
+
+  if (loading) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        fontFamily: 'Segoe UI, sans-serif'
+      }}>
+        <div>Loading...</div>
+      </div>
+    );
+  }
+
+  // If not authenticated, show Azure authentication
+  if (!isAuthenticated) {
+    return <AzureAuth onAuthSuccess={handleAuthSuccess} />;
+  }
+
+  // If authenticated, show the main application
+  return <AppContent onLogout={handleLogout} />;
 }
 
 export default App;

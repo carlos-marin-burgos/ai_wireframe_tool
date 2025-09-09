@@ -1,35 +1,78 @@
 /**
  * Dashboard endpoint for monitoring wireframe generation
  */
-const WireframeMonitor = require('./monitoring');
+const WireframeMonitor = require("./monitoring");
+const http = require("http");
 
 // Initialize the monitor (should be shared instance in production)
 const monitor = new WireframeMonitor();
 
+// Helper function to make HTTP requests
+function makeRequest(url) {
+  return new Promise((resolve, reject) => {
+    const request = http.get(url, (response) => {
+      let data = "";
+      response.on("data", (chunk) => (data += chunk));
+      response.on("end", () => {
+        try {
+          resolve(JSON.parse(data));
+        } catch (error) {
+          reject(new Error("Invalid JSON response"));
+        }
+      });
+    });
+
+    request.on("error", reject);
+    request.setTimeout(5000, () => {
+      request.destroy();
+      reject(new Error("Request timeout"));
+    });
+  });
+}
+
 /**
  * Dashboard API endpoint
- * GET /api/dashboard - Returns monitoring data
+ * GET /api/dashboard - Returns monitoring data including OpenAI status
  */
-function getDashboardData(req, res) {
+async function getDashboardData(req, res) {
+  try {
+    const report = monitor.generateReport();
+    const alerts = monitor.checkAlerts();
+
+    // Fetch OpenAI health status
+    let openaiHealth = null;
     try {
-        const report = monitor.generateReport();
-        const alerts = monitor.checkAlerts();
-        
-        res.json({
-            success: true,
-            data: {
-                ...report,
-                alerts,
-                timestamp: new Date().toISOString()
-            }
-        });
+      openaiHealth = await makeRequest(
+        "http://localhost:7072/api/openai-health"
+      );
     } catch (error) {
-        console.error('Dashboard data error:', error);
-        res.status(500).json({
-            success: false,
-            error: 'Failed to generate dashboard data'
-        });
+      console.log("Could not fetch OpenAI health:", error.message);
+      openaiHealth = {
+        overall_status: "unknown",
+        error: "Health check unavailable",
+        openai: {
+          status: "unknown",
+          error: "Cannot connect to health endpoint",
+        },
+      };
     }
+
+    res.json({
+      success: true,
+      data: {
+        ...report,
+        alerts,
+        openaiHealth,
+        timestamp: new Date().toISOString(),
+      },
+    });
+  } catch (error) {
+    console.error("Dashboard data error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to generate dashboard data",
+    });
+  }
 }
 
 /**
@@ -37,7 +80,7 @@ function getDashboardData(req, res) {
  * GET /dashboard - Returns HTML dashboard
  */
 function getDashboardPage(req, res) {
-    const html = `
+  const html = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -220,6 +263,119 @@ function getDashboardPage(req, res) {
             color: #666;
             font-size: 0.9rem;
         }
+        
+        /* OpenAI Status Styles */
+        .openai-status {
+            background: white;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .openai-status-header {
+            background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%);
+            color: white;
+            padding: 20px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .openai-status-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .openai-status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        .openai-status-indicator.up {
+            background: #4caf50;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+        }
+        
+        .openai-status-indicator.down {
+            background: #f44336;
+            box-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
+        }
+        
+        .openai-status-indicator.degraded {
+            background: #ff9800;
+            box-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
+        }
+        
+        .openai-status-indicator.unknown {
+            background: #9e9e9e;
+            box-shadow: 0 0 10px rgba(158, 158, 158, 0.5);
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .openai-status-content {
+            padding: 25px;
+        }
+        
+        .openai-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .openai-metric {
+            text-align: center;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .openai-metric-label {
+            font-size: 0.8rem;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .openai-metric-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .openai-metric-value.good {
+            color: #4caf50;
+        }
+        
+        .openai-metric-value.warning {
+            color: #ff9800;
+        }
+        
+        .openai-metric-value.error {
+            color: #f44336;
+        }
+        
+        .openai-details {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .openai-details strong {
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -257,7 +413,105 @@ function getDashboardPage(req, res) {
         function renderDashboard(data) {
             const content = document.getElementById('dashboard-content');
             
+            // Function to render OpenAI status
+            function renderOpenAIStatus(openaiHealth) {
+                if (!openaiHealth) {
+                    return '<div class="alert medium">⚠️ OpenAI status unavailable</div>';
+                }
+                
+                const status = openaiHealth.openai?.status || 'unknown';
+                const overall = openaiHealth.overall_status || 'unknown';
+                
+                let statusText, statusClass, statusIcon;
+                switch(status) {
+                    case 'up':
+                        statusText = 'Online & Healthy';
+                        statusClass = 'up';
+                        statusIcon = '🟢';
+                        break;
+                    case 'degraded':
+                        statusText = 'Degraded Performance';
+                        statusClass = 'degraded';
+                        statusIcon = '🟡';
+                        break;
+                    case 'rate_limited':
+                        statusText = 'Rate Limited';
+                        statusClass = 'degraded';
+                        statusIcon = '🟡';
+                        break;
+                    case 'down':
+                    case 'auth_error':
+                    case 'connection_error':
+                    case 'server_error':
+                        statusText = 'Service Down';
+                        statusClass = 'down';
+                        statusIcon = '🔴';
+                        break;
+                    default:
+                        statusText = 'Status Unknown';
+                        statusClass = 'unknown';
+                        statusIcon = '⚪';
+                }
+                
+                const responseTime = openaiHealth.openai?.responseTime || 0;
+                const lastCheck = openaiHealth.timestamp ? new Date(openaiHealth.timestamp).toLocaleTimeString() : 'Unknown';
+                
+                return \`
+                    <div class="openai-status">
+                        <div class="openai-status-header">
+                            <div class="openai-status-indicator \${statusClass}"></div>
+                            <h2>🤖 Azure OpenAI Service</h2>
+                            <span style="margin-left: auto; font-size: 1.2rem;">\${statusIcon}</span>
+                        </div>
+                        <div class="openai-status-content">
+                            <div class="openai-metrics">
+                                <div class="openai-metric">
+                                    <div class="openai-metric-label">Service Status</div>
+                                    <div class="openai-metric-value \${statusClass === 'up' ? 'good' : statusClass === 'degraded' ? 'warning' : 'error'}">
+                                        \${statusText}
+                                    </div>
+                                </div>
+                                <div class="openai-metric">
+                                    <div class="openai-metric-label">Response Time</div>
+                                    <div class="openai-metric-value \${responseTime < 2000 ? 'good' : responseTime < 5000 ? 'warning' : 'error'}">
+                                        \${responseTime}ms
+                                    </div>
+                                </div>
+                                <div class="openai-metric">
+                                    <div class="openai-metric-label">Last Check</div>
+                                    <div class="openai-metric-value">
+                                        \${lastCheck}
+                                    </div>
+                                </div>
+                                <div class="openai-metric">
+                                    <div class="openai-metric-label">Model</div>
+                                    <div class="openai-metric-value">
+                                        \${openaiHealth.openai?.model || openaiHealth.configuration?.deployment || 'gpt-4o'}
+                                    </div>
+                                </div>
+                            </div>
+                            \${openaiHealth.openai?.error ? \`
+                                <div class="openai-details">
+                                    <strong>Error Details:</strong> \${openaiHealth.openai.error}
+                                    \${openaiHealth.openai.errorCode ? \` (Code: \${openaiHealth.openai.errorCode})\` : ''}
+                                </div>
+                            \` : ''}
+                            \${openaiHealth.configuration ? \`
+                                <div class="openai-details">
+                                    <strong>Configuration:</strong> 
+                                    Endpoint: \${openaiHealth.configuration.endpoint || 'Not configured'} | 
+                                    Deployment: \${openaiHealth.configuration.deployment} |
+                                    API Key: \${openaiHealth.configuration.hasApiKey ? '✅ Configured' : '❌ Missing'}
+                                </div>
+                            \` : ''}
+                        </div>
+                    </div>
+                \`;
+            }
+            
             content.innerHTML = \`
+                \${renderOpenAIStatus(data.openaiHealth)}
+                
                 <div class="metrics-grid">
                     <div class="metric-card">
                         <h3>Total Requests</h3>
@@ -348,35 +602,53 @@ function getDashboardPage(req, res) {
 </body>
 </html>`;
 
-    res.setHeader('Content-Type', 'text/html');
-    res.send(html);
+  res.setHeader("Content-Type", "text/html");
+  res.send(html);
 }
 
 /**
  * Test endpoint to simulate events (for demo purposes)
  */
 function simulateEvent(req, res) {
-    const events = [
-        { type: 'request_received', description: 'Dashboard for project management' },
-        { type: 'generation_success', description: 'Dashboard for project management', responseTimeMs: 1250 },
-        { type: 'fallback_used', description: 'E-commerce website', reason: 'OpenAI rate limit' },
-        { type: 'generation_error', error: 'timeout_error', description: 'Complex form' },
-        { type: 'parameter_validation_failed', validationError: 'Description too short' }
-    ];
-    
-    const randomEvent = events[Math.floor(Math.random() * events.length)];
-    monitor.logEvent(randomEvent.type, randomEvent);
-    
-    res.json({
-        success: true,
-        message: 'Event simulated',
-        event: randomEvent
-    });
+  const events = [
+    {
+      type: "request_received",
+      description: "Dashboard for project management",
+    },
+    {
+      type: "generation_success",
+      description: "Dashboard for project management",
+      responseTimeMs: 1250,
+    },
+    {
+      type: "fallback_used",
+      description: "E-commerce website",
+      reason: "OpenAI rate limit",
+    },
+    {
+      type: "generation_error",
+      error: "timeout_error",
+      description: "Complex form",
+    },
+    {
+      type: "parameter_validation_failed",
+      validationError: "Description too short",
+    },
+  ];
+
+  const randomEvent = events[Math.floor(Math.random() * events.length)];
+  monitor.logEvent(randomEvent.type, randomEvent);
+
+  res.json({
+    success: true,
+    message: "Event simulated",
+    event: randomEvent,
+  });
 }
 
 module.exports = {
-    getDashboardData,
-    getDashboardPage,
-    simulateEvent,
-    monitor
+  getDashboardData,
+  getDashboardPage,
+  simulateEvent,
+  monitor,
 };

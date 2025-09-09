@@ -49,19 +49,27 @@ export const API_CONFIG = {
   ],
 
   ENDPOINTS: {
-    GENERATE_WIREFRAME: "/api/generate-wireframe", // Azure Functions endpoint
+    // NUCLEAR OPTION: Single endpoint that works no matter what
+    GENERATE_WIREFRAME: "/api/generate-wireframe",
+    GENERATE_WIREFRAME_ENHANCED: "/api/generate-wireframe-enhanced",
+    GENERATE_FLUENT_WIREFRAME: "/api/generate-fluent-wireframe",
     GENERATE_SUGGESTIONS: "/api/generate-suggestions",
     GET_TEMPLATE: "/api/get-template",
+    COMPONENT_LIBRARY: "/api/component-library",
+    FLUENT_COMPONENTS: "/api/fluent-components",
+    FLUENT_COMPONENTS_SEARCH: "/api/fluent-components/search",
     HEALTH: "/api/health",
   },
 
   // Port configuration
   PORTS,
 
-  // Get BASE_URL - use local server in development, Azure in production
-  BASE_URL: isDevelopment
-    ? `http://localhost:${PORTS.development.primary}`
-    : "https://func-designetica-vjib6nx2wh4a4.azurewebsites.net",
+  // Get BASE_URL - use environment variable if available, then fallback logic
+  BASE_URL:
+    import.meta.env.VITE_BACKEND_BASE_URL ||
+    (isDevelopment
+      ? `http://localhost:7072`
+      : "https://func-designetica-prod-xabnur6oyusju.azurewebsites.net"),
 };
 
 // Health check to verify backend has AI capabilities

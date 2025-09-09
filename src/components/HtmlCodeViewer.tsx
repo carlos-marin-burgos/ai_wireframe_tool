@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { FiX, FiCopy, FiDownload, FiCheck } from 'react-icons/fi';
+import React, { useState, useRef } from 'react';
+import { FiX, FiCopy, FiDownload, FiCheck, FiUpload } from 'react-icons/fi';
 import './HtmlCodeViewer.css';
 
 interface HtmlCodeViewerProps {
@@ -7,15 +7,19 @@ interface HtmlCodeViewerProps {
     onClose: () => void;
     htmlContent: string;
     title?: string;
+    onImportHtml?: (html: string) => void; // new
 }
 
 const HtmlCodeViewer: React.FC<HtmlCodeViewerProps> = ({
     isOpen,
     onClose,
     htmlContent,
-    title = "HTML Code"
+    title = "HTML Code",
+    onImportHtml
 }) => {
     const [copied, setCopied] = useState(false);
+    const [importing, setImporting] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     if (!isOpen) return null;
 
@@ -41,6 +45,25 @@ const HtmlCodeViewer: React.FC<HtmlCodeViewerProps> = ({
         URL.revokeObjectURL(url);
     };
 
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setImporting(true);
+        try {
+            const text = await file.text();
+            onImportHtml?.(text);
+        } catch (err) {
+            console.error('Failed to read file', err);
+        } finally {
+            setImporting(false);
+            if (fileInputRef.current) fileInputRef.current.value = '';
+        }
+    };
+
+    const triggerFilePicker = () => {
+        fileInputRef.current?.click();
+    };
+
     const formatHtml = (html: string) => {
         // Simple HTML formatting for better readability
         return html
@@ -58,9 +81,30 @@ const HtmlCodeViewer: React.FC<HtmlCodeViewerProps> = ({
                 <div className="html-code-header">
                     <div className="header-left">
                         <h2>{title}</h2>
-                        <p>Copy or download the HTML code for your wireframe</p>
+                        <p>View, copy, import, or download the HTML for your wireframe</p>
                     </div>
                     <div className="header-right">
+                        {onImportHtml && (
+                            <>
+                                <input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    accept=".html,.htm,text/html"
+                                    className="visually-hidden-file-input"
+                                    aria-label="Import HTML file"
+                                    onChange={handleFileChange}
+                                />
+                                <button
+                                    className="code-action-btn"
+                                    onClick={triggerFilePicker}
+                                    title="Import HTML File"
+                                    disabled={importing}
+                                >
+                                    <FiUpload />
+                                    {importing ? 'Importing...' : 'Import'}
+                                </button>
+                            </>
+                        )}
                         <button
                             className="code-action-btn"
                             onClick={handleCopy}

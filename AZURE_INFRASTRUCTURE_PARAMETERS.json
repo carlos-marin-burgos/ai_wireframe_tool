@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "accounts_cog_designetica_prod_rjsqzg4bs3fc6_name": {
+      "value": "cog-designetica-prod-rjsqzg4bs3fc6"
+    },
+    "actionGroups_Application_Insights_Smart_Detection_name": {
+      "value": "Application Insights Smart Detection"
+    },
+    "components_appi_designetica_prod_rjsqzg4bs3fc6_name": {
+      "value": "appi-designetica-prod-rjsqzg4bs3fc6"
+    },
+    "serverfarms_plan_designetica_prod_rjsqzg4bs3fc6_name": {
+      "value": "plan-designetica-prod-rjsqzg4bs3fc6"
+    },
+    "sites_func_designetica_prod_rjsqzg4bs3fc6_name": {
+      "value": "func-designetica-prod-rjsqzg4bs3fc6"
+    },
+    "smartdetectoralertrules_failure_anomalies___appi_designetica_prod_rjsqzg4bs3fc6_name": {
+      "value": "failure_anomalies_-_appi-designetica-prod-rjsqzg4bs3fc6"
+    },
+    "staticSites_swa_designetica_prod_rjsqzg4bs3fc6_name": {
+      "value": "swa-designetica-prod-rjsqzg4bs3fc6"
+    },
+    "storageAccounts_stdesigneticaprodrjsqzg4_name": {
+      "value": "stdesigneticaprodrjsqzg4"
+    },
+    "userAssignedIdentities_id_designetica_prod_rjsqzg4bs3fc6_name": {
+      "value": "id-designetica-prod-rjsqzg4bs3fc6"
+    },
+    "vaults_kv_designetica_prod_rjsq_name": {
+      "value": "kv-designetica-prod-rjsq"
+    },
+    "workspaces_log_designetica_prod_rjsqzg4bs3fc6_name": {
+      "value": "log-designetica-prod-rjsqzg4bs3fc6"
+    }
+  }
+}

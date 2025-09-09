@@ -3,7 +3,7 @@
 /* Backend Status Indicator */
 .backend-status-indicator {
   position: fixed;
-  top: 80px; /* Below the fixed navbar (60px) with some margin */
+  top: 90px; /* Below the fixed navbar (70px) with some margin */
   right: 20px;
   z-index: 1000;
   background: rgba(255, 255, 255, 0.95);
@@ -15,53 +15,235 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+/* Rearrangeable Mode Toggle */
+.rearrangeable-toggle-container {
+  padding: 8px 16px;
+  border-bottom: 1px solid #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f8f9fa;
+}
+
+.rearrangeable-toggle-label {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #495057;
+}
+
+.rearrangeable-toggle-button {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: none;
+}
+
+.rearrangeable-toggle-button.active {
+  border: 2px solid #e8e6de;
+  background-color: #e8e6de;
+  color: white;
+}
+
+.rearrangeable-toggle-button.inactive {
+  border: 2px solid #dee2e6;
+  background-color: white;
+  color: #495057;
+}
+
+.rearrangeable-toggle-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 /* Main layout container */
 .split-layout {
   display: flex;
-  height: calc(100vh - 60px); /* Account for fixed navbar */
+  height: calc(100vh - 40px); /* Account for fixed header */
   width: 100%;
   overflow: hidden;
   position: relative;
-  margin-top: 50px; /* Account for fixed navbar */
-  background: radial-gradient(
-      circle at 20% 80%,
-      rgba(255, 255, 255, 0.15) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 20%,
-      rgba(255, 255, 255, 0.1) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 40% 40%,
-      rgba(32, 201, 151, 0.1) 0%,
-      transparent 50%
-    );
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  margin-top: 0; /* Remove margin since we have padding-top on app-content */
+  font-family: "Segoe UI", "Inter", -apple-system, BlinkMacSystemFont, Roboto,
     sans-serif;
 }
 
-/* Left sidebar */
+/* Left sidebar - Microsoft Fluent Design */
 .left-pane {
-  width: 380px;
-  min-width: 320px;
-  /*background: linear-gradient(135deg, #f0f6ff 0%, #e8f6f4 100%);*/
+  width: 300px;
+  min-width: 280px;
+  background: #f9fbfb;
+  border-right: 1px solid #e1e1e1;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 40px);
   position: fixed;
   left: 0;
-  top: 60px;
+  top: 40px;
   z-index: 10;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+/* Chat Header Styling (Microsoft Fluent Design) */
+.chat-header {
+  padding: 20px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-bottom: 1px solid #e1e5e9;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.chat-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.chat-header-icon {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.icon-gradient {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.icon-shape {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 4px;
+  position: relative;
+}
+
+.icon-shape::before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 25 25' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.5216 0.5H0V11.9067H11.5216V0.5Z' fill='%23f25022'/%3E%3Cpath d='M24.2418 0.5H12.7202V11.9067H24.2418V0.5Z' fill='%237fba00'/%3E%3Cpath d='M11.5216 13.0933H0V24.5H11.5216V13.0933Z' fill='%2300a4ef'/%3E%3Cpath d='M24.2418 13.0933H12.7202V24.5H24.2418V13.0933Z' fill='%23ffb900'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.chat-header-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.chat-header-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #323130;
+  line-height: 1.3;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, system-ui,
+    sans-serif;
+}
+
+.chat-header-subtitle {
+  font-size: 10px;
+  color: #616161;
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  line-height: 14px;
+  background: #ebebeb;
+  padding: 2px 8px;
+  border-radius: 4px;
+  align-self: flex-start;
+}
+
+/* Chat Messages Area - Microsoft Fluent Design */
+.chat-messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(248, 249, 250, 0.95) 100%
+  );
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Enhanced Message Styling - Microsoft Fluent Design */
+.chat-messages .enhanced-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 100%;
+  margin-bottom: 0px;
+}
+
+.chat-messages .enhanced-message.user-message {
+  flex-direction: row-reverse;
+}
+
+.chat-messages .enhanced-message.user-message .message-content {
+  background: #0078d4;
+  color: #ffffff;
+}
+
+.chat-messages .enhanced-message.ai-message .message-content {
+  background: #ffffff;
+  color: #323130;
+  border: 1px solid #e1e1e1;
+}
+
+.chat-messages .enhanced-message .message-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #e1dfdd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #605e5c;
+  flex-shrink: 0;
+}
+
+.chat-messages .enhanced-message.user-message .message-avatar {
+  background: #deecf9;
+  color: #0078d4;
+}
+
+.chat-messages .enhanced-message.ai-message .message-avatar {
+  background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+  color: #ffffff;
 }
 
 /* Main content area */
 .right-pane {
   flex: 1;
-  margin-left: 380px;
+  margin-left: 300px;
   padding: 0;
-  padding-top: 30px;
+  padding-top: 10px;
   background: radial-gradient(
       circle at 20% 80%,
       rgba(255, 255, 255, 0.15) 0%,
@@ -77,93 +259,196 @@
       rgba(32, 201, 151, 0.1) 0%,
       transparent 50%
     );
-  width: calc(100% - 380px);
+  width: calc(100% - 300px);
   height: 100vh;
   overflow-y: auto;
   scroll-behavior: smooth;
 }
 
+/* Panel Toggle Button */
+.panel-toggle-btn {
+  position: fixed;
+  top: 50%;
+  left: 300px;
+  transform: translateY(-50%);
+  z-index: 1000;
+  background: #ffffff;
+  border: 1px solid #e1e5e9;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+.panel-toggle-btn:hover {
+  background: #f8f9fa;
+  border-color: #d1d5db;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.panel-toggle-btn svg {
+  width: 16px;
+  height: 16px;
+  color: #605e5c;
+}
+
+/* Collapsed Left Panel Styles */
+.split-layout.left-panel-collapsed .left-pane {
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.split-layout.left-panel-collapsed .panel-toggle-btn {
+  left: 20px;
+}
+
+.split-layout.left-panel-collapsed .right-pane {
+  margin-left: 0;
+  width: 100%;
+}
+
+/* Smooth transitions for panel collapse */
+.left-pane {
+  transition: all 0.3s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+.right-pane {
+  transition: all 0.3s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
 /* Wireframe container styles */
 .wireframe-container {
   flex: 1;
-  overflow: auto;
-  padding: 20px;
-  height: calc(100% - 60px); /* Subtract exact toolbar height */
-  background: #fafafa;
+  overflow: visible; /* Allow content to expand */
+  padding: 15px;
+  padding-bottom: 15px; /* Reduced padding for more wireframe space */
+  height: 100%; /* Fill the available flex space completely */
+  background: transparent;
 }
 
 .wireframe-content {
   width: 100%;
-  height: calc(100% - 40px); /* Account for container padding */
-  min-height: calc(100vh - 200px); /* Ensure it fills available space */
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 15px;
+  box-shadow: none;
   overflow: auto;
 }
 
 .wireframe-panel {
-  height: calc(100vh - 120px); /* Full viewport minus nav and margins */
+  height: calc(100% - 80px); /* Reduced from 100px for more wireframe space */
   width: calc(100% - 60px); /* Account for margins with extra right margin */
   background: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  overflow: auto; /* Changed from hidden to auto to prevent cut-off */
   display: flex;
   flex-direction: column;
-  margin: 20px 40px 20px 20px; /* Increased right margin */
+  margin: 30px 40px 70px 20px; /* Increased top margin from 10px to 30px for better spacing */
 }
 
-/* AI Assistant main container */
+/* Wireframe Name Header */
+.wireframe-name-header {
+  padding: 12px 16px 8px;
+  border-bottom: 1px solid #e9ecef;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 8px 8px 0 0;
+}
+
+.wireframe-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #000000;
+  text-align: center;
+  letter-spacing: 1.2px;
+  font-family: "Courier New", "Monaco", "Consolas", "SF Mono", "Roboto Mono",
+    "Source Code Pro", monospace;
+  text-transform: uppercase;
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+  background-clip: unset;
+  text-shadow: none;
+}
+
+/* Dark mode support for wireframe name */
+[data-theme="dark"] .wireframe-name-header {
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  border-bottom-color: #4a5568;
+}
+
+[data-theme="dark"] .wireframe-title {
+  color: #ffffff;
+  font-family: "Courier New", "Monaco", "Consolas", "SF Mono", "Roboto Mono",
+    "Source Code Pro", monospace;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+  background-clip: unset;
+}
+
+/* AI Assistant main container - Microsoft Learn style */
 .ai-assistant-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 60vh;
-  padding: 2rem;
+  padding: 32px;
   text-align: center;
+  background: #fafbfc;
 }
 
-.ai-assistant-title {
-  font-size: 2.5rem;
+/* Submit button styling - Microsoft Learn style */
+.ai-assistant-submit {
+  background: #0078d4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 24px;
+  font-size: 14px;
   font-weight: 600;
-  color: #111827;
-  margin: 0 0 2rem 0;
-  letter-spacing: -0.025em;
-}
-
-.ai-assistant-input-container {
-  width: 100%;
-  max-width: 600px;
-  margin-bottom: 2rem;
-}
-
-.ai-assistant-input {
-  width: 100%;
-  min-height: 120px;
-  padding: 1.5rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-family: inherit;
-  resize: vertical;
-  color: #111827;
+  cursor: pointer;
   transition: all 0.2s ease;
-  background: #ffffff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 1px 2px rgba(0, 120, 212, 0.3);
+  font-family: "Segoe UI", sans-serif;
 }
 
-.ai-assistant-input:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+.ai-assistant-submit:hover:not(:disabled) {
+  background: #106ebe;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 120, 212, 0.4);
 }
 
-.ai-assistant-input::placeholder {
-  color: #9ca3af;
+.ai-assistant-submit:disabled {
+  background: #c8c6c4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Stop button variant */
+.ai-assistant-submit.stop-generating {
+  background: #d13438;
+  margin-top: 8px;
+}
+
+.ai-assistant-submit.stop-generating:hover:not(:disabled) {
+  background: #b22125;
 }
 
 /* Sticky header */
@@ -225,9 +510,9 @@
 }
 
 .tab-btn.active {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  color: white;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  background: rgba(0, 0, 0, 0.08);
+  color: #333;
+  border-bottom: 2px solid #666;
   position: relative;
   overflow: hidden;
 }
@@ -644,127 +929,6 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   gap: 1.25rem;
 }
 
-.textarea-container {
-  position: relative;
-}
-
-.textarea-container textarea {
-  width: 100%;
-  min-height: 120px;
-  padding: 1.25rem;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 12px;
-  font-size: 0.925rem;
-  font-family: inherit;
-  resize: vertical;
-  color: #334155;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  background-color: rgba(255, 255, 255, 0.95);
-}
-
-.textarea-container textarea:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15), 0 1px 3px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  background-color: #ffffff;
-}
-
-/* Send/Stop buttons */
-.send-btn {
-  position: absolute;
-  bottom: 0.75rem;
-  right: 0.75rem;
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  width: 38px;
-  height: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 5px rgba(37, 99, 235, 0.3);
-}
-
-.send-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.4);
-}
-
-.send-btn:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.4);
-}
-
-.send-btn:disabled {
-  background: #bfdbfe;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-.send-icon {
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.send-btn:hover .send-icon {
-  transform: translateX(2px) translateY(-2px);
-}
-
-.stop-btn {
-  position: absolute;
-  bottom: 0.75rem;
-  right: 3.5rem;
-  background: linear-gradient(135deg, #ef4444, #dc2626);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  width: 38px;
-  height: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 5px rgba(220, 38, 38, 0.3);
-  animation: pulseStop 2s infinite;
-}
-
-.stop-btn:hover {
-  background: linear-gradient(135deg, #dc2626, #b91c1c);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.4);
-}
-
-.stop-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.4);
-}
-
-@keyframes pulseStop {
-  0% {
-    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4);
-  }
-  70% {
-    box-shadow: 0 0 0 8px rgba(220, 38, 38, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
-  }
-}
-
-/* Loading spinner */
-.loading-spinner {
-  animation: spin 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  color: white;
-  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
-}
-
 /* Loading overlay for better UX during API calls */
 .loading-overlay {
   position: absolute;
@@ -861,76 +1025,214 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   }
 }
 
-/* AI Suggestions */
+/* AI Suggestions - Microsoft Learn style */
 .ai-suggestions-inline {
-  background: linear-gradient(to bottom right, #f1f5f9, #e2e8f0);
-  border-radius: 12px;
-  padding: 1.25rem;
-  border: 1px solid rgba(0, 0, 0, 0.03);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  background: #f3f2f1;
+  border: 1px solid #e1dfdd;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 12px;
   position: relative;
   overflow: hidden;
+}
+
+/* Limit height so the suggestions panel doesn't take over the screen */
+.ai-suggestions-inline.ai-suggestions-dynamic {
+  max-height: 140px; /* slightly smaller to fit with input */
+  /* Scroll on the outer container so the whole block gets a scrollbar */
+  overflow-y: auto;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: auto 1fr; /* label + scrollable list */
+}
+
+/* Make only the pills container scroll inside the dynamic suggestions */
+.ai-suggestions-inline.ai-suggestions-dynamic .ai-suggestions-buttons {
+  /* Let content flow; outer container handles scrolling */
+  overflow-y: visible;
+  padding-right: 2px; /* room for scrollbar */
+}
+
+/* When loading, scroll the placeholder list instead of the whole block */
+.ai-suggestions-inline.ai-suggestions-dynamic .ai-suggestions-placeholder {
+  /* Let content flow; outer container handles scrolling */
+  overflow-y: visible;
+}
+
+@media (max-width: 480px) {
+  .ai-suggestions-inline.ai-suggestions-dynamic {
+    max-height: 110px;
+  }
+  .ai-suggestions-inline.ai-suggestions-dynamic .ai-suggestions-placeholder {
+    overflow-y: auto; /* ensure placeholder list scrolls on small screens */
+  }
+}
+
+.ai-suggestions-inline.ai-suggestions-dynamic::-webkit-scrollbar {
+  width: 8px;
+}
+.ai-suggestions-inline.ai-suggestions-dynamic::-webkit-scrollbar-track {
+  background: transparent;
+}
+.ai-suggestions-inline.ai-suggestions-dynamic::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 8px;
+}
+.ai-suggestions-inline.ai-suggestions-dynamic::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Match scrollbar styling on the inner scroll area */
+/* Scrollbar styling applies on the outer dynamic container (which now scrolls) */
+
+.ai-suggestions-dynamic {
+  background: #fff4ce;
+  border-color: #ffb900;
+}
+
+/* New label-free suggestions panel */
+.ai-suggestions-panel {
+  background: #fafafa; /* match dynamic styling */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 10px;
+  max-height: 240px;
+  overflow-y: auto; /* scroll just this panel */
+  box-sizing: border-box;
+}
+
+/* Simple stack container for label + panel */
+.ai-suggestions-container {
+  margin-top: 12px;
+}
+.ai-suggestions-panel::-webkit-scrollbar {
+  width: 8px;
+}
+.ai-suggestions-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+.ai-suggestions-panel::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 8px;
+}
+.ai-suggestions-panel::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+@media (max-width: 480px) {
+  .ai-suggestions-panel {
+    max-height: 110px;
+  }
 }
 
 .ai-suggestions-label {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  color: #1e3a8a;
-  font-size: 0.75rem;
+  gap: 8px;
+  color: #323130;
+  font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  letter-spacing: 0.5px;
+  margin-bottom: 4px; /* small separation without stealing height */
+  font-family: "Segoe UI", sans-serif;
+}
+
+.ai-icon {
+  color: #0078d4;
+  font-size: 14px;
 }
 
 .ai-suggestions-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 8px;
+  grid-row: 2;
+}
+
+/* Placeholder layout to avoid jumpiness while suggestions load */
+.ai-suggestions-placeholder {
+  display: flex;
+  gap: 8px;
+  grid-row: 2;
+}
+
+.ai-suggestions-placeholder .skeleton-pill {
+  height: 28px;
+  width: 160px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #eee 25%, #f5f5f5 37%, #eee 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.2s ease-in-out infinite;
+  border: 1px solid #e5e7eb;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
 }
 
 .ai-suggestion-pill {
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 30px;
-  padding: 8px 14px;
-  font-size: 0.8rem;
-  color: #334155;
+  background: #ffffff;
+  border: 1px solid #d1d1d1;
+  border-radius: 16px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: #323130;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  font-weight: 500;
+  transition: all 0.2s ease;
+  font-weight: 400;
   display: flex;
   align-items: center;
-  gap: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  gap: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
   position: relative;
   overflow: hidden;
+  font-family: "Segoe UI", sans-serif;
 }
 
 .ai-suggestion-pill:hover {
-  background: white;
-  border-color: rgba(59, 130, 246, 0.5);
+  background: #ffffff;
+  border-color: #0078d4;
   transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(59, 130, 246, 0.15);
-  color: #1e40af;
+  box-shadow: 0 2px 4px rgba(0, 120, 212, 0.2);
+  color: #0078d4;
 }
 
 .ai-suggestion-pill:active {
   transform: translateY(0);
-  box-shadow: 0 1px 2px rgba(59, 130, 246, 0.2);
+  box-shadow: 0 1px 2px rgba(0, 120, 212, 0.2);
 }
 
-.ai-suggestion-pill svg {
-  color: #3b82f6;
-  transition: transform 0.3s ease;
+.ai-suggestion-pill .ai-badge {
+  background: #0078d4;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
-.ai-suggestion-pill:hover svg {
-  transform: rotate(-10deg) scale(1.2);
+/* Button styling for suggestion pills */
+.ai-suggestion-button {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.ai-suggestion-button .ai-suggestion-pill {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #d1d1d1;
+  background: #ffffff;
 }
 
 /* Coming soon pill styling */
@@ -1114,14 +1416,14 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 .wireframe-preview button,
 .wireframe-preview .button,
 .wireframe-preview [role="button"] {
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease;
+  border: 2px dashed rgba(156, 163, 175, 0.4);
 }
 
 .wireframe-preview button:hover,
 .wireframe-preview .button:hover,
 .wireframe-preview [role="button"]:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-color: rgba(75, 85, 99, 0.8);
 }
 
 .wireframe-preview input,
@@ -1145,27 +1447,14 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 .wireframe-preview textarea,
 .wireframe-preview [role="button"] {
   position: relative;
+  border: 2px dashed rgba(156, 163, 175, 0.4);
+  transition: border-color 0.2s ease;
 }
 
-.wireframe-preview button:before,
-.wireframe-preview a:before,
-.wireframe-preview [role="button"]:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(59, 130, 246, 0);
-  pointer-events: none;
-  transition: background 0.2s ease;
-  border-radius: inherit;
-}
-
-.wireframe-preview button:hover:before,
-.wireframe-preview a:hover:before,
-.wireframe-preview [role="button"]:hover:before {
-  background: rgba(59, 130, 246, 0.05);
+.wireframe-preview button:hover,
+.wireframe-preview a:hover,
+.wireframe-preview [role="button"]:hover {
+  border-color: rgba(75, 85, 99, 0.8);
 }
 
 /* Wireframe info panel */
@@ -1246,14 +1535,23 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 /* Responsive styles */
 @media (max-width: 1200px) {
   .left-pane {
-    width: 340px;
-    min-width: 300px;
+    width: 280px;
+    min-width: 260px;
     padding: 1.5rem;
   }
 
   .right-pane {
-    margin-left: 340px;
-    width: calc(100% - 340px);
+    margin-left: 280px;
+    width: calc(100% - 280px);
+  }
+
+  /* Adjust toggle button for smaller left panel */
+  .panel-toggle-btn {
+    left: 280px;
+  }
+
+  .split-layout.left-panel-collapsed .panel-toggle-btn {
+    left: 20px;
   }
 }
 
@@ -1271,6 +1569,10 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
     min-height: 0;
     max-height: none;
     overflow: visible;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    box-shadow: none;
   }
 
   .right-pane {
@@ -1278,6 +1580,29 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
     width: 100%;
     height: auto;
     min-height: 70vh;
+    padding-top: 10px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .wireframe-panel {
+    position: relative;
+    overflow: visible;
+  }
+
+  /* Hide toggle button on mobile since panels stack */
+  .panel-toggle-btn {
+    display: none;
+  }
+
+  /* Ensure wireframe container takes full width */
+  .wireframe-container {
+    flex: 1; /* Maintain flex behavior on mobile */
+    height: 100%; /* Maintain full height on mobile */
+    padding: 10px;
+    padding-bottom: 0px; /* Add extra bottom padding for mobile */
+    position: relative;
+    background: #fafafa; /* Maintain background consistency */
   }
 
   .tab-content {
@@ -1343,6 +1668,38 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
     padding: 1rem;
   }
 
+  /* Chat Header Mobile Responsiveness */
+  .chat-header {
+    padding: 16px;
+  }
+
+  .chat-header-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .chat-header-title {
+    font-size: 16px;
+  }
+
+  /* Chat Input Mobile Responsiveness */
+  .chat-input-container {
+    padding: 16px;
+  }
+
+  .chat-input {
+    min-height: 100px;
+    padding: 14px 56px 14px 16px;
+    font-size: 13px;
+  }
+
+  .chat-send-btn {
+    width: 36px;
+    height: 36px;
+    bottom: 10px;
+    right: 10px;
+  }
+
   .onboarding,
   .design-controls {
     padding: 1rem;
@@ -1364,24 +1721,25 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   }
 }
 
-/* Complexity Level Section */
+/* Complexity Level Section - Microsoft Learn style */
 .complexity-section {
   width: 100%;
   max-width: 600px;
-  margin-bottom: 2rem;
+  margin-bottom: 32px;
 }
 
 .complexity-title {
-  font-size: 1.125rem;
+  font-size: 16px;
   font-weight: 600;
-  color: #111827;
-  margin: 0 0 1rem 0;
+  color: #323130;
+  margin: 0 0 16px 0;
   text-align: left;
+  font-family: "Segoe UI", sans-serif;
 }
 
 .complexity-options {
   display: flex;
-  gap: 1.5rem;
+  gap: 16px;
   justify-content: center;
   flex-wrap: wrap;
 }
@@ -1392,54 +1750,57 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   align-items: center;
   text-align: center;
   cursor: pointer;
-  padding: 1rem;
-  border-radius: 12px;
-  border: 2px solid #e5e7eb;
+  padding: 16px;
+  border-radius: 4px;
+  border: 1px solid #d1d1d1;
   background: #ffffff;
   transition: all 0.2s ease;
   min-width: 160px;
   flex: 1;
   max-width: 180px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
 .complexity-option:hover {
-  border-color: #d1d5db;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-color: #0078d4;
+  box-shadow: 0 2px 4px rgba(0, 120, 212, 0.2);
 }
 
 .complexity-option.selected {
-  border-color: #3b82f6;
-  background: #eff6ff;
-  box-shadow: 0 0 0 1px #3b82f6;
+  border-color: #0078d4;
+  background: #deecf9;
+  box-shadow: 0 0 0 1px #0078d4;
 }
 
 .complexity-radio {
-  width: 20px;
-  height: 20px;
-  margin-bottom: 0.75rem;
-  accent-color: #3b82f6;
+  width: 16px;
+  height: 16px;
+  margin-bottom: 12px;
+  accent-color: #0078d4;
 }
 
 .complexity-label {
-  font-size: 1rem;
+  font-size: 14px;
   font-weight: 600;
-  color: #111827;
-  margin-bottom: 0.5rem;
+  color: #323130;
+  margin-bottom: 8px;
+  font-family: "Segoe UI", sans-serif;
 }
 
 .complexity-description {
-  font-size: 0.875rem;
-  color: #6b7280;
+  font-size: 13px;
+  color: #605e5c;
   line-height: 1.4;
   margin: 0;
+  font-family: "Segoe UI", sans-serif;
 }
 
 .complexity-option.selected .complexity-label {
-  color: #3b82f6;
+  color: #0078d4;
 }
 
 .complexity-option.selected .complexity-description {
-  color: #1e40af;
+  color: #005a9e;
 }
 
 /* Action buttons in sidebar */
@@ -1535,374 +1896,40 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   background: #dc2626;
 }
 
-/* Subtle feature callouts */
+/* Feature callouts - Microsoft Learn style */
 .feature-callout {
-  background: #f3f4f6;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-top: 1rem;
+  background: #fff4ce;
+  border: 1px solid #ffb900;
+  border-left: 4px solid #ffb900;
+  border-radius: 4px;
+  padding: 16px;
+  margin-top: 16px;
+  font-family: "Segoe UI", sans-serif;
 }
 
 .feature-callout-title {
-  font-size: 0.875rem;
+  font-size: 14px;
   font-weight: 600;
-  color: #111827;
-  margin: 0 0 0.5rem 0;
+  color: #323130;
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .feature-callout-text {
-  font-size: 0.875rem;
-  color: #6b7280;
+  font-size: 13px;
+  color: #605e5c;
   margin: 0;
   line-height: 1.4;
 }
 
-/* Chat Header with Logo */
-.chat-header {
-  padding: 0rem;
-  border-bottom: 0px solid #e5e7eb;
-  background: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.logo-button {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.logo-button:hover {
-  background: #f3f4f6;
-  transform: scale(1.05);
-}
-
-.chat-logo {
-  height: 32px;
-  width: auto;
-  object-fit: contain;
-}
-
-/* Chat Interface Styles */
-.chat-messages {
-  margin-top: 20px;
-  flex: 1;
-  overflow-y: auto;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  scroll-behavior: smooth;
-  height: calc(
-    100vh - 280px
-  ); /* Increased space by reducing from 140px to 280px for more room */
-}
-
-.message-bubble {
-  max-width: 85%;
-  padding: 0.875rem 1rem;
-  border-radius: 18px;
-  position: relative;
-  word-wrap: break-word;
-  line-height: 1.4;
-  animation: messageSlideIn 0.3s ease-out;
-  transform-origin: left bottom;
-}
-
-.user-message {
-  align-self: flex-end;
-  color: #fff;
-  border-bottom-right-radius: 6px;
-  margin-left: auto;
-  animation: messageSlideInRight 0.3s ease-out;
-  transform-origin: right bottom;
-}
-
-.ai-message {
-  align-self: flex-start;
-  color: #000;
-  border-bottom-left-radius: 6px;
-}
-
-.message-content {
-  margin: 0;
-  font-size: 0.925rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.message-timestamp {
-  font-size: 0.75rem;
-  opacity: 0.7;
-  margin-top: 0.25rem;
-  text-align: right;
-}
-
-.ai-message .message-timestamp {
-  text-align: left;
-}
-
-@keyframes messageSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes messageSlideInRight {
-  from {
-    opacity: 0;
-    transform: translateY(10px) translateX(10px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) translateX(0) scale(1);
-  }
-}
-
-/* Empty state styling */
-.chat-messages:empty::before {
-  content: "Start a conversation...";
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  color: #9ca3af;
-  font-style: italic;
-  font-size: 0.9rem;
-}
-
-/* Improved scrollbar for chat */
-.chat-messages::-webkit-scrollbar {
-  width: 6px;
-}
-
-.chat-messages::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.chat-messages::-webkit-scrollbar-thumb {
-  background: #d1d5db;
-  border-radius: 3px;
-}
-
-.chat-messages::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
-}
-
-/* Fixed Chat Input Container */
-.chat-input-container {
-  padding: 1rem;
-  border-top: 0px solid #e5e7eb;
-  /*background: linear-gradient(135deg, #f0f6ff 0%, #e8f6f4 100%);*/
-  position: sticky;
-  bottom: 0;
-}
-
-.chat-form {
-  margin: 0;
-}
-
-.chat-input-wrapper {
-  position: relative;
-  width: 100%;
-}
-
-.chat-input {
-  width: 100%;
-  border: 1px solid #d1d5db;
-  border-radius: 20px;
-  padding: 0.75rem 1rem;
-  padding-right: 90px; /* Make room for both image and send buttons */
-  font-size: 0.925rem;
-  font-family: inherit;
-  resize: none;
-  min-height: 44px;
-  max-height: 120px;
-  background: #fafafa;
-  transition: all 0.2s ease;
-  line-height: 1.4;
-  cursor: text; /* Indicates it's clickable for reset */
-}
-
-.chat-input:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-}
-
-.chat-input::placeholder {
-  color: #9ca3af;
-}
-
-.chat-send-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background: #007bff;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-  position: absolute;
-  right: 8px;
-  bottom: 8px; /* Adjust to vertically center in the textarea */
-  font-size: 0.85rem; /* Make the icon smaller too */
-}
-
-/* Stop button for chat interface */
-.chat-stop-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background: linear-gradient(135deg, #ef4444, #dc2626);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-  position: absolute;
-  right: 46px; /* Position it to the left of the send button */
-  bottom: 8px;
-  font-size: 0.85rem;
-  box-shadow: 0 2px 5px rgba(220, 38, 38, 0.3);
-}
-
-/* Image upload button for chat interface */
-.chat-image-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background: #6366f1;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-  position: absolute;
-  right: 46px; /* Position it to the left of the send button */
-  bottom: 8px;
-  font-size: 0.85rem;
-  box-shadow: 0 2px 5px rgba(99, 102, 241, 0.3);
-}
-
-.chat-image-btn:hover {
-  background: #4f46e5;
-  transform: scale(1.05);
-  box-shadow: 0 3px 7px rgba(99, 102, 241, 0.4);
-}
-
-/* Fluent Library button for chat interface */
-.chat-atlas-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background: #0078d4;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-  position: absolute;
-  right: 84px; /* Position it to the left of the image button */
-  bottom: 8px;
-  font-size: 0.85rem;
-  box-shadow: 0 2px 5px rgba(0, 120, 212, 0.3);
-}
-
-.chat-atlas-btn:hover {
-  background: #106ebe;
-  transform: scale(1.05);
-  box-shadow: 0 3px 7px rgba(0, 120, 212, 0.4);
-}
-
-.chat-stop-btn:hover {
-  background: linear-gradient(135deg, #dc2626, #b91c1c);
-  transform: scale(1.05);
-  box-shadow: 0 3px 7px rgba(220, 38, 38, 0.4);
-}
-
-.chat-send-btn:hover:not(:disabled) {
-  background: #0056b3;
-  transform: scale(1.05);
-}
-
-.chat-send-btn:disabled {
-  background: #9ca3af;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.chat-send-btn .loading-spinner {
-  animation: spin 1s linear infinite;
-}
-
-/* Chat Suggestions */
-.chat-suggestions {
-  margin-top: 0.75rem;
-}
-
-.suggestions-label {
-  font-size: 0.8rem;
-  color: #6b7280;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-}
-
-.suggestion-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.suggestion-pill {
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 16px;
-  padding: 0.375rem 0.75rem;
-  font-size: 0.8rem;
-  color: #495057;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.suggestion-pill:hover {
-  background: #e9ecef;
-  border-color: #007bff;
-  color: #007bff;
-}
+/* Microsoft Learn AI Agent Enhancements - Updated for Designetica */
 
 /* Toast Notification System */
 .toast-container {
   position: fixed;
-  top: 80px; /* Below the fixed navbar (60px) with some margin */
+  top: 90px; /* Below the fixed navbar (70px) with some margin */
   right: 20px;
   z-index: 1000;
   display: flex;
@@ -2129,7 +2156,7 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 /* Offline Support */
 .offline-banner {
   position: fixed;
-  top: 60px; /* Below navbar */
+  top: 70px; /* Below navbar */
   left: 0;
   right: 0;
   background: linear-gradient(135deg, #fbbf24, #f59e0b);
@@ -2160,7 +2187,7 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 
 /* Adjust main layout when offline banner is visible */
 .split-layout.offline-mode {
-  padding-top: 110px; /* 60px navbar + 50px offline banner */
+  padding-top: 120px; /* 70px navbar + 50px offline banner */
 }
 
 .split-layout.offline-mode .left-pane {
@@ -2569,4 +2596,256 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
     padding: 8px 16px;
     font-size: 12px;
   }
+}
+
+/* Image Upload Zone - Microsoft Learn style */
+.image-upload-section {
+  margin-top: 12px;
+  padding: 16px;
+  background: #f3f2f1;
+  border: 1px solid #e1dfdd;
+  border-radius: 4px;
+}
+
+.image-upload-zone {
+  border: 2px dashed #a19f9d;
+  border-radius: 4px;
+  padding: 24px;
+  text-align: center;
+  background: #ffffff;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.image-upload-zone:hover {
+  border-color: #0078d4;
+  background: #deecf9;
+}
+
+.image-upload-zone.dragover {
+  border-color: #0078d4;
+  background: #deecf9;
+  transform: scale(1.02);
+}
+
+.upload-icon {
+  font-size: 24px;
+  color: #605e5c;
+  margin-bottom: 8px;
+}
+
+.upload-text {
+  font-size: 14px;
+  color: #323130;
+  font-weight: 600;
+  margin-bottom: 4px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.upload-subtext {
+  font-size: 12px;
+  color: #605e5c;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* AI Assistant Input Styles - Microsoft Design */
+.ai-assistant-input-container {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+  padding: 0 16px;
+}
+
+.ai-assistant-input {
+  width: 100%;
+  min-height: 120px;
+  padding: 16px 20px;
+  border: 1px solid #d1d1d1;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+  resize: vertical;
+  color: #323130;
+  transition: all 0.2s ease;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.ai-assistant-input:focus {
+  border-color: #0078d4;
+  box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+}
+
+.ai-assistant-input::placeholder {
+  color: #a19f9d;
+  font-style: italic;
+}
+
+.ai-assistant-submit {
+  width: 100%;
+  padding: 12px 24px;
+  margin: 0 16px 16px 16px;
+  background: #0078d4;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: "Segoe UI", sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.ai-assistant-submit:hover:not(:disabled) {
+  background: #106ebe;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 120, 212, 0.2);
+}
+
+.ai-assistant-submit:disabled {
+  background: #c8c6c4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Chat Input Wrapper - Microsoft Fluent Design */
+.chat-input-wrapper {
+  position: relative; /* Anchor the absolute-positioned send button to this wrapper */
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e1e5e9;
+  transition: all 0.2s ease;
+}
+
+.chat-input-wrapper:focus-within {
+  border-color: #0078d4;
+  box-shadow: 0 2px 12px rgba(0, 120, 212, 0.15),
+    0 1px 4px rgba(0, 120, 212, 0.1);
+}
+
+.chat-input {
+  width: 100%;
+  min-height: 120px;
+  /* Leave room for the send button on the right (40px) + gaps */
+  padding: 16px 64px 16px 20px;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, system-ui,
+    sans-serif;
+  resize: vertical;
+  color: #323130;
+  background: transparent;
+  box-sizing: border-box;
+  line-height: 1.4;
+}
+
+.chat-input:focus {
+  outline: none;
+}
+
+.chat-input::placeholder {
+  color: #a19f9d;
+  font-style: italic;
+}
+
+/* Textarea container from landing page */
+.textarea-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+/* Send Button - Microsoft Fluent Design */
+.chat-send-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 16px;
+  box-shadow: 0 2px 8px rgba(0, 120, 212, 0.25),
+    0 1px 3px rgba(0, 120, 212, 0.15);
+}
+
+.chat-send-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #106ebe 0%, #005a9e 100%);
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 120, 212, 0.35),
+    0 2px 6px rgba(0, 120, 212, 0.2);
+}
+
+.chat-send-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 6px rgba(0, 120, 212, 0.2);
+}
+
+.chat-send-btn:disabled {
+  background: linear-gradient(135deg, #c8c6c4 0%, #a19f9d 100%);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.chat-send-btn .loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Stop Button Improvements */
+.ai-assistant-submit.stop-generating {
+  background: #d83b01;
+  color: white;
+  margin: 16px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(216, 59, 1, 0.2);
+}
+
+.ai-assistant-submit.stop-generating:hover:not(:disabled) {
+  background: #c23201;
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 4px 8px rgba(216, 59, 1, 0.3);
+}
+
+/* Chat Input Container - Microsoft Fluent Design */
+.chat-input-container {
+  flex: 0 0 auto; /* fixed at bottom */
+  padding: 20px;
+  border-top: 1px solid #e1e5e9;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  max-height: 45vh; /* keep room for messages */
+  overflow: hidden; /* contain internal scroll areas */
+  position: relative;
 }

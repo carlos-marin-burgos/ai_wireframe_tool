@@ -1,0 +1,701 @@
+/* Enhanced Component Library Styles */
+
+.enhanced-component-library-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.enhanced-component-library-modal {
+  background: white;
+  border-radius: 12px;
+  width: 95vw;
+  max-width: 1600px;
+  height: 95vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+/* Header */
+.library-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 24px;
+  border-bottom: 1px solid #e1e5e9;
+  background: #faf9f8;
+}
+
+.header-content h2 {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #323130;
+}
+
+.header-content p {
+  margin: 0;
+  color: #605e5c;
+  font-size: 14px;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #605e5c;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.close-button:hover {
+  background: #f3f2f1;
+  color: #323130;
+}
+
+/* Playbook Selector */
+.playbook-selector {
+  padding: 16px 24px 0;
+  background: white;
+}
+
+.playbook-tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid #e1e5e9;
+}
+
+.playbook-tab {
+  background: none;
+  border: none;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #605e5c;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.playbook-tab.active {
+  color: #0078d4;
+  border-bottom-color: #0078d4;
+}
+
+.playbook-tab:hover {
+  color: #323130;
+  background: #f3f2f1;
+}
+
+.source-badge {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 8px;
+  text-transform: uppercase;
+}
+
+.source-badge.github {
+  background: #f6f8fa;
+  color: #24292f;
+  border: 1px solid #d1d9e0;
+}
+
+.source-badge.figma {
+  background: #f24e1e;
+  color: white;
+}
+
+.source-badge.azure {
+  background: #0078d4;
+  color: white;
+}
+
+/* Filters */
+.filters-section {
+  display: flex;
+  gap: 24px;
+  padding: 16px 24px;
+  background: #faf9f8;
+  border-bottom: 1px solid #e1e5e9;
+  flex-wrap: wrap;
+  align-items: end;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 150px;
+}
+
+.filter-group.search-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #323130;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.filter-group select,
+.search-input {
+  padding: 8px 12px;
+  border: 1px solid #8a8886;
+  border-radius: 4px;
+  font-size: 14px;
+  background: white;
+  color: #323130;
+  transition: border-color 0.2s;
+}
+
+.filter-group select:focus,
+.search-input:focus {
+  outline: none;
+  border-color: #0078d4;
+  box-shadow: 0 0 0 1px #0078d4;
+}
+
+/* Selection Controls */
+.selection-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background: #e6f3ff;
+  border-bottom: 1px solid #cfe4fa;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.selection-info .selection-count {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0078d4;
+}
+
+.selection-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.add-selected-btn {
+  background: #0078d4;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s;
+  font-size: 14px;
+}
+
+.add-selected-btn:hover {
+  background: #106ebe;
+}
+
+.add-selected-btn.primary {
+  background: #107c10;
+}
+
+.add-selected-btn.primary:hover {
+  background: #0e6e0e;
+}
+
+.clear-selection-btn {
+  background: transparent;
+  color: #605e5c;
+  border: 1px solid #8a8886;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+  font-size: 14px;
+}
+
+.clear-selection-btn:hover {
+  background: #f3f2f1;
+  color: #323130;
+  border-color: #605e5c;
+}
+.loading-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #605e5c;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #f3f2f1;
+  border-top: 3px solid #0078d4;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Components Grid */
+.components-grid {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: 24px;
+  align-content: start;
+  max-height: calc(90vh - 200px);
+}
+
+.component-card {
+  background: white;
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  position: relative;
+}
+
+.component-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.component-card.selected {
+  border-color: #0078d4;
+  box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+}
+
+.component-card.selected:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 0 0 2px rgba(0, 120, 212, 0.3);
+}
+
+/* Selection Indicator */
+.component-selection-indicator {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+}
+
+.selection-checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #8a8886;
+  border-radius: 4px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.selection-checkbox.checked {
+  background: #0078d4;
+  border-color: #0078d4;
+}
+
+.checkmark {
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.component-preview {
+  background: #faf9f8;
+  padding: 20px;
+  border-bottom: 1px solid #e1e5e9;
+  overflow: auto;
+  min-height: 180px;
+  max-height: 250px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+}
+
+.component-preview-scaled {
+  transform: scale(0.75);
+  transform-origin: center top;
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+}
+
+/* Ensure component preview content is properly displayed */
+.component-preview iframe,
+.component-preview > div {
+  width: 100%;
+  max-width: 100%;
+  border: none;
+  background: transparent;
+}
+
+.component-preview .preview-content {
+  width: 100%;
+  max-width: 100%;
+  padding: 8px;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Hide any text nodes that might leak through */
+.component-preview-scaled {
+  white-space: normal;
+  overflow: hidden;
+}
+
+.component-preview-scaled * {
+  box-sizing: border-box;
+}
+
+.component-info {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 120px;
+}
+
+.component-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.component-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #323130;
+}
+
+.source-indicators {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+}
+
+.source-tag {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 8px;
+  text-transform: uppercase;
+}
+
+.source-tag.fluent-github,
+.source-tag.atlas-github {
+  background: #f6f8fa;
+  color: #24292f;
+  border: 1px solid #d1d9e0;
+}
+
+.source-tag.figma-fluent,
+.source-tag.figma-atlas {
+  background: #f24e1e;
+  color: white;
+}
+
+.playbook-tag {
+  font-size: 9px;
+  font-weight: 500;
+  padding: 2px 4px;
+  border-radius: 6px;
+  background: #e6f3ff;
+  color: #0078d4;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.component-description {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #605e5c;
+  line-height: 1.4;
+}
+
+.component-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.category-tag {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 12px;
+  background: #f3f2f1;
+  color: #323130;
+}
+
+.source-link {
+  font-size: 12px;
+  color: #0078d4;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.source-link:hover {
+  text-decoration: underline;
+}
+
+.add-component-btn {
+  width: 100%;
+  background: #0078d4;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.add-component-btn:hover {
+  background: #106ebe;
+}
+
+.add-component-btn.individual {
+  background: #605e5c;
+  font-size: 12px;
+  padding: 8px 12px;
+}
+
+.add-component-btn.individual:hover {
+  background: #484644;
+}
+
+/* Empty State */
+.empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #605e5c;
+  text-align: center;
+}
+
+.empty-state button {
+  margin-top: 16px;
+  background: #0078d4;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Footer */
+.library-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-top: 1px solid #e1e5e9;
+  background: #faf9f8;
+}
+
+.stats {
+  font-size: 14px;
+  color: #605e5c;
+}
+
+.ai-generate-btn {
+  background: #107c10;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.ai-generate-btn:hover {
+  background: #0e6e0e;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .enhanced-component-library-modal {
+    width: 98vw;
+    height: 98vh;
+  }
+
+  .filters-section {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .filter-group {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .components-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .playbook-tabs {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .playbook-tab {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  .component-preview {
+    min-height: 150px;
+    max-height: 200px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .components-grid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  }
+}
+
+/* Components Grid Header */
+.components-grid-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e1e5e9;
+  background: #f8f9fa;
+}
+
+.grid-header-info h3 {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #323130;
+}
+
+.grid-header-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #605e5c;
+}
+
+.grid-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.figma-library-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #0078d4;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid #0078d4;
+}
+
+.figma-library-link:hover {
+  background: #106ebe;
+  border-color: #106ebe;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 120, 212, 0.3);
+}
+
+.figma-library-link svg {
+  opacity: 0.8;
+}
+
+.figma-library-link:hover svg {
+  opacity: 1;
+}
+
+.figma-icon {
+  color: white;
+  flex-shrink: 0;
+}
+
+.external-link-icon {
+  color: white;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .components-grid-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .grid-header-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}

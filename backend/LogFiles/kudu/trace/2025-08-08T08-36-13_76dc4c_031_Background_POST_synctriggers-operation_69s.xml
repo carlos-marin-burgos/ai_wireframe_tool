@@ -1,0 +1,54 @@
+<step title="BackgroundTrace" date="2025-08-08T08:36:13.110" instance="76dc4c" url="synctriggers-operation" method="POST" >
+  <step title="Cleanup Xml Logs" date="2025-08-08T08:36:13.157" /><!-- duration: 62ms -->
+  <step title="Updating shutdown sentinel last write time" date="2025-08-08T08:36:13.250" SemaphoreCount="6" /><!-- duration: 47ms -->
+  <step title="Delaying &apos;00:01:00&apos; for Functions site to restart." date="2025-08-08T08:36:13.328" /><!-- duration: 31ms -->
+  <step title="Begin HttpPost https://func-prod-fresh-u62277mynzfg4.azurewebsites.net/admin/host/synctriggers, x-ms-request-id: 5661e70f-401e-8a31-2554-94e7bd0826d2" date="2025-08-08T08:37:13.416" /><!-- duration: 47ms -->
+  <step title="End HttpPost, status: ServiceUnavailable" date="2025-08-08T08:37:17.072" /><!-- duration: 47ms -->
+  <step title="Begin HttpPost https://func-prod-fresh-u62277mynzfg4.azurewebsites.net/admin/host/synctriggers, x-ms-request-id: 5661e70f-401e-8a31-2554-94e7bd0826d2" date="2025-08-08T08:37:18.198" /><!-- duration: 47ms -->
+  <step title="End HttpPost, status: ServiceUnavailable" date="2025-08-08T08:37:18.323" /><!-- duration: 31ms -->
+  <step title="Begin HttpPost https://func-prod-fresh-u62277mynzfg4.azurewebsites.net/admin/host/synctriggers, x-ms-request-id: 5661e70f-401e-8a31-2554-94e7bd0826d2" date="2025-08-08T08:37:19.417" /><!-- duration: 47ms -->
+  <step title="End HttpPost, status: ServiceUnavailable" date="2025-08-08T08:37:19.542" /><!-- duration: 47ms -->
+  <step title="Syncing function triggers by calling the functions runtime site failed. System.Net.Http.HttpRequestException: Response status code does not indicate success: 503 (Service Unavailable).
+   at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode()
+   at Kudu.Core.Helpers.PostDeploymentHelper.&lt;PostAsync&gt;d__49.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Kudu.Core.Helpers.PostDeploymentHelper.&lt;&gt;c__DisplayClass38_0.&lt;&lt;TryFunctionsRuntimeSyncTriggers&gt;b__1&gt;d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Kudu.Core.Infrastructure.OperationManager.&lt;&gt;c__DisplayClass4_0.&lt;&lt;AttemptAsync&gt;b__0&gt;d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Kudu.Core.Infrastructure.OperationManager.&lt;AttemptAsync&gt;d__5`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Kudu.Core.Helpers.PostDeploymentHelper.&lt;TryFunctionsRuntimeSyncTriggers&gt;d__38.MoveNext()" date="2025-08-08T08:37:19.621" /><!-- duration: 47ms -->
+  <step title="Attempting to perform settriggers call directly." date="2025-08-08T08:37:19.714" /><!-- duration: 31ms -->
+  <step title="Syncing httpTrigger of aiBuilderHealth" date="2025-08-08T08:37:19.871" /><!-- duration: 31ms -->
+  <step title="Skipping http of aiBuilderHealth" date="2025-08-08T08:37:19.949" /><!-- duration: 31ms -->
+  <step title="Syncing httpTrigger of analytics" date="2025-08-08T08:37:20.074" /><!-- duration: 47ms -->
+  <step title="Skipping http of analytics" date="2025-08-08T08:37:20.152" /><!-- duration: 31ms -->
+  <step title="Syncing httpTrigger of analyzeUIImage" date="2025-08-08T08:37:20.277" /><!-- duration: 31ms -->
+  <step title="Skipping http of analyzeUIImage" date="2025-08-08T08:37:20.355" /><!-- duration: 31ms -->
+  <step title="Syncing httpTrigger of fast-suggestions" date="2025-08-08T08:37:20.480" /><!-- duration: 47ms -->
+  <step title="Skipping http of fast-suggestions" date="2025-08-08T08:37:20.558" /><!-- duration: 47ms -->
+  <step title="Syncing httpTrigger of generateSuggestions" date="2025-08-08T08:37:20.683" /><!-- duration: 47ms -->
+  <step title="Skipping http of generateSuggestions" date="2025-08-08T08:37:20.761" /><!-- duration: 31ms -->
+  <step title="Syncing httpTrigger of generateWireframe" date="2025-08-08T08:37:20.871" /><!-- duration: 31ms -->
+  <step title="Skipping http of generateWireframe" date="2025-08-08T08:37:20.949" /><!-- duration: 31ms -->
+  <step title="Syncing httpTrigger of get-template" date="2025-08-08T08:37:21.074" /><!-- duration: 47ms -->
+  <step title="Skipping http of get-template" date="2025-08-08T08:37:21.152" /><!-- duration: 47ms -->
+  <step title="Syncing httpTrigger of health" date="2025-08-08T08:37:21.277" /><!-- duration: 31ms -->
+  <step title="Skipping http of health" date="2025-08-08T08:37:21.339" /><!-- duration: 47ms -->
+  <step title="Syncing httpTrigger of healthCheck" date="2025-08-08T08:37:21.464" /><!-- duration: 47ms -->
+  <step title="Skipping http of healthCheck" date="2025-08-08T08:37:21.558" /><!-- duration: 31ms -->
+  <step title="Syncing httpTrigger of performance-stats" date="2025-08-08T08:37:21.699" /><!-- duration: 47ms -->
+  <step title="Skipping http of performance-stats" date="2025-08-08T08:37:21.777" /><!-- duration: 47ms -->
+  <step title="Begin HttpPost https://func-prod-fresh-u62277mynzfg4.scm.azurewebsites.net/operations/settriggers, x-ms-request-id: 5661e70f-401e-8a31-2554-94e7bd0826d2" date="2025-08-08T08:37:21.886" /><!-- duration: 47ms -->
+  <step title="End HttpPost, status: OK" date="2025-08-08T08:37:22.136" /><!-- duration: 31ms -->
+  <step title="Syncing 10 function triggers with payload size 1536 bytes successful." date="2025-08-08T08:37:22.214" /><!-- duration: 31ms -->
+</step><!-- duration: 69198ms -->

@@ -1,9 +1,11 @@
 const { validateWireframeParams } = require("./types");
 const { TemplateManager, selectTemplate } = require("./template-manager");
 const { generateSiteHeaderHTML } = require("./components/SiteHeaderGenerator");
+const AtlasComponentLibrary = require("./components/AtlasComponentLibrary");
 
-// Initialize template manager
+// Initialize template manager and Atlas library
 const templateManager = new TemplateManager();
+const atlasLibrary = new AtlasComponentLibrary();
 
 /**
  * Enhanced fallback wireframe generator with template-based system
@@ -69,11 +71,7 @@ function createFallbackWireframe(
       console.log(
         `🤖 No template match - using AI-generated wireframe for: ${validDesc}`
       );
-      return createInlineFallbackTemplate(
-        generateCleanTitle(validDesc),
-        theme,
-        primaryColor
-      );
+      return createInlineFallbackTemplate(validDesc, theme, primaryColor);
     }
 
     // Try to render the selected template
@@ -96,11 +94,7 @@ function createFallbackWireframe(
   // Fallback to AI-generated inline template for non-Microsoft Learn themes or if template loading fails
   console.log(`🔄 Using AI-generated inline wireframe for theme: ${theme}`);
 
-  return createInlineFallbackTemplate(
-    generateCleanTitle(validDesc),
-    theme,
-    primaryColor
-  );
+  return createInlineFallbackTemplate(validDesc, theme, primaryColor);
 }
 
 /**
@@ -251,7 +245,9 @@ function extractForms(desc) {
   if (
     desc.includes("form") ||
     desc.includes("input") ||
-    desc.includes("field")
+    desc.includes("field") ||
+    desc.includes("textbox") ||
+    desc.includes("text box")
   ) {
     const fields = [];
 
@@ -270,6 +266,36 @@ function extractForms(desc) {
       fields.push({ type: "text", label: "Address", required: false });
     if (desc.includes("company"))
       fields.push({ type: "text", label: "Company", required: false });
+
+    // Extract specific textbox counts
+    const textboxMatch = desc.match(
+      /(\d+|one|two|three|four|five|six)\s+(textbox|text\s*box)/i
+    );
+    if (textboxMatch) {
+      const numberWords = {
+        one: 1,
+        two: 2,
+        three: 3,
+        four: 4,
+        five: 5,
+        six: 6,
+      };
+      const count =
+        numberWords[textboxMatch[1].toLowerCase()] ||
+        parseInt(textboxMatch[1]) ||
+        2;
+
+      // Clear existing default fields if we have specific textbox count
+      if (fields.length === 0) {
+        for (let i = 0; i < count; i++) {
+          fields.push({
+            type: "text",
+            label: i === 0 ? "Input " + (i + 1) : "Input " + (i + 1),
+            required: false,
+          });
+        }
+      }
+    }
 
     // If no specific fields mentioned, create a default contact form
     if (fields.length === 0) {
@@ -1310,8 +1336,7 @@ function generateAtlasCard(card) {
  */
 function getCardIconSrc(type) {
   const icons = {
-    course:
-      "https://learn.microsoft.com/en-us/training/achievements/review-microsoft-azure-pricing-slas-lifecycles.svg",
+    course: "course.png",
     product:
       "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iNCIgZmlsbD0iIzAwNzhkNCIvPgo8cGF0aCBkPSJNMjQgMTJMMzAgMThIMThMMjQgMTJaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMTggMThIMzBWMzZIMThWMThaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K",
     article:
@@ -1338,9 +1363,9 @@ function createInlineFallbackTemplate(description, theme, primaryColor) {
     primaryColor
   );
 
-  // Get Microsoft Learn TopNav components
-  const msLearnTopNav = createMicrosoftLearnTopNav();
-  const msLearnTopNavCSS = getMicrosoftLearnTopNavCSS();
+  // Get Atlas Top Navigation (specific Figma component)
+  const atlasTopNav = atlasLibrary.generateAtlasTopNavigation();
+  const atlasTopNavCSS = getAtlasTopNavCSS();
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -1349,12 +1374,12 @@ function createInlineFallbackTemplate(description, theme, primaryColor) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${description}</title>
     <style>
-        ${msLearnTopNavCSS}
+        ${atlasTopNavCSS}
         ${styles}
     </style>
 </head>
 <body>
-    ${msLearnTopNav}
+    ${atlasTopNav}
     
     ${content}
     
@@ -1368,23 +1393,59 @@ function createInlineFallbackTemplate(description, theme, primaryColor) {
 }
 
 /**
- * Create Microsoft Learn Site Header HTML using official design system
+ * Create Atlas Top Navigation HTML using specific Figma component
  */
-function createMicrosoftLearnTopNav() {
-  return generateSiteHeaderHTML();
+function createAtlasTopNav() {
+  return atlasLibrary.generateAtlasTopNavigation();
 }
 
 /**
- * Get Microsoft Learn TopNav CSS
+ * Get Atlas Top Navigation CSS
  */
-function getMicrosoftLearnTopNavCSS() {
+function getAtlasTopNavCSS() {
   return `
-    /* Microsoft Learn TopNav Styles */
-    :root {
-      --ms-color-primary: #0078d4;
-      --ms-color-primary-hover: #106ebe;
-      --ms-color-white: #ffffff;
-      --ms-color-gray-100: #f1f1f1;
+    /* Atlas Top Navigation Styles (from wireframe-styles.css) */
+    .atlas-top-navigation {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #FFFFFF;
+      border-bottom: 1px solid #E0E0E0;
+    }
+    
+    .ms-learn-brand {
+      font-family: 'Segoe UI', sans-serif;
+      font-weight: 600;
+      font-size: 16px;
+      color: #171717;
+      text-decoration: none;
+    }
+    
+    .wireframe-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .wireframe-nav-item {
+      display: flex;
+      align-items: center;
+      padding: 6px 8px;
+      cursor: pointer;
+    }
+    
+    .wireframe-nav-link {
+      font-family: 'Segoe UI', sans-serif;
+      font-weight: 400;
+      font-size: 14px;
+      color: #171717;
+      text-decoration: none;
+    }
+    
+    .wireframe-nav-item:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      border-radius: 4px;
+    }
       --ms-color-gray-600: #5c5c5c;
       --ms-font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
       --ms-shadow-nav: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -1575,4 +1636,5 @@ module.exports = {
   createInlineFallbackTemplate,
   createMicrosoftLearnTopNav,
   getMicrosoftLearnTopNavCSS,
+  analyzeDescription,
 };

@@ -1,21 +1,24 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import "./SplitLayout.css";
 import SuggestionSourceIndicator from "./SuggestionSourceIndicator";
 import LoadingOverlay from "./LoadingOverlay";
-import WireframeToolbar from "./WireframeToolbar";
 import AddPagesModal from "./AddPagesModal";
-import SaveWireframeModal, { SavedWireframe } from "./SaveWireframeModal";
+import FluentSaveWireframeModal, { SavedWireframe } from "./FluentSaveWireframeModal";
+import FluentImageUploadModal from "./FluentImageUploadModal";
 import FigmaIntegrationModal from "./FigmaIntegrationModal";
-import ComponentLibraryModal from "./ComponentLibraryModal";
-import LinkableWireframe from "./LinkableWireframe";
+import DownloadModal from "./DownloadModal";
+import DevPlaybooksLibrary from "./DevPlaybooksLibrary";
+import FigmaComponentsLibrary from "./FigmaComponentsLibrary";
+import EnhancedComponentLibrary from "./EnhancedComponentLibrary";
+import SimpleDragWireframe from "./SimpleDragWireframe";
 import EnhancedMessage from "./EnhancedMessage";
 import ImageUploadZone from "./ImageUploadZone";
-import DemoImageSelector from "./DemoImageSelector";
 import PageNavigation from "./PageNavigation";
 import HtmlCodeViewer from "./HtmlCodeViewer";
 import PresentationMode from "./PresentationMode";
 
-import { exportToPowerPoint, generateShareUrl } from "../utils/powerpointExport";
+import { generateShareUrl } from "../utils/powerpointExport";
+import { generateWireframeName } from "../utils/wireframeNaming";
 import {
   FiSend,
   FiLoader,
@@ -23,6 +26,8 @@ import {
   FiCpu,
   FiImage,
   FiLink,
+  FiChevronLeft,
+  FiChevronRight,
 } from 'react-icons/fi';
 import { TbBoxModel2 } from 'react-icons/tb'; // Fluent UI style icon for component library
 
@@ -48,6 +53,7 @@ interface SplitLayoutProps {
   setHtmlWireframe: (html: string) => void;
   // New props for content header
   onSave: () => void;
+  onEnhancedSave?: React.MutableRefObject<(() => void) | null>; // Enhanced save for TopNavbar
   onMultiStep: () => void;
   // Design system props (Microsoft Learn theme only)
   designTheme: string;
@@ -67,6 +73,16 @@ interface SplitLayoutProps {
   onAddComponent?: (component: any) => void;
   // Page content generation handler
   onGeneratePageContent?: (description: string, pageType: string) => Promise<string>;
+  // Figma export handler
+  onFigmaExport?: (format: 'figma-file' | 'figma-components') => void;
+  // Toolbar function references for header toolbar
+  onFigmaIntegration?: React.MutableRefObject<(() => void) | null>;
+  onComponentLibrary?: React.MutableRefObject<(() => void) | null>;
+  onDevPlaybooks?: React.MutableRefObject<(() => void) | null>;
+  onFigmaComponents?: React.MutableRefObject<(() => void) | null>;
+  onViewHtmlCode?: React.MutableRefObject<(() => void) | null>;
+  onDownloadWireframe?: React.MutableRefObject<(() => void) | null>;
+  onPresentationMode?: React.MutableRefObject<(() => void) | null>;
 }
 
 const SplitLayout: React.FC<SplitLayoutProps> = ({
@@ -90,14 +106,28 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   onAiSuggestionClick,
   designTheme,
   colorScheme,
+  onSave,
+  onEnhancedSave,
   onAddComponent,
   onGeneratePageContent,
+  onFigmaExport,
+  onFigmaIntegration,
+  onComponentLibrary,
+  onDevPlaybooks,
+  onFigmaComponents,
+  onViewHtmlCode,
+  onDownloadWireframe,
+  onPresentationMode,
 }) => {
   // Create ref for textarea autofocus
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const chatMessagesRef = useRef<HTMLDivElement>(null);
   // Ref to track if initial message has been added
   const initialMessageAddedRef = useRef(false);
+  // Debounce timer for AI suggestions on typing
+  const debounceTimerRef = useRef<number | null>(null);
+  // Track input focus to stabilize suggestions container
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   // Conversation history state
   const [conversationHistory, setConversationHistory] = useState<Array<{
@@ -127,13 +157,15 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   // Image Upload and Analysis state
   const [showImageUpload, setShowImageUpload] = useState(false);
-  const [showDemoSelector, setShowDemoSelector] = useState(false);
 
   // Enhanced Save System state
   const [isEnhancedSaveModalOpen, setIsEnhancedSaveModalOpen] = useState(false);
   const [savedWireframes, setSavedWireframes] = useState<SavedWireframe[]>([]);
   const [isUpdatingWireframe, setIsUpdatingWireframe] = useState(false);
   const [wireframeToUpdate, setWireframeToUpdate] = useState<SavedWireframe | undefined>();
+
+  // Validation state for chat input
+  const [chatValidationError, setChatValidationError] = useState<string | null>(null);
 
   // Component Library Modal removed - using direct AI generation instead
 
@@ -152,12 +184,77 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   // Component Library Modal state
   const [isComponentLibraryOpen, setIsComponentLibraryOpen] = useState(false);
+  const [isDevPlaybooksOpen, setIsDevPlaybooksOpen] = useState(false);
+  const [isFigmaComponentsOpen, setIsFigmaComponentsOpen] = useState(false);
+
+  // Download Modal state
+  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+
+  // Image Upload Modal state
+  const [isImageUploadModalOpen, setIsImageUploadModalOpen] = useState(false);
+  const [isProcessingImage, setIsProcessingImage] = useState(false);
+
+  // Left panel collapse state
+  const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);
+
+  // Wireframe name state
+  const [wireframeName, setWireframeName] = useState<string | null>(null);
+
+  // Track if wireframe has been added to recents to avoid duplicates
+  const [addedToRecents, setAddedToRecents] = useState<boolean>(false);
+
+  // Function to validate chat input - check if it's only numbers
+  const validateChatInput = (input: string): boolean => {
+    const trimmedInput = input.trim();
+
+    // Check if the input is only numbers (including spaces and basic punctuation)
+    const onlyNumbersRegex = /^[\d\s.,]+$/;
+
+    if (onlyNumbersRegex.test(trimmedInput) && trimmedInput.length > 0) {
+      setChatValidationError("Please provide a descriptive text, not just numbers. For example: 'contact form with name and email fields' instead of just '2'.");
+      return false;
+    }
+
+    // Clear validation error if input is valid
+    setChatValidationError(null);
+    return true;
+  };
 
   // Clear AI suggestions when SplitLayout loads
   useEffect(() => {
     console.log('🧹 SplitLayout mounted - clearing AI suggestions');
     setShowAiSuggestions(false);
   }, [setShowAiSuggestions]); // Include dependency for proper function reference
+
+  // Debounced AI suggestion trigger on typing (mirror LandingPage behavior)
+  useEffect(() => {
+    if (!onGenerateAiSuggestions) return;
+
+    // Clear existing timer
+    if (debounceTimerRef.current) {
+      window.clearTimeout(debounceTimerRef.current);
+    }
+
+    // Only react when user has started typing
+    if (description.length > 0) {
+      // Don't generate suggestions for number-only inputs
+      const trimmedInput = description.trim();
+      const onlyNumbersRegex = /^[\d\s.,]+$/;
+
+      if (!onlyNumbersRegex.test(trimmedInput)) {
+        const delay = description.length <= 3 ? 100 : 200;
+        debounceTimerRef.current = window.setTimeout(() => {
+          onGenerateAiSuggestions(description);
+        }, delay);
+      }
+    }
+
+    return () => {
+      if (debounceTimerRef.current) {
+        window.clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, [description, onGenerateAiSuggestions, setShowAiSuggestions]);
 
   // Add message to conversation
   const addMessage = useCallback((type: 'user' | 'ai', content: string) => {
@@ -170,28 +267,27 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     setConversationHistory(prev => [...prev, newMessage]);
   }, []);
 
-  // Auto-create "Home" page when wireframe content is first generated
+  // Auto-create "First Page" page when wireframe content is first generated
   useEffect(() => {
-    console.log('🔥 useEffect for Home page:', {
-      htmlWireframe: !!htmlWireframe,
-      htmlWireframeLength: htmlWireframe?.length,
+    console.log('🔥 useEffect for First Page:', {
+      hasWireframe: !!htmlWireframe,
       wireframePagesLength: wireframePages.length
     });
 
-    // If we have wireframe content but no pages, create a "Home" page
+    // If we have wireframe content but no pages, create a "First Page" page
     if (htmlWireframe && wireframePages.length === 0) {
-      console.log('🔥 Creating Home page automatically');
+      console.log('🔥 Creating First Page automatically');
       const homePage = {
         id: 'home-page',
-        name: 'Home',
-        description: 'Main landing page',
+        name: 'First Page',
+        description: 'First Page',
         type: 'page' as const
       };
 
       setWireframePages([homePage]);
       setCurrentPageId(homePage.id);
 
-      // Store the current wireframe content for the Home page
+      // Store the current wireframe content for the First Page
       setPageContents(prev => ({
         ...prev,
         [homePage.id]: htmlWireframe
@@ -368,7 +464,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                   Generate Content
                 </button>
                 <button style="background: #f3f2f1; color: #323130; border: 1px solid #e1dfdd; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-weight: 600; transition: background-color 0.2s ease;">
-                  Copy from Home
+                  Copy from First Page
                 </button>
               </div>
             </div>
@@ -391,6 +487,33 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   const handleAddPages = useCallback(() => {
     setIsAddPagesModalOpen(true);
   }, []);
+
+  const handleAddToFavorites = useCallback(() => {
+    if (!currentPageId) return;
+
+    const currentPage = wireframePages.find(p => p.id === currentPageId);
+    if (!currentPage) return;
+
+    // Get current content for the page
+    const currentContent = pageContents[currentPageId] || htmlWireframe;
+
+    // Create favorite item
+    const favoriteItem = {
+      id: `favorite-${Date.now()}`,
+      name: currentPage.name,
+      htmlContent: currentContent,
+      type: currentPage.type,
+      createdAt: new Date().toISOString()
+    };
+
+    // Save to localStorage
+    const existingFavorites = JSON.parse(localStorage.getItem('designetica_favorites') || '[]');
+    existingFavorites.push(favoriteItem);
+    localStorage.setItem('designetica_favorites', JSON.stringify(existingFavorites));
+
+    // Show confirmation message
+    addMessage('ai', `⭐ Added "${currentPage.name}" to favorites! You can find it in the favorites tab on the landing page.`);
+  }, [currentPageId, wireframePages, pageContents, htmlWireframe, addMessage]);
 
   // Enhanced chat handlers
   const handleMessageReact = useCallback((messageId: string, emoji: string) => {
@@ -418,6 +541,8 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   // Figma Integration handlers
   const handleFigmaIntegration = useCallback(() => {
+    console.log('🎨 SplitLayout: handleFigmaIntegration - Opening enhanced Figma Integration Modal');
+    // Enable the enhanced FigmaIntegrationModal
     setIsFigmaModalOpen(true);
   }, []);
 
@@ -432,7 +557,30 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
     addMessage('ai', `✅ Successfully imported "${fileName}" from Figma! The wireframe has been converted and is ready for editing.`);
     setIsFigmaModalOpen(false);
-  }, [addMessage, setHtmlWireframe]);
+  }, [setHtmlWireframe, addMessage]);
+
+  // HTML Import handler
+  const handleImportHtml = useCallback(() => {
+    // Create file input element for HTML import
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.html,.htm';
+    input.onchange = (event) => {
+      const file = (event.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const htmlContent = e.target?.result as string;
+          if (htmlContent && setHtmlWireframe) {
+            setHtmlWireframe(htmlContent);
+            addMessage('ai', `✅ Successfully imported "${file.name}"! The HTML wireframe is ready for editing.`);
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+    input.click();
+  }, [setHtmlWireframe, addMessage]);
 
   const handleFigmaExport = useCallback((format: 'figma-file' | 'figma-components') => {
     // Handle Figma export
@@ -440,6 +588,27 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     addMessage('ai', `Wireframe exported to Figma as ${format} successfully! You can now access it in your Figma workspace.`);
     setIsFigmaModalOpen(false);
   }, [addMessage]);
+
+  // Download wireframe handler
+  const handleDownloadWireframe = useCallback(() => {
+    setIsDownloadModalOpen(true);
+  }, []);
+
+  const handleDownloadModalDownload = useCallback((format: 'html' | 'json') => {
+    // Call the parent's figma export handler with the appropriate format
+    // This reuses the existing export functionality
+    const figmaFormat = format === 'html' ? 'figma-file' : 'figma-components';
+    onFigmaExport?.(figmaFormat);
+    addMessage('ai', `🎉 ${format.toUpperCase()} download started! Check your browser's Downloads folder.`);
+  }, [onFigmaExport, addMessage]);
+
+  // HTML import handler for HtmlCodeViewer
+  const handleHtmlImport = useCallback((htmlContent: string) => {
+    if (htmlContent && setHtmlWireframe) {
+      setHtmlWireframe(htmlContent);
+      addMessage('ai', `✅ Successfully imported HTML content! The wireframe is ready for editing.`);
+    }
+  }, [setHtmlWireframe, addMessage]);
 
   // HTML Code viewer handler
   const handleViewHtmlCode = useCallback(() => {
@@ -459,34 +628,34 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     }, 500);
   }, [addMessage]);
 
+  const handleImageFile = useCallback((file: File) => {
+    setIsProcessingImage(true);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imageDataUrl = e.target?.result as string;
+      handleImageUpload(imageDataUrl);
+      setIsImageUploadModalOpen(false);
+      setIsProcessingImage(false);
+    };
+    reader.readAsDataURL(file);
+  }, [handleImageUpload]);
+
+  const handleAnalyzeImage = useCallback((imageUrl: string, fileName: string) => {
+    setIsProcessingImage(true);
+    addMessage('user', `[Image uploaded: ${fileName}]`);
+    setTimeout(() => {
+      addMessage('ai', '🔍 Analyzing your uploaded image for UI components. Please wait while I detect buttons, inputs, and other elements...');
+      setIsProcessingImage(false);
+    }, 500);
+  }, [addMessage]);
+
   const toggleImageUpload = useCallback(() => {
     setShowImageUpload(prev => !prev);
-    // Close demo selector when opening image upload
-    if (!showImageUpload) {
-      setShowDemoSelector(false);
-    }
-  }, [showImageUpload]);
+  }, []);
 
-  const toggleDemoSelector = useCallback(() => {
-    setShowDemoSelector(prev => !prev);
-    // Close image upload when opening demo selector
-    if (!showDemoSelector) {
-      setShowImageUpload(false);
-    }
-  }, [showDemoSelector]);
-
-  const handleDemoGenerate = useCallback((imagePath: string, description: string) => {
-    setDescription(description);
-    setShowDemoSelector(false);
-
-    // Add demo message to chat
-    addMessage('user', `🎯 Demo: ${description}`);
-
-    // Generate wireframe immediately
-    setTimeout(() => {
-      handleSubmit({ preventDefault: () => { } } as React.FormEvent);
-    }, 100);
-  }, [setDescription, addMessage, handleSubmit]);
+  const openImageUploadModal = useCallback(() => {
+    setIsImageUploadModalOpen(true);
+  }, []);
 
   // Enhanced Save System handlers
   const handleOpenEnhancedSave = useCallback(() => {
@@ -494,6 +663,44 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     setIsUpdatingWireframe(false);
     setWireframeToUpdate(undefined);
   }, []);
+
+  // Generate intelligent wireframe name based on content
+  const generateAndSetWireframeName = useCallback(() => {
+    const currentContent = currentPageId && pageContents[currentPageId]
+      ? pageContents[currentPageId]
+      : htmlWireframe;
+
+    if (currentContent) {
+      const intelligentName = generateWireframeName(currentContent);
+      setWireframeName(intelligentName);
+      console.log('🧠 Generated intelligent wireframe name:', intelligentName);
+
+      // Automatically add to recents when wireframe is first generated (only once)
+      if (!addedToRecents) {
+        const addToRecents = (window as any).addToRecents;
+        if (addToRecents && typeof addToRecents === 'function') {
+          addToRecents(
+            intelligentName,
+            "Auto-generated wireframe",
+            currentContent
+          );
+          console.log(`✅ Auto-added "${intelligentName}" to recents`);
+          setAddedToRecents(true); // Mark as added to avoid duplicates
+
+          // Also dispatch a custom event to ensure UI updates
+          window.dispatchEvent(new CustomEvent('wireframeSaved', {
+            detail: {
+              name: intelligentName,
+              description: "Auto-generated wireframe",
+              html: currentContent
+            }
+          }));
+        } else {
+          console.warn("addToRecents function not available for auto-add");
+        }
+      }
+    }
+  }, [currentPageId, pageContents, htmlWireframe, addedToRecents]);
 
   const handleSaveWireframe = useCallback(async (
     wireframeData: Omit<SavedWireframe, 'id' | 'createdAt' | 'updatedAt'>
@@ -524,79 +731,139 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
       setSavedWireframes(prev => [...prev, newWireframe]);
       addMessage('ai', `💾 Wireframe "${wireframeData.name}" saved successfully! You can access it from the library.`);
-    }
 
-    // In a real app, you would also save to backend/localStorage
-    localStorage.setItem('designetica_saved_wireframes', JSON.stringify(savedWireframes));
+      // Add saved wireframe to recents - moved outside of try-catch for better reliability
+      const addToRecents = (window as any).addToRecents;
+      if (addToRecents && typeof addToRecents === 'function') {
+        addToRecents(wireframeData.name, wireframeData.description || "Saved wireframe", wireframeData.html);
+        console.log(`✅ Added "${wireframeData.name}" to recents`);
+
+        // Also dispatch a custom event to ensure UI updates
+        window.dispatchEvent(new CustomEvent('wireframeSaved', {
+          detail: {
+            name: wireframeData.name,
+            description: wireframeData.description || "Saved wireframe",
+            html: wireframeData.html
+          }
+        }));
+      } else {
+        console.warn("addToRecents function not available on window object");
+      }
+    }
 
     setIsEnhancedSaveModalOpen(false);
   }, [isUpdatingWireframe, wireframeToUpdate, savedWireframes, addMessage]);
 
+  // Update localStorage whenever savedWireframes changes
+  useEffect(() => {
+    localStorage.setItem('designetica_saved_wireframes', JSON.stringify(savedWireframes));
+  }, [savedWireframes]);
+
+  // Generate intelligent wireframe name when content changes
+  useEffect(() => {
+    if (htmlWireframe && htmlWireframe.trim() && !wireframeName) {
+      // Only generate name for the first time when content is created
+      generateAndSetWireframeName();
+    }
+  }, [htmlWireframe, wireframeName, generateAndSetWireframeName]);
+
+  // Regenerate name when switching pages or when significant content changes
+  useEffect(() => {
+    if ((htmlWireframe || (currentPageId && pageContents[currentPageId])) && wireframeName) {
+      // Regenerate name when page content changes significantly
+      const currentContent = currentPageId && pageContents[currentPageId]
+        ? pageContents[currentPageId]
+        : htmlWireframe;
+
+      if (currentContent && currentContent.length > 500) { // Only for substantial content
+        const newName = generateWireframeName(currentContent);
+        if (newName !== wireframeName) {
+          setWireframeName(newName);
+          console.log('🔄 Updated wireframe name to:', newName);
+        }
+      }
+    }
+  }, [currentPageId, pageContents, htmlWireframe, wireframeName]);
+
+  // Reset addedToRecents flag when starting a new wireframe session
+  useEffect(() => {
+    if (!htmlWireframe || htmlWireframe.trim() === '') {
+      setAddedToRecents(false);
+      setWireframeName(null);
+    }
+  }, [htmlWireframe]);
+
   const handleOpenLibrary = useCallback(() => {
+    console.log('🎨 Opening Component Library Modal');
     setIsComponentLibraryOpen(true);
   }, []);
 
+  const handleOpenDevPlaybooks = useCallback(() => {
+    console.log('📚 Opening Dev Playbooks Library');
+    setIsDevPlaybooksOpen(true);
+  }, []);
+
+  const handleOpenFigmaComponents = useCallback(() => {
+    console.log('🎨 Opening Figma Components Library');
+    setIsFigmaComponentsOpen(true);
+  }, []);
+
   // Export handlers
-  const handleExportPowerPoint = useCallback(async () => {
-    try {
-      // Prepare wireframe data for export
-      const wireframeData = {
-        name: `Wireframe ${new Date().toLocaleDateString()}`,
-        description: 'Generated wireframe design',
-        pages: wireframePages.length > 0 ? wireframePages : [{
-          id: 'main',
-          name: 'Main Page',
-          description: 'Main wireframe page',
-          type: 'page' as const
-        }],
-        pageContents: wireframePages.length > 0 ? pageContents : {
-          main: htmlWireframe || '<p>No content available</p>'
-        }
-      };
-
-      await exportToPowerPoint(wireframeData);
-    } catch (error) {
-      console.error('PowerPoint export failed:', error);
-    }
-  }, [wireframePages, pageContents, htmlWireframe]);
 
 
-
-  const handleShareUrl = useCallback(async () => {
-    try {
-      // Prepare wireframe data for sharing
-      const wireframeData = {
-        name: `Wireframe ${new Date().toLocaleDateString()}`,
-        description: 'Generated wireframe design',
-        pages: wireframePages.length > 0 ? wireframePages : [{
-          id: 'main',
-          name: 'Main Page',
-          description: 'Main wireframe page',
-          type: 'page' as const
-        }],
-        pageContents: wireframePages.length > 0 ? pageContents : {
-          main: htmlWireframe || '<p>No content available</p>'
-        }
-      };
-
-      const contentToShare = htmlWireframe || '<p>No wireframe content available</p>';
-      const result = await generateShareUrl(contentToShare, wireframeData.name);
-
-      if (result.success) {
-        // Show success message with toast notification
-        console.log('✅ Share URL generated:', result.shareUrl);
-        console.log('Share URL copied to clipboard!');
-      } else {
-        console.error('Failed to generate share URL:', result.message);
-      }
-    } catch (error) {
-      console.error('Share URL generation failed:', error);
-    }
-  }, [wireframePages, pageContents, htmlWireframe]);
 
   // Presentation Mode handler
   const handlePresentationMode = useCallback(() => {
     setIsPresentationModeOpen(true);
+  }, []);
+
+  // Set toolbar function refs for header toolbar access
+  // Set up the Figma Integration ref
+  useEffect(() => {
+    if (onFigmaIntegration) {
+      onFigmaIntegration.current = handleFigmaIntegration;
+    }
+  }, [onFigmaIntegration, handleFigmaIntegration]);
+
+  useEffect(() => {
+    if (onComponentLibrary) {
+      onComponentLibrary.current = handleOpenLibrary;
+    }
+  }, [onComponentLibrary, handleOpenLibrary]);
+
+  useEffect(() => {
+    if (onDevPlaybooks) {
+      onDevPlaybooks.current = handleOpenDevPlaybooks;
+    }
+  }, [onDevPlaybooks, handleOpenDevPlaybooks]);
+
+  useEffect(() => {
+    if (onFigmaComponents) {
+      onFigmaComponents.current = handleOpenFigmaComponents;
+    }
+  }, [onFigmaComponents, handleOpenFigmaComponents]);
+
+  useEffect(() => {
+    if (onViewHtmlCode) {
+      onViewHtmlCode.current = handleViewHtmlCode;
+    }
+  }, [onViewHtmlCode, handleViewHtmlCode]);
+
+  useEffect(() => {
+    if (onDownloadWireframe) {
+      onDownloadWireframe.current = handleDownloadWireframe;
+    }
+  }, [onDownloadWireframe, handleDownloadWireframe]);
+
+  useEffect(() => {
+    if (onPresentationMode) {
+      onPresentationMode.current = handlePresentationMode;
+    }
+  }, [onPresentationMode, handlePresentationMode]);
+
+  // Toggle left panel collapse
+  const handleToggleLeftPanel = useCallback(() => {
+    setIsLeftPanelCollapsed(prev => !prev);
   }, []);
 
   // Load saved wireframes from localStorage on component mount
@@ -617,10 +884,22 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     handleOpenEnhancedSave();
   }, [handleOpenEnhancedSave]);
 
+  // Expose enhanced save to parent via ref
+  useEffect(() => {
+    if (onEnhancedSave) {
+      onEnhancedSave.current = enhancedOnSave;
+    }
+  }, [onEnhancedSave, enhancedOnSave]);
+
   // Direct AI generation with Microsoft Learn components - no modal
   const enhancedHandleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     console.log('🚀 Direct AI generation called!', { description: description.trim(), loading });
+
+    // Validate the input before proceeding
+    if (!validateChatInput(description)) {
+      return; // Stop submission if validation fails
+    }
 
     if (description.trim() && !loading) {
       // Close image upload zone when starting generation for cleaner UI
@@ -647,7 +926,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         loading
       });
     }
-  }, [description, loading, setDescription, conversationHistory.length, showImageUpload, setShowImageUpload, addMessage]);
+  }, [description, loading, conversationHistory.length, showImageUpload, setShowImageUpload, addMessage, validateChatInput, handleSubmit]);
 
   // Scroll to bottom of chat
   const scrollToBottom = () => {
@@ -694,9 +973,18 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   }, [description, addMessage, setDescription]);
 
   return (
-    <div className="split-layout">
+    <div className={`split-layout ${isLeftPanelCollapsed ? 'left-panel-collapsed' : ''}`}>
+      {/* Panel Toggle Button */}
+      <button
+        className="panel-toggle-btn"
+        onClick={handleToggleLeftPanel}
+        title={isLeftPanelCollapsed ? 'Expand panel' : 'Collapse panel'}
+      >
+        {isLeftPanelCollapsed ? <FiChevronRight /> : <FiChevronLeft />}
+      </button>
+
       {/* Left: Chat Interface */}
-      <div className="left-pane">
+      <div className={`left-pane ${isLeftPanelCollapsed ? 'collapsed' : ''}`}>
         {/* Chat Messages Area */}
         <div className="chat-messages" ref={chatMessagesRef}>
           {conversationHistory.length === 0 && !loading && (
@@ -711,6 +999,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
             />
           )}
 
+          {/* Conversation History */}
           {conversationHistory.map((message) => (
             <EnhancedMessage
               key={message.id}
@@ -720,6 +1009,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
             />
           ))}
 
+          {/* Loading message */}
           {loading && (
             <EnhancedMessage
               message={{
@@ -736,6 +1026,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         {/* Simple Chat Input Area */}
         <div className="chat-input-container">
           {error && <div className="error error-margin">{error}</div>}
+          {chatValidationError && <div className="input-info-alert">{chatValidationError}</div>}
 
           <form onSubmit={enhancedHandleSubmit} className="chat-form">
             <div className="chat-input-wrapper">
@@ -746,18 +1037,47 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                   const value = e.target.value;
                   setDescription(value);
 
-                  // Hide suggestions when content becomes too short
+                  // Check if input is valid and clear validation error if needed
+                  if (value.trim()) {
+                    const trimmedInput = value.trim();
+                    const onlyNumbersRegex = /^[\d\s.,]+$/;
+
+                    // Clear validation error if input becomes valid
+                    if (!onlyNumbersRegex.test(trimmedInput)) {
+                      setChatValidationError(null);
+                    }
+                  } else {
+                    // Clear validation error if input is empty
+                    setChatValidationError(null);
+                  }
+
+                  // Hide suggestions if content becomes too short or is number-only
                   if (value.length <= 2) {
                     setShowAiSuggestions(false);
+                  } else {
+                    // Don't show suggestions for number-only inputs
+                    const trimmedInput = value.trim();
+                    const onlyNumbersRegex = /^[\d\s.,]+$/;
+                    if (onlyNumbersRegex.test(trimmedInput)) {
+                      setShowAiSuggestions(false);
+                    }
                   }
                 }}
+                onFocus={() => setIsInputFocused(true)}
+                onBlur={() => setIsInputFocused(false)}
                 onClick={() => {
                   // Generate AI suggestions when textarea is clicked
                   if (description.length > 2) {
-                    if (onGenerateAiSuggestions) {
-                      onGenerateAiSuggestions(description);
+                    // Don't generate suggestions for number-only inputs
+                    const trimmedInput = description.trim();
+                    const onlyNumbersRegex = /^[\d\s.,]+$/;
+
+                    if (!onlyNumbersRegex.test(trimmedInput)) {
+                      if (onGenerateAiSuggestions) {
+                        onGenerateAiSuggestions(description);
+                      }
+                      setShowAiSuggestions(true);
                     }
-                    setShowAiSuggestions(true);
                   }
                 }}
                 onKeyDown={(e) => {
@@ -770,26 +1090,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                 className="chat-input"
                 rows={3}
               />
-
-              {/* Image upload button */}
-              <button
-                type="button"
-                onClick={toggleImageUpload}
-                className="chat-image-btn"
-                title="Upload UI image to analyze"
-              >
-                <FiImage />
-              </button>
-
-              {/* Fluent Library button */}
-              <button
-                type="button"
-                onClick={handleOpenLibrary}
-                className="chat-atlas-btn"
-                title="Open Fluent Component Library"
-              >
-                <TbBoxModel2 />
-              </button>
 
               {/* Send button */}
               <button
@@ -806,52 +1106,40 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
             </div>
           </form>
 
-          {/* Image Upload Zone */}
-          {showImageUpload && (
-            <div className="image-upload-section">
-              <ImageUploadZone
-                onImageUpload={(file) => {
-                  const reader = new FileReader();
-                  reader.onload = (e) => {
-                    const imageDataUrl = e.target?.result as string;
-                    handleImageUpload(imageDataUrl);
-                  };
-                  reader.readAsDataURL(file);
-                }}
-                onAnalyzeImage={(imageUrl, fileName) => {
-                  console.log('Analyzing image:', fileName, imageUrl);
-                  // Add image analysis logic here
-                }}
-                isAnalyzing={loading}
-              />
-            </div>
-          )}
-
-          {/* AI Suggestions */}
-          {showAiSuggestions && aiSuggestions.length > 0 && (
-            <div className="ai-suggestions-inline ai-suggestions-dynamic">
+          {/* AI Suggestions: label outside a dedicated scrollable panel */}
+          {showAiSuggestions && (aiSuggestions.length > 0 || (suggestionLoading && isInputFocused)) && (
+            <div className="ai-suggestions-container">
               <div className="ai-suggestions-label">
                 <FiCpu className="ai-icon" />
                 <span>AI Suggestions:</span>
                 {suggestionLoading && <span className="loading-dot">●</span>}
               </div>
-              <div className="ai-suggestions-buttons">
-                {aiSuggestions.map((suggestion, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    className="ai-suggestion-pill ai-suggestion-button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setDescription(suggestion);
-                      onAiSuggestionClick(suggestion);
-                    }}
-                  >
-                    <span className="ai-badge">AI</span>
-                    {suggestion}
-                  </button>
-                ))}
+              <div className="ai-suggestions-panel" aria-label="AI suggestions">
+                {aiSuggestions.length > 0 ? (
+                  <div className="ai-suggestions-buttons">
+                    {aiSuggestions.map((suggestion, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        className="ai-suggestion-pill ai-suggestion-button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setDescription(suggestion);
+                          onAiSuggestionClick(suggestion);
+                        }}
+                      >
+                        <span className="ai-badge">AI</span>
+                        {suggestion}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="ai-suggestions-placeholder">
+                    <div className="skeleton-pill" />
+                    <div className="skeleton-pill" />
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -860,47 +1148,41 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       </div>
 
       {/* Right: AI Assistant Interface */}
-      <div className="right-pane">
+      <div className={`right-pane ${isLeftPanelCollapsed ? 'expanded' : ''}`}>
         {(htmlWireframe || wireframePages.length > 0) ? (
           <div className="wireframe-panel">
-            <WireframeToolbar
-              onFigmaIntegration={handleFigmaIntegration}
-              onSave={enhancedOnSave}
-              onOpenLibrary={handleOpenLibrary}
-              onAddPages={handleAddPages}
-              onViewHtmlCode={handleViewHtmlCode}
-              onExportPowerPoint={handleExportPowerPoint}
-              onPresentationMode={handlePresentationMode}
-              onShareUrl={handleShareUrl}
-            />
+            {/* Intelligent Wireframe Name Display */}
+            {wireframeName && (
+              <div className="wireframe-name-header">
+                <h3 className="wireframe-title">{wireframeName}</h3>
+              </div>
+            )}
 
             {/* Always show PageNavigation when we have a wireframe */}
             <PageNavigation
               pages={wireframePages}
               currentPageId={currentPageId}
               onPageSwitch={handlePageSwitch}
+              onAddPage={handleAddPages}
+              onOpenLibrary={handleOpenLibrary}
+              onOpenDevPlaybooks={handleOpenDevPlaybooks}
+              onOpenFigmaComponents={handleOpenFigmaComponents}
+              onSave={enhancedOnSave}
+              onAddToFavorites={handleAddToFavorites}
+              onImageUpload={openImageUploadModal}
             />
+
             <div className="wireframe-container">
-              {/* Status bar removed for cleaner presentation */}
               <div className="wireframe-content">
-                <LinkableWireframe
+                <SimpleDragWireframe
                   htmlContent={currentPageId ? (pageContents[currentPageId] || htmlWireframe) : htmlWireframe}
-                  onUpdateHtml={(newHtml) => {
-                    // Update the current page content
+                  onUpdateContent={(newContent) => {
                     if (currentPageId) {
-                      setPageContents(prev => ({
-                        ...prev,
-                        [currentPageId]: newHtml
-                      }));
-                    }
-                    // Also update the main htmlWireframe if it's the first page or no current page
-                    if (!currentPageId || wireframePages.length === 0) {
-                      // You would call your main update function here
-                      // For now, we'll just store it locally
+                      setPageContents(prev => ({ ...prev, [currentPageId]: newContent }));
+                    } else {
+                      setHtmlWireframe(newContent);
                     }
                   }}
-                  onNavigateToPage={handlePageSwitch}
-                  availablePages={wireframePages}
                 />
               </div>
             </div>
@@ -1044,14 +1326,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               </div>
             )}
 
-            {/* Feature callout */}
-            <div className="feature-callout">
-              <div className="feature-callout-title">💡 Pro Tip</div>
-              <p className="feature-callout-text">
-                Be specific about your requirements. Mention components, layout, colors, and interactions for better results.
-              </p>
-            </div>
-
             {/* Loading overlay for AI processing */}
             <LoadingOverlay
               isVisible={loading}
@@ -1066,7 +1340,10 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         isOpen={isAddPagesModalOpen}
         onClose={() => setIsAddPagesModalOpen(false)}
         onAddPages={handleAddPagesToWireframe}
-        existingPages={wireframePages}
+        existingPages={wireframePages.map(page => ({
+          ...page,
+          htmlContent: pageContents[page.id] || page.htmlContent || htmlWireframe
+        }))}
         onGeneratePageContent={onGeneratePageContent}
       />
 
@@ -1095,7 +1372,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       */}
 
       {/* Enhanced Save Modal */}
-      <SaveWireframeModal
+      <FluentSaveWireframeModal
         isOpen={isEnhancedSaveModalOpen}
         onClose={() => setIsEnhancedSaveModalOpen(false)}
         onSave={handleSaveWireframe}
@@ -1103,8 +1380,18 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         currentCss="/* Generated CSS styles */"
         designTheme={designTheme}
         colorScheme={colorScheme}
+        initialName={wireframeName || undefined}
         isUpdating={isUpdatingWireframe}
         existingWireframe={wireframeToUpdate}
+      />
+
+      {/* Image Upload Modal */}
+      <FluentImageUploadModal
+        isOpen={isImageUploadModalOpen}
+        onClose={() => setIsImageUploadModalOpen(false)}
+        onImageUpload={handleImageFile}
+        onAnalyzeImage={handleAnalyzeImage}
+        isAnalyzing={isProcessingImage}
       />
 
       {/* Figma Integration Modal */}
@@ -1115,19 +1402,25 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         onExport={handleFigmaExport}
       />
 
-      {/* Component Library Modal */}
-      <ComponentLibraryModal
-        isOpen={isComponentLibraryOpen}
+      {/* Download Modal */}
+      <DownloadModal
+        isOpen={isDownloadModalOpen}
+        onClose={() => setIsDownloadModalOpen(false)}
+        onDownload={handleDownloadModalDownload}
+        wireframeTitle={description || 'Wireframe'}
+      />
+
+      {/* Dev Playbooks Library */}
+      <DevPlaybooksLibrary
+        isOpen={isDevPlaybooksOpen}
         onClose={() => {
-          console.log('🔄 Component library modal closing');
-          setIsComponentLibraryOpen(false);
+          setIsDevPlaybooksOpen(false);
         }}
         onAddComponent={(component: any) => {
-          console.log('✨ Component added:', component.name);
+          console.log('✨ Dev Playbook component added:', component.name);
           if (onAddComponent) {
             onAddComponent(component);
           }
-          addMessage('ai', `✨ Added ${component.name} to your wireframe!`);
         }}
         onGenerateWithAI={(description: string) => {
           console.log('🤖 AI generation requested for:', description);
@@ -1139,6 +1432,52 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         currentDescription={description}
       />
 
+      {/* Figma Components Library */}
+      <FigmaComponentsLibrary
+        isOpen={isFigmaComponentsOpen}
+        onClose={() => {
+          setIsFigmaComponentsOpen(false);
+        }}
+        onAddComponent={(component: any) => {
+          console.log('✨ Figma component added:', component.name);
+          if (onAddComponent) {
+            onAddComponent(component);
+          }
+        }}
+        onGenerateWithAI={(description: string) => {
+          console.log('🤖 AI generation requested for:', description);
+          // Call the original handleSubmit to trigger AI generation
+          const mockEvent = new Event('submit') as any;
+          handleSubmit(mockEvent);
+          addMessage('ai', '🤖 Generating wireframe with AI...');
+        }}
+        currentDescription={description}
+      />
+
+      {/* Enhanced Component Library (Legacy) */}
+      <EnhancedComponentLibrary
+        isOpen={isComponentLibraryOpen}
+        onClose={() => {
+          setIsComponentLibraryOpen(false);
+        }}
+        onAddComponent={(component: any) => {
+          console.log('✨ Component added:', component.name);
+          if (onAddComponent) {
+            onAddComponent(component);
+          }
+          // Removed toast notification to prevent components showing inside toasts
+        }}
+        onGenerateWithAI={(description: string) => {
+          console.log('🤖 AI generation requested for:', description);
+          // Call the original handleSubmit to trigger AI generation
+          const mockEvent = new Event('submit') as any;
+          handleSubmit(mockEvent);
+          addMessage('ai', '🤖 Generating wireframe with AI...');
+        }}
+        currentDescription={description}
+        libraryType="dev-playbooks"
+      />
+
       {/* HTML Code Viewer */}
       <HtmlCodeViewer
         isOpen={isHtmlCodeViewerOpen}
@@ -1148,6 +1487,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
           `HTML Code - ${wireframePages.find(p => p.id === currentPageId)?.name || 'Unknown Page'}` :
           'HTML Code - Main Wireframe'
         }
+        onImportHtml={handleHtmlImport}
       />
 
       {/* Presentation Mode */}

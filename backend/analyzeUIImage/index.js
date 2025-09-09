@@ -8,14 +8,40 @@ function initializeOpenAI() {
   try {
     console.log("🔧 Initializing OpenAI for image analysis...");
 
+    // Load local.settings.json values if in development
+    if (!process.env.AZURE_OPENAI_KEY) {
+      const fs = require("fs");
+      const path = require("path");
+      try {
+        const localSettingsPath = path.join(
+          __dirname,
+          "..",
+          "local.settings.json"
+        );
+        const localSettings = JSON.parse(
+          fs.readFileSync(localSettingsPath, "utf8")
+        );
+
+        // Set environment variables from local.settings.json
+        Object.keys(localSettings.Values).forEach((key) => {
+          if (!process.env[key]) {
+            process.env[key] = localSettings.Values[key];
+          }
+        });
+
+        console.log("📁 Loaded local.settings.json for analyzeUIImage");
+      } catch (error) {
+        console.error("⚠️ Could not load local.settings.json:", error.message);
+      }
+    }
+
     if (!process.env.AZURE_OPENAI_KEY || !process.env.AZURE_OPENAI_ENDPOINT) {
       console.error("❌ Missing OpenAI configuration for image analysis");
       return false;
     }
 
     const endpoint = process.env.AZURE_OPENAI_ENDPOINT.replace(/\/$/, "");
-    const deployment =
-      process.env.AZURE_OPENAI_DEPLOYMENT || "designetica-gpt4o";
+    const deployment = process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o";
     const apiVersion =
       process.env.AZURE_OPENAI_API_VERSION || "2024-08-01-preview";
 
@@ -29,6 +55,8 @@ function initializeOpenAI() {
     });
 
     console.log("✅ OpenAI initialized for image analysis");
+    console.log("🔑 Using endpoint:", endpoint);
+    console.log("🎯 Using deployment:", deployment);
     return true;
   } catch (error) {
     console.error("❌ Failed to initialize OpenAI for image analysis:", error);
@@ -144,7 +172,7 @@ module.exports = async function (context, req) {
     // Call Azure OpenAI GPT-4V
     const response = await Promise.race([
       openai.chat.completions.create({
-        model: process.env.AZURE_OPENAI_DEPLOYMENT || "designetica-gpt4o",
+        model: process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o",
         messages: [
           {
             role: "system",

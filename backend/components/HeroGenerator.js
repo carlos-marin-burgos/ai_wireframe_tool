@@ -3,12 +3,13 @@
 
 /**
  * Generates the complete Microsoft Learn Navigation HTML
+ * Uses the specific Atlas navigation component from Figma (node-id: 11530:113245)
  * @returns {string} Complete HTML string for Microsoft Learn navbar
  */
 function generateMicrosoftNavHTML() {
   return `
-  <!-- Microsoft Learn Navigation -->
-  <header style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 8px 24px; gap: 21px; width: 100%; height: 54px; box-sizing: border-box; background: #FFFFFF; border-bottom: 1px solid #E0E0E0;">
+  <!-- Atlas Top Navigation - Always Present (Node ID: 11530:113245) -->
+  <header class="atlas-top-navigation" data-node-id="11530:113245" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 8px 24px; gap: 21px; width: 100%; height: 54px; box-sizing: border-box; background: #FFFFFF; border-bottom: 1px solid #E0E0E0; position: sticky; top: 0; z-index: 1000;">
     <!-- Logo & Menu Section -->
     <div style="display: flex; flex-direction: row; align-items: center; padding: 0px; gap: 16px; flex-grow: 1;">
       <!-- Logo Container -->
@@ -23,16 +24,16 @@ function generateMicrosoftNavHTML() {
         <!-- Separator -->
         <div style="width: 2px; height: 24px; background: #2F2F2F;"></div>
         <!-- Site Title -->
-        <span style="font-family: 'Segoe UI', sans-serif; font-weight: 600; font-size: 20px; color: #171717; line-height: 1;">Learn</span>
+        <span class="ms-learn-brand">Learn</span>
       </div>
       
       <!-- Navigation Menu -->
-      <nav style="display: flex; align-items: center; gap: 8px; margin-left: 24px;">
-        <div style="display: flex; align-items: center; padding: 6px 8px; gap: 4px; cursor: pointer;">
-          <span style="font-family: 'Segoe UI', sans-serif; font-weight: 400; font-size: 14px; color: #171717;">Browse</span>
+      <nav class="wireframe-nav">
+        <div class="wireframe-nav-item">
+          <span class="wireframe-nav-link">Browse</span>
         </div>
-        <div style="display: flex; align-items: center; padding: 6px 8px; gap: 4px; cursor: pointer;">
-          <span style="font-family: 'Segoe UI', sans-serif; font-weight: 400; font-size: 14px; color: #171717;">Reference</span>
+        <div class="wireframe-nav-item">
+          <span class="wireframe-nav-link">Reference</span>
         </div>
         <div style="display: flex; align-items: center; padding: 6px 8px; gap: 4px; cursor: pointer;">
           <span style="font-family: 'Segoe UI', sans-serif; font-weight: 400; font-size: 14px; color: #171717;">Learn</span>
@@ -45,16 +46,22 @@ function generateMicrosoftNavHTML() {
     
     <!-- Profile Section -->
     <div style="display: flex; align-items: center; gap: 8px;">
-      <!-- Search Icon -->
-      <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-        <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-          <path d="M8.5 3C5.46243 3 3 5.46243 3 8.5C3 11.5376 5.46243 14 8.5 14C9.83879 14 11.0659 13.5217 12.0196 12.7266L16.6464 17.3536L17.3536 16.6464L12.7266 12.0196C13.5217 11.0659 14 9.83879 14 8.5C14 5.46243 11.5376 3 8.5 3ZM4 8.5C4 6.01472 6.01472 4 8.5 4C10.9853 4 13 6.01472 13 8.5C13 10.9853 10.9853 13 8.5 13C6.01472 13 4 10.9853 4 8.5Z" fill="#171717"/>
-        </svg>
-      </div>
-      <!-- User Avatar -->
-      <div style="width: 36px; height: 36px; border-radius: 50%; background: url('public/mina.png') center/cover; border: 2px solid #0078d4;"></div>
+      <!-- User Avatar with Mina image -->
+      <img src="mina.png" alt="Mina" style="
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #e1e1e1;
+      " />
       <!-- CXS Logo -->
-      <img src="/cxsLogo.png" alt="CXS Logo" style="height: 30px; object-fit: contain; margin-left: 8px;" />
+      <!-- Microsoft Logo -->
+      <div style="position: relative; width: 26px; height: 26px; margin-left: 8px;">
+        <div style="position: absolute; top: 0; left: 0; width: 12px; height: 12px; background: #F26522;"></div>
+        <div style="position: absolute; top: 0; right: 0; width: 12px; height: 12px; background: #8DC63F;"></div>
+        <div style="position: absolute; bottom: 0; left: 0; width: 12px; height: 12px; background: #00AEEF;"></div>
+        <div style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: #FFC20E;"></div>
+      </div>
     </div>
   </header>
   `;
@@ -87,7 +94,7 @@ function generateHeroHTML(options = {}) {
     secondaryCtaText = "Browse",
     showSecondaryButton = true,
     backgroundColor = "#E8E6DF",
-    heroImageUrl = "public/hero300.png"
+    heroImageUrl = "Microsoft-Learn-keyart-neutral-gray-angle-1.png",
   } = options;
 
   return `
@@ -134,7 +141,9 @@ function generateHeroHTML(options = {}) {
                          background-color: transparent; color: #0078d4;">
             ${ctaText}
           </button>
-          ${showSecondaryButton ? `
+          ${
+            showSecondaryButton
+              ? `
           <button class="button border" 
                   style="display: inline-flex; align-items: center; justify-content: center; 
                          padding: 0.5rem 1rem; border-radius: 0.25rem; font-family: 'Segoe UI', sans-serif; 
@@ -143,7 +152,9 @@ function generateHeroHTML(options = {}) {
                          background-color: #0078d4; color: white;">
             ${secondaryCtaText}
           </button>
-          ` : ''}
+          `
+              : ""
+          }
         </div>
       </div>
     </section>

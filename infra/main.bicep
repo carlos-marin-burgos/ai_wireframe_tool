@@ -13,7 +13,7 @@ param environmentName string = 'designetica'
 param location string = resourceGroup().location
 
 @description('Location for OpenAI resources')
-param openAiLocation string = 'eastus'
+param openAiLocation string = 'eastus2'
 
 @description('SKU name for the OpenAI service')
 param openAiSkuName string = 'S0'
@@ -41,16 +41,16 @@ param openAiModelDeployments array = [
 ]
 
 // Generate a unique token for resource naming
-var resourceToken = toLower(uniqueString(subscription().id, resourceGroup().id, location, environmentName))
+var uniqueSuffix = uniqueString(subscription().id, resourceGroup().id, location, environmentName)
 var abbreviations = loadJsonContent('abbreviations.json')
 
 // Resource names using the token
-var openAiAccountName = take('${abbreviations.cognitiveServices}-${environmentName}-${resourceToken}', 64)
-var storageAccountName = take('${abbreviations.storageAccount}${replace(environmentName, '-', '')}${resourceToken}', 24)
-var logAnalyticsName = take('${abbreviations.logAnalyticsWorkspace}-${environmentName}-${resourceToken}', 63)
-var applicationInsightsName = '${abbreviations.applicationInsights}-${environmentName}-${resourceToken}'
-var userAssignedIdentityName = '${abbreviations.userAssignedIdentity}-${environmentName}-${resourceToken}'
-var staticWebAppName = '${abbreviations.staticWebApp}-${environmentName}-${resourceToken}'
+var openAiAccountName = take('${abbreviations.cognitiveServices}-${environmentName}-${uniqueSuffix}', 64)
+var storageAccountName = take('${abbreviations.storageAccount}${replace(environmentName, '-', '')}${uniqueSuffix}', 24)
+var logAnalyticsName = take('${abbreviations.logAnalyticsWorkspace}-${environmentName}-${uniqueSuffix}', 63)
+var applicationInsightsName = '${abbreviations.applicationInsights}-${environmentName}-${uniqueSuffix}'
+var userAssignedIdentityName = '${abbreviations.userAssignedIdentity}-${environmentName}-${uniqueSuffix}'
+var staticWebAppName = '${abbreviations.staticWebApp}-${environmentName}-${uniqueSuffix}'
 
 // Tags for all resources
 var tags = {
@@ -219,6 +219,20 @@ resource storageQueueDataContributorRoleAssignment 'Microsoft.Authorization/role
   }
 }
 
+// Storage Blob Data Contributor role assignment to managed identity
+resource storageBlobDataContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(storageAccount.id, userAssignedIdentity.id, 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')
+  scope: storageAccount
+  properties: {
+    roleDefinitionId: subscriptionResourceId(
+      'Microsoft.Authorization/roleDefinitions',
+      'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
+    ) // Storage Blob Data Contributor
+    principalId: userAssignedIdentity.properties.principalId
+    principalType: 'ServicePrincipal'
+  }
+}
+
 // Cognitive Services User role assignment to managed identity
 resource cognitiveServicesUserRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   name: guid(openAiAccount.id, userAssignedIdentity.id, 'a97b65f3-24c7-4388-baec-2e87135dc908')
@@ -271,12 +285,122 @@ resource monitoringMetricsPublisherRoleAssignment 'Microsoft.Authorization/roleA
 // - FUNCTIONS_ENDPOINT: 'https://{functionApp.properties.defaultHostName}'
 
 // ========================================
+// Function App for Backend APIs
+// ========================================
+var functionAppName = '${abbreviations.functionApp}-${environmentName}-${uniqueSuffix}'
+var hostingPlanName = '${abbreviations.appServicePlan}-${environmentName}-${uniqueSuffix}'
+
+resource hostingPlan 'Microsoft.Web/serverfarms@2023-12-01' = {
+  name: hostingPlanName
+  location: 'eastus2'
+  tags: tags
+  sku: {
+    name: 'Y1'
+    tier: 'Dynamic'
+  }
+  properties: {
+    reserved: false
+  }
+}
+
+resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
+  name: functionAppName
+  location: 'eastus2'
+  kind: 'functionapp'
+  tags: union(tags, {
+    'azd-service-name': 'backend'
+  })
+  properties: {
+    serverFarmId: hostingPlan.id
+    siteConfig: {
+      appSettings: [
+        {
+          name: 'AzureWebJobsStorage'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
+        }
+        {
+          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
+        }
+        {
+          name: 'WEBSITE_CONTENTSHARE'
+          value: toLower(functionAppName)
+        }
+        {
+          name: 'FUNCTIONS_EXTENSION_VERSION'
+          value: '~4'
+        }
+        {
+          name: 'WEBSITE_NODE_DEFAULT_VERSION'
+          value: '~20'
+        }
+        {
+          name: 'FUNCTIONS_WORKER_RUNTIME'
+          value: 'node'
+        }
+        {
+          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+          value: applicationInsights.properties.ConnectionString
+        }
+        {
+          name: 'AZURE_CLIENT_ID'
+          value: userAssignedIdentity.properties.clientId
+        }
+        {
+          name: 'AZURE_OPENAI_ENDPOINT'
+          value: openAiAccount.properties.endpoint
+        }
+        {
+          name: 'AZURE_OPENAI_API_VERSION'
+          value: '2024-08-01-preview'
+        }
+        {
+          name: 'AZURE_OPENAI_DEPLOYMENT'
+          value: 'gpt-4o'
+        }
+        {
+          name: 'AZURE_OPENAI_KEY'
+          value: openAiAccount.listKeys().key1
+        }
+        {
+          name: 'NODE_ENV'
+          value: 'production'
+        }
+      ]
+      cors: {
+        allowedOrigins: [
+          'https://brave-island-04ba9f70f.2.azurestaticapps.net'
+          'https://make.powerapps.com'
+          'https://make.powerautomate.com'
+          'https://flow.microsoft.com'
+          'https://powerapps.microsoft.com'
+          'http://localhost:5173'
+          'https://localhost:5173'
+        ]
+        supportCredentials: false
+      }
+    }
+    httpsOnly: true
+  }
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${userAssignedIdentity.id}': {}
+    }
+  }
+}
+
+// ========================================
 // Static Web App for Frontend with Integrated APIs
 // ========================================
 resource staticWebApp 'Microsoft.Web/staticSites@2024-04-01' = if (gitHubUserName != '') {
   name: staticWebAppName
-  location: location
+  location: 'eastus2'
   tags: frontendTags
+  sku: {
+    name: 'Free'
+    tier: 'Free'
+  }
   properties: {
     repositoryUrl: 'https://github.com/${gitHubUserName}/${repositoryName}'
     branch: 'main'

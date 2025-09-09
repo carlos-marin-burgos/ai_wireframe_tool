@@ -12,7 +12,8 @@
   justify-content: center;
   z-index: 10000;
   padding: 20px;
-  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont,
+    sans-serif;
 }
 
 .html-code-modal {
@@ -90,7 +91,7 @@
   overflow: auto;
   background: #1e1e1e;
   color: #d4d4d4;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
 }
 
 .html-code-block {
@@ -118,7 +119,7 @@
 
 /* Basic HTML syntax highlighting */
 .html-code-block code::before {
-  content: '';
+  content: "";
 }
 
 /* Footer */
@@ -136,21 +137,23 @@
   font-size: 12px;
 }
 
-.btn-secondary {
-  background: #ffffff;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+.fluent-btn-secondary {
+  background: transparent;
+  color: #323130;
+  border: 1px solid #d1d1d1;
   padding: 8px 16px;
-  color: #374151;
+  margin: 0 4px;
+  border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   transition: all 0.2s ease;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.btn-secondary:hover {
-  background: #f9fafb;
-  border-color: #9ca3af;
+.fluent-btn-secondary:hover {
+  background: #f3f2f1;
+  border-color: #c7c6c4;
 }
 
 /* Responsive Design */
@@ -249,4 +252,15 @@
 
 .html-code-content::-webkit-scrollbar-thumb:hover {
   background: #4c4c50;
+}
+
+.visually-hidden-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
 }

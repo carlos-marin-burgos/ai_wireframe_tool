@@ -1,0 +1,120 @@
+<step title="BackgroundTrace" date="2025-08-08T08:40:44.790" instance="76dc4c" url="/api/zipdeploy" method="POST" >
+  <step title="Updating shutdown sentinel last write time" date="2025-08-08T08:40:44.868" SemaphoreCount="7" /><!-- duration: 47ms -->
+  <step title="LockFile &apos;C:\home\site\locks\deployments.lock&apos; acquired" date="2025-08-08T08:40:44.962" /><!-- duration: 47ms -->
+  <step title="Creating temporary deployment" date="2025-08-08T08:40:45.056" /><!-- duration: 266ms -->
+  <step title="Performing fetch based deployment" date="2025-08-08T08:40:45.353" >
+    <step title="Fetching changes." date="2025-08-08T08:40:45.743" /><!-- duration: 31ms -->
+    <step title="Starting LocalZipHandler" date="2025-08-08T08:40:45.822" /><!-- duration: 47ms -->
+    <step title="Cleaning up temp folders from previous zip deployments and extracting pushed zip file C:\local\Temp\zipdeploy\ina2chr2.zip (10.94 MB) to C:\local\Temp\zipdeploy\extracted" date="2025-08-08T08:40:46.118" /><!-- duration: 47ms -->
+    <step title="Cleaning up temp folders from previous zip deployments and extracting pushed zip file C:\local\Temp\zipdeploy\ina2chr2.zip (10.94 MB) to C:\local\Temp\zipdeploy\extracted" date="2025-08-08T08:40:46.212" >
+      <step title="Extracting 7549 entries to C:\local\Temp\zipdeploy\extracted directory" date="2025-08-08T08:40:46.306" >
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\ai\advanced-prompt-engine.js ..." date="2025-08-08T08:40:46.353" /><!-- duration: 31ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\ai\ai-context-manager.js ..." date="2025-08-08T08:40:46.431" /><!-- duration: 47ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\ai\ai-enhanced-wireframe-generator.js ..." date="2025-08-08T08:40:46.509" /><!-- duration: 47ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\ai\enhanced-ai-engine.js ..." date="2025-08-08T08:40:46.603" /><!-- duration: 31ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\ai\real-time-refinement-engine.js ..." date="2025-08-08T08:40:46.681" /><!-- duration: 47ms -->
+        <step title="Omitting extracting file traces ..." date="2025-08-08T08:40:46.759" /><!-- duration: 47ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\utils\analytics-logger.js ..." date="2025-08-08T08:40:53.667" /><!-- duration: 47ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\utils\api-validation.js ..." date="2025-08-08T08:40:53.760" /><!-- duration: 31ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\utils\performance-wireframe-generator.js ..." date="2025-08-08T08:40:53.823" /><!-- duration: 47ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\utils\secure-openai.js ..." date="2025-08-08T08:40:53.917" /><!-- duration: 31ms -->
+        <step title="Extracting to C:\local\Temp\zipdeploy\extracted\utils\wireframe-generator.js ..." date="2025-08-08T08:40:53.995" /><!-- duration: 31ms -->
+      </step><!-- duration: 7783ms -->
+    </step><!-- duration: 7908ms -->
+    <step title="Before sending BuildRequestReceived status to /api/updatedeploystatus" date="2025-08-08T08:40:54.214" /><!-- duration: 31ms -->
+    <step title="DeploymentManager.Deploy(id:c08562200a974e4ead483c9b430e5341)" date="2025-08-08T08:40:54.292" >
+      <step title="Collecting changeset information" date="2025-08-08T08:40:54.385" /><!-- duration: 328ms -->
+      <step title="Updating submodules" date="2025-08-08T08:40:54.760" >
+        <step title="Updating submodules." date="2025-08-08T08:40:55.167" /><!-- duration: 47ms -->
+      </step><!-- duration: 484ms -->
+      <step title="Preparing deployment for commit id &apos;c08562200a&apos;." date="2025-08-08T08:40:55.651" /><!-- duration: 47ms -->
+      <step title="Determining deployment builder" date="2025-08-08T08:40:56.057" >
+        <step title="Builder is BasicBuilder" date="2025-08-08T08:40:56.105" /><!-- duration: 46ms -->
+      </step><!-- duration: 141ms -->
+      <step title="Copying SSH keys" date="2025-08-08T08:40:56.370" /><!-- duration: 78ms -->
+      <step title="Building" date="2025-08-08T08:40:56.479" >
+        <step title="Generating deployment script." date="2025-08-08T08:40:56.901" /><!-- duration: 47ms -->
+        <step title="Generating deployment script" date="2025-08-08T08:40:56.979" >
+          <step title="Using cached version of the deployment script for command: -y --no-dot-deployment -r &quot;C:\local\Temp\zipdeploy\extracted&quot; -o &quot;C:\home\site\deployments\tools&quot; --basic --sitePath &quot;C:\local\Temp\zipdeploy\extracted&quot;" date="2025-08-08T08:40:57.120" /><!-- duration: 47ms -->
+          <step title="Using cached version of deployment script (command: &apos;azure -y --no-dot-deployment -r &quot;C:\local\Temp\zipdeploy\extracted&quot; -o &quot;C:\home\site\deployments\tools&quot; --basic --sitePath &quot;C:\local\Temp\zipdeploy\extracted&quot;&apos;)." date="2025-08-08T08:40:57.245" /><!-- duration: 47ms -->
+        </step><!-- duration: 344ms -->
+        <step title="Running deployment command..." date="2025-08-08T08:40:57.682" /><!-- duration: 47ms -->
+        <step title="Command: &quot;C:\home\site\deployments\tools\deploy.cmd&quot;" date="2025-08-08T08:40:57.807" /><!-- duration: 47ms -->
+        <step title="Executing external process" date="2025-08-08T08:40:57.901" type="process" path="starter.cmd" arguments="&quot;C:\home\site\deployments\tools\deploy.cmd&quot;" >
+          <step title="Handling Basic Web Site deployment." date="2025-08-08T08:40:58.964" /><!-- duration: 31ms -->
+          <step title="Creating app_offline.htm" date="2025-08-08T08:41:11.464" /><!-- duration: 63ms -->
+          <step title="KuduSync.NET from: &apos;C:\local\Temp\zipdeploy\extracted&apos; to: &apos;C:\home\site\wwwroot&apos;" date="2025-08-08T08:41:11.589" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\.package-lock.json&apos;" date="2025-08-08T08:41:11.714" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\navigation\INavigationClient.d.ts.map&apos;" date="2025-08-08T08:41:11.839" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\navigation\NavigationClient.d.ts.map&apos;" date="2025-08-08T08:41:11.948" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\navigation\NavigationClient.mjs&apos;" date="2025-08-08T08:41:12.105" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\navigation\NavigationClient.mjs.map&apos;" date="2025-08-08T08:41:12.214" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\navigation\NavigationOptions.d.ts.map&apos;" date="2025-08-08T08:41:12.339" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\network\FetchClient.d.ts.map&apos;" date="2025-08-08T08:41:12.464" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\network\FetchClient.mjs&apos;" date="2025-08-08T08:41:12.589" /><!-- duration: 63ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\network\FetchClient.mjs.map&apos;" date="2025-08-08T08:41:12.745" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\operatingcontext\BaseOperatingContext.d.ts.map&apos;" date="2025-08-08T08:41:12.870" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\operatingcontext\BaseOperatingContext.mjs&apos;" date="2025-08-08T08:41:12.995" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\operatingcontext\BaseOperatingContext.mjs.map&apos;" date="2025-08-08T08:41:13.105" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\operatingcontext\NestedAppOperatingContext.d.ts.map&apos;" date="2025-08-08T08:41:13.230" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\operatingcontext\NestedAppOperatingContext.mjs&apos;" date="2025-08-08T08:41:13.355" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\operatingcontext\NestedAppOperatingContext.mjs.map&apos;" date="2025-08-08T08:41:13.464" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\operatingcontext\StandardOperatingContext.d.ts.map&apos;" date="2025-08-08T08:41:13.573" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\operatingcontext\StandardOperatingContext.mjs&apos;" date="2025-08-08T08:41:13.698" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\operatingcontext\StandardOperatingContext.mjs.map&apos;" date="2025-08-08T08:41:13.823" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\operatingcontext\UnknownOperatingContext.d.ts.map&apos;" date="2025-08-08T08:41:13.948" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\operatingcontext\UnknownOperatingContext.mjs&apos;" date="2025-08-08T08:41:14.058" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\operatingcontext\UnknownOperatingContext.mjs.map&apos;" date="2025-08-08T08:41:14.183" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\protocol\Authorize.d.ts.map&apos;" date="2025-08-08T08:41:14.308" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\protocol\Authorize.mjs&apos;" date="2025-08-08T08:41:14.417" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\protocol\Authorize.mjs.map&apos;" date="2025-08-08T08:41:14.558" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\request\AuthorizationCodeRequest.d.ts.map&apos;" date="2025-08-08T08:41:14.683" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\request\AuthorizationUrlRequest.d.ts.map&apos;" date="2025-08-08T08:41:14.808" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\request\ClearCacheRequest.d.ts.map&apos;" date="2025-08-08T08:41:14.917" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\request\EndSessionPopupRequest.d.ts.map&apos;" date="2025-08-08T08:41:15.042" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\request\EndSessionRequest.d.ts.map&apos;" date="2025-08-08T08:41:15.167" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\request\InitializeApplicationRequest.d.ts.map&apos;" date="2025-08-08T08:41:15.292" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\request\PopupRequest.d.ts.map&apos;" date="2025-08-08T08:41:15.401" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\request\PopupWindowAttributes.d.ts.map&apos;" date="2025-08-08T08:41:15.526" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\request\RedirectRequest.d.ts.map&apos;" date="2025-08-08T08:41:15.651" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\request\RequestHelpers.d.ts.map&apos;" date="2025-08-08T08:41:15.761" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\request\RequestHelpers.mjs&apos;" date="2025-08-08T08:41:15.886" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\request\RequestHelpers.mjs.map&apos;" date="2025-08-08T08:41:15.995" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\request\SilentRequest.d.ts.map&apos;" date="2025-08-08T08:41:16.120" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\request\SsoSilentRequest.d.ts.map&apos;" date="2025-08-08T08:41:16.245" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\response\AuthenticationResult.d.ts.map&apos;" date="2025-08-08T08:41:16.370" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\response\ResponseHandler.d.ts.map&apos;" date="2025-08-08T08:41:16.495" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\response\ResponseHandler.mjs&apos;" date="2025-08-08T08:41:16.605" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\response\ResponseHandler.mjs.map&apos;" date="2025-08-08T08:41:16.730" /><!-- duration: 48ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\telemetry\BrowserPerformanceClient.d.ts.map&apos;" date="2025-08-08T08:41:16.856" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\telemetry\BrowserPerformanceClient.mjs&apos;" date="2025-08-08T08:41:16.965" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\telemetry\BrowserPerformanceClient.mjs.map&apos;" date="2025-08-08T08:41:17.075" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\telemetry\BrowserPerformanceMeasurement.d.ts.map&apos;" date="2025-08-08T08:41:17.200" /><!-- duration: 31ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\telemetry\BrowserPerformanceMeasurement.mjs&apos;" date="2025-08-08T08:41:17.309" /><!-- duration: 47ms -->
+          <step title="Copying file: &apos;node_modules\@azure\msal-browser\dist\telemetry\BrowserPerformanceMeasurement.mjs.map&apos;" date="2025-08-08T08:41:17.434" /><!-- duration: 47ms -->
+          <step title="Omitting next output lines..." date="2025-08-08T08:41:17.559" /><!-- duration: 31ms -->
+          <step title="Processed 320 files..." date="2025-08-08T08:41:34.063" /><!-- duration: 31ms -->
+          <step title="Processed 596 files..." date="2025-08-08T08:41:54.085" /><!-- duration: 47ms -->
+          <step title="Processed 886 files..." date="2025-08-08T08:42:14.179" /><!-- duration: 62ms -->
+          <step title="Processed 1172 files..." date="2025-08-08T08:42:34.164" /><!-- duration: 31ms -->
+          <step title="Processed 1464 files..." date="2025-08-08T08:42:54.181" /><!-- duration: 62ms -->
+          <step title="Processed 1753 files..." date="2025-08-08T08:43:14.229" /><!-- duration: 63ms -->
+          <step title="Processed 2064 files..." date="2025-08-08T08:43:34.261" /><!-- duration: 63ms -->
+          <step title="Processed 2368 files..." date="2025-08-08T08:43:54.261" /><!-- duration: 63ms -->
+          <step title="Processed 2671 files..." date="2025-08-08T08:44:14.281" /><!-- duration: 31ms -->
+          <step title="Processed 2967 files..." date="2025-08-08T08:44:34.267" /><!-- duration: 63ms -->
+          <step title="Finished successfully." date="2025-08-08T08:44:35.986" /><!-- duration: 47ms -->
+        </step><!-- duration: 218179ms -->
+        <step title="Running post deployment command(s)..." date="2025-08-08T08:44:36.533" /><!-- duration: 47ms -->
+        <step title="Triggering recycle (preview mode disabled)." date="2025-08-08T08:44:37.002" /><!-- duration: 47ms -->
+        <step title="Ignoring FS watcher based recycle request as this is a classic Windows app." date="2025-08-08T08:44:37.080" /><!-- duration: 47ms -->
+        <step title="Deployment successful. DEPLOYMENTINFO: deploymentPath = Functions App ZipDeploy. Extract zip. , deployer = ZipDeploy, os = windows, sku = Dynamic, language = node, siteName = func-prod-fresh-u62277mynzfg4, slotName = Production, siteHostName = func-prod-fresh-u62277mynzfg4.azurewebsites.net, deploymentStatus = Success" date="2025-08-08T08:44:37.502" /><!-- duration: 47ms -->
+      </step><!-- duration: 221929ms -->
+    </step><!-- duration: 224163ms -->
+    <step title="Cleaning up temp files" date="2025-08-08T08:44:38.486" /><!-- duration: 47ms -->
+    <step title="Begin HttpPost https://func-prod-fresh-u62277mynzfg4.scm.azurewebsites.net/operations/settriggers, x-ms-request-id: 33cf001f-f8c5-9743-9c5c-e33d1978d05c" date="2025-08-08T08:44:38.627" /><!-- duration: 31ms -->
+    <step title="End HttpPost, status: OK" date="2025-08-08T08:44:38.799" /><!-- duration: 31ms -->
+    <step title="Scheduling background sync triggers after delay" date="2025-08-08T08:44:38.877" /><!-- duration: 47ms -->
+  </step><!-- duration: 233727ms -->
+  <step title="LockFile &apos;C:\home\site\locks\deployments.lock&apos; released" date="2025-08-08T08:44:39.143" /><!-- duration: 31ms -->
+</step><!-- duration: 234462ms -->

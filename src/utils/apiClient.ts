@@ -31,8 +31,9 @@ export class ApiError extends Error {
 
 // Check if backend is healthy
 async function checkBackendHealth(): Promise<boolean> {
-  // ALWAYS return true in development to avoid "offline mode" error
-  if (import.meta.env.DEV) {
+  // In production, always assume healthy to avoid blocking the UI
+  // The actual network requests will handle connection failures
+  if (!import.meta.env.DEV) {
     return true;
   }
 
@@ -79,8 +80,14 @@ async function checkBackendHealth(): Promise<boolean> {
 
 // Enhanced error messages for better user experience
 function getReadableErrorMessage(error: Error): string {
+  const isDevelopment = import.meta.env.DEV;
+
   if (error.message.includes("Failed to fetch")) {
-    return "Unable to connect to the backend server. Please ensure the Azure Functions backend is running on localhost:7072";
+    if (isDevelopment) {
+      return "Unable to connect to the local backend server. Please ensure the Azure Functions backend is running on localhost:7072";
+    } else {
+      return "Unable to connect to the backend server. Please check your internet connection or try again later.";
+    }
   }
   if (error.message.includes("NetworkError")) {
     return "Network connection error. Please check your internet connection and try again";
@@ -99,8 +106,8 @@ async function fetchWithRetry(
   let lastError: Error | null = null;
   let delay = retryConfig.delayMs;
 
-  // ALWAYS skip health check in development - direct connection to avoid "offline mode" error
-  const isDevelopment = import.meta.env.DEV;
+  // Remove the health check blocking to avoid "offline mode" errors
+  // Let the actual fetch requests handle network failures gracefully
 
   for (let attempt = 0; attempt <= retryConfig.maxRetries; attempt++) {
     try {
@@ -112,6 +119,12 @@ async function fetchWithRetry(
 
       // Check if the response is ok (status in the range 200-299)
       if (!response.ok) {
+        // For 503 Service Unavailable (AI service down), return the error response as JSON
+        // instead of throwing immediately so we can show the proper error message
+        if (response.status === 503) {
+          return response; // Let the caller handle the 503 response
+        }
+
         throw new ApiError(
           response.status,
           `HTTP error! status: ${response.status}`
@@ -151,59 +164,104 @@ async function fetchWithRetry(
 }
 
 export async function apiRequest<T>(
-  endpoint: string,
+  endpoint: string | string[],
   options: RequestInit = {},
   retryConfig?: RetryConfig
 ): Promise<T> {
-  const url = `${API_CONFIG.BASE_URL}${endpoint}`;
+  // BULLETPROOF: Handle multiple endpoints for wireframe generation
+  const endpoints = Array.isArray(endpoint) ? endpoint : [endpoint];
 
-  // Merge default headers with provided options
-  const mergedOptions = {
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
-    ...options,
-  };
+  let lastError: Error | null = null;
 
-  try {
-    const response = await fetchWithRetry(url, mergedOptions, retryConfig);
-    return await response.json();
-  } catch (error) {
-    if (error instanceof ApiError) {
-      // Handle specific HTTP errors
-      switch (error.status) {
-        case 401:
-          throw new Error("Unauthorized: Please check your API credentials");
-        case 403:
-          throw new Error(
-            "Forbidden: You don't have permission to access this resource"
-          );
-        case 404:
-          throw new Error("Not Found: The requested resource doesn't exist");
-        case 429:
-          throw new Error("Too Many Requests: Please try again later");
-        case 500:
-          throw new Error("Server Error: Something went wrong on our end");
-        default:
-          throw new Error(`API Error: ${error.message}`);
+  for (const singleEndpoint of endpoints) {
+    const url = `${API_CONFIG.BASE_URL}${singleEndpoint}`;
+    console.log(`🔧 BULLETPROOF: Trying endpoint: ${url}`);
+
+    // Merge default headers with provided options
+    const mergedOptions = {
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+      ...options,
+    };
+
+    try {
+      const response = await fetchWithRetry(url, mergedOptions, retryConfig);
+
+      // Handle 503 Service Unavailable responses specially
+      if (response.status === 503) {
+        const errorData = await response.json();
+        throw new ApiError(
+          503,
+          errorData.message ||
+            errorData.error ||
+            "Service temporarily unavailable"
+        );
+      }
+
+      console.log(`✅ BULLETPROOF: Success with endpoint: ${url}`);
+      return await response.json();
+    } catch (error) {
+      lastError = error as Error;
+      console.log(
+        `❌ BULLETPROOF: Failed with endpoint: ${url}, error:`,
+        error instanceof Error ? error.message : error
+      );
+
+      // If this is a 404 (endpoint doesn't exist), try the next endpoint
+      if (error instanceof ApiError && error.status === 404) {
+        continue;
+      }
+
+      // For other errors, still try the next endpoint but log the error
+      if (endpoints.length > 1) {
+        console.log(`⚠️ BULLETPROOF: Trying next endpoint...`);
+        continue;
       }
     }
-
-    // Handle network errors
-    if (error instanceof TypeError) {
-      throw new Error("Network Error: Please check your internet connection");
-    }
-
-    throw error;
   }
+
+  // All endpoints failed, handle the last error
+  if (lastError instanceof ApiError) {
+    // Handle specific HTTP errors
+    switch (lastError.status) {
+      case 401:
+        throw new Error("Unauthorized: Please check your API credentials");
+      case 403:
+        throw new Error(
+          "Forbidden: You don't have permission to access this resource"
+        );
+      case 404:
+        throw new Error("Not Found: The requested resource doesn't exist");
+      case 429:
+        throw new Error("Too Many Requests: Please try again later");
+      case 500:
+        throw new Error("Server Error: Something went wrong on our end");
+      case 503:
+        throw new Error(lastError.message); // Use the message from the server
+      default:
+        throw new Error(`API Error: ${lastError.message}`);
+    }
+  }
+
+  // Handle network errors
+  if (lastError instanceof TypeError) {
+    throw new Error("Network Error: Please check your internet connection");
+  }
+
+  throw lastError || new Error("All API endpoints failed");
 }
 
 export const api = {
-  get: <T>(endpoint: string, options: RequestInit = {}) =>
+  get: <T>(endpoint: string | string[], options: RequestInit = {}) =>
     apiRequest<T>(endpoint, { ...options, method: "GET" }),
 
-  post: <T>(endpoint: string, data: any, options: RequestInit = {}) => {
+  post: <T>(
+    endpoint: string | string[],
+    data: any,
+    options: RequestInit = {}
+  ) => {
     console.log("🔍 API POST Debug:", {
       endpoint,
       data,
@@ -223,14 +281,14 @@ export const api = {
     });
   },
 
-  put: <T>(endpoint: string, data: any, options: RequestInit = {}) =>
+  put: <T>(endpoint: string | string[], data: any, options: RequestInit = {}) =>
     apiRequest<T>(endpoint, {
       ...options,
       method: "PUT",
       body: JSON.stringify(data),
     }),
 
-  delete: <T>(endpoint: string, options: RequestInit = {}) =>
+  delete: <T>(endpoint: string | string[], options: RequestInit = {}) =>
     apiRequest<T>(endpoint, { ...options, method: "DELETE" }),
 };
 

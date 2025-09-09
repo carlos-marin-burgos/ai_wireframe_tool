@@ -13,15 +13,17 @@ interface FallbackWireframeOptions {
 
 // Color scheme definitions
 const COLOR_SCHEMES = {
-  primary: {
+  microsoftLearn: {
     main: "#0078d4",
     secondary: "#106ebe",
     bg: "#ffffff",
     surface: "#f8f9fa",
-    text: "#171717",
+    text: "#323130",
     textSecondary: "#605e5c",
-    border: "#e1dfdd",
+    border: "#e1e5e9",
     accent: "#0078d4",
+    headerBg: "#ffffff",
+    headerText: "#000000",
   },
   secondary: {
     main: "#8b5dae",
@@ -32,6 +34,8 @@ const COLOR_SCHEMES = {
     textSecondary: "#605e5c",
     border: "#e1dfdd",
     accent: "#8b5dae",
+    headerBg: "#ffffff",
+    headerText: "#000000",
   },
   success: {
     main: "#107c10",
@@ -42,6 +46,8 @@ const COLOR_SCHEMES = {
     textSecondary: "#605e5c",
     border: "#e1dfdd",
     accent: "#107c10",
+    headerBg: "#ffffff",
+    headerText: "#000000",
   },
 };
 
@@ -56,7 +62,7 @@ const getBaseCSS = (colors: any) => `
   }
   .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
   .header { 
-    background: ${colors.surface}; 
+    background: ${colors.headerBg || "#ffffff"}; 
     padding: 16px 0; 
     border-bottom: 1px solid ${colors.border}; 
     position: relative; 
@@ -70,11 +76,11 @@ const getBaseCSS = (colors: any) => `
   .logo { 
     font-size: 24px; 
     font-weight: 600; 
-    color: ${colors.main}; 
+    color: ${colors.headerText || "#000000"}; 
   }
   .nav { display: flex; gap: 24px; }
   .nav a { 
-    color: ${colors.textSecondary}; 
+    color: ${colors.headerText || "#000000"}; 
     text-decoration: none; 
     font-weight: 500; 
     transition: color 0.2s; 
@@ -133,6 +139,39 @@ const getBaseCSS = (colors: any) => `
   .fallback-notice strong { color: #8a6914; }
 `;
 
+// Microsoft Learn Header Template
+const getMicrosoftLearnHeader = (colors: any) => `
+  <header style="background: ${colors.headerBg || "#ffffff"}; color: ${
+  colors.headerText || "#000000"
+}; padding: 12px 24px; border-bottom: 1px solid #e5e5e5; font-family: 'Segoe UI', system-ui, sans-serif;">
+    <div style="display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto;">
+      <div style="display: flex; align-items: center;">
+        <svg aria-hidden="true" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; margin-right: 16px;">
+          <path d="M11.5216 0.5H0V11.9067H11.5216V0.5Z" fill="#f25022" />
+          <path d="M24.2418 0.5H12.7202V11.9067H24.2418V0.5Z" fill="#7fba00" />
+          <path d="M11.5216 13.0933H0V24.5H11.5216V13.0933Z" fill="#00a4ef" />
+          <path d="M24.2418 13.0933H12.7202V24.5H24.2418V13.0933Z" fill="#ffb900" />
+        </svg>
+        <div style="width: 1px; height: 24px; background: #e1e5e9; margin-right: 16px;"></div>
+        <span style="font-weight: 600; font-size: 16px; color: ${
+          colors.headerText || "#000000"
+        };">Microsoft Learn</span>
+      </div>
+      <nav style="display: flex; gap: 24px;">
+        <a href="#" style="color: ${
+          colors.headerText || "#000000"
+        }; text-decoration: none; font-size: 14px;">Documentation</a>
+        <a href="#" style="color: ${
+          colors.headerText || "#000000"
+        }; text-decoration: none; font-size: 14px;">Training</a>
+        <a href="#" style="color: ${
+          colors.headerText || "#000000"
+        }; text-decoration: none; font-size: 14px;">Certifications</a>
+      </nav>
+    </div>
+  </header>
+`;
+
 // Landing page template
 const generateLandingPage = (
   description: string,
@@ -141,7 +180,7 @@ const generateLandingPage = (
 ): string => {
   const colors =
     COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] ||
-    COLOR_SCHEMES.primary;
+    COLOR_SCHEMES.microsoftLearn;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -152,13 +191,14 @@ const generateLandingPage = (
     <style>
         ${getBaseCSS(colors)}
         .hero { 
-            background: linear-gradient(135deg, ${colors.surface}, #e8f5ff); 
+            background: ${colors.headerBg || "#ffffff"}; 
             padding: 80px 0; 
             text-align: center; 
         }
         .hero h1 { 
             font-size: 48px; 
             font-weight: 700; 
+            color: ${colors.headerText || "#000000"}; 
             color: ${colors.text}; 
             margin-bottom: 24px; 
         }
@@ -203,27 +243,7 @@ const generateLandingPage = (
     </style>
 </head>
 <body>
-    <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
-        <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
-            <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
-                <svg width="24" height="24" fill="#0078d4" viewBox="0 0 24 24">
-                    <path d="M11.25 4.533a9.707 9.707 0 00-6.984 2.708L3.482 6.457C5.283 4.457 8.145 3.25 11.25 3.25s5.967 1.207 7.768 3.207l-.784.784A9.707 9.707 0 0011.25 4.533zM18.017 8.017L17.233 8.8a8.25 8.25 0 00-11.966 0l-.784-.784a9.75 9.75 0 0113.534 0zM15.516 10.516L14.732 11.3a5.25 5.25 0 00-7.464 0l-.784-.784a6.75 6.75 0 019.032 0zM13.016 13.016L12.232 13.8a2.25 2.25 0 00-3.464 0l-.784-.784a3.75 3.75 0 015.032 0z"/>
-                </svg>
-                <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
-            </div>
-            <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
-                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Documentation</a>
-                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Learning Paths</a>
-                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Certifications</a>
-                <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Q&A</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Sign in</button>
-            </nav>
-        </div>
-    </header>
-
-    <div class="fallback-notice">
-        <strong>⚡ Smart Template:</strong> This wireframe was generated using intelligent templates while the AI service is temporarily unavailable.
-    </div>
+    ${getMicrosoftLearnHeader(colors)}
 
     <section class="hero">
         <div class="container">
@@ -270,7 +290,7 @@ const generateDashboard = (
 ): string => {
   const colors =
     COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] ||
-    COLOR_SCHEMES.primary;
+    COLOR_SCHEMES.microsoftLearn;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -378,9 +398,7 @@ const generateDashboard = (
     <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
         <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
             <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
-                <svg width="24" height="24" fill="#0078d4" viewBox="0 0 24 24">
-                    <path d="M11.25 4.533a9.707 9.707 0 00-6.984 2.708L3.482 6.457C5.283 4.457 8.145 3.25 11.25 3.25s5.967 1.207 7.768 3.207l-.784.784A9.707 9.707 0 0011.25 4.533z"/>
-                </svg>
+              <img src="/windowsLogo.png" alt="Microsoft Logo" width="24" height="24">
                 <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
             </div>
             <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
@@ -392,10 +410,6 @@ const generateDashboard = (
             </nav>
         </div>
     </header>
-
-    <div class="fallback-notice">
-        <strong>⚡ Smart Template:</strong> Dashboard generated using intelligent templates.
-    </div>
 
     <main class="main">
         <div class="container">
@@ -474,7 +488,7 @@ const generateForm = (
 ): string => {
   const colors =
     COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] ||
-    COLOR_SCHEMES.primary;
+    COLOR_SCHEMES.microsoftLearn;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -568,9 +582,7 @@ const generateForm = (
     <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
         <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
             <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
-                <svg width="24" height="24" fill="#0078d4" viewBox="0 0 24 24">
-                    <path d="M11.25 4.533a9.707 9.707 0 00-6.984 2.708L3.482 6.457C5.283 4.457 8.145 3.25 11.25 3.25s5.967 1.207 7.768 3.207l-.784.784A9.707 9.707 0 0011.25 4.533z"/>
-                </svg>
+               <img src="/windowsLogo.png" alt="Microsoft Logo" width="24" height="24">
                 <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
             </div>
             <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
@@ -649,7 +661,7 @@ const generateContent = (
 ): string => {
   const colors =
     COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] ||
-    COLOR_SCHEMES.primary;
+    COLOR_SCHEMES.microsoftLearn;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -743,9 +755,7 @@ const generateContent = (
     <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
         <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
             <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
-                <svg width="24" height="24" fill="#0078d4" viewBox="0 0 24 24">
-                    <path d="M11.25 4.533a9.707 9.707 0 00-6.984 2.708L3.482 6.457C5.283 4.457 8.145 3.25 11.25 3.25s5.967 1.207 7.768 3.207l-.784.784A9.707 9.707 0 0011.25 4.533z"/>
-                </svg>
+                <img src="/windowsLogo.png" alt="Microsoft Logo" width="24" height="24">
                 <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
             </div>
             <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
@@ -850,7 +860,7 @@ const generateGeneric = (
 ): string => {
   const colors =
     COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] ||
-    COLOR_SCHEMES.primary;
+    COLOR_SCHEMES.microsoftLearn;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -900,9 +910,7 @@ const generateGeneric = (
     <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
         <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
             <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
-                <svg width="24" height="24" fill="#0078d4" viewBox="0 0 24 24">
-                    <path d="M11.25 4.533a9.707 9.707 0 00-6.984 2.708L3.482 6.457C5.283 4.457 8.145 3.25 11.25 3.25s5.967 1.207 7.768 3.207l-.784.784A9.707 9.707 0 0011.25 4.533z"/>
-                </svg>
+                <img src="/windowsLogo.png" alt="Microsoft Logo" width="24" height="24">
                 <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
             </div>
             <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
@@ -914,10 +922,6 @@ const generateGeneric = (
             </nav>
         </div>
     </header>
-
-    <div class="fallback-notice">
-        <strong>⚡ Smart Template:</strong> Wireframe generated using intelligent templates while AI service is temporarily unavailable.
-    </div>
 
     <main class="main">
         <div class="container">
@@ -1117,9 +1121,7 @@ const generateCustomForm = (description: string, _theme: string, colorScheme: st
     <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
         <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
             <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
-                <svg width="24" height="24" fill="#0078d4" viewBox="0 0 24 24">
-                    <path d="M11.25 4.533a9.707 9.707 0 00-6.984 2.708L3.482 6.457C5.283 4.457 8.145 3.25 11.25 3.25s5.967 1.207 7.768 3.207l-.784.784A9.707 9.707 0 0011.25 4.533z"/>
-                </svg>
+                <img src="/windowsLogo.png" alt="Microsoft Logo" width="24" height="24">
                 <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
             </div>
             <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
@@ -1238,7 +1240,7 @@ export function generateFallbackWireframe(
 export async function shouldUseFallback(): Promise<boolean> {
   try {
     // First check if API is responding at all
-    const response = await fetch("/api/generateWireframe", {
+    const response = await fetch("/api/generate-wireframe", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

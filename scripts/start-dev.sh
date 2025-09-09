@@ -1,109 +1,83 @@
 #!/bin/bash
 
-# Smart Development Start Script
-# Automatically starts services in the correct order and verifies they're working
+# Development startup script for Designetica
+# Starts both frontend and backend servers
 
-echo "🚀 Starting AI Wireframe Development Environment"
+echo "🚀 Starting Designetica Development Environment"
 echo "=============================================="
 
-# Function to wait for service to be ready
-wait_for_service() {
-    local port=$1
-    local service=$2
-    local max_attempts=30
-    local attempt=1
-    
-    echo "⏳ Waiting for $service on port $port..."
-    
-    while [ $attempt -le $max_attempts ]; do
-        if curl -s http://localhost:$port/api/health >/dev/null 2>&1; then
-            echo "✅ $service is ready!"
-            return 0
-        fi
-        
-        echo "   Attempt $attempt/$max_attempts..."
-        sleep 2
-        ((attempt++))
-    done
-    
-    echo "❌ $service failed to start within expected time"
-    return 1
-}
+# Get the project root (parent of scripts directory)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-# Kill any existing processes on our ports
-echo "🧹 Cleaning up existing processes..."
-lsof -ti:5173 | xargs -r kill -9 2>/dev/null || true
-lsof -ti:7072 | xargs -r kill -9 2>/dev/null || true
+# Colors for output
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
 
-sleep 2
-
-# Start backend first
-echo ""
-echo "🖥️  Starting Azure Functions backend..."
-cd backend
-func start --port 7072 &
-backend_pid=$!
-cd ..
-
-# Wait for backend to be ready
-if wait_for_service 7072 "Backend"; then
-    # Test AI capabilities
-    echo "🤖 Testing AI capabilities..."
-    response=$(curl -s -X POST http://localhost:7072/api/generate-html-wireframe \
-        -H "Content-Type: application/json" \
-        -d '{"description": "test"}' \
-        --max-time 15)
-    
-    if echo "$response" | grep -q '"aiGenerated":true'; then
-        echo "✅ AI is working correctly!"
-    else
-        echo "⚠️  AI test failed - check Azure OpenAI configuration"
-        echo "Response: $response"
-    fi
-else
-    echo "❌ Backend failed to start"
+# Change to project root and check if we're in the right directory
+cd "$PROJECT_ROOT"
+if [ ! -f "package.json" ]; then
+    echo -e "${RED}❌ Error: package.json not found in $PROJECT_ROOT${NC}"
     exit 1
 fi
 
-# Start frontend
-echo ""
-echo "🌐 Starting frontend development server..."
-npm run dev &
-frontend_pid=$!
-
-# Wait for frontend to be ready
-if wait_for_service 5173 "Frontend"; then
-    echo "✅ Frontend is ready!"
-else
-    echo "❌ Frontend failed to start"
-    kill $backend_pid 2>/dev/null || true
+# Check if backend directory exists
+if [ ! -d "backend" ]; then
+    echo -e "${RED}❌ Error: Backend directory not found${NC}"
     exit 1
 fi
 
-# Final health check
-echo ""
-echo "🔍 Running final health check..."
-./scripts/health-check.sh
+echo -e "${BLUE}📋 Pre-flight checks...${NC}"
 
-echo ""
-echo "🎉 Development environment is ready!"
-echo ""
-echo "📍 Access your application:"
-echo "   Frontend: http://localhost:5173"
-echo "   Backend API: http://localhost:7072"
-echo "   Health Check: http://localhost:7072/api/health"
-echo ""
-echo "To stop all services, press Ctrl+C or run: ./scripts/stop-dev.sh"
+# Check if Node.js is installed
+if ! command -v node &> /dev/null; then
+    echo -e "${RED}❌ Node.js is not installed${NC}"
+    exit 1
+fi
 
-# Keep script running and handle cleanup on exit
-cleanup() {
-    echo ""
-    echo "🛑 Shutting down development environment..."
-    kill $backend_pid $frontend_pid 2>/dev/null || true
-    exit 0
-}
+# Check if npm is installed
+if ! command -v npm &> /dev/null; then
+    echo -e "${RED}❌ npm is not installed${NC}"
+    exit 1
+fi
 
-trap cleanup INT TERM
+# Check if Azure Functions Core Tools is installed
+if ! command -v func &> /dev/null; then
+    echo -e "${YELLOW}⚠️ Azure Functions Core Tools not found. Installing...${NC}"
+    npm install -g azure-functions-core-tools@4 --unsafe-perm true
+fi
 
-# Wait for background processes
-wait
+echo -e "${GREEN}✅ Pre-flight checks completed${NC}"
+
+# Install dependencies if needed
+if [ ! -d "node_modules" ]; then
+    echo -e "${BLUE}📦 Installing frontend dependencies...${NC}"
+    npm install
+fi
+
+if [ ! -d "backend/node_modules" ]; then
+    echo -e "${BLUE}📦 Installing backend dependencies...${NC}"
+    cd "$PROJECT_ROOT/backend" && npm install && cd "$PROJECT_ROOT"
+fi
+
+# Check if concurrently is installed
+if ! npm list concurrently &> /dev/null; then
+    echo -e "${BLUE}📦 Installing concurrently...${NC}"
+    npm install --save-dev concurrently@8.2.2
+fi
+
+echo -e "${GREEN}✅ Dependencies ready${NC}"
+
+# Start both servers
+echo -e "${BLUE}🚀 Starting both frontend and backend servers...${NC}"
+echo -e "${YELLOW}Frontend will be available at: http://localhost:5173${NC}"
+echo -e "${YELLOW}Backend will be available at: http://localhost:7071${NC}"
+echo ""
+echo -e "${BLUE}Press Ctrl+C to stop both servers${NC}"
+echo ""
+
+# Start with concurrently
+npm run dev:full

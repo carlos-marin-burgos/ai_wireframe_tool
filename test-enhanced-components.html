@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Component Previews Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            margin: 0 0 20px 0;
+            color: #1a1a1a;
+        }
+
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .component-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+        }
+
+        /* Make all components take full width */
+        .component-grid>div {
+            width: 100%;
+            max-width: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🎨 Enhanced Component Previews Test</h1>
+        <p>Testing the improved Fluent and Atlas component previews vs Azure components</p>
+
+        <div class="section">
+            <h2>🔵 Azure Components (Baseline - Rich Previews)</h2>
+            <div id="azure-components" class="component-grid">
+                <div class="loading">Loading Azure components...</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🟡 Fluent Components (Enhanced Previews)</h2>
+            <div id="fluent-components" class="component-grid">
+                <div class="loading">Loading enhanced Fluent components...</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🟣 Atlas Components (Enhanced Previews)</h2>
+            <div id="atlas-components" class="component-grid">
+                <div class="loading">Loading enhanced Atlas components...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulate our enhanced component loading from the React component
+
+        // Azure fallback components (rich preview)
+        const azureComponents = [
+            {
+                id: 'figma-azure-dashboard',
+                name: 'Azure Resource Dashboard',
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 12px; overflow: hidden; font-family: 'Segoe UI', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 480px;">
+                    <div style="background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%); color: white; padding: 24px;">
+                        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+                            <div style="width: 48px; height: 48px; background: rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                <div style="width: 24px; height: 24px; background: white; border-radius: 4px;"></div>
+                            </div>
+                            <div>
+                                <h2 style="margin: 0; font-size: 24px; font-weight: 600;">Azure Portal</h2>
+                                <p style="margin: 4px 0 0 0; opacity: 0.9; font-size: 14px;">Resource Management Dashboard</p>
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+                            <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 28px; font-weight: 700; margin-bottom: 4px;">47</div>
+                                <div style="font-size: 12px; opacity: 0.9;">Resources</div>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 28px; font-weight: 700; margin-bottom: 4px;">12</div>
+                                <div style="font-size: 12px; opacity: 0.9;">Services</div>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 28px; font-weight: 700; margin-bottom: 4px;">3</div>
+                                <div style="font-size: 12px; opacity: 0.9;">Regions</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 24px;">
+                        <div style="margin-bottom: 20px;">
+                            <h3 style="margin: 0 0 12px 0; font-size: 16px; color: #323130;">Recent Activity</h3>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <div style="padding: 12px; background: #f3f2f1; border-radius: 6px; display: flex; justify-content: space-between;">
+                                    <span style="font-size: 14px; color: #323130;">Storage Account</span>
+                                    <span style="font-size: 12px; color: #0078d4;">Running</span>
+                                </div>
+                                <div style="padding: 12px; background: #f3f2f1; border-radius: 6px; display: flex; justify-content: space-between;">
+                                    <span style="font-size: 14px; color: #323130;">Web App</span>
+                                    <span style="font-size: 12px; color: #107c10;">Healthy</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+            },
+            {
+                id: 'azure-function-app',
+                name: 'Azure Function App',
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 12px; overflow: hidden; font-family: 'Segoe UI', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 380px;">
+                    <div style="background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%); color: white; padding: 20px;">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                            <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 18px;">⚡</div>
+                            <div>
+                                <h3 style="margin: 0; font-size: 18px; font-weight: 600;">Function App</h3>
+                                <p style="margin: 4px 0 0 0; opacity: 0.9; font-size: 12px;">Serverless compute service</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 20px;">
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 12px; color: #605e5c;">Execution Count</span>
+                                <span style="font-size: 12px; color: #0078d4; font-weight: 600;">1,247</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 12px; color: #605e5c;">Average Duration</span>
+                                <span style="font-size: 12px; color: #107c10; font-weight: 600;">142ms</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="font-size: 12px; color: #605e5c;">Success Rate</span>
+                                <span style="font-size: 12px; color: #107c10; font-weight: 600;">99.8%</span>
+                            </div>
+                        </div>
+                        <div style="background: #f3f2f1; padding: 12px; border-radius: 6px;">
+                            <div style="font-size: 11px; color: #605e5c; margin-bottom: 4px;">Latest Functions</div>
+                            <div style="font-size: 12px; color: #323130;">• HttpTrigger1</div>
+                            <div style="font-size: 12px; color: #323130;">• TimerTrigger1</div>
+                            <div style="font-size: 12px; color: #323130;">• BlobTrigger1</div>
+                        </div>
+                    </div>
+                </div>`
+            },
+            {
+                id: 'azure-storage-account',
+                name: 'Azure Storage Account',
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 12px; overflow: hidden; font-family: 'Segoe UI', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 380px;">
+                    <div style="background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%); color: white; padding: 20px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 18px;">💾</div>
+                            <div>
+                                <h3 style="margin: 0; font-size: 18px; font-weight: 600;">Storage Account</h3>
+                                <p style="margin: 4px 0 0 0; opacity: 0.9; font-size: 12px;">Blob, file, queue, and table storage</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 20px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                            <div style="background: #f3f2f1; padding: 12px; border-radius: 6px; text-align: center;">
+                                <div style="font-size: 16px; font-weight: 600; color: #323130; margin-bottom: 2px;">2.4 GB</div>
+                                <div style="font-size: 10px; color: #605e5c;">Used Space</div>
+                            </div>
+                            <div style="background: #f3f2f1; padding: 12px; border-radius: 6px; text-align: center;">
+                                <div style="font-size: 16px; font-weight: 600; color: #323130; margin-bottom: 2px;">156</div>
+                                <div style="font-size: 10px; color: #605e5c;">Containers</div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <div style="font-size: 12px; color: #605e5c; margin-bottom: 6px;">Storage Services</div>
+                            <div style="display: flex; flex-wrap: gap; gap: 4px;">
+                                <span style="background: #e6f3ff; color: #0078d4; padding: 4px 8px; border-radius: 4px; font-size: 10px;">Blob</span>
+                                <span style="background: #e6f3ff; color: #0078d4; padding: 4px 8px; border-radius: 4px; font-size: 10px;">File</span>
+                                <span style="background: #e6f3ff; color: #0078d4; padding: 4px 8px; border-radius: 4px; font-size: 10px;">Queue</span>
+                                <span style="background: #e6f3ff; color: #0078d4; padding: 4px 8px; border-radius: 4px; font-size: 10px;">Table</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+            },
+            {
+                id: 'azure-app-service',
+                name: 'Azure App Service',
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 12px; overflow: hidden; font-family: 'Segoe UI', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 380px;">
+                    <div style="background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%); color: white; padding: 20px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 18px;">🌐</div>
+                            <div>
+                                <h3 style="margin: 0; font-size: 18px; font-weight: 600;">App Service</h3>
+                                <p style="margin: 4px 0 0 0; opacity: 0.9; font-size: 12px;">Web app hosting platform</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 20px;">
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                <span style="font-size: 12px; color: #605e5c;">Status</span>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <div style="width: 8px; height: 8px; background: #107c10; border-radius: 50%;"></div>
+                                    <span style="font-size: 12px; color: #107c10; font-weight: 600;">Running</span>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 12px; color: #605e5c;">App Service Plan</span>
+                                <span style="font-size: 12px; color: #323130; font-weight: 500;">B1 Basic</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="font-size: 12px; color: #605e5c;">Runtime Stack</span>
+                                <span style="font-size: 12px; color: #323130; font-weight: 500;">Node.js 18</span>
+                            </div>
+                        </div>
+                        <div style="background: #f3f2f1; padding: 12px; border-radius: 6px;">
+                            <div style="font-size: 11px; color: #605e5c; margin-bottom: 6px;">Performance Metrics</div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                <span style="font-size: 11px; color: #323130;">Response Time</span>
+                                <span style="font-size: 11px; color: #107c10; font-weight: 600;">85ms</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="font-size: 11px; color: #323130;">Requests/min</span>
+                                <span style="font-size: 11px; color: #0078d4; font-weight: 600;">342</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+            },
+            {
+                id: 'azure-cosmos-db',
+                name: 'Azure Cosmos DB',
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 12px; overflow: hidden; font-family: 'Segoe UI', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 380px;">
+                    <div style="background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%); color: white; padding: 20px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 18px;">🌌</div>
+                            <div>
+                                <h3 style="margin: 0; font-size: 18px; font-weight: 600;">Cosmos DB</h3>
+                                <p style="margin: 4px 0 0 0; opacity: 0.9; font-size: 12px;">Global NoSQL database</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 20px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                            <div style="background: #f3f2f1; padding: 12px; border-radius: 6px; text-align: center;">
+                                <div style="font-size: 16px; font-weight: 600; color: #323130; margin-bottom: 2px;">5</div>
+                                <div style="font-size: 10px; color: #605e5c;">Regions</div>
+                            </div>
+                            <div style="background: #f3f2f1; padding: 12px; border-radius: 6px; text-align: center;">
+                                <div style="font-size: 16px; font-weight: 600; color: #323130; margin-bottom: 2px;">98.7ms</div>
+                                <div style="font-size: 10px; color: #605e5c;">Latency</div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span style="font-size: 12px; color: #605e5c;">API</span>
+                                <span style="font-size: 12px; color: #323130; font-weight: 500;">SQL (Core)</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span style="font-size: 12px; color: #605e5c;">Consistency</span>
+                                <span style="font-size: 12px; color: #323130; font-weight: 500;">Session</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="font-size: 12px; color: #605e5c;">Throughput</span>
+                                <span style="font-size: 12px; color: #0078d4; font-weight: 600;">400 RU/s</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+            }
+        ];
+
+        // Enhanced Fluent component examples
+        const fluentComponents = [
+            {
+                name: "Primary Button",
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; font-family: 'Segoe UI', sans-serif; width: 280px;">
+                    <div style="margin-bottom: 16px;">
+                        <div style="font-weight: 600; color: #323130; font-size: 14px; margin-bottom: 12px;">Primary Button</div>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Primary</button>
+                            <button style="background: transparent; color: #0078d4; border: 1px solid #0078d4; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Secondary</button>
+                        </div>
+                    </div>
+                    <div style="font-size: 11px; color: #605e5c; opacity: 0.8;">From Figma Fluent Library</div>
+                </div>`
+            },
+            {
+                name: "Data Card",
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; padding: 16px; font-family: 'Segoe UI', sans-serif; width: 280px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <div style="background: #f3f2f1; border-radius: 6px; height: 80px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; color: #605e5c;">
+                        <div style="font-size: 24px;">📊</div>
+                    </div>
+                    <div style="font-weight: 600; color: #323130; font-size: 14px; margin-bottom: 4px;">Data Card</div>
+                    <div style="color: #605e5c; font-size: 12px; line-height: 1.4; margin-bottom: 12px;">Interactive card component with Fluent Design styling</div>
+                    <div style="font-size: 11px; color: #605e5c; opacity: 0.8;">From Figma Fluent Library</div>
+                </div>`
+            },
+            {
+                name: "Navigation Menu",
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; overflow: hidden; font-family: 'Segoe UI', sans-serif; width: 320px;">
+                    <div style="background: #f3f2f1; padding: 12px 16px; border-bottom: 1px solid #e1dfdd; display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 24px; height: 24px; background: #0078d4; border-radius: 4px;"></div>
+                        <div style="font-weight: 600; color: #323130; font-size: 14px;">Navigation Menu</div>
+                    </div>
+                    <div style="padding: 8px;">
+                        <div style="display: flex; flex-direction: column; gap: 2px;">
+                            <div style="padding: 8px 12px; color: #0078d4; background: #f3f9fd; border-radius: 4px; font-size: 13px;">Home</div>
+                            <div style="padding: 8px 12px; color: #605e5c; font-size: 13px;">Products</div>
+                            <div style="padding: 8px 12px; color: #605e5c; font-size: 13px;">About</div>
+                        </div>
+                    </div>
+                    <div style="padding: 12px 16px; font-size: 11px; color: #605e5c; opacity: 0.8; border-top: 1px solid #e1dfdd;">From Figma Fluent Library</div>
+                </div>`
+            },
+            {
+                name: "Input Field",
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; font-family: 'Segoe UI', sans-serif; width: 280px;">
+                    <div style="margin-bottom: 16px;">
+                        <div style="font-weight: 600; color: #323130; font-size: 14px; margin-bottom: 8px;">Text Input</div>
+                        <div style="margin-bottom: 8px;">
+                            <label style="display: block; font-size: 12px; color: #605e5c; margin-bottom: 4px;">Email address</label>
+                            <input type="email" placeholder="Enter your email" style="width: 100%; padding: 8px 12px; border: 1px solid #c8c6c4; border-radius: 4px; font-size: 14px; font-family: inherit; box-sizing: border-box;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 12px; color: #605e5c; margin-bottom: 4px;">Password</label>
+                            <input type="password" placeholder="Enter password" style="width: 100%; padding: 8px 12px; border: 1px solid #c8c6c4; border-radius: 4px; font-size: 14px; font-family: inherit; box-sizing: border-box;">
+                        </div>
+                    </div>
+                    <div style="font-size: 11px; color: #605e5c; opacity: 0.8;">From Figma Fluent Library</div>
+                </div>`
+            },
+            {
+                name: "Toggle Switch",
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; font-family: 'Segoe UI', sans-serif; width: 280px;">
+                    <div style="margin-bottom: 16px;">
+                        <div style="font-weight: 600; color: #323130; font-size: 14px; margin-bottom: 12px;">Toggle Switch</div>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <span style="font-size: 13px; color: #323130;">Enable notifications</span>
+                                <div style="width: 44px; height: 24px; background: #0078d4; border-radius: 12px; position: relative; cursor: pointer;">
+                                    <div style="width: 20px; height: 20px; background: white; border-radius: 50%; position: absolute; top: 2px; right: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);"></div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <span style="font-size: 13px; color: #323130;">Dark mode</span>
+                                <div style="width: 44px; height: 24px; background: #c8c6c4; border-radius: 12px; position: relative; cursor: pointer;">
+                                    <div style="width: 20px; height: 20px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="font-size: 11px; color: #605e5c; opacity: 0.8;">From Figma Fluent Library</div>
+                </div>`
+            },
+            {
+                name: "Progress Bar",
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; font-family: 'Segoe UI', sans-serif; width: 280px;">
+                    <div style="margin-bottom: 16px;">
+                        <div style="font-weight: 600; color: #323130; font-size: 14px; margin-bottom: 12px;">Progress Indicators</div>
+                        <div style="margin-bottom: 12px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                <span style="font-size: 12px; color: #605e5c;">Upload progress</span>
+                                <span style="font-size: 12px; color: #605e5c;">75%</span>
+                            </div>
+                            <div style="width: 100%; height: 6px; background: #f3f2f1; border-radius: 3px; overflow: hidden;">
+                                <div style="width: 75%; height: 100%; background: #0078d4; border-radius: 3px;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                <span style="font-size: 12px; color: #605e5c;">Processing</span>
+                                <span style="font-size: 12px; color: #605e5c;">45%</span>
+                            </div>
+                            <div style="width: 100%; height: 6px; background: #f3f2f1; border-radius: 3px; overflow: hidden;">
+                                <div style="width: 45%; height: 100%; background: #107c10; border-radius: 3px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="font-size: 11px; color: #605e5c; opacity: 0.8;">From Figma Fluent Library</div>
+                </div>`
+            },
+            {
+                name: "List View",
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; overflow: hidden; font-family: 'Segoe UI', sans-serif; width: 320px;">
+                    <div style="background: #f3f2f1; padding: 12px 16px; border-bottom: 1px solid #e1dfdd;">
+                        <div style="font-weight: 600; color: #323130; font-size: 14px;">Team Members</div>
+                    </div>
+                    <div style="padding: 8px 0;">
+                        <div style="padding: 12px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #f3f2f1;">
+                            <div style="width: 32px; height: 32px; background: #0078d4; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 600;">JD</div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 13px; color: #323130; font-weight: 500;">John Doe</div>
+                                <div style="font-size: 11px; color: #605e5c;">Product Manager</div>
+                            </div>
+                            <div style="color: #107c10; font-size: 8px;">●</div>
+                        </div>
+                        <div style="padding: 12px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #f3f2f1;">
+                            <div style="width: 32px; height: 32px; background: #5c2d91; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 600;">AS</div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 13px; color: #323130; font-weight: 500;">Alice Smith</div>
+                                <div style="font-size: 11px; color: #605e5c;">UI Designer</div>
+                            </div>
+                            <div style="color: #fab900; font-size: 8px;">●</div>
+                        </div>
+                        <div style="padding: 12px 16px; display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 32px; height: 32px; background: #d13438; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 600;">BJ</div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 13px; color: #323130; font-weight: 500;">Bob Johnson</div>
+                                <div style="font-size: 11px; color: #605e5c;">Developer</div>
+                            </div>
+                            <div style="color: #c8c6c4; font-size: 8px;">●</div>
+                        </div>
+                    </div>
+                    <div style="padding: 12px 16px; font-size: 11px; color: #605e5c; opacity: 0.8; border-top: 1px solid #e1dfdd;">From Figma Fluent Library</div>
+                </div>`
+            },
+            {
+                name: "Modal Dialog",
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; overflow: hidden; font-family: 'Segoe UI', sans-serif; width: 320px; box-shadow: 0 8px 24px rgba(0,0,0,0.2);">
+                    <div style="padding: 20px 24px; border-bottom: 1px solid #e1dfdd;">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <div style="font-weight: 600; color: #323130; font-size: 16px;">Confirm Action</div>
+                            <div style="width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #605e5c;">×</div>
+                        </div>
+                    </div>
+                    <div style="padding: 20px 24px;">
+                        <div style="color: #605e5c; font-size: 14px; line-height: 1.4; margin-bottom: 20px;">Are you sure you want to delete this item? This action cannot be undone.</div>
+                        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                            <button style="background: transparent; color: #605e5c; border: 1px solid #c8c6c4; padding: 8px 16px; border-radius: 4px; font-size: 14px; cursor: pointer;">Cancel</button>
+                            <button style="background: #d13438; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; cursor: pointer;">Delete</button>
+                        </div>
+                    </div>
+                    <div style="padding: 12px 16px; font-size: 11px; color: #605e5c; opacity: 0.8; border-top: 1px solid #e1dfdd;">From Figma Fluent Library</div>
+                </div>`
+            },
+            {
+                name: "Dropdown Menu",
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; font-family: 'Segoe UI', sans-serif; width: 280px;">
+                    <div style="margin-bottom: 16px;">
+                        <div style="font-weight: 600; color: #323130; font-size: 14px; margin-bottom: 8px;">Select Option</div>
+                        <div style="position: relative;">
+                            <div style="width: 100%; padding: 8px 32px 8px 12px; border: 1px solid #c8c6c4; border-radius: 4px; font-size: 14px; background: white; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+                                <span style="color: #323130;">Choose an option...</span>
+                                <span style="color: #605e5c;">▼</span>
+                            </div>
+                            <div style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #c8c6c4; border-top: none; border-radius: 0 0 4px 4px; z-index: 10; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <div style="padding: 8px 12px; font-size: 14px; color: #323130; cursor: pointer; border-bottom: 1px solid #f3f2f1;">Option 1</div>
+                                <div style="padding: 8px 12px; font-size: 14px; color: #323130; cursor: pointer; border-bottom: 1px solid #f3f2f1;">Option 2</div>
+                                <div style="padding: 8px 12px; font-size: 14px; color: #323130; cursor: pointer;">Option 3</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="font-size: 11px; color: #605e5c; opacity: 0.8;">From Figma Fluent Library</div>
+                </div>`
+            },
+            {
+                name: "Tab Navigation",
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; overflow: hidden; font-family: 'Segoe UI', sans-serif; width: 320px;">
+                    <div style="display: flex; border-bottom: 1px solid #e1dfdd;">
+                        <div style="flex: 1; padding: 12px 16px; text-align: center; background: #f3f9fd; color: #0078d4; border-bottom: 2px solid #0078d4; font-size: 13px; font-weight: 500; cursor: pointer;">Overview</div>
+                        <div style="flex: 1; padding: 12px 16px; text-align: center; color: #605e5c; font-size: 13px; cursor: pointer;">Details</div>
+                        <div style="flex: 1; padding: 12px 16px; text-align: center; color: #605e5c; font-size: 13px; cursor: pointer;">Settings</div>
+                    </div>
+                    <div style="padding: 20px;">
+                        <div style="font-size: 14px; color: #323130; margin-bottom: 8px;">Overview Content</div>
+                        <div style="color: #605e5c; font-size: 12px; line-height: 1.4;">This is the overview tab content with relevant information and data.</div>
+                    </div>
+                    <div style="padding: 12px 16px; font-size: 11px; color: #605e5c; opacity: 0.8; border-top: 1px solid #e1dfdd;">From Figma Fluent Library</div>
+                </div>`
+            },
+            {
+                name: "Hero Component (Fluent 2)",
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; overflow: hidden; font-family: 'Segoe UI', sans-serif; width: 100%; max-width: 600px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <!-- Hero Container -->
+                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; padding: 0px 0px 0px 16px; gap: 20px; background: #FFFFFF; min-height: 180px;">
+                        
+                        <!-- Left Section -->
+                        <div style="display: flex; flex-direction: column; align-items: flex-start; padding: 24px 0px; gap: 16px; flex: 1; max-width: 400px;">
+                            
+                            <!-- Icon Placeholder -->
+                            <div style="width: 62px; height: 62px; background: #EBF3FC; border-radius: 8px; display: flex; align-items: center; justify-content: center; position: relative;">
+                                <div style="font-family: 'Segoe UI'; font-weight: 400; font-size: 10px; line-height: 14px; color: #0F6CBD; text-align: center;">CONTENT</div>
+                            </div>
+                            
+                            <!-- Text Box -->
+                            <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 12px; width: 100%;">
+                                
+                                <!-- Metadata -->
+                                <div style="display: flex; flex-direction: row; align-items: flex-start; gap: 8px;">
+                                    <span style="font-family: 'Segoe UI'; font-weight: 400; font-size: 12px; line-height: 16px; color: #424242;">Category • Published</span>
+                                </div>
+                                
+                                <!-- Page Title -->
+                                <div style="display: flex; flex-direction: row; align-items: center; width: 100%; min-width: 180px;">
+                                    <h1 style="margin: 0; font-family: 'Segoe UI'; font-weight: 600; font-size: 32px; line-height: 42px; color: #242424; flex-grow: 1;">Hero Component Title</h1>
+                                </div>
+                                
+                                <!-- Content Description -->
+                                <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px; width: 100%;">
+                                    <p style="margin: 0; font-family: 'Segoe UI'; font-weight: 400; font-size: 16px; line-height: 22px; color: #424242;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+                                </div>
+                                
+                                <!-- Button Group -->
+                                <div style="display: flex; flex-direction: row; align-items: flex-start; padding: 4px 0px 0px; gap: 8px;">
+                                    <!-- Primary Button -->
+                                    <button style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding: 8px 16px; background: #0F6CBD; border: none; border-radius: 4px; cursor: pointer;">
+                                        <span style="font-family: 'Segoe UI'; font-weight: 600; font-size: 16px; line-height: 22px; color: #FFFFFF;">Action</span>
+                                    </button>
+                                    
+                                    <!-- Secondary Button -->
+                                    <button style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding: 8px 16px; background: #FFFFFF; border: 1px solid #D1D1D1; border-radius: 4px; cursor: pointer;">
+                                        <span style="font-family: 'Segoe UI'; font-weight: 600; font-size: 16px; line-height: 22px; color: #242424;">Learn</span>
+                                    </button>
+                                    
+                                    <!-- Menu Button -->
+                                    <button style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding: 6px; width: 32px; height: 32px; background: transparent; border: none; border-radius: 4px; cursor: pointer;">
+                                        <div style="width: 12.5px; height: 2.5px; background: #424242; border-radius: 1px;"></div>
+                                    </button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+                        <!-- Right Section (Placeholder) -->
+                        <div style="display: flex; flex-direction: row; align-items: flex-start; flex: 1; max-width: 200px; height: 180px;">
+                            <div style="width: 100%; height: 100%; background: #EBF3FC; border-radius: 8px; display: flex; align-items: center; justify-content: center; position: relative;">
+                                <span style="font-family: 'Segoe UI'; font-weight: 400; font-size: 10px; line-height: 14px; color: #0F6CBD; text-align: center;">SWAP WITH CONTENT COMPONENT</span>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <!-- Component Label -->
+                    <div style="padding: 12px 16px; font-size: 11px; color: #605e5c; opacity: 0.8; border-top: 1px solid #e1dfdd;">From Figma Fluent 2 Extended Library</div>
+                </div>`
+            }
+        ];
+
+        // Enhanced Atlas component examples
+        const atlasComponents = [
+            {
+                name: "Primary Action Button",
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1e5e9; border-radius: 12px; padding: 20px; font-family: 'Segoe UI', sans-serif; width: 280px; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
+                    <div style="margin-bottom: 16px;">
+                        <div style="font-weight: 600; color: #1a1a1a; font-size: 14px; margin-bottom: 12px;">Primary Action Button</div>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <button style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; box-shadow: 0 2px 8px rgba(102,126,234,0.3);">Primary</button>
+                            <button style="background: transparent; color: #667eea; border: 2px solid #667eea; padding: 8px 18px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer;">Secondary</button>
+                        </div>
+                    </div>
+                    <div style="font-size: 11px; color: #6b7280; opacity: 0.8;">From Figma Atlas Library</div>
+                </div>`
+            },
+            {
+                name: "Feature Card",
+                htmlCode: `
+                <div style="background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); border: 1px solid #e1e5e9; border-radius: 16px; padding: 16px; font-family: 'Segoe UI', sans-serif; width: 280px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; height: 80px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; color: white;">
+                        <div style="font-size: 28px;">🎨</div>
+                    </div>
+                    <div style="font-weight: 600; color: #1a1a1a; font-size: 14px; margin-bottom: 4px;">Feature Card</div>
+                    <div style="color: #6b7280; font-size: 12px; line-height: 1.4; margin-bottom: 12px;">Atlas Design System card with gradient styling and modern aesthetics</div>
+                    <div style="font-size: 11px; color: #6b7280; opacity: 0.8;">From Figma Atlas Library</div>
+                </div>`
+            },
+            {
+                name: "Atlas Navigation",
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1e5e9; border-radius: 12px; overflow: hidden; font-family: 'Segoe UI', sans-serif; width: 320px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 16px; color: white;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 28px; height: 28px; background: rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                <div style="width: 16px; height: 16px; background: white; border-radius: 4px;"></div>
+                            </div>
+                            <div style="font-weight: 600; font-size: 14px;">Atlas Navigation</div>
+                        </div>
+                    </div>
+                    <div style="padding: 12px;">
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <div style="padding: 10px 16px; color: #667eea; background: linear-gradient(135deg, #f0f2ff 0%, #e6e9ff 100%); border-radius: 8px; font-size: 13px; font-weight: 500;">Dashboard</div>
+                            <div style="padding: 10px 16px; color: #6b7280; font-size: 13px;">Analytics</div>
+                            <div style="padding: 10px 16px; color: #6b7280; font-size: 13px;">Settings</div>
+                        </div>
+                    </div>
+                    <div style="padding: 12px 16px; font-size: 11px; color: #6b7280; opacity: 0.8; border-top: 1px solid #e1e5e9;">From Figma Atlas Library</div>
+                </div>`
+            },
+            {
+                name: "Atlas Form Controls",
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1e5e9; border-radius: 12px; padding: 20px; font-family: 'Segoe UI', sans-serif; width: 280px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+                    <div style="margin-bottom: 16px;">
+                        <div style="font-weight: 600; color: #1a1a1a; font-size: 14px; margin-bottom: 12px;">Modern Form Controls</div>
+                        <div style="margin-bottom: 12px;">
+                            <label style="display: block; font-size: 12px; color: #6b7280; margin-bottom: 6px; font-weight: 500;">Email Address</label>
+                            <input type="email" placeholder="Enter your email" style="width: 100%; padding: 12px 16px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 14px; font-family: inherit; box-sizing: border-box; transition: border-color 0.2s; background: #fafbfc;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 12px; color: #6b7280; margin-bottom: 6px; font-weight: 500;">Message</label>
+                            <textarea placeholder="Your message here..." style="width: 100%; height: 60px; padding: 12px 16px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 14px; font-family: inherit; box-sizing: border-box; resize: none; background: #fafbfc;"></textarea>
+                        </div>
+                    </div>
+                    <div style="font-size: 11px; color: #6b7280; opacity: 0.8;">From Figma Atlas Library</div>
+                </div>`
+            },
+            {
+                name: "Atlas Toggle & Switches",
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1e5e9; border-radius: 12px; padding: 20px; font-family: 'Segoe UI', sans-serif; width: 280px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+                    <div style="margin-bottom: 16px;">
+                        <div style="font-weight: 600; color: #1a1a1a; font-size: 14px; margin-bottom: 16px;">Toggle Controls</div>
+                        <div style="display: flex; flex-direction: column; gap: 16px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div>
+                                    <div style="font-size: 13px; color: #1a1a1a; font-weight: 500;">Push notifications</div>
+                                    <div style="font-size: 11px; color: #6b7280;">Receive updates instantly</div>
+                                </div>
+                                <div style="width: 52px; height: 28px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 14px; position: relative; cursor: pointer; box-shadow: 0 2px 8px rgba(102,126,234,0.3);">
+                                    <div style="width: 24px; height: 24px; background: white; border-radius: 50%; position: absolute; top: 2px; right: 2px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div>
+                                    <div style="font-size: 13px; color: #1a1a1a; font-weight: 500;">Email updates</div>
+                                    <div style="font-size: 11px; color: #6b7280;">Weekly summary emails</div>
+                                </div>
+                                <div style="width: 52px; height: 28px; background: #e5e7eb; border-radius: 14px; position: relative; cursor: pointer;">
+                                    <div style="width: 24px; height: 24px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 2px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="font-size: 11px; color: #6b7280; opacity: 0.8;">From Figma Atlas Library</div>
+                </div>`
+            },
+            {
+                name: "Atlas Progress Indicators",
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1e5e9; border-radius: 12px; padding: 20px; font-family: 'Segoe UI', sans-serif; width: 280px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+                    <div style="margin-bottom: 16px;">
+                        <div style="font-weight: 600; color: #1a1a1a; font-size: 14px; margin-bottom: 16px;">Progress Tracking</div>
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span style="font-size: 12px; color: #6b7280; font-weight: 500;">Project completion</span>
+                                <span style="font-size: 12px; color: #1a1a1a; font-weight: 600;">85%</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: #f3f4f6; border-radius: 4px; overflow: hidden;">
+                                <div style="width: 85%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 4px;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span style="font-size: 12px; color: #6b7280; font-weight: 500;">Task completion</span>
+                                <span style="font-size: 12px; color: #1a1a1a; font-weight: 600;">62%</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: #f3f4f6; border-radius: 4px; overflow: hidden;">
+                                <div style="width: 62%; height: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 4px;"></div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 4px; margin-top: 12px;">
+                            <div style="width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: 600;">1</div>
+                            <div style="width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: 600;">2</div>
+                            <div style="width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: 600;">3</div>
+                            <div style="width: 24px; height: 24px; border-radius: 50%; background: #e5e7eb; display: flex; align-items: center; justify-content: center; color: #6b7280; font-size: 10px; font-weight: 600;">4</div>
+                            <div style="width: 24px; height: 24px; border-radius: 50%; background: #e5e7eb; display: flex; align-items: center; justify-content: center; color: #6b7280; font-size: 10px; font-weight: 600;">5</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 11px; color: #6b7280; opacity: 0.8;">From Figma Atlas Library</div>
+                </div>`
+            },
+            {
+                name: "Atlas Stats Dashboard",
+                htmlCode: `
+                <div style="background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); border: 1px solid #e1e5e9; border-radius: 16px; padding: 20px; font-family: 'Segoe UI', sans-serif; width: 320px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                    <div style="margin-bottom: 16px;">
+                        <div style="font-weight: 600; color: #1a1a1a; font-size: 16px; margin-bottom: 16px;">Analytics Overview</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                            <div style="background: white; padding: 16px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                                <div style="font-size: 24px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">2.4K</div>
+                                <div style="font-size: 11px; color: #6b7280;">Users</div>
+                            </div>
+                            <div style="background: white; padding: 16px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                                <div style="font-size: 24px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">94%</div>
+                                <div style="font-size: 11px; color: #6b7280;">Uptime</div>
+                            </div>
+                        </div>
+                        <div style="background: white; padding: 16px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                <span style="font-size: 12px; color: #6b7280; font-weight: 500;">Revenue Growth</span>
+                                <span style="font-size: 12px; color: #10b981; font-weight: 600;">+23%</span>
+                            </div>
+                            <div style="height: 40px; background: linear-gradient(135deg, #f0f2ff 0%, #e6e9ff 100%); border-radius: 8px; position: relative; overflow: hidden;">
+                                <div style="position: absolute; bottom: 0; left: 8px; width: 4px; height: 60%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 2px;"></div>
+                                <div style="position: absolute; bottom: 0; left: 16px; width: 4px; height: 80%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 2px;"></div>
+                                <div style="position: absolute; bottom: 0; left: 24px; width: 4px; height: 45%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 2px;"></div>
+                                <div style="position: absolute; bottom: 0; left: 32px; width: 4px; height: 90%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 2px;"></div>
+                                <div style="position: absolute; bottom: 0; left: 40px; width: 4px; height: 75%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 2px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="font-size: 11px; color: #6b7280; opacity: 0.8;">From Figma Atlas Library</div>
+                </div>`
+            },
+            {
+                name: "Atlas List Component",
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1e5e9; border-radius: 12px; overflow: hidden; font-family: 'Segoe UI', sans-serif; width: 320px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+                    <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 16px; border-bottom: 1px solid #e1e5e9;">
+                        <div style="font-weight: 600; color: #1a1a1a; font-size: 14px;">Team Directory</div>
+                    </div>
+                    <div style="padding: 8px 0;">
+                        <div style="padding: 16px 20px; display: flex; align-items: center; gap: 16px; border-bottom: 1px solid #f1f5f9;">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: 600;">SM</div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 14px; color: #1a1a1a; font-weight: 500; margin-bottom: 2px;">Sarah Miller</div>
+                                <div style="font-size: 12px; color: #6b7280;">Lead Designer</div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%;"></div>
+                                <span style="font-size: 11px; color: #6b7280;">Online</span>
+                            </div>
+                        </div>
+                        <div style="padding: 16px 20px; display: flex; align-items: center; gap: 16px; border-bottom: 1px solid #f1f5f9;">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: 600;">MJ</div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 14px; color: #1a1a1a; font-weight: 500; margin-bottom: 2px;">Michael Johnson</div>
+                                <div style="font-size: 12px; color: #6b7280;">Frontend Developer</div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div style="width: 8px; height: 8px; background: #f59e0b; border-radius: 50%;"></div>
+                                <span style="font-size: 11px; color: #6b7280;">Away</span>
+                            </div>
+                        </div>
+                        <div style="padding: 16px 20px; display: flex; align-items: center; gap: 16px;">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #e11d48 0%, #be185d 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: 600;">AR</div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 14px; color: #1a1a1a; font-weight: 500; margin-bottom: 2px;">Alex Rivera</div>
+                                <div style="font-size: 12px; color: #6b7280;">Product Manager</div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div style="width: 8px; height: 8px; background: #6b7280; border-radius: 50%;"></div>
+                                <span style="font-size: 11px; color: #6b7280;">Offline</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 12px 16px; font-size: 11px; color: #6b7280; opacity: 0.8; border-top: 1px solid #e1e5e9;">From Figma Atlas Library</div>
+                </div>`
+            },
+            {
+                name: "Atlas Modal Dialog",
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1e5e9; border-radius: 16px; overflow: hidden; font-family: 'Segoe UI', sans-serif; width: 360px; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 24px; color: white;">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <div style="font-weight: 600; font-size: 18px; margin-bottom: 4px;">Confirm Changes</div>
+                                <div style="font-size: 13px; opacity: 0.9;">This action will update your preferences</div>
+                            </div>
+                            <div style="width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: rgba(255,255,255,0.2); border-radius: 6px; font-size: 16px;">×</div>
+                        </div>
+                    </div>
+                    <div style="padding: 24px;">
+                        <div style="color: #6b7280; font-size: 14px; line-height: 1.5; margin-bottom: 24px;">Your settings will be saved and applied immediately. You can always change these preferences later in your account settings.</div>
+                        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                            <button style="background: transparent; color: #6b7280; border: 2px solid #e5e7eb; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer;">Cancel</button>
+                            <button style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; box-shadow: 0 2px 8px rgba(102,126,234,0.3);">Confirm</button>
+                        </div>
+                    </div>
+                    <div style="padding: 12px 16px; font-size: 11px; color: #6b7280; opacity: 0.8; border-top: 1px solid #e1e5e9;">From Figma Atlas Library</div>
+                </div>`
+            },
+            {
+                name: "Atlas Tab Navigation",
+                htmlCode: `
+                <div style="background: white; border: 1px solid #e1e5e9; border-radius: 12px; overflow: hidden; font-family: 'Segoe UI', sans-serif; width: 360px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+                    <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 4px; display: flex; border-bottom: 1px solid #e1e5e9;">
+                        <div style="flex: 1; padding: 12px 16px; text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; margin: 4px;">Overview</div>
+                        <div style="flex: 1; padding: 12px 16px; text-align: center; color: #6b7280; font-size: 13px; cursor: pointer; margin: 4px;">Analytics</div>
+                        <div style="flex: 1; padding: 12px 16px; text-align: center; color: #6b7280; font-size: 13px; cursor: pointer; margin: 4px;">Reports</div>
+                    </div>
+                    <div style="padding: 24px;">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                            <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px;">📈</div>
+                            <div>
+                                <div style="font-size: 16px; color: #1a1a1a; font-weight: 600; margin-bottom: 2px;">Overview Dashboard</div>
+                                <div style="color: #6b7280; font-size: 13px;">Key metrics and insights at a glance</div>
+                            </div>
+                        </div>
+                        <div style="color: #6b7280; font-size: 14px; line-height: 1.5;">Monitor your project's performance with real-time data visualization and comprehensive analytics tools.</div>
+                    </div>
+                    <div style="padding: 12px 16px; font-size: 11px; color: #6b7280; opacity: 0.8; border-top: 1px solid #e1e5e9;">From Figma Atlas Library</div>
+                </div>`
+            }
+        ];
+
+        // Render components
+        function renderComponent(component) {
+            const div = document.createElement('div');
+            div.innerHTML = component.htmlCode;
+            return div;
+        }
+
+        // Load Azure components
+        const azureContainer = document.getElementById('azure-components');
+        azureContainer.innerHTML = '';
+        azureComponents.forEach(component => {
+            azureContainer.appendChild(renderComponent(component));
+        });
+
+        // Load Fluent components
+        const fluentContainer = document.getElementById('fluent-components');
+        fluentContainer.innerHTML = '';
+        fluentComponents.forEach(component => {
+            fluentContainer.appendChild(renderComponent(component));
+        });
+
+        // Load Atlas components
+        const atlasContainer = document.getElementById('atlas-components');
+        atlasContainer.innerHTML = '';
+        atlasComponents.forEach(component => {
+            atlasContainer.appendChild(renderComponent(component));
+        });
+    </script>
+</body>
+
+</html>

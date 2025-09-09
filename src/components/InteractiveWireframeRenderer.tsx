@@ -162,12 +162,12 @@ const InteractiveWireframeRenderer: React.FC<InteractiveWireframeRendererProps> 
         
         button, input[type="button"], input[type="submit"], a, .btn, .button, [role="button"] {
           transition: all 0.2s ease !important;
+          border: 2px dashed rgba(156, 163, 175, 0.4) !important;
         }
         
         button:hover, input[type="button"]:hover, input[type="submit"]:hover, 
         a:hover, .btn:hover, .button:hover, [role="button"]:hover {
-          transform: translateY(-1px) !important;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+          border-color: rgba(75, 85, 99, 0.8) !important;
         }
         
         .wireframe-generating {

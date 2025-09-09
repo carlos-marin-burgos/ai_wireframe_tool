@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wireframe Controls Now Draggable!</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .breakthrough-section {
+            background: linear-gradient(135deg, #e8f5e8 0%, #d4edda 100%);
+            border: 2px solid #28a745;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+        }
+
+        .status-section {
+            background: #f8f9fa;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .check-icon {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        .success {
+            color: #28a745;
+        }
+
+        .new-feature {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        .info {
+            color: #17a2b8;
+        }
+
+        code {
+            background: #f1f3f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+        }
+
+        .test-steps {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .comparison-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .before {
+            background: #f8d7da;
+        }
+
+        .after {
+            background: #d1ecf1;
+        }
+
+        .visual-demo {
+            background: #f8f9fa;
+            border: 2px dashed #6c757d;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .drag-indicator {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 5px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .user-added {
+            background: #0078d4;
+            color: white;
+        }
+
+        .wireframe-control {
+            background: #28a745;
+            color: white;
+        }
+
+        .big-test-button {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+            transition: transform 0.2s ease;
+        }
+
+        .big-test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🎉 Breakthrough: Wireframe Controls Now Draggable!</h1>
+
+    <div class="breakthrough-section">
+        <h2>🚀 Major Feature Enhancement</h2>
+
+        <div class="check-item">
+            <span class="check-icon new-feature">🎯</span>
+            <span><strong>AI-Generated Wireframe Controls:</strong> Form groups, buttons, and other wireframe elements
+                are now draggable!</span>
+        </div>
+
+        <div class="check-item">
+            <span class="check-icon new-feature">🔄</span>
+            <span><strong>Complete Rearrangement:</strong> You can now move everything around and use snap features on
+                ALL elements</span>
+        </div>
+
+        <div class="check-item">
+            <span class="check-icon new-feature">✨</span>
+            <span><strong>Visual Differentiation:</strong> Different indicators for user-added vs wireframe
+                controls</span>
+        </div>
+
+        <div class="check-item">
+            <span class="check-icon success">⚡</span>
+            <span><strong>Enhanced Snap System:</strong> Works with both Atlas components AND wireframe controls</span>
+        </div>
+    </div>
+
+    <div class="visual-demo">
+        <h3>🎨 Visual Indicators</h3>
+        <p><strong>Hover tooltips now differentiate between element types:</strong></p>
+        <div class="drag-indicator user-added">⋮⋮ Drag to move</div>
+        <span>← Atlas Library Components</span><br><br>
+        <div class="drag-indicator wireframe-control">↔️ Drag to rearrange</div>
+        <span>← AI Wireframe Controls</span>
+    </div>
+
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Element Type</th>
+                <th class="before">Before (Limited)</th>
+                <th class="after">After (Full Control)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Atlas Components</strong></td>
+                <td class="before">✅ Draggable with snap</td>
+                <td class="after">✅ Draggable with snap</td>
+            </tr>
+            <tr>
+                <td><strong>Form Groups</strong></td>
+                <td class="before">❌ Fixed position</td>
+                <td class="after">✅ Draggable with snap</td>
+            </tr>
+            <tr>
+                <td><strong>Buttons</strong></td>
+                <td class="before">❌ Fixed position</td>
+                <td class="after">✅ Draggable with snap</td>
+            </tr>
+            <tr>
+                <td><strong>Cards/Sections</strong></td>
+                <td class="before">❌ Fixed position</td>
+                <td class="after">✅ Draggable with snap</td>
+            </tr>
+            <tr>
+                <td><strong>Hero Sections</strong></td>
+                <td class="before">❌ Fixed position</td>
+                <td class="after">✅ Draggable with snap</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="test-steps">
+        <h2>🧪 Complete Testing Workflow</h2>
+        <ol>
+            <li><strong>Generate a wireframe:</strong>
+                <ul>
+                    <li>Enter description like "user registration form" or "dashboard page"</li>
+                    <li>Click "Generate Wireframe"</li>
+                    <li>Wait for AI to create the wireframe with form controls</li>
+                </ul>
+            </li>
+            <li><strong>Test wireframe controls dragging:</strong>
+                <ul>
+                    <li>Hover over any form group → should show "↔️ Drag to rearrange"</li>
+                    <li>Hover over buttons → should show drag indicator</li>
+                    <li>Try dragging form elements around the page</li>
+                    <li>Look for green snap guides when moving elements</li>
+                </ul>
+            </li>
+            <li><strong>Add Atlas components:</strong>
+                <ul>
+                    <li>Click "Add Components" button</li>
+                    <li>Add 2-3 components from the Atlas library</li>
+                    <li>Hover over these → should show "⋮⋮ Drag to move"</li>
+                </ul>
+            </li>
+            <li><strong>Test mixed dragging:</strong>
+                <ul>
+                    <li>Drag wireframe controls near Atlas components</li>
+                    <li>Drag Atlas components near wireframe controls</li>
+                    <li>Watch for snap guides between different element types</li>
+                    <li>Verify all elements snap to each other properly</li>
+                </ul>
+            </li>
+            <li><strong>Check browser console:</strong>
+                <ul>
+                    <li>Open Developer Tools (F12)</li>
+                    <li>Look for snap detection messages for all element types</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <div class="status-section">
+        <h2>🔧 Technical Implementation</h2>
+
+        <div class="check-item">
+            <span class="check-icon info">📝</span>
+            <span><strong>isDraggableElement() Enhanced:</strong> Now checks for wireframe control classes in addition
+                to user-added components</span>
+        </div>
+
+        <div class="check-item">
+            <span class="check-icon info">📝</span>
+            <span><strong>CSS Styling Added:</strong> Wireframe controls get green hover indicators and drag
+                cursors</span>
+        </div>
+
+        <div class="check-item">
+            <span class="check-icon info">📝</span>
+            <span><strong>Snap System Integration:</strong> All draggable elements participate in the same snap grid
+                system</span>
+        </div>
+
+        <div class="check-item">
+            <span class="check-icon info">📝</span>
+            <span><strong>Protected Elements:</strong> Header navigation and critical UI elements remain fixed</span>
+        </div>
+    </div>
+
+    <div class="status-section">
+        <h2>🎯 What You Can Now Drag</h2>
+        <ul>
+            <li><strong>✅ Form Groups:</strong> Complete form field containers with labels and inputs</li>
+            <li><strong>✅ Submit Buttons:</strong> Form submission and action buttons</li>
+            <li><strong>✅ Content Cards:</strong> Card-based content sections</li>
+            <li><strong>✅ Hero Sections:</strong> Large banner and hero areas</li>
+            <li><strong>✅ Navigation Sections:</strong> Secondary navigation elements</li>
+            <li><strong>✅ Atlas Components:</strong> All components from the library (as before)</li>
+            <li><strong>✅ Custom Divs:</strong> Any styled container with content</li>
+        </ul>
+
+        <h3>🚫 What Remains Fixed:</h3>
+        <ul>
+            <li>Direct input/textarea/select elements (drag their containers instead)</li>
+            <li>Header navigation buttons (to preserve page structure)</li>
+            <li>Delete buttons and utility controls</li>
+        </ul>
+    </div>
+
+    <a href="http://localhost:5173" target="_blank" rel="noopener" class="big-test-button">
+        🚀 Test Complete Drag & Drop System!
+    </a>
+
+    <div
+        style="text-align: center; margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #e8f5e8 0%, #d4edda 100%); border-radius: 12px; border: 2px solid #28a745;">
+        <h3>🎉 Revolutionary Improvement!</h3>
+        <p><strong>You now have complete control over your wireframe layout!</strong></p>
+        <p>Drag ANY element (wireframe controls + Atlas components) and use the enhanced snap system to create perfectly
+            aligned layouts. The snap guides work between all element types for maximum flexibility!</p>
+        <p><em>This transforms the wireframe tool from static layouts to fully customizable, draggable designs! 🎨</em>
+        </p>
+    </div>
+</body>
+
+</html>

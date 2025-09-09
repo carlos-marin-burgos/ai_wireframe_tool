@@ -1,0 +1,109 @@
+/* TopNavbar for Landing Page - Blended with page content */
+.top-nav-landing {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  box-shadow: none;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.navbar-logo-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navbar-logo-button:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.navbar-logo-text {
+  font-family: "Orbitron", "Segoe UI", -apple-system, BlinkMacSystemFont,
+    sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #000000;
+  letter-spacing: -0.02em;
+}
+
+.separator-bar {
+  width: 1px;
+  height: 24px;
+  background-color: #d2d0ce;
+  margin: 0 8px;
+}
+
+.navbar-cxs-logo {
+  height: 24px;
+  width: auto;
+  margin-right: 16px;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.navbar-logout-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 0px solid rgba(0, 0, 0, 0.2);
+  color: #323130;
+  padding: 10px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: "Segoe UI", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.navbar-logout-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(0, 0, 0, 0.3);
+  transform: translateY(-1px);
+  color: #000000;
+}
+
+.navbar-logout-btn:active {
+  transform: translateY(0);
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(0, 0, 0, 0.25);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .top-nav-landing {
+    padding: 0 16px;
+  }
+
+  .navbar-logo-text {
+    font-size: 18px;
+  }
+}

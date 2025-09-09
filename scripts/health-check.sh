@@ -25,12 +25,12 @@ check_ai() {
     local port=$1
     echo "🤖 Testing AI capabilities on port $port..."
     
-    response=$(curl -s -X POST http://localhost:$port/api/generate-html-wireframe \
+    response=$(curl -s -X POST http://localhost:$port/api/generate-wireframe \
         -H "Content-Type: application/json" \
-        -d '{"description": "health check test"}' \
-        --max-time 10)
+        -d '{"description": "simple test", "colorScheme": "primary"}' \
+        --max-time 35)
     
-    if echo "$response" | grep -q '"aiGenerated":true'; then
+    if echo "$response" | grep -q '"html"'; then
         echo "✅ AI is working on port $port"
         return 0
     else

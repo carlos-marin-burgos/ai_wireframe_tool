@@ -1,0 +1,781 @@
+[
+  {
+    "id": "atlas-design-1:4886",
+    "name": "Hero-500",
+    "description": "Microsoft Learn Hero Component - Azure Fundamentals course showcase with certification badge, compelling headlines, and call-to-action buttons. Features authentic Microsoft styling with Segoe UI typography and proper Azure brand colors.",
+    "category": "Layout",
+    "library": "Atlas Design",
+    "htmlCode": "<section class=\"figma-hero figma-hero-1-4886\">\n    <div class=\"figma-hero-content\">\n      <div class=\"figma-component figma-component-1-4886-0\">\n        <!-- Microsoft Certification Badge -->\n        <div class=\"figma-component figma-component-1-4886-0-0\">\n          <div class=\"figma-component figma-component-1-4886-0-0-0\">\n            <div class=\"figma-badge microsoft-badge\">\n              <img src=\"microsoft-certified-fundamentals-badge 2.png\" alt=\"Microsoft Certified Fundamentals\" style=\"width: 100%; height: 100%; object-fit: contain;\" />\n            </div>\n          </div>\n        </div>\n        \n        <!-- Hero Text Content -->\n        <div class=\"figma-hero-text-content\">\n          <div class=\"figma-component figma-component-1-4886-0-1-0\">\n            <div class=\"figma-component figma-component-1-4886-0-1-0-0\">\n              <p class=\"figma-eyebrow\">Microsoft Learn</p>\n              <div class=\"figma-component figma-component-1-4886-0-1-0-0-1\">\n                <h1 class=\"figma-hero-title\">Azure Fundamentals</h1>\n                <h2 class=\"figma-hero-subtitle\">Learn cloud computing basics</h2>\n                <p class=\"figma-hero-metadata\">Free • Beginner • 6 hours</p>\n                <p class=\"figma-hero-summary\">Start your cloud journey with Azure fundamentals and build in-demand skills.</p>\n              </div>\n            </div>\n            \n            <!-- Call-to-Action Buttons -->\n            <div class=\"figma-component figma-component-1-4886-0-1-0-1\">\n              <button class=\"figma-btn figma-btn-primary\">\n                <span>Start Learning</span>\n              </button>\n              <button class=\"figma-btn figma-btn-secondary\">\n                <span>Browse Topics</span>\n                <svg width=\"12\" height=\"7\" fill=\"currentColor\">\n                  <path d=\"M1 1l5 5 5-5\"/>\n                </svg>\n              </button>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n    \n    <!-- Hero Image Section -->\n    <div class=\"figma-hero-image\">\n      <div class=\"figma-hero-bg\" style=\"background: linear-gradient(135deg, rgba(232, 230, 223, 0.7) 0%, rgba(245, 245, 245, 0.7) 100%), url('Microsoft-Learn-keyart-neutral-gray-angle-1.png'); background-size: cover; background-position: center; background-repeat: no-repeat; width: 100%; height: 100%; position: relative; border-radius: 8px; overflow: hidden;\">\n      </div>\n    </div>\n  </section>",
+    "css": ".figma-hero-1-4886 {\n  width: 100%;\n  max-width: 1768px;\n  height: 500px;\n  background-color: rgba(232, 230, 223, 1);\n  padding: 0px 0px 0px 16px;\n  display: flex;\n  align-items: stretch;\n  position: relative;\n  border-radius: 8px;\n  overflow: hidden;\n  box-shadow: 0 4px 20px rgba(0,0,0,0.1);\n}\n\n.figma-hero-content {\n  flex: 1;\n  padding: 40px;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  max-width: 748px;\n}\n\n.figma-component-1-4886-0 {\n  display: flex;\n  flex-direction: column;\n  gap: 24px;\n}\n\n/* Microsoft Badge Styling */\n.figma-component-1-4886-0-0 {\n  width: 62px;\n  height: 62px;\n  background-color: rgba(255, 255, 255, 1);\n  border-radius: 8px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  box-shadow: 0 2px 8px rgba(0,0,0,0.1);\n}\n\n.microsoft-badge {\n  width: 45px;\n  height: 60px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n\n.microsoft-badge img {\n  max-width: 100%;\n  max-height: 100%;\n  object-fit: contain;\n}\n\n/* Hero Text Content */\n.figma-hero-text-content {\n  display: flex;\n  flex-direction: column;\n  gap: 24px;\n}\n\n.figma-eyebrow {\n  margin: 0;\n  font-family: 'Segoe UI', sans-serif;\n  font-size: 14px;\n  font-weight: 400;\n  color: rgba(23, 23, 23, 0.7);\n  text-transform: uppercase;\n  letter-spacing: 0.5px;\n}\n\n.figma-hero-title {\n  margin: 8px 0 0 0;\n  font-family: 'Segoe UI', sans-serif;\n  font-size: 40px;\n  font-weight: 600;\n  line-height: 1.1;\n  color: rgba(23, 23, 23, 1);\n}\n\n.figma-hero-subtitle {\n  margin: 8px 0 0 0;\n  font-family: 'Segoe UI', sans-serif;\n  font-size: 28px;\n  font-weight: 400;\n  line-height: 1.2;\n  color: rgba(23, 23, 23, 1);\n}\n\n.figma-hero-metadata {\n  margin: 8px 0 0 0;\n  font-family: 'Segoe UI', sans-serif;\n  font-size: 16px;\n  font-weight: 400;\n  color: rgba(23, 23, 23, 0.7);\n}\n\n.figma-hero-summary {\n  margin: 16px 0 0 0;\n  font-family: 'Segoe UI', sans-serif;\n  font-size: 16px;\n  font-weight: 400;\n  line-height: 1.4;\n  color: rgba(23, 23, 23, 1);\n  max-width: 620px;\n}\n\n/* Button Styling */\n.figma-component-1-4886-0-1-0-1 {\n  display: flex;\n  gap: 12px;\n  margin-top: 24px;\n}\n\n.figma-btn {\n  display: inline-flex;\n  align-items: center;\n  gap: 8px;\n  padding: 8px 16px;\n  border: none;\n  border-radius: 4px;\n  cursor: pointer;\n  font-family: 'Segoe UI', sans-serif;\n  font-size: 16px;\n  font-weight: 600;\n  transition: all 0.2s ease;\n  text-decoration: none;\n}\n\n.figma-btn-primary {\n  background-color: rgba(0, 120, 212, 1);\n  color: white;\n  min-width: 140px;\n  justify-content: center;\n}\n\n.figma-btn-primary:hover {\n  background-color: rgba(0, 100, 180, 1);\n  transform: translateY(-1px);\n  box-shadow: 0 4px 12px rgba(0, 120, 212, 0.3);\n}\n\n.figma-btn-secondary {\n  background-color: transparent;\n  color: rgba(23, 23, 23, 1);\n  border: 1px solid rgba(142, 142, 142, 1);\n  min-width: 140px;\n  justify-content: center;\n}\n\n.figma-btn-secondary:hover {\n  background-color: rgba(23, 23, 23, 0.05);\n  border-color: rgba(23, 23, 23, 0.5);\n  transform: translateY(-1px);\n}\n\n/* Hero Image Section */\n.figma-hero-image {\n  flex: 1;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  min-height: 500px;\n  padding: 20px;\n}\n\n.figma-hero-bg {\n  width: 100%;\n  height: 100%;\n  min-height: 400px;\n  background: linear-gradient(135deg, rgba(232, 230, 223, 0.7) 0%, rgba(245, 245, 245, 0.7) 100%), url('Microsoft-Learn-keyart-neutral-gray-angle-1.png');\n  background-size: cover;\n  background-position: center;\n  background-repeat: no-repeat;\n  border-radius: 8px;\n  position: relative;\n  transition: background-size 0.3s ease;\n}\n\n.figma-hero-bg:hover {\n  background-size: 105%;\n}\n\n/* Responsive Design */\n@media (max-width: 1200px) {\n  .figma-hero-1-4886 {\n    max-width: 100%;\n    height: auto;\n    min-height: 500px;\n  }\n}\n\n@media (max-width: 768px) {\n  .figma-hero-1-4886 {\n    flex-direction: column;\n    height: auto;\n    padding: 0;\n  }\n  \n  .figma-hero-content {\n    padding: 24px;\n    max-width: 100%;\n  }\n  \n  .figma-hero-title {\n    font-size: 32px;\n  }\n  \n  .figma-hero-subtitle {\n    font-size: 24px;\n  }\n  \n  .figma-component-1-4886-0-1-0-1 {\n    flex-direction: column;\n    gap: 12px;\n  }\n  \n  .figma-btn {\n    width: 100%;\n    justify-content: center;\n  }\n  \n  .figma-hero-image {\n    min-height: 250px;\n    padding: 20px;\n  }\n  \n  .figma-hero-bg {\n    background-size: contain;\n    background-position: center;\n    min-height: 200px;\n  }\n}\n\n/* Common Figma Component Styles */\n.figma-component {\n  box-sizing: border-box;\n}\n\n/* Legacy placeholder styles (for fallback) */\n.figma-image {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  background-color: #f5f5f5;\n  border: 1px dashed #ccc;\n  min-height: 100px;\n  background-size: cover;\n  background-position: center;\n}\n\n.figma-image-placeholder {\n  color: #666;\n  font-style: italic;\n  text-align: center;\n  padding: 1rem;\n}",
+    "type": "component",
+    "lastModified": "2025-08-25T14:35:14.929Z",
+    "createdBy": "Figma Import",
+    "figmaUrl": "https://www.figma.com/design/PuWj05uKXhfbqrhmJLtCij/Atlas-library-for-designetica?node-id=1-4886&t=ZZG7ksmOtnLfGef2-4",
+    "figmaFileId": "PuWj05uKXhfbqrhmJLtCij",
+    "figmaNodeId": "1:4886",
+    "designTokens": {
+      "name": "Hero-500",
+      "type": "COMPONENT",
+      "width": 1768,
+      "height": 500,
+      "fills": [
+        {
+          "type": "solid",
+          "color": "rgba(232, 230, 223, 1)",
+          "opacity": 1
+        }
+      ],
+      "strokes": [],
+      "cornerRadius": 0,
+      "padding": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 16
+      },
+      "typography": {},
+      "children": [
+        {
+          "name": "Left Section",
+          "type": "FRAME",
+          "width": 748,
+          "height": 500,
+          "fills": [],
+          "strokes": [],
+          "cornerRadius": 0,
+          "padding": {},
+          "typography": {},
+          "children": [
+            {
+              "name": "Certifications/microsoft-certified-fundamentals-badge 2",
+              "type": "INSTANCE",
+              "width": 62,
+              "height": 62,
+              "fills": [
+                {
+                  "type": "solid",
+                  "color": "rgba(255, 255, 255, 1)",
+                  "opacity": 1
+                }
+              ],
+              "strokes": [],
+              "cornerRadius": 0,
+              "padding": {},
+              "typography": {},
+              "children": [
+                {
+                  "name": "Group 79",
+                  "type": "GROUP",
+                  "width": 44.99202346801758,
+                  "height": 59.88481140136719,
+                  "fills": [],
+                  "strokes": [],
+                  "cornerRadius": 0,
+                  "padding": {},
+                  "typography": {},
+                  "children": [
+                    {
+                      "name": "Vector",
+                      "type": "VECTOR",
+                      "width": 44.99202346801758,
+                      "height": 59.88481140136719,
+                      "fills": [
+                        {
+                          "type": "solid",
+                          "color": "rgba(0, 32, 80, 1)",
+                          "opacity": 1
+                        }
+                      ],
+                      "strokes": [],
+                      "cornerRadius": 0,
+                      "padding": {},
+                      "typography": {},
+                      "children": [],
+                      "figmaNodeId": "1:4886-0-0-0-0"
+                    },
+                    {
+                      "name": "Vector",
+                      "type": "VECTOR",
+                      "width": 40.482120513916016,
+                      "height": 39.961055755615234,
+                      "fills": [
+                        {
+                          "type": "solid",
+                          "color": "rgba(0, 100, 181, 1)",
+                          "opacity": 1
+                        }
+                      ],
+                      "strokes": [],
+                      "cornerRadius": 0,
+                      "padding": {},
+                      "typography": {},
+                      "children": [],
+                      "figmaNodeId": "1:4886-0-0-0-1"
+                    },
+                    {
+                      "name": "Vector",
+                      "type": "VECTOR",
+                      "width": 25.713075637817383,
+                      "height": 27.585622787475586,
+                      "fills": [
+                        {
+                          "type": "solid",
+                          "color": "rgba(255, 255, 255, 1)",
+                          "opacity": 1
+                        }
+                      ],
+                      "strokes": [],
+                      "cornerRadius": 0,
+                      "padding": {},
+                      "typography": {},
+                      "children": [],
+                      "figmaNodeId": "1:4886-0-0-0-2"
+                    }
+                  ],
+                  "figmaNodeId": "1:4886-0-0-0"
+                }
+              ],
+              "figmaNodeId": "1:4886-0-0"
+            },
+            {
+              "name": "Icon + Text",
+              "type": "FRAME",
+              "width": 748,
+              "height": 278,
+              "fills": [],
+              "strokes": [],
+              "cornerRadius": 0,
+              "padding": {},
+              "typography": {},
+              "children": [
+                {
+                  "name": "Text",
+                  "type": "FRAME",
+                  "width": 748,
+                  "height": 162,
+                  "fills": [],
+                  "strokes": [],
+                  "cornerRadius": 0,
+                  "padding": {},
+                  "typography": {},
+                  "children": [
+                    {
+                      "name": "Top Section",
+                      "type": "FRAME",
+                      "width": 748,
+                      "height": 110,
+                      "fills": [],
+                      "strokes": [],
+                      "cornerRadius": 0,
+                      "padding": {},
+                      "typography": {},
+                      "children": [
+                        {
+                          "name": "eyebrow",
+                          "type": "TEXT",
+                          "width": 748,
+                          "height": 20,
+                          "fills": [
+                            {
+                              "type": "solid",
+                              "color": "rgba(23, 23, 23, 1)",
+                              "opacity": 1
+                            }
+                          ],
+                          "strokes": [],
+                          "cornerRadius": 0,
+                          "padding": {},
+                          "typography": {
+                            "fontFamily": "Segoe UI",
+                            "fontSize": 14,
+                            "fontWeight": 400,
+                            "lineHeight": "74.10950469970703%",
+                            "textAlign": "left",
+                            "color": "rgba(23, 23, 23, 1)"
+                          },
+                          "children": [],
+                          "figmaNodeId": "1:4886-0-1-0-0-0"
+                        },
+                        {
+                          "name": "Title + Summary",
+                          "type": "FRAME",
+                          "width": 748,
+                          "height": 86,
+                          "fills": [],
+                          "strokes": [],
+                          "cornerRadius": 0,
+                          "padding": {},
+                          "typography": {},
+                          "children": [
+                            {
+                              "name": "Title",
+                              "type": "TEXT",
+                              "width": 748,
+                              "height": 52,
+                              "fills": [
+                                {
+                                  "type": "solid",
+                                  "color": "rgba(23, 23, 23, 1)",
+                                  "opacity": 1
+                                }
+                              ],
+                              "strokes": [],
+                              "cornerRadius": 0,
+                              "padding": {},
+                              "typography": {
+                                "fontFamily": "Segoe-UI",
+                                "fontSize": 40,
+                                "fontWeight": 600,
+                                "lineHeight": "110.9333267211914%",
+                                "textAlign": "left",
+                                "color": "rgba(23, 23, 23, 1)"
+                              },
+                              "children": [],
+                              "figmaNodeId": "1:4886-0-1-0-0-1-0"
+                            },
+                            {
+                              "name": "Title",
+                              "type": "TEXT",
+                              "width": 622,
+                              "height": 35,
+                              "fills": [
+                                {
+                                  "type": "solid",
+                                  "color": "rgba(23, 23, 23, 1)",
+                                  "opacity": 1
+                                }
+                              ],
+                              "strokes": [],
+                              "cornerRadius": 0,
+                              "padding": {},
+                              "typography": {
+                                "fontFamily": "Segoe UI",
+                                "fontSize": 28,
+                                "fontWeight": 400,
+                                "lineHeight": "93.97943878173828%",
+                                "textAlign": "left",
+                                "color": "rgba(23, 23, 23, 1)"
+                              },
+                              "children": [],
+                              "figmaNodeId": "1:4886-0-1-0-0-1-1"
+                            },
+                            {
+                              "name": "Metadata",
+                              "type": "TEXT",
+                              "width": 622,
+                              "height": 22,
+                              "fills": [
+                                {
+                                  "type": "solid",
+                                  "color": "rgba(23, 23, 23, 1)",
+                                  "opacity": 1
+                                }
+                              ],
+                              "strokes": [],
+                              "cornerRadius": 0,
+                              "padding": {},
+                              "typography": {
+                                "fontFamily": "Segoe UI",
+                                "fontSize": 16,
+                                "fontWeight": 400,
+                                "lineHeight": "103.37738800048828%",
+                                "textAlign": "left",
+                                "color": "rgba(23, 23, 23, 1)"
+                              },
+                              "children": [],
+                              "figmaNodeId": "1:4886-0-1-0-0-1-2"
+                            },
+                            {
+                              "name": "Summary",
+                              "type": "TEXT",
+                              "width": 748,
+                              "height": 22,
+                              "fills": [
+                                {
+                                  "type": "solid",
+                                  "color": "rgba(23, 23, 23, 1)",
+                                  "opacity": 1
+                                }
+                              ],
+                              "strokes": [],
+                              "cornerRadius": 0,
+                              "padding": {},
+                              "typography": {
+                                "fontFamily": "Segoe UI",
+                                "fontSize": 16,
+                                "fontWeight": 400,
+                                "lineHeight": "103.37738800048828%",
+                                "textAlign": "left",
+                                "color": "rgba(23, 23, 23, 1)"
+                              },
+                              "children": [],
+                              "figmaNodeId": "1:4886-0-1-0-0-1-3"
+                            }
+                          ],
+                          "figmaNodeId": "1:4886-0-1-0-0-1"
+                        }
+                      ],
+                      "figmaNodeId": "1:4886-0-1-0-0"
+                    },
+                    {
+                      "name": "Buttons",
+                      "type": "FRAME",
+                      "width": 138,
+                      "height": 36,
+                      "fills": [],
+                      "strokes": [],
+                      "cornerRadius": 0,
+                      "padding": {},
+                      "typography": {},
+                      "children": [
+                        {
+                          "name": "Filled Button",
+                          "type": "INSTANCE",
+                          "width": 64,
+                          "height": 36,
+                          "fills": [
+                            {
+                              "type": "solid",
+                              "color": "rgba(0, 120, 212, 1)",
+                              "opacity": 1
+                            }
+                          ],
+                          "strokes": [],
+                          "cornerRadius": 2,
+                          "padding": {
+                            "top": 5,
+                            "right": 12,
+                            "bottom": 5,
+                            "left": 12
+                          },
+                          "typography": {},
+                          "children": [
+                            {
+                              "name": "Placeholder",
+                              "type": "INSTANCE",
+                              "width": 20,
+                              "height": 20,
+                              "fills": [
+                                {
+                                  "type": "solid",
+                                  "color": "rgba(255, 255, 255, 1)",
+                                  "opacity": 1
+                                }
+                              ],
+                              "strokes": [],
+                              "cornerRadius": 0,
+                              "padding": {},
+                              "typography": {},
+                              "children": [
+                                {
+                                  "name": "Shape",
+                                  "type": "VECTOR",
+                                  "width": 16,
+                                  "height": 16,
+                                  "fills": [
+                                    {
+                                      "type": "solid",
+                                      "color": "rgba(255, 255, 255, 1)",
+                                      "opacity": 1
+                                    }
+                                  ],
+                                  "strokes": [],
+                                  "cornerRadius": 0,
+                                  "padding": {},
+                                  "typography": {},
+                                  "children": [],
+                                  "figmaNodeId": "1:4886-0-1-0-1-0-0-0"
+                                }
+                              ],
+                              "figmaNodeId": "1:4886-0-1-0-1-0-0"
+                            },
+                            {
+                              "name": "Free Trial",
+                              "type": "TEXT",
+                              "width": 40,
+                              "height": 21,
+                              "fills": [
+                                {
+                                  "type": "solid",
+                                  "color": "rgba(255, 255, 255, 1)",
+                                  "opacity": 1
+                                }
+                              ],
+                              "strokes": [],
+                              "cornerRadius": 0,
+                              "padding": {},
+                              "typography": {
+                                "fontFamily": "Segoe-UI",
+                                "fontSize": 16,
+                                "fontWeight": 600,
+                                "lineHeight": "110.9333267211914%",
+                                "textAlign": "left",
+                                "color": "rgba(255, 255, 255, 1)"
+                              },
+                              "children": [],
+                              "figmaNodeId": "1:4886-0-1-0-1-0-1"
+                            },
+                            {
+                              "name": "",
+                              "type": "TEXT",
+                              "width": 16,
+                              "height": 21,
+                              "fills": [
+                                {
+                                  "type": "solid",
+                                  "color": "rgba(255, 255, 255, 1)",
+                                  "opacity": 1
+                                }
+                              ],
+                              "strokes": [],
+                              "cornerRadius": 0,
+                              "padding": {},
+                              "typography": {
+                                "fontFamily": "Full MDL2 Assets",
+                                "fontSize": 16,
+                                "fontWeight": 400,
+                                "lineHeight": "131.25%",
+                                "textAlign": "left",
+                                "color": "rgba(255, 255, 255, 1)"
+                              },
+                              "children": [],
+                              "figmaNodeId": "1:4886-0-1-0-1-0-2"
+                            }
+                          ],
+                          "figmaNodeId": "1:4886-0-1-0-1-0"
+                        },
+                        {
+                          "name": "Outlined Button",
+                          "type": "INSTANCE",
+                          "width": 66,
+                          "height": 36,
+                          "fills": [],
+                          "strokes": [
+                            {
+                              "type": "solid",
+                              "color": "rgba(142, 142, 142, 1)",
+                              "weight": 1
+                            }
+                          ],
+                          "cornerRadius": 2,
+                          "padding": {
+                            "top": 5,
+                            "right": 12,
+                            "bottom": 5,
+                            "left": 12
+                          },
+                          "typography": {},
+                          "children": [
+                            {
+                              "name": "Placeholder",
+                              "type": "INSTANCE",
+                              "width": 20,
+                              "height": 20,
+                              "fills": [
+                                {
+                                  "type": "solid",
+                                  "color": "rgba(255, 255, 255, 1)",
+                                  "opacity": 1
+                                }
+                              ],
+                              "strokes": [],
+                              "cornerRadius": 0,
+                              "padding": {},
+                              "typography": {},
+                              "children": [
+                                {
+                                  "name": "Shape",
+                                  "type": "VECTOR",
+                                  "width": 16,
+                                  "height": 16,
+                                  "fills": [
+                                    {
+                                      "type": "solid",
+                                      "color": "rgba(36, 36, 36, 1)",
+                                      "opacity": 1
+                                    }
+                                  ],
+                                  "strokes": [],
+                                  "cornerRadius": 0,
+                                  "padding": {},
+                                  "typography": {},
+                                  "children": [],
+                                  "figmaNodeId": "1:4886-0-1-0-1-1-0-0"
+                                }
+                              ],
+                              "figmaNodeId": "1:4886-0-1-0-1-1-0"
+                            },
+                            {
+                              "name": "Free Trial",
+                              "type": "TEXT",
+                              "width": 42,
+                              "height": 21,
+                              "fills": [
+                                {
+                                  "type": "solid",
+                                  "color": "rgba(23, 23, 23, 1)",
+                                  "opacity": 1
+                                }
+                              ],
+                              "strokes": [],
+                              "cornerRadius": 0,
+                              "padding": {},
+                              "typography": {
+                                "fontFamily": "Segoe UI",
+                                "fontSize": 16,
+                                "fontWeight": 600,
+                                "lineHeight": "98.67841339111328%",
+                                "textAlign": "left",
+                                "color": "rgba(23, 23, 23, 1)"
+                              },
+                              "children": [],
+                              "figmaNodeId": "1:4886-0-1-0-1-1-1"
+                            },
+                            {
+                              "name": "Chevron",
+                              "type": "INSTANCE",
+                              "width": 20,
+                              "height": 20,
+                              "fills": [],
+                              "strokes": [],
+                              "cornerRadius": 0,
+                              "padding": {},
+                              "typography": {},
+                              "children": [
+                                {
+                                  "name": "Shape",
+                                  "type": "VECTOR",
+                                  "width": 12.000797271728516,
+                                  "height": 6.499191761016846,
+                                  "fills": [
+                                    {
+                                      "type": "solid",
+                                      "color": "rgba(36, 36, 36, 1)",
+                                      "opacity": 1
+                                    }
+                                  ],
+                                  "strokes": [],
+                                  "cornerRadius": 0,
+                                  "padding": {},
+                                  "typography": {},
+                                  "children": [],
+                                  "figmaNodeId": "1:4886-0-1-0-1-1-2-0"
+                                }
+                              ],
+                              "figmaNodeId": "1:4886-0-1-0-1-1-2"
+                            }
+                          ],
+                          "figmaNodeId": "1:4886-0-1-0-1-1"
+                        }
+                      ],
+                      "figmaNodeId": "1:4886-0-1-0-1"
+                    }
+                  ],
+                  "figmaNodeId": "1:4886-0-1-0"
+                }
+              ],
+              "figmaNodeId": "1:4886-0-1"
+            }
+          ],
+          "figmaNodeId": "1:4886-0"
+        },
+        {
+          "name": "Header Light/Hero Image 501",
+          "type": "FRAME",
+          "width": 1000,
+          "height": 500,
+          "fills": [
+            {
+              "type": "solid",
+              "color": "rgba(255, 255, 255, 1)",
+              "opacity": 1
+            }
+          ],
+          "strokes": [],
+          "cornerRadius": 0,
+          "padding": {},
+          "typography": {},
+          "children": [
+            {
+              "name": "Abstract",
+              "type": "INSTANCE",
+              "width": 1000,
+              "height": 500,
+              "fills": [
+                {
+                  "type": "solid",
+                  "color": "rgba(232, 230, 223, 1)",
+                  "opacity": 1
+                }
+              ],
+              "strokes": [],
+              "cornerRadius": 0,
+              "padding": {},
+              "typography": {},
+              "children": [
+                {
+                  "name": "Microsoft-Learn-keyart-neutral-gray-angle-1",
+                  "type": "RECTANGLE",
+                  "width": 1000,
+                  "height": 500,
+                  "fills": [
+                    {
+                      "blendMode": "NORMAL",
+                      "type": "IMAGE",
+                      "scaleMode": "FILL",
+                      "imageRef": "ea591d2d91c8ba77dd5a8d81269e332c429e13f8"
+                    }
+                  ],
+                  "strokes": [],
+                  "cornerRadius": 0,
+                  "padding": {},
+                  "typography": {},
+                  "children": [],
+                  "figmaNodeId": "1:4886-1-0-0"
+                }
+              ],
+              "figmaNodeId": "1:4886-1-0"
+            },
+            {
+              "name": "right gradient",
+              "type": "RECTANGLE",
+              "width": 130.0000000000001,
+              "height": 500,
+              "fills": [
+                {
+                  "blendMode": "NORMAL",
+                  "type": "GRADIENT_LINEAR",
+                  "gradientHandlePositions": [
+                    {
+                      "x": -1.1102230246251565e-15,
+                      "y": 0
+                    },
+                    {
+                      "x": 0.999999999999999,
+                      "y": -2.7755575615628914e-16
+                    },
+                    {
+                      "x": 2.5538744937699e-15,
+                      "y": -0.22328734146230578
+                    }
+                  ],
+                  "gradientStops": [
+                    {
+                      "color": {
+                        "r": 0.9098039269447327,
+                        "g": 0.9019607901573181,
+                        "b": 0.8745098114013672,
+                        "a": 1
+                      },
+                      "position": 0
+                    },
+                    {
+                      "color": {
+                        "r": 0.9098039269447327,
+                        "g": 0.9019607901573181,
+                        "b": 0.8745098114013672,
+                        "a": 0
+                      },
+                      "position": 1
+                    }
+                  ]
+                }
+              ],
+              "strokes": [],
+              "cornerRadius": 0,
+              "padding": {},
+              "typography": {},
+              "children": [],
+              "figmaNodeId": "1:4886-1-1"
+            },
+            {
+              "name": "Left Solid",
+              "type": "RECTANGLE",
+              "width": 12,
+              "height": 500,
+              "fills": [
+                {
+                  "type": "solid",
+                  "color": "rgba(232, 230, 223, 1)",
+                  "opacity": 1
+                }
+              ],
+              "strokes": [],
+              "cornerRadius": 0,
+              "padding": {},
+              "typography": {},
+              "children": [],
+              "figmaNodeId": "1:4886-1-2"
+            },
+            {
+              "name": "left gradient",
+              "type": "RECTANGLE",
+              "width": 130,
+              "height": 500,
+              "fills": [
+                {
+                  "blendMode": "NORMAL",
+                  "type": "GRADIENT_LINEAR",
+                  "gradientHandlePositions": [
+                    {
+                      "x": -1.1102230246251565e-15,
+                      "y": 0
+                    },
+                    {
+                      "x": 0.999999999999999,
+                      "y": -2.7755575615628914e-16
+                    },
+                    {
+                      "x": 2.5538744937699e-15,
+                      "y": -0.22328734146230578
+                    }
+                  ],
+                  "gradientStops": [
+                    {
+                      "color": {
+                        "r": 0.9098039269447327,
+                        "g": 0.9019607901573181,
+                        "b": 0.8745098114013672,
+                        "a": 1
+                      },
+                      "position": 0,
+                      "boundVariables": {
+                        "color": {
+                          "type": "VARIABLE_ALIAS",
+                          "id": "VariableID:9ddc19adfcfaaf8b89fbeffccb950df27e079121/67149:925"
+                        }
+                      }
+                    },
+                    {
+                      "color": {
+                        "r": 0.9098039269447327,
+                        "g": 0.9019607901573181,
+                        "b": 0.8745098114013672,
+                        "a": 0
+                      },
+                      "position": 1,
+                      "boundVariables": {
+                        "color": {
+                          "type": "VARIABLE_ALIAS",
+                          "id": "VariableID:4a1808a510b0e10a497031f58f1ce6ed27940796/67149:943"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ],
+              "strokes": [],
+              "cornerRadius": 0,
+              "padding": {},
+              "typography": {},
+              "children": [],
+              "figmaNodeId": "1:4886-1-3"
+            }
+          ],
+          "figmaNodeId": "1:4886-1"
+        }
+      ],
+      "figmaNodeId": "1:4886"
+    }
+  }
+]

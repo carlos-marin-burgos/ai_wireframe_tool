@@ -1,0 +1,12 @@
+<step title="BackgroundTrace" date="2025-08-08T14:59:28.500" instance="b6405a" url="synctriggers-operation" method="POST" >
+  <step title="Cleanup Xml Logs" date="2025-08-08T14:59:28.546" /><!-- duration: 47ms -->
+  <step title="Updating shutdown sentinel last write time" date="2025-08-08T14:59:28.640" SemaphoreCount="5" /><!-- duration: 47ms -->
+  <step title="Delaying &apos;00:01:00&apos; for Functions site to restart." date="2025-08-08T14:59:28.734" /><!-- duration: 31ms -->
+  <step title="Begin HttpPost https://func-prod-fresh-u62277mynzfg4.azurewebsites.net/admin/host/synctriggers, x-ms-request-id: ccf035db-4988-4295-b5d3-d86ee0ccf715" date="2025-08-08T14:59:53.304" /><!-- duration: 47ms -->
+  <step title="End HttpPost, status: OK" date="2025-08-08T15:00:00.289" /><!-- duration: 62ms -->
+  <step title="Syncing function triggers by calling the functions runtime site successful." date="2025-08-08T15:00:00.383" /><!-- duration: 47ms -->
+  <step title="Begin HttpPost https://func-prod-fresh-u62277mynzfg4.azurewebsites.net/admin/host/synctriggers, x-ms-request-id: ed16bd3a-69b7-4302-bb28-f3049e056e9b" date="2025-08-08T15:00:28.820" /><!-- duration: 63ms -->
+  <step title="End HttpPost, status: OK" date="2025-08-08T15:00:29.336" /><!-- duration: 47ms -->
+  <step title="Syncing function triggers by calling the functions runtime site successful." date="2025-08-08T15:00:29.429" /><!-- duration: 31ms -->
+  <step title="Deleting shutdown sentinel file" date="2025-08-08T15:00:29.508" SemaphoreCount="8" /><!-- duration: 47ms -->
+</step><!-- duration: 61102ms -->

@@ -5,8 +5,8 @@
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
-      "methods": ["get", "post", "options"],
-      "route": "generate-wireframe"
+      "methods": ["post", "options"],
+      "route": "generate-html-wireframe"
     },
     {
       "type": "http",

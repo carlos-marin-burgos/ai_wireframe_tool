@@ -1,0 +1,709 @@
+/* Rearrangeable Wireframe Styles */
+/* Bootstrap Grid-based Drag & Drop Interface inspired by CodePen */
+
+.rearrangeable-wireframe-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #f8f9fa;
+  border-radius: 8px;
+  overflow: hidden;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+/* ============================================
+   INSTRUCTION PANEL
+   ============================================ */
+
+.rearrangeable-instructions {
+  position: sticky;
+  top: 0;
+  background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+  color: white;
+  padding: 12px 20px;
+  border-bottom: 1px solid #e1dfdd;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.instruction-content h4 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.instruction-content p {
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.95;
+  line-height: 1.4;
+}
+
+.instruction-content strong {
+  color: #ffd700;
+  font-weight: 600;
+}
+
+/* ============================================
+   COMPONENT LIBRARY BAR
+   ============================================ */
+
+.component-library-bar {
+  background: white;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e1dfdd;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.component-library-bar h5 {
+  margin: 0 0 12px 0;
+  color: #323130;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.library-items {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.library-item-btn {
+  background: #f3f2f1;
+  border: 1px solid #e1dfdd;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #323130;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.library-item-btn:hover {
+  background: #e1dfdd;
+  border-color: #c8c6c4;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.library-item-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================
+   GRID SYSTEM & LAYOUT
+   ============================================ */
+
+.grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.grid-lines {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.grid-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(0, 120, 212, 0.1);
+  pointer-events: none;
+}
+
+/* Dynamic grid line positioning */
+.grid-line[data-grid-position="0"] {
+  left: 0%;
+}
+.grid-line[data-grid-position="1"] {
+  left: 8.333%;
+}
+.grid-line[data-grid-position="2"] {
+  left: 16.666%;
+}
+.grid-line[data-grid-position="3"] {
+  left: 25%;
+}
+.grid-line[data-grid-position="4"] {
+  left: 33.333%;
+}
+.grid-line[data-grid-position="5"] {
+  left: 41.666%;
+}
+.grid-line[data-grid-position="6"] {
+  left: 50%;
+}
+.grid-line[data-grid-position="7"] {
+  left: 58.333%;
+}
+.grid-line[data-grid-position="8"] {
+  left: 66.666%;
+}
+.grid-line[data-grid-position="9"] {
+  left: 75%;
+}
+.grid-line[data-grid-position="10"] {
+  left: 83.333%;
+}
+.grid-line[data-grid-position="11"] {
+  left: 91.666%;
+}
+.grid-line[data-grid-position="12"] {
+  left: 100%;
+}
+
+.wireframe-content-area {
+  position: relative;
+  padding: 20px;
+  min-height: 600px;
+  z-index: 2;
+}
+
+.wireframe-grid {
+  position: relative;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.wireframe-grid.dragging-active {
+  cursor: grabbing;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* ============================================
+   BOOTSTRAP GRID ENHANCEMENTS
+   ============================================ */
+
+.rearrangeable-wireframe .container {
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.rearrangeable-wireframe .row {
+  margin: 0 0 20px 0;
+  min-height: 100px;
+  border: 2px dashed transparent;
+  border-radius: 8px;
+  padding: 10px 0;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.drop-zone-row {
+  border-color: rgba(0, 120, 212, 0.2) !important;
+  background: rgba(0, 120, 212, 0.02);
+}
+
+.drop-zone-row:hover {
+  border-color: rgba(0, 120, 212, 0.4) !important;
+  background: rgba(0, 120, 212, 0.05);
+}
+
+/* Row drag handle */
+.row-drag-handle {
+  position: absolute;
+  left: -12px;
+  top: 8px;
+  width: 16px;
+  height: 24px;
+  background: #f3f2f1;
+  border: 1px solid #e1dfdd;
+  border-radius: 4px;
+  color: #605e5c;
+  font-weight: 700;
+  font-family: system-ui, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  z-index: 3;
+}
+
+.drop-zone-row {
+  position: relative;
+}
+
+/* ============================================
+   DRAGGABLE BLOCKS
+   ============================================ */
+
+.draggable-block {
+  min-height: 100px;
+  border: 2px dashed rgba(156, 163, 175, 0.4);
+  border-radius: 6px;
+  background: white;
+  padding: 16px;
+  margin-bottom: 0;
+  cursor: grab;
+  transition: border-color 0.3s ease;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.draggable-block:hover {
+  border-color: rgba(75, 85, 99, 0.8);
+}
+
+.draggable-block:active {
+  cursor: grabbing;
+}
+
+.draggable-block.dragging {
+  opacity: 0.8;
+  transform: rotate(2deg) scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  border-color: #0078d4;
+  z-index: 1000;
+  cursor: grabbing;
+}
+
+/* Component Type Indicators */
+.draggable-block[data-type="button-group"] {
+  border-left: 4px solid #0078d4;
+}
+
+.draggable-block[data-type="form"] {
+  border-left: 4px solid #107c10;
+}
+
+.draggable-block[data-type="image"] {
+  border-left: 4px solid #d83b01;
+}
+
+.draggable-block[data-type="heading"] {
+  border-left: 4px solid #5c2d91;
+}
+
+.draggable-block[data-type="text"] {
+  border-left: 4px solid #8a8886;
+}
+
+.draggable-block[data-type="card"] {
+  border-left: 4px solid #ca5010;
+}
+
+.draggable-block[data-type="navigation"] {
+  border-left: 4px solid #004578;
+}
+
+.draggable-block[data-type="library-component"] {
+  border-left: 4px solid #b146c2;
+}
+
+/* ============================================
+   DROP ZONES & INDICATORS
+   ============================================ */
+
+.drop-zone-indicators {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.drop-zone {
+  position: absolute;
+  border: 2px dashed rgba(0, 120, 212, 0.3);
+  border-radius: 4px;
+  background: rgba(0, 120, 212, 0.05);
+  pointer-events: auto;
+  transition: all 0.2s ease;
+  opacity: 0.7;
+  min-width: 80px;
+  min-height: 100px;
+}
+
+/* Dynamic positioning for drop zones */
+.drop-zone[data-row="0"] {
+  top: 0px;
+}
+.drop-zone[data-row="1"] {
+  top: 120px;
+}
+.drop-zone[data-row="2"] {
+  top: 240px;
+}
+.drop-zone[data-row="3"] {
+  top: 360px;
+}
+.drop-zone[data-row="4"] {
+  top: 480px;
+}
+
+.drop-zone[data-col="0"] {
+  left: 0%;
+  width: 8.333%;
+}
+.drop-zone[data-col="1"] {
+  left: 8.333%;
+  width: 8.333%;
+}
+.drop-zone[data-col="2"] {
+  left: 16.666%;
+  width: 8.333%;
+}
+.drop-zone[data-col="3"] {
+  left: 25%;
+  width: 8.333%;
+}
+.drop-zone[data-col="4"] {
+  left: 33.333%;
+  width: 8.333%;
+}
+.drop-zone[data-col="5"] {
+  left: 41.666%;
+  width: 8.333%;
+}
+.drop-zone[data-col="6"] {
+  left: 50%;
+  width: 8.333%;
+}
+.drop-zone[data-col="7"] {
+  left: 58.333%;
+  width: 8.333%;
+}
+.drop-zone[data-col="8"] {
+  left: 66.666%;
+  width: 8.333%;
+}
+.drop-zone[data-col="9"] {
+  left: 75%;
+  width: 8.333%;
+}
+.drop-zone[data-col="10"] {
+  left: 83.333%;
+  width: 8.333%;
+}
+.drop-zone[data-col="11"] {
+  left: 91.666%;
+  width: 8.333%;
+}
+
+.drop-zone.hovered {
+  border-color: #0078d4;
+  background: rgba(0, 120, 212, 0.15);
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+.drop-zone-hover {
+  border-color: #0078d4 !important;
+  background: rgba(0, 120, 212, 0.1) !important;
+}
+
+.drop-success {
+  background: rgba(34, 197, 94, 0.2) !important;
+  border-color: #22c55e !important;
+  animation: dropSuccess 0.6s ease;
+}
+
+/* ============================================
+   RESIZE HANDLES
+   ============================================ */
+
+.resize-handle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #0078d4;
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: ew-resize;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.draggable-block:hover .resize-handle,
+.resize-handle:hover {
+  opacity: 1;
+}
+
+.resize-handle:hover {
+  background: #106ebe;
+  transform: scale(1.1);
+}
+
+/* Position resize handles */
+.resize-handle[data-position="right"] {
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.resize-handle[data-position="bottom"] {
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: ns-resize;
+}
+
+.resize-handle[data-position="bottom-right"] {
+  bottom: -6px;
+  right: -6px;
+  cursor: nw-resize;
+}
+
+/* ============================================
+   ANIMATIONS & TRANSITIONS
+   ============================================ */
+
+@keyframes dropSuccess {
+  0% {
+    transform: scale(1);
+    background: rgba(34, 197, 94, 0.1);
+  }
+  50% {
+    transform: scale(1.05);
+    background: rgba(34, 197, 94, 0.2);
+  }
+  100% {
+    transform: scale(1);
+    background: white;
+  }
+}
+
+.draggable-block.drop-success {
+  animation: dropSuccess 0.6s ease;
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(0, 120, 212, 0.3);
+  }
+}
+
+.draggable-block.selected {
+  animation: pulseGlow 2s infinite;
+  border-color: #0078d4;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 768px) {
+  .rearrangeable-wireframe-container {
+    border-radius: 0;
+  }
+
+  .rearrangeable-instructions {
+    padding: 10px 16px;
+  }
+
+  .instruction-content h4 {
+    font-size: 14px;
+  }
+
+  .instruction-content p {
+    font-size: 12px;
+  }
+
+  .component-library-bar {
+    padding: 12px 16px;
+  }
+
+  .library-items {
+    gap: 6px;
+  }
+
+  .library-item-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .wireframe-content-area {
+    padding: 16px;
+  }
+
+  .draggable-block {
+    padding: 12px;
+    min-height: 80px;
+  }
+
+  .rearrangeable-wireframe .row {
+    min-height: 80px;
+    margin-bottom: 16px;
+  }
+
+  /* Make grid lines more subtle on mobile */
+  .grid-line {
+    background: rgba(0, 120, 212, 0.05);
+  }
+
+  /* Larger touch targets for mobile */
+  .resize-handle {
+    width: 16px;
+    height: 16px;
+  }
+
+  .drop-zone {
+    border-width: 3px;
+  }
+}
+
+@media (max-width: 480px) {
+  .instruction-content p {
+    display: none; /* Hide detailed instructions on very small screens */
+  }
+
+  .component-library-bar h5 {
+    font-size: 12px;
+  }
+
+  .library-item-btn {
+    flex: 1;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .wireframe-content-area {
+    padding: 12px;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY IMPROVEMENTS
+   ============================================ */
+
+.draggable-block:focus {
+  outline: 3px solid #0078d4;
+  outline-offset: 2px;
+}
+
+.library-item-btn:focus {
+  outline: 2px solid #0078d4;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .draggable-block {
+    border-width: 2px;
+  }
+
+  .drop-zone {
+    border-width: 3px;
+  }
+
+  .grid-line {
+    background: rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .draggable-block,
+  .drop-zone,
+  .wireframe-grid,
+  .library-item-btn,
+  .resize-handle {
+    transition: none;
+  }
+
+  .draggable-block.drop-success {
+    animation: none;
+  }
+
+  .draggable-block.selected {
+    animation: none;
+    box-shadow: 0 0 0 3px #0078d4;
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.drag-preview {
+  pointer-events: none;
+  opacity: 0.8;
+  transform: rotate(5deg);
+}
+
+.drop-target-active {
+  background: rgba(0, 120, 212, 0.1);
+  border-color: #0078d4;
+}
+
+.component-locked {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.component-locked:hover {
+  transform: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Grid size variations */
+.grid-size-8 .draggable-block {
+  min-width: calc(12.5% - 20px);
+}
+
+.grid-size-12 .draggable-block {
+  min-width: calc(8.333% - 20px);
+}
+
+.grid-size-16 .draggable-block {
+  min-width: calc(6.25% - 20px);
+}
+
+/* Success and error states */
+.drop-success-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #107c10;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  z-index: 1001;
+  pointer-events: none;
+}
+
+.drop-error-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #d13438;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  z-index: 1001;
+  pointer-events: none;
+}

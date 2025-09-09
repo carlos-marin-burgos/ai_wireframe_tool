@@ -114,7 +114,7 @@
 }
 
 .atlas-card-selected::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -136,7 +136,7 @@
   .atlas-card {
     margin: var(--atlas-spacing-sm);
   }
-  
+
   .atlas-card-header,
   .atlas-card-content,
   .atlas-card-footer {
@@ -161,4 +161,304 @@
 
 .atlas-cards-list .atlas-card {
   margin-bottom: 0;
+}
+
+/* Learning Path Card - Atlas Design Library Component */
+/* Atlas Learning Path Card Styles */
+.atlas-learning-path-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  max-width: 400px;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.atlas-learning-path-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+}
+
+.learning-path-header {
+  background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+  padding: 20px;
+  color: white;
+  position: relative;
+}
+
+.learning-path-category {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+}
+
+.learning-path-difficulty {
+  background: #00bcf2;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  float: right;
+}
+
+.learning-path-title {
+  margin: 16px 0 8px 0;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.learning-path-description {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.learning-path-content {
+  padding: 24px;
+}
+
+.learning-path-modules {
+  margin-bottom: 20px;
+}
+
+.module-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #0078d4;
+}
+
+.module-item:nth-child(2) {
+  border-left-color: #0078d4;
+}
+
+.module-item:nth-child(3) {
+  background: #e8f4fd;
+  border-left-color: #00bcf2;
+}
+
+.module-icon {
+  font-size: 20px;
+}
+
+.learning-path-progress {
+  margin-bottom: 20px;
+}
+
+.progress-bar {
+  background: #f3f2f1;
+  border-radius: 8px;
+  height: 8px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, #0078d4, #00bcf2);
+  height: 100%;
+  width: 40%;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 14px;
+  color: #0078d4;
+  font-weight: 600;
+  float: right;
+}
+
+.learning-path-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.continue-btn {
+  flex: 1;
+  background: #0078d4;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.continue-btn:hover {
+  background: #106ebe;
+}
+
+.bookmark-btn {
+  background: #f3f2f1;
+  color: #605e5c;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.bookmark-btn:hover {
+  background: #e1dfdd;
+}
+
+.atlas-learning-path-card-header {
+  padding: var(--atlas-spacing-lg);
+  border-bottom: 1px solid var(--atlas-color-neutral-30);
+  background: linear-gradient(
+    135deg,
+    var(--atlas-color-neutral-10) 0%,
+    var(--atlas-color-neutral-20) 100%
+  );
+}
+
+.atlas-learning-path-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--atlas-color-neutral-130);
+  margin: 0 0 var(--atlas-spacing-sm) 0;
+  line-height: 1.3;
+}
+
+.atlas-learning-path-card-description {
+  font-size: 14px;
+  color: var(--atlas-color-neutral-110);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.atlas-learning-path-card-content {
+  padding: var(--atlas-spacing-lg);
+}
+
+.atlas-learning-path-card-modules {
+  margin-bottom: var(--atlas-spacing-lg);
+}
+
+.atlas-learning-path-module {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--atlas-spacing-md);
+  margin-bottom: var(--atlas-spacing-sm);
+  background: var(--atlas-color-neutral-20);
+  border-radius: var(--atlas-corner-radius-md);
+  border-left: 4px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.atlas-learning-path-module:last-child {
+  margin-bottom: 0;
+}
+
+.atlas-learning-path-module-info {
+  flex: 1;
+}
+
+.atlas-learning-path-module-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--atlas-color-neutral-130);
+  margin: 0 0 4px 0;
+}
+
+.atlas-learning-path-module-subtitle {
+  font-size: 12px;
+  color: var(--atlas-color-neutral-110);
+  margin: 0;
+}
+
+.atlas-learning-path-module-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--atlas-spacing-sm);
+}
+
+.atlas-learning-path-module-percentage {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--atlas-color-primary);
+  min-width: 50px;
+  text-align: right;
+}
+
+.atlas-learning-path-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--atlas-color-neutral-30);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: var(--atlas-spacing-sm);
+}
+
+.atlas-learning-path-progress-fill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--atlas-color-primary) 0%,
+    #106ebe 100%
+  );
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* Module Status Variants */
+.atlas-learning-path-module.completed {
+  border-left-color: #107c10;
+  background: rgba(16, 124, 16, 0.05);
+}
+
+.atlas-learning-path-module.completed .atlas-learning-path-module-percentage {
+  color: #107c10;
+}
+
+.atlas-learning-path-module.in-progress {
+  border-left-color: var(--atlas-color-primary);
+  background: rgba(0, 120, 212, 0.05);
+}
+
+.atlas-learning-path-module.not-started {
+  border-left-color: var(--atlas-color-neutral-60);
+  background: var(--atlas-color-neutral-20);
+}
+
+.atlas-learning-path-module.not-started .atlas-learning-path-module-percentage {
+  color: var(--atlas-color-neutral-80);
+}
+
+/* Responsive Learning Path Card */
+@media (max-width: 768px) {
+  .atlas-learning-path-card {
+    max-width: 100%;
+  }
+
+  .atlas-learning-path-card-header,
+  .atlas-learning-path-card-content {
+    padding: var(--atlas-spacing-md);
+  }
+
+  .atlas-learning-path-module {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--atlas-spacing-sm);
+  }
+
+  .atlas-learning-path-module-progress {
+    width: 100%;
+    justify-content: space-between;
+  }
 }

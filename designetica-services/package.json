@@ -1,0 +1,22 @@
+{
+  "name": "designetica-services",
+  "version": "1.0.0",
+  "description": "Services for Figma Code Connect integration",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@figma/code-connect": "^1.0.0",
+    "axios": "^1.6.0",
+    "dotenv": "^16.0.0"
+  },
+  "keywords": [
+    "figma",
+    "code-connect",
+    "design-system"
+  ],
+  "author": "Designetica",
+  "license": "MIT"
+}

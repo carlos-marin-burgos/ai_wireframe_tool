@@ -12,18 +12,24 @@ const {
   AIEnhancedWireframeGenerator,
 } = require("./ai/ai-enhanced-wireframe-generator");
 
+// Import Component-Driven Wireframe Services
+const {
+  integrateWithBackend,
+  WireframeApiService,
+} = require("../designetica-services/backendIntegration");
+
 require("dotenv").config();
 
 // Initialize OpenAI client for Azure OpenAI
 let openai = null;
 try {
-  if (process.env.AZURE_OPENAI_API_KEY && process.env.AZURE_OPENAI_ENDPOINT) {
+  if (process.env.AZURE_OPENAI_KEY && process.env.AZURE_OPENAI_ENDPOINT) {
     openai = new OpenAI({
-      apiKey: process.env.AZURE_OPENAI_API_KEY,
+      apiKey: process.env.AZURE_OPENAI_KEY,
       baseURL: `${process.env.AZURE_OPENAI_ENDPOINT}/openai/deployments/${process.env.AZURE_OPENAI_DEPLOYMENT}`,
       defaultQuery: { "api-version": "2024-02-15-preview" },
       defaultHeaders: {
-        "api-key": process.env.AZURE_OPENAI_API_KEY,
+        "api-key": process.env.AZURE_OPENAI_KEY,
       },
     });
     console.log("✅ Azure OpenAI client initialized successfully");
@@ -43,9 +49,17 @@ const PORT = process.env.PORT || 5001;
 const enhancedAI = new AIEnhancedWireframeGenerator();
 console.log("🚀 Enhanced AI Wireframe Generator initialized");
 
+// Initialize Component-Driven Wireframe API
+const componentWireframeApi = new WireframeApiService();
+console.log("🎨 Component-Driven Wireframe API initialized");
+
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Integrate Component-Driven Wireframe Services
+integrateWithBackend(app);
+console.log("✅ Component-driven wireframe endpoints integrated");
 
 // Serve static files
 app.use(express.static("../")); // Serve files from the parent directory

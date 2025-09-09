@@ -35,40 +35,7 @@ body {
   min-height: 100vh;
 }
 
-/* Enhanced Draggable Components */
-.atlas-component {
-  position: relative;
-  cursor: grab;
-  transition: all 0.2s ease;
-}
-
-.atlas-component:hover {
-  box-shadow: 0 2px 8px rgba(0, 123, 212, 0.2);
-  transform: translateY(-1px);
-}
-
-.atlas-component:hover::after {
-  content: "⋮⋮";
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  background: #0078d4;
-  color: white;
-  font-size: 12px;
-  padding: 2px 4px;
-  border-radius: 2px;
-  line-height: 1;
-  pointer-events: none;
-  opacity: 0.8;
-}
-
-.atlas-component[data-dragging="true"] {
-  cursor: grabbing !important;
-  box-shadow: 0 4px 16px rgba(0, 123, 212, 0.3) !important;
-  transform: scale(1.02) !important;
-  z-index: 1000 !important;
-  opacity: 0.8 !important;
-}
+/* Basic component styling */
 
 /* Main App Container */
 .app {
@@ -77,16 +44,18 @@ body {
   flex-direction: column;
 }
 
-/* Main Content */
+/* Adjust main content for new TopNavbar */
+
+/* Main Content - Blended with TopNavbar */
 .app-content {
-  min-height: calc(100vh - 50px);
+  min-height: calc(100vh - 40px);
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding-top: 0;
+  padding-top: 40px; /* Reduced for blended navbar */
   flex: 1;
   background: transparent;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 /* Add padding only when navbar is present (split layout) */
@@ -237,7 +206,7 @@ body {
 .textarea-container {
   position: relative;
   width: 100%;
-  margin-bottom: 2rem;
+  margin-bottom: 0rem;
 }
 
 .app-textarea {
@@ -304,8 +273,8 @@ body {
   background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
   border: none;
   border-radius: 12px;
-  width: 48px;
-  height: 48px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -710,7 +679,7 @@ body {
 }
 
 .transparent-navbar .nav-link:hover {
-  color: #007bff;
+  color: #e8e6de;
 }
 
 .top-nav {
@@ -794,6 +763,7 @@ body {
   overflow: hidden;
   box-shadow: none; /* Remove shadow for subtlety */
   min-height: 500px;
+  margin-bottom: 0px; /* Add bottom margin to prevent cut-off */
   display: flex;
   flex-direction: column;
 }
@@ -922,3 +892,17 @@ body {
 }
 
 /* === RESPONSIVE DESIGN === */
+
+/* Figma modal overlay */
+.figma-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

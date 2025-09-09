@@ -1,0 +1,16 @@
+host.json
+package.json
+generateWireframe
+generateWireframe\function.json
+generateWireframe\function.json.dependencies
+generateWireframe\index-backup.js
+generateWireframe\index-broken.js
+generateWireframe\index-complex-backup.js
+generateWireframe\index-minimal-backup.js
+generateWireframe\index-minimal.js
+generateWireframe\index-simple.js
+generateWireframe\index-standalone.js
+generateWireframe\index-test.js
+generateWireframe\index.js
+generateWireframe\package-lock.json
+generateWireframe\package.json

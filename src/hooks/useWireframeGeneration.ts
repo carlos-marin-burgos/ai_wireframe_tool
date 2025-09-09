@@ -80,6 +80,9 @@ export const useWireframeGeneration = () => {
     // Clear all loading timers
     loadingTimersRef.current.forEach((timer) => clearTimeout(timer));
     loadingTimersRef.current = [];
+    // Reset loading states
+    setIsLoading(false);
+    setLoadingStage("");
   }, []);
 
   const generateWireframe = useCallback(
@@ -182,24 +185,64 @@ export const useWireframeGeneration = () => {
           timestamp: Date.now(),
         });
 
-        const data = await api.post<WireframeResponse>(
-          API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME + `?t=${Date.now()}`, // Add timestamp to force cache bust
-          { description, theme, colorScheme, fastMode: shouldUseFastMode },
-          {
-            signal: abortController.signal,
-            headers: {
-              "Cache-Control": "no-cache, no-store, must-revalidate",
-              Pragma: "no-cache",
-              Expires: "0",
-            },
-          }
-        );
+        // Call the API using our new client with fallback mechanism
+        console.log("🚀 Making API call with:", {
+          description,
+          theme,
+          colorScheme,
+          fastMode: shouldUseFastMode,
+          timestamp: Date.now(),
+        });
+
+        let data: WireframeResponse;
+        let usingEnhanced = true;
+
+        try {
+          // Try enhanced endpoint first (component-driven)
+          data = await api.post<WireframeResponse>(
+            API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME_ENHANCED +
+              `?t=${Date.now()}`,
+            { description, theme, colorScheme, fastMode: shouldUseFastMode },
+            {
+              signal: abortController.signal,
+              headers: {
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+                Pragma: "no-cache",
+                Expires: "0",
+              },
+            }
+          );
+          console.log("✅ Enhanced endpoint succeeded");
+        } catch (enhancedError) {
+          console.warn(
+            "⚠️ Enhanced endpoint failed, falling back to original:",
+            enhancedError
+          );
+          usingEnhanced = false;
+
+          // Fallback to original endpoint
+          data = await api.post<WireframeResponse>(
+            API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME + `?t=${Date.now()}`,
+            { description, theme, colorScheme, fastMode: shouldUseFastMode },
+            {
+              signal: abortController.signal,
+              headers: {
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+                Pragma: "no-cache",
+                Expires: "0",
+              },
+            }
+          );
+          console.log("✅ Original endpoint succeeded");
+        }
 
         console.log("📥 API response received:", {
           hasHtml: !!data.html,
           htmlLength: data.html?.length,
           fallback: data.fallback,
           source: (data as any).source,
+          usingEnhanced,
+          endpoint: usingEnhanced ? "enhanced" : "original",
           title:
             data.html?.match(/<title>(.*?)<\/title>/)?.[1] || "No title found",
         });
@@ -267,110 +310,29 @@ export const useWireframeGeneration = () => {
           throw err;
         }
 
-        // Use enhanced fallback generator for all other errors
-        try {
-          console.log("🔄 Attempting enhanced fallback generation...");
-          const { generateFallbackWireframe } = await import(
-            "../utils/fallbackWireframeGenerator"
+        // Check if this is an AI service unavailable error
+        if (
+          err instanceof Error &&
+          (err.message.includes(
+            "AI Wireframe Service Temporarily Unavailable"
+          ) ||
+            err.message.includes("AI Service Connection Failed") ||
+            err.message.includes("Service temporarily unavailable"))
+        ) {
+          console.log(
+            "🚫 AI service is unavailable - showing error message to user"
           );
-
-          const fallbackHtml = generateFallbackWireframe({
-            description,
-            theme: theme || "microsoftlearn",
-            colorScheme: colorScheme || "primary",
-          });
-
-          // Cache fallback result with shorter TTL
-          wireframeCache[`fallback-${cacheKey}`] = {
-            html: fallbackHtml,
-            timestamp: Date.now(),
-            processingTime: 0,
-          };
-
-          console.log("✅ Enhanced fallback wireframe generated successfully");
-          setError(null); // Clear any previous errors since fallback succeeded
-          setFallback(true);
-
-          return {
-            html: fallbackHtml,
-            fallback: true,
-            processingTime: 0,
-            fromCache: false,
-          };
-        } catch (fallbackError) {
-          console.error("❌ Enhanced fallback also failed:", fallbackError);
-
-          // Final basic fallback as last resort
-          const basicFallbackHtml = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wireframe - ${description}</title>
-    <style>
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            background: #f8f9fa;
-            margin: 0;
-            padding: 20px;
-            color: #171717;
+          setError(err.message);
+          throw err; // Don't use fallback, just show the error
         }
-        .fallback-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        .error-notice {
-            background: #fff4ce;
-            border: 1px solid #ffb900;
-            color: #8a6914;
-            padding: 16px;
-            border-radius: 4px;
-            margin-bottom: 24px;
-        }
-        h1 { color: #F2CC60; margin-bottom: 16px; }
-        p { color: #605e5c; line-height: 1.6; margin-bottom: 16px; }
-        .btn {
-            background: #F2CC60;
-            color: #2D2D2D;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 4px;
-            text-decoration: none;
-            display: inline-block;
-            margin: 8px;
-            font-weight: 500;
-        }
-    </style>
-</head>
-<body>
-    <div class="fallback-container">
-        <div class="error-notice">
-            <strong>⚠️ Emergency Fallback:</strong> Both API and enhanced fallback failed. 
-            This is a minimal emergency wireframe for "${description}".
-        </div>
-        <h1>${description}</h1>
-        <p>This is an emergency fallback wireframe. Please check your connection and try again.</p>
-        <a href="#" class="btn">Retry</a>
-        <a href="#" class="btn">Help</a>
-    </div>
-</body>
-</html>`;
 
-          setError("System fallback active - Basic wireframe generated");
-          setFallback(true);
-
-          return {
-            html: basicFallbackHtml,
-            fallback: true,
-            processingTime: 0,
-            fromCache: false,
-          };
-        }
+        // For other errors, show a generic error message
+        const errorMessage =
+          err instanceof Error
+            ? err.message
+            : "An unexpected error occurred while generating the wireframe.";
+        setError(`Wireframe Generation Failed: ${errorMessage}`);
+        throw err; // Don't use fallback for any errors
       } finally {
         setIsLoading(false);
         setLoadingStage("");

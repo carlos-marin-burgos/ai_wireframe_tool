@@ -1,0 +1,1000 @@
+{
+  "name": "Designetica Wireframe Analyzer",
+  "displayName": "AI Wireframe Studio",
+  "description": "Comprehensive wireframe analysis and generation tool powered by AI Builder and GPT-4o. Upload images, analyze components, generate variations, and get intelligent design recommendations.",
+  "version": "2.0.0",
+  "author": "Designetica Team",
+  "category": "Design & Productivity",
+  "tags": ["AI", "Wireframes", "Design", "UX", "AI Builder", "Analysis"],
+
+  "screens": {
+    "HomeScreen": {
+      "name": "Home",
+      "description": "Main dashboard with quick actions and recent wireframes",
+      "controls": {
+        "HeaderContainer": {
+          "type": "Container",
+          "properties": {
+            "Fill": "RGBA(0, 120, 212, 1)",
+            "Height": 80,
+            "Width": "Parent.Width"
+          },
+          "children": {
+            "AppTitle": {
+              "type": "Label",
+              "properties": {
+                "Text": "\"AI Wireframe Studio\"",
+                "Color": "RGBA(255, 255, 255, 1)",
+                "Size": 24,
+                "FontWeight": "Bold",
+                "Align": "Center"
+              }
+            },
+            "UserGreeting": {
+              "type": "Label",
+              "properties": {
+                "Text": "\"Welcome back, \" & User().FullName & \"!\"",
+                "Color": "RGBA(255, 255, 255, 0.8)",
+                "Size": 14
+              }
+            }
+          }
+        },
+
+        "QuickActionsContainer": {
+          "type": "Container",
+          "properties": {
+            "Height": 200,
+            "Width": "Parent.Width",
+            "LayoutDirection": "Horizontal",
+            "LayoutWrap": true,
+            "LayoutJustifyContent": "SpaceAround"
+          },
+          "children": {
+            "GenerateWireframeCard": {
+              "type": "Container",
+              "properties": {
+                "Width": 300,
+                "Height": 180,
+                "Fill": "RGBA(245, 245, 245, 1)",
+                "BorderRadius": 8,
+                "BorderThickness": 1,
+                "BorderColor": "RGBA(200, 200, 200, 1)"
+              },
+              "children": {
+                "GenerateIcon": {
+                  "type": "Icon",
+                  "properties": {
+                    "Icon": "Icon.Add",
+                    "Color": "RGBA(0, 120, 212, 1)",
+                    "Size": 32
+                  }
+                },
+                "GenerateTitle": {
+                  "type": "Label",
+                  "properties": {
+                    "Text": "\"Generate New Wireframe\"",
+                    "FontWeight": "Bold",
+                    "Size": 16
+                  }
+                },
+                "GenerateDescription": {
+                  "type": "Label",
+                  "properties": {
+                    "Text": "\"Create wireframes from text descriptions using AI\"",
+                    "Size": 12,
+                    "Color": "RGBA(100, 100, 100, 1)"
+                  }
+                },
+                "GenerateButton": {
+                  "type": "Button",
+                  "properties": {
+                    "Text": "\"Start Creating\"",
+                    "OnSelect": "Navigate(GenerateScreen, ScreenTransition.Fade)",
+                    "Fill": "RGBA(0, 120, 212, 1)",
+                    "Color": "RGBA(255, 255, 255, 1)"
+                  }
+                }
+              }
+            },
+
+            "AnalyzeImageCard": {
+              "type": "Container",
+              "properties": {
+                "Width": 300,
+                "Height": 180,
+                "Fill": "RGBA(245, 245, 245, 1)",
+                "BorderRadius": 8
+              },
+              "children": {
+                "AnalyzeIcon": {
+                  "type": "Icon",
+                  "properties": {
+                    "Icon": "Icon.Camera",
+                    "Color": "RGBA(16, 124, 16, 1)",
+                    "Size": 32
+                  }
+                },
+                "AnalyzeTitle": {
+                  "type": "Label",
+                  "properties": {
+                    "Text": "\"Analyze Wireframe Image\"",
+                    "FontWeight": "Bold",
+                    "Size": 16
+                  }
+                },
+                "AnalyzeButton": {
+                  "type": "Button",
+                  "properties": {
+                    "Text": "\"Upload & Analyze\"",
+                    "OnSelect": "Navigate(AnalyzeScreen, ScreenTransition.Fade)",
+                    "Fill": "RGBA(16, 124, 16, 1)",
+                    "Color": "RGBA(255, 255, 255, 1)"
+                  }
+                }
+              }
+            },
+
+            "CompareWireframesCard": {
+              "type": "Container",
+              "properties": {
+                "Width": 300,
+                "Height": 180,
+                "Fill": "RGBA(245, 245, 245, 1)",
+                "BorderRadius": 8
+              },
+              "children": {
+                "CompareIcon": {
+                  "type": "Icon",
+                  "properties": {
+                    "Icon": "Icon.Compare",
+                    "Color": "RGBA(138, 43, 226, 1)",
+                    "Size": 32
+                  }
+                },
+                "CompareTitle": {
+                  "type": "Label",
+                  "properties": {
+                    "Text": "\"Compare Designs\"",
+                    "FontWeight": "Bold",
+                    "Size": 16
+                  }
+                },
+                "CompareButton": {
+                  "type": "Button",
+                  "properties": {
+                    "Text": "\"Compare Wireframes\"",
+                    "OnSelect": "Navigate(CompareScreen, ScreenTransition.Fade)",
+                    "Fill": "RGBA(138, 43, 226, 1)",
+                    "Color": "RGBA(255, 255, 255, 1)"
+                  }
+                }
+              }
+            }
+          }
+        },
+
+        "RecentWireframesGallery": {
+          "type": "Gallery",
+          "properties": {
+            "Items": "DesigneticaWireframes",
+            "Height": 400,
+            "LayoutMinWidth": 250,
+            "TemplateSize": 280,
+            "WrapCount": "RoundDown(Parent.Width / 280, 0)"
+          },
+          "template": {
+            "WireframeCard": {
+              "type": "Container",
+              "properties": {
+                "Width": 260,
+                "Height": 260,
+                "Fill": "RGBA(255, 255, 255, 1)",
+                "BorderRadius": 8,
+                "BorderThickness": 1,
+                "BorderColor": "RGBA(200, 200, 200, 1)"
+              },
+              "children": {
+                "WireframePreview": {
+                  "type": "Image",
+                  "properties": {
+                    "Image": "ThisItem.PreviewUrl",
+                    "Width": 240,
+                    "Height": 180,
+                    "BorderRadius": 4
+                  }
+                },
+                "WireframeTitle": {
+                  "type": "Label",
+                  "properties": {
+                    "Text": "ThisItem.Title",
+                    "FontWeight": "Bold",
+                    "Size": 14
+                  }
+                },
+                "WireframeDate": {
+                  "type": "Label",
+                  "properties": {
+                    "Text": "Text(ThisItem.CreatedDate, \"mm/dd/yyyy\")",
+                    "Size": 10,
+                    "Color": "RGBA(100, 100, 100, 1)"
+                  }
+                },
+                "OpenButton": {
+                  "type": "Button",
+                  "properties": {
+                    "Text": "\"Open\"",
+                    "OnSelect": "Set(SelectedWireframe, ThisItem); Navigate(DetailScreen, ScreenTransition.Fade)",
+                    "Width": 60,
+                    "Height": 30
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "GenerateScreen": {
+      "name": "Generate Wireframe",
+      "description": "Create new wireframes from text descriptions",
+      "controls": {
+        "BackButton": {
+          "type": "Icon",
+          "properties": {
+            "Icon": "Icon.ChevronLeft",
+            "OnSelect": "Navigate(HomeScreen, ScreenTransition.Fade)",
+            "Size": 24,
+            "Color": "RGBA(0, 120, 212, 1)"
+          }
+        },
+
+        "GenerateForm": {
+          "type": "Form",
+          "properties": {
+            "DataSource": "WireframeRequests",
+            "DefaultMode": "FormMode.New",
+            "Width": "Parent.Width * 0.8",
+            "Height": 600
+          },
+          "cards": [
+            {
+              "field": "Description",
+              "control": "Text input",
+              "properties": {
+                "DisplayName": "\"Wireframe Description\"",
+                "Required": true,
+                "HintText": "\"Describe the wireframe you want to create (e.g., 'E-commerce product page with navigation, hero banner, product grid, and footer')\"",
+                "Mode": "TextMode.MultiLine",
+                "Height": 100
+              }
+            },
+            {
+              "field": "Industry",
+              "control": "Dropdown",
+              "properties": {
+                "DisplayName": "\"Industry\"",
+                "Items": "[\"E-commerce\", \"Healthcare\", \"Education\", \"Finance\", \"Technology\", \"Marketing\", \"General\"]",
+                "DefaultSelectedItems": "[\"General\"]"
+              }
+            },
+            {
+              "field": "DeviceType",
+              "control": "Dropdown",
+              "properties": {
+                "DisplayName": "\"Target Device\"",
+                "Items": "[\"Desktop\", \"Tablet\", \"Mobile\", \"Responsive\"]",
+                "DefaultSelectedItems": "[\"Desktop\"]"
+              }
+            },
+            {
+              "field": "Complexity",
+              "control": "Dropdown",
+              "properties": {
+                "DisplayName": "\"Complexity Level\"",
+                "Items": "[\"Simple\", \"Moderate\", \"Complex\"]",
+                "DefaultSelectedItems": "[\"Moderate\"]"
+              }
+            },
+            {
+              "field": "IncludeAIAnalysis",
+              "control": "Toggle",
+              "properties": {
+                "DisplayName": "\"Include AI Builder Analysis\"",
+                "Default": true,
+                "TrueText": "\"Yes\"",
+                "FalseText": "\"No\""
+              }
+            }
+          ]
+        },
+
+        "ReferenceImageUpload": {
+          "type": "AddMediaButton",
+          "properties": {
+            "Text": "\"Upload Reference Image (Optional)\"",
+            "Media": "AddMediaButtonMedia",
+            "OnSelect": "Set(ReferenceImage, AddMediaButtonMedia)",
+            "Height": 50
+          }
+        },
+
+        "GenerateButton": {
+          "type": "Button",
+          "properties": {
+            "Text": "\"Generate Wireframe\"",
+            "OnSelect": "Set(IsGenerating, true); Set(GeneratedWireframe, DesigneticaConnector.GenerateWireframe({description: DataCardValue1.Text, industry: DataCardValue2.Selected.Value, deviceType: DataCardValue3.Selected.Value, complexity: DataCardValue4.Selected.Value, includeAiAnalysis: DataCardValue5.Value, referenceImage: If(!IsBlank(ReferenceImage), JSON(ReferenceImage))})); Set(IsGenerating, false); Navigate(ResultScreen, ScreenTransition.Fade)",
+            "Fill": "RGBA(0, 120, 212, 1)",
+            "Color": "RGBA(255, 255, 255, 1)",
+            "Height": 50,
+            "FontWeight": "Bold",
+            "DisplayMode": "If(IsGenerating, DisplayMode.Disabled, DisplayMode.Edit)"
+          }
+        },
+
+        "LoadingSpinner": {
+          "type": "Spinner",
+          "properties": {
+            "Visible": "IsGenerating",
+            "Size": "SpinnerSize.Medium"
+          }
+        },
+
+        "LoadingText": {
+          "type": "Label",
+          "properties": {
+            "Text": "\"Generating your wireframe with AI... This may take a few moments.\"",
+            "Visible": "IsGenerating",
+            "Color": "RGBA(0, 120, 212, 1)",
+            "Align": "Center"
+          }
+        }
+      }
+    },
+
+    "AnalyzeScreen": {
+      "name": "Analyze Wireframe",
+      "description": "Upload and analyze wireframe images using AI Builder",
+      "controls": {
+        "BackButton": {
+          "type": "Icon",
+          "properties": {
+            "Icon": "Icon.ChevronLeft",
+            "OnSelect": "Navigate(HomeScreen, ScreenTransition.Fade)",
+            "Size": 24,
+            "Color": "RGBA(0, 120, 212, 1)"
+          }
+        },
+
+        "UploadContainer": {
+          "type": "Container",
+          "properties": {
+            "Height": 300,
+            "Width": "Parent.Width * 0.8",
+            "Fill": "RGBA(245, 245, 245, 1)",
+            "BorderStyle": "BorderStyle.Dashed",
+            "BorderThickness": 2,
+            "BorderColor": "RGBA(0, 120, 212, 1)",
+            "BorderRadius": 8
+          },
+          "children": {
+            "UploadIcon": {
+              "type": "Icon",
+              "properties": {
+                "Icon": "Icon.CloudUpload",
+                "Size": 48,
+                "Color": "RGBA(0, 120, 212, 1)"
+              }
+            },
+            "UploadText": {
+              "type": "Label",
+              "properties": {
+                "Text": "\"Click to upload wireframe image\\n(PNG, JPEG, GIF supported)\"",
+                "Align": "Center",
+                "Size": 16,
+                "Color": "RGBA(0, 120, 212, 1)"
+              }
+            },
+            "UploadButton": {
+              "type": "AddMediaButton",
+              "properties": {
+                "Text": "\"Select Image\"",
+                "Media": "UploadedWireframe",
+                "OnSelect": "Set(UploadedWireframe, AddMediaButtonMedia)",
+                "Fill": "RGBA(0, 120, 212, 1)",
+                "Color": "RGBA(255, 255, 255, 1)"
+              }
+            }
+          }
+        },
+
+        "UploadedImagePreview": {
+          "type": "Image",
+          "properties": {
+            "Image": "UploadedWireframe",
+            "Visible": "!IsBlank(UploadedWireframe)",
+            "Width": "Parent.Width * 0.8",
+            "Height": 400,
+            "BorderRadius": 8
+          }
+        },
+
+        "AnalysisOptions": {
+          "type": "Container",
+          "properties": {
+            "Visible": "!IsBlank(UploadedWireframe)",
+            "Height": 200,
+            "Width": "Parent.Width * 0.8"
+          },
+          "children": {
+            "AnalysisDepthDropdown": {
+              "type": "Dropdown",
+              "properties": {
+                "DisplayName": "\"Analysis Depth\"",
+                "Items": "[\"Basic\", \"Detailed\", \"Comprehensive\"]",
+                "DefaultSelectedItems": "[\"Detailed\"]"
+              }
+            },
+            "DetectComponentsToggle": {
+              "type": "Toggle",
+              "properties": {
+                "DisplayName": "\"Detect Individual Components\"",
+                "Default": true
+              }
+            },
+            "AnalyzeLayoutToggle": {
+              "type": "Toggle",
+              "properties": {
+                "DisplayName": "\"Analyze Layout Structure\"",
+                "Default": true
+              }
+            }
+          }
+        },
+
+        "AnalyzeImageButton": {
+          "type": "Button",
+          "properties": {
+            "Text": "\"Analyze with AI Builder\"",
+            "OnSelect": "Set(IsAnalyzing, true); Set(AnalysisResult, DesigneticaConnector.AnalyzeWireframeImage(UploadedWireframe, Dropdown1.Selected.Value, Toggle1.Value, Toggle2.Value)); Set(IsAnalyzing, false); Navigate(AnalysisResultScreen, ScreenTransition.Fade)",
+            "Visible": "!IsBlank(UploadedWireframe)",
+            "Fill": "RGBA(16, 124, 16, 1)",
+            "Color": "RGBA(255, 255, 255, 1)",
+            "Height": 50,
+            "FontWeight": "Bold",
+            "DisplayMode": "If(IsAnalyzing, DisplayMode.Disabled, DisplayMode.Edit)"
+          }
+        }
+      }
+    },
+
+    "CompareScreen": {
+      "name": "Compare Wireframes",
+      "description": "Compare two wireframe designs side by side",
+      "controls": {
+        "BackButton": {
+          "type": "Icon",
+          "properties": {
+            "Icon": "Icon.ChevronLeft",
+            "OnSelect": "Navigate(HomeScreen, ScreenTransition.Fade)",
+            "Size": 24
+          }
+        },
+
+        "ComparisonContainer": {
+          "type": "Container",
+          "properties": {
+            "Height": "Parent.Height - 100",
+            "Width": "Parent.Width",
+            "LayoutDirection": "Horizontal"
+          },
+          "children": {
+            "Wireframe1Container": {
+              "type": "Container",
+              "properties": {
+                "Width": "Parent.Width / 2 - 20",
+                "Height": "Parent.Height"
+              },
+              "children": {
+                "Wireframe1Title": {
+                  "type": "Label",
+                  "properties": {
+                    "Text": "\"Wireframe 1\"",
+                    "FontWeight": "Bold",
+                    "Size": 18,
+                    "Align": "Center"
+                  }
+                },
+                "Upload1Button": {
+                  "type": "AddMediaButton",
+                  "properties": {
+                    "Text": "\"Upload First Wireframe\"",
+                    "Media": "Wireframe1",
+                    "OnSelect": "Set(Wireframe1, AddMediaButtonMedia)"
+                  }
+                },
+                "Wireframe1Preview": {
+                  "type": "Image",
+                  "properties": {
+                    "Image": "Wireframe1",
+                    "Visible": "!IsBlank(Wireframe1)",
+                    "Width": "Parent.Width - 20",
+                    "Height": 300
+                  }
+                }
+              }
+            },
+
+            "Wireframe2Container": {
+              "type": "Container",
+              "properties": {
+                "Width": "Parent.Width / 2 - 20",
+                "Height": "Parent.Height"
+              },
+              "children": {
+                "Wireframe2Title": {
+                  "type": "Label",
+                  "properties": {
+                    "Text": "\"Wireframe 2\"",
+                    "FontWeight": "Bold",
+                    "Size": 18,
+                    "Align": "Center"
+                  }
+                },
+                "Upload2Button": {
+                  "type": "AddMediaButton",
+                  "properties": {
+                    "Text": "\"Upload Second Wireframe\"",
+                    "Media": "Wireframe2",
+                    "OnSelect": "Set(Wireframe2, AddMediaButtonMedia)"
+                  }
+                },
+                "Wireframe2Preview": {
+                  "type": "Image",
+                  "properties": {
+                    "Image": "Wireframe2",
+                    "Visible": "!IsBlank(Wireframe2)",
+                    "Width": "Parent.Width - 20",
+                    "Height": 300
+                  }
+                }
+              }
+            }
+          }
+        },
+
+        "ComparisonTypeDropdown": {
+          "type": "Dropdown",
+          "properties": {
+            "DisplayName": "\"Comparison Type\"",
+            "Items": "[\"Layout\", \"Components\", \"Styling\", \"Comprehensive\"]",
+            "DefaultSelectedItems": "[\"Comprehensive\"]",
+            "Visible": "!IsBlank(Wireframe1) && !IsBlank(Wireframe2)"
+          }
+        },
+
+        "CompareButton": {
+          "type": "Button",
+          "properties": {
+            "Text": "\"Compare Wireframes\"",
+            "OnSelect": "Set(IsComparing, true); Set(ComparisonResult, DesigneticaConnector.CompareWireframes(Wireframe1, Wireframe2, Dropdown1.Selected.Value)); Set(IsComparing, false); Navigate(ComparisonResultScreen, ScreenTransition.Fade)",
+            "Visible": "!IsBlank(Wireframe1) && !IsBlank(Wireframe2)",
+            "Fill": "RGBA(138, 43, 226, 1)",
+            "Color": "RGBA(255, 255, 255, 1)",
+            "Height": 50,
+            "FontWeight": "Bold",
+            "DisplayMode": "If(IsComparing, DisplayMode.Disabled, DisplayMode.Edit)"
+          }
+        }
+      }
+    },
+
+    "ResultScreen": {
+      "name": "Generated Wireframe",
+      "description": "Display generated wireframe with AI analysis",
+      "controls": {
+        "BackButton": {
+          "type": "Icon",
+          "properties": {
+            "Icon": "Icon.ChevronLeft",
+            "OnSelect": "Navigate(GenerateScreen, ScreenTransition.Fade)",
+            "Size": 24
+          }
+        },
+
+        "WireframeViewer": {
+          "type": "HtmlText",
+          "properties": {
+            "HtmlText": "GeneratedWireframe.html",
+            "Width": "Parent.Width * 0.6",
+            "Height": 600,
+            "BorderThickness": 1,
+            "BorderColor": "RGBA(200, 200, 200, 1)"
+          }
+        },
+
+        "AnalysisPanel": {
+          "type": "Container",
+          "properties": {
+            "Width": "Parent.Width * 0.35",
+            "Height": 600,
+            "Fill": "RGBA(245, 245, 245, 1)",
+            "BorderRadius": 8
+          },
+          "children": {
+            "AnalysisTabs": {
+              "type": "Container",
+              "properties": {
+                "Height": 50,
+                "LayoutDirection": "Horizontal"
+              },
+              "children": {
+                "ComponentsTab": {
+                  "type": "Button",
+                  "properties": {
+                    "Text": "\"Components\"",
+                    "OnSelect": "Set(ActiveTab, \"components\")",
+                    "Fill": "If(ActiveTab = \"components\", RGBA(0, 120, 212, 1), RGBA(200, 200, 200, 1))"
+                  }
+                },
+                "LayoutTab": {
+                  "type": "Button",
+                  "properties": {
+                    "Text": "\"Layout\"",
+                    "OnSelect": "Set(ActiveTab, \"layout\")",
+                    "Fill": "If(ActiveTab = \"layout\", RGBA(0, 120, 212, 1), RGBA(200, 200, 200, 1))"
+                  }
+                },
+                "SuggestionsTab": {
+                  "type": "Button",
+                  "properties": {
+                    "Text": "\"Suggestions\"",
+                    "OnSelect": "Set(ActiveTab, \"suggestions\")",
+                    "Fill": "If(ActiveTab = \"suggestions\", RGBA(0, 120, 212, 1), RGBA(200, 200, 200, 1))"
+                  }
+                }
+              }
+            },
+
+            "ComponentsGallery": {
+              "type": "Gallery",
+              "properties": {
+                "Items": "GeneratedWireframe.aiAnalysis.detectedComponents",
+                "Visible": "ActiveTab = \"components\"",
+                "Height": 500,
+                "TemplateSize": 80
+              },
+              "template": {
+                "ComponentItem": {
+                  "type": "Container",
+                  "properties": {
+                    "Height": 70,
+                    "BorderThickness": 1,
+                    "BorderColor": "RGBA(200, 200, 200, 1)"
+                  },
+                  "children": {
+                    "ComponentType": {
+                      "type": "Label",
+                      "properties": {
+                        "Text": "ThisItem.type",
+                        "FontWeight": "Bold"
+                      }
+                    },
+                    "ComponentConfidence": {
+                      "type": "Label",
+                      "properties": {
+                        "Text": "\"Confidence: \" & Round(ThisItem.confidence * 100, 0) & \"%\"",
+                        "Size": 12,
+                        "Color": "RGBA(100, 100, 100, 1)"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+
+        "ActionButtons": {
+          "type": "Container",
+          "properties": {
+            "Height": 60,
+            "LayoutDirection": "Horizontal",
+            "LayoutJustifyContent": "SpaceAround"
+          },
+          "children": {
+            "DownloadButton": {
+              "type": "Button",
+              "properties": {
+                "Text": "\"Download\"",
+                "OnSelect": "Download(GeneratedWireframe.downloadUrl, \"wireframe.html\")",
+                "Fill": "RGBA(0, 120, 212, 1)",
+                "Color": "RGBA(255, 255, 255, 1)"
+              }
+            },
+            "GenerateVariationsButton": {
+              "type": "Button",
+              "properties": {
+                "Text": "\"Generate Variations\"",
+                "OnSelect": "Navigate(VariationsScreen, ScreenTransition.Fade)",
+                "Fill": "RGBA(16, 124, 16, 1)",
+                "Color": "RGBA(255, 255, 255, 1)"
+              }
+            },
+            "ShareButton": {
+              "type": "Button",
+              "properties": {
+                "Text": "\"Share\"",
+                "OnSelect": "Launch(GeneratedWireframe.previewUrl)",
+                "Fill": "RGBA(138, 43, 226, 1)",
+                "Color": "RGBA(255, 255, 255, 1)"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "dataSources": {
+    "DesigneticaConnector": {
+      "type": "CustomConnector",
+      "connectionName": "Designetica AI Wireframe Connector",
+      "description": "Custom connector for Designetica AI wireframe services"
+    },
+    "DesigneticaWireframes": {
+      "type": "SharePointList",
+      "listName": "Wireframes",
+      "columns": [
+        {
+          "name": "Title",
+          "type": "Text",
+          "required": true
+        },
+        {
+          "name": "Description",
+          "type": "Text"
+        },
+        {
+          "name": "PreviewUrl",
+          "type": "Text"
+        },
+        {
+          "name": "DownloadUrl",
+          "type": "Text"
+        },
+        {
+          "name": "Industry",
+          "type": "Choice",
+          "choices": [
+            "E-commerce",
+            "Healthcare",
+            "Education",
+            "Finance",
+            "Technology",
+            "Marketing",
+            "General"
+          ]
+        },
+        {
+          "name": "DeviceType",
+          "type": "Choice",
+          "choices": ["Desktop", "Tablet", "Mobile", "Responsive"]
+        },
+        {
+          "name": "CreatedDate",
+          "type": "DateTime"
+        },
+        {
+          "name": "CreatedBy",
+          "type": "Person"
+        },
+        {
+          "name": "AIAnalysisData",
+          "type": "Text"
+        }
+      ]
+    },
+    "WireframeRequests": {
+      "type": "SharePointList",
+      "listName": "Wireframe Requests",
+      "columns": [
+        {
+          "name": "Description",
+          "type": "Text",
+          "required": true
+        },
+        {
+          "name": "Industry",
+          "type": "Choice"
+        },
+        {
+          "name": "DeviceType",
+          "type": "Choice"
+        },
+        {
+          "name": "Complexity",
+          "type": "Choice"
+        },
+        {
+          "name": "IncludeAIAnalysis",
+          "type": "Boolean"
+        },
+        {
+          "name": "Status",
+          "type": "Choice",
+          "choices": ["Pending", "Processing", "Completed", "Failed"]
+        }
+      ]
+    }
+  },
+
+  "globalVariables": [
+    {
+      "name": "IsGenerating",
+      "type": "Boolean",
+      "defaultValue": false,
+      "description": "Tracks if wireframe generation is in progress"
+    },
+    {
+      "name": "IsAnalyzing",
+      "type": "Boolean",
+      "defaultValue": false,
+      "description": "Tracks if image analysis is in progress"
+    },
+    {
+      "name": "IsComparing",
+      "type": "Boolean",
+      "defaultValue": false,
+      "description": "Tracks if wireframe comparison is in progress"
+    },
+    {
+      "name": "GeneratedWireframe",
+      "type": "Record",
+      "description": "Stores the generated wireframe data"
+    },
+    {
+      "name": "AnalysisResult",
+      "type": "Record",
+      "description": "Stores the image analysis results"
+    },
+    {
+      "name": "ComparisonResult",
+      "type": "Record",
+      "description": "Stores the wireframe comparison results"
+    },
+    {
+      "name": "SelectedWireframe",
+      "type": "Record",
+      "description": "Currently selected wireframe from gallery"
+    },
+    {
+      "name": "ActiveTab",
+      "type": "Text",
+      "defaultValue": "components",
+      "description": "Currently active tab in analysis panel"
+    }
+  ],
+
+  "powerAutomateFlows": [
+    {
+      "name": "Process Wireframe Generation",
+      "description": "Handles wireframe generation requests and updates status",
+      "trigger": "When an item is created or modified",
+      "dataSource": "WireframeRequests",
+      "actions": [
+        {
+          "type": "Condition",
+          "condition": "Status equals 'Pending'",
+          "trueActions": [
+            {
+              "type": "CallConnector",
+              "connector": "DesigneticaConnector",
+              "action": "GenerateWireframe",
+              "parameters": {
+                "description": "@{triggerBody()?['Description']}",
+                "industry": "@{triggerBody()?['Industry']}",
+                "deviceType": "@{triggerBody()?['DeviceType']}",
+                "complexity": "@{triggerBody()?['Complexity']}",
+                "includeAiAnalysis": "@{triggerBody()?['IncludeAIAnalysis']}"
+              }
+            },
+            {
+              "type": "CreateItem",
+              "dataSource": "DesigneticaWireframes",
+              "parameters": {
+                "Title": "@{triggerBody()?['Description']}",
+                "Description": "@{triggerBody()?['Description']}",
+                "PreviewUrl": "@{body('CallConnector')?['previewUrl']}",
+                "DownloadUrl": "@{body('CallConnector')?['downloadUrl']}",
+                "Industry": "@{triggerBody()?['Industry']}",
+                "DeviceType": "@{triggerBody()?['DeviceType']}",
+                "AIAnalysisData": "@{body('CallConnector')?['aiAnalysis']}"
+              }
+            },
+            {
+              "type": "UpdateItem",
+              "dataSource": "WireframeRequests",
+              "parameters": {
+                "Status": "Completed"
+              }
+            }
+          ],
+          "falseActions": []
+        }
+      ]
+    },
+    {
+      "name": "AI Builder Model Training Monitor",
+      "description": "Monitors AI Builder model training status",
+      "trigger": "Recurrence",
+      "recurrence": "Daily",
+      "actions": [
+        {
+          "type": "CallConnector",
+          "connector": "DesigneticaConnector",
+          "action": "GetAIBuilderModelStatus"
+        },
+        {
+          "type": "Condition",
+          "condition": "Model status equals 'failed'",
+          "trueActions": [
+            {
+              "type": "SendEmail",
+              "to": "admin@designetica.app",
+              "subject": "AI Builder Model Training Failed",
+              "body": "One or more AI Builder models have failed training. Please check the models."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+
+  "deployment": {
+    "environment": "Production",
+    "permissions": {
+      "users": ["All Company Users"],
+      "roles": ["Contributor", "Reader"],
+      "securityGroups": ["Designers", "Product Managers", "UX Teams"]
+    },
+    "settings": {
+      "enableOfflineMode": false,
+      "enableDataLossPreventionPolicies": true,
+      "requireMFA": true,
+      "auditLogging": true
+    }
+  },
+
+  "configuration": {
+    "branding": {
+      "primaryColor": "RGBA(0, 120, 212, 1)",
+      "secondaryColor": "RGBA(16, 124, 16, 1)",
+      "accentColor": "RGBA(138, 43, 226, 1)",
+      "backgroundColor": "RGBA(245, 245, 245, 1)",
+      "textColor": "RGBA(50, 50, 50, 1)"
+    },
+    "features": {
+      "enableBatchProcessing": true,
+      "enableVariationGeneration": true,
+      "enableAdvancedAnalytics": true,
+      "enableExportOptions": true,
+      "enableCollaboration": true
+    },
+    "integrations": {
+      "sharePoint": {
+        "enabled": true,
+        "siteUrl": "https://yourtenant.sharepoint.com/sites/DesigneticaWorkspace"
+      },
+      "teams": {
+        "enabled": true,
+        "notificationChannel": "Design Reviews"
+      },
+      "oneDrive": {
+        "enabled": true,
+        "autoSave": true
+      }
+    }
+  }
+}

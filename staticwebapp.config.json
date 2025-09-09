@@ -1,16 +1,67 @@
 {
+  "auth": {
+    "identityProviders": {
+      "azureActiveDirectory": {
+        "registration": {
+          "openIdIssuer": "https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/v2.0",
+          "clientIdSettingName": "AZURE_CLIENT_ID",
+          "clientSecretSettingName": "AZURE_CLIENT_SECRET"
+        },
+        "userDetailsClaim": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+      }
+    }
+  },
   "routes": [
+    {
+      "route": "/production-analytics.html",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/simple-analytics.html",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/monitor-analytics.html",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
     {
       "route": "/api/*",
       "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/.auth/*",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/*",
+      "allowedRoles": ["authenticated"]
     }
   ],
   "navigationFallback": {
-    "rewrite": "/index.html"
+    "rewrite": "/index.html",
+    "exclude": [
+      "/production-analytics.html",
+      "/simple-analytics.html",
+      "/monitor-analytics.html",
+      "/*.png",
+      "/*.jpg",
+      "/*.ico",
+      "/*.svg",
+      "/*.css",
+      "/*.js",
+      "/*.json"
+    ]
   },
   "responseOverrides": {
-    "404": {
-      "rewrite": "/index.html"
+    "401": {
+      "redirect": "/.auth/login/aad",
+      "statusCode": 302
     }
   }
 }
