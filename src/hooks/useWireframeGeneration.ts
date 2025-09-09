@@ -6,6 +6,7 @@ interface WireframeResponse {
   html: string;
   fallback?: boolean;
   processingTime?: number;
+  source?: string;
 }
 
 // Simple in-memory cache
@@ -21,28 +22,87 @@ const wireframeCache: Record<
 // Cache expiration time (30 minutes)
 const CACHE_EXPIRATION = 30 * 60 * 1000;
 
-// Helper function to ensure HTML content is always a string
+// Function to remove wireframe placeholders and replace with functional content
+const removeWireframePlaceholders = (html: string): string => {
+  // First, scope all CSS to only affect wireframe content
+  html = html.replace(
+    /<style[^>]*>([\s\S]*?)<\/style>/gi,
+    (match, cssContent) => {
+      // Scope all CSS rules to only apply within .wireframe-content
+      const scopedCSS = cssContent.replace(
+        /([^{}]+){/g,
+        (ruleMatch, selector) => {
+          // Don't scope @keyframes, @media, or other @ rules
+          if (selector.trim().startsWith("@")) {
+            return ruleMatch;
+          }
+          // Scope the selector to only apply within wireframe content
+          const trimmedSelector = selector.trim();
+          if (
+            trimmedSelector &&
+            !trimmedSelector.includes(".wireframe-content")
+          ) {
+            return `.wireframe-content ${trimmedSelector} {`;
+          }
+          return ruleMatch;
+        }
+      );
+
+      return `<style>${scopedCSS}</style>`;
+    }
+  );
+
+  // Replace placeholder elements with actual content
+  // Replace text placeholder headings with real headings
+  html = html.replace(
+    /<div[^>]*class="[^"]*text-placeholder-heading[^"]*"[^>]*><\/div>/gi,
+    "<h2>Sample Heading</h2>"
+  );
+
+  // Replace text placeholder lines with sample paragraphs
+  html = html.replace(
+    /<div[^>]*class="[^"]*text-placeholder-line[^"]*"[^>]*><\/div>/gi,
+    "<p>This is sample text content that represents the actual content that would appear in the final design.</p>"
+  );
+
+  // Replace multiple consecutive placeholder paragraphs with varied content
+  html = html.replace(
+    /(<p>This is sample text content that represents the actual content that would appear in the final design\.<\/p>\s*){2,}/gi,
+    "<p>This is sample text content that represents the actual content that would appear in the final design.</p><p>Here is additional sample content to show how multiple paragraphs would look in the actual implementation.</p>"
+  );
+
+  // Remove any remaining text-placeholder CSS classes
+  html = html.replace(/text-placeholder-[a-zA-Z-]+/gi, "");
+
+  return html;
+}; // Helper function to ensure HTML content is always a string and apply fixes
 const ensureString = (value: unknown): string => {
   if (value === null || value === undefined) {
     return "";
   }
   if (typeof value === "string") {
     let cleaned = value.trim();
-    // Remove any markdown artifacts or unwanted prefixes that might come from AI responses
+    // Remove any markdown artifacts
     cleaned = cleaned.replace(/^[0'"]+|[0'"]+$/g, "");
     cleaned = cleaned.replace(/^'''html\s*/gi, "");
     cleaned = cleaned.replace(/^```html\s*/gi, "");
     cleaned = cleaned.replace(/```\s*$/gi, "");
+
+    // Apply wireframe placeholder removal
+    cleaned = removeWireframePlaceholders(cleaned);
+
     return cleaned.trim();
   }
-  // Try to convert to string if possible
   try {
     let stringValue = String(value).trim();
-    // Apply same cleaning to converted strings
     stringValue = stringValue.replace(/^[0'"]+|[0'"]+$/g, "");
     stringValue = stringValue.replace(/^'''html\s*/gi, "");
     stringValue = stringValue.replace(/^```html\s*/gi, "");
     stringValue = stringValue.replace(/```\s*$/gi, "");
+
+    // Apply wireframe placeholder removal
+    stringValue = removeWireframePlaceholders(stringValue);
+
     return stringValue.trim();
   } catch (e) {
     console.error("Failed to convert HTML content to string:", e);
@@ -91,139 +151,61 @@ export const useWireframeGeneration = () => {
       theme: string = "microsoftlearn",
       colorScheme: string = "primary",
       skipCache: boolean = false,
-      fastMode: boolean = false // New parameter for fast mode
+      fastMode: boolean = false
     ) => {
       // Cancel any ongoing request
       cancelGeneration();
 
-      console.log("🎨 Generating wireframe with enhanced fallback support:", {
+      console.log("🎨 Generating wireframe (INTELLIGENT FALLBACK):", {
         description: description.substring(0, 100) + "...",
         theme,
         colorScheme,
         skipCache,
         fastMode,
+        baseUrl: API_CONFIG.BASE_URL,
       });
-
-      // 🤖 AI-ONLY MODE: Always use AI, never fast mode
-      const shouldUseFastMode = false; // Disabled - always use AI
 
       // Reset state
       setIsLoading(true);
       setError(null);
       setFallback(false);
+      setLoadingStage("🚀 Connecting to AI wireframe service...");
 
-      // 🤖 Always show AI mode loading stages
-      setLoadingStage("🤖 AI mode: Initializing AI model...");
+      // Create a cache key
+      const cacheKey = `${description}-${theme}-${colorScheme}-${Date.now()}`;
 
-      // Create a cache key with version for Microsoft Design Language update
-      // DEVELOPMENT: Always skip cache by making key unique
-      const cacheKey = `${description}-${theme}-${colorScheme}-${shouldUseFastMode}-DEVELOPMENT-NOCACHE-${Date.now()}`;
-
-      // Set up AI loading stage timers
+      // Set up loading stage timers
       const timer1 = setTimeout(
-        () => setLoadingStage("🤖 Analyzing your description..."),
-        1000
+        () => setLoadingStage("🤖 AI analyzing your description..."),
+        2000
       );
       const timer2 = setTimeout(
-        () => setLoadingStage("🤖 Generating wireframe code..."),
-        3000
+        () => setLoadingStage("⚡ Generating intelligent wireframe..."),
+        6000
       );
       const timer3 = setTimeout(
-        () => setLoadingStage("🤖 Optimizing layout..."),
-        8000
+        () => setLoadingStage("🎯 Finalizing design..."),
+        12000
       );
-      const timer4 = setTimeout(
-        () => setLoadingStage("🤖 Finalizing components..."),
-        15000
-      );
-      const timer5 = setTimeout(
-        () => setLoadingStage("🤖 Almost done..."),
-        25000
-      );
-      loadingTimersRef.current = [timer1, timer2, timer3, timer4, timer5];
+      loadingTimersRef.current = [timer1, timer2, timer3];
 
       try {
-        // DEVELOPMENT: Completely skip cache for debugging
-        const skipCacheCompletely = true;
-        if (!skipCacheCompletely && !skipCache && wireframeCache[cacheKey]) {
-          const cached = wireframeCache[cacheKey];
-          const now = Date.now();
-
-          // Check if cache is still valid
-          if (now - cached.timestamp < CACHE_EXPIRATION) {
-            console.log("Using cached wireframe", {
-              age: Math.round((now - cached.timestamp) / 1000) + "s",
-              processingTime: cached.processingTime + "ms",
-            });
-            setProcessingTime(cached.processingTime);
-
-            // Still wait a bit to avoid UI flashing
-            await new Promise((resolve) => setTimeout(resolve, 500));
-
-            return {
-              html: ensureString(cached.html),
-              fallback: false,
-              fromCache: true,
-            };
-          } else {
-            console.log("Cache expired, generating new wireframe");
-            // Remove expired cache entry
-            delete wireframeCache[cacheKey];
-          }
-        }
-
         // Create abort controller for this request
         const abortController = new AbortController();
         abortControllerRef.current = abortController;
 
-        // Call the API using our new client
-        console.log("🚀 Making API call with:", {
-          description,
-          theme,
-          colorScheme,
-          fastMode: shouldUseFastMode,
-          timestamp: Date.now(),
+        console.log("🚀 Attempting Azure Functions + OpenAI generation:", {
+          endpoint: API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME,
+          payload: { description, theme, colorScheme, fastMode: false },
         });
 
-        // Call the API using our new client with fallback mechanism
-        console.log("🚀 Making API call with:", {
-          description,
-          theme,
-          colorScheme,
-          fastMode: shouldUseFastMode,
-          timestamp: Date.now(),
-        });
+        const startTime = Date.now();
 
-        let data: WireframeResponse;
-        let usingEnhanced = true;
-
-        try {
-          // Try enhanced endpoint first (component-driven)
-          data = await api.post<WireframeResponse>(
-            API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME_ENHANCED +
-              `?t=${Date.now()}`,
-            { description, theme, colorScheme, fastMode: shouldUseFastMode },
-            {
-              signal: abortController.signal,
-              headers: {
-                "Cache-Control": "no-cache, no-store, must-revalidate",
-                Pragma: "no-cache",
-                Expires: "0",
-              },
-            }
-          );
-          console.log("✅ Enhanced endpoint succeeded");
-        } catch (enhancedError) {
-          console.warn(
-            "⚠️ Enhanced endpoint failed, falling back to original:",
-            enhancedError
-          );
-          usingEnhanced = false;
-
-          // Fallback to original endpoint
-          data = await api.post<WireframeResponse>(
+        // Try Azure Functions + OpenAI first (with shorter timeout for faster fallback)
+        const data = await Promise.race([
+          api.post<WireframeResponse>(
             API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME + `?t=${Date.now()}`,
-            { description, theme, colorScheme, fastMode: shouldUseFastMode },
+            { description, theme, colorScheme, fastMode: false },
             {
               signal: abortController.signal,
               headers: {
@@ -232,62 +214,44 @@ export const useWireframeGeneration = () => {
                 Expires: "0",
               },
             }
-          );
-          console.log("✅ Original endpoint succeeded");
-        }
+          ),
+          // Timeout after 15 seconds to provide faster user experience
+          new Promise<never>((_, reject) =>
+            setTimeout(
+              () => reject(new Error("Azure Functions timeout")),
+              15000
+            )
+          ),
+        ]);
 
-        console.log("📥 API response received:", {
+        const endTime = Date.now();
+        console.log(
+          "✅ Azure Functions call succeeded in",
+          endTime - startTime,
+          "ms"
+        );
+        console.log("📦 Response data:", {
           hasHtml: !!data.html,
           htmlLength: data.html?.length,
           fallback: data.fallback,
-          source: (data as any).source,
-          usingEnhanced,
-          endpoint: usingEnhanced ? "enhanced" : "original",
-          title:
-            data.html?.match(/<title>(.*?)<\/title>/)?.[1] || "No title found",
+          processingTime: data.processingTime,
         });
-
-        console.log("API response received");
-        console.log("API response data keys:", Object.keys(data));
-        console.log("API response data structure:", data);
-
-        // Validate the data structure
-        if (!data || typeof data !== "object") {
-          console.error("API returned invalid data structure:", data);
-          throw new Error("Invalid data structure from wireframe API");
-        }
 
         // Update state based on response
         setFallback(data.fallback || false);
-
         if (data.processingTime) {
           setProcessingTime(data.processingTime);
         }
 
-        // Debug log
-        console.log("API returned HTML content type:", typeof data.html);
-        console.log("HTML is null?", data.html === null);
-        console.log("HTML is undefined?", data.html === undefined);
-
         // Make sure html is a string
         const htmlContent = ensureString(data.html);
 
-        // Log additional debugging info
-        if (htmlContent) {
-          console.log(
-            "HTML content length after ensureString:",
-            htmlContent.length
-          );
-          console.log(
-            "HTML content preview:",
-            htmlContent.substring(0, 100) + "..."
-          );
-        } else {
-          console.error("HTML content is empty after ensureString");
+        if (!htmlContent) {
+          throw new Error("No HTML content received from Azure Functions");
         }
 
-        // Cache the successful result if not a fallback and content is valid
-        if (htmlContent && htmlContent.length > 0 && !data.fallback) {
+        // Cache the successful result
+        if (htmlContent.length > 0 && !data.fallback) {
           wireframeCache[cacheKey] = {
             html: htmlContent,
             timestamp: Date.now(),
@@ -295,44 +259,77 @@ export const useWireframeGeneration = () => {
           };
         }
 
+        console.log("🎉 Azure Functions + OpenAI generation successful");
         return {
           html: htmlContent,
           fallback: data.fallback || false,
           processingTime: data.processingTime || 0,
           fromCache: false,
+          source: "azure-functions",
         };
       } catch (err) {
-        console.error("❌ Error generating wireframe:", err);
+        console.warn(
+          "⚠️ Azure Functions unavailable, using intelligent fallback:",
+          err
+        );
 
-        // Handle AbortError specially
-        if (err instanceof Error && err.name === "AbortError") {
+        // Handle AbortError specially (user cancelled)
+        if (
+          err instanceof Error &&
+          err.name === "AbortError" &&
+          !err.message.includes("timeout")
+        ) {
           setError("Request was cancelled");
           throw err;
         }
 
-        // Check if this is an AI service unavailable error
-        if (
-          err instanceof Error &&
-          (err.message.includes(
-            "AI Wireframe Service Temporarily Unavailable"
-          ) ||
-            err.message.includes("AI Service Connection Failed") ||
-            err.message.includes("Service temporarily unavailable"))
-        ) {
-          console.log(
-            "🚫 AI service is unavailable - showing error message to user"
-          );
-          setError(err.message);
-          throw err; // Don't use fallback, just show the error
-        }
+        // Use intelligent client-side fallback
+        try {
+          setLoadingStage("🧠 Using intelligent local generation...");
 
-        // For other errors, show a generic error message
-        const errorMessage =
-          err instanceof Error
-            ? err.message
-            : "An unexpected error occurred while generating the wireframe.";
-        setError(`Wireframe Generation Failed: ${errorMessage}`);
-        throw err; // Don't use fallback for any errors
+          const { generateFallbackWireframe } = await import(
+            "../utils/fallbackWireframeGenerator"
+          );
+
+          console.log("🔧 Generating intelligent local wireframe...");
+          const fallbackStartTime = Date.now();
+
+          const fallbackHtml = await generateFallbackWireframe({
+            description,
+            theme,
+            colorScheme,
+          });
+
+          const fallbackEndTime = Date.now();
+          console.log(
+            "✅ Intelligent fallback generated in",
+            fallbackEndTime - fallbackStartTime,
+            "ms"
+          );
+
+          const result = {
+            html: fallbackHtml,
+            fallback: true,
+            processingTime: fallbackEndTime - fallbackStartTime,
+            fromCache: false,
+            source: "client-side-intelligent",
+          };
+
+          setFallback(true);
+          setProcessingTime(result.processingTime);
+
+          console.log("🎯 Client-side intelligent generation successful");
+          return result;
+        } catch (fallbackError) {
+          console.error("❌ All generation methods failed:", fallbackError);
+
+          const errorMessage =
+            err instanceof Error
+              ? err.message
+              : "Unable to generate wireframe. Please try again.";
+          setError(`Generation Failed: ${errorMessage}`);
+          throw err;
+        }
       } finally {
         setIsLoading(false);
         setLoadingStage("");
