@@ -120,20 +120,35 @@ module.exports = async function (context, req) {
     const analysisPrompt =
       prompt ||
       `
-        Analyze this UI/website screenshot image and provide a detailed breakdown of ALL visible components and layout structure.
+        MISSION: Analyze this UI/website screenshot with EXTREME PRECISION to recreate it pixel-perfectly.
 
-        For EACH component you identify, provide:
-        1. **Type**: button, input, card, navigation, header, text, image, form, table, list, modal, dropdown, search, menu, footer, sidebar
-        2. **Position**: approximate percentage coordinates (x, y, width, height) relative to the image
-        3. **Text Content**: exact text visible (if any)
-        4. **Properties**: colors, styling, size hints
-        5. **Confidence**: 0.0-1.0 how certain you are about this component
+        STEP 1 - VISUAL SCAN: Examine every pixel systematically from top-left to bottom-right.
 
-        Also analyze:
-        - **Layout Structure**: grid, flexbox, absolute positioning, columns
-        - **Design Tokens**: color palette, typography styles, spacing patterns
-        - **Navigation Pattern**: header nav, sidebar, breadcrumbs, pagination
-        - **Content Areas**: main content, sidebar, footer sections
+        STEP 2 - COMPONENT DETECTION: For EVERY visible UI element, provide:
+        1. **Type**: button, input, card, navigation, header, text, image, form, table, list, modal, dropdown, search, menu, footer, sidebar, icon, logo, badge, tag, tooltip, carousel, tabs, accordion, breadcrumb, pagination, stepper, progress, slider, toggle, checkbox, radio, select, textarea, datepicker, rating, avatar, divider, spacer
+        2. **Exact Position**: precise percentage coordinates (x, y, width, height) relative to total image dimensions
+        3. **Text Content**: EXACT text visible character-by-character, including punctuation
+        4. **Visual Properties**: 
+           - Background color (hex codes when possible)
+           - Text color (hex codes)
+           - Border radius, borders, shadows
+           - Font size, weight, family hints
+           - Padding, margins, spacing
+           - States: hover, active, disabled, selected
+        5. **Hierarchical Relationships**: parent-child component relationships
+        6. **Confidence**: 0.0-1.0 precision score
+
+        STEP 3 - LAYOUT ARCHITECTURE: 
+        - **Layout Type**: CSS Grid, Flexbox, Absolute, Float, Table
+        - **Responsive Breakpoints**: mobile, tablet, desktop indicators
+        - **Z-index Layers**: stacking order of overlapping elements
+        - **Spacing System**: consistent padding/margin patterns
+
+        STEP 4 - DESIGN SYSTEM EXTRACTION:
+        - **Color Palette**: ALL unique colors with hex codes
+        - **Typography**: Font families, sizes, weights, line heights
+        - **Component Variants**: button styles, input types, card designs
+        - **Interactive States**: hover, focus, active, disabled appearances
 
         Return the response in this EXACT JSON format:
         {

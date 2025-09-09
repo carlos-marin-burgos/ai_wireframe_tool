@@ -913,21 +913,73 @@ function createImageBasedWireframePrompt(
   const { components, layout, designTokens, wireframeDescription, confidence } =
     imageAnalysis;
 
-  // Build component descriptions
+  // Build detailed component descriptions with exact positioning
   const componentDescriptions = components
-    .map((comp) => {
+    .map((comp, index) => {
       const pos = comp.bounds
-        ? `at position ${comp.bounds.x}%, ${comp.bounds.y}%`
+        ? `EXACT POSITION: x=${comp.bounds.x}%, y=${comp.bounds.y}%, width=${comp.bounds.width}%, height=${comp.bounds.height}%`
         : "";
-      const text = comp.text ? `with text "${comp.text}"` : "";
+      const text = comp.text ? `EXACT TEXT: "${comp.text}"` : "";
       const style = comp.properties
-        ? `styled as ${JSON.stringify(comp.properties)}`
+        ? `VISUAL STYLE: ${JSON.stringify(comp.properties)}`
         : "";
-      return `- ${comp.type} ${pos} ${text} ${style}`.trim();
+      const confidence = comp.confidence ? `CONFIDENCE: ${comp.confidence}` : "";
+      return `COMPONENT ${index + 1}: ${comp.type}\n  ${pos}\n  ${text}\n  ${style}\n  ${confidence}`;
     })
-    .join("\n");
+    .join("\n\n");
 
-  const basePrompt = `You are an expert UI/UX designer creating HTML wireframes that EXACTLY match uploaded images.
+  const basePrompt = `MISSION: Create a PIXEL-PERFECT HTML wireframe that matches the uploaded image with 100% accuracy.
+
+ANALYSIS CONFIDENCE: ${confidence || "0.8"}
+
+DETECTED COMPONENTS (RECREATE EXACTLY):
+${componentDescriptions}
+
+LAYOUT ARCHITECTURE:
+- Primary Structure: ${layout.type || "grid"}
+- Column System: ${layout.columns || "12"} columns
+- Section Hierarchy: ${layout.sections?.join(" → ") || "header → main → footer"}
+- Navigation Pattern: ${layout.navigationPattern || "top-nav"}
+
+VISUAL DESIGN SYSTEM:
+- Color Palette: ${designTokens.colors?.map(c => c.toLowerCase()).join(", ") || "#0078d4, #ffffff, #f3f2f1"}
+- Typography: ${designTokens.fonts?.join(", ") || "Segoe UI, -apple-system, sans-serif"}
+- Spacing System: ${designTokens.spacing?.join("px, ") || "8, 16, 24, 32"}px
+- Component Variants: ${designTokens.variants?.join(", ") || "primary, secondary, outline"}
+
+PRECISION REQUIREMENTS:
+1. **EXACT POSITIONING**: Place every component at its detected coordinates using CSS positioning
+2. **EXACT TEXT CONTENT**: Use the precise text content analyzed from the image
+3. **EXACT COLORS**: Match detected colors using hex codes from analysis
+4. **EXACT DIMENSIONS**: Honor width/height percentages from component bounds
+5. **EXACT HIERARCHY**: Maintain detected parent-child relationships
+6. **EXACT SPACING**: Use detected spacing patterns consistently
+
+TECHNICAL SPECIFICATIONS:
+- MANDATORY: Use Microsoft Fluent Web Components (@fluentui/web-components)
+- MANDATORY: Include CDN: <script type="module" src="https://unpkg.com/@fluentui/web-components"></script>
+- MANDATORY: Use responsive CSS Grid/Flexbox for layout structure
+- MANDATORY: Implement detected interactive states (hover, focus, active)
+- COMPONENT MAPPING:
+  * buttons → <fluent-button appearance="primary|secondary|outline">
+  * text inputs → <fluent-text-field placeholder="text">
+  * checkboxes → <fluent-checkbox>
+  * dropdowns/selects → <fluent-select>
+  * cards/containers → <fluent-card>
+  * navigation → <fluent-tabs> or <fluent-breadcrumb>
+  * progress indicators → <fluent-progress>
+  * sliders → <fluent-slider>
+  * toggles → <fluent-switch>
+
+WIREFRAME DESCRIPTION FROM IMAGE:
+${wireframeDescription || "Recreate the uploaded interface design"}
+
+MANDATORY HEADER (Include exactly as provided):
+${officialSiteHeader}
+
+TARGET: Create a wireframe that looks EXACTLY like the uploaded image using clean, semantic HTML/CSS with Fluent Web Components.
+
+CRITICAL: Generate ONLY the complete HTML code (starting with <!DOCTYPE html> and ending with </html>). No explanations or markdown formatting.`;
 
 Create a complete, responsive HTML wireframe that recreates the EXACT layout and components from this analyzed image:
 
