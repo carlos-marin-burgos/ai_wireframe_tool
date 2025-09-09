@@ -15,9 +15,11 @@ import Toast from "./components/Toast";
 import AzureAuth from "./components/AzureAuth";
 import FigmaIntegration from "./components/FigmaIntegration";
 import FigmaIntegrationModal from "./components/FigmaIntegrationModal";
+import { ReactWireframeRenderer } from "./components/ReactWireframeRenderer";
 import { API_CONFIG, getApiUrl } from "./config/api";
 // All API calls are now handled by the wireframe generation hook
 import { useWireframeGeneration } from './hooks/useWireframeGeneration';
+import { useReactWireframeGeneration } from './hooks/useReactWireframeGeneration';
 import { PerformanceTracker } from "./utils/performance";
 import { generateHeroHTML } from "./components/HeroGenerator";
 import { processWireframeForProduction } from './utils/wireframeProcessor';
@@ -42,6 +44,8 @@ interface ToastData {
 function AppContent({ onLogout }: { onLogout?: () => void }) {
   const [description, setDescription] = useState("");
   const [htmlWireframe, setHtmlWireframe] = useState("");
+  const [reactWireframe, setReactWireframe] = useState("");
+  const [wireframeMode, setWireframeMode] = useState<'html' | 'react'>('react');
   const [savedWireframes, setSavedWireframes] = useState<SavedWireframe[]>([]);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [saveTitle, setSaveTitle] = useState("");
@@ -150,6 +154,14 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     processingTime,
     cancelGeneration
   } = useWireframeGeneration();
+
+  // React wireframe generation hook
+  const {
+    generateReactWireframe,
+    isLoading: reactLoading,
+    error: reactError,
+    processingTime: reactProcessingTime
+  } = useReactWireframeGeneration();
 
   useEffect(() => {
     localStorage.removeItem("snapframe_current");

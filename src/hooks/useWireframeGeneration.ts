@@ -6,6 +6,7 @@ interface WireframeResponse {
   html: string;
   fallback?: boolean;
   processingTime?: number;
+  source?: string;
 }
 
 // Simple in-memory cache
@@ -23,20 +24,7 @@ const CACHE_EXPIRATION = 30 * 60 * 1000;
 
 // Function to remove wireframe placeholders and replace with functional content
 const removeWireframePlaceholders = (html: string): string => {
-  // DEBUG: Log what CSS is in the wireframe HTML
-  const styleMatches = html.match(/<style[^>]*>([\s\S]*?)<\/style>/gi);
-  if (styleMatches) {
-    console.log(
-      "🎨 Found CSS in wireframe HTML:",
-      styleMatches.length,
-      "style blocks"
-    );
-    styleMatches.forEach((style, index) => {
-      console.log(`Style block ${index + 1}:`, style.substring(0, 200) + "...");
-    });
-  }
-
-  // PROPER FIX: Scope all CSS to only affect wireframe content
+  // First, scope all CSS to only affect wireframe content
   html = html.replace(
     /<style[^>]*>([\s\S]*?)<\/style>/gi,
     (match, cssContent) => {
@@ -64,88 +52,27 @@ const removeWireframePlaceholders = (html: string): string => {
     }
   );
 
-  // ENHANCED: Remove ALL wireframe placeholder CSS that creates rectangles/gray boxes
-  // Remove text-placeholder styles
-  html = html.replace(/\.text-placeholder[^}]*}/g, "");
-  // Remove placeholder styles with various naming patterns
-  html = html.replace(/\.[^{]*placeholder[^{]*\{[^}]*background[^}]*\}/gi, "");
+  // Replace placeholder elements with actual content
+  // Replace text placeholder headings with real headings
   html = html.replace(
-    /\.[^{]*placeholder[^{]*\{[^}]*width[^}]*height[^}]*\}/gi,
-    ""
-  );
-  // Remove generic rectangle/box styles that might be placeholders
-  html = html.replace(
-    /\.[^{]*\{[^}]*background:\s*#[a-fA-F0-9]{3,6}[^}]*width:[^}]*height:[^}]*\}/gi,
-    ""
-  );
-  // Remove any CSS creating colored rectangles (common placeholder pattern)
-  html = html.replace(
-    /\.[^{]*\{[^}]*background-color:\s*#[a-fA-F0-9]{3,6}[^}]*\}/gi,
-    ""
-  );
-  // Remove wireframe-specific patterns
-  html = html.replace(/\.[^{]*wireframe[^{]*\{[^}]*background[^}]*\}/gi, "");
-  html = html.replace(/\.[^{]*component[^{]*\{[^}]*background[^}]*\}/gi, "");
-  html = html.replace(/\.[^{]*rectangle[^{]*\{[^}]*\}/gi, "");
-  html = html.replace(/\.[^{]*box[^{]*\{[^}]*background[^}]*\}/gi, "");
-  // Remove specific low-fi patterns
-  html = html.replace(/\.[^{]*mockup[^{]*\{[^}]*\}/gi, "");
-  html = html.replace(/\.[^{]*sketch[^{]*\{[^}]*\}/gi, "");
-  html = html.replace(/\.[^{]*proto[^{]*\{[^}]*\}/gi, "");
-
-  // Replace wireframe placeholder elements with actual content
-  html = html.replace(
-    /<div class="text-placeholder-heading[^"]*"><\/div>/g,
-    "<h2>Microsoft Learn - Azure Platform</h2>"
+    /<div[^>]*class="[^"]*text-placeholder-heading[^"]*"[^>]*><\/div>/gi,
+    "<h2>Sample Heading</h2>"
   );
 
+  // Replace text placeholder lines with sample paragraphs
   html = html.replace(
-    /<div class="text-placeholder-line[^"]*"><\/div>/g,
-    "<p>Learn Microsoft Azure with hands-on tutorials, documentation, and interactive examples.</p>"
+    /<div[^>]*class="[^"]*text-placeholder-line[^"]*"[^>]*><\/div>/gi,
+    "<p>This is sample text content that represents the actual content that would appear in the final design.</p>"
   );
 
+  // Replace multiple consecutive placeholder paragraphs with varied content
   html = html.replace(
-    /<h1 class="text-placeholder[^"]*"><\/h1>/g,
-    "<h1>Welcome to Microsoft Learn</h1>"
+    /(<p>This is sample text content that represents the actual content that would appear in the final design\.<\/p>\s*){2,}/gi,
+    "<p>This is sample text content that represents the actual content that would appear in the final design.</p><p>Here is additional sample content to show how multiple paragraphs would look in the actual implementation.</p>"
   );
 
-  // Replace any remaining placeholder divs with actual content
-  html = html.replace(
-    /<div[^>]*class="[^"]*placeholder[^"]*"[^>]*><\/div>/gi,
-    "<p>Sample content</p>"
-  );
-
-  // Replace wireframe-specific elements
-  html = html.replace(
-    /<div[^>]*class="[^"]*wireframe[^"]*"[^>]*><\/div>/gi,
-    "<p>Sample content</p>"
-  );
-
-  html = html.replace(
-    /<div[^>]*class="[^"]*component[^"]*"[^>]*><\/div>/gi,
-    "<div class='content-block'><p>Content</p></div>"
-  );
-
-  html = html.replace(
-    /<div[^>]*class="[^"]*rectangle[^"]*"[^>]*><\/div>/gi,
-    "<p>Sample content</p>"
-  );
-
-  // Replace empty divs that might be placeholders
-  html = html.replace(/<div[^>]*class="[^"]*"[^>]*><\/div>/gi, (match) => {
-    // Only replace if it looks like a placeholder (has width/height styles or placeholder in class)
-    if (
-      match.includes("placeholder") ||
-      match.includes("wireframe") ||
-      match.includes("component") ||
-      match.includes("rectangle") ||
-      match.includes("width") ||
-      match.includes("height")
-    ) {
-      return "<p>Sample content</p>";
-    }
-    return match;
-  });
+  // Remove any remaining text-placeholder CSS classes
+  html = html.replace(/text-placeholder-[a-zA-Z-]+/gi, "");
 
   return html;
 }; // Helper function to ensure HTML content is always a string and apply fixes
@@ -229,7 +156,7 @@ export const useWireframeGeneration = () => {
       // Cancel any ongoing request
       cancelGeneration();
 
-      console.log("🎨 Generating wireframe (SIMPLIFIED):", {
+      console.log("🎨 Generating wireframe (INTELLIGENT FALLBACK):", {
         description: description.substring(0, 100) + "...",
         theme,
         colorScheme,
@@ -242,23 +169,23 @@ export const useWireframeGeneration = () => {
       setIsLoading(true);
       setError(null);
       setFallback(false);
-      setLoadingStage("🤖 AI mode: Connecting to wireframe service...");
+      setLoadingStage("🚀 Connecting to AI wireframe service...");
 
       // Create a cache key
       const cacheKey = `${description}-${theme}-${colorScheme}-${Date.now()}`;
 
       // Set up loading stage timers
       const timer1 = setTimeout(
-        () => setLoadingStage("🤖 Analyzing your description..."),
-        3000
+        () => setLoadingStage("🤖 AI analyzing your description..."),
+        2000
       );
       const timer2 = setTimeout(
-        () => setLoadingStage("🤖 Generating wireframe code..."),
-        8000
+        () => setLoadingStage("⚡ Generating intelligent wireframe..."),
+        6000
       );
       const timer3 = setTimeout(
-        () => setLoadingStage("⚡ Almost ready..."),
-        15000
+        () => setLoadingStage("🎯 Finalizing design..."),
+        12000
       );
       loadingTimersRef.current = [timer1, timer2, timer3];
 
@@ -267,29 +194,42 @@ export const useWireframeGeneration = () => {
         const abortController = new AbortController();
         abortControllerRef.current = abortController;
 
-        console.log("🚀 Making API call to:", {
+        console.log("🚀 Attempting Azure Functions + OpenAI generation:", {
           endpoint: API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME,
           payload: { description, theme, colorScheme, fastMode: false },
         });
 
         const startTime = Date.now();
 
-        // Call the single working endpoint
-        const data = await api.post<WireframeResponse>(
-          API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME + `?t=${Date.now()}`,
-          { description, theme, colorScheme, fastMode: false },
-          {
-            signal: abortController.signal,
-            headers: {
-              "Cache-Control": "no-cache, no-store, must-revalidate",
-              Pragma: "no-cache",
-              Expires: "0",
-            },
-          }
-        );
+        // Try Azure Functions + OpenAI first (with shorter timeout for faster fallback)
+        const data = await Promise.race([
+          api.post<WireframeResponse>(
+            API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME + `?t=${Date.now()}`,
+            { description, theme, colorScheme, fastMode: false },
+            {
+              signal: abortController.signal,
+              headers: {
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+                Pragma: "no-cache",
+                Expires: "0",
+              },
+            }
+          ),
+          // Timeout after 15 seconds to provide faster user experience
+          new Promise<never>((_, reject) =>
+            setTimeout(
+              () => reject(new Error("Azure Functions timeout")),
+              15000
+            )
+          ),
+        ]);
 
         const endTime = Date.now();
-        console.log("✅ API call succeeded in", endTime - startTime, "ms");
+        console.log(
+          "✅ Azure Functions call succeeded in",
+          endTime - startTime,
+          "ms"
+        );
         console.log("📦 Response data:", {
           hasHtml: !!data.html,
           htmlLength: data.html?.length,
@@ -307,7 +247,7 @@ export const useWireframeGeneration = () => {
         const htmlContent = ensureString(data.html);
 
         if (!htmlContent) {
-          throw new Error("No HTML content received from API");
+          throw new Error("No HTML content received from Azure Functions");
         }
 
         // Cache the successful result
@@ -319,30 +259,39 @@ export const useWireframeGeneration = () => {
           };
         }
 
+        console.log("🎉 Azure Functions + OpenAI generation successful");
         return {
           html: htmlContent,
           fallback: data.fallback || false,
           processingTime: data.processingTime || 0,
           fromCache: false,
+          source: "azure-functions",
         };
       } catch (err) {
-        console.error("❌ Primary endpoint failed:", err);
+        console.warn(
+          "⚠️ Azure Functions unavailable, using intelligent fallback:",
+          err
+        );
 
-        // Handle AbortError specially
-        if (err instanceof Error && err.name === "AbortError") {
+        // Handle AbortError specially (user cancelled)
+        if (
+          err instanceof Error &&
+          err.name === "AbortError" &&
+          !err.message.includes("timeout")
+        ) {
           setError("Request was cancelled");
           throw err;
         }
 
-        // Use fallback generator
+        // Use intelligent client-side fallback
         try {
-          setLoadingStage("🛠️ Using local fallback generator...");
+          setLoadingStage("🧠 Using intelligent local generation...");
 
           const { generateFallbackWireframe } = await import(
             "../utils/fallbackWireframeGenerator"
           );
 
-          console.log("🔧 Generating fallback wireframe...");
+          console.log("🔧 Generating intelligent local wireframe...");
           const fallbackStartTime = Date.now();
 
           const fallbackHtml = await generateFallbackWireframe({
@@ -353,7 +302,7 @@ export const useWireframeGeneration = () => {
 
           const fallbackEndTime = Date.now();
           console.log(
-            "✅ Fallback wireframe generated in",
+            "✅ Intelligent fallback generated in",
             fallbackEndTime - fallbackStartTime,
             "ms"
           );
@@ -363,20 +312,22 @@ export const useWireframeGeneration = () => {
             fallback: true,
             processingTime: fallbackEndTime - fallbackStartTime,
             fromCache: false,
+            source: "client-side-intelligent",
           };
 
           setFallback(true);
           setProcessingTime(result.processingTime);
 
+          console.log("🎯 Client-side intelligent generation successful");
           return result;
         } catch (fallbackError) {
-          console.error("❌ Fallback generator also failed:", fallbackError);
+          console.error("❌ All generation methods failed:", fallbackError);
 
           const errorMessage =
             err instanceof Error
               ? err.message
-              : "An unexpected error occurred while generating the wireframe.";
-          setError(`Wireframe Generation Failed: ${errorMessage}`);
+              : "Unable to generate wireframe. Please try again.";
+          setError(`Generation Failed: ${errorMessage}`);
           throw err;
         }
       } finally {
