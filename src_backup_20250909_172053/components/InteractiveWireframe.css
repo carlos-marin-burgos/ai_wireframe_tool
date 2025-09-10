@@ -1,0 +1,93 @@
+/* Interactive Wireframe Styles */
+.interactive-wireframe-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.wireframe-display {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.wireframe-content {
+  width: 100%;
+  min-height: 100%;
+  padding: 16px;
+}
+
+/* Rearrangeable Mode Styles */
+.rearrangeable-mode .wireframe-content {
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  min-height: 500px;
+}
+
+.rearrangeable-mode .draggable-item {
+  transition: border-color 0.2s ease;
+  border: 2px dashed rgba(156, 163, 175, 0.4);
+  cursor: move !important;
+  position: relative;
+  z-index: 1;
+}
+
+.rearrangeable-mode .draggable-item:hover {
+  border-color: rgba(75, 85, 99, 0.8);
+}
+
+.rearrangeable-mode .draggable-item.dragging {
+  opacity: 0.7;
+  transform: scale(1.05);
+  z-index: 1000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Drop zone styles */
+.drop-zone {
+  position: absolute;
+  background: linear-gradient(45deg, #e8e6de22, #28a74522);
+  border: 2px dashed #e8e6de;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.drop-zone.active {
+  opacity: 1;
+}
+
+.drop-zone::before {
+  content: "Drop here";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #e8e6de;
+  font-weight: bold;
+  font-size: 14px;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
+}
+
+/* Enhanced visual feedback for rearrangeable elements */
+.rearrangeable-mode .card {
+  margin-bottom: 1rem;
+  border: 2px dashed rgba(156, 163, 175, 0.4);
+  transition: border-color 0.2s ease;
+}
+
+.rearrangeable-mode .card:hover {
+  border-color: rgba(75, 85, 99, 0.8);
+}
+
+.rearrangeable-mode .btn {
+  transition: border-color 0.2s ease;
+  border: 2px dashed rgba(156, 163, 175, 0.4);
+}
+
+.rearrangeable-mode .btn:hover {
+  border-color: rgba(75, 85, 99, 0.8);
+}

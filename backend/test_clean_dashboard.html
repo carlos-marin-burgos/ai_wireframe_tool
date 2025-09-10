@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dashboard with three metric cards</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+        }
+        #root {
+            min-height: 100vh;
+        }
+        
+        /* Additional Tailwind-like styles for better rendering */
+        .bg-primary { background-color: #0078d4; }
+        .bg-primary-light { background-color: #106ebe; }
+        .bg-primary-dark { background-color: #005a9e; }
+        .text-primary { color: #0078d4; }
+        .border-primary { border-color: #0078d4; }
+        .ring-primary { --tw-ring-color: #0078d4; }
+        .focus\:ring-primary:focus { --tw-ring-color: #0078d4; box-shadow: 0 0 0 2px #0078d4; }
+        .focus\:border-primary:focus { border-color: #0078d4; }
+        .hover\:bg-primary-dark:hover { background-color: #005a9e; }
+        .hover\:bg-primary-light:hover { background-color: #106ebe; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const Dashboard = () => {
+  return (
+    <div className="flex flex-col md-row justify-between items-center p-4 bg-primary min-h-screen">
+      <div className="bg-white shadow-lg rounded-lg p-6 m-4 flex-1 w-full md-1/3 hover-gray-100 focus-none focus-2 focus-primary">
+        <h2 className="text-lg font-semibold" aria-label="Metric Card 1 Title">Metric 1</h2>
+        <p className="text-gray-600" aria-label="Metric Card 1 Description">Description for metric 1</p>
+      </div>
+      <div className="bg-white shadow-lg rounded-lg p-6 m-4 flex-1 w-full md-1/3 hover-gray-100 focus-none focus-2 focus-primary">
+        <h2 className="text-lg font-semibold" aria-label="Metric Card 2 Title">Metric 2</h2>
+        <p className="text-gray-600" aria-label="Metric Card 2 Description">Description for metric 2</p>
+      </div>
+      <div className="bg-white shadow-lg rounded-lg p-6 m-4 flex-1 w-full md-1/3 hover-gray-100 focus-none focus-2 focus-primary">
+        <h2 className="text-lg font-semibold" aria-label="Metric Card 3 Title">Metric 3</h2>
+        <p className="text-gray-600" aria-label="Metric Card 3 Description">Description for metric 3</p>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;
+        
+        // Simple and reliable component rendering
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        
+        try {
+            // Find the component name from export statement
+            const exportMatch = `const Dashboard = () => {
+  return (
+    <div className="flex flex-col md-row justify-between items-center p-4 bg-primary min-h-screen">
+      <div className="bg-white shadow-lg rounded-lg p-6 m-4 flex-1 w-full md-1/3 hover-gray-100 focus-none focus-2 focus-primary">
+        <h2 className="text-lg font-semibold" aria-label="Metric Card 1 Title">Metric 1</h2>
+        <p className="text-gray-600" aria-label="Metric Card 1 Description">Description for metric 1</p>
+      </div>
+      <div className="bg-white shadow-lg rounded-lg p-6 m-4 flex-1 w-full md-1/3 hover-gray-100 focus-none focus-2 focus-primary">
+        <h2 className="text-lg font-semibold" aria-label="Metric Card 2 Title">Metric 2</h2>
+        <p className="text-gray-600" aria-label="Metric Card 2 Description">Description for metric 2</p>
+      </div>
+      <div className="bg-white shadow-lg rounded-lg p-6 m-4 flex-1 w-full md-1/3 hover-gray-100 focus-none focus-2 focus-primary">
+        <h2 className="text-lg font-semibold" aria-label="Metric Card 3 Title">Metric 3</h2>
+        <p className="text-gray-600" aria-label="Metric Card 3 Description">Description for metric 3</p>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;`.match(/export default (\w+);?/);
+            const componentName = exportMatch ? exportMatch[1] : null;
+            
+            if (componentName) {
+                // Create the component from the cleaned code
+                const componentCode = `const Dashboard = () => {
+  return (
+    <div className="flex flex-col md-row justify-between items-center p-4 bg-primary min-h-screen">
+      <div className="bg-white shadow-lg rounded-lg p-6 m-4 flex-1 w-full md-1/3 hover-gray-100 focus-none focus-2 focus-primary">
+        <h2 className="text-lg font-semibold" aria-label="Metric Card 1 Title">Metric 1</h2>
+        <p className="text-gray-600" aria-label="Metric Card 1 Description">Description for metric 1</p>
+      </div>
+      <div className="bg-white shadow-lg rounded-lg p-6 m-4 flex-1 w-full md-1/3 hover-gray-100 focus-none focus-2 focus-primary">
+        <h2 className="text-lg font-semibold" aria-label="Metric Card 2 Title">Metric 2</h2>
+        <p className="text-gray-600" aria-label="Metric Card 2 Description">Description for metric 2</p>
+      </div>
+      <div className="bg-white shadow-lg rounded-lg p-6 m-4 flex-1 w-full md-1/3 hover-gray-100 focus-none focus-2 focus-primary">
+        <h2 className="text-lg font-semibold" aria-label="Metric Card 3 Title">Metric 3</h2>
+        <p className="text-gray-600" aria-label="Metric Card 3 Description">Description for metric 3</p>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;`.replace(`export default ${componentName};`, `window.${componentName} = ${componentName};`);
+                
+                // Execute the component code
+                eval(componentCode);
+                
+                // Render the component
+                if (window[componentName]) {
+                    root.render(React.createElement(window[componentName]));
+                } else {
+                    throw new Error(`Component ${componentName} not found`);
+                }
+            } else {
+                throw new Error('No export default found in component code');
+            }
+        } catch (error) {
+            console.error('Component rendering error:', error);
+            
+            // Fallback to display the raw component structure
+            root.render(
+                React.createElement('div', { 
+                    style: { 
+                        padding: '20px', 
+                        fontFamily: 'system-ui',
+                        backgroundColor: '#f8f9fa',
+                        border: '1px solid #dee2e6',
+                        borderRadius: '8px',
+                        margin: '20px'
+                    } 
+                }, [
+                    React.createElement('h2', { 
+                        key: 'title',
+                        style: { color: '#495057', marginBottom: '16px' }
+                    }, 'dashboard with three metric cards'),
+                    React.createElement('p', { 
+                        key: 'error',
+                        style: { color: '#dc3545', fontFamily: 'monospace', fontSize: '14px' }
+                    }, 'Component rendering failed: ' + error.message),
+                    React.createElement('details', { 
+                        key: 'details',
+                        style: { marginTop: '16px' }
+                    }, [
+                        React.createElement('summary', { key: 'summary' }, 'Component Code'),
+                        React.createElement('pre', { 
+                            key: 'code',
+                            style: { 
+                                backgroundColor: '#f8f9fa', 
+                                padding: '12px', 
+                                borderRadius: '4px',
+                                fontSize: '12px',
+                                overflow: 'auto'
+                            }
+                        }, `const Dashboard = () => {
+  return (
+    <div className="flex flex-col md-row justify-between items-center p-4 bg-primary min-h-screen">
+      <div className="bg-white shadow-lg rounded-lg p-6 m-4 flex-1 w-full md-1/3 hover-gray-100 focus-none focus-2 focus-primary">
+        <h2 className="text-lg font-semibold" aria-label="Metric Card 1 Title">Metric 1</h2>
+        <p className="text-gray-600" aria-label="Metric Card 1 Description">Description for metric 1</p>
+      </div>
+      <div className="bg-white shadow-lg rounded-lg p-6 m-4 flex-1 w-full md-1/3 hover-gray-100 focus-none focus-2 focus-primary">
+        <h2 className="text-lg font-semibold" aria-label="Metric Card 2 Title">Metric 2</h2>
+        <p className="text-gray-600" aria-label="Metric Card 2 Description">Description for metric 2</p>
+      </div>
+      <div className="bg-white shadow-lg rounded-lg p-6 m-4 flex-1 w-full md-1/3 hover-gray-100 focus-none focus-2 focus-primary">
+        <h2 className="text-lg font-semibold" aria-label="Metric Card 3 Title">Metric 3</h2>
+        <p className="text-gray-600" aria-label="Metric Card 3 Description">Description for metric 3</p>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;`)
+                    ])
+                ])
+            );
+        }
+    </script>
+</body>
+</html>

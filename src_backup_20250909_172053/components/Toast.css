@@ -1,0 +1,94 @@
+/* Toast Notification Styles */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-left: 4px solid;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 300px;
+  max-width: 500px;
+  z-index: 10001;
+  transition: all 0.3s ease;
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont,
+    sans-serif;
+}
+
+.toast-success {
+  border-left-color: #107c10;
+}
+
+.toast-info {
+  border-left-color: #0078d4;
+}
+
+.toast-warning {
+  border-left-color: #ffb900;
+}
+
+.toast-error {
+  border-left-color: #d13438;
+}
+
+.toast-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.toast-hidden {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.toast-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.toast-message {
+  color: #323130;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #605e5c;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  margin-left: 12px;
+  transition: background-color 0.2s ease;
+}
+
+.toast-close:hover {
+  background-color: #f3f2f1;
+}
+
+/* Animation for multiple toasts */
+.toast:nth-child(2) {
+  top: 90px;
+}
+
+.toast:nth-child(3) {
+  top: 160px;
+}
+
+.toast:nth-child(4) {
+  top: 230px;
+}

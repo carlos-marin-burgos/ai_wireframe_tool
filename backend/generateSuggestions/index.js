@@ -1,70 +1,70 @@
-// Microsoft Learn-focused suggestion generator
-function generateMicrosoftLearnSuggestions(description) {
+// Generic wireframe suggestion generator
+function generateCleanSuggestions(description) {
   const lowerDescription = description.toLowerCase();
 
-  // Microsoft Learn wireframe-focused suggestion categories
+  // Generic wireframe-focused suggestion categories
   const categories = {
     layout: [
-      "Add Microsoft Learn's signature header with Microsoft logo and Learn branding",
-      "Include Microsoft Learn's left navigation sidebar with expandable learning paths",
-      "Create Microsoft Learn's main content area with documentation-style typography",
-      "Add Microsoft Learn's right sidebar with 'In this article' table of contents",
-      "Include Microsoft Learn's footer with community links and feedback options",
-      "Design Microsoft Learn's breadcrumb trail showing learning path progression",
+      "Add a clean header with company logo and main navigation",
+      "Include a sidebar with organized menu items and quick links",
+      "Create a main content area with clear typography hierarchy",
+      "Add a secondary sidebar with helpful navigation elements",
+      "Include a footer with essential links and contact information",
+      "Design a breadcrumb trail for easy navigation tracking",
     ],
     navigation: [
-      "Add Microsoft Learn's global navigation with 'Documentation', 'Learning', 'Certifications' tabs",
-      "Include Microsoft Learn's search bar with technology and role-based filters",
-      "Create Microsoft Learn's learning path navigation with module completion indicators",
-      "Add Microsoft Learn's 'Previous' and 'Next Unit' navigation for sequential learning",
-      "Include Microsoft Learn's floating progress indicator for current learning module",
-      "Design Microsoft Learn's mobile hamburger menu with nested learning categories",
+      "Add a primary navigation bar with clear category sections",
+      "Include a search bar with helpful filters and options",
+      "Create structured navigation with logical grouping",
+      "Add pagination controls for content browsing",
+      "Include progress indicators for multi-step processes",
+      "Design mobile-friendly hamburger menu with clear hierarchy",
     ],
     content: [
-      "Create Microsoft Learn's hero banner with technology focus and learning objectives",
-      "Add Microsoft Learn's 'Learning objectives' card with checkboxes for goal tracking",
-      "Include Microsoft Learn's code block containers with 'Try it' and 'Copy' buttons",
-      "Design Microsoft Learn's unit progress bar showing completion within a module",
-      "Add Microsoft Learn's collapsible content sections for step-by-step tutorials",
-      "Create Microsoft Learn's achievement badge display for completed learning paths",
+      "Create an engaging hero section with clear value proposition",
+      "Add informational cards with key features and benefits",
+      "Include content sections with proper spacing and organization",
+      "Design progress indicators for user guidance",
+      "Add expandable content sections for detailed information",
+      "Create highlight areas for important announcements",
     ],
     forms: [
-      "Add Microsoft Learn's knowledge check quiz with multiple choice and explanations",
-      "Include Microsoft Learn's skills assessment form with role-based questions",
-      "Design Microsoft Learn's certification exam registration form with prerequisites",
-      "Create Microsoft Learn's learning preferences form with technology interests",
-      "Add Microsoft Learn's community Q&A submission form with tagging system",
-      "Include Microsoft Learn's feedback form for rating learning module quality",
+      "Add user-friendly forms with clear labels and validation",
+      "Include interactive elements like quizzes or assessments",
+      "Design registration forms with intuitive field organization",
+      "Create preference settings with easy-to-use controls",
+      "Add feedback forms with rating systems",
+      "Include survey forms with logical question flow",
     ],
     cards: [
-      "Design Microsoft Learn's learning path cards with technology logos and difficulty badges",
-      "Create Microsoft Learn's certification cards with exam codes and preparation time estimates",
-      "Add Microsoft Learn's documentation cards with API references and code samples",
-      "Include Microsoft Learn's community cards showing Q&A discussions and expert answers",
-      "Design Microsoft Learn's instructor-led training cards with schedule and registration info",
-      "Create Microsoft Learn's hands-on lab cards with Azure sandbox environment links",
+      "Design feature cards with icons and clear descriptions",
+      "Create product cards with images and key information",
+      "Add service cards with pricing and feature details",
+      "Include team member cards with photos and roles",
+      "Design testimonial cards with customer feedback",
+      "Create resource cards with downloadable content",
     ],
     interactive: [
-      "Add Microsoft Learn's interactive Azure portal simulations with guided steps",
-      "Include Microsoft Learn's code playground with live Azure resource deployment",
-      "Design Microsoft Learn's decision tree diagrams for choosing Azure services",
-      "Create Microsoft Learn's interactive tutorials with real-time feedback",
-      "Add Microsoft Learn's sandbox environment for hands-on Azure practice",
-      "Include Microsoft Learn's progress tracking with badges and achievement unlocks",
+      "Add interactive elements like image galleries or sliders",
+      "Include dynamic content areas that respond to user input",
+      "Design interactive diagrams or process flows",
+      "Create engaging user interface elements",
+      "Add interactive tutorials or guided experiences",
+      "Include real-time feedback and progress tracking",
     ],
     dashboard: [
-      "Create Microsoft Learn's certification dashboard with exam progress and completion dates",
-      "Design Microsoft Learn's learning analytics dashboard with study time and achievement metrics",
-      "Add Microsoft Learn's skill assessment dashboard with competency tracking",
-      "Include Microsoft Learn's learning path dashboard with module completion status",
-      "Build Microsoft Learn's personalized recommendation dashboard with AI-suggested content",
-      "Design Microsoft Learn's community activity dashboard with Q&A participation metrics",
+      "Create analytics dashboard with key performance metrics",
+      "Design user activity dashboard with engagement tracking",
+      "Add reporting dashboard with visual data representations",
+      "Include monitoring dashboard with status indicators",
+      "Build management dashboard with administrative controls",
+      "Design overview dashboard with summary information",
     ],
   };
 
   let suggestions = [];
 
-  // Check for dashboard-related keywords (addressing the "dashboard for tracking progress" test case)
+  // Check for dashboard-related keywords
   if (
     lowerDescription.includes("dashboard") ||
     lowerDescription.includes("analytics") ||
@@ -105,8 +105,8 @@ function generateMicrosoftLearnSuggestions(description) {
     lowerDescription.includes("article") ||
     lowerDescription.includes("documentation") ||
     lowerDescription.includes("tutorial") ||
-    lowerDescription.includes("learning") ||
-    lowerDescription.includes("lesson")
+    lowerDescription.includes("section") ||
+    lowerDescription.includes("information")
   ) {
     suggestions.push(...categories.content.slice(0, 2));
   }
@@ -117,8 +117,7 @@ function generateMicrosoftLearnSuggestions(description) {
     lowerDescription.includes("input") ||
     lowerDescription.includes("quiz") ||
     lowerDescription.includes("assessment") ||
-    lowerDescription.includes("exam") ||
-    lowerDescription.includes("test") ||
+    lowerDescription.includes("registration") ||
     lowerDescription.includes("feedback") ||
     lowerDescription.includes("survey")
   ) {
@@ -128,11 +127,11 @@ function generateMicrosoftLearnSuggestions(description) {
   // Check for card-related keywords
   if (
     lowerDescription.includes("card") ||
-    lowerDescription.includes("module") ||
-    lowerDescription.includes("course") ||
-    lowerDescription.includes("certification") ||
-    lowerDescription.includes("path") ||
-    lowerDescription.includes("training")
+    lowerDescription.includes("feature") ||
+    lowerDescription.includes("product") ||
+    lowerDescription.includes("service") ||
+    lowerDescription.includes("team") ||
+    lowerDescription.includes("testimonial")
   ) {
     suggestions.push(...categories.cards.slice(0, 2));
   }
@@ -140,24 +139,24 @@ function generateMicrosoftLearnSuggestions(description) {
   // Check for interactive keywords
   if (
     lowerDescription.includes("interactive") ||
-    lowerDescription.includes("exercise") ||
-    lowerDescription.includes("playground") ||
-    lowerDescription.includes("simulation") ||
-    lowerDescription.includes("sandbox") ||
-    lowerDescription.includes("hands-on")
+    lowerDescription.includes("dynamic") ||
+    lowerDescription.includes("gallery") ||
+    lowerDescription.includes("slider") ||
+    lowerDescription.includes("tutorial") ||
+    lowerDescription.includes("guided")
   ) {
     suggestions.push(...categories.interactive.slice(0, 2));
   }
 
-  // If no specific matches, provide general Microsoft Learn suggestions
+  // If no specific matches, provide general suggestions
   if (suggestions.length === 0) {
     suggestions = [
-      "Create Microsoft Learn's learning path overview with module cards and progress tracking",
-      "Design Microsoft Learn's documentation page with table of contents and code examples",
-      "Add Microsoft Learn's certification journey with exam preparation and study guides",
-      "Include Microsoft Learn's community-driven Q&A section with expert moderation",
-      "Build Microsoft Learn's hands-on lab environment with Azure sandbox integration",
-      "Generate Microsoft Learn's assessment portal with skills validation and feedback",
+      "Create a clean and organized layout with clear navigation",
+      "Design user-friendly interface with intuitive controls",
+      "Add engaging content areas with proper visual hierarchy",
+      "Include interactive elements for better user engagement",
+      "Build responsive design elements for all device types",
+      "Generate accessible interface with inclusive design principles",
     ];
   }
 
@@ -191,8 +190,8 @@ module.exports = async function (context, req) {
     const inputDescription =
       userInput || description || "general Microsoft Learn content";
 
-    // Generate Microsoft Learn-focused suggestions based on the input
-    const suggestions = generateMicrosoftLearnSuggestions(inputDescription);
+    // Generate clean suggestions based on the input
+    const suggestions = generateCleanSuggestions(inputDescription);
 
     context.res = {
       status: 200,
@@ -202,19 +201,19 @@ module.exports = async function (context, req) {
       },
       body: {
         suggestions,
-        source: "microsoft-learn-focused",
+        source: "clean-suggestions",
         fallback: false,
       },
     };
   } catch (error) {
-    // Fallback to general Microsoft Learn suggestions if there's an error
+    // Fallback to general clean suggestions if there's an error
     const fallbackSuggestions = [
-      "Create Microsoft Learn's learning path overview with module cards and progress tracking",
-      "Design Microsoft Learn's documentation page with table of contents and code examples",
-      "Add Microsoft Learn's certification journey with exam preparation and study guides",
-      "Include Microsoft Learn's community-driven Q&A section with expert moderation",
-      "Build Microsoft Learn's hands-on lab environment with Azure sandbox integration",
-      "Generate Microsoft Learn's assessment portal with skills validation and feedback",
+      "Create a clean and organized layout with clear navigation",
+      "Design user-friendly interface with intuitive controls",
+      "Add engaging content areas with proper visual hierarchy",
+      "Include interactive elements for better user engagement",
+      "Build responsive design elements for all device types",
+      "Generate accessible interface with inclusive design principles",
     ];
 
     context.res = {
@@ -225,7 +224,7 @@ module.exports = async function (context, req) {
       },
       body: {
         suggestions: fallbackSuggestions,
-        source: "microsoft-learn-fallback",
+        source: "clean-suggestions-fallback",
         fallback: true,
       },
     };

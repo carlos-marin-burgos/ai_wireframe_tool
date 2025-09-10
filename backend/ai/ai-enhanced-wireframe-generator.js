@@ -3,24 +3,24 @@
  * Integrates the new enhanced AI capabilities with the existing system
  */
 
-const { EnhancedAIEngine } = require('./enhanced-ai-engine');
-const { AIContextManager } = require('./ai-context-manager');
-const { AdvancedPromptEngine } = require('./advanced-prompt-engine');
-const { createFallbackWireframe } = require('../fallback-generator');
+const { EnhancedAIEngine } = require("./enhanced-ai-engine");
+const { AIContextManager } = require("./ai-context-manager");
+const { AdvancedPromptEngine } = require("./advanced-prompt-engine");
+const { createFallbackWireframe } = require("../fallback-generator");
 
 class AIEnhancedWireframeGenerator {
   constructor() {
     this.aiEngine = new EnhancedAIEngine();
     this.contextManager = new AIContextManager();
     this.promptEngine = new AdvancedPromptEngine();
-    
+
     // Performance tracking
     this.stats = {
       totalRequests: 0,
       aiGeneratedCount: 0,
       fallbackCount: 0,
       averageQuality: 0,
-      userSatisfactionScore: 0
+      userSatisfactionScore: 0,
     };
 
     console.log("🚀 AI-Enhanced Wireframe Generator initialized");
@@ -34,23 +34,34 @@ class AIEnhancedWireframeGenerator {
       description,
       sessionId = null,
       userAgent = null,
-      designTheme = "microsoftlearn",
+      designTheme = "microsoft",
       colorScheme = "primary",
       enhanceQuality = true,
-      userFeedback = null
+      userFeedback = null,
     } = options;
 
     this.stats.totalRequests++;
     const startTime = Date.now();
 
     try {
-      console.log(`🧠 Starting enhanced AI generation for: "${description.substring(0, 50)}..."`);
+      console.log(
+        `🧠 Starting enhanced AI generation for: "${description.substring(
+          0,
+          50
+        )}..."`
+      );
 
       // Initialize or get user session
-      const session = this.contextManager.initializeSession(sessionId, userAgent);
-      
+      const session = this.contextManager.initializeSession(
+        sessionId,
+        userAgent
+      );
+
       // Get generation context from user history
-      const generationContext = this.contextManager.getGenerationContext(sessionId, description);
+      const generationContext = this.contextManager.getGenerationContext(
+        sessionId,
+        description
+      );
 
       // Enhanced generation with context awareness
       const result = await this.aiEngine.generateAdvancedWireframe({
@@ -59,7 +70,7 @@ class AIEnhancedWireframeGenerator {
         designTheme,
         colorScheme,
         enhanceQuality,
-        context: generationContext
+        context: generationContext,
       });
 
       // Record this interaction
@@ -73,19 +84,27 @@ class AIEnhancedWireframeGenerator {
           accessibilityScore: 0.9, // Placeholder - would be calculated
           performanceScore: 0.85,
           modernityScore: 0.9,
-          responsiveScore: 0.95
+          responsiveScore: 0.95,
         },
         responseTime: Date.now() - startTime,
-        enhancementsApplied: result.metadata.enhancementApplied ? ["ai-enhancement"] : [],
-        userFeedback
+        enhancementsApplied: result.metadata.enhancementApplied
+          ? ["ai-enhancement"]
+          : [],
+        userFeedback,
       });
 
       // Update statistics
       this.stats.aiGeneratedCount++;
       this.updateQualityStats(result.metadata.confidenceScore);
 
-      console.log(`✅ Enhanced AI generation completed in ${Date.now() - startTime}ms`);
-      console.log(`📊 Confidence Score: ${Math.round(result.metadata.confidenceScore * 100)}%`);
+      console.log(
+        `✅ Enhanced AI generation completed in ${Date.now() - startTime}ms`
+      );
+      console.log(
+        `📊 Confidence Score: ${Math.round(
+          result.metadata.confidenceScore * 100
+        )}%`
+      );
 
       return {
         html: result.html,
@@ -96,20 +115,19 @@ class AIEnhancedWireframeGenerator {
           ...result.metadata,
           processingTime: Date.now() - startTime,
           userSession: sessionId,
-          contextualSuggestions: result.metadata.suggestions || []
-        }
+          contextualSuggestions: result.metadata.suggestions || [],
+        },
       };
-
     } catch (error) {
       console.error("❌ Enhanced AI generation failed:", error);
-      
+
       // Record failed interaction
       if (sessionId) {
         this.contextManager.addDesignInteraction(sessionId, {
           description,
           generationMethod: "enhanced-ai-failed",
           success: false,
-          responseTime: Date.now() - startTime
+          responseTime: Date.now() - startTime,
         });
       }
 
@@ -123,23 +141,28 @@ class AIEnhancedWireframeGenerator {
    */
   async intelligentFallbackWithContext(options, sessionId, startTime) {
     const { description, designTheme, colorScheme } = options;
-    
+
     try {
       console.log("🔄 Using intelligent fallback with context preservation...");
-      
+
       // Get user context for smarter fallback
-      const context = this.contextManager.getGenerationContext(sessionId, description);
-      
+      const context = this.contextManager.getGenerationContext(
+        sessionId,
+        description
+      );
+
       // Try to use successful patterns from user's history
       if (context && context.successfulPatterns.length > 0) {
         const pattern = context.successfulPatterns[0];
-        console.log(`🎯 Using successful pattern: ${pattern.patterns.join(", ")}`);
-        
+        console.log(
+          `🎯 Using successful pattern: ${pattern.patterns.join(", ")}`
+        );
+
         // Generate contextual fallback
         const contextualFallback = this.generateContextualFallback(
-          description, 
-          pattern, 
-          designTheme, 
+          description,
+          pattern,
+          designTheme,
           colorScheme
         );
 
@@ -149,7 +172,7 @@ class AIEnhancedWireframeGenerator {
           generationMethod: "contextual-fallback",
           success: true,
           detectedPatterns: pattern.patterns,
-          responseTime: Date.now() - startTime
+          responseTime: Date.now() - startTime,
         });
 
         this.stats.fallbackCount++;
@@ -164,15 +187,19 @@ class AIEnhancedWireframeGenerator {
             generationMethod: "contextual-fallback",
             usedPatterns: pattern.patterns,
             processingTime: Date.now() - startTime,
-            userSession: sessionId
-          }
+            userSession: sessionId,
+          },
         };
       }
 
       // Standard fallback if no context available
       console.log("🔄 Using standard fallback generation...");
-      const fallbackHtml = createFallbackWireframe(description, designTheme, colorScheme);
-      
+      const fallbackHtml = createFallbackWireframe(
+        description,
+        designTheme,
+        colorScheme
+      );
+
       this.stats.fallbackCount++;
 
       return {
@@ -183,16 +210,19 @@ class AIEnhancedWireframeGenerator {
         metadata: {
           generationMethod: "standard-fallback",
           processingTime: Date.now() - startTime,
-          userSession: sessionId
-        }
+          userSession: sessionId,
+        },
       };
-
     } catch (fallbackError) {
       console.error("❌ Even fallback failed:", fallbackError);
-      
+
       // Emergency fallback
-      const emergencyHtml = this.generateEmergencyFallback(description, designTheme, colorScheme);
-      
+      const emergencyHtml = this.generateEmergencyFallback(
+        description,
+        designTheme,
+        colorScheme
+      );
+
       return {
         html: emergencyHtml,
         fallback: true,
@@ -202,8 +232,8 @@ class AIEnhancedWireframeGenerator {
         metadata: {
           generationMethod: "emergency-fallback",
           processingTime: Date.now() - startTime,
-          error: fallbackError.message
-        }
+          error: fallbackError.message,
+        },
       };
     }
   }
@@ -211,9 +241,14 @@ class AIEnhancedWireframeGenerator {
   /**
    * Generate contextual fallback based on user's successful patterns
    */
-  generateContextualFallback(description, successfulPattern, designTheme, colorScheme) {
+  generateContextualFallback(
+    description,
+    successfulPattern,
+    designTheme,
+    colorScheme
+  ) {
     const patterns = successfulPattern.patterns;
-    
+
     // Basic template with learned patterns
     let html = `<!DOCTYPE html>
 <html lang="en">
@@ -223,7 +258,9 @@ class AIEnhancedWireframeGenerator {
     <title>${description}</title>
     <style>
         :root {
-            --primary-color: ${colorScheme === 'primary' ? '#0078d4' : '#107c10'};
+            --primary-color: ${
+              colorScheme === "primary" ? "#0078d4" : "#107c10"
+            };
             --secondary-color: #f3f2f1;
             --text-color: #323130;
             --border-color: #edebe9;
@@ -270,7 +307,7 @@ class AIEnhancedWireframeGenerator {
         }`;
 
     // Add pattern-specific styles
-    if (patterns.includes('card-grid')) {
+    if (patterns.includes("card-grid")) {
       html += `
         .card-grid {
             display: grid;
@@ -292,7 +329,7 @@ class AIEnhancedWireframeGenerator {
         }`;
     }
 
-    if (patterns.includes('hero-section')) {
+    if (patterns.includes("hero-section")) {
       html += `
         .hero {
             text-align: center;
@@ -342,7 +379,7 @@ class AIEnhancedWireframeGenerator {
         <main class="content">`;
 
     // Add pattern-specific content
-    if (patterns.includes('hero-section')) {
+    if (patterns.includes("hero-section")) {
       html += `
             <section class="hero">
                 <h2>Welcome to Your Solution</h2>
@@ -351,7 +388,7 @@ class AIEnhancedWireframeGenerator {
             </section>`;
     }
 
-    if (patterns.includes('card-grid')) {
+    if (patterns.includes("card-grid")) {
       html += `
             <section class="card-grid">
                 <div class="card">
@@ -422,21 +459,33 @@ class AIEnhancedWireframeGenerator {
   /**
    * Generate design suggestions using enhanced AI
    */
-  async generateDesignSuggestions(description, sessionId = null, currentWireframe = null) {
+  async generateDesignSuggestions(
+    description,
+    sessionId = null,
+    currentWireframe = null
+  ) {
     try {
       console.log("💡 Generating enhanced design suggestions...");
-      
-      const context = this.contextManager.getGenerationContext(sessionId, description);
-      const suggestions = await this.aiEngine.generateDesignSuggestions(description, currentWireframe);
-      
+
+      const context = this.contextManager.getGenerationContext(
+        sessionId,
+        description
+      );
+      const suggestions = await this.aiEngine.generateDesignSuggestions(
+        description,
+        currentWireframe
+      );
+
       // Add contextual suggestions from user history
       if (context && context.contextualSuggestions) {
-        suggestions.suggestions.push(...context.contextualSuggestions.map(s => ({
-          title: s.suggestion,
-          description: `Based on your design history`,
-          impact: s.confidence > 0.8 ? "high" : "medium",
-          category: s.type
-        })));
+        suggestions.suggestions.push(
+          ...context.contextualSuggestions.map((s) => ({
+            title: s.suggestion,
+            description: `Based on your design history`,
+            impact: s.confidence > 0.8 ? "high" : "medium",
+            category: s.type,
+          }))
+        );
       }
 
       return suggestions;
@@ -448,9 +497,9 @@ class AIEnhancedWireframeGenerator {
             title: "Enhance User Experience",
             description: "Focus on improving usability and accessibility",
             impact: "high",
-            category: "ux"
-          }
-        ]
+            category: "ux",
+          },
+        ],
       };
     }
   }
@@ -458,19 +507,23 @@ class AIEnhancedWireframeGenerator {
   /**
    * Analyze and improve existing wireframe
    */
-  async analyzeAndImprove(wireframeHTML, originalDescription, sessionId = null) {
+  async analyzeAndImprove(
+    wireframeHTML,
+    originalDescription,
+    sessionId = null
+  ) {
     try {
       console.log("🔍 Analyzing wireframe for improvements...");
-      
+
       const analysisPrompt = this.promptEngine.generateImprovementPrompt(
-        wireframeHTML, 
-        originalDescription, 
+        wireframeHTML,
+        originalDescription,
         { issues: [], scores: {} }
       );
 
       // This would use the AI engine to analyze and suggest improvements
       // Implementation would depend on your specific needs
-      
+
       return {
         improvements: [
           {
@@ -478,9 +531,9 @@ class AIEnhancedWireframeGenerator {
             issue: "Missing ARIA labels for interactive elements",
             solution: "Add proper ARIA labels and roles",
             impact: "High",
-            priority: "1"
-          }
-        ]
+            priority: "1",
+          },
+        ],
       };
     } catch (error) {
       console.error("❌ Wireframe analysis failed:", error);
@@ -493,8 +546,9 @@ class AIEnhancedWireframeGenerator {
    */
   updateQualityStats(qualityScore) {
     const totalGenerated = this.stats.aiGeneratedCount;
-    this.stats.averageQuality = 
-      ((this.stats.averageQuality * (totalGenerated - 1)) + qualityScore) / totalGenerated;
+    this.stats.averageQuality =
+      (this.stats.averageQuality * (totalGenerated - 1) + qualityScore) /
+      totalGenerated;
   }
 
   /**
@@ -503,10 +557,12 @@ class AIEnhancedWireframeGenerator {
   getEnhancedStats() {
     return {
       ...this.stats,
-      aiSuccessRate: this.stats.totalRequests > 0 ? 
-        (this.stats.aiGeneratedCount / this.stats.totalRequests) * 100 : 0,
+      aiSuccessRate:
+        this.stats.totalRequests > 0
+          ? (this.stats.aiGeneratedCount / this.stats.totalRequests) * 100
+          : 0,
       contextManagerStats: this.contextManager.getAnalytics(),
-      aiEngineMetrics: this.aiEngine.getPerformanceMetrics()
+      aiEngineMetrics: this.aiEngine.getPerformanceMetrics(),
     };
   }
 

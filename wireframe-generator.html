@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wireframe Generator - Visual Components</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .main-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .input-section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .preview-section {
+            border: 2px dashed #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            min-height: 400px;
+            background: #ffffff;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .mode-btn {
+            background: #f1f5f9;
+            color: #475569;
+            border: 2px solid #e2e8f0;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .mode-btn.active {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border-color: #6366f1;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, .3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .preview-container {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            background: white;
+            min-height: 300px;
+            margin-bottom: 20px;
+        }
+
+        .code-section {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 16px;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+
+        .error-message {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        .success-message {
+            background: #f0fdf4;
+            color: #16a34a;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="main-card">
+            <div class="header">
+                <h1 style="margin: 0; font-size: 2.5rem; font-weight: 700;">🎨 Lovable-Style Wireframe Generator</h1>
+                <p style="margin: 10px 0 0 0; font-size: 1.1rem; opacity: 0.9;">Generate beautiful visual wireframes
+                    with React components</p>
+            </div>
+            <div class="content">
+                <div id="app"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/babel">
+        const { useState, useRef, useEffect } = React;
+
+        // Component Preview Component
+        function ComponentPreview({ componentCode, componentName = 'GeneratedComponent' }) {
+            const [previewContent, setPreviewContent] = useState(null);
+            const [error, setError] = useState(null);
+            const containerRef = useRef(null);
+
+            useEffect(() => {
+                if (!componentCode) {
+                    setPreviewContent(null);
+                    setError(null);
+                    return;
+                }
+
+                try {
+                    // Clean up the component code
+                    let cleanCode = componentCode.trim();
+
+                    // Remove markdown code blocks if present
+                    cleanCode = cleanCode.replace(/^```[a-zA-Z]*\n/, '').replace(/\n```$/, '');
+
+                    // Ensure we have a proper React component
+                    if (!cleanCode.includes('function') && !cleanCode.includes('const')) {
+                        // If it's just JSX, wrap it in a component
+                        cleanCode = `function ${componentName}() {
+                            return (
+                                <div className="generated-component">
+                                    ${cleanCode}
+                                </div>
+                            );
+                        }`;
+                    }
+
+                    // Add React import if not present
+                    if (!cleanCode.includes('import React')) {
+                        cleanCode = `const React = window.React;\n${cleanCode}`;
+                    }
+
+                    // Transform the code using Babel
+                    const transformedCode = Babel.transform(cleanCode, {
+                        presets: ['react'],
+                        filename: 'component.jsx'
+                    }).code;
+
+                    // Create a function that returns the component
+                    const componentFunction = new Function('React', 'ReactDOM', `
+                        ${transformedCode}
+                        return ${componentName};
+                    `);
+
+                    const Component = componentFunction(React, ReactDOM);
+                    setPreviewContent(React.createElement(Component));
+                    setError(null);
+                } catch (err) {
+                    console.error('Component preview error:', err);
+                    setError(`Failed to render component: ${err.message}`);
+                    setPreviewContent(null);
+                }
+            }, [componentCode, componentName]);
+
+            if (error) {
+                return (
+                    <div className="preview-container">
+                        <div className="error-message">
+                            <strong>Preview Error:</strong> {error}
+                        </div>
+                        <details style={{ marginTop: '10px' }}>
+                            <summary style={{ cursor: 'pointer' }}>View Component Code</summary>
+                            <div className="code-section" style={{ marginTop: '10px' }}>
+                                {componentCode}
+                            </div>
+                        </details>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="preview-container">
+                    <div ref={containerRef}>
+                        {previewContent || (
+                            <div style={{
+                                textAlign: 'center',
+                                color: '#64748b',
+                                fontStyle: 'italic',
+                                padding: '40px 20px'
+                            }}>
+                                Your visual wireframe will appear here...
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        // Main Wireframe Generator App
+        function WireframeGeneratorApp() {
+            const [description, setDescription] = useState('');
+            const [loading, setLoading] = useState(false);
+            const [generatedComponent, setGeneratedComponent] = useState(null);
+            const [error, setError] = useState(null);
+            const [mode, setMode] = useState('wireframe');
+            const [showCode, setShowCode] = useState(false);
+
+            const generateWireframe = async () => {
+                if (!description.trim()) {
+                    alert('Please enter a description');
+                    return;
+                }
+
+                setLoading(true);
+                setError(null);
+                setGeneratedComponent(null);
+
+                try {
+                    const endpoint = mode === 'wireframe'
+                        ? '/api/generate-react-wireframe'
+                        : '/api/generate-react-component';
+
+                    const response = await fetch(`http://localhost:5001${endpoint}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            description,
+                            componentType: mode === 'wireframe' ? 'wireframe' : 'page',
+                            designTheme: mode === 'wireframe' ? 'wireframe' : 'modern'
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.component) {
+                        setGeneratedComponent(data.component);
+                        setError(null);
+                    } else {
+                        setError(data.error || 'Failed to generate component');
+                    }
+                } catch (err) {
+                    setError(err.message || 'Network error occurred');
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            return (
+                <div>
+                    {/* Input Section */}
+                    <div className="input-section">
+                        <div style={{ marginBottom: '20px' }}>
+                            <label style={{ display: 'block', fontWeight: '600', marginBottom: '10px', color: '#374151' }}>
+                                Generation Mode
+                            </label>
+                            <div>
+                                <button
+                                    onClick={() => setMode('wireframe')}
+                                    className={`mode-btn ${mode === 'wireframe' ? 'active' : ''}`}
+                                >
+                                    🖼️ Wireframe
+                                </button>
+                                <button
+                                    onClick={() => setMode('component')}
+                                    className={`mode-btn ${mode === 'component' ? 'active' : ''}`}
+                                >
+                                    ⚛️ Component
+                                </button>
+                            </div>
+                        </div>
+
+                        <div style={{ marginBottom: '20px' }}>
+                            <label style={{ display: 'block', fontWeight: '600', marginBottom: '10px', color: '#374151' }}>
+                                Describe your {mode}
+                            </label>
+                            <textarea
+                                rows={4}
+                                placeholder={mode === 'wireframe'
+                                    ? 'Example: Create a dashboard wireframe with sidebar navigation, main content area, and header'
+                                    : 'Example: Create a modern user profile card with avatar, name, email, and action buttons'
+                                }
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                            />
+                        </div>
+
+                        <button
+                            onClick={generateWireframe}
+                            disabled={loading || !description.trim()}
+                            className="btn"
+                            style={{ width: '100%' }}
+                        >
+                            {loading ? (
+                                <>
+                                    <span className="loading-spinner" style={{ marginRight: '10px' }}></span>
+                                    Generating...
+                                </>
+                            ) : (
+                                `🚀 Generate ${mode === 'wireframe' ? 'Wireframe' : 'Component'}`
+                            )}
+                        </button>
+
+                        {error && (
+                            <div className="error-message">
+                                <strong>Error:</strong> {error}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Preview Section */}
+                    <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                            <h2 style={{ margin: 0, color: '#374151' }}>
+                                {mode === 'wireframe' ? '🎨 Wireframe Preview' : '⚛️ Component Preview'}
+                            </h2>
+                            {generatedComponent && (
+                                <button
+                                    onClick={() => setShowCode(!showCode)}
+                                    className="mode-btn"
+                                >
+                                    {showCode ? '👁️ Show Preview' : '📝 Show Code'}
+                                </button>
+                            )}
+                        </div>
+
+                        {loading && (
+                            <div className="preview-container" style={{ textAlign: 'center', padding: '60px 20px' }}>
+                                <div className="loading-spinner" style={{ width: '40px', height: '40px', marginBottom: '20px' }}></div>
+                                <p style={{ color: '#64748b' }}>Generating your {mode}...</p>
+                            </div>
+                        )}
+
+                        {generatedComponent && !showCode && (
+                            <ComponentPreview
+                                componentCode={generatedComponent}
+                                componentName={mode === 'wireframe' ? 'GeneratedWireframe' : 'GeneratedComponent'}
+                            />
+                        )}
+
+                        {generatedComponent && showCode && (
+                            <div className="code-section">
+                                {generatedComponent}
+                            </div>
+                        )}
+
+                        {!loading && !generatedComponent && !error && (
+                            <div className="preview-container" style={{ textAlign: 'center', padding: '60px 20px' }}>
+                                <div style={{ fontSize: '3rem', marginBottom: '20px' }}>🎨</div>
+                                <p style={{ color: '#64748b', fontSize: '1.1rem' }}>
+                                    Your generated {mode} will appear here
+                                </p>
+                                <p style={{ color: '#9ca3af', fontSize: '0.9rem' }}>
+                                    Enter a description above and click generate to see visual results!
+                                </p>
+                            </div>
+                        )}
+                    </div>
+
+                    {generatedComponent && (
+                        <div className="success-message">
+                            ✅ {mode === 'wireframe' ? 'Wireframe' : 'Component'} generated successfully!
+                            This is a visual preview like Lovable.dev - you can see the actual rendered components above.
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // Render the app
+        ReactDOM.render(<WireframeGeneratorApp />, document.getElementById('app'));
+    </script>
+</body>
+
+</html>

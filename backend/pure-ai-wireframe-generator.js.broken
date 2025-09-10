@@ -1,0 +1,272 @@
+/**
+ * Pure AI Wireframe Generator - 100% AI-driven React component generation
+ * Handles ANY user input without templates or pattern matching
+ */
+
+const { OpenAI } = require("openai");
+
+class PureAIWireframeGenerator {
+  constructor() {
+    // Load environment variables if not already loaded
+    require("dotenv").config();
+
+    const endpoint = process.env.AZURE_OPENAI_ENDPOINT.replace(/\/$/, "");
+    const deployment = process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o";
+    const apiVersion =
+      process.env.AZURE_OPENAI_API_VERSION || "2024-08-01-preview";
+
+    this.openai = new OpenAI({
+      apiKey: process.env.AZURE_OPENAI_KEY,
+      baseURL: `${endpoint}/openai/deployments/${deployment}`,
+      defaultQuery: { "api-version": apiVersion },
+      defaultHeaders: {
+        "api-key": process.env.AZURE_OPENAI_KEY,
+      },
+    });
+  }
+
+  /**
+   * Generate ANY wireframe from user description using pure AI
+   * Examples it can handle:
+   * - "left navigation with dashboard"
+   * - "data table with sorting and filters"
+   * - "e-commerce product grid"
+   * - "user profile settings page"
+   * - "chat interface with message bubbles"
+   * - "kanban board with drag and drop"
+   * - "calendar view with events"
+   * - "analytics dashboard with charts"
+   * - "login form with social buttons"
+   * - "video player with controls"
+   * - "file upload interface"
+   * - "notification center"
+   * - "pricing comparison table"
+   * - "image gallery with lightbox"
+   * - "search results with facets"
+   * - "admin panel with sidebar"
+   * - "blog layout with comments"
+   * - "invoice template"
+   * - "landing page with hero section"
+   * - "shopping cart checkout flow"
+   * - "user onboarding wizard"
+   * - LITERALLY ANYTHING!
+   */
+  async generateReactWireframe(description, options = {}) {
+    const {
+      colorScheme = "primary",
+      framework = "react",
+      styling = "tailwind",
+      includeInteractivity = true,
+      accessibility = true,
+      responsive = true,
+    } = options;
+
+    const prompt = this.buildAdvancedPrompt(description, {
+      colorScheme,
+      framework,
+      styling,
+      includeInteractivity,
+      accessibility,
+      responsive,
+    });
+
+    try {
+      const response = await this.openai.chat.completions.create({
+        model: process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o",
+        messages: [
+          {
+            role: "system",
+            content: this.getSystemPrompt(),
+          },
+          {
+            role: "user",
+            content: prompt,
+          },
+        ],
+        max_tokens: 4000,
+        temperature: 0.9, // Higher temperature for more creativity and variation
+        top_p: 0.95, // Add nucleus sampling for more diverse outputs
+      });
+
+      const reactCode = this.cleanAIResponse(
+        response.choices[0].message.content
+      );
+
+      return {
+        code: reactCode,
+        framework: "react",
+        styling: "tailwind",
+        generatedAt: new Date().toISOString(),
+        description,
+        aiGenerated: true,
+        source: "pure-ai",
+      };
+    } catch (error) {
+      console.error("AI wireframe generation failed:", error);
+      throw new Error(`Failed to generate wireframe: ${error.message}`);
+    }
+  }
+
+  getSystemPrompt() {
+    return `You are an expert React developer. Generate ONLY JavaScript React components. NO TYPESCRIPT EVER.
+
+JAVASCRIPT ONLY - NEVER USE:
+- interface declarations
+- type annotations like ": string" or ": number"
+- React.FC<Props>
+- TypeScript syntax
+
+ALWAYS USE:
+- Plain JavaScript function components
+- Tailwind CSS classes
+- Regular JavaScript props (no typing)
+
+Example of what to generate:
+javascript
+const Dashboard = ({ title = "Dashboard" }) => {
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold">{title}</h1>
+      <div className="grid grid-cols-3 gap-4 mt-4">
+        <div className="bg-blue-500 text-white p-4 rounded">Card 1</div>
+        <div className="bg-green-500 text-white p-4 rounded">Card 2</div>
+        <div className="bg-red-500 text-white p-4 rounded">Card 3</div>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;
+
+
+RULES:
+1. JAVASCRIPT ONLY - no TypeScript syntax
+2. Use Tailwind CSS for styling
+  }
+
+  buildAdvancedPrompt(description, options) {
+    const uniqueId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `Create a React component wireframe that EXACTLY matches this specification: "${description}"
+
+🎯 CRITICAL: Follow the description EXACTLY. If it mentions specific numbers (like "two buttons"), create exactly that number - no more, no less.
+
+🆔 UNIQUE REQUEST ID: ${uniqueId} (Generate completely fresh code - no caching)
+
+SPECIFICATIONS:
+- Framework: ${options.framework}
+- Styling: ${options.styling} CSS
+- Color Scheme: ${options.colorScheme}
+- Responsive: ${options.responsive ? "Yes" : "No"}
+- Accessibility: ${options.accessibility ? "WCAG 2.1 AA compliant" : "Basic"}
+- Interactivity: ${
+      options.includeInteractivity
+        ? "Include interactive features"
+        : "Static only"
+    }
+
+REQUIREMENTS:
+1. Create EXACTLY what is described - no additional elements
+2. Use TypeScript with proper interfaces
+3. Keep content minimal and focused
+4. Make it responsive for mobile, tablet, desktop
+5. Add proper ARIA labels and semantic HTML
+6. Include hover states and focus management
+7. Use modern React patterns (useState, useEffect only if needed)
+8. Include proper TypeScript types for all props
+9. Make it visually appealing with good spacing and typography
+10. DON'T ADD: Extra navigation, sidebars, headers, or footers unless specifically requested
+
+EXAMPLE STRUCTURE:
+\`\`\`tsx
+interface ComponentProps {
+  // Define props here
+}
+
+const ComponentName: React.FC<ComponentProps> = ({ prop1, prop2 }) => {
+  // Component logic here
+  
+  return (
+    <div className="tailwind-classes-here">
+      {/* Component JSX here */}
+    </div>
+  );
+};
+
+export default ComponentName;
+\`\`\`
+
+Generate the complete React component now:`;
+  }
+
+  cleanAIResponse(response) {
+    // Remove markdown code blocks
+    let cleaned = response.trim();
+
+    if (cleaned.startsWith("```tsx") || cleaned.startsWith("```typescript")) {
+      cleaned = cleaned.replace(/^```tsx?\n?/, "").replace(/\n?```$/, "");
+    } else if (cleaned.startsWith("```")) {
+      cleaned = cleaned.replace(/^```[a-zA-Z]*\n?/, "").replace(/\n?```$/, "");
+    }
+
+    return cleaned;
+  }
+
+  /**
+   * Generate multiple variations of the same wireframe
+   */
+  async generateVariations(description, count = 3) {
+    const variations = [];
+
+    for (let i = 0; i < count; i++) {
+      const variation = await this.generateReactWireframe(description, {
+        colorScheme: ["primary", "secondary", "accent"][i % 3],
+      });
+      variations.push({
+        ...variation,
+        variationId: i + 1,
+      });
+    }
+
+    return variations;
+  }
+
+  /**
+   * Generate wireframe with specific component requirements
+   */
+  async generateWithComponents(description, requiredComponents = []) {
+    const componentPrompt =
+      requiredComponents.length > 0
+        ? `\n\nMUST INCLUDE THESE COMPONENTS: ${requiredComponents.join(", ")}`
+        : "";
+
+    return this.generateReactWireframe(description + componentPrompt);
+  }
+}
+
+// Example usage demonstrations
+const examples = {
+  leftNavigation: "left navigation sidebar with menu items and user profile",
+  dashboard: "analytics dashboard with charts, KPIs, and data tables",
+  dataTable:
+    "data table with sorting, filtering, pagination, and row selection",
+  ecommerce: "e-commerce product grid with filters, search, and shopping cart",
+  chatInterface: "messaging interface with chat bubbles and input field",
+  kanbanBoard: "kanban board with draggable cards and multiple columns",
+  calendarView: "calendar view with events, month/week/day views",
+  userProfile: "user profile page with avatar, settings, and activity feed",
+  adminPanel:
+    "admin control panel with sidebar navigation and dashboard widgets",
+  blogLayout: "blog layout with article cards, sidebar, and pagination",
+  loginForm: "modern login form with social authentication options",
+  fileUpload: "file upload interface with drag and drop support",
+  searchResults: "search results page with faceted navigation and filters",
+  videoPlayer: "video player with controls, playlist, and subtitles",
+  pricingTable: "pricing comparison table with feature highlights",
+  notificationCenter: "notification center with different notification types",
+  imageGallery: "image gallery with lightbox and thumbnail grid",
+  checkoutFlow: "shopping cart checkout with payment forms",
+  onboardingWizard: "user onboarding wizard with progress steps",
+  invoiceTemplate: "invoice template with itemized billing",
+};
+
+module.exports = { PureAIWireframeGenerator, examples };

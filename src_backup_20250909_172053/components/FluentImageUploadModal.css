@@ -1,0 +1,353 @@
+/* Fluent UI Image Upload Modal Styles */
+/* Extends the base modal styles with upload-specific styling */
+
+.fluent-upload-dialog {
+  max-width: 520px;
+}
+
+.fluent-upload-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.fluent-dialog-description {
+  color: #605e5c;
+  font-size: 14px;
+  line-height: 1.4;
+  margin: 0;
+  text-align: center;
+}
+
+.fluent-upload-zone-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.fluent-upload-zone {
+  width: 100%;
+  max-width: 400px;
+  min-height: 200px;
+  border: 2px dashed #8a8886;
+  border-radius: 8px;
+  background: #faf9f8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.fluent-upload-zone:hover {
+  border-color: #0078d4;
+  background: #f3f9ff;
+}
+
+.fluent-upload-zone:focus-visible {
+  border-color: #0078d4;
+  box-shadow: 0 0 0 1px #0078d4;
+  outline: none;
+}
+
+.fluent-upload-zone.drag-over {
+  border-color: #0078d4;
+  background: #f3f9ff;
+  transform: scale(1.02);
+}
+
+.fluent-upload-zone.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Upload Zone Content */
+.fluent-upload-zone .upload-icon {
+  font-size: 48px;
+  color: #8a8886;
+  margin-bottom: 16px;
+  transition: color 0.2s ease;
+}
+
+.fluent-upload-zone:hover .upload-icon {
+  color: #0078d4;
+}
+
+.fluent-upload-zone .upload-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #323130;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.fluent-upload-zone .upload-subtext {
+  font-size: 14px;
+  color: #605e5c;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.fluent-upload-zone .upload-formats {
+  font-size: 12px;
+  color: #8a8886;
+  text-align: center;
+  margin-top: 12px;
+  font-style: italic;
+}
+
+/* File Input (Hidden) */
+.fluent-upload-zone input[type="file"] {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+/* Upload Progress */
+.fluent-upload-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #edebe9;
+  overflow: hidden;
+}
+
+.fluent-upload-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #0078d4, #106ebe);
+  width: 0%;
+  transition: width 0.3s ease;
+  border-radius: 0 2px 2px 0;
+}
+
+/* Analyzing Status */
+.fluent-analyzing-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px;
+  background: #f3f9ff;
+  border: 1px solid #d1e7ff;
+  border-radius: 6px;
+  color: #0078d4;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.fluent-analyzing-status .fluent-spinner {
+  border-color: #0078d4;
+  border-top-color: transparent;
+}
+
+/* Image Preview */
+.fluent-image-preview {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 12px 0;
+}
+
+.fluent-image-preview-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.fluent-image-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #605e5c;
+}
+
+.fluent-image-name {
+  font-weight: 500;
+  color: #323130;
+}
+
+.fluent-image-size {
+  color: #8a8886;
+}
+
+/* Action Buttons in Upload Zone */
+.fluent-upload-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.fluent-upload-actions .fluent-button {
+  min-width: 100px;
+}
+
+/* Error States */
+.fluent-upload-error {
+  color: #d13438;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: #fef6f6;
+  border: 1px solid #f1bbbb;
+  border-radius: 4px;
+}
+
+.fluent-upload-zone.error {
+  border-color: #d13438;
+  background: #fef6f6;
+}
+
+.fluent-upload-zone.error .upload-icon {
+  color: #d13438;
+}
+
+/* Success States */
+.fluent-upload-success {
+  color: #107c10;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: #f3fcf4;
+  border: 1px solid #bdd99b;
+  border-radius: 4px;
+}
+
+.fluent-upload-zone.success {
+  border-color: #107c10;
+  background: #f3fcf4;
+}
+
+.fluent-upload-zone.success .upload-icon {
+  color: #107c10;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .fluent-upload-dialog {
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .fluent-upload-zone {
+    min-height: 160px;
+    padding: 16px;
+  }
+
+  .fluent-upload-zone .upload-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+  }
+
+  .fluent-upload-zone .upload-text {
+    font-size: 14px;
+  }
+
+  .fluent-upload-zone .upload-subtext {
+    font-size: 13px;
+  }
+
+  .fluent-upload-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .fluent-upload-actions .fluent-button {
+    width: 100%;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .fluent-upload-zone {
+    background: #2d2d30;
+    border-color: #454545;
+  }
+
+  .fluent-upload-zone:hover {
+    background: #1e1e3f;
+    border-color: #4f94cd;
+  }
+
+  .fluent-analyzing-status {
+    background: #1e1e3f;
+    border-color: #4f94cd;
+    color: #4f94cd;
+  }
+
+  .fluent-upload-error {
+    background: #442726;
+    border-color: #8b3a3a;
+  }
+
+  .fluent-upload-success {
+    background: #2d3e2d;
+    border-color: #5a7c5a;
+  }
+}
+
+/* Accessibility */
+.fluent-upload-zone[aria-describedby] {
+  /* Properly labeled for screen readers */
+  position: relative;
+}
+
+.fluent-upload-zone:focus-visible {
+  outline: 2px solid #0078d4;
+  outline-offset: 2px;
+}
+
+/* Animation for drag and drop */
+@keyframes fluent-upload-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+.fluent-upload-zone.drag-active {
+  animation: fluent-upload-pulse 1s ease-in-out infinite;
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .fluent-upload-zone {
+    border: 3px solid;
+  }
+
+  .fluent-upload-zone:hover {
+    border: 3px solid;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .fluent-upload-zone,
+  .fluent-upload-progress-bar,
+  .fluent-analyzing-status .fluent-spinner {
+    animation: none;
+    transition: none;
+  }
+
+  .fluent-upload-zone.drag-over {
+    transform: none;
+  }
+}

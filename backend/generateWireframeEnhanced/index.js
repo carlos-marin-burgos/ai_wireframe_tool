@@ -338,7 +338,7 @@ async function generateWithAI(description, options = {}) {
   const colorScheme = options.colorScheme || "blue";
   const fastMode = options.fastMode !== false;
 
-  const prompt = `Create a complete, modern HTML wireframe for: ${description}\n\nRequirements:\n- Use modern CSS with flexbox/grid\n- Include semantic HTML structure\n- ${theme} theme with ${colorScheme} color scheme\n- Mobile-responsive design\n- Include proper meta tags and DOCTYPE\n- Use inline CSS for complete standalone file\n- Create sections for: header, main content, and footer (navigation will be provided separately)\n- DO NOT create any navigation elements (nav, header with navigation) as navigation is provided\n- IMPORTANT: Color contrast rules - ALWAYS use dark text (#333 or #000) on light backgrounds (#fff, #f8f9fa, #E8E6DF). For headers with #E8E6DF background, use black text (#333 or #000) for optimal readability.\n- Avoid opacity values below 0.9 for text to ensure readability\n${
+  const prompt = `Create a complete, modern HTML wireframe for: ${description}\n\nRequirements:\n- Use modern CSS with flexbox/grid\n- Include semantic HTML structure\n- ${theme} theme with ${colorScheme} color scheme\n- Mobile-responsive design\n- Include proper meta tags and DOCTYPE\n- Use inline CSS for complete standalone file\n- Focus ONLY on the requested component/feature\n- NO navigation bars, headers, footers, or branding unless specifically requested\n- Keep designs clean and minimal\n- IMPORTANT: Color contrast rules - ALWAYS use dark text (#333 or #000) on light backgrounds (#fff, #f8f9fa, #E8E6DF). For headers with #E8E6DF background, use black text (#333 or #000) for optimal readability.\n- Avoid opacity values below 0.9 for text to ensure readability\n${
     fastMode
       ? "- Keep it simple and fast to load"
       : "- Include rich interactions and detailed styling"
@@ -351,7 +351,7 @@ async function generateWithAI(description, options = {}) {
       {
         role: "system",
         content:
-          "You are a professional web developer who creates clean, modern HTML wireframes. Return only valid HTML code.",
+          "You are a professional web developer who creates clean, minimal wireframes focused ONLY on the requested component. DO NOT include navigation bars, headers, footers, or branding unless specifically requested. Keep it simple and focused.",
       },
       { role: "user", content: prompt },
     ],
@@ -415,7 +415,7 @@ module.exports = async function (context, req) {
       theme,
       colorScheme,
       fastMode,
-      includeAtlas = true,
+      includeAtlas = false,
     } = req.body || {};
 
     if (!description) {
@@ -449,100 +449,18 @@ module.exports = async function (context, req) {
       throw new Error("AI response insufficient or invalid");
     }
 
-    // ✨ ALWAYS inject Atlas Navigation as clean topnav
-    console.log("🧭 Injecting clean Atlas Navigation for ALL wireframes...");
-    const atlasNavigation = `
-      <!-- Atlas Navigation - Always Present at TOP -->
-      <style>
-        .atlas-navigation {
-          /* No animations - static navigation */
-        }
-        
-        .atlas-navigation nav a:hover {
-          color: #0078d4 !important;
-          border-bottom-color: #0078d4 !important;
-        }
-        
-        .atlas-navigation img:hover {
-          transform: scale(1.05);
-          transition: transform 0.2s ease;
-        }
-      </style>
-      
-      <header class="atlas-navigation" style="
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 24px;
-        background: #ffffff !important;
-        background-color: #ffffff !important;
-        border-bottom: 1px solid #e1e5e9;
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        margin: 0;
-      ">
-        <!-- Logo & Brand -->
-        <div style="display: flex; align-items: center; gap: 16px;">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <!-- Microsoft Logo -->
-            <div style="position: relative; width: 20px; height: 20px;">
-              <div style="position: absolute; top: 0; left: 0; width: 9px; height: 9px; background: #F26522;"></div>
-              <div style="position: absolute; top: 0; right: 0; width: 9px; height: 9px; background: #8DC63F;"></div>
-              <div style="position: absolute; bottom: 0; left: 0; width: 9px; height: 9px; background: #00AEEF;"></div>
-              <div style="position: absolute; bottom: 0; right: 0; width: 9px; height: 9px; background: #FFC20E;"></div>
-            </div>
-            <span style="font-size: 18px; font-weight: 600; color: #323130; margin-left: 8px;">Learn</span>
-          </div>
-          
-          <!-- Navigation Menu -->
-          <nav style="display: flex; gap: 24px; margin-left: 32px;">
-            <a href="#" style="color: #323130; text-decoration: none; font-weight: 500; padding: 8px 0; border-bottom: 2px solid transparent; transition: all 0.2s;">Browse</a>
-            <a href="#" style="color: #323130; text-decoration: none; font-weight: 500; padding: 8px 0; border-bottom: 2px solid transparent; transition: all 0.2s;">Reference</a>
-            <a href="#" style="color: #0078d4; text-decoration: none; font-weight: 500; padding: 8px 0; border-bottom: 2px solid #0078d4; transition: all 0.2s;">Learn</a>
-            <a href="#" style="color: #323130; text-decoration: none; font-weight: 500; padding: 8px 0; border-bottom: 2px solid transparent; transition: all 0.2s;">Q&A</a>
-          </nav>
-        </div>
-        
-        <!-- User Section -->
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <!-- User Avatar with Mina image -->
-          <img src="mina.png" alt="Mina" style="
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #e1e1e1;
-          " />
-        </div>
-      </header>`;
+    // No automatic injections - clean wireframe generation
+    console.log("✅ Clean wireframe generation without automatic injections");
 
-    // Inject navigation right after <body> tag
-    if (html.includes("<body>")) {
-      html = html.replace("<body>", `<body>\n${atlasNavigation}`);
-      console.log("✅ Atlas Navigation injected after <body> tag");
-    } else if (html.includes("<body ")) {
-      const bodyTagMatch = html.match(/<body[^>]*>/);
-      if (bodyTagMatch) {
-        html = html.replace(
-          bodyTagMatch[0],
-          `${bodyTagMatch[0]}\n${atlasNavigation}`
-        );
-        console.log("✅ Atlas Navigation injected after <body ...> tag");
-      }
-    } else {
-      console.log("⚠️ No <body> tag found, appending navigation to content");
-      html = atlasNavigation + html;
-    }
-
-    // Optionally apply Atlas components
+    // Only apply Atlas components if explicitly requested
     if (includeAtlas) {
       html = addAtlasComponents(html, description);
     }
 
-    // Apply Fluent Playbook components (always enabled for Microsoft consistency)
-    html = addFluentPlaybookComponents(html);
+    // Only apply Fluent components if explicitly requested
+    if (req.body?.includeFluent) {
+      html = addFluentPlaybookComponents(html);
+    }
 
     const processingTime = Date.now() - startTime;
 
@@ -562,7 +480,7 @@ module.exports = async function (context, req) {
         theme: theme || "professional",
         colorScheme: colorScheme || "blue",
         fastMode: fastMode !== false,
-        includeAtlas: includeAtlas !== false,
+        includeAtlas: includeAtlas === true,
         atlasComponents: atlasStats,
         generatedAt: new Date().toISOString(),
         processingTimeMs: processingTime,

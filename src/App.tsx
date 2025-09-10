@@ -1,29 +1,23 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
-import "./wireframe-styles.css";
-import "./styles/microsoftlearn-card.css";
-import "./styles/suggestion-indicator.css";
-import "./styles/suggestion-performance.css";
-import "./styles/atlas-design-system.css";
 import LandingPage from "./components/LandingPage";
-import SplitLayout from "./components/SplitLayout";
-import TopNavbarApp from "./components/TopNavbarApp";
+import SplitLayout from "./components/SplitLayoutSimple";
+import { API_CONFIG, getApiUrl } from "./config/api";
+import { PerformanceTracker } from "./utils/performance";
+import { processWireframeForProduction } from './utils/wireframeProcessor';
+import { getInstantSuggestions, shouldUseAI } from "./utils/fastSuggestions";
+import { getCachedSuggestions, cacheSuggestions } from "./utils/suggestionCache";
+import { PerformanceMonitor, usePerformanceMonitor } from "./components/PerformanceMonitor";
+import { useWireframeGeneration } from "./hooks/useWireframeGeneration";
+import { generateHeroHTML } from "./components/HeroGenerator";
 import TopNavbarLanding from "./components/TopNavbarLanding";
+import TopNavbarApp from "./components/TopNavbarApp";
 import SaveDialog from "./components/SaveDialog";
 import LoadDialog from "./components/LoadDialog";
 import Toast from "./components/Toast";
-import AzureAuth from "./components/AzureAuth";
 import FigmaIntegration from "./components/FigmaIntegration";
 import FigmaIntegrationModal from "./components/FigmaIntegrationModal";
-import { API_CONFIG, getApiUrl } from "./config/api";
-// All API calls are now handled by the wireframe generation hook
-import { useWireframeGeneration } from './hooks/useWireframeGeneration';
-import { PerformanceTracker } from "./utils/performance";
-import { generateHeroHTML } from "./components/HeroGenerator";
-import { processWireframeForProduction } from './utils/wireframeProcessor';
-import { PerformanceMonitor, usePerformanceMonitor } from "./components/PerformanceMonitor";
-import { getInstantSuggestions, shouldUseAI } from "./utils/fastSuggestions";
-import { getCachedSuggestions, cacheSuggestions } from "./utils/suggestionCache";
+import AzureAuth from "./components/AzureAuth";
 
 interface SavedWireframe {
   id: string;
@@ -51,7 +45,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   const [suggestionLoading, setSuggestionLoading] = useState(false);
   const [isAiSourcedSuggestions] = useState(false);
   // Microsoft Learn is the only theme available now
-  const designTheme = "microsoftlearn";
+  const designTheme = "microsoft";
   const [colorScheme, setColorScheme] = useState("primary");
   const [forceUpdateKey, setForceUpdateKey] = useState<number>(Date.now());
   const [showLandingPage, setShowLandingPage] = useState(true);
@@ -150,6 +144,11 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     processingTime,
     cancelGeneration
   } = useWireframeGeneration();
+
+  // React component generation state
+  const [reactComponent, setReactComponent] = useState("");
+  const [isGeneratingComponent, setIsGeneratingComponent] = useState(false);
+  const [componentGenerationError, setComponentGenerationError] = useState("");
 
   useEffect(() => {
     localStorage.removeItem("snapframe_current");
@@ -303,62 +302,63 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
   const handleSubmit = async (e: React.FormEvent, overrideDescription?: string) => {
     const actualDescription = overrideDescription || description;
-    console.log("🔍 handleSubmit called with description:", actualDescription, "override:", overrideDescription);
+    console.log("� handleSubmit called with description (React Component Generation):", actualDescription);
     e.preventDefault();
 
+    if (!actualDescription || actualDescription.trim().length === 0) {
+      showToast('Please enter a description for the React component', 'warning');
+      return;
+    }
+
+    setIsGeneratingComponent(true);
+    setComponentGenerationError("");
+    setReactComponent("");
+
     // Create a new performance tracker
-    const perfTracker = new PerformanceTracker('wireframe-generation');
+    const perfTracker = new PerformanceTracker('react-component-generation');
 
     try {
-      console.log('🚀 Form submitted with description:', actualDescription);
-      // Use our enhanced wireframe generation hook with theme and color scheme
-      const result = await generateWireframe(
-        actualDescription,
-        designTheme,
-        colorScheme,
-        true,  // skipCache: true to force fresh generation for debugging
-        fastMode  // Pass fast mode preference
-      );
+      console.log('🚀 Generating wireframe with description:', actualDescription);
 
-      console.log('✅ Wireframe generation result:', {
-        hasResult: !!result,
-        hasHtml: !!(result && result.html),
-        htmlLength: result?.html?.length || 0,
-        htmlPreview: result?.html?.substring(0, 200) || 'No HTML',
-        fallback: result?.fallback,
-        fromCache: result?.fromCache
+      const response = await fetch(getApiUrl(API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          description: actualDescription,
+          designTheme: designTheme,
+          colorScheme: colorScheme
+        })
       });
 
-      if (result && result.html) {
-        if (typeof result.html === 'string' && result.html.length > 0) {
-          handleWireframeGenerated(result.html); // Use the proper handler function
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-          // Close AI suggestions panel after successful generation
-          setShowAiSuggestions(false);
+      const data = await response.json();
 
-          // Show success notification
-          // Success notification removed
-        } else {
-          setHtmlWireframe(""); // Set empty string
-          // Error notification removed
-        }
+      if (data.html) {
+        // Use HTML wireframe generation
+        handleWireframeGenerated(data.html);
+        setReactComponent("");  // Clear React component
+        setShowLandingPage(false);
+        showToast('🚀 Wireframe generated!', 'success');
+
+        // Close AI suggestions panel after successful generation
+        setShowAiSuggestions(false);
       } else {
-        setHtmlWireframe("");
-        // Error notification removed
+        throw new Error(data.error || 'No wireframe generated');
       }
     } catch (err) {
-      console.error("🔍 Exception in handleSubmit:", err);
-      // Show error notification
-      if (err instanceof Error) {
-        // Error notification removed
-      } else {
-        // Error notification removed
-      }
+      console.error("� Exception in handleSubmit (React component):", err);
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      setComponentGenerationError(errorMessage);
+      showToast(`Failed to generate React component: ${errorMessage}`, 'error');
     } finally {
-      // Record performance metric
+      setIsGeneratingComponent(false);
       perfTracker.stop();
     }
   };
+
 
   const handleStop = () => {
     // Use the cancel function from our hook
@@ -372,34 +372,44 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     setShowAiSuggestions(false);
     setDescription(suggestion);
 
-    const perfTracker = new PerformanceTracker('ai-suggestion-wireframe');
+    const perfTracker = new PerformanceTracker('ai-suggestion-react-component');
 
     try {
-      // Use our enhanced wireframe generation hook with theme and color scheme
-      const result = await generateWireframe(
-        suggestion,
-        designTheme,
-        colorScheme
-      );
+      setIsGeneratingComponent(true);
+      setComponentGenerationError("");
+      setReactComponent("");
 
-      if (result && result.html) {
-        if (typeof result.html === 'string' && result.html.length > 0) {
-          handleWireframeGenerated(result.html);
-          // // Success notification removed
-        } else {
-          // Error notification removed
-        }
+      const response = await fetch(getApiUrl(API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          description: suggestion,
+          designTheme: designTheme,
+          colorScheme: colorScheme
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.html) {
+        handleWireframeGenerated(data.html);
+        setReactComponent("");
+        setShowLandingPage(false);
+        showToast('🚀 Wireframe generated from suggestion!', 'success');
       } else {
-        // Error notification removed
+        throw new Error(data.error || 'No component generated');
       }
     } catch (err) {
       console.error("🚀 Exception in handleAiSuggestionClick:", err);
-      if (err instanceof Error) {
-        // Error notification removed
-      } else {
-        // Error notification removed
-      }
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      setComponentGenerationError(errorMessage);
+      showToast(`Failed to generate React component: ${errorMessage}`, 'error');
     } finally {
+      setIsGeneratingComponent(false);
       perfTracker.stop();
     }
   };
@@ -1123,6 +1133,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
   const handleBackToLanding = () => {
     setHtmlWireframe("");
+    setReactComponent(""); // Clear React component when going back
     setShowLandingPage(true);
     setDescription("");
   };
@@ -1354,7 +1365,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   return (
     <div className={`app-content`}>
       {/* Conditional TopNavbar based on landing page state */}
-      {showLandingPage && !htmlWireframe ? (
+      {showLandingPage && !htmlWireframe && !reactComponent ? (
         <TopNavbarLanding
           onLogoClick={handleBackToLanding}
           onLogout={onLogout}
@@ -1370,7 +1381,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
         />
       )}
 
-      {showLandingPage && !htmlWireframe ? (
+      {showLandingPage && !htmlWireframe && !reactComponent ? (
         <LandingPage
           error={error}
           savedWireframesCount={savedWireframes.length}
@@ -1386,7 +1397,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
             }
           }}
           onSubmit={handleSubmit}
-          loading={loading}
+          loading={isGeneratingComponent}
           handleStop={handleStop}
           showAiSuggestions={showAiSuggestions}
           aiSuggestions={aiSuggestions}
@@ -1417,30 +1428,14 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           setShowAiSuggestions={setShowAiSuggestions}
           onGenerateAiSuggestions={handleGenerateAiSuggestions}
           error={error}
-          savedWireframesCount={savedWireframes.length}
-          onLoadClick={() => setShowLoadDialog(true)}
           htmlWireframe={htmlWireframe}
           setHtmlWireframe={setHtmlWireframe}
-          onSave={() => setShowSaveDialog(true)}
-          onEnhancedSave={enhancedSaveRef}
-          onMultiStep={handleMultiStep}
+          reactComponent={reactComponent}
+          setReactComponent={setReactComponent}
           designTheme={designTheme}
           colorScheme={colorScheme}
-          setColorScheme={setColorScheme}
-          onDesignChange={handleDesignChange}
           onAiSuggestionClick={handleAiSuggestionClick}
           forceUpdateKey={forceUpdateKey}
-          onBackToLanding={handleBackToLanding}
-          onAddComponent={handleAddComponent}
-          onGeneratePageContent={handleGeneratePageContent}
-          onFigmaExport={handleFigmaExport}
-          onFigmaIntegration={figmaIntegrationRef}
-          onComponentLibrary={componentLibraryRef}
-          onDevPlaybooks={devPlaybooksRef}
-          onFigmaComponents={figmaComponentsRef}
-          onViewHtmlCode={viewHtmlCodeRef}
-          onDownloadWireframe={downloadWireframeRef}
-          onPresentationMode={presentationModeRef}
         />
       )}
 

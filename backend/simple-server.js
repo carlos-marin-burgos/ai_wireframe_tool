@@ -1,17 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const { OpenAI } = require("openai");
-const {
-  generateMicrosoftNavHTML,
-  generateMicrosoftFooterHTML,
-} = require("./components/HeroGenerator");
-const AtlasComponentLibrary = require("./components/AtlasComponentLibrary");
-const { createFallbackWireframe } = require("./fallback-generator");
 
-// Import Enhanced AI System
-const {
-  AIEnhancedWireframeGenerator,
-} = require("./ai/ai-enhanced-wireframe-generator");
+// NO MORE MICROSOFT LEARN IMPORTS - CLEAN SLATE
 
 require("dotenv").config();
 
@@ -41,22 +32,35 @@ try {
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// Initialize Enhanced AI System
-const enhancedAI = new AIEnhancedWireframeGenerator();
-const atlasLibrary = new AtlasComponentLibrary();
-console.log("🚀 Enhanced AI Wireframe Generator initialized");
-console.log("🎨 Atlas Component Library initialized");
+// NO MORE MICROSOFT LEARN COMPONENTS OR LIBRARIES
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// Serve static files
-app.use(express.static("../")); // Serve files from the parent directory
-app.use("/public", express.static("../public")); // Serve public assets
+// 🛡️ Global error handling middleware to prevent crashes
+app.use((err, req, res, next) => {
+  console.error("🚨 Express error caught:", err);
 
-// Root route - serve a simple interface
-app.get("/", (req, res) => {
+  // Don't crash the server - always respond gracefully
+  if (!res.headersSent) {
+    res.status(500).json({
+      error: "Internal Server Error",
+      message:
+        "The server encountered an unexpected error but is still running.",
+      timestamp: new Date().toISOString(),
+      requestId: req.headers["x-request-id"] || "unknown",
+    });
+  }
+});
+
+// Serve static files from the parent directory (YOUR MAIN APP)
+app.use(express.static("../"));
+app.use("/public", express.static("../public"));
+
+// Simple test interface on /test route instead
+// Simple test interface for wireframe testing
+app.get("/test", (req, res) => {
   res.send(`
 <!DOCTYPE html>
 <html lang="en">
@@ -111,7 +115,7 @@ app.get("/", (req, res) => {
 <body>
     <div class="container">
         <h1>🚀 AI Wireframe Generator</h1>
-        <p>Welcome to the AI-Enhanced Wireframe Generator with Microsoft Learn integration!</p>
+        <p>Welcome to the clean, intelligent AI Wireframe Generator!</p>
         
         <div class="endpoint">
             <strong>Health Check:</strong><br>
@@ -122,7 +126,19 @@ app.get("/", (req, res) => {
         <div class="endpoint">
             <strong>Generate Wireframe:</strong><br>
             <span class="method">POST</span> <span class="url">/api/generate-html-wireframe</span><br>
-            <small>Generate an AI-powered wireframe with Microsoft Learn styling</small>
+            <small>Generate a clean, professional wireframe using natural AI intelligence</small>
+        </div>
+        
+        <div class="endpoint">
+            <strong>Generate React Component (NEW!):</strong><br>
+            <span class="method">POST</span> <span class="url">/api/generate-react-component</span><br>
+            <small>Generate production-ready React components with Tailwind CSS - Lovable.dev style!</small>
+        </div>
+        
+        <div class="endpoint">
+            <strong>Generate React Wireframe (LOVABLE-STYLE!):</strong><br>
+            <span class="method">POST</span> <span class="url">/api/generate-react-wireframe</span><br>
+            <small>Generate visual wireframes using React components - just like Lovable.dev!</small>
         </div>
         
         <div class="endpoint">
@@ -136,7 +152,9 @@ app.get("/", (req, res) => {
             <p>Enter a description for your wireframe:</p>
             <textarea id="description" placeholder="Example: Create a learning dashboard with course cards and a hero section"></textarea>
             <br>
-            <button onclick="generateWireframe()">Generate Wireframe</button>
+            <button onclick="generateWireframe()">Generate HTML Wireframe</button>
+            <button onclick="generateReactComponent()" style="background: #28a745; margin-left: 10px;">Generate React Component</button>
+            <button onclick="generateReactWireframe()" style="background: #6f42c1; margin-left: 10px; color: white;">Generate React Wireframe (LOVABLE!)</button>
             <div id="result" class="result" style="display:none;"></div>
         </div>
     </div>
@@ -183,11 +201,104 @@ app.get("/", (req, res) => {
                 resultDiv.textContent = 'Error: ' + error.message;
             }
         }
+
+        async function generateReactComponent() {
+            const description = document.getElementById('description').value;
+            const resultDiv = document.getElementById('result');
+            
+            if (!description.trim()) {
+                alert('Please enter a description');
+                return;
+            }
+            
+            resultDiv.style.display = 'block';
+            resultDiv.textContent = 'Generating React component... (This may take longer)';
+            
+            try {
+                const response = await fetch('/api/generate-react-component', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        description,
+                        componentType: 'page',
+                        designTheme: 'modern'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.component) {
+                    resultDiv.innerHTML = \`
+                        <strong>🚀 React Component Generated Successfully!</strong><br>
+                        Framework: \${data.framework}<br>
+                        UI Library: \${data.uiLibrary}<br>
+                        Dependencies: \${data.dependencies?.join(', ') || 'None'}<br>
+                        <br>
+                        <details>
+                            <summary><strong>View Generated Code</strong></summary>
+                            <pre style="background: #f8f9fa; padding: 1rem; border-radius: 4px; overflow-x: auto; white-space: pre-wrap;">\${data.component}</pre>
+                        </details>
+                    \`;
+                } else {
+                    resultDiv.textContent = 'Error: ' + (data.error || 'Unknown error occurred');
+                }
+            } catch (error) {
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function generateReactWireframe() {
+            const description = document.getElementById('description').value;
+            const resultDiv = document.getElementById('result');
+            
+            if (!description.trim()) {
+                alert('Please enter a description');
+                return;
+            }
+            
+            resultDiv.style.display = 'block';
+            resultDiv.textContent = 'Generating React wireframe... (Lovable.dev style!)';
+            
+            try {
+                const response = await fetch('/api/generate-react-wireframe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        description,
+                        componentType: 'wireframe',
+                        designTheme: 'wireframe'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.component) {
+                    resultDiv.innerHTML = \`
+                        <strong>🎨 React Wireframe Generated Successfully!</strong><br>
+                        Framework: \${data.framework}<br>
+                        Style: Wireframe (Lovable.dev style)<br>
+                        Wireframe Mode: \${data.wireframeStyle ? 'Yes' : 'No'}<br>
+                        Dependencies: \${data.dependencies?.join(', ') || 'None'}<br>
+                        <br>
+                        <details>
+                            <summary><strong>View Generated Wireframe Code</strong></summary>
+                            <pre style="background: #f8f9fa; padding: 1rem; border-radius: 4px; overflow-x: auto; white-space: pre-wrap;">\${data.component}</pre>
+                        </details>
+                    \`;
+                } else {
+                    resultDiv.textContent = 'Error: ' + (data.error || 'Unknown error occurred');
+                }
+            } catch (error) {
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
     </script>
 </body>
 </html>
   `);
 });
+
+// Remove the duplicate static file serving that I added
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {
@@ -387,14 +498,8 @@ app.post("/api/generate-html-wireframe", async (req, res) => {
     if (aiGeneratedHtml) {
       console.log("✅ AI generation successful!");
 
-      // Always prepend Atlas Top Navigation to every wireframe
-      const atlasTopNav = atlasLibrary.generateAtlasTopNavigation();
-      const fullWireframeHtml = `${atlasTopNav}\n${aiGeneratedHtml}`;
-
-      console.log("🧭 Atlas Top Navigation added to wireframe");
-
       return res.json({
-        html: fullWireframeHtml,
+        html: aiGeneratedHtml,
         fallback: false,
         cached: false,
         theme: designTheme,
@@ -402,7 +507,6 @@ app.post("/api/generate-html-wireframe", async (req, res) => {
         generatedBy: "AI",
         timestamp: new Date().toISOString(),
         aiPowered: true,
-        atlasNavigation: true,
       });
     }
 
@@ -483,127 +587,435 @@ app.post("/api/generate-html-wireframe", async (req, res) => {
   }
 });
 
-// ✨ ENHANCED AI WIREFRAME GENERATION ENDPOINT - NEXT GENERATION AI
-app.post("/api/generate-enhanced-wireframe", async (req, res) => {
+// ✨ LOVABLE-STYLE WIREFRAME COMPONENT GENERATION - VISUAL WIREFRAMES WITH REACT!
+app.post("/api/generate-react-wireframe", async (req, res) => {
   const {
     description = "",
-    sessionId = null,
-    designTheme = "microsoftlearn",
-    colorScheme = "primary",
-    enhanceQuality = true,
-    userAgent = req.get("User-Agent"),
-    userFeedback = null,
+    designTheme = "wireframe",
+    colorScheme = "grayscale",
+    componentType = "wireframe", // wireframe, mockup, prototype
   } = req.body;
 
   if (!description || description.trim().length === 0) {
     return res.status(400).json({ error: "Description is required" });
   }
 
-  console.log("✨ Enhanced AI wireframe generation request:");
+  console.log("🎨 Lovable-style React WIREFRAME generation:");
   console.log(`📝 Description: "${description}"`);
-  console.log(`🎨 Theme: ${designTheme}, Color Scheme: ${colorScheme}`);
-  console.log(`🔧 Enhancement: ${enhanceQuality ? "enabled" : "disabled"}`);
-  console.log(`👤 Session: ${sessionId || "new"}`);
+  console.log(`🎨 Theme: ${designTheme}, Type: ${componentType}`);
 
   try {
-    const result = await enhancedAI.generateEnhancedWireframe({
+    const reactWireframe = await generateReactWireframeWithAI(
       description,
-      sessionId,
-      userAgent,
       designTheme,
       colorScheme,
-      enhanceQuality,
-      userFeedback,
-    });
-
-    return res.json({
-      ...result,
-      timestamp: new Date().toISOString(),
-      version: "enhanced-v2.0",
-    });
-  } catch (error) {
-    console.error("❌ Enhanced AI generation failed:", error);
-
-    // Emergency fallback
-    const emergencyHtml = generateEmergencyFallback(
-      description,
-      designTheme,
-      colorScheme
+      componentType
     );
 
-    res.status(500).json({
-      html: emergencyHtml,
-      fallback: true,
-      enhanced: false,
-      error: error.message,
+    if (reactWireframe) {
+      console.log("✅ React wireframe generation successful!");
+
+      return res.json({
+        component: reactWireframe.code,
+        imports: reactWireframe.imports,
+        dependencies: reactWireframe.dependencies,
+        componentType: componentType,
+        framework: "react",
+        uiLibrary: "tailwind",
+        wireframeStyle: true,
+        fallback: false,
+        timestamp: new Date().toISOString(),
+        generatedBy: "AI-Wireframe-Engine",
+      });
+    }
+
+    console.log("❌ React wireframe generation failed");
+    return res.status(503).json({
+      error: "React Wireframe Service Temporarily Unavailable",
+      message: "Failed to generate React wireframe. Please try again.",
       timestamp: new Date().toISOString(),
-      generatedBy: "EmergencyFallback",
+    });
+  } catch (error) {
+    console.error("❌ Error in React wireframe generation:", error);
+    return res.status(503).json({
+      error: "React Wireframe Service Error",
+      message: error.message,
+      timestamp: new Date().toISOString(),
     });
   }
+});
+
+// ✨ LOVABLE-STYLE COMPONENT GENERATION - NEXT GENERATION AI
+app.post("/api/generate-react-component", async (req, res) => {
+  const {
+    description = "",
+    designTheme = "modern",
+    colorScheme = "primary",
+    componentType = "page", // page, component, widget
+  } = req.body;
+
+  if (!description || description.trim().length === 0) {
+    return res.status(400).json({ error: "Description is required" });
+  }
+
+  console.log("🚀 Lovable-style React component generation:");
+  console.log(`📝 Description: "${description}"`);
+  console.log(`🎨 Theme: ${designTheme}, Type: ${componentType}`);
+
+  try {
+    const reactComponent = await generateReactComponentWithAI(
+      description,
+      designTheme,
+      colorScheme,
+      componentType
+    );
+
+    if (reactComponent) {
+      console.log("✅ React component generation successful!");
+
+      return res.json({
+        component: reactComponent.code,
+        imports: reactComponent.imports,
+        dependencies: reactComponent.dependencies,
+        componentType: componentType,
+        framework: "react",
+        uiLibrary: "tailwind",
+        fallback: false,
+        timestamp: new Date().toISOString(),
+        generatedBy: "AI-Enhanced",
+      });
+    }
+
+    console.log("❌ React component generation failed");
+    return res.status(503).json({
+      error: "React Component Service Temporarily Unavailable",
+      message: "Failed to generate React component. Please try again.",
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error("❌ Error in React component generation:", error);
+    return res.status(503).json({
+      error: "React Component Service Error",
+      message: error.message,
+      timestamp: new Date().toISOString(),
+    });
+  }
+});
+
+// ✨ ENHANCED AI WIREFRAME GENERATION ENDPOINT - NEXT GENERATION AI
+app.post("/api/generate-enhanced-wireframe", async (req, res) => {
+  res.status(501).json({
+    error: "Enhanced wireframe generation is disabled",
+    message: "Use the main wireframe generation endpoint instead",
+  });
 });
 
 // 💡 ENHANCED DESIGN SUGGESTIONS ENDPOINT
 app.post("/api/generate-design-suggestions", async (req, res) => {
-  const {
-    description = "",
-    sessionId = null,
-    currentWireframe = null,
-  } = req.body;
-
-  if (!description || description.trim().length === 0) {
-    return res.status(400).json({ error: "Description is required" });
-  }
-
-  try {
-    console.log("💡 Generating enhanced design suggestions...");
-
-    const suggestions = await enhancedAI.generateDesignSuggestions(
-      description,
-      sessionId,
-      currentWireframe
-    );
-
-    return res.json({
-      ...suggestions,
-      timestamp: new Date().toISOString(),
-      sessionId,
-    });
-  } catch (error) {
-    console.error("❌ Enhanced suggestion generation failed:", error);
-
-    res.status(500).json({
-      suggestions: [
-        {
-          title: "Enhance User Experience",
-          description: "Focus on improving usability and accessibility",
-          impact: "high",
-          category: "ux",
-        },
-      ],
-      error: error.message,
-      timestamp: new Date().toISOString(),
-    });
-  }
+  res.status(501).json({
+    error: "Design suggestions are disabled",
+    message: "Focus on direct wireframe generation",
+  });
 });
 
 // 📊 ENHANCED AI ANALYTICS ENDPOINT
 app.get("/api/ai-analytics", (req, res) => {
-  try {
-    const stats = enhancedAI.getEnhancedStats();
-
-    return res.json({
-      ...stats,
-      timestamp: new Date().toISOString(),
-      version: "enhanced-v2.0",
-    });
-  } catch (error) {
-    console.error("❌ Analytics retrieval failed:", error);
-    res.status(500).json({
-      error: error.message,
-      timestamp: new Date().toISOString(),
-    });
-  }
+  res.json({
+    message: "Analytics disabled in clean mode",
+    timestamp: new Date().toISOString(),
+  });
 });
+
+// LOVABLE-STYLE REACT WIREFRAME GENERATION FUNCTION - VISUAL WIREFRAMES!
+async function generateReactWireframeWithAI(
+  description,
+  designTheme = "wireframe",
+  colorScheme = "grayscale",
+  componentType = "wireframe"
+) {
+  if (!openai) {
+    console.log("⚠️ OpenAI client not available for wireframe generation");
+    return null;
+  }
+
+  try {
+    console.log(
+      "🎨 Generating Lovable-style React WIREFRAME for:",
+      description
+    );
+    console.log(`🎨 Theme: ${designTheme}, Type: ${componentType}`);
+
+    // WIREFRAME-SPECIFIC React Component Generation
+    const prompt = `Create a React wireframe component for: "${description}"
+
+WIREFRAME REQUIREMENTS:
+1. Generate a VISUAL WIREFRAME using React + Tailwind CSS
+2. Use wireframe styling: gray borders, placeholder content, box layouts
+3. Show structure and layout, not final design
+4. Use placeholder text like "Header", "Navigation", "Content Area", "Sidebar"
+5. Use gray/black wireframe colors: bg-gray-100, border-gray-300, text-gray-600
+6. Include TypeScript interfaces
+7. Make it look like a traditional wireframe but built with React
+
+WIREFRAME STYLE:
+- Gray backgrounds (bg-gray-50, bg-gray-100)
+- Dashed or solid gray borders (border-gray-300, border-dashed)
+- Placeholder content in boxes
+- Simple typography (text-gray-600, text-gray-800)
+- Clear layout structure
+- Responsive wireframe design
+
+COMPONENT TYPE: ${componentType}
+DESIGN THEME: ${designTheme}
+
+FORMAT:
+\`\`\`tsx
+import React from 'react';
+
+interface WireframeProps {
+  // Props interface here
+}
+
+const WireframeName: React.FC<WireframeProps> = () => {
+  return (
+    <div className="bg-gray-50 border-2 border-dashed border-gray-300 p-4">
+      {/* Wireframe structure here */}
+      <div className="bg-gray-100 border border-gray-300 p-4 mb-4">
+        <span className="text-gray-600">Header Area</span>
+      </div>
+      {/* More wireframe elements */}
+    </div>
+  );
+};
+
+export default WireframeName;
+\`\`\`
+
+CRITICAL: Create a VISUAL WIREFRAME that shows layout structure using React components and Tailwind CSS wireframe styling.`;
+
+    const response = await Promise.race([
+      openai.chat.completions.create({
+        model: process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4",
+        messages: [
+          {
+            role: "system",
+            content: `You are an expert wireframe designer who creates visual wireframes using React and Tailwind CSS. Focus on:
+- Creating wireframe-style visual layouts
+- Using gray color scheme for wireframe appearance (bg-gray-50, bg-gray-100, border-gray-300)
+- Showing layout structure with boxes and placeholders
+- Using dashed borders and wireframe styling
+- Creating placeholder content like "Header", "Navigation", "Content Area"
+- Making wireframes that look like traditional wireframes but built with React
+- Using Tailwind CSS classes for wireframe styling
+- Including proper TypeScript interfaces
+
+IMPORTANT: Generate wireframe-styled React components that visually represent layout structure, not final designs.`,
+          },
+          {
+            role: "user",
+            content: prompt,
+          },
+        ],
+        temperature: 0.5, // Lower temperature for consistent wireframe structure
+        max_tokens: 4000,
+      }),
+      new Promise((_, reject) =>
+        setTimeout(
+          () => reject(new Error("React wireframe generation timeout")),
+          30000
+        )
+      ),
+    ]);
+
+    const componentCode = response.choices[0]?.message?.content?.trim();
+
+    if (!componentCode) {
+      console.log("❌ No React wireframe code generated by AI");
+      return null;
+    }
+
+    // Clean up markdown formatting and extract component
+    const cleanedCode = componentCode
+      .replace(/```typescript\n?/g, "")
+      .replace(/```tsx\n?/g, "")
+      .replace(/```javascript\n?/g, "")
+      .replace(/```jsx\n?/g, "")
+      .replace(/```\n?/g, "")
+      .trim();
+
+    // Extract imports and dependencies
+    const imports = extractImports(cleanedCode);
+    const dependencies = extractDependencies(cleanedCode);
+
+    console.log("✅ Lovable-style React WIREFRAME generated successfully");
+    console.log(
+      `📊 Generated ${cleanedCode.length} characters of wireframe code`
+    );
+
+    return {
+      code: cleanedCode,
+      imports: imports,
+      dependencies: dependencies,
+    };
+  } catch (error) {
+    if (error.message === "React wireframe generation timeout") {
+      console.error("⏰ React wireframe generation timed out after 30 seconds");
+    } else {
+      console.error("❌ Error generating React wireframe:", error);
+    }
+    return null;
+  }
+}
+
+// LOVABLE-STYLE REACT COMPONENT GENERATION FUNCTION
+async function generateReactComponentWithAI(
+  description,
+  designTheme = "modern",
+  colorScheme = "primary",
+  componentType = "page"
+) {
+  if (!openai) {
+    console.log("⚠️ OpenAI client not available for component generation");
+    return null;
+  }
+
+  try {
+    console.log(
+      "🚀 Generating Lovable-style React component for:",
+      description
+    );
+    console.log(`🎨 Theme: ${designTheme}, Type: ${componentType}`);
+
+    // LOVABLE-STYLE React JSX Component Generation
+    const prompt = `Create a React TypeScript component for: "${description}"
+
+STRICT REQUIREMENTS:
+1. Output ONLY React TSX code - NO HTML pages
+2. Use React functional component with TypeScript
+3. Include all necessary React imports
+4. Use only Tailwind CSS classes for styling
+5. Make component responsive and accessible
+6. Include proper TypeScript interfaces
+
+COMPONENT TYPE: ${componentType}
+DESIGN THEME: ${designTheme}  
+COLOR SCHEME: ${colorScheme}
+
+FORMAT (start with imports):
+\`\`\`tsx
+import React, { useState } from 'react';
+
+interface ComponentProps {
+  // Props interface here
+}
+
+const ComponentName: React.FC<ComponentProps> = () => {
+  return (
+    <div className="tailwind-classes">
+      {/* Component content */}
+    </div>
+  );
+};
+
+export default ComponentName;
+\`\`\`
+
+CRITICAL: Generate ONLY the React TSX component code above. Do NOT create HTML pages, CSS files, or explanations.`;
+
+    const response = await Promise.race([
+      openai.chat.completions.create({
+        model: process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4",
+        messages: [
+          {
+            role: "system",
+            content: `You are an expert React developer and component designer. Create professional React TSX components like Lovable.dev. Focus on:
+- Complete React functional components with TypeScript
+- Modern React patterns with hooks (useState, useEffect, etc.)
+- Tailwind CSS for all styling (NO embedded CSS)
+- Responsive design with Tailwind breakpoints
+- Accessibility best practices with proper ARIA attributes
+- Clean, production-ready component architecture
+- Proper TypeScript interfaces and type safety
+- Modern design principles with Tailwind utilities
+- Interactive elements with React state management
+
+IMPORTANT: Generate ONLY React TSX/JSX code, NOT HTML. Use Tailwind classes for styling.`,
+          },
+          {
+            role: "user",
+            content: prompt,
+          },
+        ],
+        temperature: 0.7, // Increased for more creative React component generation
+        max_tokens: 4000,
+      }),
+      new Promise((_, reject) =>
+        setTimeout(
+          () => reject(new Error("React component generation timeout")),
+          30000
+        )
+      ),
+    ]);
+
+    const componentCode = response.choices[0]?.message?.content?.trim();
+
+    if (!componentCode) {
+      console.log("❌ No React component code generated by AI");
+      return null;
+    }
+
+    // Clean up markdown formatting and extract component
+    const cleanedCode = componentCode
+      .replace(/```typescript\n?/g, "")
+      .replace(/```tsx\n?/g, "")
+      .replace(/```javascript\n?/g, "")
+      .replace(/```jsx\n?/g, "")
+      .replace(/```\n?/g, "")
+      .trim();
+
+    // Extract imports and dependencies
+    const imports = extractImports(cleanedCode);
+    const dependencies = extractDependencies(cleanedCode);
+
+    console.log("✅ Lovable-style React component generated successfully");
+    console.log(
+      `📊 Generated ${cleanedCode.length} characters of component code`
+    );
+
+    return {
+      code: cleanedCode,
+      imports: imports,
+      dependencies: dependencies,
+    };
+  } catch (error) {
+    if (error.message === "React component generation timeout") {
+      console.error("⏰ React component generation timed out after 30 seconds");
+    } else {
+      console.error("❌ Error generating React component:", error);
+    }
+    return null;
+  }
+}
+
+// Helper functions for component analysis
+function extractImports(code) {
+  const importRegex = /import\s+.*?\s+from\s+['"`].*?['"`];?/g;
+  const imports = code.match(importRegex) || [];
+  return imports;
+}
+
+function extractDependencies(code) {
+  const dependencies = new Set();
+
+  // Check for common UI library usage
+  if (code.includes("lucide-react")) dependencies.add("lucide-react");
+  if (code.includes("@heroicons")) dependencies.add("@heroicons/react");
+  if (code.includes("framer-motion")) dependencies.add("framer-motion");
+  if (code.includes("recharts")) dependencies.add("recharts");
+  if (code.includes("react-hook-form")) dependencies.add("react-hook-form");
+
+  return Array.from(dependencies);
+}
 
 // PURE AI WIREFRAME GENERATION FUNCTION
 async function generateWireframeWithAI(
@@ -665,113 +1077,36 @@ async function generateWireframeWithAI(
 
     const colors =
       customColors || colorSchemes[colorScheme] || colorSchemes.primary;
-    const isMicrosoftLearn = designTheme.toLowerCase() === "microsoftlearn";
+    const isMicrosoft = designTheme.toLowerCase() === "microsoft";
 
-    // ADVANCED AI PROMPT - Let AI decide everything
-    const prompt = `You are an expert frontend developer and UX designer. Create a complete, functional HTML wireframe with inline CSS based on this description:
+    // Enhanced AI prompt with mobile-specific instructions
+    const isMobileRequest =
+      description.toLowerCase().includes("mobile") ||
+      description.toLowerCase().includes("hamburger") ||
+      description.toLowerCase().includes("responsive");
 
-USER REQUEST: "${description}"
+    const mobileInstructions = isMobileRequest
+      ? `
+- CRITICAL: Include responsive mobile navigation with hamburger menu
+- Add CSS media queries for mobile breakpoints (@media max-width: 768px)
+- Hamburger menu should toggle navigation on mobile devices
+- Include JavaScript for hamburger menu functionality
+- Navigation should be hidden on mobile and shown when hamburger is clicked
+- Use transform: translateX() for smooth slide-in navigation animations`
+      : "";
 
-DESIGN SPECIFICATIONS:
-- Theme: ${designTheme}
+    // CLEAN AI PROMPT - Let AI be naturally intelligent
+    const prompt = `Create a modern, responsive HTML wireframe for: "${description}"
+
+Requirements:
+- Complete HTML document with inline CSS and JavaScript
+- Professional, clean design
 - Color scheme: ${colorScheme}
-- Primary color: ${colors.main}
-- Secondary color: ${colors.secondary}
-- Background: ${colors.bg}
-- Text color: ${colors.text}
-- Border color: ${colors.border}
-- Banner/Hero background: ${colors.banner || "#E7E5DE"}
+- Modern web design standards
+- Fully responsive design (desktop, tablet, mobile)${mobileInstructions}
+- NO Microsoft branding or Learn content
 
-${
-  isMicrosoftLearn
-    ? `
-MICROSOFT LEARN DESIGN SYSTEM:
-- Use Segoe UI font family: 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif
-- Clean, minimal documentation-style interface
-- Subtle borders instead of heavy shadows
-- White backgrounds with excellent typography
-- Professional Microsoft aesthetic
-- Use proper semantic HTML5 structure
-`
-    : `
-MODERN WEB DESIGN:
-- Contemporary, visually appealing interface
-- Proper spacing and visual hierarchy
-- Responsive design principles
-- Accessible and user-friendly
-- Clean, professional aesthetic
-`
-}
-
-REQUIREMENTS:
-1. ANALYZE the user's request carefully and understand exactly what they want
-2. START with the official Microsoft Learn site header as the FIRST element in the body
-3. CREATE the exact interface they described (forms, textboxes, buttons, layouts, etc.)
-4. GENERATE complete HTML with inline CSS (no external dependencies)
-5. INCLUDE proper semantic structure (header, main, nav, sections, etc.)
-6. MAKE it responsive and production-ready
-7. ADD interactive elements where appropriate (hover states, focus styles)
-8. USE the specified color scheme throughout
-9. ENSURE accessibility (proper labels, contrast, semantic HTML)
-10. INCLUDE realistic placeholder content that matches the context
-11. MAKE it look polished and production-ready
-
-MICROSOFT LEARN HEADER TEMPLATE (ALWAYS INCLUDE FIRST):
-<header style="background: #ffffff; color: #000000; padding: 12px 24px; border-bottom: 1px solid #e5e5e5; font-family: 'Segoe UI', system-ui, sans-serif;">
-  <div style="display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto;">
-    <div style="display: flex; align-items: center;">
-      <svg aria-hidden="true" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; margin-right: 16px;">
-        <path d="M11.5216 0.5H0V11.9067H11.5216V0.5Z" fill="#f25022" />
-        <path d="M24.2418 0.5H12.7202V11.9067H24.2418V0.5Z" fill="#7fba00" />
-        <path d="M11.5216 13.0933H0V24.5H11.5216V13.0933Z" fill="#00a4ef" />
-        <path d="M24.2418 13.0933H12.7202V24.5H24.2418V13.0933Z" fill="#ffb900" />
-      </svg>
-      <span class="ms-learn-brand">Microsoft Learn</span>
-    </div>
-    <nav class="wireframe-nav">
-      <a href="#" class="wireframe-nav-link">Documentation</a>
-      <a href="#" class="wireframe-nav-link">Training</a>
-      <a href="#" class="wireframe-nav-link">Certifications</a>
-    </nav>
-  </div>
-</header>
-
-COLOR USAGE GUIDELINES:
-- Use PRIMARY COLOR (#0078d4) for buttons, links, and interactive elements
-- Use HEADER BACKGROUND (#ffffff) with BLACK TEXT (#000000) for all page headers and hero sections
-- Use BANNER/HERO BACKGROUND (#ffffff) for large background sections, hero areas, and banners
-- Keep button backgrounds blue (#0078d4) - do not change button colors
-- For headers and hero sections, always use background: #ffffff with color: #000000
-
-MICROSOFT LEARN HEADER REQUIREMENTS:
-- ALWAYS include the official Microsoft Learn site header as the FIRST element in the body
-- Header background MUST be #ffffff with black text (#000000)
-- Include Microsoft logo, "Microsoft Learn" branding, and navigation
-- Use the exact structure: <header style="background: #ffffff; color: #000000; padding: 12px 24px; border-bottom: 1px solid #e5e5e5;">
-- Include proper navigation items: Documentation, Training, Certifications
-
-HERO SECTION DESIGN REQUIREMENTS:
-- Use exact Microsoft Learn Accent Hero pattern with background-color-body-accent (#ffffff)
-- Header background MUST be #ffffff with black text color (#000000)
-- Implement hero-image class structure: section.hero.hero-image
-- Background images: Use CSS custom properties --hero-background-image-light and --hero-background-image-dark
-- Gradient border: Add gradient-border-right gradient-border-body-accent
-- Content structure: Use .hero-content div with proper typography classes
-- Typography: letter-spacing-wide text-transform-uppercase for eyebrow, font-size-h1 font-weight-semibold for title
-- Buttons: Use .button.border.button-clear class structure
-
-IMPORTANT INSTRUCTIONS:
-- Build EXACTLY what the user asked for
-- If they want "two textboxes", create exactly two textboxes
-- If they want a "dashboard", create a dashboard layout
-- If they want a "contact form", create a contact form
-- Be creative and comprehensive - don't just create basic elements
-- Include proper styling for a polished, professional look
-- Make it look like a real production interface
-- Add subtle animations and transitions where appropriate
-
-OUTPUT FORMAT:
-Return ONLY the HTML code with inline CSS. No markdown formatting, no explanations, just clean HTML that can be rendered directly.`;
+Generate the complete HTML now:`;
 
     const response = await Promise.race([
       openai.chat.completions.create({
@@ -780,7 +1115,7 @@ Return ONLY the HTML code with inline CSS. No markdown formatting, no explanatio
           {
             role: "system",
             content:
-              "You are an expert frontend developer and UI/UX designer who creates beautiful, production-ready HTML interfaces with inline CSS. You analyze user requirements and generate complete, functional wireframes that match exactly what users describe. You are creative, thorough, and build realistic interfaces that look professional and polished.",
+              "You are a professional web designer specializing in responsive design. Create clean, modern HTML wireframes with inline CSS styling and JavaScript functionality. When mobile navigation is requested, always include a working hamburger menu with proper CSS animations and JavaScript toggle functionality. Use semantic HTML5 elements and modern CSS Grid/Flexbox layouts.",
           },
           {
             role: "user",
@@ -821,626 +1156,21 @@ Return ONLY the HTML code with inline CSS. No markdown formatting, no explanatio
   }
 }
 
-// INTELLIGENT FALLBACK SYSTEM - Dynamic analysis without hardcoded conditions
-async function generateIntelligentFallback(
-  description,
-  designTheme = "modern",
-  colorScheme = "primary",
-  customColors = null
-) {
-  console.log("🤖 Using Smart Dynamic Fallback System");
-  console.log(`🔍 Analyzing request: "${description}"`);
-
-  const lowerDesc = description.toLowerCase();
-
-  // PRIORITY CHECK: Microsoft Learn special handling
-  if (
-    designTheme === "microsoftlearn" ||
-    lowerDesc.includes("learn") ||
-    lowerDesc.includes("microsoft")
-  ) {
-    // Always use our enhanced fallback generator for Microsoft Learn content
-    console.log(
-      "🎯 Using enhanced fallback generator for Microsoft Learn content"
-    );
-    return createFallbackWireframe(description, designTheme, colorScheme);
-  }
-
-  // Define color schemes
-  const colorSchemes = {
-    primary: {
-      main: "#0078d4",
-      secondary: "#106ebe",
-      bg: "#ffffff",
-      text: "#323130",
-      border: "#e5e5e5",
-    },
-    success: {
-      main: "#107c10",
-      secondary: "#0b6413",
-      bg: "#f1faf1",
-      text: "#000000",
-      border: "#e5e5e5",
-    },
-    info: {
-      main: "#0078d4",
-      secondary: "#106ebe",
-      bg: "#ebf3fc",
-      text: "#000000",
-      border: "#e5e5e5",
-    },
-    warning: {
-      main: "#ffb900",
-      secondary: "#d19700",
-      bg: "#fff9e6",
-      text: "#000000",
-      border: "#e5e5e5",
-    },
-    danger: {
-      main: "#d13438",
-      secondary: "#c50f1f",
-      bg: "#fdf3f4",
-      text: "#000000",
-      border: "#e5e5e5",
-    },
-  };
-
-  const colors =
-    customColors || colorSchemes[colorScheme] || colorSchemes.primary;
-  // lowerDesc already defined above
-
-  // Dynamic component detection
-  const detectedComponents = {
-    textboxes: 0,
-    buttons: 0,
-    forms: 0,
-    tables: 0,
-    cards: 0,
-    sections: 0,
-  };
-
-  // Smart number extraction
-  const words = lowerDesc.split(/\s+/);
-  const numberWords = {
-    one: 1,
-    two: 2,
-    three: 3,
-    four: 4,
-    five: 5,
-    six: 6,
-    seven: 7,
-    eight: 8,
-    nine: 9,
-    ten: 10,
-  };
-
-  words.forEach((word, index) => {
-    if (numberWords[word] || /^\d+$/.test(word)) {
-      const number = numberWords[word] || parseInt(word);
-      const nextWord = words[index + 1];
-
-      if (
-        nextWord &&
-        (nextWord.includes("textbox") ||
-          nextWord.includes("input") ||
-          nextWord.includes("field"))
-      ) {
-        detectedComponents.textboxes = number;
-      }
-      if (
-        nextWord &&
-        (nextWord.includes("button") || nextWord.includes("btn"))
-      ) {
-        detectedComponents.buttons = number;
-      }
-      if (
-        nextWord &&
-        (nextWord.includes("card") || nextWord.includes("item"))
-      ) {
-        detectedComponents.cards = number;
-      }
-    }
-  });
-
-  // Detect component types
-  if (
-    lowerDesc.includes("textbox") ||
-    lowerDesc.includes("input") ||
-    lowerDesc.includes("field")
-  ) {
-    if (detectedComponents.textboxes === 0) detectedComponents.textboxes = 1;
-  }
-  if (lowerDesc.includes("button")) {
-    if (detectedComponents.buttons === 0) detectedComponents.buttons = 1;
-  }
-  if (lowerDesc.includes("form")) {
-    detectedComponents.forms = 1;
-  }
-  if (
-    lowerDesc.includes("table") ||
-    lowerDesc.includes("list") ||
-    lowerDesc.includes("data")
-  ) {
-    detectedComponents.tables = 1;
-  }
-  if (
-    lowerDesc.includes("card") ||
-    lowerDesc.includes("product") ||
-    lowerDesc.includes("item")
-  ) {
-    if (detectedComponents.cards === 0) detectedComponents.cards = 3;
-  }
-
-  console.log("🔍 Detected components:", detectedComponents);
-
-  // Generate appropriate wireframe based on detected components
-  let wireframeHtml = "";
-
-  if (detectedComponents.textboxes > 0) {
-    wireframeHtml = generateFormWireframe(
-      detectedComponents,
-      colors,
-      description
-    );
-  } else if (detectedComponents.tables > 0) {
-    wireframeHtml = generateTableWireframe(
-      detectedComponents,
-      colors,
-      description
-    );
-  } else if (detectedComponents.cards > 0) {
-    wireframeHtml = generateCardWireframe(
-      detectedComponents,
-      colors,
-      description
-    );
-  } else {
-    wireframeHtml = generateGeneralWireframe(description, colors);
-  }
-
-  console.log(`✅ Generated intelligent fallback wireframe`);
-  return wireframeHtml;
-}
-
-// Helper function to generate form wireframes
-function generateFormWireframe(components, colors, description) {
-  const fieldNames = [
-    "Name",
-    "Email",
-    "Phone",
-    "Address",
-    "Message",
-    "Subject",
-    "Company",
-    "Title",
-  ];
-  const fieldTypes = [
-    "text",
-    "email",
-    "tel",
-    "text",
-    "textarea",
-    "text",
-    "text",
-    "text",
-  ];
-
-  let formHtml = `
-  <div style="max-width: 600px; margin: 40px auto; padding: 32px; border: 1px solid ${
-    colors.border
-  }; border-radius: 8px; background: ${
-    colors.bg
-  }; font-family: 'Segoe UI', system-ui, sans-serif;">
-    <h2 style="color: ${
-      colors.text
-    }; font-size: 24px; font-weight: 600; margin: 0 0 24px 0; text-align: center;">
-      ${components.forms > 0 ? "Form" : "Input Fields"} ${
-    components.textboxes > 1 ? `with ${components.textboxes} Fields` : ""
-  }
-    </h2>
-    <form style="display: flex; flex-direction: column; gap: 20px;">`;
-
-  for (let i = 0; i < components.textboxes; i++) {
-    const fieldName = fieldNames[i] || `Field ${i + 1}`;
-    const fieldType = fieldTypes[i] || "text";
-
-    if (fieldType === "textarea") {
-      formHtml += `
-      <div>
-        <label style="display: block; color: ${
-          colors.text
-        }; font-weight: 500; margin-bottom: 8px;">${fieldName}</label>
-        <textarea placeholder="Enter ${fieldName.toLowerCase()}" rows="4" style="width: 100%; padding: 12px 16px; border: 2px solid ${
-        colors.border
-      }; border-radius: 6px; font-size: 16px; transition: border-color 0.2s ease; resize: vertical; font-family: inherit;"></textarea>
-      </div>`;
-    } else {
-      formHtml += `
-      <div>
-        <label style="display: block; color: ${
-          colors.text
-        }; font-weight: 500; margin-bottom: 8px;">${fieldName}</label>
-        <input type="${fieldType}" placeholder="Enter ${fieldName.toLowerCase()}" style="width: 100%; padding: 12px 16px; border: 2px solid ${
-        colors.border
-      }; border-radius: 6px; font-size: 16px; transition: border-color 0.2s ease; font-family: inherit;">
-      </div>`;
-    }
-  }
-
-  // Add buttons
-  if (components.buttons > 0) {
-    formHtml += `<div style="display: flex; gap: 12px; margin-top: 12px;">`;
-    for (let i = 0; i < components.buttons; i++) {
-      const buttonText =
-        i === 0 ? "Submit" : i === 1 ? "Cancel" : `Button ${i + 1}`;
-      const buttonStyle =
-        i === 0
-          ? `background: ${colors.main}; color: white; border: none;`
-          : `background: transparent; color: ${colors.text}; border: 2px solid ${colors.border};`;
-
-      formHtml += `
-        <button type="${
-          i === 0 ? "submit" : "button"
-        }" style="${buttonStyle} padding: 14px 24px; border-radius: 6px; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; font-family: inherit;">
-          ${buttonText}
-        </button>`;
-    }
-    formHtml += `</div>`;
-  } else {
-    formHtml += `
-      <button type="submit" style="background: ${colors.main}; color: white; padding: 14px 24px; border: none; border-radius: 6px; font-size: 16px; font-weight: 500; cursor: pointer; margin-top: 12px; transition: background-color 0.2s ease; font-family: inherit;">
-        Submit
-      </button>`;
-  }
-
-  formHtml += `
-    </form>
-  </div>
-  <style>
-    input:focus, textarea:focus {
-      outline: none !important;
-      border-color: ${colors.main} !important;
-      box-shadow: 0 0 0 3px ${colors.main}20 !important;
-    }
-    button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-  </style>`;
-
-  return formHtml;
-}
-
-// Helper function to generate table wireframes
-function generateTableWireframe(components, colors, description) {
-  return `
-  <div style="max-width: 1000px; margin: 40px auto; padding: 32px; font-family: 'Segoe UI', system-ui, sans-serif;">
-    <h2 style="color: ${
-      colors.text
-    }; font-size: 24px; font-weight: 600; margin: 0 0 24px 0; text-align: center;">Data Table</h2>
-    <div style="overflow-x: auto; border: 1px solid ${
-      colors.border
-    }; border-radius: 8px; background: ${colors.bg};">
-      <table style="width: 100%; border-collapse: collapse;">
-        <thead style="background: ${colors.border};">
-          <tr>
-            <th style="padding: 16px; text-align: left; color: ${
-              colors.text
-            }; font-weight: 600; border-bottom: 2px solid ${
-    colors.border
-  };">Name</th>
-            <th style="padding: 16px; text-align: left; color: ${
-              colors.text
-            }; font-weight: 600; border-bottom: 2px solid ${
-    colors.border
-  };">Email</th>
-            <th style="padding: 16px; text-align: left; color: ${
-              colors.text
-            }; font-weight: 600; border-bottom: 2px solid ${
-    colors.border
-  };">Status</th>
-            <th style="padding: 16px; text-align: left; color: ${
-              colors.text
-            }; font-weight: 600; border-bottom: 2px solid ${
-    colors.border
-  };">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${Array.from(
-            { length: 5 },
-            (_, i) => `
-            <tr style="border-bottom: 1px solid ${colors.border};">
-              <td style="padding: 16px; color: ${colors.text};">User ${
-              i + 1
-            }</td>
-              <td style="padding: 16px; color: ${
-                colors.text
-              }; opacity: 0.8;">user${i + 1}@example.com</td>
-              <td style="padding: 16px;">
-                <span style="background: ${
-                  i % 2 === 0 ? colors.main : colors.secondary
-                }; color: white; padding: 4px 12px; border-radius: 16px; font-size: 12px;">
-                  ${i % 2 === 0 ? "Active" : "Pending"}
-                </span>
-              </td>
-              <td style="padding: 16px;">
-                <button style="background: transparent; border: 1px solid ${
-                  colors.border
-                }; color: ${
-              colors.text
-            }; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-right: 8px; font-family: inherit;">Edit</button>
-                <button style="background: transparent; border: 1px solid ${
-                  colors.border
-                }; color: ${
-              colors.text
-            }; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-family: inherit;">Delete</button>
-              </td>
-            </tr>
-          `
-          ).join("")}
-        </tbody>
-      </table>
-    </div>
-  </div>`;
-}
-
-// Helper function to generate card wireframes
-function generateCardWireframe(components, colors, description) {
-  return `
-  <div style="max-width: 1200px; margin: 40px auto; padding: 32px; font-family: 'Segoe UI', system-ui, sans-serif;">
-    <h2 style="color: ${
-      colors.text
-    }; font-size: 24px; font-weight: 600; margin: 0 0 24px 0; text-align: center;">Card Layout</h2>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
-      ${Array.from(
-        { length: components.cards },
-        (_, i) => `
-        <div style="border: 1px solid ${
-          colors.border
-        }; border-radius: 8px; padding: 24px; background: ${
-          colors.bg
-        }; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s ease, box-shadow 0.2s ease;">
-          <h3 style="color: ${
-            colors.main
-          }; font-size: 20px; font-weight: 600; margin: 0 0 12px 0;">Card ${
-          i + 1
-        }</h3>
-          <p style="color: ${
-            colors.text
-          }; line-height: 1.6; margin: 0 0 16px 0;">
-            This is a dynamically generated card component. Content is created based on your description and requirements.
-          </p>
-          <button style="background: ${
-            colors.main
-          }; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; font-family: inherit; transition: background-color 0.2s ease;">
-            Action ${i + 1}
-          </button>
-        </div>
-      `
-      ).join("")}
-    </div>
-  </div>
-  <style>
-    div[style*="grid-template-columns"] > div:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-  </style>`;
-}
-
-// Helper function to generate general wireframes
-function generateGeneralWireframe(description, colors) {
-  return `
-  <div style="max-width: 800px; margin: 40px auto; padding: 32px; font-family: 'Segoe UI', system-ui, sans-serif;">
-    <h2 style="color: ${colors.text}; font-size: 28px; font-weight: 600; margin: 0 0 16px 0;">${description}</h2>
-    <p style="color: ${colors.text}; opacity: 0.8; font-size: 16px; line-height: 1.6; margin: 0 0 32px 0;">
-      This wireframe was dynamically generated based on your description. The system analyzed your request and created the most appropriate layout.
-    </p>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px;">
-      <div style="border: 1px solid ${colors.border}; padding: 24px; border-radius: 8px; background: ${colors.bg};">
-        <h4 style="color: ${colors.main}; margin: 0 0 12px 0;">✨ Dynamic Content</h4>
-        <p style="color: ${colors.text}; margin: 0; font-size: 14px;">Content generated based on your specific requirements.</p>
-      </div>
-      <div style="border: 1px solid ${colors.border}; padding: 24px; border-radius: 8px; background: ${colors.bg};">
-        <h4 style="color: ${colors.main}; margin: 0 0 12px 0;">🎯 Smart Layout</h4>
-        <p style="color: ${colors.text}; margin: 0; font-size: 14px;">Intelligent wireframe structure tailored to your needs.</p>
-      </div>
-    </div>
-  </div>`;
-}
-
-// Emergency fallback for critical errors
-function generateEmergencyFallback(description, designTheme, colorScheme) {
-  return `
-  <div style="max-width: 600px; margin: 40px auto; padding: 32px; border: 1px solid #e5e5e5; border-radius: 8px; background: #ffffff; font-family: 'Segoe UI', system-ui, sans-serif;">
-    <h2 style="color: #323130; font-size: 24px; font-weight: 600; margin: 0 0 16px 0; text-align: center;">⚠️ Service Temporarily Unavailable</h2>
-    <p style="color: #605e5c; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0; text-align: center;">
-      We're experiencing technical difficulties with our wireframe generation service. Please try again in a few moments.
-    </p>
-    <div style="background: #f8f9fa; padding: 20px; border-radius: 6px; border-left: 4px solid #d1ccf0;">
-      <p style="color: #323130; margin: 0 0 8px 0; font-weight: 500;">Your request:</p>
-      <p style="color: #605e5c; margin: 0; font-style: italic;">"${description}"</p>
-    </div>
-    <div style="text-align: center; margin-top: 24px;">
-      <button style="background: #0078d4; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 16px; font-weight: 500; cursor: pointer; font-family: inherit;">
-        Try Again
-      </button>
-    </div>
-  </div>`;
-}
-
-// Suggestions endpoint
+// Suggestions endpoint - DISABLED
 app.post("/api/generate-suggestions", async (req, res) => {
-  const { description = "" } = req.body;
-
-  try {
-    console.log("📝 Microsoft Learn suggestions requested for:", description);
-
-    // Microsoft Learn-focused suggestions based on description
-    const suggestions = generateMicrosoftLearnSuggestions(description);
-
-    res.json({
-      suggestions: suggestions,
-      fallback: false,
-      source: "microsoft-learn-focused",
-    });
-  } catch (error) {
-    console.error("❌ Error in suggestions endpoint:", error);
-    res.status(500).json({
-      error: "Failed to generate suggestions",
-      details: error.message,
-    });
-  }
+  res.json({
+    suggestions: [
+      "Clean, minimal design with no branding",
+      "Modern responsive layout",
+      "Professional typography and spacing",
+      "User-friendly navigation structure",
+      "Accessible form design",
+      "Mobile-first responsive design",
+    ],
+    fallback: false,
+    source: "generic-clean",
+  });
 });
-
-// Microsoft Learn-focused suggestion generator
-function generateMicrosoftLearnSuggestions(description) {
-  const lowerDescription = description.toLowerCase();
-
-  // Microsoft Learn wireframe-focused suggestion categories
-  const categories = {
-    layout: [
-      "Add Microsoft Learn's signature header with Microsoft logo and Learn branding",
-      "Include Microsoft Learn's left navigation sidebar with expandable learning paths",
-      "Create Microsoft Learn's main content area with documentation-style typography",
-      "Add Microsoft Learn's right sidebar with 'In this article' table of contents",
-      "Include Microsoft Learn's footer with community links and feedback options",
-      "Design Microsoft Learn's breadcrumb trail showing learning path progression",
-    ],
-    navigation: [
-      "Add Microsoft Learn's global navigation with 'Documentation', 'Learning', 'Certifications' tabs",
-      "Include Microsoft Learn's search bar with technology and role-based filters",
-      "Create Microsoft Learn's learning path navigation with module completion indicators",
-      "Add Microsoft Learn's 'Previous' and 'Next Unit' navigation for sequential learning",
-      "Include Microsoft Learn's floating progress indicator for current learning module",
-      "Design Microsoft Learn's mobile hamburger menu with nested learning categories",
-    ],
-    content: [
-      "Create Microsoft Learn's hero banner with technology focus and learning objectives",
-      "Add Microsoft Learn's 'Learning objectives' card with checkboxes for goal tracking",
-      "Include Microsoft Learn's code block containers with 'Try it' and 'Copy' buttons",
-      "Design Microsoft Learn's unit progress bar showing completion within a module",
-      "Add Microsoft Learn's collapsible content sections for step-by-step tutorials",
-      "Create Microsoft Learn's achievement badge display for completed learning paths",
-    ],
-    forms: [
-      "Add Microsoft Learn's knowledge check quiz with multiple choice and explanations",
-      "Include Microsoft Learn's skills assessment form with role-based questions",
-      "Design Microsoft Learn's certification exam registration form with prerequisites",
-      "Create Microsoft Learn's learning preferences form with technology interests",
-      "Add Microsoft Learn's community Q&A submission form with tagging system",
-      "Include Microsoft Learn's feedback form for rating learning module quality",
-    ],
-    cards: [
-      "Design Microsoft Learn's learning path cards with technology logos and difficulty badges",
-      "Create Microsoft Learn's certification cards with exam codes and preparation time estimates",
-      "Add Microsoft Learn's documentation cards with API references and code samples",
-      "Include Microsoft Learn's community cards showing Q&A discussions and expert answers",
-      "Design Microsoft Learn's instructor-led training cards with schedule and registration info",
-      "Create Microsoft Learn's hands-on lab cards with Azure sandbox environment links",
-    ],
-    interactive: [
-      "Add Microsoft Learn's interactive Azure portal simulations with guided steps",
-      "Include Microsoft Learn's code playground with live Azure resource deployment",
-      "Design Microsoft Learn's decision tree diagrams for choosing Azure services",
-      "Create Microsoft Learn's interactive tutorials with real-time feedback",
-      "Add Microsoft Learn's sandbox environment for hands-on Azure practice",
-      "Include Microsoft Learn's progress tracking with badges and achievement unlocks",
-    ],
-  };
-
-  let suggestions = [];
-
-  // Check for layout-related keywords
-  if (
-    lowerDescription.includes("page") ||
-    lowerDescription.includes("layout") ||
-    lowerDescription.includes("structure") ||
-    lowerDescription.includes("website") ||
-    lowerDescription.includes("site") ||
-    lowerDescription.includes("landing")
-  ) {
-    suggestions.push(...categories.layout.slice(0, 2));
-  }
-
-  // Check for navigation-related keywords
-  if (
-    lowerDescription.includes("navigation") ||
-    lowerDescription.includes("menu") ||
-    lowerDescription.includes("nav") ||
-    lowerDescription.includes("header") ||
-    lowerDescription.includes("search")
-  ) {
-    suggestions.push(...categories.navigation.slice(0, 2));
-  }
-
-  // Check for content-related keywords
-  if (
-    lowerDescription.includes("content") ||
-    lowerDescription.includes("article") ||
-    lowerDescription.includes("documentation") ||
-    lowerDescription.includes("tutorial") ||
-    lowerDescription.includes("learning") ||
-    lowerDescription.includes("lesson")
-  ) {
-    suggestions.push(...categories.content.slice(0, 2));
-  }
-
-  // Check for form-related keywords (THIS IS THE KEY ONE FOR YOUR "FORM" TEST)
-  if (
-    lowerDescription.includes("form") ||
-    lowerDescription.includes("input") ||
-    lowerDescription.includes("quiz") ||
-    lowerDescription.includes("assessment") ||
-    lowerDescription.includes("exam") ||
-    lowerDescription.includes("test") ||
-    lowerDescription.includes("feedback") ||
-    lowerDescription.includes("survey")
-  ) {
-    suggestions.push(...categories.forms.slice(0, 2));
-  }
-
-  // Check for card-related keywords
-  if (
-    lowerDescription.includes("card") ||
-    lowerDescription.includes("module") ||
-    lowerDescription.includes("course") ||
-    lowerDescription.includes("certification") ||
-    lowerDescription.includes("path") ||
-    lowerDescription.includes("training")
-  ) {
-    suggestions.push(...categories.cards.slice(0, 2));
-  }
-
-  // Check for interactive keywords
-  if (
-    lowerDescription.includes("interactive") ||
-    lowerDescription.includes("exercise") ||
-    lowerDescription.includes("playground") ||
-    lowerDescription.includes("simulation") ||
-    lowerDescription.includes("sandbox") ||
-    lowerDescription.includes("hands-on")
-  ) {
-    suggestions.push(...categories.interactive.slice(0, 2));
-  }
-
-  // If no specific matches, provide general Microsoft Learn suggestions
-  if (suggestions.length === 0) {
-    suggestions = [
-      "Create Microsoft Learn's learning path overview with module cards and progress tracking",
-      "Design Microsoft Learn's documentation page with table of contents and code examples",
-      "Add Microsoft Learn's certification journey with exam preparation and study guides",
-      "Include Microsoft Learn's community-driven Q&A section with expert moderation",
-      "Build Microsoft Learn's hands-on lab environment with Azure sandbox integration",
-      "Generate Microsoft Learn's assessment portal with skills validation and feedback",
-    ];
-  }
-
-  // Ensure we return exactly 6 unique suggestions
-  const uniqueSuggestions = [...new Set(suggestions)];
-  return uniqueSuggestions.slice(0, 6);
-}
 
 app.listen(PORT, () => {
   console.log(`🚀 Clean AI-driven wireframe server running on port ${PORT}`);
@@ -1452,3 +1182,31 @@ app.listen(PORT, () => {
     `🧠 AI-first approach: Always tries AI generation first, smart fallbacks when needed`
   );
 });
+
+// 🛡️ CRITICAL: Prevent server crashes with robust error handling
+process.on("uncaughtException", (error) => {
+  console.error("🚨 Uncaught Exception - Server will continue running:", error);
+  // Don't exit the process - keep server alive for users
+});
+
+process.on("unhandledRejection", (reason, promise) => {
+  console.error(
+    "🚨 Unhandled Rejection - Server will continue running:",
+    reason
+  );
+  // Log the promise for debugging but keep server running
+  console.error("Promise:", promise);
+});
+
+process.on("SIGTERM", () => {
+  console.log("🔄 Server received SIGTERM - graceful shutdown initiated");
+  process.exit(0);
+});
+
+process.on("SIGINT", () => {
+  console.log("🔄 Server received SIGINT - graceful shutdown initiated");
+  process.exit(0);
+});
+
+// 💪 Keep the server alive and healthy
+console.log("🛡️ Server crash protection enabled - your users are safe!");

@@ -1,0 +1,183 @@
+/* Top Navigation Bar */
+.top-nav {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 70px;
+  background: rgba(255, 255, 255, 0.95);
+  -webkit-backdrop-filter: blur(20px) !important;
+  backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  z-index: 1030;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-center {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  z-index: 1001;
+}
+
+/* New Navbar Toolbar */
+.navbar-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-right: 12px;
+  border-right: 1px solid #e1dfdd;
+}
+
+.navbar-toolbar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: #ffffff;
+  border: 1px solid #e1dfdd;
+  color: #605e5c;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 16px;
+  position: relative;
+}
+
+.navbar-toolbar-btn:hover {
+  background: #f3f2f1;
+  border-color: #d1d1d1;
+  color: #323130;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-toolbar-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Save button special styling */
+.navbar-toolbar-btn.save-btn {
+  background: #0078d4;
+  border-color: #0078d4;
+  color: #ffffff;
+}
+
+.navbar-toolbar-btn.save-btn:hover {
+  background: #106ebe;
+  border-color: #106ebe;
+  color: #ffffff;
+}
+
+/* Logout button styling */
+.navbar-toolbar-btn.logout-btn {
+  background: transparent;
+  border-color: #e1dfdd;
+  color: #605e5c;
+}
+
+.navbar-toolbar-btn.logout-btn:hover {
+  background: #f3f2f1;
+  border-color: #d1d1d1;
+  color: #323130;
+}
+
+.navbar-cxs-logo {
+  height: 32px;
+  width: auto;
+  transition: opacity 0.15s ease;
+  mix-blend-mode: multiply;
+  filter: contrast(1.2) brightness(1.1);
+  display: block;
+  position: relative;
+  z-index: 1001;
+}
+
+.navbar-cxs-logo:hover {
+  opacity: 0.8;
+}
+
+.navbar-logo-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  transition: opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  box-shadow: none;
+  outline: none;
+}
+
+.navbar-logo-button:hover {
+  opacity: 0.8;
+}
+
+.navbar-logo-button:focus {
+  outline: none;
+}
+
+.navbar-logo-text {
+  font-size: 26px;
+  font-weight: 600;
+  color: #323130;
+  font-family: "Orbitron", "Segoe UI Variable Display", "Segoe UI", system-ui,
+    sans-serif;
+  letter-spacing: -0.01em;
+  margin-left: 5px !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .top-nav {
+    padding: 0 1rem;
+  }
+
+  .navbar-toolbar {
+    gap: 4px;
+    padding-right: 8px;
+  }
+
+  .navbar-toolbar-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-toolbar {
+    gap: 2px;
+    padding-right: 6px;
+  }
+
+  .navbar-toolbar-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+
+  .navbar-logo-text {
+    font-size: 22px;
+  }
+}

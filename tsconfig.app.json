@@ -30,6 +30,8 @@
     "dist",
     "build",
     "**/*.test.*",
-    "**/*.spec.*"
+    "**/*.spec.*",
+    "**/*_backup_*.tsx",
+    "**/*_backup_*.ts"
   ]
 }
