@@ -1,4 +1,4 @@
-/* TopNavbar for App - Blended with page content */
+/* TopNavbar for App - Blended with page content - Force refresh */
 .top-nav-app {
   position: fixed;
   top: 0;
@@ -9,20 +9,22 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start; /* Changed from space-between to flex-start */
   padding: 0 24px;
   box-shadow: none;
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
 }
 
-.navbar-left {
+.top-nav-app .navbar-left {
   display: flex;
   align-items: center;
   gap: 16px;
+  flex: 0 0 auto; /* Ensure left section doesn't grow or shrink */
+  justify-self: flex-start; /* Explicitly align to start */
 }
 
-.navbar-logo-button {
+.top-nav-app .navbar-logo-button {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -62,10 +64,12 @@
   width: auto;
 }
 
-.navbar-right {
+.top-nav-app .navbar-right {
   display: flex;
   align-items: center;
   gap: 16px;
+  flex: 0 0 auto; /* Ensure right section doesn't grow or shrink */
+  margin-left: auto; /* Push to the right */
 }
 
 .navbar-toolbar {

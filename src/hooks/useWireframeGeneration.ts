@@ -133,17 +133,37 @@ export const useWireframeGeneration = () => {
    * Cancels any ongoing wireframe generation request
    */
   const cancelGeneration = useCallback(() => {
+    console.log("🚨 cancelGeneration called!");
+    console.log("🚨 Current abortController:", abortControllerRef.current);
+    console.log("🚨 Current isLoading:", isLoading);
+
+    // Always try to abort if abortController exists
     if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
+      console.log("🚨 Aborting request...");
+      try {
+        abortControllerRef.current.abort();
+        console.log("🚨 Request aborted!");
+      } catch (error) {
+        console.log("🚨 Error aborting request:", error);
+      }
       abortControllerRef.current = null;
+    } else {
+      console.log(
+        "🚨 No abortController to abort (request may have completed)"
+      );
     }
-    // Clear all loading timers
+
+    // Clear all loading timers (always do this regardless of abortController state)
+    console.log("🚨 Clearing timers:", loadingTimersRef.current.length);
     loadingTimersRef.current.forEach((timer) => clearTimeout(timer));
     loadingTimersRef.current = [];
-    // Reset loading states
+
+    // Reset loading states (always do this to stop the spinner)
+    console.log("🚨 Resetting loading states...");
     setIsLoading(false);
     setLoadingStage("");
-  }, []);
+    console.log("🚨 cancelGeneration complete!");
+  }, [isLoading]);
 
   const generateWireframe = useCallback(
     async (

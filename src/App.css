@@ -415,7 +415,11 @@ body {
 
 /* Loading Spinner */
 .loading-spinner {
-  animation: spin 1s linear infinite;
+  animation: spin 1.2s linear infinite;
+  color: #0078d4; /* Microsoft blue for better visibility */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @keyframes spin {

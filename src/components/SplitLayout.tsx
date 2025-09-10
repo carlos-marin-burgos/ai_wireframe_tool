@@ -263,10 +263,10 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     };
   }, [description, onGenerateAiSuggestions, setShowAiSuggestions]);
 
-  // Add message to conversation
+  // Add message to conversation with unique ID
   const addMessage = useCallback((type: 'user' | 'ai', content: string) => {
     const newMessage = {
-      id: Date.now().toString(),
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       type,
       content,
       timestamp: new Date()

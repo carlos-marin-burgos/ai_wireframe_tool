@@ -179,7 +179,7 @@ function LandingPage({
   };  // Add to favorites from recent section
   const handleAddRecentToFavorites = (projectName: string, projectMeta: string, htmlContent?: string) => {
     const newFavorite = {
-      id: Date.now().toString(),
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       name: projectName,
       htmlContent: htmlContent || '',
       type: 'recent',
@@ -198,7 +198,7 @@ function LandingPage({
   // Add to recents utility function (can be called from parent)
   const addToRecents = useCallback((name: string, description: string, htmlContent?: string) => {
     const newRecent = {
-      id: Date.now().toString(),
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       name,
       description,
       htmlContent: htmlContent || '',
@@ -499,8 +499,23 @@ function LandingPage({
                 {loading && (
                   <button
                     type="button"
-                    className={`stop-btn ${loading ? "generating" : ""}`}
-                    onClick={handleStop}
+                    className={`stop-btn-landing ${loading ? "generating" : ""}`}
+                    onClick={(e) => {
+                      console.log('🛑 Stop button clicked!');
+                      console.log('🛑 Current loading state:', loading);
+                      console.log('🛑 handleStop function:', typeof handleStop);
+                      e.preventDefault();
+                      e.stopPropagation();
+
+                      // Call handleStop immediately
+                      try {
+                        console.log('🛑 About to call handleStop...');
+                        handleStop();
+                        console.log('🛑 handleStop called successfully!');
+                      } catch (error) {
+                        console.error('🛑 Error calling handleStop:', error);
+                      }
+                    }}
                     title="Stop generation"
                   >
                     <FiStopCircle />

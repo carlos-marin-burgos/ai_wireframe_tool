@@ -186,7 +186,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
   const showToast = (message: string, type: ToastData['type'] = 'success') => {
     const newToast: ToastData = {
-      id: Date.now(),
+      id: Date.now() + Math.random(), // Make it unique
       message,
       type
     };
@@ -208,7 +208,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     if (!htmlWireframe || !saveTitle.trim()) return;
 
     const newWireframe: SavedWireframe = {
-      id: Date.now().toString(),
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       name: saveTitle.trim(),
       description: description,
       html: htmlWireframe,
@@ -368,8 +368,17 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
 
   const handleStop = () => {
+    console.log('🛑 App.tsx handleStop called!');
+    console.log('🛑 cancelGeneration function:', typeof cancelGeneration);
+    console.log('🛑 Current loading state:', loading);
+
     // Use the cancel function from our hook
-    cancelGeneration();
+    try {
+      cancelGeneration();
+      console.log('🛑 cancelGeneration called successfully from App.tsx');
+    } catch (error) {
+      console.error('🛑 Error calling cancelGeneration:', error);
+    }
   };
 
   const handleAiSuggestionClick = async (suggestion: string) => {

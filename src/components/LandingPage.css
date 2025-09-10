@@ -1,4 +1,4 @@
-/* Landing Page Base Styles - PROTECTED */
+/* Landing Page Base Styles - CACHE BREAKER 2025-09-10 - PROTECTED */
 /* Override App.css styles */
 .landing-page {
   min-height: calc(100vh - 70px);
@@ -510,33 +510,34 @@
 }
 
 .stop-btn-landing {
-  background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
-  border: none;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 16px rgba(255, 107, 107, 0.3);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0;
-  position: absolute;
-  bottom: 12px;
-  right: 62px;
-  z-index: 2;
+  background: linear-gradient(135deg, #ff6b6b, #ff8e8e) !important;
+  border: none !important;
+  border-radius: 50% !important;
+  width: 36px !important;
+  height: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 4px 16px rgba(255, 107, 107, 0.3) !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  padding: 0 !important;
+  position: absolute !important;
+  bottom: 12px !important;
+  right: 56px !important; /* Position to the left of send button */
+  z-index: 1000 !important;
+  pointer-events: auto !important;
 }
 
 .stop-btn-landing:hover {
-  transform: translateY(-2px) scale(1.08);
-  box-shadow: 0 8px 24px rgba(255, 107, 107, 0.4);
+  transform: translateY(-2px) scale(1.1) !important;
+  box-shadow: 0 8px 24px rgba(255, 107, 107, 0.5) !important;
 }
 
 .stop-btn-landing svg {
-  color: #ffffff;
-  width: 20px;
-  height: 20px;
+  color: #ffffff !important;
+  width: 16px !important;
+  height: 16px !important;
 }
 
 .suggestions-section {
@@ -823,7 +824,7 @@
   }
 }
 
-/* Additional styles for send button */
+/* Send button - properly positioned */
 .send-btn {
   position: absolute;
   bottom: 12px;
@@ -848,6 +849,23 @@
 .send-btn:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
+}
+
+/* Loading spinner - centered in send button */
+.send-btn .loading-spinner {
+  color: #ffffff !important;
+  font-size: 16px !important;
+  animation: loading-spin 0.8s linear infinite !important;
+}
+
+/* Clean spinning animation for the loading spinner */
+@keyframes loading-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* React Component Generation Button */
@@ -1282,7 +1300,7 @@
   border: 1px solid #d1d9e0;
   border-radius: 0;
   margin-top: 0;
-  height: 280px; /* Fixed height matching empty state */
+  height: 200px; /* Reduced height for more compact panel */
   overflow-y: auto; /* Enable vertical scrolling */
   overflow-x: hidden; /* Hide horizontal scrolling */
   position: relative;
