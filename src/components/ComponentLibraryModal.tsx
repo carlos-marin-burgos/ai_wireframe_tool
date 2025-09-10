@@ -436,7 +436,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                 showSecondaryButton: true,
                 secondaryCtaText: "Learn More",
                 backgroundColor: "#E8E6DF",
-                imageUrl: "https://learn.microsoft.com/media/learn/home/hero-learn.svg"
+                heroImageUrl: "https://learn.microsoft.com/media/learn/home/hero-learn.svg"
             })
         },
         {
@@ -452,7 +452,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                 showSecondaryButton: true,
                 secondaryCtaText: "Learn More",
                 backgroundColor: "#E8E6DF",
-                imageUrl: "https://learn.microsoft.com/media/learn/Product/Microsoft-Azure/azure.svg"
+                heroImageUrl: "https://learn.microsoft.com/media/learn/Product/Microsoft-Azure/azure.svg"
             })
         },
         {
@@ -467,7 +467,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                 ctaText: "Explore AI",
                 showSecondaryButton: false,
                 backgroundColor: "#E8E6DF",
-                imageUrl: "https://learn.microsoft.com/media/learn/Product/Azure/azure-ai.svg"
+                heroImageUrl: "https://learn.microsoft.com/media/learn/Product/Azure/azure-ai.svg"
             })
         },
 

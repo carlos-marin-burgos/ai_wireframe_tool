@@ -32,6 +32,7 @@
     "**/*.test.*",
     "**/*.spec.*",
     "**/*_backup_*.tsx",
-    "**/*_backup_*.ts"
+    "**/*_backup_*.ts",
+    "src/App.tsx"
   ]
 }

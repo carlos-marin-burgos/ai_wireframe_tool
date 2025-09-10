@@ -5,6 +5,9 @@ import LoadingOverlay from "./LoadingOverlay";
 import SimpleDragWireframe from "./SimpleDragWireframe";
 import EnhancedMessage from "./EnhancedMessage";
 import ComponentPreview from "./ComponentPreview";
+import AddPagesModal from './AddPagesModal';
+import SaveWireframeModal from './SaveWireframeModal';
+import ImageUploadModal from './ImageUploadModal';
 
 import {
   FiSend,
@@ -41,7 +44,7 @@ interface SplitLayoutProps {
   forceUpdateKey?: number;
 }
 
-const SplitLayout: React.FC<SplitLayoutProps> = ({
+const SplitLayoutSimple: React.FC<SplitLayoutProps> = ({
   description,
   setDescription,
   handleSubmit,
@@ -82,6 +85,11 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   // Validation state for chat input
   const [chatValidationError, setChatValidationError] = useState<string | null>(null);
+
+  // Modal state variables
+  const [isAddPagesModalOpen, setIsAddPagesModalOpen] = useState(false);
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+  const [isImageUploadModalOpen, setIsImageUploadModalOpen] = useState(false);
 
   // Function to validate chat input - check if it's only numbers
   const validateChatInput = (input: string): boolean => {
@@ -276,9 +284,32 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                   } else {
                     setChatValidationError(null);
                   }
+
+                  if (value.length <= 2) {
+                    setShowAiSuggestions(false);
+                  } else {
+                    const trimmedInput = value.trim();
+                    const onlyNumbersRegex = /^[\d\s.,]+$/;
+                    if (onlyNumbersRegex.test(trimmedInput)) {
+                      setShowAiSuggestions(false);
+                    }
+                  }
                 }}
                 onFocus={() => setIsInputFocused(true)}
                 onBlur={() => setIsInputFocused(false)}
+                onClick={() => {
+                  if (description.length > 2) {
+                    const trimmedInput = description.trim();
+                    const onlyNumbersRegex = /^[\d\s.,]+$/;
+
+                    if (!onlyNumbersRegex.test(trimmedInput)) {
+                      if (onGenerateAiSuggestions) {
+                        onGenerateAiSuggestions(description);
+                      }
+                      setShowAiSuggestions(true);
+                    }
+                  }
+                }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
@@ -303,6 +334,43 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               </button>
             </div>
 
+            {/* AI Suggestions */}
+            {showAiSuggestions && (aiSuggestions.length > 0 || (suggestionLoading && isInputFocused)) && (
+              <div className="ai-suggestions-integrated">
+                <div className="ai-suggestions-label">
+                  <FiCpu className="ai-icon" />
+                  <span>AI Suggestions:</span>
+                  {suggestionLoading && <span className="loading-dot">●</span>}
+                </div>
+                <div className="ai-suggestions-panel" aria-label="AI suggestions">
+                  {aiSuggestions.length > 0 ? (
+                    <div className="ai-suggestions-buttons">
+                      {aiSuggestions.map((suggestion, index) => (
+                        <button
+                          key={index}
+                          type="button"
+                          className="ai-suggestion-pill ai-suggestion-button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setDescription(suggestion);
+                            onAiSuggestionClick(suggestion);
+                          }}
+                        >
+                          <span className="ai-badge">AI</span>
+                          {suggestion}
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="ai-suggestions-placeholder">
+                      <div className="skeleton-pill" />
+                      <div className="skeleton-pill" />
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </form>
         </div>
       </div>
@@ -431,15 +499,89 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               </button>
             )}
 
+            {showAiSuggestions && aiSuggestions.length > 0 && (
+              <div className="ai-suggestions-inline">
+                <div className="ai-suggestions-label">
+                  <FiCpu className="ai-icon" />
+                  <span>AI Suggestions:</span>
+                  {suggestionLoading && <span className="loading-dot">●</span>}
+                </div>
+                <div className="ai-suggestions-buttons">
+                  {aiSuggestions.map((suggestion, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      className="ai-suggestion-pill ai-suggestion-button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setDescription(suggestion);
+                        onAiSuggestionClick(suggestion);
+                      }}
+                    >
+                      <FiCpu /> {suggestion}
+                      <SuggestionSourceIndicator
+                        isAI={isAiSourced}
+                        isLoading={suggestionLoading}
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <LoadingOverlay
               isVisible={loading}
               message={loadingStage || (loading ? "Creating your wireframe..." : "")}
             />
           </div>
         )}
+
+        {/* Modal Components */}
+        {isAddPagesModalOpen && (
+          <AddPagesModal
+            isOpen={isAddPagesModalOpen}
+            onClose={() => setIsAddPagesModalOpen(false)}
+            existingPages={[]}
+            onAddPages={(pages) => {
+              console.log('Pages added:', pages);
+              setIsAddPagesModalOpen(false);
+            }}
+          />
+        )}
+
+        {isSaveModalOpen && (
+          <SaveWireframeModal
+            isOpen={isSaveModalOpen}
+            onClose={() => setIsSaveModalOpen(false)}
+            currentHtml={htmlWireframe}
+            currentCss=""
+            designTheme="modern"
+            colorScheme="light"
+            onSave={(wireframe, options) => {
+              console.log('Wireframe saved:', wireframe, options);
+              setIsSaveModalOpen(false);
+            }}
+          />
+        )}
+
+        {isImageUploadModalOpen && (
+          <ImageUploadModal
+            isOpen={isImageUploadModalOpen}
+            onClose={() => setIsImageUploadModalOpen(false)}
+            onImageUpload={(file) => {
+              console.log('Image uploaded:', file);
+              setIsImageUploadModalOpen(false);
+            }}
+            onAnalyzeImage={(imageUrl, fileName) => {
+              console.log('Image analyzed:', imageUrl, fileName);
+              setIsImageUploadModalOpen(false);
+            }}
+          />
+        )}
       </div>
     </div>
   );
 };
 
-export default SplitLayout;
+export default SplitLayoutSimple;

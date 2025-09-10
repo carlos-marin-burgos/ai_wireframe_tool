@@ -1,28 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
-import "./wireframe-styles.css";
-import "./styles/microsoftlearn-card.css";
-import "./styles/suggestion-indicator.css";
-import "./styles/suggestion-performance.css";
-import "./styles/atlas-design-system.css";
 import LandingPage from "./components/LandingPage";
-import SplitLayout from "./components/SplitLayout";
-import TopNavbarApp from "./components/TopNavbarApp";
-import TopNavbarLanding from "./components/TopNavbarLanding";
-import SaveDialog from "./components/SaveDialog";
-import LoadDialog from "./components/LoadDialog";
-import Toast from "./components/Toast";
-import AzureAuth from "./components/AzureAuth";
-import FigmaIntegration from "./components/FigmaIntegration";
-import FigmaIntegrationModal from "./components/FigmaIntegrationModal";
-import WireframeGenerator from "./pages/WireframeGenerator";
+import SplitLayout from "./components/SplitLayoutSimple";
 import { API_CONFIG, getApiUrl } from "./config/api";
-// All API calls are now handled by the wireframe generation hook
-import { useWireframeGeneration } from './hooks/useWireframeGeneration';
 import { PerformanceTracker } from "./utils/performance";
-import { generateHeroHTML } from "./components/HeroGenerator";
 import { processWireframeForProduction } from './utils/wireframeProcessor';
-import { PerformanceMonitor, usePerformanceMonitor } from "./components/PerformanceMonitor";
 import { getInstantSuggestions, shouldUseAI } from "./utils/fastSuggestions";
 import { getCachedSuggestions, cacheSuggestions } from "./utils/suggestionCache";
 
@@ -1435,32 +1417,14 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           setShowAiSuggestions={setShowAiSuggestions}
           onGenerateAiSuggestions={handleGenerateAiSuggestions}
           error={error}
-          savedWireframesCount={savedWireframes.length}
-          onLoadClick={() => setShowLoadDialog(true)}
-          htmlWireframe={reactComponent || htmlWireframe}
+          htmlWireframe={htmlWireframe}
           setHtmlWireframe={setHtmlWireframe}
           reactComponent={reactComponent}
           setReactComponent={setReactComponent}
-          onSave={() => setShowSaveDialog(true)}
-          onEnhancedSave={enhancedSaveRef}
-          onMultiStep={handleMultiStep}
           designTheme={designTheme}
           colorScheme={colorScheme}
-          setColorScheme={setColorScheme}
-          onDesignChange={handleDesignChange}
           onAiSuggestionClick={handleAiSuggestionClick}
           forceUpdateKey={forceUpdateKey}
-          onBackToLanding={handleBackToLanding}
-          onAddComponent={handleAddComponent}
-          onGeneratePageContent={handleGeneratePageContent}
-          onFigmaExport={handleFigmaExport}
-          onFigmaIntegration={figmaIntegrationRef}
-          onComponentLibrary={componentLibraryRef}
-          onDevPlaybooks={devPlaybooksRef}
-          onFigmaComponents={figmaComponentsRef}
-          onViewHtmlCode={viewHtmlCodeRef}
-          onDownloadWireframe={downloadWireframeRef}
-          onPresentationMode={presentationModeRef}
         />
       )}
 
