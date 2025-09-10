@@ -151,7 +151,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   const [componentGenerationError, setComponentGenerationError] = useState("");
 
   useEffect(() => {
-    localStorage.removeItem("snapframe_current");
+    localStorage.removeItem("designetica_current");
     localStorage.removeItem("currentWireframe");
     localStorage.removeItem("lastUsedTheme");
     localStorage.setItem("lastUsedTheme", "microsoftlearn");
@@ -191,7 +191,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   };
 
   const loadSavedWireframes = () => {
-    const saved = localStorage.getItem("snapframe_saved");
+    const saved = localStorage.getItem("designetica_saved");
     if (saved) {
       setSavedWireframes(JSON.parse(saved));
     }
@@ -210,7 +210,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
     const updated = [...savedWireframes, newWireframe];
     setSavedWireframes(updated);
-    localStorage.setItem("snapframe_saved", JSON.stringify(updated));
+    localStorage.setItem("designetica_saved", JSON.stringify(updated));
 
     setShowSaveDialog(false);
     setSaveTitle("");
@@ -241,7 +241,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     const wireframe = savedWireframes.find(w => w.id === id);
     const updated = savedWireframes.filter((w) => w.id !== id);
     setSavedWireframes(updated);
-    localStorage.setItem("snapframe_saved", JSON.stringify(updated));
+    localStorage.setItem("designetica_saved", JSON.stringify(updated));
 
     // Show info notification
     if (wireframe) {
@@ -727,7 +727,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           showSecondaryButton: true,
           secondaryCtaText: "Learn More",
           backgroundColor: "#E8E6DF",
-          heroImageUrl: "hero-learn.svg"
+          imageUrl: "hero-learn.svg"
         });
 
       case 'atlas-banner':
