@@ -14,6 +14,7 @@ import SimpleDragWireframe from "./SimpleDragWireframe";
 import EnhancedMessage from "./EnhancedMessage";
 import ImageUploadZone from "./ImageUploadZone";
 import PageNavigation from "./PageNavigation";
+import LoadingSpinner from "./LoadingSpinner";
 import HtmlCodeViewer from "./HtmlCodeViewer";
 import PresentationMode from "./PresentationMode";
 import ComponentPreview from "./ComponentPreview";
@@ -22,7 +23,6 @@ import { generateShareUrl } from "../utils/powerpointExport";
 import { generateWireframeName } from "../utils/wireframeNaming";
 import {
   FiSend,
-  FiLoader,
   FiStopCircle,
   FiCpu,
   FiImage,
@@ -1105,11 +1105,28 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                 className="chat-send-btn"
               >
                 {loading ? (
-                  <FiLoader className="loading-spinner" />
+                  <LoadingSpinner size="small" color="white" />
                 ) : (
                   <FiSend />
                 )}
               </button>
+
+              {/* Stop button for left-pane */}
+              {loading && (
+                <button
+                  type="button"
+                  className="chat-stop-btn"
+                  onClick={(e) => {
+                    console.log('🛑 SplitLayout Stop button clicked!');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleStop();
+                  }}
+                  title="Stop generation"
+                >
+                  <FiStopCircle />
+                </button>
+              )}
             </div>
 
             {/* AI Suggestions integrated within the same container */}
@@ -1289,7 +1306,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
             >
               {loading ? (
                 <>
-                  <FiLoader className="loading-spinner" />
+                  <LoadingSpinner size="small" color="white" />
                   Generating...
                 </>
               ) : (

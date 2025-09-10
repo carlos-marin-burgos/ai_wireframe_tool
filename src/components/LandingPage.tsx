@@ -6,6 +6,7 @@ import ImageUploadZone from './ImageUploadZone';
 import { figmaApi, FigmaFile as ApiFigmaFile, FigmaFrame } from '../services/figmaApi';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
 import FigmaIntegrationModal from './FigmaIntegrationModal';
+import LoadingSpinner from './LoadingSpinner';
 
 interface LandingPageProps {
   error: string | null;
@@ -33,7 +34,6 @@ interface LandingPageProps {
 import {
   FiPlus,
   FiFolder,
-  FiLoader,
   FiSend,
   FiStopCircle,
   FiCpu,
@@ -490,7 +490,7 @@ function LandingPage({
                   title={loading ? "Generating..." : "Generate"}
                 >
                   {loading ? (
-                    <FiLoader className="loading-spinner" />
+                    <LoadingSpinner size="small" color="white" />
                   ) : (
                     <FiSend className="send-icon" />
                   )}

@@ -852,22 +852,6 @@
 }
 
 /* Loading spinner - centered in send button */
-.send-btn .loading-spinner {
-  color: #ffffff !important;
-  font-size: 16px !important;
-  animation: loading-spin 0.8s linear infinite !important;
-}
-
-/* Clean spinning animation for the loading spinner */
-@keyframes loading-spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
 /* React Component Generation Button */
 .react-component-btn {
   position: absolute;
