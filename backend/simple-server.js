@@ -1095,6 +1095,16 @@ async function generateWireframeWithAI(
 - Use transform: translateX() for smooth slide-in navigation animations`
       : "";
 
+    // Enhanced responsive instructions for ALL wireframes
+    const responsiveInstructions = `
+- CRITICAL: Ensure all elements fit within container on mobile (max-width: 768px)
+- Use overflow-x: auto for wide content like tables or navigation bars
+- Make topbars/headers stack vertically on mobile if needed
+- Use flexible layouts (flexbox/grid) that adapt to small screens
+- Ensure minimum 16px font size for mobile readability
+- Add proper viewport meta tag: <meta name="viewport" content="width=device-width, initial-scale=1.0">
+- Test all components fit within 320px width (smallest mobile)`;
+
     // CLEAN AI PROMPT - Let AI be naturally intelligent
     const prompt = `Create a modern, responsive HTML wireframe for: "${description}"
 
@@ -1103,7 +1113,7 @@ Requirements:
 - Professional, clean design
 - Color scheme: ${colorScheme}
 - Modern web design standards
-- Fully responsive design (desktop, tablet, mobile)${mobileInstructions}
+- Fully responsive design (desktop, tablet, mobile)${mobileInstructions}${responsiveInstructions}
 - NO Microsoft branding or Learn content
 
 Generate the complete HTML now:`;

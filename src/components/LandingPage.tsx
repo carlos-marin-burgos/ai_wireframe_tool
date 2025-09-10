@@ -425,7 +425,7 @@ function LandingPage({
               </div>
               <div className="announcement-text">
                 <h3>🎉 New: Designetica Figma Plugin!</h3>
-                <p>Generate AI wireframes directly in Figma. Perfect for designers who want to stay in their workflow.</p>
+                <p>Generate AI wireframes directly in Figma.</p>
               </div>
               <div className="announcement-action">
                 <a

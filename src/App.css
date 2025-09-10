@@ -492,6 +492,9 @@ body {
   border-radius: 12px !important;
   max-height: none !important;
   overflow: visible !important;
+  /* Mobile responsiveness */
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 /* AI Suggestions - Dynamic/Generated */
@@ -499,6 +502,9 @@ body {
   background: linear-gradient(135deg, #f3e8ff0d, #e879f90d) !important;
   border: 1px solid rgba(232, 121, 249, 0.15) !important;
   box-shadow: 0 2px 12px rgba(232, 121, 249, 0.08) !important;
+  /* Mobile responsiveness */
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 .ai-suggestions-dynamic .ai-suggestions-label {
@@ -517,17 +523,23 @@ body {
   font-size: 1rem !important;
   font-weight: 400 !important;
   color: #323130 !important;
+  /* Mobile text wrapping */
+  flex-wrap: wrap !important;
 }
 
 .ai-icon {
   color: #323130;
   font-size: 16px;
+  flex-shrink: 0; /* Prevent icon from shrinking */
 }
 
 .ai-suggestions-buttons {
   display: flex !important;
   flex-wrap: wrap !important;
   gap: 0.5rem !important;
+  /* Mobile scrolling for suggestions */
+  max-width: 100% !important;
+  overflow-x: auto !important;
   width: 100% !important;
   overflow: visible !important;
   position: relative !important;
@@ -760,7 +772,7 @@ body {
   width: 100%;
   background: transparent; /* More subtle */
   border-radius: 0; /* Less pronounced */
-  overflow: hidden;
+  overflow: hidden; /* Hide overflow for main container */
   box-shadow: none; /* Remove shadow for subtlety */
   min-height: 500px;
   margin-bottom: 0px; /* Add bottom margin to prevent cut-off */
@@ -774,11 +786,26 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
+  /* Handle wireframe overflow on mobile */
+  overflow-x: auto; /* Allow horizontal scrolling for wide content */
+  overflow-y: auto; /* Allow vertical scrolling */
+}
+
+/* Wireframe iframe styles for mobile */
+.tab-content iframe {
+  width: 100%;
+  min-width: 320px; /* Minimum mobile width */
+  border: none;
+  background: white;
+  /* Responsive sizing */
+  height: auto;
+  min-height: 400px;
 }
 
 /* Make sure the app root fills the viewport */
 #root {
   min-height: 100vh;
+  overflow-x: hidden; /* Prevent horizontal page scroll */
 }
 
 /* Ensure content is visible */
@@ -787,6 +814,7 @@ body {
   width: 100%;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden; /* Prevent horizontal page scroll */
 }
 
 /* Hero Illustration */
@@ -905,4 +933,110 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* === MOBILE RESPONSIVE MEDIA QUERIES === */
+
+/* Mobile devices (phones) */
+@media (max-width: 768px) {
+  /* AI Suggestions Panel Mobile */
+  .ai-suggestions-inline,
+  .ai-suggestions-dynamic {
+    margin: 0.5rem 0 !important;
+    padding: 0.75rem !important;
+    border-radius: 8px !important;
+    overflow: visible !important;
+    width: calc(100% - 1rem) !important;
+  }
+
+  .ai-suggestions-buttons {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.25rem !important;
+  }
+
+  .ai-suggestions-buttons button {
+    width: 100% !important;
+    margin: 0 !important;
+    text-align: left !important;
+    justify-content: flex-start !important;
+  }
+
+  /* Wireframe Container Mobile */
+  .wireframe-container {
+    min-height: 300px !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .tab-content {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Main app layout mobile */
+  .app-content {
+    padding: 0.5rem !important;
+    min-height: calc(100vh - 60px) !important;
+  }
+
+  /* Typography mobile adjustments */
+  h1,
+  h2,
+  h3 {
+    font-size: smaller !important;
+    line-height: 1.3 !important;
+    margin: 0.5rem 0 !important;
+  }
+
+  /* Button adjustments for mobile */
+  button {
+    min-height: 44px !important; /* Touch target size */
+    padding: 0.75rem 1rem !important;
+  }
+
+  /* Form inputs mobile */
+  input,
+  textarea,
+  select {
+    font-size: 16px !important; /* Prevent zoom on iOS */
+    padding: 0.75rem !important;
+  }
+
+  /* Navigation mobile improvements */
+  .top-navbar,
+  .navbar {
+    flex-wrap: wrap !important;
+    padding: 0.5rem !important;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  .ai-suggestions-inline,
+  .ai-suggestions-dynamic {
+    margin: 0.25rem 0 !important;
+    padding: 0.5rem !important;
+    width: calc(100% - 0.5rem) !important;
+  }
+
+  .app-content {
+    padding: 0.25rem !important;
+  }
+
+  /* Extra small wireframe adjustments */
+  .wireframe-container {
+    min-height: 250px !important;
+  }
+}
+
+/* Landscape mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .wireframe-container {
+    min-height: 200px !important;
+  }
+
+  .app-content {
+    min-height: calc(100vh - 40px) !important;
+  }
 }
