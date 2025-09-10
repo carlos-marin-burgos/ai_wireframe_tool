@@ -3,7 +3,7 @@ import './LoadingSpinner.css';
 
 interface LoadingSpinnerProps {
     size?: 'small' | 'medium' | 'large';
-    color?: 'white' | 'blue' | 'gray';
+    color?: 'white' | 'blue' | 'gray' | 'dark';
     className?: string;
 }
 
@@ -12,15 +12,14 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     color = 'white',
     className = ''
 }) => {
-    return (
-        <div
-            className={`loading-spinner loading-spinner--${size} loading-spinner--${color} ${className}`}
-            role="status"
-            aria-label="Loading"
-        >
-            <div className="loading-spinner__inner"></div>
-        </div>
-    );
+    const classes = [
+        'loading-spinner',
+        `loading-spinner--${size}`,
+        `loading-spinner--${color}`,
+        className
+    ].filter(Boolean).join(' ');
+
+    return <div className={classes} title="Loading..." />;
 };
 
 export default LoadingSpinner;

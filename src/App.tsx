@@ -309,59 +309,49 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
   const handleSubmit = async (e: React.FormEvent, overrideDescription?: string) => {
     const actualDescription = overrideDescription || description;
-    console.log("� handleSubmit called with description (React Component Generation):", actualDescription);
+    console.log("🚀 handleSubmit called with description:", actualDescription);
     e.preventDefault();
 
     if (!actualDescription || actualDescription.trim().length === 0) {
-      showToast('Please enter a description for the React component', 'warning');
+      showToast('Please enter a description for the wireframe', 'warning');
       return;
     }
 
-    setIsGeneratingComponent(true);
-    setComponentGenerationError("");
-    setReactComponent("");
-
     // Create a new performance tracker
-    const perfTracker = new PerformanceTracker('react-component-generation');
+    const perfTracker = new PerformanceTracker('wireframe-generation');
 
     try {
       console.log('🚀 Generating wireframe with description:', actualDescription);
 
-      const response = await fetch(getApiUrl(API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          description: actualDescription,
-          designTheme: designTheme,
-          colorScheme: colorScheme
-        })
-      });
+      // Use the generateWireframe hook which properly manages loading state
+      const result = await generateWireframe(
+        actualDescription,
+        designTheme,
+        colorScheme
+      );
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      if (result && result.html) {
+        if (typeof result.html === 'string' && result.html.length > 0) {
+          handleWireframeGenerated(result.html);
+          setReactComponent("");  // Clear React component
+          setShowLandingPage(false);
+          showToast('🚀 Wireframe generated!', 'success');
 
-      const data = await response.json();
-
-      if (data.html) {
-        // Use HTML wireframe generation
-        handleWireframeGenerated(data.html);
-        setReactComponent("");  // Clear React component
-        setShowLandingPage(false);
-        showToast('🚀 Wireframe generated!', 'success');
-
-        // Close AI suggestions panel after successful generation
-        setShowAiSuggestions(false);
+          // Close AI suggestions panel after successful generation
+          setShowAiSuggestions(false);
+        } else {
+          console.error("Error: Received invalid wireframe data");
+          showToast("Error: Received invalid wireframe data. Please try again.", 'error');
+        }
       } else {
-        throw new Error(data.error || 'No wireframe generated');
+        console.error("Error: No wireframe generated");
+        showToast("Error: No wireframe generated. Please try again.", 'error');
       }
     } catch (err) {
-      console.error("� Exception in handleSubmit (React component):", err);
+      console.error("🚀 Exception in handleSubmit:", err);
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-      setComponentGenerationError(errorMessage);
-      showToast(`Failed to generate React component: ${errorMessage}`, 'error');
+      showToast(`Failed to generate wireframe: ${errorMessage}`, 'error');
     } finally {
-      setIsGeneratingComponent(false);
       perfTracker.stop();
     }
   };
@@ -388,44 +378,35 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     setShowAiSuggestions(false);
     setDescription(suggestion);
 
-    const perfTracker = new PerformanceTracker('ai-suggestion-react-component');
+    const perfTracker = new PerformanceTracker('ai-suggestion-wireframe');
 
     try {
-      setIsGeneratingComponent(true);
-      setComponentGenerationError("");
-      setReactComponent("");
+      // Use the generateWireframe hook which properly manages loading state
+      const result = await generateWireframe(
+        suggestion,
+        designTheme,
+        colorScheme
+      );
 
-      const response = await fetch(getApiUrl(API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          description: suggestion,
-          designTheme: designTheme,
-          colorScheme: colorScheme
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      if (data.html) {
-        handleWireframeGenerated(data.html);
-        setReactComponent("");
-        setShowLandingPage(false);
-        showToast('🚀 Wireframe generated from suggestion!', 'success');
+      if (result && result.html) {
+        if (typeof result.html === 'string' && result.html.length > 0) {
+          handleWireframeGenerated(result.html);
+          setReactComponent("");
+          setShowLandingPage(false);
+          showToast('🚀 Wireframe generated from suggestion!', 'success');
+        } else {
+          console.error("Error: Received invalid wireframe data");
+          showToast("Error: Received invalid wireframe data. Please try again.", 'error');
+        }
       } else {
-        throw new Error(data.error || 'No component generated');
+        console.error("Error: No wireframe generated");
+        showToast("Error: No wireframe generated. Please try again.", 'error');
       }
     } catch (err) {
       console.error("🚀 Exception in handleAiSuggestionClick:", err);
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-      setComponentGenerationError(errorMessage);
-      showToast(`Failed to generate React component: ${errorMessage}`, 'error');
+      showToast(`Failed to generate wireframe from suggestion: ${errorMessage}`, 'error');
     } finally {
-      setIsGeneratingComponent(false);
       perfTracker.stop();
     }
   };
@@ -1413,7 +1394,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
             }
           }}
           onSubmit={handleSubmit}
-          loading={isGeneratingComponent}
+          loading={loading}
           handleStop={handleStop}
           showAiSuggestions={showAiSuggestions}
           aiSuggestions={aiSuggestions}

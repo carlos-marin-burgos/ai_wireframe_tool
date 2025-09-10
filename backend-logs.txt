@@ -393,3 +393,31 @@ For detailed output, run func with --verbose flag.
 [2025-09-10T20:12:59.341Z]   "duration": "91"
 [2025-09-10T20:12:59.341Z] }
 [2025-09-10T20:13:03.238Z] Host lock lease acquired by instance ID '00000000000000000000000049CADE8B'.
+[2025-09-10T20:13:35.921Z] Language Worker Process exited. Pid=82910.
+[2025-09-10T20:13:35.921Z] node exited with code 130 (0x82). .
+[2025-09-10T20:13:35.924Z] Stopping host...
+[2025-09-10T20:13:36.033Z] Stopping JobHost
+[2025-09-10T20:13:36.035Z] Job host stopped
+[2025-09-10T20:13:36.200Z] Worker 81639cfe-6bad-4829-ae3b-926d6c733203 connecting on 127.0.0.1:57955
+[2025-09-10T20:13:36.232Z] Worker 81639cfe-6bad-4829-ae3b-926d6c733203 received WorkerInitRequest
+[2025-09-10T20:13:36.235Z] Worker process started and initialized.
+[2025-09-10T20:13:36.373Z] Worker 81639cfe-6bad-4829-ae3b-926d6c733203 received FunctionLoadRequest
+[2025-09-10T20:13:36.373Z] Worker 81639cfe-6bad-4829-ae3b-926d6c733203 received FunctionLoadRequest
+[2025-09-10T20:13:36.384Z] Worker 81639cfe-6bad-4829-ae3b-926d6c733203 received FunctionLoadRequest
+[2025-09-10T20:13:36.385Z] Worker 81639cfe-6bad-4829-ae3b-926d6c733203 received FunctionLoadRequest
+[2025-09-10T20:13:36.386Z] Worker 81639cfe-6bad-4829-ae3b-926d6c733203 received FunctionLoadRequest
+[2025-09-10T20:13:36.386Z] Worker 81639cfe-6bad-4829-ae3b-926d6c733203 received FunctionLoadRequest
+[2025-09-10T20:13:36.387Z] Worker 81639cfe-6bad-4829-ae3b-926d6c733203 received FunctionLoadRequest
+[2025-09-10T20:13:36.387Z] Worker 81639cfe-6bad-4829-ae3b-926d6c733203 received FunctionLoadRequest
+[2025-09-10T20:13:36.387Z] Worker 81639cfe-6bad-4829-ae3b-926d6c733203 received FunctionLoadRequest
+[2025-09-10T20:13:36.387Z] Worker 81639cfe-6bad-4829-ae3b-926d6c733203 received FunctionLoadRequest
+[2025-09-10T20:13:36.388Z] Worker 81639cfe-6bad-4829-ae3b-926d6c733203 received FunctionLoadRequest
+[2025-09-10T20:13:36.390Z] Worker 81639cfe-6bad-4829-ae3b-926d6c733203 received FunctionLoadRequest
+[2025-09-10T20:13:36.390Z] Worker 81639cfe-6bad-4829-ae3b-926d6c733203 received FunctionLoadRequest
+[2025-09-10T20:13:36.390Z] Worker 81639cfe-6bad-4829-ae3b-926d6c733203 received FunctionLoadRequest
+[2025-09-10T20:13:36.390Z] Worker 81639cfe-6bad-4829-ae3b-926d6c733203 received FunctionLoadRequest
+[2025-09-10T20:13:36.390Z] Worker 81639cfe-6bad-4829-ae3b-926d6c733203 received FunctionLoadRequest
+[2025-09-10T20:13:36.390Z] Worker 81639cfe-6bad-4829-ae3b-926d6c733203 received FunctionLoadRequest
+[2025-09-10T20:13:36.418Z] Worker 81639cfe-6bad-4829-ae3b-926d6c733203 exited with code 0
+[2025-09-10T20:13:36.424Z] Host shutdown completed.
+[2025-09-10T20:13:36.425Z] Shutting down language worker channels for runtime:node

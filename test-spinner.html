@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Loading Spinner and Stop Button</title>
+    <style>
+        /* Simple, Clean Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-spinner--small {
+            width: 14px;
+            height: 14px;
+        }
+
+        .loading-spinner--white {
+            border-top-color: white;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Chat Input Styles */
+        .test-container {
+            padding: 20px;
+            max-width: 400px;
+            margin: 50px auto;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .chat-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px 50px 10px 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .chat-send-btn {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            width: 40px;
+            height: 40px;
+            background: #0078d4;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .chat-send-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .chat-stop-btn {
+            position: absolute;
+            bottom: 12px;
+            right: 60px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            background: #f0f0f0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-container">
+        <h2>Test Loading Spinner and Stop Button</h2>
+
+        <div class="status" id="status">
+            Status: Ready
+        </div>
+
+        <div class="chat-input-wrapper">
+            <textarea id="chatInput" class="chat-input" placeholder="Type something to test..." rows="3"></textarea>
+
+            <!-- Send button -->
+            <button id="sendBtn" class="chat-send-btn" onclick="startLoading()">
+                <span id="sendIcon">▶</span>
+                <div id="sendSpinner" class="loading-spinner loading-spinner--small loading-spinner--white"
+                    style="display: none;"></div>
+            </button>
+
+            <!-- Stop button -->
+            <button id="stopBtn" class="chat-stop-btn" onclick="stopLoading()" style="display: none;">
+                ⏹
+            </button>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <button onclick="startLoading()">Start Loading Test</button>
+            <button onclick="stopLoading()">Stop Loading Test</button>
+        </div>
+    </div>
+
+    <script>
+        let isLoading = false;
+
+        function startLoading() {
+            isLoading = true;
+            updateUI();
+
+            document.getElementById('status').textContent = 'Status: Loading...';
+
+            // Auto-stop after 5 seconds for demo
+            setTimeout(() => {
+                if (isLoading) {
+                    stopLoading();
+                }
+            }, 5000);
+        }
+
+        function stopLoading() {
+            isLoading = false;
+            updateUI();
+            document.getElementById('status').textContent = 'Status: Stopped';
+        }
+
+        function updateUI() {
+            const sendBtn = document.getElementById('sendBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            const sendIcon = document.getElementById('sendIcon');
+            const sendSpinner = document.getElementById('sendSpinner');
+
+            if (isLoading) {
+                // Show spinner in send button
+                sendIcon.style.display = 'none';
+                sendSpinner.style.display = 'inline-block';
+                sendBtn.disabled = true;
+
+                // Show stop button
+                stopBtn.style.display = 'flex';
+            } else {
+                // Show send icon
+                sendIcon.style.display = 'inline';
+                sendSpinner.style.display = 'none';
+                sendBtn.disabled = false;
+
+                // Hide stop button
+                stopBtn.style.display = 'none';
+            }
+        }
+
+        // Initialize UI
+        updateUI();
+    </script>
+</body>
+
+</html>
