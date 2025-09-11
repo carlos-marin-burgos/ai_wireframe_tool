@@ -7,6 +7,12 @@ interface WireframeResponse {
   fallback?: boolean;
   processingTime?: number;
   source?: string;
+  metadata?: {
+    description?: string;
+    correlationId?: string;
+    processingTimeMs?: number;
+    generatedAt?: string;
+  };
 }
 
 // Simple in-memory cache
@@ -186,8 +192,18 @@ export const useWireframeGeneration = () => {
       setLoadingStage("🚀 Connecting to AI wireframe service...");
 
       // Create a cache key
+      const requestId = `req-${Date.now()}-${Math.random()
+        .toString(36)
+        .substr(2, 9)}`;
       const cacheKey = `${description}-${theme}-${colorScheme}-${Date.now()}`;
 
+      console.log(`🔍 [${requestId}] Starting wireframe generation for:`, {
+        description:
+          description.substring(0, 50) + (description.length > 50 ? "..." : ""),
+        theme,
+        colorScheme,
+        requestId,
+      });
       // Set up loading stage timers
       const timer1 = setTimeout(
         () => setLoadingStage("🤖 AI analyzing your description..."),
@@ -208,10 +224,27 @@ export const useWireframeGeneration = () => {
         const abortController = new AbortController();
         abortControllerRef.current = abortController;
 
-        console.log("🚀 Attempting Azure Functions + OpenAI generation:", {
-          endpoint: API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME,
-          payload: { description, theme, colorScheme, fastMode: false },
-        });
+        console.log(
+          `🚀 [${requestId}] Attempting Azure Functions + OpenAI generation:`,
+          {
+            endpoint: API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME,
+            payload: { description, theme, colorScheme, fastMode: false },
+            timestamp: Date.now(),
+            cacheKey,
+            requestId,
+          }
+        );
+
+        const requestPayload = {
+          description,
+          theme,
+          colorScheme,
+          fastMode: false,
+        };
+        console.log(
+          `📡 [${requestId}] Detailed request payload:`,
+          JSON.stringify(requestPayload, null, 2)
+        );
 
         const startTime = Date.now();
 
@@ -219,7 +252,7 @@ export const useWireframeGeneration = () => {
         const data = await Promise.race([
           api.post<WireframeResponse>(
             API_CONFIG.ENDPOINTS.GENERATE_WIREFRAME + `?t=${Date.now()}`,
-            { description, theme, colorScheme, fastMode: false },
+            requestPayload,
             {
               signal: abortController.signal,
               headers: {
@@ -240,16 +273,28 @@ export const useWireframeGeneration = () => {
 
         const endTime = Date.now();
         console.log(
-          "✅ Azure Functions call succeeded in",
+          `✅ [${requestId}] Azure Functions call succeeded in`,
           endTime - startTime,
           "ms"
         );
-        console.log("📦 Response data:", {
+        console.log(`📦 [${requestId}] Response data:`, {
           hasHtml: !!data.html,
           htmlLength: data.html?.length,
           fallback: data.fallback,
           processingTime: data.processingTime,
+          source: data.source,
+          metadata: data.metadata,
         });
+
+        // Log template detection info
+        if (data.metadata?.description) {
+          console.log(`🎯 [${requestId}] Template Detection:`, {
+            requestedDescription: description,
+            responseDescription: data.metadata.description,
+            templateSource: data.source,
+            match: description === data.metadata.description,
+          });
+        }
 
         // Update state based on response
         setFallback(data.fallback || false);

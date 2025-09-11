@@ -3064,6 +3064,89 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   }
 }
 
+/* Template Pills Styles */
+.template-pills-container {
+  margin-top: 12px;
+  padding: 8px 0;
+}
+
+.template-pills-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #605e5c;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.template-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.template-pill {
+  background: linear-gradient(135deg, #f3f2f1 0%, #f8f9fa 100%);
+  border: 1px solid #e1dfdd;
+  color: #323130;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: "Segoe UI", sans-serif;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.template-pill:hover {
+  background: linear-gradient(135deg, #e1dfdd 0%, #f3f2f1 100%);
+  border-color: #c7c3c0;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.template-pill:active {
+  transform: translateY(0);
+  background: linear-gradient(135deg, #d2d0ce 0%, #e1dfdd 100%);
+}
+
+/* Responsive adjustments for template pills */
+@media (max-width: 768px) {
+  .template-pills {
+    gap: 4px;
+  }
+
+  .template-pill {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .template-pills-container {
+    margin-top: 8px;
+    padding: 6px 0;
+  }
+
+  .template-pills-label {
+    font-size: 10px;
+    margin-bottom: 4px;
+  }
+
+  .template-pills {
+    gap: 3px;
+  }
+
+  .template-pill {
+    font-size: 9px;
+    padding: 2px 5px;
+  }
+}
+
 /* React Component Viewer Styles */
 .react-component-viewer {
   height: 100%;

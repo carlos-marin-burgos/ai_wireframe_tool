@@ -1130,6 +1130,73 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
             </div>
           </form>
 
+          {/* Template Shortcut Pills */}
+          <div className="template-pills-container">
+            <div className="template-pills-label">Quick Templates:</div>
+            <div className="template-pills">
+              <button
+                type="button"
+                className="template-pill"
+                onClick={() => {
+                  const description = "azure learning path with course cards";
+                  console.log("🎯 Azure Path pill clicked - Description:", description);
+                  setDescription(description);
+                  onAiSuggestionClick(description);
+                }}
+              >
+                Azure Path
+              </button>
+              <button
+                type="button"
+                className="template-pill"
+                onClick={() => {
+                  const description = "microsoft learning plan";
+                  console.log("🎯 Learning Plan pill clicked - Description:", description);
+                  setDescription(description);
+                  onAiSuggestionClick(description);
+                }}
+              >
+                Learning Plan
+              </button>
+              <button
+                type="button"
+                className="template-pill"
+                onClick={() => {
+                  const description = "certification progress tracker";
+                  console.log("🎯 Certification pill clicked - Description:", description);
+                  setDescription(description);
+                  onAiSuggestionClick(description);
+                }}
+              >
+                Certification
+              </button>
+              <button
+                type="button"
+                className="template-pill"
+                onClick={() => {
+                  const description = "microsoft docs";
+                  console.log("🎯 Docs pill clicked - Description:", description);
+                  setDescription(description);
+                  onAiSuggestionClick(description);
+                }}
+              >
+                Learn Docs
+              </button>
+              <button
+                type="button"
+                className="template-pill"
+                onClick={() => {
+                  const description = "learn home page";
+                  console.log("🎯 Learn Home pill clicked - Description:", description);
+                  setDescription(description);
+                  onAiSuggestionClick(description);
+                }}
+              >
+                Learn Home
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
 

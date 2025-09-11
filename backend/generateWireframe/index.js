@@ -1,8 +1,10 @@
 const { MinimalWireframeGenerator } = require("./minimal-wireframe-generator");
+const { TemplateManager, selectTemplate } = require("../template-manager");
 const crypto = require("crypto");
 
-// Initialize Minimal Generator - let AI be naturally intelligent
+// Initialize Minimal Generator and Template Manager
 const minimalGenerator = new MinimalWireframeGenerator();
+const templateManager = new TemplateManager();
 
 // Logger utility
 const logger = {
@@ -24,6 +26,39 @@ async function generateWireframeFromDescription(
   correlationId
 ) {
   try {
+    // First check if we should use a template
+    const selectedTemplate = selectTemplate(description);
+
+    if (selectedTemplate) {
+      logger.info("🎯 TEMPLATE SELECTED: Using template instead of AI", {
+        correlationId,
+        template: selectedTemplate,
+        description: description.substring(0, 100) + "...",
+      });
+
+      try {
+        const templateHtml = await templateManager.loadTemplate(
+          selectedTemplate
+        );
+        return {
+          html: templateHtml,
+          reactCode: null,
+          source: "template-system",
+          aiGenerated: false,
+          unlimited: true,
+          framework: "html",
+          styling: "inline-css",
+        };
+      } catch (templateError) {
+        logger.warn("⚠️ Template loading failed, falling back to AI", {
+          correlationId,
+          template: selectedTemplate,
+          error: templateError.message,
+        });
+        // Continue to AI generation if template fails
+      }
+    }
+
     logger.info("🎯 MINIMAL GENERATION: Testing natural AI intelligence", {
       correlationId,
       description: description.substring(0, 100) + "...",
