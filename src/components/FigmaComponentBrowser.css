@@ -174,22 +174,22 @@
 }
 
 /* Modern Spinner with Multiple Rings */
-.loading-spinner {
+.figma-browser-loading-spinner {
   position: relative;
   width: 80px;
   height: 80px;
   margin-bottom: 32px;
 }
 
-.loading-spinner::before,
-.loading-spinner::after {
+.figma-browser-loading-spinner::before,
+.figma-browser-loading-spinner::after {
   content: "";
   position: absolute;
   border-radius: 50%;
   animation: spin 2s linear infinite;
 }
 
-.loading-spinner::before {
+.figma-browser-loading-spinner::before {
   width: 80px;
   height: 80px;
   border: 3px solid transparent;
@@ -197,7 +197,7 @@
   border-right: 3px solid #ffffff;
 }
 
-.loading-spinner::after {
+.figma-browser-loading-spinner::after {
   width: 60px;
   height: 60px;
   top: 10px;
@@ -209,7 +209,7 @@
 }
 
 /* Inner dot */
-.loading-spinner .inner-dot {
+.figma-browser-loading-spinner .inner-dot {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -399,17 +399,17 @@
     font-size: 14px;
   }
 
-  .loading-spinner {
+  .figma-browser-loading-spinner {
     width: 60px;
     height: 60px;
   }
 
-  .loading-spinner::before {
+  .figma-browser-loading-spinner::before {
     width: 60px;
     height: 60px;
   }
 
-  .loading-spinner::after {
+  .figma-browser-loading-spinner::after {
     width: 40px;
     height: 40px;
     top: 10px;

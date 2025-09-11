@@ -193,3 +193,52 @@
   border: 1px solid #f5c6cb !important;
   background: #f8d7da !important;
 }
+
+/* ===== INLINE EDITING STYLES ===== */
+
+/* Editable elements hover state */
+[data-editable="true"]:hover {
+  outline: 2px dashed #2563eb !important;
+  outline-offset: 2px;
+  cursor: pointer !important;
+  position: relative;
+}
+
+/* Tooltip for editable elements */
+[data-editable="true"]:hover::after {
+  content: "Click to edit";
+  position: absolute;
+  top: -25px;
+  left: 0;
+  background: #2563eb;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  white-space: nowrap;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+/* Active editing state */
+[contenteditable="true"] {
+  outline: 2px solid #2563eb !important;
+  outline-offset: 2px;
+  background-color: rgba(37, 99, 235, 0.1) !important;
+  cursor: text !important;
+}
+
+[contenteditable="true"]:focus {
+  outline: 2px solid #1d4ed8 !important;
+  background-color: rgba(29, 78, 216, 0.15) !important;
+}
+
+/* Override drag cursor for editable elements when editing */
+[contenteditable="true"] {
+  cursor: text !important;
+}
+
+/* Disable drag when editing */
+.dragula-container [contenteditable="true"] {
+  cursor: text !important;
+}

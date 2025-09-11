@@ -1128,44 +1128,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                 </button>
               )}
             </div>
-
-            {/* AI Suggestions integrated within the same container */}
-            {showAiSuggestions && (aiSuggestions.length > 0 || (suggestionLoading && isInputFocused)) && (
-              <div className="ai-suggestions-integrated">
-                <div className="ai-suggestions-label">
-                  <FiCpu className="ai-icon" />
-                  <span>AI Suggestions:</span>
-                  {suggestionLoading && <span className="loading-dot">●</span>}
-                </div>
-                <div className="ai-suggestions-panel" aria-label="AI suggestions">
-                  {aiSuggestions.length > 0 ? (
-                    <div className="ai-suggestions-buttons">
-                      {aiSuggestions.map((suggestion, index) => (
-                        <button
-                          key={index}
-                          type="button"
-                          className="ai-suggestion-pill ai-suggestion-button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setDescription(suggestion);
-                            onAiSuggestionClick(suggestion);
-                          }}
-                        >
-                          <span className="ai-badge">AI</span>
-                          {suggestion}
-                        </button>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="ai-suggestions-placeholder">
-                      <div className="skeleton-pill" />
-                      <div className="skeleton-pill" />
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
           </form>
 
         </div>

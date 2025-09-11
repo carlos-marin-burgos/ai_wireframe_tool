@@ -1,47 +1,58 @@
-/* Simple, Clean Loading Spinner */
+/* Better Loading Spinner */
 
 .loading-spinner {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 2px solid transparent;
-  border-top: 2px solid currentColor;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #fff;
+  border-bottom-color: #ff3d00;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
 }
 
 .loading-spinner--small {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #fff;
+  border-bottom-color: #ff3d00;
 }
 
 .loading-spinner--medium {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #fff;
+  border-bottom-color: #ff3d00;
 }
 
 .loading-spinner--large {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
+  border: 3px solid #fff;
+  border-bottom-color: #ff3d00;
 }
 
 .loading-spinner--white {
-  border-top-color: white;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-bottom-color: white;
 }
 
 .loading-spinner--blue {
-  border-top-color: #0078d4;
+  border: 3px solid rgba(0, 120, 212, 0.3);
+  border-bottom-color: #0078d4;
 }
 
 .loading-spinner--gray {
-  border-top-color: #666;
+  border: 3px solid rgba(102, 102, 102, 0.3);
+  border-bottom-color: #666;
 }
 
 .loading-spinner--dark {
-  border-top-color: #333;
+  border: 3px solid rgba(51, 51, 51, 0.3);
+  border-bottom-color: #333;
 }
 
-@keyframes spin {
+@keyframes rotation {
   0% {
     transform: rotate(0deg);
   }

@@ -62,6 +62,9 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   const [showFigmaIntegration, setShowFigmaIntegration] = useState(false);
   const [showTopToolbarFigmaImport, setShowTopToolbarFigmaImport] = useState(false);
 
+  // Editing mode state
+  const [editingMode, setEditingMode] = useState<'drag' | 'edit'>('drag');
+
   // Toolbar function refs
   const figmaIntegrationRef = useRef<(() => void) | null>(null);
   const componentLibraryRef = useRef<(() => void) | null>(null);
@@ -335,7 +338,6 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           handleWireframeGenerated(result.html);
           setReactComponent("");  // Clear React component
           setShowLandingPage(false);
-          showToast('🚀 Wireframe generated!', 'success');
 
           // Close AI suggestions panel after successful generation
           setShowAiSuggestions(false);
@@ -393,7 +395,6 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           handleWireframeGenerated(result.html);
           setReactComponent("");
           setShowLandingPage(false);
-          showToast('🚀 Wireframe generated from suggestion!', 'success');
         } else {
           console.error("Error: Received invalid wireframe data");
           showToast("Error: Received invalid wireframe data. Please try again.", 'error');
@@ -1351,7 +1352,6 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
       if (result && result.html) {
         handleWireframeGenerated(result.html);
-        showToast(`${demoType} wireframe generated!`, 'success');
       }
     } catch (error) {
       console.error('Error generating demo wireframe:', error);
@@ -1451,6 +1451,8 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           onViewHtmlCode={viewHtmlCodeRef}
           onDownloadWireframe={downloadWireframeRef}
           onPresentationMode={presentationModeRef}
+          editingMode={editingMode}
+          onEditingModeChange={setEditingMode}
         />
       )}
 

@@ -1,0 +1,174 @@
+.editable-wireframe {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wireframe-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: #f3f2f1;
+  border: 1px solid #e1dfdd;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #605e5c;
+}
+
+.toolbar-text {
+  font-weight: 500;
+}
+
+.editable-wireframe-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  min-height: 400px;
+  padding: 16px;
+  border: 1px solid #e1dfdd;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+/* Editable element styles */
+.editable-wireframe-container [data-editable="true"] {
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.editable-wireframe-container [data-editable="true"]:hover {
+  background-color: rgba(0, 120, 212, 0.1) !important;
+  border-radius: 2px !important;
+}
+
+.editable-wireframe-container [data-editable="true"][contenteditable="true"] {
+  background-color: rgba(0, 120, 212, 0.2) !important;
+  border: 2px solid #0078d4 !important;
+  border-radius: 4px !important;
+  padding: 2px 4px !important;
+  outline: none !important;
+  box-shadow: 0 0 0 1px rgba(0, 120, 212, 0.3);
+}
+
+/* Selection highlight */
+.editable-wireframe-container
+  [data-editable="true"][contenteditable="true"]::selection {
+  background-color: rgba(0, 120, 212, 0.3);
+}
+
+/* Prevent dragula from interfering with contenteditable */
+.editable-wireframe-container [contenteditable="true"] {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+}
+
+/* Dragula overrides for editable elements */
+.editable-wireframe-container .gu-mirror {
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  opacity: 0.8 !important;
+  background: white !important;
+  border: 2px solid #0078d4 !important;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.editable-wireframe-container .gu-hide {
+  display: none !important;
+}
+
+.editable-wireframe-container .gu-unselectable {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+
+.editable-wireframe-container .gu-transit {
+  opacity: 0.2 !important;
+  border: 2px dashed #0078d4 !important;
+  background: rgba(0, 120, 212, 0.1) !important;
+}
+
+/* Force visibility for all elements */
+.editable-wireframe-container * {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Preserve Bootstrap and custom styles */
+.editable-wireframe-container .btn,
+.editable-wireframe-container button,
+.editable-wireframe-container input[type="button"],
+.editable-wireframe-container input[type="submit"] {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Drop zone highlighting */
+.editable-wireframe-container .row {
+  min-height: 60px;
+  padding: 8px;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.editable-wireframe-container .row.gu-over {
+  background: rgba(0, 120, 212, 0.1) !important;
+  border-color: #0078d4 !important;
+}
+
+/* Column styling */
+.editable-wireframe-container .col,
+.editable-wireframe-container [class*="col-"] {
+  padding: 6px;
+  border: 1px dashed #dee2e6;
+  border-radius: 4px;
+  margin: 2px 0;
+  background: #f8f9fa;
+  min-height: 40px;
+  transition: all 0.2s ease;
+}
+
+.editable-wireframe-container .col:hover,
+.editable-wireframe-container [class*="col-"]:hover {
+  border-color: rgba(0, 120, 212, 0.6);
+  background: rgba(0, 120, 212, 0.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .wireframe-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .editable-wireframe-container {
+    padding: 12px;
+  }
+}
+
+/* Focus styles for better accessibility */
+.editable-wireframe-container [data-editable="true"]:focus {
+  box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.4);
+}
+
+/* Loading state */
+.editable-wireframe.loading .editable-wireframe-container {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.editable-wireframe.loading .wireframe-toolbar::after {
+  content: " (Loading...)";
+  color: #a19f9d;
+}

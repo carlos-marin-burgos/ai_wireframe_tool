@@ -433,7 +433,7 @@
 }
 
 /* Loading spinner */
-.loading-spinner {
+.enhanced-message-loading-spinner {
   animation: spin 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   color: white;
   filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));

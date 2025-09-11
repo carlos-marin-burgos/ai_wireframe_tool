@@ -301,7 +301,7 @@ body {
 }
 
 /* Loading Animation */
-.loading-spinner {
+.app-clean-loading-spinner {
   animation: spin 1s linear infinite;
 }
 

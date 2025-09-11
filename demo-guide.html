@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Designetica Demo - Step by Step Guide</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0078d4, #005a9e);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            background: white;
+            border: 1px solid #e1dfdd;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .step h2 {
+            color: #0078d4;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-number {
+            background: #0078d4;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .code {
+            background: #f6f8fa;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 16px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f1aeb5;
+            color: #721c24;
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+
+        .screenshot-placeholder {
+            background: #e9ecef;
+            border: 2px dashed #adb5bd;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            margin: 15px 0;
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checklist li:before {
+            content: "☐";
+            font-size: 18px;
+            color: #0078d4;
+        }
+
+        .button-demo {
+            background: #0078d4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+
+        .mode-toggle-demo {
+            background: #f3f2f1;
+            border: 1px solid #e1dfdd;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .mode-toggle-demo.active {
+            background: #0078d4;
+            color: white;
+            border-color: #0078d4;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>🎯 Designetica Demo: Inline Text Editing</h1>
+        <p>Complete step-by-step guide to test the "update label to 'Designetica Dashboard'" functionality</p>
+    </div>
+
+    <div class="step">
+        <h2><span class="step-number">1</span>Open Designetica App</h2>
+        <p>Navigate to the Designetica application in your browser:</p>
+        <div class="code">http://localhost:5173</div>
+
+        <div class="success">
+            ✅ <strong>Expected Result:</strong> You should see the Designetica landing page with a description input
+            field and "Generate Wireframe" button.
+        </div>
+
+        <div class="screenshot-placeholder">
+            [Landing page with input field and generate button]
+        </div>
+    </div>
+
+    <div class="step">
+        <h2><span class="step-number">2</span>Generate a Test Wireframe</h2>
+        <p>In the description field, enter the following text:</p>
+        <div class="code">Simple dashboard with header saying "Dashboard" and a paragraph below it</div>
+
+        <p>Then click the <button class="button-demo">Generate Wireframe</button> button.</p>
+
+        <div class="warning">
+            ⚠️ <strong>Wait for generation:</strong> This may take 5-10 seconds. You'll see a loading indicator.
+        </div>
+
+        <div class="success">
+            ✅ <strong>Expected Result:</strong> A wireframe should appear with a header saying "Dashboard" and some
+            paragraph text below it.
+        </div>
+
+        <div class="screenshot-placeholder">
+            [Generated wireframe with header and paragraph]
+        </div>
+    </div>
+
+    <div class="step">
+        <h2><span class="step-number">3</span>Locate the Mode Toggle Button</h2>
+        <p>Look for a mode toggle button that should appear above or near the wireframe. It will look like one of these:
+        </p>
+
+        <div style="text-align: center; margin: 20px 0;">
+            <button class="mode-toggle-demo">🖱️ Drag Mode</button>
+            <span style="margin: 0 10px;">OR</span>
+            <button class="mode-toggle-demo active">✏️ Edit Mode</button>
+        </div>
+
+        <div class="success">
+            ✅ <strong>Expected Result:</strong> You should see a toggle button. If it says "🖱️ Drag Mode", click it to
+            switch to "✏️ Edit Mode".
+        </div>
+
+        <div class="error">
+            ❌ <strong>If you don't see the toggle button:</strong> Check the browser console for errors (F12 → Console
+            tab).
+        </div>
+    </div>
+
+    <div class="step">
+        <h2><span class="step-number">4</span>Switch to Edit Mode</h2>
+        <p>Click the mode toggle button to ensure you're in <strong>Edit Mode</strong>. The button should show:</p>
+        <div style="text-align: center; margin: 15px 0;">
+            <button class="mode-toggle-demo active">✏️ Edit Mode</button>
+        </div>
+
+        <div class="success">
+            ✅ <strong>Expected Result:</strong> The button text changes to "✏️ Edit Mode" and the wireframe should now
+            be in editing mode.
+        </div>
+    </div>
+
+    <div class="step">
+        <h2><span class="step-number">5</span>Test Inline Text Editing</h2>
+        <p>Now for the demo action: <strong>"Select a component on the right pane (e.g., the header text), update label
+                to 'Designetica Dashboard'"</strong></p>
+
+        <ul class="checklist">
+            <li>Hover over the header text that says "Dashboard"</li>
+            <li>You should see a light blue highlight when hovering</li>
+            <li>Click on the header text</li>
+            <li>The text should become editable with a blue border</li>
+            <li>Change the text from "Dashboard" to "Designetica Dashboard"</li>
+            <li>Press Enter or click outside to save</li>
+        </ul>
+
+        <div class="success">
+            ✅ <strong>Expected Result:</strong> The header text changes from "Dashboard" to "Designetica Dashboard" and
+            remains changed after saving.
+        </div>
+
+        <div class="screenshot-placeholder">
+            [Editable text with blue border showing "Designetica Dashboard"]
+        </div>
+    </div>
+
+    <div class="step">
+        <h2><span class="step-number">6</span>Troubleshooting</h2>
+        <p>If inline editing is not working, try these debugging steps:</p>
+
+        <h3>🔍 Browser Console Check</h3>
+        <p>Press F12 and check the Console tab for any red error messages. Common issues:</p>
+        <div class="code">
+            • React rendering errors
+            • JavaScript function errors
+            • Component mounting failures
+        </div>
+
+        <h3>🔄 Refresh and Retry</h3>
+        <p>Sometimes React components need a refresh:</p>
+        <div class="code">
+            1. Refresh the page (Ctrl+R / Cmd+R)
+            2. Generate a new wireframe
+            3. Try editing again
+        </div>
+
+        <h3>📋 Manual Console Test</h3>
+        <p>Open browser console (F12) and paste this diagnostic script:</p>
+        <div class="code">
+            console.log('🔍 Checking editing components...');
+            const editableWireframe = document.querySelector('.editable-wireframe');
+            const editableElements = document.querySelectorAll('[data-editable="true"]');
+            console.log('EditableWireframe found:', !!editableWireframe);
+            console.log('Editable elements:', editableElements.length);
+            if (editableElements.length > 0) {
+            console.log('First editable element:', editableElements[0]);
+            editableElements[0].click();
+            setTimeout(() => {
+            console.log('ContentEditable after click:', editableElements[0].contentEditable);
+            }, 500);
+            }
+        </div>
+    </div>
+
+    <div class="step">
+        <h2><span class="step-number">7</span>Demo Success Criteria</h2>
+        <p>For a successful demo, you should be able to:</p>
+
+        <ul class="checklist">
+            <li>Generate a wireframe with header text</li>
+            <li>Switch to Edit Mode using the toggle button</li>
+            <li>Click on the header text to make it editable</li>
+            <li>Change "Dashboard" to "Designetica Dashboard"</li>
+            <li>Save the changes by pressing Enter or clicking outside</li>
+            <li>See the updated text persist in the wireframe</li>
+        </ul>
+
+        <div class="success">
+            🎉 <strong>Demo Complete!</strong> You've successfully demonstrated inline text editing in Designetica.
+        </div>
+    </div>
+
+    <div class="step">
+        <h2><span class="step-number">💡</span>Additional Demo Tips</h2>
+        <ul>
+            <li><strong>Practice the workflow</strong> several times before the actual demo</li>
+            <li><strong>Have a backup plan</strong> - if editing fails, show the toggle button and explain the feature
+            </li>
+            <li><strong>Emphasize the use case</strong> - "This allows users to quickly customize wireframe text without
+                regenerating"</li>
+            <li><strong>Show multiple elements</strong> - try editing both the header and paragraph text</li>
+            <li><strong>Mention future enhancements</strong> - "We're working on drag-and-drop and component editing
+                too"</li>
+        </ul>
+    </div>
+</body>
+
+</html>

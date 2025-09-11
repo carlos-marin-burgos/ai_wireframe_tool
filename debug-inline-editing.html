@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Inline Editing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+
+        .test-section {
+            border: 2px solid #0078d4;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .wireframe-content {
+            border: 1px dashed #ccc;
+            padding: 20px;
+            margin: 10px 0;
+            background: #f9f9f9;
+        }
+
+        [data-editable="true"] {
+            cursor: text;
+            padding: 2px 4px;
+            border-radius: 2px;
+            transition: all 0.2s ease;
+        }
+
+        [data-editable="true"]:hover {
+            background-color: rgba(0, 120, 212, 0.1);
+        }
+
+        .status {
+            background: #e7f3ff;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Inline Editing Debug Test</h1>
+
+    <div class="status" id="status">
+        Status: Ready to test
+    </div>
+
+    <div class="test-section">
+        <h2>Step 1: Manual Test</h2>
+        <p>Click the button below to make text elements editable, then click on any text to edit it.</p>
+        <button onclick="makeElementsEditable()"
+            style="padding: 10px 20px; background: #0078d4; color: white; border: none; border-radius: 4px; cursor: pointer;">
+            Make Elements Editable
+        </button>
+    </div>
+
+    <div class="test-section">
+        <h2>Step 2: Test Wireframe Content</h2>
+        <div class="wireframe-content" id="wireframe">
+            <div style="font-size: 2.5em; font-weight: bold; color: #007bff; margin-bottom: 10px;">Dashboard</div>
+            <div style="font-size: 1.2em; line-height: 1.6; color: #495057;">
+                Welcome to your dashboard. Here you will find all the information you need to manage your tasks and
+                activities efficiently.
+            </div>
+            <h3>Additional Header</h3>
+            <p>This is a paragraph that should be editable.</p>
+            <button
+                style="padding: 8px 16px; background: #28a745; color: white; border: none; border-radius: 4px;">Action
+                Button</button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Step 3: Debug Output</h2>
+        <div id="debug-output"
+            style="background: #f8f9fa; padding: 10px; border-radius: 4px; font-family: monospace; max-height: 200px; overflow-y: auto;">
+            Debug messages will appear here...
+        </div>
+    </div>
+
+    <script>
+        let isEditing = false;
+        let selectedElement = null;
+
+        function log(message) {
+            const debugOutput = document.getElementById('debug-output');
+            const timestamp = new Date().toLocaleTimeString();
+            debugOutput.innerHTML += `[${timestamp}] ${message}\n`;
+            debugOutput.scrollTop = debugOutput.scrollHeight;
+            console.log(message);
+        }
+
+        function updateStatus(message) {
+            document.getElementById('status').textContent = `Status: ${message}`;
+            log(`STATUS: ${message}`);
+        }
+
+        function makeElementsEditable() {
+            const wireframe = document.getElementById('wireframe');
+            if (!wireframe) {
+                log('❌ Wireframe container not found');
+                return;
+            }
+
+            log('🔧 Making text elements editable...');
+            updateStatus('Making elements editable...');
+
+            const textElementSelectors = [
+                'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+                'p', 'span', 'div',
+                'a', 'button',
+                'label', 'td', 'th',
+                'li', 'blockquote'
+            ];
+
+            let editableCount = 0;
+
+            textElementSelectors.forEach(selector => {
+                const elements = wireframe.querySelectorAll(selector);
+                log(`🔍 Found ${elements.length} elements for selector: ${selector}`);
+
+                elements.forEach((element) => {
+                    // Skip if it's a container with child elements
+                    if (element.children.length > 0 && element.tagName !== 'BUTTON' && element.tagName !== 'A') {
+                        log(`⏭️ Skipping ${element.tagName} - has children: ${element.children.length}`);
+                        return;
+                    }
+
+                    // Only make editable if it has text content
+                    if (!element.textContent?.trim()) {
+                        log(`⏭️ Skipping ${element.tagName} - no text content`);
+                        return;
+                    }
+
+                    log(`✅ Making ${element.tagName} editable: "${element.textContent.trim()}"`);
+
+                    // Mark as editable
+                    element.setAttribute('data-editable', 'true');
+                    element.style.cursor = 'text';
+                    element.style.outline = 'none';
+
+                    // Add click listener
+                    element.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        log(`🖱️ Clicked on editable element: ${element.tagName} - "${element.textContent.trim()}"`);
+                        startEditing(element);
+                    });
+
+                    // Add hover effects
+                    element.addEventListener('mouseenter', function () {
+                        if (!isEditing) {
+                            element.style.backgroundColor = 'rgba(0, 120, 212, 0.1)';
+                            element.style.borderRadius = '2px';
+                        }
+                    });
+
+                    element.addEventListener('mouseleave', function () {
+                        if (!isEditing || selectedElement !== element) {
+                            element.style.backgroundColor = '';
+                            element.style.borderRadius = '';
+                        }
+                    });
+
+                    editableCount++;
+                });
+            });
+
+            log(`🎯 Total editable elements created: ${editableCount}`);
+            updateStatus(`${editableCount} elements made editable. Click any text to edit.`);
+        }
+
+        function startEditing(element) {
+            log(`🚀 Starting to edit element: ${element.tagName} - "${element.textContent}"`);
+
+            if (isEditing && selectedElement && selectedElement !== element) {
+                finishEditing(selectedElement);
+            }
+
+            selectedElement = element;
+            isEditing = true;
+
+            // Make contentEditable
+            element.contentEditable = 'true';
+            element.focus();
+
+            // Select all text
+            const range = document.createRange();
+            range.selectNodeContents(element);
+            const selection = window.getSelection();
+            selection?.removeAllRanges();
+            selection?.addRange(range);
+
+            // Style for editing mode
+            element.style.backgroundColor = 'rgba(0, 120, 212, 0.2)';
+            element.style.border = '2px solid #0078d4';
+            element.style.borderRadius = '4px';
+            element.style.padding = '2px 4px';
+
+            log(`✅ Element is now contentEditable: ${element.contentEditable}`);
+            updateStatus(`Editing: ${element.tagName} - Press Enter to save, Escape to cancel`);
+
+            // Handle key events
+            const handleKeyDown = (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    finishEditing(element);
+                } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    finishEditing(element);
+                }
+            };
+
+            // Handle blur (click outside)
+            const handleBlur = () => {
+                setTimeout(() => finishEditing(element), 100);
+            };
+
+            element.addEventListener('keydown', handleKeyDown);
+            element.addEventListener('blur', handleBlur);
+
+            // Store cleanup functions
+            element._cleanup = () => {
+                element.removeEventListener('keydown', handleKeyDown);
+                element.removeEventListener('blur', handleBlur);
+            };
+        }
+
+        function finishEditing(element) {
+            if (!element) return;
+
+            log(`💾 Finishing edit of element: ${element.tagName} - New content: "${element.textContent}"`);
+
+            element.contentEditable = 'false';
+            element.style.backgroundColor = '';
+            element.style.border = '';
+            element.style.borderRadius = '';
+            element.style.padding = '';
+
+            // Cleanup event listeners
+            if (element._cleanup) {
+                element._cleanup();
+                delete element._cleanup;
+            }
+
+            isEditing = false;
+            selectedElement = null;
+            updateStatus('Edit completed. Click any text to edit again.');
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', function () {
+            log('🌟 Page loaded - Ready for testing');
+            updateStatus('Ready - Click "Make Elements Editable" button to start');
+        });
+    </script>
+</body>
+
+</html>
