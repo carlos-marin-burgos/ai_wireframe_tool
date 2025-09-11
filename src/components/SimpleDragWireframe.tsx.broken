@@ -1,3 +1,19 @@
+/*
+ * Enhanced SimpleDragWireframe Component
+ * 
+ * Features:
+ * 1. Cross-container moves - Elements can be moved between .row, .col, .section, etc.
+ * 2. Drag mode toggle - Button to enable/disable dragging to prevent accidental moves
+ * 3. Ordering metadata - Semantic structure tracking for better diffing
+ * 
+ * Usage:
+ * <SimpleDragWireframe 
+ *   htmlContent={wireframeHtml}
+ *   onUpdateContent={(newHtml) => setWireframeHtml(newHtml)}
+ *   onOrderingChange={(metadata) => console.log('Structure changed:', metadata)}
+ * />
+ */
+
 import React, { useEffect, useRef, useState } from 'react';
 import dragula from 'dragula';
 import 'dragula/dist/dragula.css';
@@ -17,7 +33,42 @@ interface SimpleDragWireframeProps {
     onOrderingChange?: (metadata: OrderingMetadata[]) => void;
 }
 
-// HTML sanitization function to prevent broken HTML display
+// Generate ordering metadata from DOM structure
+function generateOrderingMetadata(element: Element, index: number = 0): OrderingMetadata {
+    const id = element.id || `element-${element.tagName.toLowerCase()}-${index}`;
+
+    return {
+        id,
+        tagName: element.tagName.toLowerCase(),
+        className: element.className || undefined,
+        textContent: element.textContent?.trim().substring(0, 50) || undefined,
+        children: Array.from(element.children).map((child, childIndex) =>
+            generateOrderingMetadata(child, childIndex)
+        )
+    };
+}
+
+// Find all containers that can accept drops (rows, cols, sections, etc.)
+function findDragContainers(rootElement: HTMLElement): HTMLElement[] {
+    const containers = [rootElement]; // Always include the root
+    const selectors = [
+        '.row', '.col', '.column',
+        '.container', '.section', '.grid',
+        '[data-droppable="true"]',
+        '.card-body', '.panel-body'
+    ];
+
+    selectors.forEach(selector => {
+        const elements = rootElement.querySelectorAll(selector);
+        elements.forEach(el => {
+            if (el instanceof HTMLElement) {
+                containers.push(el);
+            }
+        });
+    });
+
+    return [...new Set(containers)]; // Remove duplicates
+}
 function sanitizeHTML(html: string): string {
     if (!html || typeof html !== 'string') {
         return '';
@@ -77,24 +128,35 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
     const containerRef = useRef<HTMLDivElement>(null);
     const dragulaRef = useRef<any>(null);
     const [isDragEnabled, setIsDragEnabled] = useState(false);
+    const [dragContainers, setDragContainers] = useState<HTMLElement[]>([]);
 
     // Function to make elements editable
     const makeElementsEditable = (container: HTMLElement) => {
         if (!container) return;
 
-        const editableSelectors = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'div', 'a', 'button', 'li', 'td', 'th', 'label'];
+        const editableSelectors = [
+            'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+            'p', 'span', 'div', 'a', 'button',
+            'li', 'td', 'th', 'label'
+        ];
 
         editableSelectors.forEach(selector => {
             const elements = container.querySelectorAll(selector);
             elements.forEach(element => {
-                if (element instanceof HTMLElement && element.textContent?.trim() &&
-                    !element.classList.contains('dragula-container')) {
-                    element.setAttribute('data-editable', 'true');
-                    // Also mark elements with content as potentially draggable
-                    if (element.textContent?.trim().length > 0) {
-                        element.setAttribute('data-draggable', 'true');
+                if (element instanceof HTMLElement) {
+                    // Skip if already processed or is a container
+                    if (element.getAttribute('data-editable') === 'true' ||
+                        element.classList.contains('dragula-container') ||
+                        element.classList.contains('row') ||
+                        element.classList.contains('col')) {
+                        return;
                     }
-                    element.addEventListener('click', handleElementClick);
+
+                    // Only make editable if it has text content
+                    if (element.textContent && element.textContent.trim()) {
+                        element.setAttribute('data-editable', 'true');
+                        element.addEventListener('click', handleElementClick);
+                    }
                 }
             });
         });
@@ -102,31 +164,37 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
 
     // Handle click on editable elements
     const handleElementClick = (event: Event) => {
-        if (isDragEnabled) return; // Don't allow editing in drag mode
-
         event.stopPropagation();
+
         const element = event.target as HTMLElement;
         if (!element || element.contentEditable === 'true') return;
 
+        // Make element editable
         element.contentEditable = 'true';
         element.focus();
 
+        // Select all text
         const range = document.createRange();
         range.selectNodeContents(element);
         const selection = window.getSelection();
         selection?.removeAllRanges();
         selection?.addRange(range);
 
+        // Handle blur (finish editing)
         const handleBlur = () => {
             element.contentEditable = 'false';
             element.removeEventListener('blur', handleBlur);
             element.removeEventListener('keydown', handleKeyDown);
 
+            // Update content
             if (containerRef.current && onUpdateContent) {
-                onUpdateContent(containerRef.current.innerHTML);
+                const newContent = containerRef.current.innerHTML;
+                onUpdateContent(newContent);
+                updateOrderingMetadata();
             }
         };
 
+        // Handle enter key (finish editing)
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -142,13 +210,28 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
         element.addEventListener('keydown', handleKeyDown);
     };
 
+    // Function to update ordering metadata
+    const updateOrderingMetadata = () => {
+        if (!containerRef.current || !onOrderingChange) return;
+
+        const metadata = Array.from(containerRef.current.children).map((child, index) =>
+            generateOrderingMetadata(child, index)
+        );
+        onOrderingChange(metadata);
+    };
+
+    // Function to toggle drag mode
     const toggleDragMode = () => {
         setIsDragEnabled(!isDragEnabled);
     };
 
-    // HTML content effect - runs when htmlContent changes
     useEffect(() => {
         if (!containerRef.current) return;
+
+        // Clean up previous dragula instance
+        if (dragulaRef.current) {
+            dragulaRef.current.destroy();
+        }
 
         // Sanitize and parse the HTML content safely
         const sanitizedHTML = sanitizeHTML(htmlContent);
@@ -161,25 +244,50 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
                 <p><strong>❌ Wireframe Rendering Error</strong></p>
                 <p>Could not render the wireframe. Please try regenerating it.</p>
             </div>`;
+            return;
         }
-    }, [htmlContent]);
 
-    // Separate effect for managing editable elements - runs when content or drag mode changes
+        // Find all containers that can accept drops
+        const containers = findDragContainers(containerRef.current);
+        setDragContainers(containers);
+
+        // Make elements editable for inline editing
+        makeElementsEditable(containerRef.current);
+
     useEffect(() => {
         if (!containerRef.current) return;
 
-        // Clean up existing event listeners
-        const existingEditableElements = containerRef.current.querySelectorAll('[data-editable="true"]');
-        existingEditableElements.forEach(element => {
-            element.removeEventListener('click', handleElementClick);
-            element.removeAttribute('data-editable');
-            element.removeAttribute('data-draggable');
-        });
+        // Clean up previous dragula instance
+        if (dragulaRef.current) {
+            dragulaRef.current.destroy();
+        }
 
-        // Re-attach editable functionality
+        // Sanitize and parse the HTML content safely
+        const sanitizedHTML = sanitizeHTML(htmlContent);
+
+        try {
+            // Use innerHTML only after sanitization
+            containerRef.current.innerHTML = sanitizedHTML;
+        } catch (error) {
+            containerRef.current.innerHTML = `<div style="padding: 20px; color: #dc3545; font-family: 'Segoe UI', sans-serif;">
+                <p><strong>❌ Wireframe Rendering Error</strong></p>
+                <p>Could not render the wireframe. Please try regenerating it.</p>
+            </div>`;
+            return;
+        }
+
+        // Find all containers that can accept drops
+        const containers = findDragContainers(containerRef.current);
+        setDragContainers(containers);
+
+        // Make elements editable for inline editing
         makeElementsEditable(containerRef.current);
 
+        // Initial metadata generation
+        updateOrderingMetadata();
+
         return () => {
+            // Clean up event listeners
             if (containerRef.current) {
                 const editableElements = containerRef.current.querySelectorAll('[data-editable="true"]');
                 editableElements.forEach(element => {
@@ -187,49 +295,50 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
                 });
             }
         };
-    }, [htmlContent, isDragEnabled]); // Re-run when drag mode changes
+    }, [htmlContent, onUpdateContent, onOrderingChange]); // Removed isDragEnabled from dependencies
 
-    // Dragula effect - runs when drag mode changes
+    // Separate effect for dragula initialization that responds to drag mode changes
     useEffect(() => {
-        if (!containerRef.current) return;
+        if (!containerRef.current || dragContainers.length === 0) return;
 
+        // Clean up previous dragula instance
         if (dragulaRef.current) {
             dragulaRef.current.destroy();
         }
 
-        // Initialize dragula with better container detection
-        dragulaRef.current = dragula([containerRef.current], {
+        // Initialize dragula with cross-container support
+        dragulaRef.current = dragula(dragContainers, {
             moves: function (el, source, handle, sibling) {
-                const element = el as HTMLElement;
-                // Only allow dragging if drag mode is enabled and element is not currently being edited
-                const isCurrentlyEditable = element.contentEditable === 'true';
-                const hasText = element.textContent?.trim().length > 0;
-
-                // Allow moving elements that have content and are not being edited
-                return isDragEnabled && !isCurrentlyEditable && hasText;
+                // Only allow moves if drag mode is enabled
+                if (!isDragEnabled) return false;
+                
+                // Allow all elements to be moved
+                return true;
             },
             accepts: function (el, target, source, sibling) {
-                // Allow dropping into the main container or any child container
-                return target === containerRef.current || containerRef.current?.contains(target);
+                // Allow cross-container moves (ensure target is HTMLElement)
+                return target instanceof HTMLElement && dragContainers.includes(target);
             },
-            copy: false,
-            revertOnSpill: true,
-            removeOnSpill: false
+            invalid: function (el, handle) {
+                // Don't allow dragging of form inputs, buttons, links, or elements being actively edited
+                if (!(el instanceof HTMLElement)) return true;
+
+                return el.tagName === 'INPUT' ||
+                    el.tagName === 'BUTTON' ||
+                    el.tagName === 'A' ||
+                    el.contentEditable === 'true'; // Only prevent if actively being edited
+            }
         });
 
+        // Update content and metadata when items are moved
         dragulaRef.current.on('drop', () => {
             if (containerRef.current && onUpdateContent) {
                 try {
                     const newContent = containerRef.current.innerHTML;
                     onUpdateContent(newContent);
-
-                    // Generate ordering metadata if callback provided
-                    if (onOrderingChange) {
-                        const metadata = generateOrderingMetadata(containerRef.current);
-                        onOrderingChange(metadata);
-                    }
+                    updateOrderingMetadata();
                 } catch (error) {
-                    // Silent error handling for drag operations
+                    // Silent error handling
                 }
             }
         });
@@ -239,27 +348,7 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
                 dragulaRef.current.destroy();
             }
         };
-    }, [isDragEnabled, onUpdateContent, onOrderingChange]);
-
-    // Generate ordering metadata from DOM structure
-    const generateOrderingMetadata = (element: Element): OrderingMetadata[] => {
-        const metadata: OrderingMetadata[] = [];
-
-        Array.from(element.children).forEach((child, index) => {
-            if (child instanceof HTMLElement) {
-                const childMetadata: OrderingMetadata = {
-                    id: child.id || `element-${index}`,
-                    tagName: child.tagName.toLowerCase(),
-                    className: child.className,
-                    textContent: child.textContent?.substring(0, 50) || '',
-                    children: generateOrderingMetadata(child)
-                };
-                metadata.push(childMetadata);
-            }
-        });
-
-        return metadata;
-    };
+    }, [isDragEnabled, dragContainers]); // Only re-run when drag mode or containers change
 
     return (
         <div className="simple-drag-wireframe">
@@ -271,9 +360,13 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
                     title={isDragEnabled ? "Click to disable drag mode" : "Click to enable drag mode"}
                 >
                     {isDragEnabled ? (
-                        <>🔒 <span>Drag Mode: ON</span></>
+                        <>
+                            🔒 <span>Drag Mode: ON</span>
+                        </>
                     ) : (
-                        <>🔓 <span>Drag Mode: OFF</span></>
+                        <>
+                            🔓 <span>Drag Mode: OFF</span>
+                        </>
                     )}
                 </button>
                 <small className="drag-mode-hint">
@@ -284,10 +377,20 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
                 </small>
             </div>
 
+            {/* Main wireframe container */}
             <div
                 ref={containerRef}
                 className={`dragula-container ${isDragEnabled ? 'drag-enabled' : 'drag-disabled'}`}
             ></div>
+
+            {/* Info about containers */}
+            {dragContainers.length > 1 && (
+                <div className="drag-info">
+                    <small>
+                        ℹ️ Cross-container dragging enabled: {dragContainers.length} drop zones detected
+                    </small>
+                </div>
+            )}
         </div>
     );
 };

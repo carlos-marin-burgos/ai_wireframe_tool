@@ -116,7 +116,30 @@ function extractMainConceptFromDescription(description: string): string {
   // Extract key concepts from the user's description
   const desc = description.toLowerCase().trim();
 
-  // Look for specific wireframe types mentioned in description
+  // PRIORITY: Microsoft/Azure specific templates - preserve original naming
+  if (
+    desc.includes("microsoft learning plan") ||
+    desc.includes("ms learning plan")
+  )
+    return "Microsoft Learning Plan";
+  if (desc.includes("azure learning path")) return "Azure Learning Path";
+  if (
+    desc.includes("certification progress tracker") ||
+    desc.includes("certification tracker")
+  )
+    return "Certification Progress Tracker";
+  if (
+    desc.includes("microsoft docs") ||
+    desc.includes("microsoft documentation")
+  )
+    return "Microsoft Docs";
+  if (
+    desc.includes("learn home page") ||
+    desc.includes("microsoft learn landing")
+  )
+    return "Microsoft Learn Home";
+
+  // Generic wireframe types - only for non-template descriptions
   if (desc.includes("dashboard")) return "Dashboard";
   if (desc.includes("landing") || desc.includes("homepage"))
     return "Landing Page";

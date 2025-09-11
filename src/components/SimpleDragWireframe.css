@@ -71,23 +71,16 @@
 
 .dragula-container.drag-disabled {
   opacity: 0.8;
-  pointer-events: none;
+  /* Don't use pointer-events: none as it prevents scrolling */
 }
 
-.dragula-container.drag-disabled::after {
-  content: "🔒 Drag mode disabled";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(107, 114, 128, 0.9);
-  color: white;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  pointer-events: none;
-  z-index: 50;
+.dragula-container.drag-disabled * {
+  /* Only prevent dragging on child elements, not scrolling */
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  /* user-drag: none; - not a standard property */
 }
 
 .dragula-container.drag-enabled {
@@ -277,9 +270,17 @@
   transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
-.dragula-container .draggable-block:hover {
+/* Hover effects for draggable blocks only when drag mode is ON */
+.dragula-container.drag-enabled .draggable-block:hover {
+  border-color: #10b981;
+  background-color: rgba(16, 185, 129, 0.05);
+}
+
+/* Hover effects for editable draggable blocks only when drag mode is OFF */
+.dragula-container.drag-disabled .draggable-block[data-editable="true"]:hover {
   border-color: #6b7280;
   background-color: #f9fafb;
+  cursor: text;
 }
 
 /* Inner blocks should not inherit heavy outer padding duplication */
@@ -343,12 +344,40 @@
   border: 2px dashed #34495e !important;
 }
 
-.dragula-container > *:hover {
+/* Remove generic hover effects - replaced with specific ones below */
+/* .dragula-container > *:hover - REMOVED for better UX */
+
+/* Hover effects ONLY for editable elements when drag mode is OFF */
+.dragula-container.drag-disabled [data-editable="true"]:hover {
   border-color: rgba(75, 85, 99, 0.8) !important;
+  background-color: rgba(75, 85, 99, 0.05) !important;
+  cursor: text;
 }
 
-/* Drag icon on hover */
-.dragula-container > *:hover::before {
+/* Hover effects ONLY for draggable elements when drag mode is ON */
+.dragula-container.drag-enabled [data-draggable="true"]:hover {
+  border-color: rgba(16, 185, 129, 0.8) !important;
+  background-color: rgba(16, 185, 129, 0.05) !important;
+  cursor: grab;
+}
+
+/* Edit icon on hover for editable elements only */
+.dragula-container.drag-disabled [data-editable="true"]:hover::before {
+  content: "✏️";
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 3px;
+  padding: 2px 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Drag icon on hover for draggable elements only */
+.dragula-container.drag-enabled [data-draggable="true"]:hover::before {
   content: "⋮⋮";
   position: absolute;
   top: 50%;
@@ -373,8 +402,14 @@
   transition: all 0.2s ease;
 }
 
-.dragula-container .col:hover,
-.dragula-container [class*="col-"]:hover {
+/* Hover effects for columns only when appropriate */
+.dragula-container.drag-enabled .col:hover,
+.dragula-container.drag-enabled [class*="col-"]:hover {
+  border-color: rgba(16, 185, 129, 0.8);
+}
+
+.dragula-container.drag-disabled .col[data-editable="true"]:hover,
+.dragula-container.drag-disabled [class*="col-"][data-editable="true"]:hover {
   border-color: rgba(75, 85, 99, 0.8);
 }
 
