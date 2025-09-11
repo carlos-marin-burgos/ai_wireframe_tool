@@ -82,19 +82,34 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
     const makeElementsEditable = (container: HTMLElement) => {
         if (!container) return;
 
-        const editableSelectors = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'div', 'a', 'button', 'li', 'td', 'th', 'label'];
+        const editableSelectors = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'a', 'button', 'li', 'td', 'th', 'label'];
 
         editableSelectors.forEach(selector => {
             const elements = container.querySelectorAll(selector);
             elements.forEach(element => {
                 if (element instanceof HTMLElement && element.textContent?.trim() &&
                     !element.classList.contains('dragula-container')) {
-                    element.setAttribute('data-editable', 'true');
-                    // Also mark elements with content as potentially draggable
-                    if (element.textContent?.trim().length > 0) {
+
+                    // Only make it editable if it doesn't contain other editable elements
+                    const hasEditableChildren = element.querySelector('h1, h2, h3, h4, h5, h6, p, span, a, button, li, td, th, label');
+
+                    if (!hasEditableChildren) {
+                        element.setAttribute('data-editable', 'true');
+                        element.addEventListener('click', handleElementClick);
+                    }
+
+                    // Mark container elements (divs, sections, articles, etc.) as draggable if they have content
+                    // but don't make them editable if they contain other editable elements
+                    if ((element.tagName === 'DIV' || element.tagName === 'SECTION' ||
+                        element.tagName === 'ARTICLE' || element.tagName === 'ASIDE' ||
+                        element.classList.contains('card') || element.classList.contains('block'))
+                        && element.textContent?.trim().length > 10) {
+                        element.setAttribute('data-draggable', 'true');
+                        // Don't make containers editable, only their text content
+                    } else if (!hasEditableChildren) {
+                        // Only text elements without children get both editable and draggable
                         element.setAttribute('data-draggable', 'true');
                     }
-                    element.addEventListener('click', handleElementClick);
                 }
             });
         });

@@ -347,18 +347,44 @@
 /* Remove generic hover effects - replaced with specific ones below */
 /* .dragula-container > *:hover - REMOVED for better UX */
 
-/* Hover effects ONLY for editable elements when drag mode is OFF */
+/* Hover effects for precise element targeting */
+.dragula-container.drag-disabled [data-editable="true"] {
+  position: relative;
+}
+
 .dragula-container.drag-disabled [data-editable="true"]:hover {
   border-color: rgba(75, 85, 99, 0.8) !important;
   background-color: rgba(75, 85, 99, 0.05) !important;
   cursor: text;
 }
 
-/* Hover effects ONLY for draggable elements when drag mode is ON */
+/* Remove parent hover effects when child is being hovered */
+.dragula-container.drag-disabled
+  [data-editable="true"]
+  [data-editable="true"]:hover {
+  position: relative;
+  z-index: 1;
+}
+
+.dragula-container.drag-disabled
+  [data-editable="true"]:has([data-editable="true"]:hover) {
+  border-color: transparent !important;
+  background-color: transparent !important;
+  cursor: default;
+}
+
+/* Draggable element hover effects when drag mode is ON */
 .dragula-container.drag-enabled [data-draggable="true"]:hover {
   border-color: rgba(16, 185, 129, 0.8) !important;
   background-color: rgba(16, 185, 129, 0.05) !important;
   cursor: grab;
+}
+
+.dragula-container.drag-enabled
+  [data-draggable="true"]:has([data-draggable="true"]:hover) {
+  border-color: transparent !important;
+  background-color: transparent !important;
+  cursor: default;
 }
 
 /* Edit icon on hover for editable elements only */

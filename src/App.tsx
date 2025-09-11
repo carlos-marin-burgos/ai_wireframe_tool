@@ -1145,27 +1145,83 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   };
 
   const handleAnalyzeImage = async (imageUrl: string, fileName: string) => {
-    console.log('Analyzing image:', fileName, 'Size:', imageUrl.length, 'bytes');
+    console.log('🔍 Starting advanced image analysis:', fileName, 'Size:', imageUrl.length, 'bytes');
     setIsAnalyzingImage(true);
 
     try {
-      // Set description to indicate image analysis
-      const imageDescription = `Generate a wireframe based on the uploaded image: ${fileName}. Analyze the layout, components, and structure shown in the image.`;
-      setDescription(imageDescription);
+      // Use the advanced GPT-4V image analysis endpoint
+      const analysisResponse = await fetch('/api/analyzeUIImage', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          image: imageUrl, // Base64 image data
+          prompt: null, // Use default advanced prompt
+        }),
+      });
 
-      // Use the same wireframe generation logic but with image context
-      // TODO: In the future, we could send the imageUrl to the backend for actual image analysis
+      if (!analysisResponse.ok) {
+        throw new Error(`Image analysis failed: ${analysisResponse.status}`);
+      }
+
+      const analysisResult = await analysisResponse.json();
+
+      if (!analysisResult.components || analysisResult.components.length === 0) {
+        throw new Error('No components detected in image');
+      }
+
+      console.log('✅ Advanced image analysis completed:', {
+        componentsFound: analysisResult.components.length,
+        layoutType: analysisResult.layout?.type,
+        confidence: analysisResult.confidence,
+        colorsDetected: analysisResult.designTokens?.colors?.length || 0,
+      });
+
+      // Create detailed description from analysis results
+      const componentTypes = [...new Set(analysisResult.components.map((c: any) => c.type))];
+      const colors = analysisResult.designTokens?.colors?.slice(0, 5).join(', ') || 'various colors';
+      const layoutType = analysisResult.layout?.type || 'structured layout';
+
+      const enhancedDescription = `
+        Recreate this UI design with ${analysisResult.components.length} components including: ${componentTypes.join(', ')}.
+        Layout: ${layoutType} with ${analysisResult.layout?.columns || 'responsive'} columns.
+        Colors: ${colors}.
+        Components detected: ${analysisResult.components.map((c: any) =>
+        `${c.type} (${c.text || 'no text'}) at ${Math.round(c.bounds?.x || 0)}%, ${Math.round(c.bounds?.y || 0)}%`
+      ).slice(0, 10).join('; ')}.
+        Wireframe description: ${analysisResult.wireframeDescription || 'Modern UI design with multiple interactive components'}.
+      `.trim();
+
+      setDescription(enhancedDescription);
+
+      // Generate wireframe with enhanced context including image analysis
       const result = await generateWireframe(
-        imageDescription,
+        enhancedDescription,
+        designTheme,
+        colorScheme,
+        analysisResult // Pass the full analysis result
+      );
+
+      if (result && result.html) {
+        handleWireframeGenerated(result.html, enhancedDescription);
+      }
+    } catch (error) {
+      console.error('❌ Advanced image analysis failed:', error);
+
+      // Fallback to basic text-based generation
+      const fallbackDescription = `Generate a wireframe based on the uploaded image: ${fileName}. Analyze the layout, components, and structure shown in the image.`;
+      setDescription(fallbackDescription);
+
+      const result = await generateWireframe(
+        fallbackDescription,
         designTheme,
         colorScheme
       );
 
       if (result && result.html) {
-        handleWireframeGenerated(result.html, description);
+        handleWireframeGenerated(result.html, fallbackDescription);
       }
-    } catch (error) {
-      console.error('Error analyzing image:', error);
     } finally {
       setIsAnalyzingImage(false);
     }
@@ -1451,6 +1507,9 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           onBackToLanding={handleBackToLanding}
           onAddComponent={handleAddComponent}
           onGeneratePageContent={handleGeneratePageContent}
+          onImageUpload={handleImageUpload}
+          onAnalyzeImage={handleAnalyzeImage}
+          isAnalyzingImage={isAnalyzingImage}
           onFigmaExport={handleFigmaExport}
           onFigmaIntegration={figmaIntegrationRef}
           onComponentLibrary={componentLibraryRef}

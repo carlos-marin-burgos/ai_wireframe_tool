@@ -4,7 +4,6 @@ import SuggestionSourceIndicator from "./SuggestionSourceIndicator";
 import LoadingOverlay from "./LoadingOverlay";
 import AddPagesModal from "./AddPagesModal";
 import FluentSaveWireframeModal, { SavedWireframe } from "./FluentSaveWireframeModal";
-import FluentImageUploadModal from "./FluentImageUploadModal";
 import FigmaIntegrationModal from "./FigmaIntegrationModal";
 import DownloadModal from "./DownloadModal";
 import DevPlaybooksLibrary from "./DevPlaybooksLibrary";
@@ -30,6 +29,7 @@ import {
   FiChevronLeft,
   FiChevronRight,
   FiCopy,
+  FiX,
 } from 'react-icons/fi';
 import { TbBoxModel2 } from 'react-icons/tb'; // Fluent UI style icon for component library
 
@@ -78,6 +78,10 @@ interface SplitLayoutProps {
   onAddComponent?: (component: any) => void;
   // Page content generation handler
   onGeneratePageContent?: (description: string, pageType: string) => Promise<string>;
+  // Image upload handlers (same as LandingPage)
+  onImageUpload?: (file: File) => void;
+  onAnalyzeImage?: (imageUrl: string, fileName: string) => void;
+  isAnalyzingImage?: boolean;
   // Figma export handler
   onFigmaExport?: (format: 'figma-file' | 'figma-components') => void;
   // Toolbar function references for header toolbar
@@ -120,6 +124,9 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   onEnhancedSave,
   onAddComponent,
   onGeneratePageContent,
+  onImageUpload,
+  onAnalyzeImage,
+  isAnalyzingImage = false,
   onFigmaExport,
   onFigmaIntegration,
   onComponentLibrary,
@@ -201,10 +208,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   // Download Modal state
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
-
-  // Image Upload Modal state
-  const [isImageUploadModalOpen, setIsImageUploadModalOpen] = useState(false);
-  const [isProcessingImage, setIsProcessingImage] = useState(false);
 
   // Left panel collapse state
   const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);
@@ -627,47 +630,31 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     setIsHtmlCodeViewerOpen(true);
   }, []);
 
-  // Image Upload and Analysis handlers
-  const handleImageUpload = useCallback((imageDataUrl: string) => {
-    // Add image message to chat
-    addMessage('user', `[Image uploaded for analysis]`);
+  // Track previous analyzing state to detect completion
+  const prevAnalyzingRef = useRef(isAnalyzingImage);
 
-    // Add AI response about starting analysis
-    setTimeout(() => {
-      addMessage('ai', '🔍 Analyzing your uploaded image for UI components. Please wait while I detect buttons, inputs, and other elements...');
-      // In a real implementation, you would use imageDataUrl here
-      console.log('Image data URL:', imageDataUrl);
-    }, 500);
-  }, [addMessage]);
-
-  const handleImageFile = useCallback((file: File) => {
-    setIsProcessingImage(true);
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const imageDataUrl = e.target?.result as string;
-      handleImageUpload(imageDataUrl);
-      setIsImageUploadModalOpen(false);
-      setIsProcessingImage(false);
-    };
-    reader.readAsDataURL(file);
-  }, [handleImageUpload]);
-
-  const handleAnalyzeImage = useCallback((imageUrl: string, fileName: string) => {
-    setIsProcessingImage(true);
-    addMessage('user', `[Image uploaded: ${fileName}]`);
-    setTimeout(() => {
-      addMessage('ai', '🔍 Analyzing your uploaded image for UI components. Please wait while I detect buttons, inputs, and other elements...');
-      setIsProcessingImage(false);
-    }, 500);
-  }, [addMessage]);
-
+  // Image Upload handlers - simplified to match LandingPage approach
   const toggleImageUpload = useCallback(() => {
     setShowImageUpload(prev => !prev);
   }, []);
 
-  const openImageUploadModal = useCallback(() => {
-    setIsImageUploadModalOpen(true);
-  }, []);
+  // Close image upload modal when analysis completes successfully
+  useEffect(() => {
+    const wasAnalyzing = prevAnalyzingRef.current;
+    const isNowComplete = !isAnalyzingImage;
+
+    // Close modal only when analysis was in progress and now completed
+    if (wasAnalyzing && isNowComplete && showImageUpload) {
+      const timer = setTimeout(() => {
+        setShowImageUpload(false);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+
+    // Update ref for next render
+    prevAnalyzingRef.current = isAnalyzingImage;
+  }, [isAnalyzingImage, showImageUpload]);
 
   // Enhanced Save System handlers
   const handleOpenEnhancedSave = useCallback(() => {
@@ -1227,7 +1214,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               onOpenFigmaComponents={handleOpenFigmaComponents}
               onSave={enhancedOnSave}
               onAddToFavorites={handleAddToFavorites}
-              onImageUpload={openImageUploadModal}
+              onImageUpload={toggleImageUpload}
             />
 
             <div className="wireframe-container">
@@ -1454,14 +1441,41 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         existingWireframe={wireframeToUpdate}
       />
 
-      {/* Image Upload Modal */}
-      <FluentImageUploadModal
-        isOpen={isImageUploadModalOpen}
-        onClose={() => setIsImageUploadModalOpen(false)}
-        onImageUpload={handleImageFile}
-        onAnalyzeImage={handleAnalyzeImage}
-        isAnalyzing={isProcessingImage}
-      />
+      {/* Image Upload Modal - simplified like LandingPage */}
+      {showImageUpload && onImageUpload && onAnalyzeImage && (
+        <div className="modal-overlay" onClick={() => setShowImageUpload(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            {/* Modal Header */}
+            <div className="modal-header">
+              <div className="modal-title">
+                <FiImage className="modal-icon" />
+                <h2>Upload Image to Wireframe</h2>
+              </div>
+              <button className="modal-close-btn" onClick={() => setShowImageUpload(false)} title="Close modal">
+                <FiX />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="modal-body">
+              <div className="upload-content">
+                <p className="modal-description">
+                  Upload an image of a UI design, wireframe, or website screenshot to generate a wireframe based on its layout.
+                </p>
+
+                <div className="upload-zone-container">
+                  <ImageUploadZone
+                    onImageUpload={onImageUpload}
+                    onAnalyzeImage={onAnalyzeImage}
+                    isAnalyzing={isAnalyzingImage}
+                    className="upload-zone"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Figma Integration Modal */}
       <FigmaIntegrationModal
