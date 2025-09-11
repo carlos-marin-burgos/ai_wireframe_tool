@@ -9,8 +9,8 @@ const isLocalhost =
 // Centralized port configuration to avoid conflicts
 const PORTS = {
   development: {
-    primary: 5001, // Clean Express server with NO Microsoft Learn content
-    fallback: 7072, // Azure Functions backend (has Microsoft Learn contamination)
+    primary: 7072, // Azure Functions backend (correct port!)
+    fallback: 5001, // Clean Express server with NO Microsoft Learn content
     frontend: 5173, // Frontend dev server
   },
   production: {
@@ -74,7 +74,7 @@ export const API_CONFIG = {
   BASE_URL:
     import.meta.env.VITE_BACKEND_BASE_URL ||
     (isDevelopment || isLocalhost
-      ? `http://localhost:5001`
+      ? `http://localhost:7072`
       : "https://func-designetica-prod-xabnur6oyusju.azurewebsites.net"),
 };
 

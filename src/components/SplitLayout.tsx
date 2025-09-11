@@ -88,6 +88,9 @@ interface SplitLayoutProps {
   onViewHtmlCode?: React.MutableRefObject<(() => void) | null>;
   onDownloadWireframe?: React.MutableRefObject<(() => void) | null>;
   onPresentationMode?: React.MutableRefObject<(() => void) | null>;
+  // Editing mode support (drag vs inline edit)
+  editingMode?: 'drag' | 'edit';
+  onEditingModeChange?: (mode: 'drag' | 'edit') => void;
 }
 
 const SplitLayout: React.FC<SplitLayoutProps> = ({
@@ -125,6 +128,8 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   onViewHtmlCode,
   onDownloadWireframe,
   onPresentationMode,
+  editingMode = 'drag',
+  onEditingModeChange,
 }) => {
   // Create ref for textarea autofocus
   const textareaRef = useRef<HTMLTextAreaElement>(null);

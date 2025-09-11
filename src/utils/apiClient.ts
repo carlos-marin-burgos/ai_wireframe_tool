@@ -173,51 +173,71 @@ export async function apiRequest<T>(
 
   let lastError: Error | null = null;
 
-  for (const singleEndpoint of endpoints) {
-    const url = `${API_CONFIG.BASE_URL}${singleEndpoint}`;
-    console.log(`🔧 BULLETPROOF: Trying endpoint: ${url}`);
+  // Build list of base URLs to try (multi-port resilience in dev)
+  const baseUrls: string[] = (() => {
+    const primary = API_CONFIG.BASE_URL;
+    if (
+      typeof window !== "undefined" &&
+      window.location.hostname === "localhost"
+    ) {
+      const alternates = [
+        "http://localhost:7072",
+        "http://localhost:5001",
+      ].filter((u) => u !== primary);
+      return [primary, ...alternates];
+    }
+    return [primary];
+  })();
 
-    // Merge default headers with provided options
-    const mergedOptions = {
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
-      ...options,
-    };
+  for (const baseUrl of baseUrls) {
+    for (const singleEndpoint of endpoints) {
+      const url = `${baseUrl}${singleEndpoint}`;
+      console.log(`🔧 BULLETPROOF: Trying endpoint: ${url}`);
 
-    try {
-      const response = await fetchWithRetry(url, mergedOptions, retryConfig);
+      // Merge default headers with provided options
+      const mergedOptions = {
+        headers: {
+          "Content-Type": "application/json",
+          ...options.headers,
+        },
+        ...options,
+      };
 
-      // Handle 503 Service Unavailable responses specially
-      if (response.status === 503) {
-        const errorData = await response.json();
-        throw new ApiError(
-          503,
-          errorData.message ||
-            errorData.error ||
-            "Service temporarily unavailable"
+      try {
+        const response = await fetchWithRetry(url, mergedOptions, retryConfig);
+
+        // Handle 503 Service Unavailable responses specially
+        if (response.status === 503) {
+          const errorData = await response.json();
+          throw new ApiError(
+            503,
+            errorData.message ||
+              errorData.error ||
+              "Service temporarily unavailable"
+          );
+        }
+
+        console.log(`✅ BULLETPROOF: Success with endpoint: ${url}`);
+        // Persist successful base for session to avoid future port hops
+        (window as any).__DESIGNETICA_LAST_WORKING_BASE__ = baseUrl;
+        return await response.json();
+      } catch (error) {
+        lastError = error as Error;
+        console.log(
+          `❌ BULLETPROOF: Failed with endpoint: ${url}, error:`,
+          error instanceof Error ? error.message : error
         );
-      }
 
-      console.log(`✅ BULLETPROOF: Success with endpoint: ${url}`);
-      return await response.json();
-    } catch (error) {
-      lastError = error as Error;
-      console.log(
-        `❌ BULLETPROOF: Failed with endpoint: ${url}, error:`,
-        error instanceof Error ? error.message : error
-      );
+        // If this is a 404 (endpoint doesn't exist), try the next endpoint
+        if (error instanceof ApiError && error.status === 404) {
+          continue;
+        }
 
-      // If this is a 404 (endpoint doesn't exist), try the next endpoint
-      if (error instanceof ApiError && error.status === 404) {
-        continue;
-      }
-
-      // For other errors, still try the next endpoint but log the error
-      if (endpoints.length > 1) {
-        console.log(`⚠️ BULLETPROOF: Trying next endpoint...`);
-        continue;
+        // For other errors, still try the next endpoint but log the error
+        if (endpoints.length > 1) {
+          console.log(`⚠️ BULLETPROOF: Trying next endpoint on same base...`);
+          continue;
+        }
       }
     }
   }

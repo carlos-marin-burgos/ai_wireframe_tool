@@ -1,15 +1,88 @@
 .simple-drag-wireframe {
   width: 100%;
   max-width: 100%;
-  overflow-x: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   background: #ffffff;
   border-radius: 8px;
+  height: 100vh;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .dragula-container {
-  min-height: 400px;
-  padding: 5px 20px 20px;
+  flex: 1;
+  width: 100%;
+  max-width: 100%;
+  padding: 10px;
   position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
+  min-height: 0; /* Important for flex child scrolling */
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .dragula-container {
+    padding: 8px;
+  }
+
+  .dragula-container > * {
+    margin: 8px 0 !important;
+    padding: 8px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .dragula-container {
+    padding: 5px;
+  }
+
+  .dragula-container > * {
+    margin: 5px 0 !important;
+    padding: 6px !important;
+    font-size: 14px;
+  }
+}
+
+/* Make wireframe content responsive */
+.dragula-container * {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+}
+
+/* Fix tables and wide elements */
+.dragula-container table {
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+
+.dragula-container img {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* Container and grid responsiveness */
+.dragula-container .container,
+.dragula-container .container-fluid {
+  width: 100% !important;
+  max-width: none !important;
+  padding: 0 8px !important;
+}
+
+.dragula-container .row {
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+.dragula-container [class*="col-"] {
+  padding: 4px !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
 }
 
 /* Error state styling */
@@ -49,6 +122,57 @@
   border-radius: 6px;
   transition: all 0.2s ease;
   position: relative;
+}
+
+/* Newly marked draggable nested blocks */
+.dragula-container .draggable-block {
+  position: relative;
+  border: 2px dashed #d1d5db;
+  margin: 8px 0;
+  padding: 8px;
+  cursor: move;
+  background: #fff;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.dragula-container .draggable-block:hover {
+  border-color: #6b7280;
+  background-color: #f9fafb;
+}
+
+/* Inner blocks should not inherit heavy outer padding duplication */
+.dragula-container .draggable-block .draggable-block {
+  margin: 6px 0;
+  padding: 6px;
+}
+
+/* Provide handle indicator */
+.dragula-container .draggable-block::after {
+  content: "⋮⋮";
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-size: 14px;
+  color: #9ca3af;
+  pointer-events: none;
+  transform: rotate(90deg);
+}
+
+/* HTML5 drag fallback styles */
+.html5-dragging {
+  opacity: 0.6 !important;
+  border-color: #6b7280 !important;
+}
+
+.html5-drag-over {
+  outline: 2px dashed #6b7280;
+}
+
+.html5-drag-placeholder {
+  border: 2px dashed #6b7280;
+  background: rgba(107, 114, 128, 0.08);
+  margin: 6px 0;
+  border-radius: 6px;
 }
 
 /* Override for header and footer elements to maintain their original styling */
@@ -177,7 +301,7 @@
 .simple-drag-wireframe input[type="submit"] {
   opacity: 1 !important;
   visibility: visible !important;
-  background-color: #007bff !important; /* Example color */
+  background-color: #6c757d !important; /* Neutral gray color */
   color: white !important;
 }
 
@@ -198,7 +322,7 @@
 
 /* Editable elements hover state */
 [data-editable="true"]:hover {
-  outline: 2px dashed #2563eb !important;
+  outline: 2px dashed #6b7280 !important;
   outline-offset: 2px;
   position: relative;
 }
@@ -224,7 +348,7 @@
   position: absolute;
   top: -25px;
   left: 0;
-  background: #2563eb;
+  background: #6b7280;
   color: white;
   padding: 2px 6px;
   border-radius: 3px;
@@ -236,15 +360,15 @@
 
 /* Active editing state */
 [contenteditable="true"] {
-  outline: 2px solid #2563eb !important;
+  outline: 2px solid #6b7280 !important;
   outline-offset: 2px;
-  background-color: rgba(37, 99, 235, 0.1) !important;
+  background-color: rgba(107, 114, 128, 0.1) !important;
   cursor: text !important;
 }
 
 [contenteditable="true"]:focus {
-  outline: 2px solid #1d4ed8 !important;
-  background-color: rgba(29, 78, 216, 0.15) !important;
+  outline: 2px solid #4b5563 !important;
+  background-color: rgba(75, 85, 99, 0.15) !important;
 }
 
 /* Override drag cursor for editable elements when editing */

@@ -242,8 +242,8 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
   // Function to open wireframe from recent/favorites
   const openWireframe = (html: string, description: string) => {
-    handleWireframeGenerated(html);
     setDescription(description);
+    handleWireframeGenerated(html, description);
     console.log('Wireframe opened from recent/favorites');
   };
 
@@ -259,8 +259,16 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     }
   };
 
-  const handleWireframeGenerated = (html: string) => {
-    console.log("⚡ handleWireframeGenerated called");
+  // Track last description used so we can persist proper naming & recents
+  const lastDescriptionRef = useRef<string>("");
+
+  const handleWireframeGenerated = (html: string, currentDescription?: string) => {
+    // Persist the description explicitly (fallback to previous if not provided)
+    if (currentDescription && currentDescription.trim().length) {
+      lastDescriptionRef.current = currentDescription.trim();
+    }
+    const effectiveDescription = currentDescription?.trim() || lastDescriptionRef.current;
+    console.log("⚡ handleWireframeGenerated called", { effectiveDescription, htmlLength: html?.length });
     setShowLandingPage(false);
 
     // Convert to string if possible, otherwise use empty string
@@ -294,10 +302,10 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
       // Add to recents
       try {
         const addToRecents = (window as any).addToRecents;
-        if (addToRecents && description) {
-          const recentName = description.length > 50 ?
-            description.substring(0, 47) + "..." :
-            description;
+        if (addToRecents && effectiveDescription) {
+          const recentName = effectiveDescription.length > 50 ?
+            effectiveDescription.substring(0, 47) + "..." :
+            effectiveDescription;
           addToRecents(recentName, "Wireframe created", processedHtml);
         }
       } catch (error) {
@@ -335,7 +343,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
       if (result && result.html) {
         if (typeof result.html === 'string' && result.html.length > 0) {
-          handleWireframeGenerated(result.html);
+          handleWireframeGenerated(result.html, actualDescription);
           setReactComponent("");  // Clear React component
           setShowLandingPage(false);
 
@@ -392,7 +400,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
       if (result && result.html) {
         if (typeof result.html === 'string' && result.html.length > 0) {
-          handleWireframeGenerated(result.html);
+          handleWireframeGenerated(result.html, suggestion);
           setReactComponent("");
           setShowLandingPage(false);
         } else {
@@ -1014,7 +1022,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
       if (result && result.html) {
         if (typeof result.html === 'string' && result.html.length > 0) {
-          handleWireframeGenerated(result.html);
+          handleWireframeGenerated(result.html, description);
         } else {
           console.error("Error: Received invalid wireframe data");
           showToast("Error: Received invalid wireframe data. Please try again.", 'error');
@@ -1154,7 +1162,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
       );
 
       if (result && result.html) {
-        handleWireframeGenerated(result.html);
+        handleWireframeGenerated(result.html, description);
       }
     } catch (error) {
       console.error('Error analyzing image:', error);
@@ -1351,7 +1359,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
       );
 
       if (result && result.html) {
-        handleWireframeGenerated(result.html);
+        handleWireframeGenerated(result.html, description);
       }
     } catch (error) {
       console.error('Error generating demo wireframe:', error);

@@ -33,6 +33,8 @@
     "**/*.spec.*",
     "**/*_backup_*.tsx",
     "**/*_backup_*.ts",
+    "**/*.backup.tsx",
+    "**/*.backup.ts",
     "src/App.tsx"
   ]
 }

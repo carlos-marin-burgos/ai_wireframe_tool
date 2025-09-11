@@ -277,13 +277,42 @@ export const useWireframeGeneration = () => {
           endTime - startTime,
           "ms"
         );
-        console.log(`📦 [${requestId}] Response data:`, {
-          hasHtml: !!data.html,
-          htmlLength: data.html?.length,
-          fallback: data.fallback,
-          processingTime: data.processingTime,
-          source: data.source,
-          metadata: data.metadata,
+
+        // New: log raw response object for diagnostics (non-truncated if small)
+        try {
+          console.log(`🩻 [${requestId}] Raw API response JSON:`, data);
+        } catch (e) {
+          console.log(
+            `🩻 [${requestId}] Raw API response could not be stringified`
+          );
+        }
+
+        // Support both legacy (direct html) and current (data.html) shapes
+        const nestedHtml = (data as any)?.data?.html;
+        const directHtml = (data as any)?.html; // legacy or alternate shape
+        const htmlRaw = directHtml || nestedHtml || "";
+        const apiSource =
+          (data as any)?.source || (data as any)?.data?.source || "unknown";
+        const apiMetadata =
+          (data as any)?.metadata || (data as any)?.data?.metadata || undefined;
+        const processingMs =
+          (data as any)?.processingTime ||
+          apiMetadata?.processingTimeMs ||
+          endTime - startTime;
+        const apiFallback =
+          (data as any)?.fallback || (data as any)?.data?.fallback || false;
+
+        console.log(`📦 [${requestId}] Normalized response info:`, {
+          hasHtml: !!htmlRaw,
+          htmlLength: htmlRaw?.length,
+          apiFallback,
+          processingMs,
+          apiSource,
+          metadata: apiMetadata,
+          shape: {
+            topLevelKeys: Object.keys(data || {}),
+            hasDataObject: !!(data as any)?.data,
+          },
         });
 
         // Log template detection info
@@ -297,32 +326,32 @@ export const useWireframeGeneration = () => {
         }
 
         // Update state based on response
-        setFallback(data.fallback || false);
-        if (data.processingTime) {
-          setProcessingTime(data.processingTime);
+        setFallback(apiFallback || false);
+        if (processingMs) {
+          setProcessingTime(processingMs);
         }
 
-        // Make sure html is a string
-        const htmlContent = ensureString(data.html);
+        // Make sure html is a string (from normalized htmlRaw)
+        const htmlContent = ensureString(htmlRaw);
 
         if (!htmlContent) {
           throw new Error("No HTML content received from Azure Functions");
         }
 
         // Cache the successful result
-        if (htmlContent.length > 0 && !data.fallback) {
+        if (htmlContent.length > 0 && !apiFallback) {
           wireframeCache[cacheKey] = {
             html: htmlContent,
             timestamp: Date.now(),
-            processingTime: data.processingTime || 0,
+            processingTime: processingMs || 0,
           };
         }
 
         console.log("🎉 Azure Functions + OpenAI generation successful");
         return {
           html: htmlContent,
-          fallback: data.fallback || false,
-          processingTime: data.processingTime || 0,
+          fallback: apiFallback || false,
+          processingTime: processingMs || 0,
           fromCache: false,
           source: "azure-functions",
         };
