@@ -1,3 +1,145 @@
+/* ===== DRAG MODE CONTROLS ===== */
+
+.drag-mode-controls {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.95);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.drag-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.drag-toggle-btn.enabled {
+  background: #10b981;
+  color: white;
+}
+
+.drag-toggle-btn.enabled:hover {
+  background: #059669;
+}
+
+.drag-toggle-btn.disabled {
+  background: #6b7280;
+  color: white;
+}
+
+.drag-toggle-btn.disabled:hover {
+  background: #4b5563;
+}
+
+.drag-mode-hint {
+  color: #6b7280;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.drag-info {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #f3f4f6;
+  border-radius: 6px;
+}
+
+.drag-info small {
+  color: #374151;
+  font-size: 12px;
+}
+
+/* ===== DRAG STATE STYLING ===== */
+
+.dragula-container.drag-disabled {
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.dragula-container.drag-disabled::after {
+  content: "🔒 Drag mode disabled";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(107, 114, 128, 0.9);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.dragula-container.drag-enabled {
+  position: relative;
+}
+
+/* Enhanced visual feedback for cross-container drops */
+.dragula-container .row,
+.dragula-container .col,
+.dragula-container .column,
+.dragula-container .container,
+.dragula-container .section,
+.dragula-container .grid,
+.dragula-container [data-droppable="true"] {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.dragula-container.drag-enabled .row:hover,
+.dragula-container.drag-enabled .col:hover,
+.dragula-container.drag-enabled .column:hover,
+.dragula-container.drag-enabled .container:hover,
+.dragula-container.drag-enabled .section:hover,
+.dragula-container.drag-enabled .grid:hover,
+.dragula-container.drag-enabled [data-droppable="true"]:hover {
+  outline: 2px dashed #10b981;
+  outline-offset: 2px;
+}
+
+.dragula-container.drag-enabled .row:hover::after,
+.dragula-container.drag-enabled .col:hover::after,
+.dragula-container.drag-enabled .column:hover::after,
+.dragula-container.drag-enabled .container:hover::after,
+.dragula-container.drag-enabled .section:hover::after,
+.dragula-container.drag-enabled .grid:hover::after,
+.dragula-container.drag-enabled [data-droppable="true"]:hover::after {
+  content: "Drop zone";
+  position: absolute;
+  top: -20px;
+  left: 4px;
+  background: #10b981;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  white-space: nowrap;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+/* ===== EXISTING DRAGULA STYLES ===== */
+
 .simple-drag-wireframe {
   width: 100%;
   max-width: 100%;

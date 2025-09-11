@@ -1,14 +1,74 @@
-import React, { useEffect, useRef } from 'react';
+/*
+ * Enhanced SimpleDragWireframe Component
+ * 
+ * Features:
+ * 1. Cross-container moves - Elements can be moved between .row, .col, .section, etc.
+ * 2. Drag mode toggle - Button to enable/disable dragging to prevent accidental moves
+ * 3. Ordering metadata - Semantic structure tracking for better diffing
+ * 
+ * Usage:
+ * <SimpleDragWireframe 
+ *   htmlContent={wireframeHtml}
+ *   onUpdateContent={(newHtml) => setWireframeHtml(newHtml)}
+ *   onOrderingChange={(metadata) => console.log('Structure changed:', metadata)}
+ * />
+ */
+
+import React, { useEffect, useRef, useState } from 'react';
 import dragula from 'dragula';
 import 'dragula/dist/dragula.css';
 import './SimpleDragWireframe.css';
 
+interface OrderingMetadata {
+    id: string;
+    tagName: string;
+    className?: string;
+    textContent?: string;
+    children: OrderingMetadata[];
+}
+
 interface SimpleDragWireframeProps {
     htmlContent: string;
     onUpdateContent?: (newContent: string) => void;
+    onOrderingChange?: (metadata: OrderingMetadata[]) => void;
 }
 
-// HTML sanitization function to prevent broken HTML display
+// Generate ordering metadata from DOM structure
+function generateOrderingMetadata(element: Element, index: number = 0): OrderingMetadata {
+    const id = element.id || `element-${element.tagName.toLowerCase()}-${index}`;
+
+    return {
+        id,
+        tagName: element.tagName.toLowerCase(),
+        className: element.className || undefined,
+        textContent: element.textContent?.trim().substring(0, 50) || undefined,
+        children: Array.from(element.children).map((child, childIndex) =>
+            generateOrderingMetadata(child, childIndex)
+        )
+    };
+}
+
+// Find all containers that can accept drops (rows, cols, sections, etc.)
+function findDragContainers(rootElement: HTMLElement): HTMLElement[] {
+    const containers = [rootElement]; // Always include the root
+    const selectors = [
+        '.row', '.col', '.column',
+        '.container', '.section', '.grid',
+        '[data-droppable="true"]',
+        '.card-body', '.panel-body'
+    ];
+
+    selectors.forEach(selector => {
+        const elements = rootElement.querySelectorAll(selector);
+        elements.forEach(el => {
+            if (el instanceof HTMLElement) {
+                containers.push(el);
+            }
+        });
+    });
+
+    return [...new Set(containers)]; // Remove duplicates
+}
 function sanitizeHTML(html: string): string {
     if (!html || typeof html !== 'string') {
         return '';
@@ -62,10 +122,28 @@ function sanitizeHTML(html: string): string {
 
 const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
     htmlContent,
-    onUpdateContent
+    onUpdateContent,
+    onOrderingChange
 }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const dragulaRef = useRef<any>(null);
+    const [isDragEnabled, setIsDragEnabled] = useState(false);
+    const [dragContainers, setDragContainers] = useState<HTMLElement[]>([]);
+
+    // Function to update ordering metadata
+    const updateOrderingMetadata = () => {
+        if (!containerRef.current || !onOrderingChange) return;
+
+        const metadata = Array.from(containerRef.current.children).map((child, index) =>
+            generateOrderingMetadata(child, index)
+        );
+        onOrderingChange(metadata);
+    };
+
+    // Function to toggle drag mode
+    const toggleDragMode = () => {
+        setIsDragEnabled(!isDragEnabled);
+    };
 
     useEffect(() => {
         if (!containerRef.current) return;
@@ -89,39 +167,98 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
             return;
         }
 
-        // Initialize dragula on the container itself
-        dragulaRef.current = dragula([containerRef.current], {
+        // Find all containers that can accept drops
+        const containers = findDragContainers(containerRef.current);
+        setDragContainers(containers);
+
+        // Initialize dragula with cross-container support
+        dragulaRef.current = dragula(containers, {
             moves: function (el, source, handle, sibling) {
-                return true; // Allow all elements to be moved
+                // Only allow moves if drag mode is enabled
+                if (!isDragEnabled) return false;
+
+                // Allow all elements to be moved
+                return true;
             },
             accepts: function (el, target, source, sibling) {
-                // Only allow dropping directly into the main container
-                return target === containerRef.current;
+                // Allow cross-container moves (ensure target is HTMLElement)
+                return target instanceof HTMLElement && containers.includes(target);
+            },
+            invalid: function (el, handle) {
+                // Don't allow dragging of form inputs, buttons, links
+                if (!(el instanceof HTMLElement)) return true;
+
+                return el.tagName === 'INPUT' ||
+                    el.tagName === 'BUTTON' ||
+                    el.tagName === 'A' ||
+                    el.contentEditable === 'true';
             }
         });
 
-        // Update content when items are moved
+        // Update content and metadata when items are moved
         dragulaRef.current.on('drop', () => {
             if (containerRef.current && onUpdateContent) {
                 try {
                     const newContent = containerRef.current.innerHTML;
                     onUpdateContent(newContent);
+                    updateOrderingMetadata();
                 } catch (error) {
                     // Silent error handling
                 }
             }
         });
 
+        // Initial metadata generation
+        updateOrderingMetadata();
+
         return () => {
             if (dragulaRef.current) {
                 dragulaRef.current.destroy();
             }
         };
-    }, [htmlContent, onUpdateContent]);
+    }, [htmlContent, onUpdateContent, onOrderingChange, isDragEnabled]);
 
     return (
         <div className="simple-drag-wireframe">
-            <div ref={containerRef} className="dragula-container"></div>
+            {/* Drag Mode Toggle */}
+            <div className="drag-mode-controls">
+                <button
+                    className={`drag-toggle-btn ${isDragEnabled ? 'enabled' : 'disabled'}`}
+                    onClick={toggleDragMode}
+                    title={isDragEnabled ? "Click to disable drag mode" : "Click to enable drag mode"}
+                >
+                    {isDragEnabled ? (
+                        <>
+                            🔒 <span>Drag Mode: ON</span>
+                        </>
+                    ) : (
+                        <>
+                            🔓 <span>Drag Mode: OFF</span>
+                        </>
+                    )}
+                </button>
+                <small className="drag-mode-hint">
+                    {isDragEnabled
+                        ? "You can drag and drop elements. Click to lock."
+                        : "Drag mode disabled. Click to enable dragging."
+                    }
+                </small>
+            </div>
+
+            {/* Main wireframe container */}
+            <div
+                ref={containerRef}
+                className={`dragula-container ${isDragEnabled ? 'drag-enabled' : 'drag-disabled'}`}
+            ></div>
+
+            {/* Info about containers */}
+            {dragContainers.length > 1 && (
+                <div className="drag-info">
+                    <small>
+                        ℹ️ Cross-container dragging enabled: {dragContainers.length} drop zones detected
+                    </small>
+                </div>
+            )}
         </div>
     );
 };
