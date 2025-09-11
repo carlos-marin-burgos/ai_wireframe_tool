@@ -158,14 +158,7 @@ class TemplateManager {
 const TEMPLATE_CONDITIONS = {
   "microsoft-learn-home": [
     "learn home page",
-    "home page",
-    "landing page",
     "microsoft learn landing page",
-    "main page",
-    "welcome page",
-    "banner",
-    "header",
-    "welcome",
     "microsoft learn course page",
     "course page",
     "learning modules",
@@ -214,6 +207,19 @@ const TEMPLATE_CONDITIONS = {
  */
 function selectTemplate(description) {
   const lowerDesc = description.toLowerCase();
+
+  // FORCE AI GENERATION for hero + navigation requests
+  if (
+    (lowerDesc.includes("hero") && lowerDesc.includes("nav")) ||
+    (lowerDesc.includes("hero") && lowerDesc.includes("navigation")) ||
+    (lowerDesc.includes("banner") && lowerDesc.includes("nav")) ||
+    (lowerDesc.includes("header") && lowerDesc.includes("nav"))
+  ) {
+    console.log(
+      `🚀 FORCE AI: Hero+Nav request detected - skipping templates: "${description}"`
+    );
+    return null; // Force AI generation
+  }
 
   // Check each template condition
   for (const [templateName, conditions] of Object.entries(
