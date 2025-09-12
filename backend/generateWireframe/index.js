@@ -159,6 +159,395 @@ async function generateWireframeFromDescription(
   }
 }
 
+// Image-based wireframe generator using GPT-4V analysis
+async function generateWireframeFromImageAnalysis(
+  imageAnalysis,
+  description,
+  colorScheme,
+  correlationId
+) {
+  try {
+    logger.info("📸 Starting image-based wireframe generation", {
+      correlationId,
+      componentsCount: imageAnalysis.components.length,
+      confidence: imageAnalysis.confidence,
+      layoutType: imageAnalysis.layout?.type,
+    });
+
+    // Extract components and their properties
+    const components = imageAnalysis.components || [];
+    const layout = imageAnalysis.layout || { type: "grid", columns: 12 };
+    const designTokens = imageAnalysis.designTokens || {};
+    const colors = designTokens.colors || ["#0078d4", "#ffffff", "#323130"];
+    const fonts = designTokens.fonts || ["Segoe UI", "Arial", "sans-serif"];
+
+    // Build component HTML from analysis
+    let htmlContent = "";
+    const componentsByPosition = components.sort((a, b) => {
+      const aY = a.bounds?.y || 0;
+      const bY = b.bounds?.y || 0;
+      if (Math.abs(aY - bY) < 5) {
+        // Same row
+        return (a.bounds?.x || 0) - (b.bounds?.x || 0);
+      }
+      return aY - bY;
+    });
+
+    // Group components by approximate rows
+    const rows = [];
+    let currentRow = [];
+    let lastY = -1;
+
+    componentsByPosition.forEach((component) => {
+      const y = component.bounds?.y || 0;
+      if (lastY === -1 || Math.abs(y - lastY) < 10) {
+        // Same row
+        currentRow.push(component);
+      } else {
+        // New row
+        if (currentRow.length > 0) rows.push(currentRow);
+        currentRow = [component];
+      }
+      lastY = y;
+    });
+    if (currentRow.length > 0) rows.push(currentRow);
+
+    // Generate HTML for each row
+    rows.forEach((row, rowIndex) => {
+      htmlContent += `    <div class="row row-${rowIndex}">\n`;
+
+      row.forEach((component, colIndex) => {
+        const componentHtml = generateComponentHtml(component, colors);
+        htmlContent += `      ${componentHtml}\n`;
+      });
+
+      htmlContent += `    </div>\n`;
+    });
+
+    // Create the complete HTML with extracted colors and layout
+    const wireframeHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generated Wireframe from Image Analysis</title>
+    <link href="https://cdn.jsdelivr.net/npm/@fluentui/web-components/dist/web-components.min.js" rel="module">
+    <style>
+        :root {
+            --primary-color: ${colors[0] || "#0078d4"};
+            --secondary-color: ${colors[1] || "#ffffff"};
+            --text-color: ${colors[2] || "#323130"};
+            --accent-color: ${colors[3] || "#107c10"};
+            --background-color: ${colors[4] || "#faf9f8"};
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: ${fonts[0] || "Segoe UI"}, ${
+      fonts[1] || "Arial"
+    }, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            ${
+              layout.type === "grid"
+                ? `display: grid; grid-template-columns: repeat(${
+                    layout.columns || 12
+                  }, 1fr); gap: 20px;`
+                : ""
+            }
+        }
+        
+        .row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            ${layout.type === "grid" ? "grid-column: 1 / -1;" : ""}
+        }
+        
+        .component {
+            position: relative;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .component:hover {
+            box-shadow: 0 4px 12px rgba(0, 120, 212, 0.15);
+            transform: translateY(-1px);
+        }
+        
+        .button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .button:hover {
+            background-color: #106ebe;
+        }
+        
+        .button.secondary {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+        
+        .input {
+            padding: 8px 12px;
+            border: 1px solid #d2d0ce;
+            border-radius: 4px;
+            font-size: 14px;
+            min-width: 200px;
+        }
+        
+        .input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 1px var(--primary-color);
+        }
+        
+        .text {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .text.heading {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .text.subheading {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+        
+        .card {
+            background: white;
+            border: 1px solid #e1dfdd;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .navigation {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding: 16px 0;
+            border-bottom: 1px solid #e1dfdd;
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .nav-link {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        
+        .nav-link:hover {
+            background-color: #f3f2f1;
+        }
+        
+        .image-placeholder {
+            background-color: #f3f2f1;
+            border: 2px dashed #d2d0ce;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+            color: #8a8886;
+            font-style: italic;
+        }
+        
+        .form {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            border: 1px solid #e1dfdd;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+${htmlContent}    </div>
+
+    <script>
+        console.log('📸 Wireframe generated from image analysis:', {
+            componentsDetected: ${components.length},
+            confidence: ${imageAnalysis.confidence || 0},
+            layoutType: '${layout.type}',
+            colorsUsed: ${JSON.stringify(colors)}
+        });
+        
+        // Add basic interactivity
+        document.querySelectorAll('.button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                console.log('Button clicked:', e.target.textContent);
+                e.target.style.transform = 'scale(0.95)';
+                setTimeout(() => e.target.style.transform = '', 150);
+            });
+        });
+        
+        document.querySelectorAll('.input').forEach(input => {
+            input.addEventListener('focus', (e) => {
+                console.log('Input focused:', e.target.placeholder || 'input');
+            });
+        });
+    </script>
+</body>
+</html>`;
+
+    logger.info("✅ Image-based wireframe generation completed", {
+      correlationId,
+      htmlLength: wireframeHtml.length,
+      componentsProcessed: components.length,
+    });
+
+    return {
+      html: wireframeHtml,
+      reactCode: null,
+      source: "image-analysis-enhanced",
+      aiGenerated: true,
+      unlimited: true,
+      framework: "html",
+      styling: "inline-css",
+      imageAnalysis: {
+        confidence: imageAnalysis.confidence,
+        componentsCount: components.length,
+        layoutType: layout.type,
+      },
+    };
+  } catch (error) {
+    logger.error("❌ Image-based wireframe generation failed", error, {
+      correlationId,
+    });
+
+    // Fallback to description-based generation
+    logger.info("🔄 Falling back to description-based generation", {
+      correlationId,
+    });
+    return await generateWireframeFromDescription(
+      description,
+      colorScheme,
+      correlationId
+    );
+  }
+}
+
+// Helper function to generate HTML for individual components
+function generateComponentHtml(component, colors) {
+  const bounds = component.bounds || {};
+  const text = component.text || "";
+  const type = component.type || "text";
+  const properties = component.properties || {};
+
+  switch (type.toLowerCase()) {
+    case "button":
+      const buttonStyle = properties.style || "primary";
+      const buttonClass =
+        buttonStyle === "secondary" ? "button secondary" : "button";
+      return `<button class="component ${buttonClass}">${
+        text || "Button"
+      }</button>`;
+
+    case "input":
+    case "textbox":
+    case "text input":
+      return `<input type="text" class="component input" placeholder="${
+        text || "Enter text..."
+      }" />`;
+
+    case "text":
+    case "label":
+      return `<span class="component text">${text || "Text content"}</span>`;
+
+    case "heading":
+    case "title":
+    case "h1":
+    case "h2":
+    case "h3":
+      return `<h2 class="component text heading">${text || "Heading"}</h2>`;
+
+    case "card":
+      return `<div class="component card">
+        <h3>${text || "Card Title"}</h3>
+        <p>Card content goes here...</p>
+      </div>`;
+
+    case "navigation":
+    case "nav":
+      const navItems = text
+        ? text.split(/[,|]/).map((item) => item.trim())
+        : ["Home", "About", "Contact"];
+      const navLinks = navItems
+        .map((item) => `<a href="#" class="nav-link">${item}</a>`)
+        .join("\n        ");
+      return `<nav class="component navigation">
+        <div class="logo">Logo</div>
+        ${navLinks}
+      </nav>`;
+
+    case "image":
+    case "img":
+      return `<div class="component image-placeholder">
+        ${text || "[Image placeholder]"}
+      </div>`;
+
+    case "form":
+      return `<form class="component form">
+        <div class="form-group">
+          <label class="label">Form field</label>
+          <input type="text" class="input" placeholder="Enter value..." />
+        </div>
+        <button type="submit" class="button">Submit</button>
+      </form>`;
+
+    default:
+      return `<div class="component text">${text || `${type} component`}</div>`;
+  }
+}
+
 // Main Azure Function
 module.exports = async function (context, req) {
   const startTime = Date.now();
@@ -187,7 +576,11 @@ module.exports = async function (context, req) {
   }
 
   try {
-    const { description, colorScheme = "primary" } = req.body || {};
+    const {
+      description,
+      colorScheme = "primary",
+      imageAnalysis,
+    } = req.body || {};
 
     if (!description) {
       context.res.status = 400;
@@ -199,12 +592,45 @@ module.exports = async function (context, req) {
       return;
     }
 
-    // Generate wireframe using Simple Generator
-    const result = await generateWireframeFromDescription(
-      description,
-      colorScheme,
-      correlationId
-    );
+    logger.info("🎯 Processing wireframe generation request", {
+      correlationId,
+      hasImageAnalysis: !!imageAnalysis,
+      componentsDetected: imageAnalysis?.components?.length || 0,
+      confidence: imageAnalysis?.confidence,
+      layoutType: imageAnalysis?.layout?.type,
+    });
+
+    // Generate wireframe - prioritize image analysis if available
+    let result;
+    if (
+      imageAnalysis &&
+      imageAnalysis.components &&
+      imageAnalysis.components.length > 0
+    ) {
+      logger.info("📸 Using image-based wireframe generation", {
+        correlationId,
+        componentsDetected: imageAnalysis.components.length,
+        confidence: imageAnalysis.confidence,
+        layoutType: imageAnalysis.layout?.type,
+      });
+
+      result = await generateWireframeFromImageAnalysis(
+        imageAnalysis,
+        description,
+        colorScheme,
+        correlationId
+      );
+    } else {
+      logger.info("📝 Using description-based wireframe generation", {
+        correlationId,
+      });
+
+      result = await generateWireframeFromDescription(
+        description,
+        colorScheme,
+        correlationId
+      );
+    }
 
     const processingTime = Date.now() - startTime;
 

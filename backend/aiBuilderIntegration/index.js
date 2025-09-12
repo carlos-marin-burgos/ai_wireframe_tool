@@ -1,3 +1,20 @@
+// TEMPORARILY DISABLED: This file uses the v4 programming model (app.http). It interferes with classic (v3) model HTTP binding.
+// To re-enable later, extract each handler into its own classic function folder with function.json OR migrate entire app to v4.
+// For now we export a simple function and skip app.http registrations to restore proper req binding in other functions.
+if (process.env.DISABLE_AI_BUILDER !== "false") {
+  module.exports = async function (context, req) {
+    return {
+      status: 503,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: "AI Builder Integration is temporarily disabled",
+        status: "disabled",
+      }),
+    };
+  };
+  return; // Prevent further execution and app.http registrations
+}
+
 const { app } = require("@azure/functions");
 // Note: multipart parsing would need proper library - using mock for now
 const {
