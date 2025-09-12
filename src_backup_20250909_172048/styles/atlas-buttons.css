@@ -49,36 +49,36 @@
 /* Button Variants */
 .button-primary {
   color: #ffffff;
-  background-color: #0078d4;
-  border-color: #0078d4;
+  background-color: #8E9AAF;
+  border-color: #8E9AAF;
 }
 
 .button-primary:hover:not(:disabled) {
-  background-color: #106ebe;
-  border-color: #106ebe;
+  background-color: #68769C;
+  border-color: #68769C;
 }
 
 .button-primary:active:not(:disabled) {
-  background-color: #005a9e;
-  border-color: #005a9e;
+  background-color: #68769C;
+  border-color: #68769C;
 }
 
 .button-secondary {
-  color: #0078d4;
+  color: #8E9AAF;
   background-color: transparent;
-  border-color: #0078d4;
+  border-color: #8E9AAF;
 }
 
 .button-secondary:hover:not(:disabled) {
   background-color: #f3f2f1;
-  border-color: #106ebe;
-  color: #106ebe;
+  border-color: #68769C;
+  color: #68769C;
 }
 
 .button-secondary:active:not(:disabled) {
   background-color: #edebe9;
-  border-color: #005a9e;
-  color: #005a9e;
+  border-color: #68769C;
+  color: #68769C;
 }
 
 .button-success {
@@ -104,7 +104,7 @@
 }
 
 .button-warning {
-  color: #323130;
+  color: #3C4858;
   background-color: #ffb900;
   border-color: #ffb900;
 }
@@ -121,7 +121,7 @@
 }
 
 .button:focus {
-  outline: 2px solid #005a9e;
+  outline: 2px solid #68769C;
   outline-offset: 2px;
 }
 

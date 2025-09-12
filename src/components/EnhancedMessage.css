@@ -3,15 +3,15 @@
 /* CSS Custom Properties for Microsoft Design */
 :root {
   /* Microsoft Colors */
-  --microsoft-blue: #0078d4;
-  --microsoft-blue-dark: #106ebe;
-  --microsoft-neutral-grey-100: #f8f9fa;
+  --microsoft-blue: #8E9AAF;
+  --microsoft-blue-dark: #68769C;
+  --microsoft-neutral-grey-100: #E9ECEF;
   --microsoft-neutral-grey-140: #f3f2f1;
   --microsoft-neutral-grey-150: #edebe9;
   --microsoft-neutral-grey-200: #e1dfdd;
   --microsoft-neutral-grey-250: #c8c6c4;
-  --microsoft-neutral-primary: #323130;
-  --microsoft-neutral-secondary: #605e5c;
+  --microsoft-neutral-primary: #3C4858;
+  --microsoft-neutral-secondary: #68769C;
   --microsoft-neutral-tertiary: #a19f9d;
 
   /* Designetica Brand Gradient */

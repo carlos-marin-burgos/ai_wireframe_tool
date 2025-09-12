@@ -63,8 +63,8 @@ function addMicrosoftLearnEnhancements(html: string): string {
     const styleBlock = `
       <style>
         :root {
-          --ms-color-primary: #0078d4;
-          --ms-color-primary-hover: #106ebe;
+          --ms-color-primary: #8E9AAF;
+          --ms-color-primary-hover: #68769C;
           --ms-color-white: #ffffff;
           --ms-color-gray-50: #f8f9fa;
           --ms-color-gray-900: #1a1a1a;

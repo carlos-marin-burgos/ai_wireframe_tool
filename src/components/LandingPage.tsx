@@ -3,6 +3,7 @@ import { FiX } from 'react-icons/fi';
 import "./LandingPage.css";
 import Footer from './Footer';
 import ImageUploadZone from './ImageUploadZone';
+import ColorThemeSelector from './ColorThemeSelector';
 import { figmaApi, FigmaFile as ApiFigmaFile, FigmaFrame } from '../services/figmaApi';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
 import FigmaIntegrationModal from './FigmaIntegrationModal';
@@ -820,6 +821,7 @@ function LandingPage({
         itemType={deleteModal.itemType}
       />
 
+      <ColorThemeSelector />
       <Footer />
     </div>
   );

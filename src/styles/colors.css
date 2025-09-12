@@ -1,0 +1,190 @@
+/**
+ * Centralized Color System for Designetica Frontend
+ * 
+ * This is the SINGLE SOURCE OF TRUTH for all colors used in the frontend.
+ * To change the color scheme, modify the CSS custom properties below
+ * and they will apply everywhere automatically.
+ * 
+ * Based on the backend color system in /backend/config/colors.js
+ */
+
+:root {
+  /* ========================================
+     PRIMARY WIREFRAME COLOR PALETTE
+     ======================================== */
+
+  /* Core Colors */
+  --color-primary: #8e9aaf; /* Medium blue-gray - main accent color */
+  --color-secondary: #68769c; /* Darker blue-gray - secondary actions */
+  --color-accent: #3c4858; /* Dark slate gray - strong accents */
+  --color-light: #e9ecef; /* Very light gray - backgrounds, cards */
+  --color-medium: #cbc2c2; /* Light warm gray - subtle surfaces */
+  --color-dark: #3c4858; /* Dark slate gray - text, headers */
+
+  /* Alpha Variants for Transparency Effects */
+  --color-primary-alpha: rgba(142, 154, 175, 0.1);
+  --color-secondary-alpha: rgba(104, 118, 156, 0.1);
+  --color-accent-alpha: rgba(60, 72, 88, 0.1);
+
+  /* RGB Values (for rgba() usage) */
+  --color-primary-rgb: 142, 154, 175;
+  --color-secondary-rgb: 104, 118, 156;
+  --color-accent-rgb: 60, 72, 88;
+
+  /* Text Colors */
+  --color-text: #3c4858; /* Primary text color */
+  --color-text-secondary: #8e9aaf; /* Secondary text color */
+  --color-text-light: #68769c; /* Light text for contrast */
+  --color-text-muted: #68769c; /* Muted text color */
+
+  /* Background Colors */
+  --color-background: #ffffff; /* Main background */
+  --color-surface: #e9ecef; /* Card/surface backgrounds */
+  --color-border: #cbc2c2; /* Border color */
+
+  /* Hero Section Colors */
+  --color-hero-bg: #e9ecef; /* Hero section background */
+  --color-hero-gradient-start: #e9ecef; /* Hero gradient start */
+  --color-hero-gradient-end: #cbc2c2; /* Hero gradient end */
+  --color-hero-text: #3c4858; /* Hero text color */
+  --color-hero-secondary: #8e9aaf; /* Hero secondary text */
+
+  /* Button Colors */
+  --color-button-primary: #8e9aaf; /* Primary button background */
+  --color-button-secondary: #68769c; /* Secondary button background */
+  --color-button-text: #ffffff; /* Button text color */
+  --color-button-border: #8e9aaf; /* Button border color */
+
+  /* Interactive States */
+  --color-hover: #68769c; /* Hover state color */
+  --color-active: #3c4858; /* Active state color */
+  --color-focus: #8e9aaf; /* Focus state color */
+  --color-disabled: #cbc2c2; /* Disabled state color */
+
+  /* ========================================
+     SEMANTIC COLORS
+     ======================================== */
+  --color-success: #107c10; /* Green for success states */
+  --color-warning: #ffb900; /* Amber for warnings */
+  --color-error: #d13212; /* Red for errors */
+  --color-info: #0078d4; /* Blue for information */
+
+  /* ========================================
+     FAVORITES & RECENT SECTION COLORS
+     ======================================== */
+  --favorites-tab-color: var(--color-secondary);
+  --favorites-tab-hover: var(--color-accent);
+  --favorites-tab-active: var(--color-accent);
+  --favorites-tab-accent: var(--color-primary);
+
+  --favorites-border: var(--color-border);
+  --favorites-item-bg: var(--color-background);
+  --favorites-item-alt: var(--color-light);
+  --favorites-item-hover: var(--color-medium);
+  --favorites-item-border: var(--color-border);
+
+  --favorites-icon: var(--color-secondary);
+  --favorites-name: var(--color-accent);
+  --favorites-meta: var(--color-secondary);
+
+  --favorites-action: var(--color-secondary);
+  --favorites-action-hover-bg: var(--color-light);
+  --favorites-action-hover: var(--color-accent);
+
+  /* ========================================
+     SCROLLBAR COLORS
+     ======================================== */
+  --scrollbar-track: var(--color-light);
+  --scrollbar-thumb: var(--color-border);
+  --scrollbar-thumb-hover: var(--color-secondary);
+
+  /* ========================================
+     SHADOW & EFFECTS
+     ======================================== */
+  --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-strong: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* ========================================
+   DARK MODE SUPPORT (Optional)
+   ======================================== */
+/* Dark mode variables can be added here when needed */
+
+/* ========================================
+   UTILITY CLASSES FOR QUICK COLOR APPLICATION
+   ======================================== */
+
+/* Background utilities */
+.bg-primary {
+  background-color: var(--color-primary) !important;
+}
+.bg-secondary {
+  background-color: var(--color-secondary) !important;
+}
+.bg-light {
+  background-color: var(--color-light) !important;
+}
+.bg-surface {
+  background-color: var(--color-surface) !important;
+}
+
+/* Text color utilities */
+.text-primary {
+  color: var(--color-text) !important;
+}
+.text-secondary {
+  color: var(--color-text-secondary) !important;
+}
+.text-muted {
+  color: var(--color-text-muted) !important;
+}
+.text-accent {
+  color: var(--color-accent) !important;
+}
+
+/* Border utilities */
+.border-primary {
+  border-color: var(--color-border) !important;
+}
+.border-medium {
+  border-color: var(--color-medium) !important;
+}
+
+/* Button color variants */
+.btn-primary {
+  background-color: var(--color-button-primary);
+  color: var(--color-button-text);
+  border-color: var(--color-button-border);
+}
+
+.btn-secondary {
+  background-color: var(--color-button-secondary);
+  color: var(--color-button-text);
+  border-color: var(--color-button-secondary);
+}
+
+/* ========================================
+   COLOR THEME SWITCHING SUPPORT
+   ======================================== */
+
+/* Blue theme variant */
+[data-theme="blue"] {
+  --color-primary: #0078d4;
+  --color-secondary: #106ebe;
+  --color-accent: #005a9e;
+}
+
+/* Green theme variant */
+[data-theme="green"] {
+  --color-primary: #107c10;
+  --color-secondary: #0e6e0e;
+  --color-accent: #0b5d0b;
+}
+
+/* Purple theme variant */
+[data-theme="purple"] {
+  --color-primary: #8764b8;
+  --color-secondary: #744da9;
+  --color-accent: #5d3b85;
+}

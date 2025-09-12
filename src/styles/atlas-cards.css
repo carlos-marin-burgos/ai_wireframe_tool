@@ -181,7 +181,7 @@
 }
 
 .learning-path-header {
-  background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+  background: linear-gradient(135deg, #8E9AAF 0%, #68769C 100%);
   padding: 20px;
   color: white;
   position: relative;
@@ -235,13 +235,13 @@
   gap: 12px;
   margin-bottom: 12px;
   padding: 12px;
-  background: #f8f9fa;
+  background: #E9ECEF;
   border-radius: 8px;
-  border-left: 4px solid #0078d4;
+  border-left: 4px solid #8E9AAF;
 }
 
 .module-item:nth-child(2) {
-  border-left-color: #0078d4;
+  border-left-color: #8E9AAF;
 }
 
 .module-item:nth-child(3) {
@@ -266,7 +266,7 @@
 }
 
 .progress-fill {
-  background: linear-gradient(90deg, #0078d4, #00bcf2);
+  background: linear-gradient(90deg, #8E9AAF, #00bcf2);
   height: 100%;
   width: 40%;
   transition: width 0.3s ease;
@@ -274,7 +274,7 @@
 
 .progress-text {
   font-size: 14px;
-  color: #0078d4;
+  color: #8E9AAF;
   font-weight: 600;
   float: right;
 }
@@ -286,7 +286,7 @@
 
 .continue-btn {
   flex: 1;
-  background: #0078d4;
+  background: #8E9AAF;
   color: white;
   border: none;
   padding: 12px 20px;
@@ -298,12 +298,12 @@
 }
 
 .continue-btn:hover {
-  background: #106ebe;
+  background: #68769C;
 }
 
 .bookmark-btn {
   background: #f3f2f1;
-  color: #605e5c;
+  color: #68769C;
   border: none;
   padding: 12px;
   border-radius: 6px;
@@ -410,7 +410,7 @@
   background: linear-gradient(
     90deg,
     var(--atlas-color-primary) 0%,
-    #106ebe 100%
+    #68769C 100%
   );
   border-radius: 3px;
   transition: width 0.3s ease;

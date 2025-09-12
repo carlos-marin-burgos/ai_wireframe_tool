@@ -156,7 +156,7 @@
 
 /* Breadcrumb Style Navigation */
 .page-navigation.breadcrumb-style {
-  background: #f8f9fa;
+  background: #E9ECEF;
   border-bottom: 1px solid #e1e5e9;
   padding: 8px 20px;
   min-height: 44px;
@@ -185,7 +185,7 @@
 .breadcrumb-item {
   background: transparent;
   border: none;
-  color: #0078d4;
+  color: #8E9AAF;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -198,11 +198,11 @@
 
 .breadcrumb-item:hover {
   background: #f3f9ff;
-  color: #005a9e;
+  color: #68769C;
 }
 
 .breadcrumb-item.active {
-  color: #323130;
+  color: #3C4858;
   font-weight: 600;
   background: #e1e5e9;
   cursor: default;
@@ -323,27 +323,27 @@
 
 /* Save button special styling */
 .toolbar-btn.save-btn {
-  background: #0078d4;
-  border-color: #0078d4;
+  background: #8E9AAF;
+  border-color: #8E9AAF;
   color: #ffffff;
 }
 
 .toolbar-btn.save-btn:hover {
-  background: #106ebe;
-  border-color: #106ebe;
+  background: #68769C;
+  border-color: #68769C;
   color: #ffffff;
 }
 
 /* Edit mode toggle */
 .toolbar-btn.edit-toggle.active {
-  background: #0078d4;
-  border-color: #0078d4;
+  background: #8E9AAF;
+  border-color: #8E9AAF;
   color: #ffffff;
 }
 
 .toolbar-btn.edit-toggle.active:hover {
-  background: #106ebe;
-  border-color: #106ebe;
+  background: #68769C;
+  border-color: #68769C;
   color: #ffffff;
 }
 

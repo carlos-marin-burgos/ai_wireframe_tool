@@ -20,7 +20,7 @@ export function generateHeroHTML(options: HeroOptions = {}): string {
     ctaText = "Get Started",
     secondaryCtaText = "Browse",
     showSecondaryButton = true,
-    backgroundColor = "#E8E6DF",
+    backgroundColor = "#E9ECEF",
     heroImageUrl = "Microsoft-Learn-keyart-neutral-gray-angle-1.png",
   } = options;
 
@@ -41,20 +41,20 @@ export function generateHeroHTML(options: HeroOptions = {}): string {
         <!-- Eyebrow Text -->
         <p class="letter-spacing-wide text-transform-uppercase font-size-sm" 
            style="letter-spacing: 0.2em; text-transform: uppercase; font-size: 0.875rem; 
-                  line-height: 1.25rem; margin: 0 0 0.5rem 0; color: #323130; font-weight: 600;">
+                  line-height: 1.25rem; margin: 0 0 0.5rem 0; color: #3C4858; font-weight: 600;">
           ${eyebrow}
         </p>
         
         <!-- Main Title -->
         <h1 class="font-size-h1 font-weight-semibold" 
-            style="font-size: 2.5rem; line-height: 3rem; font-weight: 600; margin: 0 0 1rem 0; color: #323130;">
+            style="font-size: 2.5rem; line-height: 3rem; font-weight: 600; margin: 0 0 1rem 0; color: #3C4858;">
           ${title}
         </h1>
         
         <!-- Summary Text -->
         <p class="font-size-lg font-weight-semibold margin-block-sm" 
            style="font-size: 1.125rem; line-height: 1.75rem; font-weight: 600; 
-                  margin-top: 0.5rem; margin-bottom: 0.5rem; color: #323130;">
+                  margin-top: 0.5rem; margin-bottom: 0.5rem; color: #3C4858;">
           ${summary}
         </p>
         
@@ -64,8 +64,8 @@ export function generateHeroHTML(options: HeroOptions = {}): string {
                   style="display: inline-flex; align-items: center; justify-content: center; 
                          padding: 0.5rem 1rem; border-radius: 0.25rem; font-family: 'Segoe UI', sans-serif; 
                          font-size: 0.875rem; font-weight: 600; text-decoration: none; cursor: pointer; 
-                         transition: all 0.2s ease; min-height: 2.5rem; border: 1px solid #0078d4; 
-                         background-color: transparent; color: #0078d4;">
+                         transition: all 0.2s ease; min-height: 2.5rem; border: 1px solid #8E9AAF; 
+                         background-color: transparent; color: #8E9AAF;">
             ${ctaText}
           </button>
           ${
@@ -75,8 +75,8 @@ export function generateHeroHTML(options: HeroOptions = {}): string {
                   style="display: inline-flex; align-items: center; justify-content: center; 
                          padding: 0.5rem 1rem; border-radius: 0.25rem; font-family: 'Segoe UI', sans-serif; 
                          font-size: 0.875rem; font-weight: 600; text-decoration: none; cursor: pointer; 
-                         transition: all 0.2s ease; min-height: 2.5rem; border: 1px solid #0078d4; 
-                         background-color: #0078d4; color: white;">
+                         transition: all 0.2s ease; min-height: 2.5rem; border: 1px solid #8E9AAF; 
+                         background-color: #8E9AAF; color: white;">
             ${secondaryCtaText}
           </button>
           `
@@ -105,7 +105,7 @@ export function generateHeroHTML(options: HeroOptions = {}): string {
       }
       
       .background-color-body-accent {
-        background-color: #E8E6DF;
+        background-color: #E9ECEF;
       }
       
       .gradient-border-right::after {
@@ -115,7 +115,7 @@ export function generateHeroHTML(options: HeroOptions = {}): string {
         top: 0;
         bottom: 0;
         width: 4px;
-        background: linear-gradient(180deg, #E8E6DF 0%, rgba(232, 230, 223, 0) 100%);
+        background: linear-gradient(180deg, #E9ECEF 0%, rgba(232, 230, 223, 0) 100%);
       }
       
       .hero-content {
@@ -129,13 +129,13 @@ export function generateHeroHTML(options: HeroOptions = {}): string {
       }
       
       .button.button-clear:hover {
-        background-color: #0078d4 !important;
+        background-color: #8E9AAF !important;
         color: white !important;
       }
       
       .button.border:hover {
-        background-color: #106ebe !important;
-        border-color: #106ebe !important;
+        background-color: #68769C !important;
+        border-color: #68769C !important;
       }
       
       @media (max-width: 768px) {
@@ -174,7 +174,7 @@ export const HeroTemplates = {
       ctaText: "Start Learning",
       showSecondaryButton: true,
       secondaryCtaText: "Browse",
-      backgroundColor: "#E8E6DF",
+      backgroundColor: "#E9ECEF",
       heroImageUrl: "hero-learn.svg",
     }),
 
@@ -187,7 +187,7 @@ export const HeroTemplates = {
       ctaText: "Get Started",
       showSecondaryButton: true,
       secondaryCtaText: "Learn More",
-      backgroundColor: "#E8E6DF",
+      backgroundColor: "#E9ECEF",
       heroImageUrl: "azure.svg",
     }),
 
@@ -200,7 +200,7 @@ export const HeroTemplates = {
       ctaText: "Explore Docs",
       showSecondaryButton: true,
       secondaryCtaText: "Documentation",
-      backgroundColor: "#E8E6DF",
+      backgroundColor: "#E9ECEF",
       heroImageUrl: "vscode.svg",
     }),
 
@@ -212,7 +212,7 @@ export const HeroTemplates = {
       eyebrow: "AI & MACHINE LEARNING",
       ctaText: "Explore AI",
       showSecondaryButton: false,
-      backgroundColor: "#E8E6DF",
+      backgroundColor: "#E9ECEF",
       heroImageUrl: "azure-ai.svg",
     }),
 
@@ -223,7 +223,7 @@ export const HeroTemplates = {
       eyebrow: "GETTING STARTED",
       ctaText: "Get Started",
       showSecondaryButton: false,
-      backgroundColor: "#E8E6DF",
+      backgroundColor: "#E9ECEF",
       heroImageUrl: "hero-learn.svg",
     }),
 };

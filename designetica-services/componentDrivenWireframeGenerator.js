@@ -676,7 +676,7 @@ class ComponentDrivenWireframeGenerator {
     <style>
         /* Reset and base styles */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #323130; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #3C4858; }
         
         /* Container */
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
@@ -685,8 +685,8 @@ class ComponentDrivenWireframeGenerator {
         .navbar { background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e5e9; }
         .navbar-brand { font-weight: 600; font-size: 18px; }
         .navbar-nav { display: flex; list-style: none; gap: 24px; }
-        .nav-link { text-decoration: none; color: #605e5c; font-weight: 500; }
-        .nav-link:hover { color: #0078d4; }
+        .nav-link { text-decoration: none; color: #68769C; font-weight: 500; }
+        .nav-link:hover { color: #8E9AAF; }
         
         /* Buttons */
         .btn { 
@@ -699,15 +699,15 @@ class ComponentDrivenWireframeGenerator {
             display: inline-block;
             transition: all 0.2s ease;
         }
-        .btn-primary { background: #0078d4; color: white; }
-        .btn-primary:hover { background: #106ebe; }
-        .btn-secondary { background: #f3f2f1; color: #323130; }
+        .btn-primary { background: #8E9AAF; color: white; }
+        .btn-primary:hover { background: #68769C; }
+        .btn-secondary { background: #f3f2f1; color: #3C4858; }
         .btn-secondary:hover { background: #edebe9; }
         .btn-large { padding: 12px 24px; font-size: 16px; }
         
         /* Hero section */
         .hero { 
-            background: linear-gradient(135deg, #0078d4, #40e0d0); 
+            background: linear-gradient(135deg, #8E9AAF, #40e0d0); 
             color: white; 
             padding: 80px 0; 
             text-align: center; 
@@ -741,11 +741,11 @@ class ComponentDrivenWireframeGenerator {
             display: block; 
             padding: 12px 24px; 
             text-decoration: none; 
-            color: #605e5c; 
+            color: #68769C; 
         }
         .sidebar-nav li a:hover, .sidebar-nav li a.active { 
             background: #e1e5e9; 
-            color: #323130; 
+            color: #3C4858; 
         }
         .dashboard-content { flex: 1; padding: 32px; }
         
@@ -763,7 +763,7 @@ class ComponentDrivenWireframeGenerator {
             padding: 24px; 
             text-align: center; 
         }
-        .metric-value { font-size: 32px; font-weight: 600; color: #0078d4; margin-top: 8px; }
+        .metric-value { font-size: 32px; font-weight: 600; color: #8E9AAF; margin-top: 8px; }
         
         /* Charts */
         .charts-section { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
@@ -780,7 +780,7 @@ class ComponentDrivenWireframeGenerator {
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            color: #605e5c; 
+            color: #68769C; 
             margin-top: 16px; 
         }
         
@@ -805,7 +805,7 @@ class ComponentDrivenWireframeGenerator {
             display: block; 
             margin-bottom: 8px; 
             font-weight: 500; 
-            color: #323130; 
+            color: #3C4858; 
         }
         .form-control { 
             width: 100%; 
@@ -816,8 +816,8 @@ class ComponentDrivenWireframeGenerator {
         }
         .form-control:focus { 
             outline: none; 
-            border-color: #0078d4; 
-            box-shadow: 0 0 0 1px #0078d4; 
+            border-color: #8E9AAF; 
+            box-shadow: 0 0 0 1px #8E9AAF; 
         }
         .form-actions { display: flex; gap: 12px; justify-content: flex-end; }
         
@@ -850,7 +850,7 @@ class ComponentDrivenWireframeGenerator {
             border: none; 
             font-size: 24px; 
             cursor: pointer; 
-            color: #605e5c; 
+            color: #68769C; 
         }
         .modal-body { padding: 24px; }
         .modal-footer { 

@@ -11,7 +11,7 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: linear-gradient(135deg, #0078d4, #005a9e);
+  background: linear-gradient(135deg, #8E9AAF, #68769C);
   color: white;
   padding: 8px 16px;
   border-radius: 0 0 8px 8px;
@@ -111,7 +111,7 @@
 }
 
 .draggable-overlay.generated {
-  border: 2px dashed #0078d4;
+  border: 2px dashed #8E9AAF;
   background-color: rgba(0, 120, 212, 0.1);
 }
 
@@ -262,7 +262,7 @@
 
 /* Accessibility */
 .draggable-overlay:focus {
-  outline: 2px solid #005a9e;
+  outline: 2px solid #68769C;
   outline-offset: 2px;
 }
 

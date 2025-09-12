@@ -221,63 +221,63 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
             button: `
                 <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; font-family: 'Segoe UI', sans-serif; width: 280px;">
                     <div style="margin-bottom: 16px;">
-                        <div style="font-weight: 600; color: #323130; font-size: 14px; margin-bottom: 12px;">${name}</div>
+                        <div style="font-weight: 600; color: #3C4858; font-size: 14px; margin-bottom: 12px;">${name}</div>
                         <div style="display: flex; gap: 8px; align-items: center;">
-                            <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Primary</button>
-                            <button style="background: transparent; color: #0078d4; border: 1px solid #0078d4; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Secondary</button>
+                            <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Primary</button>
+                            <button style="background: transparent; color: #8E9AAF; border: 1px solid #8E9AAF; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Secondary</button>
                         </div>
                     </div>
-                    <div style="font-size: 11px; color: #605e5c; opacity: 0.8;">From Figma Fluent Library</div>
+                    <div style="font-size: 11px; color: #68769C; opacity: 0.8;">From Figma Fluent Library</div>
                 </div>`,
             card: `
                 <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; padding: 16px; font-family: 'Segoe UI', sans-serif; width: 280px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <div style="background: #f3f2f1; border-radius: 6px; height: 80px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; color: #605e5c;">
+                    <div style="background: #f3f2f1; border-radius: 6px; height: 80px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; color: #68769C;">
                         <div style="font-size: 24px;">📊</div>
                     </div>
-                    <div style="font-weight: 600; color: #323130; font-size: 14px; margin-bottom: 4px;">${name}</div>
-                    <div style="color: #605e5c; font-size: 12px; line-height: 1.4; margin-bottom: 12px;">Interactive card component with Fluent Design styling</div>
-                    <div style="font-size: 11px; color: #605e5c; opacity: 0.8;">From Figma Fluent Library</div>
+                    <div style="font-weight: 600; color: #3C4858; font-size: 14px; margin-bottom: 4px;">${name}</div>
+                    <div style="color: #68769C; font-size: 12px; line-height: 1.4; margin-bottom: 12px;">Interactive card component with Fluent Design styling</div>
+                    <div style="font-size: 11px; color: #68769C; opacity: 0.8;">From Figma Fluent Library</div>
                 </div>`,
             navigation: `
                 <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; overflow: hidden; font-family: 'Segoe UI', sans-serif; width: 320px;">
                     <div style="background: #f3f2f1; padding: 12px 16px; border-bottom: 1px solid #e1dfdd; display: flex; align-items: center; gap: 12px;">
-                        <div style="width: 24px; height: 24px; background: #0078d4; border-radius: 4px;"></div>
-                        <div style="font-weight: 600; color: #323130; font-size: 14px;">${name}</div>
+                        <div style="width: 24px; height: 24px; background: #8E9AAF; border-radius: 4px;"></div>
+                        <div style="font-weight: 600; color: #3C4858; font-size: 14px;">${name}</div>
                     </div>
                     <div style="padding: 8px;">
                         <div style="display: flex; flex-direction: column; gap: 2px;">
-                            <div style="padding: 8px 12px; color: #0078d4; background: #f3f9fd; border-radius: 4px; font-size: 13px;">Home</div>
-                            <div style="padding: 8px 12px; color: #605e5c; font-size: 13px;">Products</div>
-                            <div style="padding: 8px 12px; color: #605e5c; font-size: 13px;">About</div>
+                            <div style="padding: 8px 12px; color: #8E9AAF; background: #f3f9fd; border-radius: 4px; font-size: 13px;">Home</div>
+                            <div style="padding: 8px 12px; color: #68769C; font-size: 13px;">Products</div>
+                            <div style="padding: 8px 12px; color: #68769C; font-size: 13px;">About</div>
                         </div>
                     </div>
-                    <div style="padding: 12px 16px; font-size: 11px; color: #605e5c; opacity: 0.8; border-top: 1px solid #e1dfdd;">From Figma Fluent Library</div>
+                    <div style="padding: 12px 16px; font-size: 11px; color: #68769C; opacity: 0.8; border-top: 1px solid #e1dfdd;">From Figma Fluent Library</div>
                 </div>`,
             form: `
                 <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; font-family: 'Segoe UI', sans-serif; width: 280px;">
-                    <div style="font-weight: 600; color: #323130; font-size: 14px; margin-bottom: 16px;">${name}</div>
+                    <div style="font-weight: 600; color: #3C4858; font-size: 14px; margin-bottom: 16px;">${name}</div>
                     <div style="margin-bottom: 12px;">
-                        <label style="display: block; font-size: 12px; color: #605e5c; margin-bottom: 4px;">Email address</label>
+                        <label style="display: block; font-size: 12px; color: #68769C; margin-bottom: 4px;">Email address</label>
                         <input style="width: 100%; padding: 8px 12px; border: 1px solid #d2d0ce; border-radius: 4px; font-size: 14px; box-sizing: border-box;" type="email" placeholder="name@example.com" disabled>
                     </div>
                     <div style="margin-bottom: 16px;">
-                        <label style="display: block; font-size: 12px; color: #605e5c; margin-bottom: 4px;">Message</label>
+                        <label style="display: block; font-size: 12px; color: #68769C; margin-bottom: 4px;">Message</label>
                         <textarea style="width: 100%; padding: 8px 12px; border: 1px solid #d2d0ce; border-radius: 4px; font-size: 14px; height: 60px; resize: none; box-sizing: border-box;" placeholder="Your message..." disabled></textarea>
                     </div>
-                    <div style="font-size: 11px; color: #605e5c; opacity: 0.8;">From Figma Fluent Library</div>
+                    <div style="font-size: 11px; color: #68769C; opacity: 0.8;">From Figma Fluent Library</div>
                 </div>`,
             general: `
                 <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; padding: 16px; font-family: 'Segoe UI', sans-serif; width: 280px;">
                     <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                        <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #0078d4, #106ebe); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 20px;">
+                        <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #8E9AAF, #68769C); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 20px;">
                             ${name.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                            <div style="font-weight: 600; color: #323130; font-size: 14px;">${name}</div>
-                            <div style="color: #605e5c; font-size: 12px;">Fluent UI Component</div>
+                            <div style="font-weight: 600; color: #3C4858; font-size: 14px;">${name}</div>
+                            <div style="color: #68769C; font-size: 12px;">Fluent UI Component</div>
                         </div>
                     </div>
-                    <div style="font-size: 11px; color: #605e5c; opacity: 0.8;">From Figma Fluent Library</div>
+                    <div style="font-size: 11px; color: #68769C; opacity: 0.8;">From Figma Fluent Library</div>
                 </div>`
         };
 
@@ -397,14 +397,14 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
             playbook: 'Figma Fluent Library',
             htmlCode: `
             <div style="padding: 24px; background: #f8f9fa; border-radius: 8px; font-family: 'Segoe UI', sans-serif;">
-                <h3 style="margin: 0 0 16px 0; color: #323130;">Fluent Button Components</h3>
+                <h3 style="margin: 0 0 16px 0; color: #3C4858;">Fluent Button Components</h3>
                 <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
-                    <button style="background: #0078d4; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: 600;">Primary</button>
-                    <button style="background: transparent; color: #0078d4; border: 1px solid #0078d4; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: 600;">Secondary</button>
-                    <button style="background: transparent; color: #323130; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: 600;">Subtle</button>
+                    <button style="background: #8E9AAF; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: 600;">Primary</button>
+                    <button style="background: transparent; color: #8E9AAF; border: 1px solid #8E9AAF; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: 600;">Secondary</button>
+                    <button style="background: transparent; color: #3C4858; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: 600;">Subtle</button>
                     <button style="background: #f3f2f1; color: #a19f9d; border: none; padding: 10px 20px; border-radius: 4px; cursor: not-allowed; font-weight: 600;" disabled>Disabled</button>
                 </div>
-                <p style="margin: 16px 0 0 0; font-size: 12px; color: #605e5c;">From Fluent 2 Figma Design System (Fallback)</p>
+                <p style="margin: 16px 0 0 0; font-size: 12px; color: #68769C;">From Fluent 2 Figma Design System (Fallback)</p>
             </div>`
         }];
     };
@@ -449,16 +449,16 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
             playbook: 'Figma Atlas Library',
             htmlCode: `
             <div style="background: white; border: 1px solid #e1e5e9; border-radius: 8px; overflow: hidden; font-family: 'Segoe UI', sans-serif;">
-                <div style="background: #0078d4; color: white; padding: 16px 24px;">
+                <div style="background: #8E9AAF; color: white; padding: 16px 24px;">
                     <h3 style="margin: 0; font-size: 18px;">Atlas Navigation</h3>
                 </div>
                 <nav style="padding: 16px 0;">
-                    <a href="#" style="display: block; padding: 12px 24px; color: #323130; text-decoration: none; border-left: 3px solid #0078d4; background: #f3f9ff;">Dashboard</a>
-                    <a href="#" style="display: block; padding: 12px 24px; color: #605e5c; text-decoration: none; border-left: 3px solid transparent;">Analytics</a>
-                    <a href="#" style="display: block; padding: 12px 24px; color: #605e5c; text-decoration: none; border-left: 3px solid transparent;">Projects</a>
-                    <a href="#" style="display: block; padding: 12px 24px; color: #605e5c; text-decoration: none; border-left: 3px solid transparent;">Settings</a>
+                    <a href="#" style="display: block; padding: 12px 24px; color: #3C4858; text-decoration: none; border-left: 3px solid #8E9AAF; background: #f3f9ff;">Dashboard</a>
+                    <a href="#" style="display: block; padding: 12px 24px; color: #68769C; text-decoration: none; border-left: 3px solid transparent;">Analytics</a>
+                    <a href="#" style="display: block; padding: 12px 24px; color: #68769C; text-decoration: none; border-left: 3px solid transparent;">Projects</a>
+                    <a href="#" style="display: block; padding: 12px 24px; color: #68769C; text-decoration: none; border-left: 3px solid transparent;">Settings</a>
                 </nav>
-                <p style="margin: 0; padding: 16px 24px; font-size: 12px; color: #605e5c; border-top: 1px solid #f3f2f1;">From Atlas Figma Library (Fallback)</p>
+                <p style="margin: 0; padding: 16px 24px; font-size: 12px; color: #68769C; border-top: 1px solid #f3f2f1;">From Atlas Figma Library (Fallback)</p>
             </div>`
         }];
     };
@@ -497,7 +497,7 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
             playbook: 'Figma Azure Library',
             htmlCode: `
             <div style="background: white; border: 1px solid #e1dfdd; border-radius: 12px; overflow: hidden; font-family: 'Segoe UI', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 480px;">
-                <div style="background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%); color: white; padding: 24px;">
+                <div style="background: linear-gradient(135deg, #8E9AAF 0%, #68769C 100%); color: white; padding: 24px;">
                     <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
                         <div style="width: 48px; height: 48px; background: rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                             <div style="width: 24px; height: 24px; background: white; border-radius: 4px;"></div>
@@ -524,31 +524,31 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                 </div>
                 <div style="padding: 24px;">
                     <div style="margin-bottom: 20px;">
-                        <h3 style="margin: 0 0 12px 0; color: #323130; font-size: 16px; font-weight: 600;">Recent Activity</h3>
+                        <h3 style="margin: 0 0 12px 0; color: #3C4858; font-size: 16px; font-weight: 600;">Recent Activity</h3>
                         <div style="space-y: 8px;">
                             <div style="display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid #f3f2f1;">
                                 <div style="width: 8px; height: 8px; background: #107c10; border-radius: 50%;"></div>
-                                <span style="flex: 1; font-size: 14px; color: #323130;">App Service deployed successfully</span>
-                                <span style="font-size: 12px; color: #605e5c;">2m ago</span>
+                                <span style="flex: 1; font-size: 14px; color: #3C4858;">App Service deployed successfully</span>
+                                <span style="font-size: 12px; color: #68769C;">2m ago</span>
                             </div>
                             <div style="display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid #f3f2f1;">
-                                <div style="width: 8px; height: 8px; background: #0078d4; border-radius: 50%;"></div>
-                                <span style="flex: 1; font-size: 14px; color: #323130;">SQL Database backup completed</span>
-                                <span style="font-size: 12px; color: #605e5c;">15m ago</span>
+                                <div style="width: 8px; height: 8px; background: #8E9AAF; border-radius: 50%;"></div>
+                                <span style="flex: 1; font-size: 14px; color: #3C4858;">SQL Database backup completed</span>
+                                <span style="font-size: 12px; color: #68769C;">15m ago</span>
                             </div>
                             <div style="display: flex; align-items: center; gap: 12px; padding: 8px 0;">
                                 <div style="width: 8px; height: 8px; background: #d83b01; border-radius: 50%;"></div>
-                                <span style="flex: 1; font-size: 14px; color: #323130;">Function app scaling event</span>
-                                <span style="font-size: 12px; color: #605e5c;">1h ago</span>
+                                <span style="flex: 1; font-size: 14px; color: #3C4858;">Function app scaling event</span>
+                                <span style="font-size: 12px; color: #68769C;">1h ago</span>
                             </div>
                         </div>
                     </div>
                     <div style="display: flex; gap: 12px;">
-                        <button style="background: #0078d4; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; flex: 1;">Manage Resources</button>
-                        <button style="background: transparent; color: #0078d4; border: 2px solid #0078d4; padding: 12px 24px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; flex: 1;">View Metrics</button>
+                        <button style="background: #8E9AAF; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; flex: 1;">Manage Resources</button>
+                        <button style="background: transparent; color: #8E9AAF; border: 2px solid #8E9AAF; padding: 12px 24px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; flex: 1;">View Metrics</button>
                     </div>
                 </div>
-                <div style="background: #f8f9fa; padding: 12px 24px; font-size: 12px; color: #605e5c; text-align: center;">
+                <div style="background: #f8f9fa; padding: 12px 24px; font-size: 12px; color: #68769C; text-align: center;">
                     From Azure Figma Design System (Fallback)
                 </div>
             </div>`
@@ -571,33 +571,33 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                     <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; width: 400px; font-family: 'Segoe UI', sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                             <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 32px; height: 32px; background: #0078d4; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">RG</div>
+                                <div style="width: 32px; height: 32px; background: #8E9AAF; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">RG</div>
                                 <div>
-                                    <h3 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">my-app-resources</h3>
-                                    <p style="margin: 2px 0 0 0; color: #605e5c; font-size: 12px;">East US • Active</p>
+                                    <h3 style="margin: 0; color: #3C4858; font-size: 16px; font-weight: 600;">my-app-resources</h3>
+                                    <p style="margin: 2px 0 0 0; color: #68769C; font-size: 12px;">East US • Active</p>
                                 </div>
                             </div>
-                            <button style="background: #0078d4; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer;">Manage</button>
+                            <button style="background: #8E9AAF; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer;">Manage</button>
                         </div>
                         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                             <div style="text-align: center;">
-                                <div style="font-size: 20px; font-weight: 600; color: #323130;">12</div>
-                                <div style="font-size: 12px; color: #605e5c;">Resources</div>
+                                <div style="font-size: 20px; font-weight: 600; color: #3C4858;">12</div>
+                                <div style="font-size: 12px; color: #68769C;">Resources</div>
                             </div>
                             <div style="text-align: center;">
                                 <div style="font-size: 20px; font-weight: 600; color: #107c10;">$47.82</div>
-                                <div style="font-size: 12px; color: #605e5c;">Monthly Cost</div>
+                                <div style="font-size: 12px; color: #68769C;">Monthly Cost</div>
                             </div>
                             <div style="text-align: center;">
-                                <div style="font-size: 20px; font-weight: 600; color: #0078d4;">3</div>
-                                <div style="font-size: 12px; color: #605e5c;">Deployments</div>
+                                <div style="font-size: 20px; font-weight: 600; color: #8E9AAF;">3</div>
+                                <div style="font-size: 12px; color: #68769C;">Deployments</div>
                             </div>
                         </div>
                         <div style="border-top: 1px solid #e1dfdd; padding-top: 12px;">
                             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                <span style="background: #deecf9; color: #0078d4; padding: 4px 8px; border-radius: 12px; font-size: 11px;">App Service</span>
-                                <span style="background: #deecf9; color: #0078d4; padding: 4px 8px; border-radius: 12px; font-size: 11px;">SQL Database</span>
-                                <span style="background: #deecf9; color: #0078d4; padding: 4px 8px; border-radius: 12px; font-size: 11px;">Storage Account</span>
+                                <span style="background: #deecf9; color: #8E9AAF; padding: 4px 8px; border-radius: 12px; font-size: 11px;">App Service</span>
+                                <span style="background: #deecf9; color: #8E9AAF; padding: 4px 8px; border-radius: 12px; font-size: 11px;">SQL Database</span>
+                                <span style="background: #deecf9; color: #8E9AAF; padding: 4px 8px; border-radius: 12px; font-size: 11px;">Storage Account</span>
                             </div>
                         </div>
                     </div>`
@@ -615,10 +615,10 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                         <div style="background: #f8f9fa; padding: 16px; border-bottom: 1px solid #e1dfdd; border-radius: 8px 8px 0 0;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <div style="display: flex; align-items: center; gap: 12px;">
-                                    <div style="width: 32px; height: 32px; background: #0078d4; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">AS</div>
+                                    <div style="width: 32px; height: 32px; background: #8E9AAF; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">AS</div>
                                     <div>
-                                        <h3 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">my-web-app</h3>
-                                        <p style="margin: 2px 0 0 0; color: #605e5c; font-size: 12px;">https://my-web-app.azurewebsites.net</p>
+                                        <h3 style="margin: 0; color: #3C4858; font-size: 16px; font-weight: 600;">my-web-app</h3>
+                                        <p style="margin: 2px 0 0 0; color: #68769C; font-size: 12px;">https://my-web-app.azurewebsites.net</p>
                                     </div>
                                 </div>
                                 <div style="display: flex; align-items: center; gap: 8px;">
@@ -630,29 +630,29 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                         <div style="padding: 16px;">
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                                 <div>
-                                    <div style="font-size: 12px; color: #605e5c; margin-bottom: 4px;">CPU Usage</div>
+                                    <div style="font-size: 12px; color: #68769C; margin-bottom: 4px;">CPU Usage</div>
                                     <div style="display: flex; align-items: center; gap: 8px;">
                                         <div style="background: #f3f2f1; height: 8px; border-radius: 4px; flex: 1; position: relative;">
                                             <div style="background: #107c10; height: 100%; width: 35%; border-radius: 4px;"></div>
                                         </div>
-                                        <span style="font-size: 14px; font-weight: 600; color: #323130;">35%</span>
+                                        <span style="font-size: 14px; font-weight: 600; color: #3C4858;">35%</span>
                                     </div>
                                 </div>
                                 <div>
-                                    <div style="font-size: 12px; color: #605e5c; margin-bottom: 4px;">Memory Usage</div>
+                                    <div style="font-size: 12px; color: #68769C; margin-bottom: 4px;">Memory Usage</div>
                                     <div style="display: flex; align-items: center; gap: 8px;">
                                         <div style="background: #f3f2f1; height: 8px; border-radius: 4px; flex: 1; position: relative;">
-                                            <div style="background: #0078d4; height: 100%; width: 67%; border-radius: 4px;"></div>
+                                            <div style="background: #8E9AAF; height: 100%; width: 67%; border-radius: 4px;"></div>
                                         </div>
-                                        <span style="font-size: 14px; font-weight: 600; color: #323130;">67%</span>
+                                        <span style="font-size: 14px; font-weight: 600; color: #3C4858;">67%</span>
                                     </div>
                                 </div>
                             </div>
                             <div style="display: flex; gap: 12px; margin-bottom: 16px;">
-                                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 12px; cursor: pointer; flex: 1;">Deploy</button>
-                                <button style="background: transparent; color: #0078d4; border: 1px solid #0078d4; padding: 8px 16px; border-radius: 4px; font-size: 12px; cursor: pointer; flex: 1;">Logs</button>
+                                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 12px; cursor: pointer; flex: 1;">Deploy</button>
+                                <button style="background: transparent; color: #8E9AAF; border: 1px solid #8E9AAF; padding: 8px 16px; border-radius: 4px; font-size: 12px; cursor: pointer; flex: 1;">Logs</button>
                             </div>
-                            <div style="border-top: 1px solid #e1dfdd; padding-top: 12px; font-size: 12px; color: #605e5c;">
+                            <div style="border-top: 1px solid #e1dfdd; padding-top: 12px; font-size: 12px; color: #68769C;">
                                 Last deployment: 2 hours ago • Build #247
                             </div>
                         </div>
@@ -671,10 +671,10 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                         <div style="background: #f8f9fa; padding: 16px; border-bottom: 1px solid #e1dfdd; border-radius: 8px 8px 0 0;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <div style="display: flex; align-items: center; gap: 12px;">
-                                    <div style="width: 32px; height: 32px; background: #0078d4; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">DB</div>
+                                    <div style="width: 32px; height: 32px; background: #8E9AAF; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">DB</div>
                                     <div>
-                                        <h3 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">myapp-database</h3>
-                                        <p style="margin: 2px 0 0 0; color: #605e5c; font-size: 12px;">SQL Database • Standard S2</p>
+                                        <h3 style="margin: 0; color: #3C4858; font-size: 16px; font-weight: 600;">myapp-database</h3>
+                                        <p style="margin: 2px 0 0 0; color: #68769C; font-size: 12px;">SQL Database • Standard S2</p>
                                     </div>
                                 </div>
                                 <div style="display: flex; align-items: center; gap: 8px;">
@@ -686,21 +686,21 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                         <div style="padding: 16px;">
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                                 <div style="text-align: center;">
-                                    <div style="font-size: 18px; font-weight: 600; color: #323130;">47</div>
-                                    <div style="font-size: 11px; color: #605e5c;">DTU Usage</div>
+                                    <div style="font-size: 18px; font-weight: 600; color: #3C4858;">47</div>
+                                    <div style="font-size: 11px; color: #68769C;">DTU Usage</div>
                                 </div>
                                 <div style="text-align: center;">
-                                    <div style="font-size: 18px; font-weight: 600; color: #323130;">23.4 GB</div>
-                                    <div style="font-size: 11px; color: #605e5c;">Storage Used</div>
+                                    <div style="font-size: 18px; font-weight: 600; color: #3C4858;">23.4 GB</div>
+                                    <div style="font-size: 11px; color: #68769C;">Storage Used</div>
                                 </div>
                             </div>
                             <div style="background: #f8f9fa; padding: 12px; border-radius: 4px; margin-bottom: 12px;">
-                                <div style="font-size: 11px; color: #605e5c; margin-bottom: 4px;">Connection String</div>
-                                <div style="font-size: 10px; color: #323130; font-family: 'Courier New', monospace; word-break: break-all;">Server=tcp:myserver.database.windows.net...</div>
+                                <div style="font-size: 11px; color: #68769C; margin-bottom: 4px;">Connection String</div>
+                                <div style="font-size: 10px; color: #3C4858; font-family: 'Courier New', monospace; word-break: break-all;">Server=tcp:myserver.database.windows.net...</div>
                             </div>
                             <div style="display: flex; gap: 8px;">
-                                <button style="background: #0078d4; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Query Editor</button>
-                                <button style="background: transparent; color: #0078d4; border: 1px solid #0078d4; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Metrics</button>
+                                <button style="background: #8E9AAF; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Query Editor</button>
+                                <button style="background: transparent; color: #8E9AAF; border: 1px solid #8E9AAF; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Metrics</button>
                             </div>
                         </div>
                     </div>`
@@ -717,51 +717,51 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                     <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; width: 360px; font-family: 'Segoe UI', sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                         <div style="background: #f8f9fa; padding: 16px; border-bottom: 1px solid #e1dfdd; border-radius: 8px 8px 0 0;">
                             <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 32px; height: 32px; background: #0078d4; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">ST</div>
+                                <div style="width: 32px; height: 32px; background: #8E9AAF; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">ST</div>
                                 <div>
-                                    <h3 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">myappstorage</h3>
-                                    <p style="margin: 2px 0 0 0; color: #605e5c; font-size: 12px;">General Purpose v2 • Hot Tier</p>
+                                    <h3 style="margin: 0; color: #3C4858; font-size: 16px; font-weight: 600;">myappstorage</h3>
+                                    <p style="margin: 2px 0 0 0; color: #68769C; font-size: 12px;">General Purpose v2 • Hot Tier</p>
                                 </div>
                             </div>
                         </div>
                         <div style="padding: 16px;">
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                                 <div style="text-align: center;">
-                                    <div style="font-size: 18px; font-weight: 600; color: #323130;">2.3 GB</div>
-                                    <div style="font-size: 11px; color: #605e5c;">Used Storage</div>
+                                    <div style="font-size: 18px; font-weight: 600; color: #3C4858;">2.3 GB</div>
+                                    <div style="font-size: 11px; color: #68769C;">Used Storage</div>
                                 </div>
                                 <div style="text-align: center;">
-                                    <div style="font-size: 18px; font-weight: 600; color: #323130;">$4.12</div>
-                                    <div style="font-size: 11px; color: #605e5c;">Monthly Cost</div>
+                                    <div style="font-size: 18px; font-weight: 600; color: #3C4858;">$4.12</div>
+                                    <div style="font-size: 11px; color: #68769C;">Monthly Cost</div>
                                 </div>
                             </div>
                             <div style="margin-bottom: 16px;">
-                                <div style="font-size: 12px; color: #605e5c; margin-bottom: 8px;">Services</div>
+                                <div style="font-size: 12px; color: #68769C; margin-bottom: 8px;">Services</div>
                                 <div style="space-y: 4px;">
                                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0;">
                                         <div style="display: flex; align-items: center; gap: 8px;">
-                                            <div style="width: 16px; height: 16px; background: #0078d4; border-radius: 2px;"></div>
-                                            <span style="font-size: 12px; color: #323130;">Blob Storage</span>
+                                            <div style="width: 16px; height: 16px; background: #8E9AAF; border-radius: 2px;"></div>
+                                            <span style="font-size: 12px; color: #3C4858;">Blob Storage</span>
                                         </div>
-                                        <span style="font-size: 11px; color: #605e5c;">23 containers</span>
+                                        <span style="font-size: 11px; color: #68769C;">23 containers</span>
                                     </div>
                                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0;">
                                         <div style="display: flex; align-items: center; gap: 8px;">
                                             <div style="width: 16px; height: 16px; background: #107c10; border-radius: 2px;"></div>
-                                            <span style="font-size: 12px; color: #323130;">File Shares</span>
+                                            <span style="font-size: 12px; color: #3C4858;">File Shares</span>
                                         </div>
-                                        <span style="font-size: 11px; color: #605e5c;">5 shares</span>
+                                        <span style="font-size: 11px; color: #68769C;">5 shares</span>
                                     </div>
                                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0;">
                                         <div style="display: flex; align-items: center; gap: 8px;">
                                             <div style="width: 16px; height: 16px; background: #d83b01; border-radius: 2px;"></div>
-                                            <span style="font-size: 12px; color: #323130;">Queues</span>
+                                            <span style="font-size: 12px; color: #3C4858;">Queues</span>
                                         </div>
-                                        <span style="font-size: 11px; color: #605e5c;">12 queues</span>
+                                        <span style="font-size: 11px; color: #68769C;">12 queues</span>
                                     </div>
                                 </div>
                             </div>
-                            <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 12px; cursor: pointer; width: 100%;">Storage Explorer</button>
+                            <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 12px; cursor: pointer; width: 100%;">Storage Explorer</button>
                         </div>
                     </div>`
             },
@@ -778,10 +778,10 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                         <div style="background: #f8f9fa; padding: 16px; border-bottom: 1px solid #e1dfdd; border-radius: 8px 8px 0 0;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <div style="display: flex; align-items: center; gap: 12px;">
-                                    <div style="width: 32px; height: 32px; background: #0078d4; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">FN</div>
+                                    <div style="width: 32px; height: 32px; background: #8E9AAF; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">FN</div>
                                     <div>
-                                        <h3 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">my-function-app</h3>
-                                        <p style="margin: 2px 0 0 0; color: #605e5c; font-size: 12px;">Consumption Plan • Node.js 18</p>
+                                        <h3 style="margin: 0; color: #3C4858; font-size: 16px; font-weight: 600;">my-function-app</h3>
+                                        <p style="margin: 2px 0 0 0; color: #68769C; font-size: 12px;">Consumption Plan • Node.js 18</p>
                                     </div>
                                 </div>
                                 <div style="display: flex; align-items: center; gap: 8px;">
@@ -793,38 +793,38 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                         <div style="padding: 16px;">
                             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px;">
                                 <div style="text-align: center;">
-                                    <div style="font-size: 16px; font-weight: 600; color: #323130;">247</div>
-                                    <div style="font-size: 10px; color: #605e5c;">Executions Today</div>
+                                    <div style="font-size: 16px; font-weight: 600; color: #3C4858;">247</div>
+                                    <div style="font-size: 10px; color: #68769C;">Executions Today</div>
                                 </div>
                                 <div style="text-align: center;">
-                                    <div style="font-size: 16px; font-weight: 600; color: #323130;">156ms</div>
-                                    <div style="font-size: 10px; color: #605e5c;">Avg Duration</div>
+                                    <div style="font-size: 16px; font-weight: 600; color: #3C4858;">156ms</div>
+                                    <div style="font-size: 10px; color: #68769C;">Avg Duration</div>
                                 </div>
                                 <div style="text-align: center;">
                                     <div style="font-size: 16px; font-weight: 600; color: #d83b01;">2</div>
-                                    <div style="font-size: 10px; color: #605e5c;">Errors</div>
+                                    <div style="font-size: 10px; color: #68769C;">Errors</div>
                                 </div>
                             </div>
                             <div style="margin-bottom: 16px;">
-                                <div style="font-size: 12px; color: #605e5c; margin-bottom: 8px;">Functions</div>
+                                <div style="font-size: 12px; color: #68769C; margin-bottom: 8px;">Functions</div>
                                 <div style="background: #f8f9fa; border-radius: 4px; padding: 8px;">
                                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                        <span style="font-size: 12px; color: #323130; font-weight: 600;">HttpTrigger1</span>
+                                        <span style="font-size: 12px; color: #3C4858; font-weight: 600;">HttpTrigger1</span>
                                         <span style="font-size: 10px; color: #107c10;">Active</span>
                                     </div>
                                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                        <span style="font-size: 12px; color: #323130; font-weight: 600;">TimerTrigger1</span>
+                                        <span style="font-size: 12px; color: #3C4858; font-weight: 600;">TimerTrigger1</span>
                                         <span style="font-size: 10px; color: #107c10;">Active</span>
                                     </div>
                                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                                        <span style="font-size: 12px; color: #323130; font-weight: 600;">BlobTrigger1</span>
-                                        <span style="font-size: 10px; color: #605e5c;">Disabled</span>
+                                        <span style="font-size: 12px; color: #3C4858; font-weight: 600;">BlobTrigger1</span>
+                                        <span style="font-size: 10px; color: #68769C;">Disabled</span>
                                     </div>
                                 </div>
                             </div>
                             <div style="display: flex; gap: 8px;">
-                                <button style="background: #0078d4; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Deploy</button>
-                                <button style="background: transparent; color: #0078d4; border: 1px solid #0078d4; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Monitor</button>
+                                <button style="background: #8E9AAF; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Deploy</button>
+                                <button style="background: transparent; color: #8E9AAF; border: 1px solid #8E9AAF; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Monitor</button>
                             </div>
                         </div>
                     </div>`
@@ -842,10 +842,10 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                         <div style="background: #f8f9fa; padding: 16px; border-bottom: 1px solid #e1dfdd; border-radius: 8px 8px 0 0;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <div style="display: flex; align-items: center; gap: 12px;">
-                                    <div style="width: 32px; height: 32px; background: #0078d4; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">VM</div>
+                                    <div style="width: 32px; height: 32px; background: #8E9AAF; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">VM</div>
                                     <div>
-                                        <h3 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">web-server-01</h3>
-                                        <p style="margin: 2px 0 0 0; color: #605e5c; font-size: 12px;">Standard B2s • Ubuntu 20.04</p>
+                                        <h3 style="margin: 0; color: #3C4858; font-size: 16px; font-weight: 600;">web-server-01</h3>
+                                        <p style="margin: 2px 0 0 0; color: #68769C; font-size: 12px;">Standard B2s • Ubuntu 20.04</p>
                                     </div>
                                 </div>
                                 <div style="display: flex; align-items: center; gap: 8px;">
@@ -857,16 +857,16 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                         <div style="padding: 16px;">
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                                 <div>
-                                    <div style="font-size: 12px; color: #605e5c; margin-bottom: 4px;">CPU</div>
-                                    <div style="font-size: 18px; font-weight: 600; color: #323130;">23%</div>
+                                    <div style="font-size: 12px; color: #68769C; margin-bottom: 4px;">CPU</div>
+                                    <div style="font-size: 18px; font-weight: 600; color: #3C4858;">23%</div>
                                 </div>
                                 <div>
-                                    <div style="font-size: 12px; color: #605e5c; margin-bottom: 4px;">Memory</div>
-                                    <div style="font-size: 18px; font-weight: 600; color: #323130;">4.2 GB</div>
+                                    <div style="font-size: 12px; color: #68769C; margin-bottom: 4px;">Memory</div>
+                                    <div style="font-size: 18px; font-weight: 600; color: #3C4858;">4.2 GB</div>
                                 </div>
                             </div>
                             <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-                                <button style="background: #0078d4; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Connect</button>
+                                <button style="background: #8E9AAF; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Connect</button>
                                 <button style="background: transparent; color: #d83b01; border: 1px solid #d83b01; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Stop</button>
                             </div>
                         </div>
@@ -884,35 +884,35 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                     <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; width: 420px; font-family: 'Segoe UI', sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                         <div style="background: #f8f9fa; padding: 16px; border-bottom: 1px solid #e1dfdd; border-radius: 8px 8px 0 0;">
                             <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 32px; height: 32px; background: #0078d4; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">DB</div>
+                                <div style="width: 32px; height: 32px; background: #8E9AAF; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">DB</div>
                                 <div>
-                                    <h3 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">myapp-cosmos</h3>
-                                    <p style="margin: 2px 0 0 0; color: #605e5c; font-size: 12px;">SQL API • Multi-region</p>
+                                    <h3 style="margin: 0; color: #3C4858; font-size: 16px; font-weight: 600;">myapp-cosmos</h3>
+                                    <p style="margin: 2px 0 0 0; color: #68769C; font-size: 12px;">SQL API • Multi-region</p>
                                 </div>
                             </div>
                         </div>
                         <div style="padding: 16px;">
                             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px;">
                                 <div style="text-align: center;">
-                                    <div style="font-size: 16px; font-weight: 600; color: #323130;">400 RU/s</div>
-                                    <div style="font-size: 10px; color: #605e5c;">Throughput</div>
+                                    <div style="font-size: 16px; font-weight: 600; color: #3C4858;">400 RU/s</div>
+                                    <div style="font-size: 10px; color: #68769C;">Throughput</div>
                                 </div>
                                 <div style="text-align: center;">
-                                    <div style="font-size: 16px; font-weight: 600; color: #323130;">1.2M</div>
-                                    <div style="font-size: 10px; color: #605e5c;">Documents</div>
+                                    <div style="font-size: 16px; font-weight: 600; color: #3C4858;">1.2M</div>
+                                    <div style="font-size: 10px; color: #68769C;">Documents</div>
                                 </div>
                                 <div style="text-align: center;">
-                                    <div style="font-size: 16px; font-weight: 600; color: #323130;">847 MB</div>
-                                    <div style="font-size: 10px; color: #605e5c;">Storage</div>
+                                    <div style="font-size: 16px; font-weight: 600; color: #3C4858;">847 MB</div>
+                                    <div style="font-size: 10px; color: #68769C;">Storage</div>
                                 </div>
                             </div>
                             <div style="background: #f8f9fa; padding: 12px; border-radius: 4px; margin-bottom: 12px;">
-                                <div style="font-size: 11px; color: #605e5c; margin-bottom: 4px;">Connection String</div>
-                                <div style="font-size: 10px; color: #323130; font-family: 'Courier New', monospace;">AccountEndpoint=https://myapp-cosmos.documents.azure.com...</div>
+                                <div style="font-size: 11px; color: #68769C; margin-bottom: 4px;">Connection String</div>
+                                <div style="font-size: 10px; color: #3C4858; font-family: 'Courier New', monospace;">AccountEndpoint=https://myapp-cosmos.documents.azure.com...</div>
                             </div>
                             <div style="display: flex; gap: 8px;">
-                                <button style="background: #0078d4; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Data Explorer</button>
-                                <button style="background: transparent; color: #0078d4; border: 1px solid #0078d4; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Scale</button>
+                                <button style="background: #8E9AAF; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Data Explorer</button>
+                                <button style="background: transparent; color: #8E9AAF; border: 1px solid #8E9AAF; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Scale</button>
                             </div>
                         </div>
                     </div>`
@@ -929,34 +929,34 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                     <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; width: 380px; font-family: 'Segoe UI', sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                         <div style="background: #f8f9fa; padding: 16px; border-bottom: 1px solid #e1dfdd; border-radius: 8px 8px 0 0;">
                             <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 32px; height: 32px; background: #0078d4; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">KV</div>
+                                <div style="width: 32px; height: 32px; background: #8E9AAF; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">KV</div>
                                 <div>
-                                    <h3 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">myapp-keyvault</h3>
-                                    <p style="margin: 2px 0 0 0; color: #605e5c; font-size: 12px;">Standard • RBAC Enabled</p>
+                                    <h3 style="margin: 0; color: #3C4858; font-size: 16px; font-weight: 600;">myapp-keyvault</h3>
+                                    <p style="margin: 2px 0 0 0; color: #68769C; font-size: 12px;">Standard • RBAC Enabled</p>
                                 </div>
                             </div>
                         </div>
                         <div style="padding: 16px;">
                             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px;">
                                 <div style="text-align: center;">
-                                    <div style="font-size: 18px; font-weight: 600; color: #323130;">12</div>
-                                    <div style="font-size: 11px; color: #605e5c;">Secrets</div>
+                                    <div style="font-size: 18px; font-weight: 600; color: #3C4858;">12</div>
+                                    <div style="font-size: 11px; color: #68769C;">Secrets</div>
                                 </div>
                                 <div style="text-align: center;">
-                                    <div style="font-size: 18px; font-weight: 600; color: #323130;">3</div>
-                                    <div style="font-size: 11px; color: #605e5c;">Keys</div>
+                                    <div style="font-size: 18px; font-weight: 600; color: #3C4858;">3</div>
+                                    <div style="font-size: 11px; color: #68769C;">Keys</div>
                                 </div>
                                 <div style="text-align: center;">
-                                    <div style="font-size: 18px; font-weight: 600; color: #323130;">2</div>
-                                    <div style="font-size: 11px; color: #605e5c;">Certificates</div>
+                                    <div style="font-size: 18px; font-weight: 600; color: #3C4858;">2</div>
+                                    <div style="font-size: 11px; color: #68769C;">Certificates</div>
                                 </div>
                             </div>
                             <div style="background: #f8f9fa; padding: 12px; border-radius: 4px; margin-bottom: 12px;">
-                                <div style="font-size: 11px; color: #605e5c; margin-bottom: 8px;">Recent Access</div>
-                                <div style="font-size: 12px; color: #323130;">database-connection-string</div>
-                                <div style="font-size: 12px; color: #323130;">api-secret-key</div>
+                                <div style="font-size: 11px; color: #68769C; margin-bottom: 8px;">Recent Access</div>
+                                <div style="font-size: 12px; color: #3C4858;">database-connection-string</div>
+                                <div style="font-size: 12px; color: #3C4858;">api-secret-key</div>
                             </div>
-                            <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 12px; cursor: pointer; width: 100%;">Manage Secrets</button>
+                            <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 12px; cursor: pointer; width: 100%;">Manage Secrets</button>
                         </div>
                     </div>`
             },
@@ -972,38 +972,38 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                     <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; width: 400px; font-family: 'Segoe UI', sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                         <div style="background: #f8f9fa; padding: 16px; border-bottom: 1px solid #e1dfdd; border-radius: 8px 8px 0 0;">
                             <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 32px; height: 32px; background: #0078d4; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">CR</div>
+                                <div style="width: 32px; height: 32px; background: #8E9AAF; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">CR</div>
                                 <div>
-                                    <h3 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">myappregistry</h3>
-                                    <p style="margin: 2px 0 0 0; color: #605e5c; font-size: 12px;">Premium • Geo-replication</p>
+                                    <h3 style="margin: 0; color: #3C4858; font-size: 16px; font-weight: 600;">myappregistry</h3>
+                                    <p style="margin: 2px 0 0 0; color: #68769C; font-size: 12px;">Premium • Geo-replication</p>
                                 </div>
                             </div>
                         </div>
                         <div style="padding: 16px;">
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                                 <div style="text-align: center;">
-                                    <div style="font-size: 18px; font-weight: 600; color: #323130;">23</div>
-                                    <div style="font-size: 11px; color: #605e5c;">Repositories</div>
+                                    <div style="font-size: 18px; font-weight: 600; color: #3C4858;">23</div>
+                                    <div style="font-size: 11px; color: #68769C;">Repositories</div>
                                 </div>
                                 <div style="text-align: center;">
-                                    <div style="font-size: 18px; font-weight: 600; color: #323130;">4.2 GB</div>
-                                    <div style="font-size: 11px; color: #605e5c;">Storage Used</div>
+                                    <div style="font-size: 18px; font-weight: 600; color: #3C4858;">4.2 GB</div>
+                                    <div style="font-size: 11px; color: #68769C;">Storage Used</div>
                                 </div>
                             </div>
                             <div style="margin-bottom: 16px;">
-                                <div style="font-size: 12px; color: #605e5c; margin-bottom: 8px;">Recent Images</div>
+                                <div style="font-size: 12px; color: #68769C; margin-bottom: 8px;">Recent Images</div>
                                 <div style="background: #f8f9fa; border-radius: 4px; padding: 8px;">
                                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                        <span style="font-size: 12px; color: #323130;">webapp:latest</span>
+                                        <span style="font-size: 12px; color: #3C4858;">webapp:latest</span>
                                         <span style="font-size: 10px; color: #107c10;">✓ Scanned</span>
                                     </div>
                                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                                        <span style="font-size: 12px; color: #323130;">api:v2.1</span>
+                                        <span style="font-size: 12px; color: #3C4858;">api:v2.1</span>
                                         <span style="font-size: 10px; color: #107c10;">✓ Scanned</span>
                                     </div>
                                 </div>
                             </div>
-                            <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 12px; cursor: pointer; width: 100%;">Browse Images</button>
+                            <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 12px; cursor: pointer; width: 100%;">Browse Images</button>
                         </div>
                     </div>`
             },
@@ -1019,38 +1019,38 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                     <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; width: 420px; font-family: 'Segoe UI', sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                         <div style="background: #f8f9fa; padding: 16px; border-bottom: 1px solid #e1dfdd; border-radius: 8px 8px 0 0;">
                             <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 32px; height: 32px; background: #0078d4; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">SB</div>
+                                <div style="width: 32px; height: 32px; background: #8E9AAF; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">SB</div>
                                 <div>
-                                    <h3 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">order-processing</h3>
-                                    <p style="margin: 2px 0 0 0; color: #605e5c; font-size: 12px;">Standard • Queue</p>
+                                    <h3 style="margin: 0; color: #3C4858; font-size: 16px; font-weight: 600;">order-processing</h3>
+                                    <p style="margin: 2px 0 0 0; color: #68769C; font-size: 12px;">Standard • Queue</p>
                                 </div>
                             </div>
                         </div>
                         <div style="padding: 16px;">
                             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px;">
                                 <div style="text-align: center;">
-                                    <div style="font-size: 16px; font-weight: 600; color: #323130;">127</div>
-                                    <div style="font-size: 10px; color: #605e5c;">Active Messages</div>
+                                    <div style="font-size: 16px; font-weight: 600; color: #3C4858;">127</div>
+                                    <div style="font-size: 10px; color: #68769C;">Active Messages</div>
                                 </div>
                                 <div style="text-align: center;">
-                                    <div style="font-size: 16px; font-weight: 600; color: #323130;">2.3K</div>
-                                    <div style="font-size: 10px; color: #605e5c;">Processed Today</div>
+                                    <div style="font-size: 16px; font-weight: 600; color: #3C4858;">2.3K</div>
+                                    <div style="font-size: 10px; color: #68769C;">Processed Today</div>
                                 </div>
                                 <div style="text-align: center;">
                                     <div style="font-size: 16px; font-weight: 600; color: #d83b01;">3</div>
-                                    <div style="font-size: 10px; color: #605e5c;">Dead Letter</div>
+                                    <div style="font-size: 10px; color: #68769C;">Dead Letter</div>
                                 </div>
                             </div>
                             <div style="background: #f8f9fa; padding: 12px; border-radius: 4px; margin-bottom: 12px;">
-                                <div style="font-size: 11px; color: #605e5c; margin-bottom: 4px;">Throughput (msgs/sec)</div>
+                                <div style="font-size: 11px; color: #68769C; margin-bottom: 4px;">Throughput (msgs/sec)</div>
                                 <div style="display: flex; align-items: center; gap: 8px;">
                                     <div style="background: #107c10; height: 4px; width: 60%; border-radius: 2px;"></div>
-                                    <span style="font-size: 12px; color: #323130;">45/sec</span>
+                                    <span style="font-size: 12px; color: #3C4858;">45/sec</span>
                                 </div>
                             </div>
                             <div style="display: flex; gap: 8px;">
-                                <button style="background: #0078d4; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Send Message</button>
-                                <button style="background: transparent; color: #0078d4; border: 1px solid #0078d4; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Monitor</button>
+                                <button style="background: #8E9AAF; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Send Message</button>
+                                <button style="background: transparent; color: #8E9AAF; border: 1px solid #8E9AAF; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Monitor</button>
                             </div>
                         </div>
                     </div>`
@@ -1069,32 +1069,32 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                             <div style="display: flex; align-items: center; gap: 12px;">
                                 <div style="width: 32px; height: 32px; background: #d83b01; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">RC</div>
                                 <div>
-                                    <h3 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">myapp-cache</h3>
-                                    <p style="margin: 2px 0 0 0; color: #605e5c; font-size: 12px;">Standard C1 • 1 GB</p>
+                                    <h3 style="margin: 0; color: #3C4858; font-size: 16px; font-weight: 600;">myapp-cache</h3>
+                                    <p style="margin: 2px 0 0 0; color: #68769C; font-size: 12px;">Standard C1 • 1 GB</p>
                                 </div>
                             </div>
                         </div>
                         <div style="padding: 16px;">
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                                 <div>
-                                    <div style="font-size: 12px; color: #605e5c; margin-bottom: 4px;">Hit Ratio</div>
+                                    <div style="font-size: 12px; color: #68769C; margin-bottom: 4px;">Hit Ratio</div>
                                     <div style="font-size: 18px; font-weight: 600; color: #107c10;">96.3%</div>
                                 </div>
                                 <div>
-                                    <div style="font-size: 12px; color: #605e5c; margin-bottom: 4px;">Memory Used</div>
-                                    <div style="font-size: 18px; font-weight: 600; color: #323130;">412 MB</div>
+                                    <div style="font-size: 12px; color: #68769C; margin-bottom: 4px;">Memory Used</div>
+                                    <div style="font-size: 18px; font-weight: 600; color: #3C4858;">412 MB</div>
                                 </div>
                             </div>
                             <div style="margin-bottom: 16px;">
-                                <div style="font-size: 12px; color: #605e5c; margin-bottom: 8px;">Operations/sec</div>
+                                <div style="font-size: 12px; color: #68769C; margin-bottom: 8px;">Operations/sec</div>
                                 <div style="background: #f8f9fa; padding: 12px; border-radius: 4px;">
                                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                        <span style="font-size: 12px; color: #323130;">Gets</span>
-                                        <span style="font-size: 12px; color: #323130; font-weight: 600;">1,247</span>
+                                        <span style="font-size: 12px; color: #3C4858;">Gets</span>
+                                        <span style="font-size: 12px; color: #3C4858; font-weight: 600;">1,247</span>
                                     </div>
                                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                                        <span style="font-size: 12px; color: #323130;">Sets</span>
-                                        <span style="font-size: 12px; color: #323130; font-weight: 600;">89</span>
+                                        <span style="font-size: 12px; color: #3C4858;">Sets</span>
+                                        <span style="font-size: 12px; color: #3C4858; font-weight: 600;">89</span>
                                     </div>
                                 </div>
                             </div>
@@ -1114,36 +1114,36 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                     <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; width: 450px; font-family: 'Segoe UI', sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                         <div style="background: #f8f9fa; padding: 16px; border-bottom: 1px solid #e1dfdd; border-radius: 8px 8px 0 0;">
                             <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 32px; height: 32px; background: #0078d4; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">AM</div>
+                                <div style="width: 32px; height: 32px; background: #8E9AAF; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">AM</div>
                                 <div>
-                                    <h3 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">Application Insights</h3>
-                                    <p style="margin: 2px 0 0 0; color: #605e5c; font-size: 12px;">myapp-insights</p>
+                                    <h3 style="margin: 0; color: #3C4858; font-size: 16px; font-weight: 600;">Application Insights</h3>
+                                    <p style="margin: 2px 0 0 0; color: #68769C; font-size: 12px;">myapp-insights</p>
                                 </div>
                             </div>
                         </div>
                         <div style="padding: 16px;">
                             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px;">
                                 <div style="text-align: center;">
-                                    <div style="font-size: 16px; font-weight: 600; color: #323130;">1.2K</div>
-                                    <div style="font-size: 10px; color: #605e5c;">Requests/min</div>
+                                    <div style="font-size: 16px; font-weight: 600; color: #3C4858;">1.2K</div>
+                                    <div style="font-size: 10px; color: #68769C;">Requests/min</div>
                                 </div>
                                 <div style="text-align: center;">
-                                    <div style="font-size: 16px; font-weight: 600; color: #323130;">156ms</div>
-                                    <div style="font-size: 10px; color: #605e5c;">Avg Response</div>
+                                    <div style="font-size: 16px; font-weight: 600; color: #3C4858;">156ms</div>
+                                    <div style="font-size: 10px; color: #68769C;">Avg Response</div>
                                 </div>
                                 <div style="text-align: center;">
                                     <div style="font-size: 16px; font-weight: 600; color: #d83b01;">2</div>
-                                    <div style="font-size: 10px; color: #605e5c;">Active Alerts</div>
+                                    <div style="font-size: 10px; color: #68769C;">Active Alerts</div>
                                 </div>
                             </div>
                             <div style="background: #f8f9fa; padding: 12px; border-radius: 4px; margin-bottom: 12px;">
-                                <div style="font-size: 11px; color: #605e5c; margin-bottom: 8px;">Recent Alerts</div>
+                                <div style="font-size: 11px; color: #68769C; margin-bottom: 8px;">Recent Alerts</div>
                                 <div style="font-size: 12px; color: #d83b01; margin-bottom: 4px;">• High CPU usage on VM-01</div>
                                 <div style="font-size: 12px; color: #d83b01;">• Database connection timeout</div>
                             </div>
                             <div style="display: flex; gap: 8px;">
-                                <button style="background: #0078d4; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">View Logs</button>
-                                <button style="background: transparent; color: #0078d4; border: 1px solid #0078d4; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Metrics</button>
+                                <button style="background: #8E9AAF; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">View Logs</button>
+                                <button style="background: transparent; color: #8E9AAF; border: 1px solid #8E9AAF; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Metrics</button>
                             </div>
                         </div>
                     </div>`
@@ -1160,42 +1160,42 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                     <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; width: 440px; font-family: 'Segoe UI', sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                         <div style="background: #f8f9fa; padding: 16px; border-bottom: 1px solid #e1dfdd; border-radius: 8px 8px 0 0;">
                             <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 32px; height: 32px; background: #0078d4; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">API</div>
+                                <div style="width: 32px; height: 32px; background: #8E9AAF; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">API</div>
                                 <div>
-                                    <h3 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">myapp-apim</h3>
-                                    <p style="margin: 2px 0 0 0; color: #605e5c; font-size: 12px;">Developer Tier • Gateway</p>
+                                    <h3 style="margin: 0; color: #3C4858; font-size: 16px; font-weight: 600;">myapp-apim</h3>
+                                    <p style="margin: 2px 0 0 0; color: #68769C; font-size: 12px;">Developer Tier • Gateway</p>
                                 </div>
                             </div>
                         </div>
                         <div style="padding: 16px;">
                             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px;">
                                 <div style="text-align: center;">
-                                    <div style="font-size: 16px; font-weight: 600; color: #323130;">12</div>
-                                    <div style="font-size: 10px; color: #605e5c;">APIs</div>
+                                    <div style="font-size: 16px; font-weight: 600; color: #3C4858;">12</div>
+                                    <div style="font-size: 10px; color: #68769C;">APIs</div>
                                 </div>
                                 <div style="text-align: center;">
-                                    <div style="font-size: 16px; font-weight: 600; color: #323130;">2.4K</div>
-                                    <div style="font-size: 10px; color: #605e5c;">Calls/hour</div>
+                                    <div style="font-size: 16px; font-weight: 600; color: #3C4858;">2.4K</div>
+                                    <div style="font-size: 10px; color: #68769C;">Calls/hour</div>
                                 </div>
                                 <div style="text-align: center;">
                                     <div style="font-size: 16px; font-weight: 600; color: #107c10;">99.8%</div>
-                                    <div style="font-size: 10px; color: #605e5c;">Uptime</div>
+                                    <div style="font-size: 10px; color: #68769C;">Uptime</div>
                                 </div>
                             </div>
                             <div style="background: #f8f9fa; padding: 12px; border-radius: 4px; margin-bottom: 12px;">
-                                <div style="font-size: 11px; color: #605e5c; margin-bottom: 8px;">Top APIs</div>
+                                <div style="font-size: 11px; color: #68769C; margin-bottom: 8px;">Top APIs</div>
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                    <span style="font-size: 12px; color: #323130;">User Management</span>
-                                    <span style="font-size: 11px; color: #605e5c;">1.2K calls</span>
+                                    <span style="font-size: 12px; color: #3C4858;">User Management</span>
+                                    <span style="font-size: 11px; color: #68769C;">1.2K calls</span>
                                 </div>
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="font-size: 12px; color: #323130;">Payment Processing</span>
-                                    <span style="font-size: 11px; color: #605e5c;">890 calls</span>
+                                    <span style="font-size: 12px; color: #3C4858;">Payment Processing</span>
+                                    <span style="font-size: 11px; color: #68769C;">890 calls</span>
                                 </div>
                             </div>
                             <div style="display: flex; gap: 8px;">
-                                <button style="background: #0078d4; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">API Portal</button>
-                                <button style="background: transparent; color: #0078d4; border: 1px solid #0078d4; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Analytics</button>
+                                <button style="background: #8E9AAF; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">API Portal</button>
+                                <button style="background: transparent; color: #8E9AAF; border: 1px solid #8E9AAF; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Analytics</button>
                             </div>
                         </div>
                     </div>`
@@ -1212,42 +1212,42 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                     <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; width: 400px; font-family: 'Segoe UI', sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                         <div style="background: #f8f9fa; padding: 16px; border-bottom: 1px solid #e1dfdd; border-radius: 8px 8px 0 0;">
                             <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 32px; height: 32px; background: #0078d4; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">LA</div>
+                                <div style="width: 32px; height: 32px; background: #8E9AAF; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">LA</div>
                                 <div>
-                                    <h3 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">order-processing</h3>
-                                    <p style="margin: 2px 0 0 0; color: #605e5c; font-size: 12px;">Standard • Enabled</p>
+                                    <h3 style="margin: 0; color: #3C4858; font-size: 16px; font-weight: 600;">order-processing</h3>
+                                    <p style="margin: 2px 0 0 0; color: #68769C; font-size: 12px;">Standard • Enabled</p>
                                 </div>
                             </div>
                         </div>
                         <div style="padding: 16px;">
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                                 <div style="text-align: center;">
-                                    <div style="font-size: 18px; font-weight: 600; color: #323130;">47</div>
-                                    <div style="font-size: 11px; color: #605e5c;">Runs Today</div>
+                                    <div style="font-size: 18px; font-weight: 600; color: #3C4858;">47</div>
+                                    <div style="font-size: 11px; color: #68769C;">Runs Today</div>
                                 </div>
                                 <div style="text-align: center;">
                                     <div style="font-size: 18px; font-weight: 600; color: #107c10;">98%</div>
-                                    <div style="font-size: 11px; color: #605e5c;">Success Rate</div>
+                                    <div style="font-size: 11px; color: #68769C;">Success Rate</div>
                                 </div>
                             </div>
                             <div style="background: #f8f9fa; padding: 12px; border-radius: 4px; margin-bottom: 12px;">
-                                <div style="font-size: 11px; color: #605e5c; margin-bottom: 8px;">Workflow Steps</div>
+                                <div style="font-size: 11px; color: #68769C; margin-bottom: 8px;">Workflow Steps</div>
                                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
                                     <div style="width: 16px; height: 16px; background: #107c10; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px;">1</div>
-                                    <span style="font-size: 12px; color: #323130;">HTTP Trigger</span>
+                                    <span style="font-size: 12px; color: #3C4858;">HTTP Trigger</span>
                                 </div>
                                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
                                     <div style="width: 16px; height: 16px; background: #107c10; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px;">2</div>
-                                    <span style="font-size: 12px; color: #323130;">Parse JSON</span>
+                                    <span style="font-size: 12px; color: #3C4858;">Parse JSON</span>
                                 </div>
                                 <div style="display: flex; align-items: center; gap: 8px;">
                                     <div style="width: 16px; height: 16px; background: #107c10; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px;">3</div>
-                                    <span style="font-size: 12px; color: #323130;">Send Email</span>
+                                    <span style="font-size: 12px; color: #3C4858;">Send Email</span>
                                 </div>
                             </div>
                             <div style="display: flex; gap: 8px;">
-                                <button style="background: #0078d4; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Designer</button>
-                                <button style="background: transparent; color: #0078d4; border: 1px solid #0078d4; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Run History</button>
+                                <button style="background: #8E9AAF; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Designer</button>
+                                <button style="background: transparent; color: #8E9AAF; border: 1px solid #8E9AAF; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Run History</button>
                             </div>
                         </div>
                     </div>`
@@ -1264,38 +1264,38 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                     <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; width: 420px; font-family: 'Segoe UI', sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                         <div style="background: #f8f9fa; padding: 16px; border-bottom: 1px solid #e1dfdd; border-radius: 8px 8px 0 0;">
                             <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 32px; height: 32px; background: #0078d4; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">AI</div>
+                                <div style="width: 32px; height: 32px; background: #8E9AAF; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">AI</div>
                                 <div>
-                                    <h3 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">myapp-cognitive</h3>
-                                    <p style="margin: 2px 0 0 0; color: #605e5c; font-size: 12px;">Multi-service • S0</p>
+                                    <h3 style="margin: 0; color: #3C4858; font-size: 16px; font-weight: 600;">myapp-cognitive</h3>
+                                    <p style="margin: 2px 0 0 0; color: #68769C; font-size: 12px;">Multi-service • S0</p>
                                 </div>
                             </div>
                         </div>
                         <div style="padding: 16px;">
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                                 <div style="text-align: center;">
-                                    <div style="font-size: 18px; font-weight: 600; color: #323130;">12.4K</div>
-                                    <div style="font-size: 11px; color: #605e5c;">API Calls Today</div>
+                                    <div style="font-size: 18px; font-weight: 600; color: #3C4858;">12.4K</div>
+                                    <div style="font-size: 11px; color: #68769C;">API Calls Today</div>
                                 </div>
                                 <div style="text-align: center;">
-                                    <div style="font-size: 18px; font-weight: 600; color: #323130;">127ms</div>
-                                    <div style="font-size: 11px; color: #605e5c;">Avg Latency</div>
+                                    <div style="font-size: 18px; font-weight: 600; color: #3C4858;">127ms</div>
+                                    <div style="font-size: 11px; color: #68769C;">Avg Latency</div>
                                 </div>
                             </div>
                             <div style="background: #f8f9fa; padding: 12px; border-radius: 4px; margin-bottom: 12px;">
-                                <div style="font-size: 11px; color: #605e5c; margin-bottom: 8px;">Active Services</div>
+                                <div style="font-size: 11px; color: #68769C; margin-bottom: 8px;">Active Services</div>
                                 <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px;">
-                                    <span style="background: #deecf9; color: #0078d4; padding: 4px 8px; border-radius: 12px; font-size: 10px;">Text Analytics</span>
-                                    <span style="background: #deecf9; color: #0078d4; padding: 4px 8px; border-radius: 12px; font-size: 10px;">Computer Vision</span>
+                                    <span style="background: #deecf9; color: #8E9AAF; padding: 4px 8px; border-radius: 12px; font-size: 10px;">Text Analytics</span>
+                                    <span style="background: #deecf9; color: #8E9AAF; padding: 4px 8px; border-radius: 12px; font-size: 10px;">Computer Vision</span>
                                 </div>
                                 <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                                    <span style="background: #deecf9; color: #0078d4; padding: 4px 8px; border-radius: 12px; font-size: 10px;">Speech Services</span>
-                                    <span style="background: #deecf9; color: #0078d4; padding: 4px 8px; border-radius: 12px; font-size: 10px;">Language</span>
+                                    <span style="background: #deecf9; color: #8E9AAF; padding: 4px 8px; border-radius: 12px; font-size: 10px;">Speech Services</span>
+                                    <span style="background: #deecf9; color: #8E9AAF; padding: 4px 8px; border-radius: 12px; font-size: 10px;">Language</span>
                                 </div>
                             </div>
                             <div style="display: flex; gap: 8px;">
-                                <button style="background: #0078d4; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Test APIs</button>
-                                <button style="background: transparent; color: #0078d4; border: 1px solid #0078d4; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Usage</button>
+                                <button style="background: #8E9AAF; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Test APIs</button>
+                                <button style="background: transparent; color: #8E9AAF; border: 1px solid #8E9AAF; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Usage</button>
                             </div>
                         </div>
                     </div>`
@@ -1312,10 +1312,10 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                     <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; width: 440px; font-family: 'Segoe UI', sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                         <div style="background: #f8f9fa; padding: 16px; border-bottom: 1px solid #e1dfdd; border-radius: 8px 8px 0 0;">
                             <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 32px; height: 32px; background: #0078d4; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">DO</div>
+                                <div style="width: 32px; height: 32px; background: #8E9AAF; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">DO</div>
                                 <div>
-                                    <h3 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">myapp-ci-cd</h3>
-                                    <p style="margin: 2px 0 0 0; color: #605e5c; font-size: 12px;">Build Pipeline • main branch</p>
+                                    <h3 style="margin: 0; color: #3C4858; font-size: 16px; font-weight: 600;">myapp-ci-cd</h3>
+                                    <p style="margin: 2px 0 0 0; color: #68769C; font-size: 12px;">Build Pipeline • main branch</p>
                                 </div>
                             </div>
                         </div>
@@ -1323,38 +1323,38 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px;">
                                 <div style="text-align: center;">
                                     <div style="font-size: 16px; font-weight: 600; color: #107c10;">✓</div>
-                                    <div style="font-size: 10px; color: #605e5c;">Last Build</div>
+                                    <div style="font-size: 10px; color: #68769C;">Last Build</div>
                                 </div>
                                 <div style="text-align: center;">
-                                    <div style="font-size: 16px; font-weight: 600; color: #323130;">4m 23s</div>
-                                    <div style="font-size: 10px; color: #605e5c;">Duration</div>
+                                    <div style="font-size: 16px; font-weight: 600; color: #3C4858;">4m 23s</div>
+                                    <div style="font-size: 10px; color: #68769C;">Duration</div>
                                 </div>
                                 <div style="text-align: center;">
-                                    <div style="font-size: 16px; font-weight: 600; color: #323130;">#247</div>
-                                    <div style="font-size: 10px; color: #605e5c;">Build Number</div>
+                                    <div style="font-size: 16px; font-weight: 600; color: #3C4858;">#247</div>
+                                    <div style="font-size: 10px; color: #68769C;">Build Number</div>
                                 </div>
                             </div>
                             <div style="background: #f8f9fa; padding: 12px; border-radius: 4px; margin-bottom: 12px;">
-                                <div style="font-size: 11px; color: #605e5c; margin-bottom: 8px;">Pipeline Stages</div>
+                                <div style="font-size: 11px; color: #68769C; margin-bottom: 8px;">Pipeline Stages</div>
                                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
                                     <div style="width: 12px; height: 12px; background: #107c10; border-radius: 50%;"></div>
-                                    <span style="font-size: 12px; color: #323130;">Build</span>
-                                    <span style="font-size: 10px; color: #605e5c; margin-left: auto;">2m 14s</span>
+                                    <span style="font-size: 12px; color: #3C4858;">Build</span>
+                                    <span style="font-size: 10px; color: #68769C; margin-left: auto;">2m 14s</span>
                                 </div>
                                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
                                     <div style="width: 12px; height: 12px; background: #107c10; border-radius: 50%;"></div>
-                                    <span style="font-size: 12px; color: #323130;">Test</span>
-                                    <span style="font-size: 10px; color: #605e5c; margin-left: auto;">1m 32s</span>
+                                    <span style="font-size: 12px; color: #3C4858;">Test</span>
+                                    <span style="font-size: 10px; color: #68769C; margin-left: auto;">1m 32s</span>
                                 </div>
                                 <div style="display: flex; align-items: center; gap: 8px;">
                                     <div style="width: 12px; height: 12px; background: #107c10; border-radius: 50%;"></div>
-                                    <span style="font-size: 12px; color: #323130;">Deploy</span>
-                                    <span style="font-size: 10px; color: #605e5c; margin-left: auto;">37s</span>
+                                    <span style="font-size: 12px; color: #3C4858;">Deploy</span>
+                                    <span style="font-size: 10px; color: #68769C; margin-left: auto;">37s</span>
                                 </div>
                             </div>
                             <div style="display: flex; gap: 8px;">
-                                <button style="background: #0078d4; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Run Pipeline</button>
-                                <button style="background: transparent; color: #0078d4; border: 1px solid #0078d4; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">History</button>
+                                <button style="background: #8E9AAF; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Run Pipeline</button>
+                                <button style="background: transparent; color: #8E9AAF; border: 1px solid #8E9AAF; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">History</button>
                             </div>
                         </div>
                     </div>`
@@ -1371,35 +1371,35 @@ const EnhancedComponentLibrary: React.FC<EnhancedComponentLibraryProps> = ({
                     <div style="background: white; border: 1px solid #e1dfdd; border-radius: 8px; width: 400px; font-family: 'Segoe UI', sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                         <div style="background: #f8f9fa; padding: 16px; border-bottom: 1px solid #e1dfdd; border-radius: 8px 8px 0 0;">
                             <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 32px; height: 32px; background: #0078d4; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">EG</div>
+                                <div style="width: 32px; height: 32px; background: #8E9AAF; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">EG</div>
                                 <div>
-                                    <h3 style="margin: 0; color: #323130; font-size: 16px; font-weight: 600;">user-events</h3>
-                                    <p style="margin: 2px 0 0 0; color: #605e5c; font-size: 12px;">Custom Topic • Standard</p>
+                                    <h3 style="margin: 0; color: #3C4858; font-size: 16px; font-weight: 600;">user-events</h3>
+                                    <p style="margin: 2px 0 0 0; color: #68769C; font-size: 12px;">Custom Topic • Standard</p>
                                 </div>
                             </div>
                         </div>
                         <div style="padding: 16px;">
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                                 <div style="text-align: center;">
-                                    <div style="font-size: 18px; font-weight: 600; color: #323130;">1.8K</div>
-                                    <div style="font-size: 11px; color: #605e5c;">Events Today</div>
+                                    <div style="font-size: 18px; font-weight: 600; color: #3C4858;">1.8K</div>
+                                    <div style="font-size: 11px; color: #68769C;">Events Today</div>
                                 </div>
                                 <div style="text-align: center;">
-                                    <div style="font-size: 18px; font-weight: 600; color: #323130;">5</div>
-                                    <div style="font-size: 11px; color: #605e5c;">Subscriptions</div>
+                                    <div style="font-size: 18px; font-weight: 600; color: #3C4858;">5</div>
+                                    <div style="font-size: 11px; color: #68769C;">Subscriptions</div>
                                 </div>
                             </div>
                             <div style="background: #f8f9fa; padding: 12px; border-radius: 4px; margin-bottom: 12px;">
-                                <div style="font-size: 11px; color: #605e5c; margin-bottom: 8px;">Event Types</div>
+                                <div style="font-size: 11px; color: #68769C; margin-bottom: 8px;">Event Types</div>
                                 <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                                    <span style="background: #deecf9; color: #0078d4; padding: 4px 8px; border-radius: 12px; font-size: 10px;">UserCreated</span>
-                                    <span style="background: #deecf9; color: #0078d4; padding: 4px 8px; border-radius: 12px; font-size: 10px;">UserUpdated</span>
-                                    <span style="background: #deecf9; color: #0078d4; padding: 4px 8px; border-radius: 12px; font-size: 10px;">UserDeleted</span>
+                                    <span style="background: #deecf9; color: #8E9AAF; padding: 4px 8px; border-radius: 12px; font-size: 10px;">UserCreated</span>
+                                    <span style="background: #deecf9; color: #8E9AAF; padding: 4px 8px; border-radius: 12px; font-size: 10px;">UserUpdated</span>
+                                    <span style="background: #deecf9; color: #8E9AAF; padding: 4px 8px; border-radius: 12px; font-size: 10px;">UserDeleted</span>
                                 </div>
                             </div>
                             <div style="display: flex; gap: 8px;">
-                                <button style="background: #0078d4; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Send Event</button>
-                                <button style="background: transparent; color: #0078d4; border: 1px solid #0078d4; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Metrics</button>
+                                <button style="background: #8E9AAF; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Send Event</button>
+                                <button style="background: transparent; color: #8E9AAF; border: 1px solid #8E9AAF; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1;">Metrics</button>
                             </div>
                         </div>
                     </div>`

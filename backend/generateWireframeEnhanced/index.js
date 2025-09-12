@@ -2,6 +2,8 @@
 // Purpose: Generate an HTML wireframe via OpenAI and optionally inject Atlas components
 
 const { OpenAI } = require("openai");
+// Import centralized color configuration
+const { WIREFRAME_COLORS, ColorUtils } = require("../config/colors");
 
 // Fluent UI Playbook imports and utilities
 const fluentPlaybook = {
@@ -188,8 +190,8 @@ function addAtlasComponents(html, description) {
           <div class="atlas-component atlas-hero-figma" data-node-id="14647:163530" style="max-width: 100%; overflow: hidden;">
               ${atlasComponents.hero}
               <div class="atlas-hero-overlay" style="text-align: center; margin-top: 12px; background: rgba(255,255,255,0.95); padding: 8px; border-radius: 6px; border: 1px solid #e1e1e1;">
-                  <p style="font-size: 12px; color: #323130; margin: 0; font-weight: 600;">✅ Atlas Hero Component (Node: 14647:163530)</p>
-                  <p style="font-size: 11px; color: #605e5c; margin: 4px 0 0 0; font-weight: 500;">🎨 Pure HTML/CSS Component</p>
+                  <p style="font-size: 12px; color: #3C4858; margin: 0; font-weight: 600;">✅ Atlas Hero Component (Node: 14647:163530)</p>
+                  <p style="font-size: 11px; color: #68769C; margin: 4px 0 0 0; font-weight: 500;">🎨 Pure HTML/CSS Component</p>
               </div>
           </div>
         </div>
@@ -205,16 +207,16 @@ function addAtlasComponents(html, description) {
   ) {
     const learningSection = `
     <!-- Atlas Learning Content Section -->
-    <section class="learning-content atlas-learning-section" style="padding: 60px 0; background: #f8f9fa;">
+    <section class="learning-content atlas-learning-section" style="padding: 60px 0; background: ${WIREFRAME_COLORS.surface};">
         <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-            <h2 style="text-align: center; margin-bottom: 40px; color: #323130;">🎓 Learning Path</h2>
+            <h2 style="text-align: center; margin-bottom: 40px; color: #3C4858;">🎓 Learning Path</h2>
             <div class="learning-grid" style="display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 50px; width: 100%;">
                 <div class="atlas-component atlas-learning-path-card-figma" data-node-id="14315:162386" data-type="learning-path" style="width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     ${atlasComponents.learningPath}
                 </div>
             </div>
             
-            <h2 style="text-align: center; margin-bottom: 40px; color: #323130;">📚 Modules</h2>
+            <h2 style="text-align: center; margin-bottom: 40px; color: #3C4858;">📚 Modules</h2>
             <div class="modules-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; width: 100%;">
                 <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     ${atlasComponents.module}
@@ -338,7 +340,9 @@ async function generateWithAI(description, options = {}) {
   const colorScheme = options.colorScheme || "blue";
   const fastMode = options.fastMode !== false;
 
-  const prompt = `Create a complete, modern HTML wireframe for: ${description}\n\nRequirements:\n- Use modern CSS with flexbox/grid\n- Include semantic HTML structure\n- ${theme} theme with ${colorScheme} color scheme\n- Mobile-responsive design\n- Include proper meta tags and DOCTYPE\n- Use inline CSS for complete standalone file\n- Focus ONLY on the requested component/feature\n- NO navigation bars, headers, footers, or branding unless specifically requested\n- Keep designs clean and minimal\n- IMPORTANT: Color contrast rules - ALWAYS use dark text (#333 or #000) on light backgrounds (#fff, #f8f9fa, #E8E6DF). For headers with #E8E6DF background, use black text (#333 or #000) for optimal readability.\n- Avoid opacity values below 0.9 for text to ensure readability\n${
+  const prompt = `Create a complete, modern HTML wireframe for: ${description}\n\nRequirements:\n- Use modern CSS with flexbox/grid\n- Include semantic HTML structure\n- ${theme} theme with ${colorScheme} color scheme\n- Mobile-responsive design\n- Include proper meta tags and DOCTYPE\n- Use inline CSS for complete standalone file\n- Focus ONLY on the requested component/feature\n- NO navigation bars, headers, footers, or branding unless specifically requested\n- Keep designs clean and minimal\n- IMPORTANT: Color contrast rules - ALWAYS use dark text (#333 or #000) on light backgrounds (#fff, ${
+    WIREFRAME_COLORS.surface
+  }, #E9ECEF). For headers with #E9ECEF background, use black text (#333 or #000) for optimal readability.\n- Avoid opacity values below 0.9 for text to ensure readability\n${
     fastMode
       ? "- Keep it simple and fast to load"
       : "- Include rich interactions and detailed styling"

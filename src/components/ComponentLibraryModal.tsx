@@ -56,15 +56,15 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     <div style="width: 1px; height: 24px; background: #e1e5e9; margin-right: 16px;"></div>
 
     <!-- Brand -->
-    <a href="#" style="color: #323130; text-decoration: none; font-weight: 600; font-size: 16px; margin-right: auto;">
+    <a href="#" style="color: #3C4858; text-decoration: none; font-weight: 600; font-size: 16px; margin-right: auto;">
         <span>Microsoft Learn</span>
     </a>
 
     <!-- Navigation -->
     <nav aria-label="site header navigation" style="display: flex; align-items: center; gap: 8px;">
-        <a href="#" style="color: #323130; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.2s; font-size: 14px;">Documentation</a>
-        <a href="#" style="color: #323130; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.2s; font-size: 14px;">Training</a>
-        <a href="#" style="color: #323130; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.2s; font-size: 14px;">Certifications</a>
+        <a href="#" style="color: #3C4858; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.2s; font-size: 14px;">Documentation</a>
+        <a href="#" style="color: #3C4858; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.2s; font-size: 14px;">Training</a>
+        <a href="#" style="color: #3C4858; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.2s; font-size: 14px;">Certifications</a>
     </nav>
 </div>`
         },
@@ -75,7 +75,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             category: 'Navigation',
             htmlCode: `<div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; background: white; border-bottom: 1px solid #e1e5e9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
     <!-- Brand -->
-    <a href="#" style="color: #323130; text-decoration: none; font-weight: 600; font-size: 16px;">
+    <a href="#" style="color: #3C4858; text-decoration: none; font-weight: 600; font-size: 16px;">
         <span>Microsoft Learn</span>
     </a>
 
@@ -89,7 +89,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         </svg>
     </a>
 
-    <a href="#" style="color: #0078d4; text-decoration: none; font-size: 14px; padding: 6px 12px; border: 1px solid #0078d4; border-radius: 4px; transition: all 0.2s;">
+    <a href="#" style="color: #8E9AAF; text-decoration: none; font-size: 14px; padding: 6px 12px; border: 1px solid #8E9AAF; border-radius: 4px; transition: all 0.2s;">
         <span>Sign in</span>
     </a>
 </div>`
@@ -118,26 +118,26 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             <div style="width: 1px; height: 24px; background: #e1e5e9; margin-right: 16px;"></div>
 
             <!-- Brand -->
-            <a href="#" style="color: #323130; text-decoration: none; font-weight: 600; font-size: 16px;">
+            <a href="#" style="color: #3C4858; text-decoration: none; font-weight: 600; font-size: 16px;">
                 <span>Microsoft Learn</span>
             </a>
         </div>
 
         <!-- Right section -->
         <div style="display: flex; align-items: center; gap: 16px;">
-            <button style="background: none; border: none; color: #323130; cursor: pointer; padding: 8px; border-radius: 4px; font-size: 14px;">🔍 Search</button>
-            <a href="#" style="color: #0078d4; text-decoration: none; font-size: 14px; padding: 6px 12px; border: 1px solid #0078d4; border-radius: 4px;">Sign in</a>
+            <button style="background: none; border: none; color: #3C4858; cursor: pointer; padding: 8px; border-radius: 4px; font-size: 14px;">🔍 Search</button>
+            <a href="#" style="color: #8E9AAF; text-decoration: none; font-size: 14px; padding: 6px 12px; border: 1px solid #8E9AAF; border-radius: 4px;">Sign in</a>
         </div>
     </div>
 
     <!-- Secondary navigation -->
     <div style="padding: 0 24px; border-top: 1px solid #f3f2f1;">
         <nav style="display: flex; gap: 32px; padding: 12px 0;">
-            <a href="#" style="color: #323130; text-decoration: none; font-size: 14px; padding: 8px 0; border-bottom: 2px solid transparent; transition: border-color 0.2s;">Browse</a>
-            <a href="#" style="color: #323130; text-decoration: none; font-size: 14px; padding: 8px 0; border-bottom: 2px solid transparent; transition: border-color 0.2s;">Learning Paths</a>
-            <a href="#" style="color: #323130; text-decoration: none; font-size: 14px; padding: 8px 0; border-bottom: 2px solid transparent; transition: border-color 0.2s;">Modules</a>
-            <a href="#" style="color: #323130; text-decoration: none; font-size: 14px; padding: 8px 0; border-bottom: 2px solid #0078d4;">Certifications</a>
-            <a href="#" style="color: #323130; text-decoration: none; font-size: 14px; padding: 8px 0; border-bottom: 2px solid transparent; transition: border-color 0.2s;">Q&A</a>
+            <a href="#" style="color: #3C4858; text-decoration: none; font-size: 14px; padding: 8px 0; border-bottom: 2px solid transparent; transition: border-color 0.2s;">Browse</a>
+            <a href="#" style="color: #3C4858; text-decoration: none; font-size: 14px; padding: 8px 0; border-bottom: 2px solid transparent; transition: border-color 0.2s;">Learning Paths</a>
+            <a href="#" style="color: #3C4858; text-decoration: none; font-size: 14px; padding: 8px 0; border-bottom: 2px solid transparent; transition: border-color 0.2s;">Modules</a>
+            <a href="#" style="color: #3C4858; text-decoration: none; font-size: 14px; padding: 8px 0; border-bottom: 2px solid #8E9AAF;">Certifications</a>
+            <a href="#" style="color: #3C4858; text-decoration: none; font-size: 14px; padding: 8px 0; border-bottom: 2px solid transparent; transition: border-color 0.2s;">Q&A</a>
         </nav>
     </div>
 </div>`
@@ -147,21 +147,21 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             name: 'Primary Button',
             description: 'Main call-to-action button',
             category: 'Buttons',
-            htmlCode: '<button style="background: #0078d4; color: white; border: none; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-weight: 600;">Click Me</button>'
+            htmlCode: '<button style="background: #8E9AAF; color: white; border: none; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-weight: 600;">Click Me</button>'
         },
         {
             id: 'button-secondary',
             name: 'Secondary Button',
             description: 'Secondary action button',
             category: 'Buttons',
-            htmlCode: '<button style="background: #f3f2f1; color: #323130; border: 1px solid #e1dfdd; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-weight: 600;">Secondary</button>'
+            htmlCode: '<button style="background: #f3f2f1; color: #3C4858; border: 1px solid #e1dfdd; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-weight: 600;">Secondary</button>'
         },
         {
             id: 'card-basic',
             name: 'Basic Card',
             description: 'Simple card layout',
             category: 'Cards',
-            htmlCode: '<div style="background: white; border-radius: 8px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border: 1px solid #e1e5e9;"><h3 style="margin: 0 0 12px 0; color: #323130;">Card Title</h3><p style="margin: 0; color: #605e5c;">Card content goes here with some descriptive text.</p></div>'
+            htmlCode: '<div style="background: white; border-radius: 8px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border: 1px solid #e1e5e9;"><h3 style="margin: 0 0 12px 0; color: #3C4858;">Card Title</h3><p style="margin: 0; color: #68769C;">Card content goes here with some descriptive text.</p></div>'
         },
         {
             id: 'form-contact',
@@ -300,7 +300,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             name: 'Basic Text Input (Legacy)',
             description: 'Simple text input field',
             category: 'Forms',
-            htmlCode: '<div style="margin-bottom: 16px;"><label style="display: block; margin-bottom: 4px; font-weight: 600; color: #323130;">Label:</label><input type="text" style="width: 100%; max-width: 300px; padding: 8px 12px; border: 1px solid #e1dfdd; border-radius: 4px; font-size: 14px;" placeholder="Enter text..."></div>'
+            htmlCode: '<div style="margin-bottom: 16px;"><label style="display: block; margin-bottom: 4px; font-weight: 600; color: #3C4858;">Label:</label><input type="text" style="width: 100%; max-width: 300px; padding: 8px 12px; border: 1px solid #e1dfdd; border-radius: 4px; font-size: 14px;" placeholder="Enter text..."></div>'
         },
         {
             id: 'fluent-select',
@@ -313,7 +313,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         margin-bottom: 4px; 
         font-size: 14px; 
         font-weight: 600; 
-        color: #323130;
+        color: #3C4858;
     ">Select an option</label>
     
     <div style="position: relative;">
@@ -326,16 +326,16 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             background: white;
             font-size: 14px;
             font-family: inherit;
-            color: #323130;
+            color: #3C4858;
             cursor: pointer;
             outline: none;
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
         " class="fluent-select-input"
-        onmouseover="this.style.borderColor='#323130'"
+        onmouseover="this.style.borderColor='#3C4858'"
         onmouseout="this.style.borderColor='#8a8886'"
-        onfocus="this.style.borderColor='#0078d4'; this.style.boxShadow='0 0 0 1px #0078d4'"
+        onfocus="this.style.borderColor='#8E9AAF'; this.style.boxShadow='0 0 0 1px #8E9AAF'"
         onblur="this.style.borderColor='#8a8886'; this.style.boxShadow='none'">
             <option value="">Choose an option</option>
             <option value="option1">Option 1</option>
@@ -351,7 +351,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             top: 50%;
             transform: translateY(-50%);
             pointer-events: none;
-            color: #605e5c;
+            color: #68769C;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -366,12 +366,12 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     
     <style>
         .fluent-select-input:hover {
-            border-color: #323130 !important;
+            border-color: #3C4858 !important;
         }
         
         .fluent-select-input:focus {
-            border-color: #0078d4 !important;
-            box-shadow: 0 0 0 1px #0078d4 !important;
+            border-color: #8E9AAF !important;
+            box-shadow: 0 0 0 1px #8E9AAF !important;
         }
         
         .fluent-select-input:disabled {
@@ -385,7 +385,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         .fluent-select-input option {
             padding: 8px;
             font-size: 14px;
-            color: #323130;
+            color: #3C4858;
             background: white;
         }
         
@@ -394,7 +394,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         }
         
         .fluent-select-input option:checked {
-            background: #0078d4;
+            background: #8E9AAF;
             color: white;
         }
     </style>
@@ -417,7 +417,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                     <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Learning Paths</a>
                     <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Certifications</a>
                     <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Q&A</a>
-                    <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Sign in</button>
+                    <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Sign in</button>
                   </nav>
                 </div>
               </header>
@@ -435,7 +435,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                 ctaText: "Get Started",
                 showSecondaryButton: true,
                 secondaryCtaText: "Learn More",
-                backgroundColor: "#E8E6DF",
+                backgroundColor: "#E9ECEF",
                 heroImageUrl: "https://learn.microsoft.com/media/learn/home/hero-learn.svg"
             })
         },
@@ -451,7 +451,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                 ctaText: "Get Started",
                 showSecondaryButton: true,
                 secondaryCtaText: "Learn More",
-                backgroundColor: "#E8E6DF",
+                backgroundColor: "#E9ECEF",
                 heroImageUrl: "https://learn.microsoft.com/media/learn/Product/Microsoft-Azure/azure.svg"
             })
         },
@@ -466,7 +466,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
                 eyebrow: "AI & MACHINE LEARNING",
                 ctaText: "Explore AI",
                 showSecondaryButton: false,
-                backgroundColor: "#E8E6DF",
+                backgroundColor: "#E9ECEF",
                 heroImageUrl: "https://learn.microsoft.com/media/learn/Product/Azure/azure-ai.svg"
             })
         },
@@ -478,21 +478,21 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Progress indicator showing completion status',
             category: 'Data Display',
             htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
-    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Progress Bar Example</h3>
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #3C4858;">Progress Bar Example</h3>
     
     <!-- Determinate Progress Bar -->
     <div style="margin-bottom: 24px;">
-        <label style="display: block; margin-bottom: 8px; font-size: 14px; color: #323130;">File Upload Progress (75%)</label>
+        <label style="display: block; margin-bottom: 8px; font-size: 14px; color: #3C4858;">File Upload Progress (75%)</label>
         <div style="width: 100%; height: 4px; background-color: #f3f2f1; border-radius: 2px; overflow: hidden;">
-            <div style="width: 75%; height: 100%; background-color: #0078d4; border-radius: 2px; transition: width 0.3s ease;"></div>
+            <div style="width: 75%; height: 100%; background-color: #8E9AAF; border-radius: 2px; transition: width 0.3s ease;"></div>
         </div>
     </div>
     
     <!-- Indeterminate Progress Bar -->
     <div style="margin-bottom: 24px;">
-        <label style="display: block; margin-bottom: 8px; font-size: 14px; color: #323130;">Loading...</label>
+        <label style="display: block; margin-bottom: 8px; font-size: 14px; color: #3C4858;">Loading...</label>
         <div style="width: 100%; height: 4px; background-color: #f3f2f1; border-radius: 2px; overflow: hidden;">
-            <div style="width: 30%; height: 100%; background-color: #0078d4; border-radius: 2px; animation: progress-indeterminate 2s infinite linear;"></div>
+            <div style="width: 30%; height: 100%; background-color: #8E9AAF; border-radius: 2px; animation: progress-indeterminate 2s infinite linear;"></div>
         </div>
     </div>
     
@@ -512,10 +512,10 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Contextual overlay for additional information',
             category: 'Overlays',
             htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white; position: relative;">
-    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Popover Example</h3>
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #3C4858;">Popover Example</h3>
     
     <!-- Trigger Button -->
-    <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; cursor: pointer; font-family: inherit;" 
+    <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; cursor: pointer; font-family: inherit;" 
             onmouseover="document.getElementById('popover-content').style.display='block'" 
             onmouseout="document.getElementById('popover-content').style.display='none'">
         Hover for info
@@ -523,8 +523,8 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     
     <!-- Popover Content -->
     <div id="popover-content" style="display: none; position: absolute; top: 60px; left: 20px; background: white; border: 1px solid #d1d1d1; border-radius: 8px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.14), 0 0px 4px rgba(0, 0, 0, 0.12); padding: 16px; max-width: 280px; z-index: 1000;">
-        <div style="font-size: 14px; font-weight: 600; color: #323130; margin-bottom: 8px;">Additional Information</div>
-        <div style="font-size: 14px; color: #605e5c; line-height: 1.4;">This popover provides contextual information that appears when you hover over the trigger element.</div>
+        <div style="font-size: 14px; font-weight: 600; color: #3C4858; margin-bottom: 8px;">Additional Information</div>
+        <div style="font-size: 14px; color: #68769C; line-height: 1.4;">This popover provides contextual information that appears when you hover over the trigger element.</div>
         
         <!-- Arrow -->
         <div style="position: absolute; top: -8px; left: 16px; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 8px solid white;"></div>
@@ -540,17 +540,17 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'User profile representation with avatar and details',
             category: 'Data Display',
             htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
-    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Persona Examples</h3>
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #3C4858;">Persona Examples</h3>
     
     <!-- Large Persona -->
     <div style="display: flex; align-items: center; margin-bottom: 24px; padding: 12px; border-radius: 8px; background: #faf9f8;">
-        <div style="width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #0078d4, #106ebe); display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; font-weight: 600; margin-right: 16px;">
+        <div style="width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #8E9AAF, #68769C); display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; font-weight: 600; margin-right: 16px;">
             JD
         </div>
         <div>
-            <div style="font-size: 20px; font-weight: 600; color: #323130; margin-bottom: 4px;">John Doe</div>
-            <div style="font-size: 14px; color: #605e5c; margin-bottom: 2px;">Senior Software Engineer</div>
-            <div style="font-size: 14px; color: #605e5c;">Microsoft Corporation</div>
+            <div style="font-size: 20px; font-weight: 600; color: #3C4858; margin-bottom: 4px;">John Doe</div>
+            <div style="font-size: 14px; color: #68769C; margin-bottom: 2px;">Senior Software Engineer</div>
+            <div style="font-size: 14px; color: #68769C;">Microsoft Corporation</div>
         </div>
     </div>
     
@@ -560,8 +560,8 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             AS
         </div>
         <div>
-            <div style="font-size: 16px; font-weight: 600; color: #323130; margin-bottom: 2px;">Alice Smith</div>
-            <div style="font-size: 13px; color: #605e5c;">Product Manager</div>
+            <div style="font-size: 16px; font-weight: 600; color: #3C4858; margin-bottom: 2px;">Alice Smith</div>
+            <div style="font-size: 13px; color: #68769C;">Product Manager</div>
         </div>
     </div>
     
@@ -571,7 +571,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             BJ
         </div>
         <div>
-            <div style="font-size: 14px; font-weight: 600; color: #323130;">Bob Johnson</div>
+            <div style="font-size: 14px; font-weight: 600; color: #3C4858;">Bob Johnson</div>
         </div>
     </div>
 </div>`
@@ -585,46 +585,46 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             category: 'Navigation',
             htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; background: white; border-right: 1px solid #edebe9; width: 280px; height: 400px; padding: 16px 0;">
     <div style="padding: 0 16px 16px 16px; border-bottom: 1px solid #edebe9; margin-bottom: 8px;">
-        <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #323130;">Navigation</h3>
+        <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #3C4858;">Navigation</h3>
     </div>
     
     <nav style="padding: 0 8px;">
         <!-- Home -->
-        <a href="#" style="display: flex; align-items: center; padding: 8px 12px; border-radius: 4px; text-decoration: none; color: #323130; background: #f3f2f1; margin-bottom: 2px;">
+        <a href="#" style="display: flex; align-items: center; padding: 8px 12px; border-radius: 4px; text-decoration: none; color: #3C4858; background: #f3f2f1; margin-bottom: 2px;">
             <span style="margin-right: 8px;">🏠</span>
             <span style="font-size: 14px; font-weight: 600;">Home</span>
         </a>
         
         <!-- Documents -->
-        <a href="#" style="display: flex; align-items: center; padding: 8px 12px; border-radius: 4px; text-decoration: none; color: #323130; margin-bottom: 2px; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">
+        <a href="#" style="display: flex; align-items: center; padding: 8px 12px; border-radius: 4px; text-decoration: none; color: #3C4858; margin-bottom: 2px; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">
             <span style="margin-right: 8px;">📁</span>
             <span style="font-size: 14px;">Documents</span>
         </a>
         
         <!-- Recent Files (Expandable) -->
         <div style="margin-bottom: 2px;">
-            <a href="#" style="display: flex; align-items: center; padding: 8px 12px; border-radius: 4px; text-decoration: none; color: #323130; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">
+            <a href="#" style="display: flex; align-items: center; padding: 8px 12px; border-radius: 4px; text-decoration: none; color: #3C4858; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">
                 <span style="margin-right: 8px;">▶</span>
                 <span style="font-size: 14px;">Recent Files</span>
             </a>
             <div style="margin-left: 32px; margin-top: 4px;">
-                <a href="#" style="display: block; padding: 6px 8px; border-radius: 4px; text-decoration: none; color: #605e5c; font-size: 13px; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">
+                <a href="#" style="display: block; padding: 6px 8px; border-radius: 4px; text-decoration: none; color: #68769C; font-size: 13px; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">
                     Report.docx
                 </a>
-                <a href="#" style="display: block; padding: 6px 8px; border-radius: 4px; text-decoration: none; color: #605e5c; font-size: 13px; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">
+                <a href="#" style="display: block; padding: 6px 8px; border-radius: 4px; text-decoration: none; color: #68769C; font-size: 13px; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">
                     Presentation.pptx
                 </a>
             </div>
         </div>
         
         <!-- Settings -->
-        <a href="#" style="display: flex; align-items: center; padding: 8px 12px; border-radius: 4px; text-decoration: none; color: #323130; margin-bottom: 2px; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">
+        <a href="#" style="display: flex; align-items: center; padding: 8px 12px; border-radius: 4px; text-decoration: none; color: #3C4858; margin-bottom: 2px; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">
             <span style="margin-right: 8px;">⚙️</span>
             <span style="font-size: 14px;">Settings</span>
         </a>
         
         <!-- Help -->
-        <a href="#" style="display: flex; align-items: center; padding: 8px 12px; border-radius: 4px; text-decoration: none; color: #323130; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">
+        <a href="#" style="display: flex; align-items: center; padding: 8px 12px; border-radius: 4px; text-decoration: none; color: #3C4858; transition: background 0.2s;" onmouseover="this.style.background='#f3f2f1'" onmouseout="this.style.background='transparent'">
             <span style="margin-right: 8px;">❓</span>
             <span style="font-size: 14px;">Help</span>
         </a>
@@ -639,46 +639,46 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Notification messages for different states',
             category: 'Feedback',
             htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
-    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">MessageBar Examples</h3>
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #3C4858;">MessageBar Examples</h3>
     
     <!-- Success Message -->
-    <div style="display: flex; align-items: center; padding: 12px 16px; background: #f3f9fd; border: 1px solid #c7e0f4; border-left: 4px solid #0078d4; border-radius: 4px; margin-bottom: 12px;">
-        <span style="margin-right: 12px; color: #0078d4; font-size: 16px;">✓</span>
+    <div style="display: flex; align-items: center; padding: 12px 16px; background: #f3f9fd; border: 1px solid #c7e0f4; border-left: 4px solid #8E9AAF; border-radius: 4px; margin-bottom: 12px;">
+        <span style="margin-right: 12px; color: #8E9AAF; font-size: 16px;">✓</span>
         <div>
-            <div style="font-size: 14px; font-weight: 600; color: #323130; margin-bottom: 2px;">Success</div>
-            <div style="font-size: 14px; color: #605e5c;">Your changes have been saved successfully.</div>
+            <div style="font-size: 14px; font-weight: 600; color: #3C4858; margin-bottom: 2px;">Success</div>
+            <div style="font-size: 14px; color: #68769C;">Your changes have been saved successfully.</div>
         </div>
-        <button style="margin-left: auto; background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px; padding: 4px;" onclick="this.parentElement.style.display='none'">×</button>
+        <button style="margin-left: auto; background: none; border: none; color: #68769C; cursor: pointer; font-size: 16px; padding: 4px;" onclick="this.parentElement.style.display='none'">×</button>
     </div>
     
     <!-- Warning Message -->
     <div style="display: flex; align-items: center; padding: 12px 16px; background: #fff9f5; border: 1px solid #fdcfb4; border-left: 4px solid #ff8c00; border-radius: 4px; margin-bottom: 12px;">
         <span style="margin-right: 12px; color: #ff8c00; font-size: 16px;">⚠</span>
         <div>
-            <div style="font-size: 14px; font-weight: 600; color: #323130; margin-bottom: 2px;">Warning</div>
-            <div style="font-size: 14px; color: #605e5c;">Some features may not work as expected in this browser.</div>
+            <div style="font-size: 14px; font-weight: 600; color: #3C4858; margin-bottom: 2px;">Warning</div>
+            <div style="font-size: 14px; color: #68769C;">Some features may not work as expected in this browser.</div>
         </div>
-        <button style="margin-left: auto; background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px; padding: 4px;" onclick="this.parentElement.style.display='none'">×</button>
+        <button style="margin-left: auto; background: none; border: none; color: #68769C; cursor: pointer; font-size: 16px; padding: 4px;" onclick="this.parentElement.style.display='none'">×</button>
     </div>
     
     <!-- Error Message -->
     <div style="display: flex; align-items: center; padding: 12px 16px; background: #fdf6f6; border: 1px solid #f1bbbb; border-left: 4px solid #d13438; border-radius: 4px; margin-bottom: 12px;">
         <span style="margin-right: 12px; color: #d13438; font-size: 16px;">✕</span>
         <div>
-            <div style="font-size: 14px; font-weight: 600; color: #323130; margin-bottom: 2px;">Error</div>
-            <div style="font-size: 14px; color: #605e5c;">Failed to connect to the server. Please try again.</div>
+            <div style="font-size: 14px; font-weight: 600; color: #3C4858; margin-bottom: 2px;">Error</div>
+            <div style="font-size: 14px; color: #68769C;">Failed to connect to the server. Please try again.</div>
         </div>
-        <button style="margin-left: auto; background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px; padding: 4px;" onclick="this.parentElement.style.display='none'">×</button>
+        <button style="margin-left: auto; background: none; border: none; color: #68769C; cursor: pointer; font-size: 16px; padding: 4px;" onclick="this.parentElement.style.display='none'">×</button>
     </div>
     
     <!-- Info Message -->
-    <div style="display: flex; align-items: center; padding: 12px 16px; background: #f6f6f6; border: 1px solid #d1d1d1; border-left: 4px solid #605e5c; border-radius: 4px;">
-        <span style="margin-right: 12px; color: #605e5c; font-size: 16px;">ℹ</span>
+    <div style="display: flex; align-items: center; padding: 12px 16px; background: #f6f6f6; border: 1px solid #d1d1d1; border-left: 4px solid #68769C; border-radius: 4px;">
+        <span style="margin-right: 12px; color: #68769C; font-size: 16px;">ℹ</span>
         <div>
-            <div style="font-size: 14px; font-weight: 600; color: #323130; margin-bottom: 2px;">Information</div>
-            <div style="font-size: 14px; color: #605e5c;">New features are available. Check out what's new in the latest update.</div>
+            <div style="font-size: 14px; font-weight: 600; color: #3C4858; margin-bottom: 2px;">Information</div>
+            <div style="font-size: 14px; color: #68769C;">New features are available. Check out what's new in the latest update.</div>
         </div>
-        <button style="margin-left: auto; background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px; padding: 4px;" onclick="this.parentElement.style.display='none'">×</button>
+        <button style="margin-left: auto; background: none; border: none; color: #68769C; cursor: pointer; font-size: 16px; padding: 4px;" onclick="this.parentElement.style.display='none'">×</button>
     </div>
 </div>`
         },
@@ -690,12 +690,12 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Responsive image component with different shapes',
             category: 'Media',
             htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
-    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Image Examples</h3>
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #3C4858;">Image Examples</h3>
     
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px;">
         <!-- Regular Image -->
         <div>
-            <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #323130;">Regular Image</h4>
+            <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #3C4858;">Regular Image</h4>
             <img src="https://via.placeholder.com/200x150/0078d4/ffffff?text=Image" 
                  alt="Example image" 
                  style="width: 100%; height: 150px; object-fit: cover; border-radius: 4px; border: 1px solid #edebe9;" />
@@ -703,7 +703,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         
         <!-- Circular Image -->
         <div>
-            <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #323130;">Circular Image</h4>
+            <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #3C4858;">Circular Image</h4>
             <img src="https://via.placeholder.com/150x150/ca5010/ffffff?text=Avatar" 
                  alt="Avatar image" 
                  style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 1px solid #edebe9;" />
@@ -711,8 +711,8 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         
         <!-- Image with Placeholder -->
         <div>
-            <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #323130;">Image Placeholder</h4>
-            <div style="width: 100%; height: 150px; background: #f3f2f1; border: 2px dashed #d1d1d1; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #605e5c;">
+            <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #3C4858;">Image Placeholder</h4>
+            <div style="width: 100%; height: 150px; background: #f3f2f1; border: 2px dashed #d1d1d1; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #68769C;">
                 <div style="font-size: 32px; margin-bottom: 8px;">🖼️</div>
                 <div style="font-size: 14px; text-align: center;">No image available</div>
             </div>
@@ -720,12 +720,12 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         
         <!-- Image with Caption -->
         <div>
-            <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #323130;">Image with Caption</h4>
+            <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #3C4858;">Image with Caption</h4>
             <figure style="margin: 0;">
                 <img src="https://via.placeholder.com/200x120/038387/ffffff?text=Graph" 
                      alt="Chart visualization" 
                      style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px; border: 1px solid #edebe9;" />
-                <figcaption style="margin-top: 8px; font-size: 13px; color: #605e5c; text-align: center;">Data visualization chart</figcaption>
+                <figcaption style="margin-top: 8px; font-size: 13px; color: #68769C; text-align: center;">Data visualization chart</figcaption>
             </figure>
         </div>
     </div>
@@ -739,11 +739,11 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Modal dialog for important user interactions',
             category: 'Overlays',
             htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white; position: relative;">
-    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Dialog Example</h3>
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #3C4858;">Dialog Example</h3>
     
     <!-- Trigger Button -->
     <button onclick="document.getElementById('dialog-overlay').style.display='flex'" 
-            style="background: #0078d4; color: white; border: none; padding: 10px 20px; border-radius: 4px; font-size: 14px; cursor: pointer; font-family: inherit;">
+            style="background: #8E9AAF; color: white; border: none; padding: 10px 20px; border-radius: 4px; font-size: 14px; cursor: pointer; font-family: inherit;">
         Open Dialog
     </button>
     
@@ -754,9 +754,9 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             <!-- Dialog Header -->
             <div style="padding: 24px 24px 16px 24px; border-bottom: 1px solid #edebe9;">
                 <div style="display: flex; align-items: center; justify-content: between;">
-                    <h2 style="margin: 0; font-size: 20px; font-weight: 600; color: #323130; flex: 1;">Confirm Action</h2>
+                    <h2 style="margin: 0; font-size: 20px; font-weight: 600; color: #3C4858; flex: 1;">Confirm Action</h2>
                     <button onclick="document.getElementById('dialog-overlay').style.display='none'" 
-                            style="background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px; padding: 4px; margin-left: 16px;">
+                            style="background: none; border: none; color: #68769C; cursor: pointer; font-size: 16px; padding: 4px; margin-left: 16px;">
                         ✕
                     </button>
                 </div>
@@ -764,20 +764,20 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             
             <!-- Dialog Content -->
             <div style="padding: 24px;">
-                <p style="margin: 0 0 16px 0; font-size: 14px; color: #323130; line-height: 1.5;">
+                <p style="margin: 0 0 16px 0; font-size: 14px; color: #3C4858; line-height: 1.5;">
                     Are you sure you want to proceed with this action? This operation cannot be undone and will permanently affect your data.
                 </p>
                 
                 <div style="display: flex; align-items: center; margin-bottom: 24px; padding: 12px; background: #fff9f5; border: 1px solid #fdcfb4; border-radius: 4px;">
                     <span style="margin-right: 8px; color: #ff8c00;">⚠</span>
-                    <span style="font-size: 13px; color: #605e5c;">This action will delete 15 items permanently.</span>
+                    <span style="font-size: 13px; color: #68769C;">This action will delete 15 items permanently.</span>
                 </div>
             </div>
             
             <!-- Dialog Footer -->
             <div style="padding: 16px 24px 24px 24px; display: flex; justify-content: flex-end; gap: 12px;">
                 <button onclick="document.getElementById('dialog-overlay').style.display='none'" 
-                        style="background: transparent; color: #323130; border: 1px solid #d1d1d1; padding: 8px 16px; border-radius: 4px; font-size: 14px; cursor: pointer; font-family: inherit;">
+                        style="background: transparent; color: #3C4858; border: 1px solid #d1d1d1; padding: 8px 16px; border-radius: 4px; font-size: 14px; cursor: pointer; font-family: inherit;">
                     Cancel
                 </button>
                 <button onclick="document.getElementById('dialog-overlay').style.display='none'" 
@@ -797,7 +797,7 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Data table with sorting and selection capabilities',
             category: 'Data Display',
             htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
-    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Data Grid Example</h3>
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #3C4858;">Data Grid Example</h3>
     
     <!-- Data Grid Container -->
     <div style="border: 1px solid #d1d1d1; border-radius: 4px; overflow: hidden; background: white;">
@@ -805,67 +805,67 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         <div style="background: #f8f8f8; border-bottom: 1px solid #d1d1d1; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
             <div style="display: flex; align-items: center;">
                 <input type="checkbox" style="margin-right: 12px; cursor: pointer;" onchange="toggleAllRows(this)">
-                <span style="font-size: 14px; font-weight: 600; color: #323130;">Select all</span>
+                <span style="font-size: 14px; font-weight: 600; color: #3C4858;">Select all</span>
             </div>
-            <div style="font-size: 13px; color: #605e5c;">5 items</div>
+            <div style="font-size: 13px; color: #68769C;">5 items</div>
         </div>
         
         <!-- Table -->
         <table style="width: 100%; border-collapse: collapse;">
             <thead>
                 <tr style="background: #faf9f8; border-bottom: 1px solid #edebe9;">
-                    <th style="text-align: left; padding: 12px 16px; font-size: 14px; font-weight: 600; color: #323130; width: 40px;">
+                    <th style="text-align: left; padding: 12px 16px; font-size: 14px; font-weight: 600; color: #3C4858; width: 40px;">
                         <input type="checkbox" style="cursor: pointer;">
                     </th>
-                    <th style="text-align: left; padding: 12px 16px; font-size: 14px; font-weight: 600; color: #323130; cursor: pointer;" onclick="sortTable(0)">
-                        Name <span style="color: #605e5c;">↕</span>
+                    <th style="text-align: left; padding: 12px 16px; font-size: 14px; font-weight: 600; color: #3C4858; cursor: pointer;" onclick="sortTable(0)">
+                        Name <span style="color: #68769C;">↕</span>
                     </th>
-                    <th style="text-align: left; padding: 12px 16px; font-size: 14px; font-weight: 600; color: #323130; cursor: pointer;" onclick="sortTable(1)">
-                        Email <span style="color: #605e5c;">↕</span>
+                    <th style="text-align: left; padding: 12px 16px; font-size: 14px; font-weight: 600; color: #3C4858; cursor: pointer;" onclick="sortTable(1)">
+                        Email <span style="color: #68769C;">↕</span>
                     </th>
-                    <th style="text-align: left; padding: 12px 16px; font-size: 14px; font-weight: 600; color: #323130; cursor: pointer;" onclick="sortTable(2)">
-                        Role <span style="color: #605e5c;">↕</span>
+                    <th style="text-align: left; padding: 12px 16px; font-size: 14px; font-weight: 600; color: #3C4858; cursor: pointer;" onclick="sortTable(2)">
+                        Role <span style="color: #68769C;">↕</span>
                     </th>
-                    <th style="text-align: left; padding: 12px 16px; font-size: 14px; font-weight: 600; color: #323130; cursor: pointer;" onclick="sortTable(3)">
-                        Status <span style="color: #605e5c;">↕</span>
+                    <th style="text-align: left; padding: 12px 16px; font-size: 14px; font-weight: 600; color: #3C4858; cursor: pointer;" onclick="sortTable(3)">
+                        Status <span style="color: #68769C;">↕</span>
                     </th>
-                    <th style="text-align: center; padding: 12px 16px; font-size: 14px; font-weight: 600; color: #323130; width: 80px;">Actions</th>
+                    <th style="text-align: center; padding: 12px 16px; font-size: 14px; font-weight: 600; color: #3C4858; width: 80px;">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr style="border-bottom: 1px solid #f3f2f1;" onmouseover="this.style.background='#faf9f8'" onmouseout="this.style.background='white'">
                     <td style="padding: 12px 16px;"><input type="checkbox" style="cursor: pointer;"></td>
-                    <td style="padding: 12px 16px; font-size: 14px; color: #323130;">John Doe</td>
-                    <td style="padding: 12px 16px; font-size: 14px; color: #605e5c;">john.doe@company.com</td>
-                    <td style="padding: 12px 16px; font-size: 14px; color: #605e5c;">Administrator</td>
-                    <td style="padding: 12px 16px;"><span style="background: #f3f9fd; color: #0078d4; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">Active</span></td>
-                    <td style="padding: 12px 16px; text-align: center;"><button style="background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px;">⋯</button></td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #3C4858;">John Doe</td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #68769C;">john.doe@company.com</td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #68769C;">Administrator</td>
+                    <td style="padding: 12px 16px;"><span style="background: #f3f9fd; color: #8E9AAF; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">Active</span></td>
+                    <td style="padding: 12px 16px; text-align: center;"><button style="background: none; border: none; color: #68769C; cursor: pointer; font-size: 16px;">⋯</button></td>
                 </tr>
                 <tr style="border-bottom: 1px solid #f3f2f1;" onmouseover="this.style.background='#faf9f8'" onmouseout="this.style.background='white'">
                     <td style="padding: 12px 16px;"><input type="checkbox" style="cursor: pointer;"></td>
-                    <td style="padding: 12px 16px; font-size: 14px; color: #323130;">Alice Smith</td>
-                    <td style="padding: 12px 16px; font-size: 14px; color: #605e5c;">alice.smith@company.com</td>
-                    <td style="padding: 12px 16px; font-size: 14px; color: #605e5c;">Editor</td>
-                    <td style="padding: 12px 16px;"><span style="background: #f3f9fd; color: #0078d4; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">Active</span></td>
-                    <td style="padding: 12px 16px; text-align: center;"><button style="background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px;">⋯</button></td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #3C4858;">Alice Smith</td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #68769C;">alice.smith@company.com</td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #68769C;">Editor</td>
+                    <td style="padding: 12px 16px;"><span style="background: #f3f9fd; color: #8E9AAF; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">Active</span></td>
+                    <td style="padding: 12px 16px; text-align: center;"><button style="background: none; border: none; color: #68769C; cursor: pointer; font-size: 16px;">⋯</button></td>
                 </tr>
                 <tr style="border-bottom: 1px solid #f3f2f1;" onmouseover="this.style.background='#faf9f8'" onmouseout="this.style.background='white'">
                     <td style="padding: 12px 16px;"><input type="checkbox" style="cursor: pointer;"></td>
-                    <td style="padding: 12px 16px; font-size: 14px; color: #323130;">Bob Johnson</td>
-                    <td style="padding: 12px 16px; font-size: 14px; color: #605e5c;">bob.johnson@company.com</td>
-                    <td style="padding: 12px 16px; font-size: 14px; color: #605e5c;">Viewer</td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #3C4858;">Bob Johnson</td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #68769C;">bob.johnson@company.com</td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #68769C;">Viewer</td>
                     <td style="padding: 12px 16px;"><span style="background: #fff9f5; color: #ff8c00; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">Pending</span></td>
-                    <td style="padding: 12px 16px; text-align: center;"><button style="background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px;">⋯</button></td>
+                    <td style="padding: 12px 16px; text-align: center;"><button style="background: none; border: none; color: #68769C; cursor: pointer; font-size: 16px;">⋯</button></td>
                 </tr>
             </tbody>
         </table>
         
         <!-- Footer -->
         <div style="background: #faf9f8; border-top: 1px solid #edebe9; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
-            <div style="font-size: 13px; color: #605e5c;">Showing 1-3 of 3 items</div>
+            <div style="font-size: 13px; color: #68769C;">Showing 1-3 of 3 items</div>
             <div style="display: flex; gap: 8px;">
-                <button style="background: #f3f2f1; border: 1px solid #d1d1d1; color: #605e5c; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;" disabled>Previous</button>
-                <button style="background: #f3f2f1; border: 1px solid #d1d1d1; color: #605e5c; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;" disabled>Next</button>
+                <button style="background: #f3f2f1; border: 1px solid #d1d1d1; color: #68769C; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;" disabled>Previous</button>
+                <button style="background: #f3f2f1; border: 1px solid #d1d1d1; color: #68769C; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;" disabled>Next</button>
             </div>
         </div>
     </div>
@@ -891,18 +891,18 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Dropdown with search and selection capabilities',
             category: 'Forms',
             htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
-    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">ComboBox Examples</h3>
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #3C4858;">ComboBox Examples</h3>
     
     <!-- Basic ComboBox -->
     <div style="margin-bottom: 24px; max-width: 300px;">
-        <label style="display: block; margin-bottom: 4px; font-size: 14px; font-weight: 600; color: #323130;">Select Country</label>
+        <label style="display: block; margin-bottom: 4px; font-size: 14px; font-weight: 600; color: #3C4858;">Select Country</label>
         <div style="position: relative;">
             <input type="text" 
                    placeholder="Type to search or select..."
-                   style="width: 100%; padding: 8px 32px 8px 12px; border: 1px solid #d1d1d1; border-radius: 4px; font-size: 14px; color: #323130; background: white;"
+                   style="width: 100%; padding: 8px 32px 8px 12px; border: 1px solid #d1d1d1; border-radius: 4px; font-size: 14px; color: #3C4858; background: white;"
                    onfocus="this.nextElementSibling.style.display='block'"
                    onblur="setTimeout(() => this.nextElementSibling.style.display='none', 200)">
-            <div style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #605e5c; pointer-events: none;">▼</div>
+            <div style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #68769C; pointer-events: none;">▼</div>
             
             <!-- Dropdown Options -->
             <div style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #d1d1d1; border-radius: 4px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 1000; max-height: 200px; overflow-y: auto;">
@@ -936,13 +936,13 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     
     <!-- Multi-select ComboBox -->
     <div style="max-width: 300px;">
-        <label style="display: block; margin-bottom: 4px; font-size: 14px; font-weight: 600; color: #323130;">Select Skills (Multi-select)</label>
+        <label style="display: block; margin-bottom: 4px; font-size: 14px; font-weight: 600; color: #3C4858;">Select Skills (Multi-select)</label>
         <div style="border: 1px solid #d1d1d1; border-radius: 4px; padding: 4px; min-height: 36px; display: flex; flex-wrap: wrap; gap: 4px; align-items: center;">
             <!-- Selected Tags -->
-            <span style="background: #e1f5fe; color: #0078d4; padding: 2px 8px; border-radius: 12px; font-size: 12px; display: flex; align-items: center; gap: 4px;">
+            <span style="background: #e1f5fe; color: #8E9AAF; padding: 2px 8px; border-radius: 12px; font-size: 12px; display: flex; align-items: center; gap: 4px;">
                 JavaScript <span style="cursor: pointer; font-weight: bold;">×</span>
             </span>
-            <span style="background: #e1f5fe; color: #0078d4; padding: 2px 8px; border-radius: 12px; font-size: 12px; display: flex; align-items: center; gap: 4px;">
+            <span style="background: #e1f5fe; color: #8E9AAF; padding: 2px 8px; border-radius: 12px; font-size: 12px; display: flex; align-items: center; gap: 4px;">
                 React <span style="cursor: pointer; font-weight: bold;">×</span>
             </span>
             <input type="text" 
@@ -960,58 +960,58 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Checkbox input with various states and styles',
             category: 'Forms',
             htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
-    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Checkbox Examples</h3>
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #3C4858;">Checkbox Examples</h3>
     
     <!-- Basic Checkboxes -->
     <div style="margin-bottom: 24px;">
-        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Basic Checkboxes</h4>
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #3C4858;">Basic Checkboxes</h4>
         
         <label style="display: flex; align-items: center; margin-bottom: 8px; cursor: pointer;">
             <input type="checkbox" checked style="margin-right: 8px; transform: scale(1.2);">
-            <span style="font-size: 14px; color: #323130;">Checked option</span>
+            <span style="font-size: 14px; color: #3C4858;">Checked option</span>
         </label>
         
         <label style="display: flex; align-items: center; margin-bottom: 8px; cursor: pointer;">
             <input type="checkbox" style="margin-right: 8px; transform: scale(1.2);">
-            <span style="font-size: 14px; color: #323130;">Unchecked option</span>
+            <span style="font-size: 14px; color: #3C4858;">Unchecked option</span>
         </label>
         
         <label style="display: flex; align-items: center; margin-bottom: 8px; cursor: pointer;">
             <input type="checkbox" indeterminate style="margin-right: 8px; transform: scale(1.2);">
-            <span style="font-size: 14px; color: #323130;">Indeterminate option</span>
+            <span style="font-size: 14px; color: #3C4858;">Indeterminate option</span>
         </label>
         
         <label style="display: flex; align-items: center; margin-bottom: 8px; cursor: not-allowed; opacity: 0.6;">
             <input type="checkbox" disabled style="margin-right: 8px; transform: scale(1.2);">
-            <span style="font-size: 14px; color: #323130;">Disabled option</span>
+            <span style="font-size: 14px; color: #3C4858;">Disabled option</span>
         </label>
     </div>
     
     <!-- Checkbox Group -->
     <div style="margin-bottom: 24px;">
-        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Notification Preferences</h4>
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #3C4858;">Notification Preferences</h4>
         <div style="background: #faf9f8; padding: 16px; border-radius: 6px; border: 1px solid #edebe9;">
             <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer;">
                 <input type="checkbox" checked style="margin-right: 8px; transform: scale(1.2);">
                 <div>
-                    <div style="font-size: 14px; font-weight: 600; color: #323130;">Email notifications</div>
-                    <div style="font-size: 12px; color: #605e5c;">Receive updates via email</div>
+                    <div style="font-size: 14px; font-weight: 600; color: #3C4858;">Email notifications</div>
+                    <div style="font-size: 12px; color: #68769C;">Receive updates via email</div>
                 </div>
             </label>
             
             <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer;">
                 <input type="checkbox" style="margin-right: 8px; transform: scale(1.2);">
                 <div>
-                    <div style="font-size: 14px; font-weight: 600; color: #323130;">Push notifications</div>
-                    <div style="font-size: 12px; color: #605e5c;">Receive push notifications on your device</div>
+                    <div style="font-size: 14px; font-weight: 600; color: #3C4858;">Push notifications</div>
+                    <div style="font-size: 12px; color: #68769C;">Receive push notifications on your device</div>
                 </div>
             </label>
             
             <label style="display: flex; align-items: center; cursor: pointer;">
                 <input type="checkbox" checked style="margin-right: 8px; transform: scale(1.2);">
                 <div>
-                    <div style="font-size: 14px; font-weight: 600; color: #323130;">SMS notifications</div>
-                    <div style="font-size: 12px; color: #605e5c;">Receive important updates via SMS</div>
+                    <div style="font-size: 14px; font-weight: 600; color: #3C4858;">SMS notifications</div>
+                    <div style="font-size: 12px; color: #68769C;">Receive important updates via SMS</div>
                 </div>
             </label>
         </div>
@@ -1019,11 +1019,11 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     
     <!-- Styled Checkboxes -->
     <div>
-        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Terms & Conditions</h4>
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #3C4858;">Terms & Conditions</h4>
         <label style="display: flex; align-items: flex-start; cursor: pointer; padding: 12px; border: 1px solid #d1d1d1; border-radius: 4px; background: white;">
             <input type="checkbox" required style="margin-right: 12px; margin-top: 2px; transform: scale(1.2);">
-            <div style="font-size: 14px; color: #323130; line-height: 1.4;">
-                I agree to the <a href="#" style="color: #0078d4; text-decoration: none;">Terms of Service</a> and <a href="#" style="color: #0078d4; text-decoration: none;">Privacy Policy</a>
+            <div style="font-size: 14px; color: #3C4858; line-height: 1.4;">
+                I agree to the <a href="#" style="color: #8E9AAF; text-decoration: none;">Terms of Service</a> and <a href="#" style="color: #8E9AAF; text-decoration: none;">Privacy Policy</a>
             </div>
         </label>
     </div>
@@ -1037,22 +1037,22 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Card footer with actions and information',
             category: 'Cards',
             htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
-    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Card Footer Examples</h3>
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #3C4858;">Card Footer Examples</h3>
     
     <!-- Card with Action Footer -->
     <div style="background: white; border: 1px solid #edebe9; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 24px; max-width: 320px;">
         <!-- Card Content -->
         <div style="padding: 16px;">
-            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #323130;">Project Update</h4>
-            <p style="margin: 0; font-size: 14px; color: #605e5c; line-height: 1.4;">The new feature has been successfully deployed to production and is ready for user testing.</p>
+            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #3C4858;">Project Update</h4>
+            <p style="margin: 0; font-size: 14px; color: #68769C; line-height: 1.4;">The new feature has been successfully deployed to production and is ready for user testing.</p>
         </div>
         
         <!-- Card Footer -->
         <div style="padding: 12px 16px; border-top: 1px solid #f3f2f1; background: #faf9f8; border-radius: 0 0 8px 8px; display: flex; justify-content: space-between; align-items: center;">
-            <div style="font-size: 12px; color: #605e5c;">2 hours ago</div>
+            <div style="font-size: 12px; color: #68769C;">2 hours ago</div>
             <div style="display: flex; gap: 8px;">
-                <button style="background: none; border: 1px solid #d1d1d1; color: #323130; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;">Dismiss</button>
-                <button style="background: #0078d4; border: none; color: white; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;">View Details</button>
+                <button style="background: none; border: 1px solid #d1d1d1; color: #3C4858; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;">Dismiss</button>
+                <button style="background: #8E9AAF; border: none; color: white; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;">View Details</button>
             </div>
         </div>
     </div>
@@ -1060,17 +1060,17 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     <!-- Card with Info Footer -->
     <div style="background: white; border: 1px solid #edebe9; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 24px; max-width: 320px;">
         <div style="padding: 16px;">
-            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #323130;">User Profile</h4>
-            <p style="margin: 0; font-size: 14px; color: #605e5c;">Software Engineer with 5+ years of experience in React and TypeScript development.</p>
+            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #3C4858;">User Profile</h4>
+            <p style="margin: 0; font-size: 14px; color: #68769C;">Software Engineer with 5+ years of experience in React and TypeScript development.</p>
         </div>
         
         <div style="padding: 12px 16px; border-top: 1px solid #f3f2f1; background: #faf9f8; border-radius: 0 0 8px 8px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-size: 12px; color: #605e5c;">Status:</span>
-                    <span style="background: #f3f9fd; color: #0078d4; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: 600;">Online</span>
+                    <span style="font-size: 12px; color: #68769C;">Status:</span>
+                    <span style="background: #f3f9fd; color: #8E9AAF; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: 600;">Online</span>
                 </div>
-                <div style="font-size: 12px; color: #605e5c;">Last seen: 5 min ago</div>
+                <div style="font-size: 12px; color: #68769C;">Last seen: 5 min ago</div>
             </div>
         </div>
     </div>
@@ -1078,29 +1078,29 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     <!-- Card with Social Footer -->
     <div style="background: white; border: 1px solid #edebe9; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); max-width: 320px;">
         <div style="padding: 16px;">
-            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #323130;">Team Achievement</h4>
-            <p style="margin: 0; font-size: 14px; color: #605e5c;">Our development team successfully completed the quarterly sprint with 98% of planned features delivered.</p>
+            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #3C4858;">Team Achievement</h4>
+            <p style="margin: 0; font-size: 14px; color: #68769C;">Our development team successfully completed the quarterly sprint with 98% of planned features delivered.</p>
         </div>
         
         <div style="padding: 12px 16px; border-top: 1px solid #f3f2f1; background: #faf9f8; border-radius: 0 0 8px 8px; display: flex; justify-content: space-between; align-items: center;">
             <div style="display: flex; gap: 12px;">
-                <button style="background: none; border: none; color: #605e5c; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 13px;" 
-                        onmouseover="this.style.color='#0078d4'" 
-                        onmouseout="this.style.color='#605e5c'">
+                <button style="background: none; border: none; color: #68769C; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 13px;" 
+                        onmouseover="this.style.color='#8E9AAF'" 
+                        onmouseout="this.style.color='#68769C'">
                     👍 12
                 </button>
-                <button style="background: none; border: none; color: #605e5c; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 13px;"
-                        onmouseover="this.style.color='#0078d4'" 
-                        onmouseout="this.style.color='#605e5c'">
+                <button style="background: none; border: none; color: #68769C; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 13px;"
+                        onmouseover="this.style.color='#8E9AAF'" 
+                        onmouseout="this.style.color='#68769C'">
                     💬 3
                 </button>
-                <button style="background: none; border: none; color: #605e5c; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 13px;"
-                        onmouseover="this.style.color='#0078d4'" 
-                        onmouseout="this.style.color='#605e5c'">
+                <button style="background: none; border: none; color: #68769C; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 13px;"
+                        onmouseover="this.style.color='#8E9AAF'" 
+                        onmouseout="this.style.color='#68769C'">
                     🔗 Share
                 </button>
             </div>
-            <div style="font-size: 12px; color: #605e5c;">Dec 15</div>
+            <div style="font-size: 12px; color: #68769C;">Dec 15</div>
         </div>
     </div>
 </div>`
@@ -1113,22 +1113,22 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Card header with title, avatar, and actions',
             category: 'Cards',
             htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
-    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Card Header Examples</h3>
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #3C4858;">Card Header Examples</h3>
     
     <!-- Card with Simple Header -->
     <div style="background: white; border: 1px solid #edebe9; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 24px; max-width: 380px;">
         <!-- Card Header -->
         <div style="padding: 16px; border-bottom: 1px solid #f3f2f1; display: flex; justify-content: space-between; align-items: center;">
             <div>
-                <h4 style="margin: 0 0 4px 0; font-size: 16px; font-weight: 600; color: #323130;">Weekly Report</h4>
-                <p style="margin: 0; font-size: 12px; color: #605e5c;">Generated on December 15, 2024</p>
+                <h4 style="margin: 0 0 4px 0; font-size: 16px; font-weight: 600; color: #3C4858;">Weekly Report</h4>
+                <p style="margin: 0; font-size: 12px; color: #68769C;">Generated on December 15, 2024</p>
             </div>
-            <button style="background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px; padding: 4px;">⋯</button>
+            <button style="background: none; border: none; color: #68769C; cursor: pointer; font-size: 16px; padding: 4px;">⋯</button>
         </div>
         
         <!-- Card Content -->
         <div style="padding: 16px;">
-            <p style="margin: 0; font-size: 14px; color: #605e5c; line-height: 1.4;">This week's performance metrics show a 15% improvement in user engagement and a 10% increase in conversion rates.</p>
+            <p style="margin: 0; font-size: 14px; color: #68769C; line-height: 1.4;">This week's performance metrics show a 15% improvement in user engagement and a 10% increase in conversion rates.</p>
         </div>
     </div>
     
@@ -1136,22 +1136,22 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     <div style="background: white; border: 1px solid #edebe9; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 24px; max-width: 380px;">
         <!-- Card Header with Avatar -->
         <div style="padding: 16px; border-bottom: 1px solid #f3f2f1; display: flex; align-items: center; gap: 12px;">
-            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #0078d4, #106ebe); display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; font-weight: 600;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #8E9AAF, #68769C); display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; font-weight: 600;">
                 JD
             </div>
             <div style="flex: 1;">
-                <h4 style="margin: 0 0 2px 0; font-size: 14px; font-weight: 600; color: #323130;">John Doe</h4>
-                <p style="margin: 0; font-size: 12px; color: #605e5c;">Senior Developer • 2 hours ago</p>
+                <h4 style="margin: 0 0 2px 0; font-size: 14px; font-weight: 600; color: #3C4858;">John Doe</h4>
+                <p style="margin: 0; font-size: 12px; color: #68769C;">Senior Developer • 2 hours ago</p>
             </div>
             <div style="display: flex; gap: 8px;">
-                <button style="background: none; border: 1px solid #d1d1d1; color: #323130; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer;">Follow</button>
-                <button style="background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px; padding: 4px;">⋯</button>
+                <button style="background: none; border: 1px solid #d1d1d1; color: #3C4858; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer;">Follow</button>
+                <button style="background: none; border: none; color: #68769C; cursor: pointer; font-size: 16px; padding: 4px;">⋯</button>
             </div>
         </div>
         
         <!-- Card Content -->
         <div style="padding: 16px;">
-            <p style="margin: 0; font-size: 14px; color: #605e5c; line-height: 1.4;">Just completed the new authentication system. The implementation includes two-factor authentication and social login options.</p>
+            <p style="margin: 0; font-size: 14px; color: #68769C; line-height: 1.4;">Just completed the new authentication system. The implementation includes two-factor authentication and social login options.</p>
         </div>
     </div>
     
@@ -1159,16 +1159,16 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     <div style="background: white; border: 1px solid #edebe9; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 24px; max-width: 380px;">
         <!-- Card Header with Icon -->
         <div style="padding: 16px; border-bottom: 1px solid #f3f2f1; display: flex; align-items: center; gap: 12px;">
-            <div style="width: 40px; height: 40px; border-radius: 8px; background: #e1f5fe; display: flex; align-items: center; justify-content: center; color: #0078d4; font-size: 18px;">
+            <div style="width: 40px; height: 40px; border-radius: 8px; background: #e1f5fe; display: flex; align-items: center; justify-content: center; color: #8E9AAF; font-size: 18px;">
                 📊
             </div>
             <div style="flex: 1;">
-                <h4 style="margin: 0 0 2px 0; font-size: 16px; font-weight: 600; color: #323130;">Analytics Dashboard</h4>
-                <p style="margin: 0; font-size: 12px; color: #605e5c;">Real-time performance metrics</p>
+                <h4 style="margin: 0 0 2px 0; font-size: 16px; font-weight: 600; color: #3C4858;">Analytics Dashboard</h4>
+                <p style="margin: 0; font-size: 12px; color: #68769C;">Real-time performance metrics</p>
             </div>
             <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="background: #f3f9fd; color: #0078d4; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: 600;">Live</span>
-                <button style="background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px; padding: 4px;">⋯</button>
+                <span style="background: #f3f9fd; color: #8E9AAF; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: 600;">Live</span>
+                <button style="background: none; border: none; color: #68769C; cursor: pointer; font-size: 16px; padding: 4px;">⋯</button>
             </div>
         </div>
         
@@ -1176,12 +1176,12 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         <div style="padding: 16px;">
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                 <div style="text-align: center;">
-                    <div style="font-size: 24px; font-weight: 600; color: #0078d4; margin-bottom: 4px;">1,234</div>
-                    <div style="font-size: 12px; color: #605e5c;">Active Users</div>
+                    <div style="font-size: 24px; font-weight: 600; color: #8E9AAF; margin-bottom: 4px;">1,234</div>
+                    <div style="font-size: 12px; color: #68769C;">Active Users</div>
                 </div>
                 <div style="text-align: center;">
                     <div style="font-size: 24px; font-weight: 600; color: #038387; margin-bottom: 4px;">89.5%</div>
-                    <div style="font-size: 12px; color: #605e5c;">Satisfaction</div>
+                    <div style="font-size: 12px; color: #68769C;">Satisfaction</div>
                 </div>
             </div>
         </div>
@@ -1192,25 +1192,25 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         <!-- Card Header with Status -->
         <div style="padding: 16px; border-bottom: 1px solid #f3f2f1;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                <h4 style="margin: 0; font-size: 16px; font-weight: 600; color: #323130;">System Status</h4>
-                <span style="background: #f3f9fd; color: #0078d4; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">Operational</span>
+                <h4 style="margin: 0; font-size: 16px; font-weight: 600; color: #3C4858;">System Status</h4>
+                <span style="background: #f3f9fd; color: #8E9AAF; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">Operational</span>
             </div>
-            <p style="margin: 0; font-size: 12px; color: #605e5c;">All systems are running normally</p>
+            <p style="margin: 0; font-size: 12px; color: #68769C;">All systems are running normally</p>
         </div>
         
         <!-- Card Content -->
         <div style="padding: 16px;">
             <div style="display: flex; flex-direction: column; gap: 12px;">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 14px; color: #323130;">API Services</span>
-                    <span style="background: #f3f9fd; color: #0078d4; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: 600;">99.9%</span>
+                    <span style="font-size: 14px; color: #3C4858;">API Services</span>
+                    <span style="background: #f3f9fd; color: #8E9AAF; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: 600;">99.9%</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 14px; color: #323130;">Database</span>
-                    <span style="background: #f3f9fd; color: #0078d4; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: 600;">100%</span>
+                    <span style="font-size: 14px; color: #3C4858;">Database</span>
+                    <span style="background: #f3f9fd; color: #8E9AAF; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: 600;">100%</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 14px; color: #323130;">CDN</span>
+                    <span style="font-size: 14px; color: #3C4858;">CDN</span>
                     <span style="background: #fff9f5; color: #ff8c00; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: 600;">98.2%</span>
                 </div>
             </div>
@@ -1226,12 +1226,12 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Card preview with media and content preview',
             category: 'Cards',
             htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
-    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Card Preview Examples</h3>
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #3C4858;">Card Preview Examples</h3>
     
     <!-- Image Preview Card -->
     <div style="background: white; border: 1px solid #edebe9; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 24px; max-width: 320px; overflow: hidden;">
         <!-- Card Preview Section -->
-        <div style="position: relative; height: 180px; background: linear-gradient(135deg, #0078d4, #106ebe); overflow: hidden;">
+        <div style="position: relative; height: 180px; background: linear-gradient(135deg, #8E9AAF, #68769C); overflow: hidden;">
             <img src="https://via.placeholder.com/320x180/0078d4/ffffff?text=Preview+Image" 
                  alt="Preview" 
                  style="width: 100%; height: 100%; object-fit: cover;" />
@@ -1243,10 +1243,10 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             
             <!-- Preview Actions -->
             <div style="position: absolute; bottom: 8px; left: 8px; display: flex; gap: 8px;">
-                <button style="background: rgba(255, 255, 255, 0.9); border: none; color: #323130; padding: 6px 8px; border-radius: 16px; font-size: 12px; cursor: pointer; backdrop-filter: blur(4px);">
+                <button style="background: rgba(255, 255, 255, 0.9); border: none; color: #3C4858; padding: 6px 8px; border-radius: 16px; font-size: 12px; cursor: pointer; backdrop-filter: blur(4px);">
                     👁️ Preview
                 </button>
-                <button style="background: rgba(255, 255, 255, 0.9); border: none; color: #323130; padding: 6px 8px; border-radius: 16px; font-size: 12px; cursor: pointer; backdrop-filter: blur(4px);">
+                <button style="background: rgba(255, 255, 255, 0.9); border: none; color: #3C4858; padding: 6px 8px; border-radius: 16px; font-size: 12px; cursor: pointer; backdrop-filter: blur(4px);">
                     ❤️ Like
                 </button>
             </div>
@@ -1254,11 +1254,11 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         
         <!-- Card Content -->
         <div style="padding: 16px;">
-            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #323130;">New Product Launch</h4>
-            <p style="margin: 0 0 12px 0; font-size: 14px; color: #605e5c; line-height: 1.4;">Introducing our latest innovation that will transform the way you work and collaborate.</p>
+            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #3C4858;">New Product Launch</h4>
+            <p style="margin: 0 0 12px 0; font-size: 14px; color: #68769C; line-height: 1.4;">Introducing our latest innovation that will transform the way you work and collaborate.</p>
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 12px; color: #605e5c;">Dec 15, 2024</span>
-                <button style="background: #0078d4; border: none; color: white; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;">Learn More</button>
+                <span style="font-size: 12px; color: #68769C;">Dec 15, 2024</span>
+                <button style="background: #8E9AAF; border: none; color: white; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;">Learn More</button>
             </div>
         </div>
     </div>
@@ -1282,15 +1282,15 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         
         <!-- Card Content -->
         <div style="padding: 16px;">
-            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #323130;">Tutorial: Getting Started</h4>
-            <p style="margin: 0 0 12px 0; font-size: 14px; color: #605e5c; line-height: 1.4;">Learn the basics of our platform in this comprehensive tutorial video.</p>
+            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #3C4858;">Tutorial: Getting Started</h4>
+            <p style="margin: 0 0 12px 0; font-size: 14px; color: #68769C; line-height: 1.4;">Learn the basics of our platform in this comprehensive tutorial video.</p>
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-size: 12px; color: #605e5c;">1.2K views</span>
-                    <span style="font-size: 12px; color: #605e5c;">•</span>
-                    <span style="font-size: 12px; color: #605e5c;">5 days ago</span>
+                    <span style="font-size: 12px; color: #68769C;">1.2K views</span>
+                    <span style="font-size: 12px; color: #68769C;">•</span>
+                    <span style="font-size: 12px; color: #68769C;">5 days ago</span>
                 </div>
-                <button style="background: none; border: 1px solid #d1d1d1; color: #323130; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;">Save</button>
+                <button style="background: none; border: 1px solid #d1d1d1; color: #3C4858; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;">Save</button>
             </div>
         </div>
     </div>
@@ -1302,26 +1302,26 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             <!-- Document Header -->
             <div style="display: flex; justify-content: between; align-items: flex-start; margin-bottom: 12px;">
                 <div style="flex: 1;">
-                    <div style="font-size: 18px; font-weight: 600; color: #323130; margin-bottom: 4px;">Q4 Report</div>
-                    <div style="font-size: 12px; color: #605e5c;">Microsoft Word Document</div>
+                    <div style="font-size: 18px; font-weight: 600; color: #3C4858; margin-bottom: 4px;">Q4 Report</div>
+                    <div style="font-size: 12px; color: #68769C;">Microsoft Word Document</div>
                 </div>
-                <div style="width: 32px; height: 32px; background: #0078d4; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: 600;">
+                <div style="width: 32px; height: 32px; background: #8E9AAF; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: 600;">
                     W
                 </div>
             </div>
             
             <!-- Document Preview Content -->
             <div style="flex: 1; overflow: hidden;">
-                <div style="font-size: 12px; color: #323130; line-height: 1.3; margin-bottom: 8px;">
+                <div style="font-size: 12px; color: #3C4858; line-height: 1.3; margin-bottom: 8px;">
                     <strong>Executive Summary</strong>
                 </div>
-                <div style="font-size: 11px; color: #605e5c; line-height: 1.2;">
+                <div style="font-size: 11px; color: #68769C; line-height: 1.2;">
                     This quarter showed significant growth across all key metrics. Revenue increased by 23% compared to the previous quarter, with customer satisfaction reaching an all-time high...
                 </div>
             </div>
             
             <!-- Document Stats -->
-            <div style="display: flex; justify-content: between; font-size: 10px; color: #605e5c; margin-top: 8px;">
+            <div style="display: flex; justify-content: between; font-size: 10px; color: #68769C; margin-top: 8px;">
                 <span>12 pages</span>
                 <span>Last modified: 2 hours ago</span>
             </div>
@@ -1331,17 +1331,17 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         <div style="padding: 16px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <div>
-                    <div style="font-size: 14px; font-weight: 600; color: #323130;">Quarterly Business Report</div>
-                    <div style="font-size: 12px; color: #605e5c;">by Sarah Johnson</div>
+                    <div style="font-size: 14px; font-weight: 600; color: #3C4858;">Quarterly Business Report</div>
+                    <div style="font-size: 12px; color: #68769C;">by Sarah Johnson</div>
                 </div>
-                <button style="background: none; border: none; color: #605e5c; cursor: pointer; font-size: 16px; padding: 4px;">⋯</button>
+                <button style="background: none; border: none; color: #68769C; cursor: pointer; font-size: 16px; padding: 4px;">⋯</button>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; gap: 8px;">
-                    <button style="background: #0078d4; border: none; color: white; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;">Open</button>
-                    <button style="background: none; border: 1px solid #d1d1d1; color: #323130; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;">Download</button>
+                    <button style="background: #8E9AAF; border: none; color: white; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;">Open</button>
+                    <button style="background: none; border: 1px solid #d1d1d1; color: #3C4858; padding: 6px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;">Download</button>
                 </div>
-                <span style="background: #f3f9fd; color: #0078d4; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: 600;">Shared</span>
+                <span style="background: #f3f9fd; color: #8E9AAF; padding: 2px 6px; border-radius: 10px; font-size: 11px; font-weight: 600;">Shared</span>
             </div>
         </div>
     </div>
@@ -1355,17 +1355,17 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Buttons with primary and secondary text content',
             category: 'Buttons',
             htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
-    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Compound Button Examples</h3>
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #3C4858;">Compound Button Examples</h3>
     
     <!-- Primary Compound Buttons -->
     <div style="margin-bottom: 24px;">
-        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Primary Compound Buttons</h4>
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #3C4858;">Primary Compound Buttons</h4>
         <div style="display: flex; flex-wrap: wrap; gap: 16px;">
             
             <!-- Create New Project -->
-            <button style="background: #0078d4; border: none; color: white; padding: 12px 16px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 12px; min-width: 200px; text-align: left; transition: background 0.2s;"
-                    onmouseover="this.style.background='#106ebe'" 
-                    onmouseout="this.style.background='#0078d4'">
+            <button style="background: #8E9AAF; border: none; color: white; padding: 12px 16px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 12px; min-width: 200px; text-align: left; transition: background 0.2s;"
+                    onmouseover="this.style.background='#68769C'" 
+                    onmouseout="this.style.background='#8E9AAF'">
                 <div style="font-size: 24px;">📁</div>
                 <div>
                     <div style="font-size: 14px; font-weight: 600; margin-bottom: 2px;">Create New Project</div>
@@ -1374,9 +1374,9 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             </button>
             
             <!-- Import Data -->
-            <button style="background: #0078d4; border: none; color: white; padding: 12px 16px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 12px; min-width: 200px; text-align: left; transition: background 0.2s;"
-                    onmouseover="this.style.background='#106ebe'" 
-                    onmouseout="this.style.background='#0078d4'">
+            <button style="background: #8E9AAF; border: none; color: white; padding: 12px 16px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 12px; min-width: 200px; text-align: left; transition: background 0.2s;"
+                    onmouseover="this.style.background='#68769C'" 
+                    onmouseout="this.style.background='#8E9AAF'">
                 <div style="font-size: 24px;">📥</div>
                 <div>
                     <div style="font-size: 14px; font-weight: 600; margin-bottom: 2px;">Import Data</div>
@@ -1388,28 +1388,28 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     
     <!-- Secondary Compound Buttons -->
     <div style="margin-bottom: 24px;">
-        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Secondary Compound Buttons</h4>
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #3C4858;">Secondary Compound Buttons</h4>
         <div style="display: flex; flex-wrap: wrap; gap: 16px;">
             
             <!-- View Templates -->
-            <button style="background: transparent; border: 1px solid #d1d1d1; color: #323130; padding: 12px 16px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 12px; min-width: 200px; text-align: left; transition: all 0.2s;"
+            <button style="background: transparent; border: 1px solid #d1d1d1; color: #3C4858; padding: 12px 16px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 12px; min-width: 200px; text-align: left; transition: all 0.2s;"
                     onmouseover="this.style.background='#f3f2f1'; this.style.borderColor='#c7c6c4'" 
                     onmouseout="this.style.background='transparent'; this.style.borderColor='#d1d1d1'">
                 <div style="font-size: 24px;">📋</div>
                 <div>
                     <div style="font-size: 14px; font-weight: 600; margin-bottom: 2px;">View Templates</div>
-                    <div style="font-size: 12px; color: #605e5c;">Browse pre-built templates</div>
+                    <div style="font-size: 12px; color: #68769C;">Browse pre-built templates</div>
                 </div>
             </button>
             
             <!-- Settings -->
-            <button style="background: transparent; border: 1px solid #d1d1d1; color: #323130; padding: 12px 16px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 12px; min-width: 200px; text-align: left; transition: all 0.2s;"
+            <button style="background: transparent; border: 1px solid #d1d1d1; color: #3C4858; padding: 12px 16px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 12px; min-width: 200px; text-align: left; transition: all 0.2s;"
                     onmouseover="this.style.background='#f3f2f1'; this.style.borderColor='#c7c6c4'" 
                     onmouseout="this.style.background='transparent'; this.style.borderColor='#d1d1d1'">
                 <div style="font-size: 24px;">⚙️</div>
                 <div>
                     <div style="font-size: 14px; font-weight: 600; margin-bottom: 2px;">Settings</div>
-                    <div style="font-size: 12px; color: #605e5c;">Configure your preferences</div>
+                    <div style="font-size: 12px; color: #68769C;">Configure your preferences</div>
                 </div>
             </button>
         </div>
@@ -1417,11 +1417,11 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     
     <!-- Large Compound Buttons -->
     <div style="margin-bottom: 24px;">
-        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Large Compound Buttons</h4>
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #3C4858;">Large Compound Buttons</h4>
         <div style="display: flex; flex-direction: column; gap: 12px; max-width: 400px;">
             
             <!-- Upgrade Plan -->
-            <button style="background: linear-gradient(135deg, #0078d4, #106ebe); border: none; color: white; padding: 16px 20px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 16px; text-align: left; transition: transform 0.2s; position: relative; overflow: hidden;"
+            <button style="background: linear-gradient(135deg, #8E9AAF, #68769C); border: none; color: white; padding: 16px 20px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 16px; text-align: left; transition: transform 0.2s; position: relative; overflow: hidden;"
                     onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 12px rgba(0, 120, 212, 0.3)'" 
                     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
                 <div style="font-size: 32px;">⭐</div>
@@ -1433,49 +1433,49 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             </button>
             
             <!-- Team Collaboration -->
-            <button style="background: white; border: 2px solid #edebe9; color: #323130; padding: 16px 20px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 16px; text-align: left; transition: all 0.2s;"
-                    onmouseover="this.style.borderColor='#0078d4'; this.style.boxShadow='0 2px 8px rgba(0, 120, 212, 0.1)'" 
+            <button style="background: white; border: 2px solid #edebe9; color: #3C4858; padding: 16px 20px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 16px; text-align: left; transition: all 0.2s;"
+                    onmouseover="this.style.borderColor='#8E9AAF'; this.style.boxShadow='0 2px 8px rgba(0, 120, 212, 0.1)'" 
                     onmouseout="this.style.borderColor='#edebe9'; this.style.boxShadow='none'">
                 <div style="font-size: 32px;">👥</div>
                 <div style="flex: 1;">
-                    <div style="font-size: 16px; font-weight: 600; margin-bottom: 4px; color: #323130;">Invite Team Members</div>
-                    <div style="font-size: 13px; color: #605e5c; line-height: 1.3;">Collaborate with your team in real-time</div>
+                    <div style="font-size: 16px; font-weight: 600; margin-bottom: 4px; color: #3C4858;">Invite Team Members</div>
+                    <div style="font-size: 13px; color: #68769C; line-height: 1.3;">Collaborate with your team in real-time</div>
                 </div>
-                <div style="font-size: 18px; color: #605e5c;">→</div>
+                <div style="font-size: 18px; color: #68769C;">→</div>
             </button>
         </div>
     </div>
     
     <!-- Action Cards Style -->
     <div>
-        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Action Cards</h4>
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #3C4858;">Action Cards</h4>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
             
             <!-- Analytics -->
-            <button style="background: white; border: 1px solid #edebe9; color: #323130; padding: 16px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
+            <button style="background: white; border: 1px solid #edebe9; color: #3C4858; padding: 16px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
                     onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.15)'" 
                     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 1px 3px rgba(0, 0, 0, 0.1)'">
                 <div style="font-size: 28px; margin-bottom: 8px;">📊</div>
                 <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">Analytics</div>
-                <div style="font-size: 12px; color: #605e5c;">View performance metrics</div>
+                <div style="font-size: 12px; color: #68769C;">View performance metrics</div>
             </button>
             
             <!-- Reports -->
-            <button style="background: white; border: 1px solid #edebe9; color: #323130; padding: 16px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
+            <button style="background: white; border: 1px solid #edebe9; color: #3C4858; padding: 16px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
                     onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.15)'" 
                     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 1px 3px rgba(0, 0, 0, 0.1)'">
                 <div style="font-size: 28px; margin-bottom: 8px;">📄</div>
                 <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">Reports</div>
-                <div style="font-size: 12px; color: #605e5c;">Generate detailed reports</div>
+                <div style="font-size: 12px; color: #68769C;">Generate detailed reports</div>
             </button>
             
             <!-- Export -->
-            <button style="background: white; border: 1px solid #edebe9; color: #323130; padding: 16px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
+            <button style="background: white; border: 1px solid #edebe9; color: #3C4858; padding: 16px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
                     onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.15)'" 
                     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 1px 3px rgba(0, 0, 0, 0.1)'">
                 <div style="font-size: 28px; margin-bottom: 8px;">📤</div>
                 <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">Export</div>
-                <div style="font-size: 12px; color: #605e5c;">Download your data</div>
+                <div style="font-size: 12px; color: #68769C;">Download your data</div>
             </button>
         </div>
     </div>
@@ -1489,35 +1489,35 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
             description: 'Button with dropdown menu options',
             category: 'Buttons',
             htmlCode: `<div style="font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: white;">
-    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #323130;">Menu Button Examples</h3>
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #3C4858;">Menu Button Examples</h3>
     
     <!-- Primary Menu Button -->
     <div style="margin-bottom: 24px;">
-        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Primary Menu Button</h4>
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #3C4858;">Primary Menu Button</h4>
         <div style="position: relative; display: inline-block;">
             <button onclick="toggleMenu('menu1')" 
-                    style="background: #0078d4; border: none; color: white; padding: 8px 12px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600;">
+                    style="background: #8E9AAF; border: none; color: white; padding: 8px 12px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600;">
                 New Item
                 <span style="font-size: 12px;">▼</span>
             </button>
             
             <div id="menu1" style="display: none; position: absolute; top: 100%; left: 0; background: white; border: 1px solid #d1d1d1; border-radius: 4px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 1000; min-width: 160px; margin-top: 4px;">
-                <div onclick="selectOption('Document')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                <div onclick="selectOption('Document')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #3C4858; border-bottom: 1px solid #f3f2f1;" 
                      onmouseover="this.style.background='#f3f2f1'" 
                      onmouseout="this.style.background='white'">
                     📄 Document
                 </div>
-                <div onclick="selectOption('Spreadsheet')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                <div onclick="selectOption('Spreadsheet')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #3C4858; border-bottom: 1px solid #f3f2f1;" 
                      onmouseover="this.style.background='#f3f2f1'" 
                      onmouseout="this.style.background='white'">
                     📊 Spreadsheet
                 </div>
-                <div onclick="selectOption('Presentation')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                <div onclick="selectOption('Presentation')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #3C4858; border-bottom: 1px solid #f3f2f1;" 
                      onmouseover="this.style.background='#f3f2f1'" 
                      onmouseout="this.style.background='white'">
                     📈 Presentation
                 </div>
-                <div onclick="selectOption('Folder')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130;" 
+                <div onclick="selectOption('Folder')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #3C4858;" 
                      onmouseover="this.style.background='#f3f2f1'" 
                      onmouseout="this.style.background='white'">
                     📁 Folder
@@ -1528,26 +1528,26 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     
     <!-- Secondary Menu Button -->
     <div style="margin-bottom: 24px;">
-        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Secondary Menu Button</h4>
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #3C4858;">Secondary Menu Button</h4>
         <div style="position: relative; display: inline-block;">
             <button onclick="toggleMenu('menu2')" 
-                    style="background: transparent; border: 1px solid #d1d1d1; color: #323130; padding: 8px 12px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 14px;">
+                    style="background: transparent; border: 1px solid #d1d1d1; color: #3C4858; padding: 8px 12px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 14px;">
                 Actions
                 <span style="font-size: 12px;">▼</span>
             </button>
             
             <div id="menu2" style="display: none; position: absolute; top: 100%; left: 0; background: white; border: 1px solid #d1d1d1; border-radius: 4px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 1000; min-width: 140px; margin-top: 4px;">
-                <div onclick="selectOption('Edit')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                <div onclick="selectOption('Edit')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #3C4858; border-bottom: 1px solid #f3f2f1;" 
                      onmouseover="this.style.background='#f3f2f1'" 
                      onmouseout="this.style.background='white'">
-                    ✏️ Edit
+                    Edit
                 </div>
-                <div onclick="selectOption('Copy')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                <div onclick="selectOption('Copy')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #3C4858; border-bottom: 1px solid #f3f2f1;" 
                      onmouseover="this.style.background='#f3f2f1'" 
                      onmouseout="this.style.background='white'">
                     📋 Copy
                 </div>
-                <div onclick="selectOption('Share')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                <div onclick="selectOption('Share')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #3C4858; border-bottom: 1px solid #f3f2f1;" 
                      onmouseover="this.style.background='#f3f2f1'" 
                      onmouseout="this.style.background='white'">
                     🔗 Share
@@ -1563,25 +1563,25 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     
     <!-- Icon Menu Button -->
     <div style="margin-bottom: 24px;">
-        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Icon Menu Button</h4>
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #3C4858;">Icon Menu Button</h4>
         <div style="position: relative; display: inline-block;">
             <button onclick="toggleMenu('menu3')" 
-                    style="background: #f3f2f1; border: 1px solid #d1d1d1; color: #323130; padding: 8px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; font-size: 16px;">
+                    style="background: #f3f2f1; border: 1px solid #d1d1d1; color: #3C4858; padding: 8px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; font-size: 16px;">
                 ⋯
             </button>
             
             <div id="menu3" style="display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #d1d1d1; border-radius: 4px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 1000; min-width: 160px; margin-top: 4px;">
-                <div onclick="selectOption('View Details')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                <div onclick="selectOption('View Details')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #3C4858; border-bottom: 1px solid #f3f2f1;" 
                      onmouseover="this.style.background='#f3f2f1'" 
                      onmouseout="this.style.background='white'">
                     👁️ View Details
                 </div>
-                <div onclick="selectOption('Download')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                <div onclick="selectOption('Download')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #3C4858; border-bottom: 1px solid #f3f2f1;" 
                      onmouseover="this.style.background='#f3f2f1'" 
                      onmouseout="this.style.background='white'">
                     💾 Download
                 </div>
-                <div onclick="selectOption('Properties')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                <div onclick="selectOption('Properties')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #3C4858; border-bottom: 1px solid #f3f2f1;" 
                      onmouseover="this.style.background='#f3f2f1'" 
                      onmouseout="this.style.background='white'">
                     ⚙️ Properties
@@ -1597,33 +1597,33 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     
     <!-- Split Menu Button -->
     <div style="margin-bottom: 24px;">
-        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Split Menu Button</h4>
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #3C4858;">Split Menu Button</h4>
         <div style="display: flex;">
             <!-- Main Action -->
             <button onclick="selectOption('Save')" 
-                    style="background: #0078d4; border: none; color: white; padding: 8px 16px; border-radius: 4px 0 0 4px; cursor: pointer; font-size: 14px; font-weight: 600;">
+                    style="background: #8E9AAF; border: none; color: white; padding: 8px 16px; border-radius: 4px 0 0 4px; cursor: pointer; font-size: 14px; font-weight: 600;">
                 Save
             </button>
             
             <!-- Dropdown Part -->
             <div style="position: relative; display: inline-block;">
                 <button onclick="toggleMenu('menu4')" 
-                        style="background: #106ebe; border: none; color: white; padding: 8px; border-radius: 0 4px 4px 0; cursor: pointer; font-size: 12px; border-left: 1px solid rgba(255, 255, 255, 0.2);">
+                        style="background: #68769C; border: none; color: white; padding: 8px; border-radius: 0 4px 4px 0; cursor: pointer; font-size: 12px; border-left: 1px solid rgba(255, 255, 255, 0.2);">
                     ▼
                 </button>
                 
                 <div id="menu4" style="display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #d1d1d1; border-radius: 4px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 1000; min-width: 140px; margin-top: 4px;">
-                    <div onclick="selectOption('Save As')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                    <div onclick="selectOption('Save As')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #3C4858; border-bottom: 1px solid #f3f2f1;" 
                          onmouseover="this.style.background='#f3f2f1'" 
                          onmouseout="this.style.background='white'">
                         💾 Save As...
                     </div>
-                    <div onclick="selectOption('Save Copy')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                    <div onclick="selectOption('Save Copy')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #3C4858; border-bottom: 1px solid #f3f2f1;" 
                          onmouseover="this.style.background='#f3f2f1'" 
                          onmouseout="this.style.background='white'">
                         📋 Save Copy
                     </div>
-                    <div onclick="selectOption('Export')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130;" 
+                    <div onclick="selectOption('Export')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #3C4858;" 
                          onmouseover="this.style.background='#f3f2f1'" 
                          onmouseout="this.style.background='white'">
                         📤 Export
@@ -1635,46 +1635,46 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     
     <!-- Context Menu Button -->
     <div>
-        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #323130;">Context Menu Button</h4>
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #3C4858;">Context Menu Button</h4>
         <div style="position: relative; display: inline-block;">
             <button onclick="toggleMenu('menu5')" 
-                    style="background: white; border: 1px solid #d1d1d1; color: #323130; padding: 8px 12px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 14px;">
+                    style="background: white; border: 1px solid #d1d1d1; color: #3C4858; padding: 8px 12px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 14px;">
                 📁 Project Folder
                 <span style="font-size: 12px;">▼</span>
             </button>
             
             <div id="menu5" style="display: none; position: absolute; top: 100%; left: 0; background: white; border: 1px solid #d1d1d1; border-radius: 4px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 1000; min-width: 180px; margin-top: 4px;">
                 <!-- Group 1 -->
-                <div onclick="selectOption('Open')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                <div onclick="selectOption('Open')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #3C4858; border-bottom: 1px solid #f3f2f1;" 
                      onmouseover="this.style.background='#f3f2f1'" 
                      onmouseout="this.style.background='white'">
                     📂 Open
                 </div>
-                <div onclick="selectOption('Open in New Window')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #e1e1e1;" 
+                <div onclick="selectOption('Open in New Window')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #3C4858; border-bottom: 1px solid #e1e1e1;" 
                      onmouseover="this.style.background='#f3f2f1'" 
                      onmouseout="this.style.background='white'">
                     🪟 Open in New Window
                 </div>
                 
                 <!-- Group 2 -->
-                <div onclick="selectOption('Rename')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                <div onclick="selectOption('Rename')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #3C4858; border-bottom: 1px solid #f3f2f1;" 
                      onmouseover="this.style.background='#f3f2f1'" 
                      onmouseout="this.style.background='white'">
-                    ✏️ Rename
+                    Rename
                 </div>
-                <div onclick="selectOption('Move')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                <div onclick="selectOption('Move')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #3C4858; border-bottom: 1px solid #f3f2f1;" 
                      onmouseover="this.style.background='#f3f2f1'" 
                      onmouseout="this.style.background='white'">
                     📦 Move
                 </div>
-                <div onclick="selectOption('Copy')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #e1e1e1;" 
+                <div onclick="selectOption('Copy')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #3C4858; border-bottom: 1px solid #e1e1e1;" 
                      onmouseover="this.style.background='#f3f2f1'" 
                      onmouseout="this.style.background='white'">
                     📋 Copy
                 </div>
                 
                 <!-- Group 3 -->
-                <div onclick="selectOption('Properties')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130; border-bottom: 1px solid #f3f2f1;" 
+                <div onclick="selectOption('Properties')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #3C4858; border-bottom: 1px solid #f3f2f1;" 
                      onmouseover="this.style.background='#f3f2f1'" 
                      onmouseout="this.style.background='white'">
                     ⚙️ Properties

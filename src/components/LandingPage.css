@@ -76,14 +76,14 @@
   margin: 0 0 0.125rem 0;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #1e293b;
+  color: #3c4858;
   line-height: 1.2;
 }
 
 .announcement-text p {
   margin: 0;
   font-size: 0.8rem;
-  color: #64748b;
+  color: #68769c;
   line-height: 1.3;
 }
 
@@ -250,7 +250,7 @@
 
 .demo-card {
   background: white;
-  border: 2px solid #e5e7eb;
+  border: 2px solid #cbc2c2;
   border-radius: 12px;
   padding: 1.5rem;
   cursor: pointer;
@@ -282,23 +282,23 @@
 .demo-mockup {
   width: 100%;
   height: 100px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #cbc2c2;
   border-radius: 6px;
   overflow: hidden;
-  background: #f9fafb;
+  background: #e9ecef;
   position: relative;
 }
 
 /* MS Learn Mockup */
 .mslearn-mockup .demo-header-bar {
   height: 20px;
-  background: #e8e6df;
+  background: #e9ecef;
   margin-bottom: 2px;
 }
 
 .mslearn-mockup .demo-nav-bar {
   height: 15px;
-  background: #f5f5f5;
+  background: #e9ecef;
   margin: 0 8px 8px 8px;
   border-radius: 2px;
 }
@@ -308,7 +308,7 @@
   background: white;
   margin: 0 8px;
   border-radius: 4px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #cbc2c2;
 }
 
 /* Dashboard Mockup */
@@ -350,12 +350,12 @@
   height: 52px;
   background: repeating-linear-gradient(
     90deg,
-    #f9fafb,
-    #f9fafb 25%,
+    #e9ecef,
+    #e9ecef 25%,
     white 25%,
     white 50%
   );
-  border: 1px solid #e5e7eb;
+  border: 1px solid #cbc2c2;
   border-radius: 4px;
   margin: 0 8px;
 }
@@ -409,7 +409,7 @@
 }
 
 .main-heading {
-  color: #323130;
+  color: #3c4858;
   font-size: 3.5rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
@@ -427,7 +427,7 @@
 }
 
 .main-subtitle {
-  color: #605e5c;
+  color: #68769c;
   font-size: 1.5rem;
   margin-bottom: 3rem;
   line-height: 1.4;
@@ -453,7 +453,7 @@
   min-height: 120px;
   padding: 1rem; /* Back to original padding */
   padding-right: 55px; /* Reduced from 85px since we removed the image upload button */
-  border: 1px solid #e5e7eb;
+  border: 1px solid #cbc2c2;
   border-radius: 12px;
   font-size: 1rem;
   font-family: inherit;
@@ -1072,7 +1072,7 @@
 
 .modal-header h2 {
   margin: 0;
-  color: #323130;
+  color: #3c4858;
   font-size: 20px;
   font-weight: 600;
 }
@@ -1082,14 +1082,14 @@
   border: none;
   font-size: 24px;
   cursor: pointer;
-  color: #605e5c;
+  color: #68769c;
   padding: 4px;
   border-radius: 4px;
 }
 
 .modal-close-btn:hover {
   background: #f3f2f1;
-  color: #323130;
+  color: #3c4858;
 }
 
 .modal-body {
@@ -1116,14 +1116,14 @@
 
 .benefit-item h4 {
   margin: 0 0 4px 0;
-  color: #323130;
+  color: #3c4858;
   font-size: 16px;
   font-weight: 600;
 }
 
 .benefit-item p {
   margin: 0;
-  color: #605e5c;
+  color: #68769c;
   font-size: 14px;
   line-height: 1.4;
 }
@@ -1156,7 +1156,7 @@
 
 .fluent-btn-secondary {
   background: transparent;
-  color: #323130;
+  color: #3c4858;
   border: 1px solid #d1d1d1;
   padding: 8px 16px;
   border-radius: 4px;
@@ -1173,7 +1173,7 @@
 .fluent-btn-secondary:hover {
   background: #f3f2f1;
   border-color: #c7c6c4;
-  color: #323130;
+  color: #3c4858;
 }
 
 /* Input Info Alert Styles */
@@ -1181,9 +1181,9 @@
   padding: 12px 16px;
   background: #f3f9fd;
   border: 1px solid #c7e0f4;
-  border-left: 4px solid #0078d4;
+  border-left: 4px solid #8e9aaf;
   border-radius: 4px;
-  color: #323130;
+  color: #3c4858;
   font-size: 14px;
   margin: 8px 0;
   display: flex;
@@ -1194,7 +1194,7 @@
 }
 
 .input-info-alert .alert-icon {
-  color: #0078d4;
+  color: #8e9aaf;
   font-size: 16px;
   margin-top: 1px;
   flex-shrink: 0;
@@ -1210,7 +1210,7 @@
 }
 
 .input-info-alert .alert-description {
-  color: #605e5c;
+  color: #68769c;
   line-height: 1.4;
 }
 
@@ -1254,7 +1254,7 @@
   padding: 8px 0;
   background: none;
   border: none;
-  color: #656d76;
+  color: var(--favorites-tab-color);
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -1263,12 +1263,12 @@
 }
 
 .tab-btn.github-tab:hover {
-  color: #24292f;
+  color: var(--favorites-tab-hover);
 }
 
 .recent-favorites-section .tab-btn.github-tab.active {
-  color: #24292f !important;
-  border-bottom-color: #fd8c73 !important;
+  color: var(--favorites-tab-active) !important;
+  border-bottom-color: var(--favorites-tab-accent) !important;
   border-radius: 0 !important;
   background: none !important;
   background-color: transparent !important;
@@ -1280,8 +1280,8 @@
 }
 
 .projects-container.github-container {
-  background: white;
-  border: 1px solid #d1d9e0;
+  background: var(--favorites-item-bg);
+  border: 1px solid var(--favorites-border);
   border-radius: 0;
   margin-top: 0;
   height: 200px; /* Reduced height for more compact panel */
@@ -1311,23 +1311,23 @@
 }
 
 .projects-container.github-container::-webkit-scrollbar-track {
-  background: #f6f8fa;
+  background: var(--scrollbar-track);
 }
 
 .projects-container.github-container::-webkit-scrollbar-thumb {
-  background: #d1d9e0;
+  background: var(--scrollbar-thumb);
   border-radius: 4px;
 }
 
 .projects-container.github-container::-webkit-scrollbar-thumb:hover {
-  background: #b1b8c0;
+  background: var(--scrollbar-thumb-hover);
 }
 
 .project-item.github-item {
   display: flex;
   text-align: left;
   padding: 12px 16px; /* Reduced from 16px to 12px vertically */
-  border-bottom: 1px solid #e1e4e8; /* More visible border */
+  border-bottom: 1px solid #cbc2c2; /* More visible border */
   border-left: 3px solid transparent; /* Invisible left border by default */
   transition: all 0.1s ease;
   cursor: pointer;
@@ -1336,7 +1336,7 @@
 
 /* Alternating background colors for better separation */
 .project-item.github-item:nth-child(even) {
-  background-color: #f8f9fa; /* Subtle gray for even items */
+  background-color: #e9ecef; /* Subtle gray for even items */
 }
 
 .project-item.github-item:last-child {
@@ -1344,13 +1344,13 @@
 }
 
 .project-item.github-item:hover {
-  background-color: #f0f3f6; /* Darker hover state for both odd and even */
-  border-left-color: #0969da; /* Blue left accent on hover */
+  background-color: #cbc2c2; /* Darker hover state for both odd and even */
+  border-left-color: #8e9aaf; /* Blue left accent on hover */
 }
 
 .project-icon {
   margin-right: 12px;
-  color: #656d76;
+  color: #68769c;
   flex-shrink: 0;
 }
 
@@ -1362,14 +1362,14 @@
 .project-name {
   font-size: 14px;
   font-weight: 600;
-  color: #24292f;
+  color: #3c4858;
   margin-bottom: 2px;
   line-height: 1.25;
 }
 
 .project-meta {
   font-size: 12px;
-  color: #656d76;
+  color: #68769c;
   line-height: 1.33;
 }
 
@@ -1388,15 +1388,15 @@
   height: 32px;
   background: none;
   border: none;
-  color: #656d76;
+  color: #68769c;
   cursor: pointer;
   border-radius: 0;
   transition: all 0.1s ease;
 }
 
 .action-btn:hover {
-  background-color: #f3f4f6;
-  color: #24292f;
+  background-color: #e9ecef;
+  color: #3c4858;
 }
 
 .action-btn.star-btn:hover {
@@ -1420,7 +1420,7 @@
   display: flex;
   gap: 0;
   margin-bottom: 24px;
-  border-bottom: 1px solid #d1d9e0;
+  border-bottom: 1px solid #cbc2c2;
   background: transparent;
 }
 
@@ -1428,7 +1428,7 @@
   padding: 10px 16px;
   background: none;
   border: none;
-  color: #656d76;
+  color: #68769c;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -1438,7 +1438,7 @@
 }
 
 .tab-btn:hover {
-  color: #24292f;
+  color: #3c4858;
   background: transparent;
 }
 
@@ -1597,12 +1597,12 @@
 
 .modal-icon {
   font-size: 20px;
-  color: #0078d4;
+  color: #8e9aaf;
 }
 
 .modal-description {
   margin: 0 0 20px 0;
-  color: #605e5c;
+  color: #68769c;
   font-size: 14px;
   line-height: 1.4;
 }
@@ -1626,6 +1626,6 @@
 }
 
 .upload-zone:hover {
-  border-color: #0078d4;
+  border-color: #8e9aaf;
   background: #f3f9ff;
 }

@@ -1,6 +1,9 @@
 // Hero Control HTML Generator for Backend Wireframe Generation
 // This generates HTML strings that can be used in wireframe generation
 
+// Import centralized color configuration
+const { WIREFRAME_COLORS } = require("./config/colors");
+
 /**
  * Generates the complete Microsoft Learn Navigation HTML
  * Uses the specific Atlas navigation component from Figma (node-id: 11530:113245)
@@ -85,18 +88,16 @@ function generateMicrosoftFooterHTML() {
  * @param {Object} options - Configuration options for the hero
  * @returns {string} Complete HTML string for Microsoft Learn Accent Hero
  */
-function generateHeroHTML(options = {}) {
-  const {
-    title = "Learning for everyone, everywhere",
-    summary = "Explore Microsoft product documentation, training, credentials, Q&A, code references, and shows.",
-    eyebrow = "MICROSOFT LEARN",
-    ctaText = "Get Started",
-    secondaryCtaText = "Browse",
-    showSecondaryButton = true,
-    backgroundColor = "#E8E6DF",
-    heroImageUrl = "Microsoft-Learn-keyart-neutral-gray-angle-1.png",
-  } = options;
-
+// Neutral wireframe hero generator
+function generateHeroSection({
+  title = "Wireframe Title",
+  subtitle = "Wireframe subtitle text goes here to demonstrate layout",
+  ctaText = "Primary Action",
+  ctaText2 = "Secondary Action",
+  backgroundColor = WIREFRAME_COLORS.heroBackground, // Using centralized color
+  textColor = WIREFRAME_COLORS.heroText, // Using centralized color
+  accentColor = WIREFRAME_COLORS.secondary, // Using centralized color
+} = {}) {
   return `
     <!-- Microsoft Learn Accent Hero Section -->
     <section class="hero hero-image background-color-body-accent gradient-border-right gradient-border-body-accent" 
@@ -114,20 +115,20 @@ function generateHeroHTML(options = {}) {
         <!-- Eyebrow Text -->
         <p class="letter-spacing-wide text-transform-uppercase font-size-sm" 
            style="letter-spacing: 0.2em; text-transform: uppercase; font-size: 0.875rem; 
-                  line-height: 1.25rem; margin: 0 0 0.5rem 0; color: #323130; font-weight: 600;">
+                  line-height: 1.25rem; margin: 0 0 0.5rem 0; color: #3C4858; font-weight: 600;">
           ${eyebrow}
         </p>
         
         <!-- Main Title -->
         <h1 class="font-size-h1 font-weight-semibold" 
-            style="font-size: 2.5rem; line-height: 3rem; font-weight: 600; margin: 0 0 1rem 0; color: #323130;">
+            style="font-size: 2.5rem; line-height: 3rem; font-weight: 600; margin: 0 0 1rem 0; color: #3C4858;">
           ${title}
         </h1>
         
         <!-- Summary Text -->
         <p class="font-size-lg font-weight-semibold margin-block-sm" 
            style="font-size: 1.125rem; line-height: 1.75rem; font-weight: 600; 
-                  margin-top: 0.5rem; margin-bottom: 0.5rem; color: #323130;">
+                  margin-top: 0.5rem; margin-bottom: 0.5rem; color: #3C4858;">
           ${summary}
         </p>
         
@@ -137,8 +138,8 @@ function generateHeroHTML(options = {}) {
                   style="display: inline-flex; align-items: center; justify-content: center; 
                          padding: 0.5rem 1rem; border-radius: 0.25rem; font-family: 'Segoe UI', sans-serif; 
                          font-size: 0.875rem; font-weight: 600; text-decoration: none; cursor: pointer; 
-                         transition: all 0.2s ease; min-height: 2.5rem; border: 1px solid #0078d4; 
-                         background-color: transparent; color: #0078d4;">
+                         transition: all 0.2s ease; min-height: 2.5rem; border: 1px solid #8E9AAF; 
+                         background-color: transparent; color: #8E9AAF;">
             ${ctaText}
           </button>
           ${
@@ -148,8 +149,8 @@ function generateHeroHTML(options = {}) {
                   style="display: inline-flex; align-items: center; justify-content: center; 
                          padding: 0.5rem 1rem; border-radius: 0.25rem; font-family: 'Segoe UI', sans-serif; 
                          font-size: 0.875rem; font-weight: 600; text-decoration: none; cursor: pointer; 
-                         transition: all 0.2s ease; min-height: 2.5rem; border: 1px solid #0078d4; 
-                         background-color: #0078d4; color: white;">
+                         transition: all 0.2s ease; min-height: 2.5rem; border: 1px solid #8E9AAF; 
+                         background-color: #8E9AAF; color: white;">
             ${secondaryCtaText}
           </button>
           `
@@ -178,7 +179,7 @@ function generateHeroHTML(options = {}) {
       }
       
       .background-color-body-accent {
-        background-color: #E8E6DF;
+        background-color: #E9ECEF;
       }
       
       .gradient-border-right::after {
@@ -188,7 +189,7 @@ function generateHeroHTML(options = {}) {
         top: 0;
         bottom: 0;
         width: 4px;
-        background: linear-gradient(180deg, #E8E6DF 0%, rgba(232, 230, 223, 0) 100%);
+        background: linear-gradient(180deg, #E9ECEF 0%, rgba(232, 230, 223, 0) 100%);
       }
       
       .hero-content {
@@ -202,13 +203,13 @@ function generateHeroHTML(options = {}) {
       }
       
       .button.button-clear:hover {
-        background-color: #0078d4 !important;
+        background-color: #8E9AAF !important;
         color: white !important;
       }
       
       .button.border:hover {
-        background-color: #106ebe !important;
-        border-color: #106ebe !important;
+        background-color: #68769C !important;
+        border-color: #68769C !important;
       }
       
       @media (max-width: 768px) {
@@ -246,7 +247,7 @@ const HeroTemplates = {
       summary:
         "Explore comprehensive learning paths and earn valuable certifications in modern technologies.",
       ctaText: "Start Learning",
-      backgroundColor: "#E8E6DF",
+      backgroundColor: "#E9ECEF",
     }),
 
   // Business and enterprise solutions
@@ -259,7 +260,7 @@ const HeroTemplates = {
       showSecondaryButton: true,
       ctaText: "Get Started",
       secondaryCtaText: "Learn More",
-      backgroundColor: "#E8E6DF",
+      backgroundColor: "#E9ECEF",
     }),
 
   // Developer tools and resources
@@ -270,7 +271,7 @@ const HeroTemplates = {
         "Access comprehensive tools and resources for modern software development.",
       searchPlaceholder: "Search developer docs...",
       ctaText: "Explore Tools",
-      backgroundColor: "#E8E6DF",
+      backgroundColor: "#E9ECEF",
     }),
 
   // Technology and innovation
@@ -281,7 +282,7 @@ const HeroTemplates = {
         "Discover cutting-edge innovations and solutions that transform how we work and live.",
       searchPlaceholder: "Search innovations...",
       ctaText: "Explore Tech",
-      backgroundColor: "#E8E6DF",
+      backgroundColor: "#E9ECEF",
       imageUrl:
         "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop",
     }),
@@ -294,7 +295,7 @@ const HeroTemplates = {
       showImage: false,
       showSearch: false,
       ctaText: "Get Started",
-      backgroundColor: "#E8E6DF",
+      backgroundColor: "#E9ECEF",
     }),
 
   // Product showcase
@@ -307,7 +308,7 @@ const HeroTemplates = {
       showSecondaryButton: true,
       ctaText: "View Products",
       secondaryCtaText: "Watch Demo",
-      backgroundColor: "#E8E6DF",
+      backgroundColor: "#E9ECEF",
       imageUrl:
         "https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=400&fit=crop",
     }),
@@ -320,7 +321,7 @@ const HeroTemplates = {
         "Connect with like-minded professionals, share knowledge, and collaborate on exciting projects.",
       searchPlaceholder: "Search community resources...",
       ctaText: "Join Community",
-      backgroundColor: "#E8E6DF",
+      backgroundColor: "#E9ECEF",
       imageUrl:
         "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=400&fit=crop",
     }),
@@ -419,7 +420,7 @@ function parseTemplateOptions(heroType) {
       summary:
         "Explore comprehensive learning paths and earn valuable certifications in modern technologies.",
       ctaText: "Start Learning",
-      backgroundColor: "#E8E6DF",
+      backgroundColor: "#E9ECEF",
     },
     business: {
       title: "Transform your business with innovation",
@@ -429,7 +430,7 @@ function parseTemplateOptions(heroType) {
       showSecondaryButton: true,
       ctaText: "Get Started",
       secondaryCtaText: "Learn More",
-      backgroundColor: "#E8E6DF",
+      backgroundColor: "#E9ECEF",
     },
     developer: {
       title: "Build exceptional applications",
@@ -437,7 +438,7 @@ function parseTemplateOptions(heroType) {
         "Access comprehensive tools and resources for modern software development.",
       searchPlaceholder: "Search developer docs...",
       ctaText: "Explore Tools",
-      backgroundColor: "#E8E6DF",
+      backgroundColor: "#E9ECEF",
     },
     technology: {
       title: "Leading the future of technology",
@@ -445,7 +446,7 @@ function parseTemplateOptions(heroType) {
         "Discover cutting-edge innovations and solutions that transform how we work and live.",
       searchPlaceholder: "Search innovations...",
       ctaText: "Explore Tech",
-      backgroundColor: "#E8E6DF",
+      backgroundColor: "#E9ECEF",
     },
     minimal: {
       title: "Simple and focused experience",
@@ -453,7 +454,7 @@ function parseTemplateOptions(heroType) {
       showImage: false,
       showSearch: false,
       ctaText: "Get Started",
-      backgroundColor: "#E8E6DF",
+      backgroundColor: "#E9ECEF",
     },
     product: {
       title: "Discover our innovative solutions",
@@ -463,7 +464,7 @@ function parseTemplateOptions(heroType) {
       showSecondaryButton: true,
       ctaText: "View Products",
       secondaryCtaText: "Watch Demo",
-      backgroundColor: "#E8E6DF",
+      backgroundColor: "#E9ECEF",
     },
     community: {
       title: "Join a thriving community",
@@ -471,7 +472,7 @@ function parseTemplateOptions(heroType) {
         "Connect with like-minded professionals, share knowledge, and collaborate on exciting projects.",
       searchPlaceholder: "Search community resources...",
       ctaText: "Join Community",
-      backgroundColor: "#E8E6DF",
+      backgroundColor: "#E9ECEF",
     },
   };
 

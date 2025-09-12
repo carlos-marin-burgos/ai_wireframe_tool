@@ -178,7 +178,7 @@ body {
 /* Landing page styles are now managed in LandingPage.css */
 
 .main-heading {
-  color: #323130;
+  color: #3C4858;
   font-size: 3.5rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
@@ -188,7 +188,7 @@ body {
 }
 
 .main-subtitle {
-  color: #605e5c;
+  color: #68769C;
   font-size: 1.5rem;
   margin-bottom: 3rem;
   line-height: 1.4;
@@ -224,22 +224,22 @@ body {
   background: #ffffff;
   box-sizing: border-box;
   line-height: 1.5;
-  color: #323130;
+  color: #3C4858;
 }
 
 .app-textarea:focus {
   outline: none;
-  border-color: #0078d4;
-  box-shadow: 0 0 0 1px #0078d4;
+  border-color: #8E9AAF;
+  box-shadow: 0 0 0 1px #8E9AAF;
 }
 
 .app-textarea::placeholder {
-  color: #605e5c;
+  color: #68769C;
   font-weight: 400;
 }
 
 .send-btn {
-  background: #0078d4;
+  background: #8E9AAF;
   border: none;
   border-radius: 4px;
   width: 48px;
@@ -258,7 +258,7 @@ body {
 }
 
 .send-btn:hover:not(:disabled) {
-  background: #106ebe;
+  background: #68769C;
   transform: none;
   box-shadow: none;
 }
@@ -435,7 +435,7 @@ body {
   align-items: center;
   gap: 4px;
   background: #f3f2f1;
-  color: #323130;
+  color: #3C4858;
 }
 
 .wireframe-mode-toggle .mode-toggle-btn:hover {
@@ -444,14 +444,14 @@ body {
 }
 
 .wireframe-mode-toggle .mode-toggle-btn.active {
-  background: #0078d4;
+  background: #8E9AAF;
   color: white;
-  border-color: #0078d4;
+  border-color: #8E9AAF;
 }
 
 .wireframe-mode-toggle .mode-toggle-btn.active:hover {
-  background: #106ebe;
-  border-color: #106ebe;
+  background: #68769C;
+  border-color: #68769C;
 }
 
 .wireframe-mode-toggle .element-selection-indicator {
@@ -552,11 +552,11 @@ body {
 }
 
 .ai-suggestions-dynamic .ai-suggestions-label {
-  color: #323130 !important;
+  color: #3C4858 !important;
 }
 
 .ai-suggestions-dynamic .ai-icon {
-  color: #323130 !important;
+  color: #3C4858 !important;
 }
 
 .ai-suggestions-label {
@@ -566,11 +566,11 @@ body {
   margin-bottom: 1rem !important;
   font-size: 1rem !important;
   font-weight: 400 !important;
-  color: #323130 !important;
+  color: #3C4858 !important;
 }
 
 .ai-icon {
-  color: #323130;
+  color: #3C4858;
   font-size: 16px;
 }
 
@@ -587,7 +587,7 @@ body {
 .ai-suggestion-pill {
   background: #f3f2f1;
   border: 1px solid #e1dfdd;
-  color: #323130;
+  color: #3C4858;
   padding: 8px 8px 8px 12px;
   border-radius: 4px;
   cursor: pointer;
@@ -729,7 +729,7 @@ body {
 }
 
 .transparent-navbar .nav-link:hover {
-  color: #e8e6de;
+  color: #CBC2C2;
 }
 
 .top-nav {
@@ -882,7 +882,7 @@ body {
 }
 
 .mini-title {
-  background: #323130;
+  background: #3C4858;
   height: 16px;
   border-radius: 2px;
   width: 70%;
@@ -896,7 +896,7 @@ body {
 }
 
 .mini-button {
-  background: #0078d4;
+  background: #8E9AAF;
   height: 20px;
   border-radius: 4px;
   width: 50%;
@@ -920,7 +920,7 @@ body {
 .element-1 {
   width: 40px;
   height: 40px;
-  background: #0078d4;
+  background: #8E9AAF;
   top: 20px;
   left: 20px;
 }

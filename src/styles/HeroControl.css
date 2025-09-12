@@ -10,7 +10,7 @@
   border-radius: 12px;
   overflow: hidden;
   position: relative;
-  background: #E8E6DF;
+  background: var(--color-light);
 }
 
 .hero-left-section {
@@ -39,14 +39,14 @@
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1.3;
-  color: #323130;
+  color: var(--color-text);
   margin: 0;
 }
 
 .hero-summary {
   font-size: 1rem;
   line-height: 1.5;
-  color: #605e5c;
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
@@ -67,7 +67,7 @@
   width: 100%;
   padding: 0.875rem 1rem;
   font-size: 16px; /* Prevent iOS zoom */
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--color-border);
   border-radius: 8px;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -75,8 +75,8 @@
 }
 
 .hero-textfield:focus {
-  border-color: #0078d4;
-  box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.1);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-alpha);
 }
 
 .hero-primary-button,
@@ -99,27 +99,27 @@
 }
 
 .hero-primary-button {
-  background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
   color: white;
 }
 
 .hero-primary-button:hover {
-  background: linear-gradient(135deg, #106ebe 0%, #005a9e 100%);
+  background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary) 100%);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 120, 212, 0.3);
+  box-shadow: var(--shadow-medium);
 }
 
 .hero-secondary-button {
-  background: #f8f9fa;
-  color: #323130;
-  border: 2px solid #e0e0e0;
+  background: var(--color-light);
+  color: var(--color-text);
+  border: 2px solid var(--color-border);
 }
 
 .hero-secondary-button:hover {
-  background: #e8f4fd;
-  border-color: #0078d4;
+  background: var(--color-surface);
+  border-color: var(--color-primary);
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-small);
 }
 
 .hero-image-container {
@@ -151,12 +151,12 @@
 
 .hero-left-gradient {
   left: 0;
-  background: linear-gradient(to right, var(--background-color, #E8E6DF), transparent);
+  background: linear-gradient(to right, var(--color-light), transparent);
 }
 
 .hero-right-gradient {
   right: 0;
-  background: linear-gradient(to left, var(--background-color, #E8E6DF), transparent);
+  background: linear-gradient(to left, var(--color-light), transparent);
 }
 
 /* ===== TABLET STYLES (768px and up) ===== */
@@ -329,14 +329,14 @@
   .hero-primary-button:hover {
     transform: none;
     box-shadow: none;
-    background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
   }
   
   .hero-secondary-button:hover {
     transform: none;
     box-shadow: none;
-    background: #f8f9fa;
-    border-color: #e0e0e0;
+    background: var(--color-light);
+    border-color: var(--color-border);
   }
 }
 
@@ -360,62 +360,62 @@
   }
   
   .hero-primary-button {
-    background: #000;
-    color: #fff;
-    border: 2px solid #000;
+    background: var(--color-contrast-bg, #000);
+    color: var(--color-contrast-text, #fff);
+    border: 2px solid var(--color-contrast-bg, #000);
   }
   
   .hero-secondary-button {
-    background: #fff;
-    color: #000;
-    border-color: #000;
+    background: var(--color-contrast-text, #fff);
+    color: var(--color-contrast-bg, #000);
+    border-color: var(--color-contrast-bg, #000);
     border-width: 3px;
   }
   
   .hero-title {
-    color: #000;
+    color: var(--color-contrast-bg, #000);
   }
   
   .hero-summary {
-    color: #333;
+    color: var(--color-contrast-medium, #333);
   }
 }
 
 /* ===== DARK MODE SUPPORT ===== */
 @media (prefers-color-scheme: dark) {
   .hero-control {
-    background: #2d2d30;
-    color: #ffffff;
+    background: var(--color-dark-bg, #2d2d30);
+    color: var(--color-dark-text, #ffffff);
   }
   
   .hero-title {
-    color: #ffffff;
+    color: var(--color-dark-text, #ffffff);
   }
   
   .hero-summary {
-    color: #cccccc;
+    color: var(--color-dark-text-secondary, #cccccc);
   }
   
   .hero-textfield {
-    background: #1e1e1e;
-    color: #ffffff;
-    border-color: #3e3e42;
+    background: var(--color-dark-surface, #1e1e1e);
+    color: var(--color-dark-text, #ffffff);
+    border-color: var(--color-dark-border, #3e3e42);
   }
   
   .hero-textfield:focus {
-    border-color: #4fc3f7;
-    box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.1);
+    border-color: var(--color-dark-accent, #4fc3f7);
+    box-shadow: 0 0 0 3px var(--color-dark-accent-alpha, rgba(79, 195, 247, 0.1));
   }
   
   .hero-secondary-button {
-    background: #3e3e42;
-    color: #ffffff;
-    border-color: #5a5a5e;
+    background: var(--color-dark-button-bg, #3e3e42);
+    color: var(--color-dark-text, #ffffff);
+    border-color: var(--color-dark-button-border, #5a5a5e);
   }
   
   .hero-secondary-button:hover {
-    background: #4a4a4e;
-    border-color: #4fc3f7;
+    background: var(--color-dark-button-hover, #4a4a4e);
+    border-color: var(--color-dark-accent, #4fc3f7);
   }
   
   .hero-left-gradient {

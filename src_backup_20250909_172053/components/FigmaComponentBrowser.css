@@ -25,30 +25,30 @@
 
 .fluent-btn-outlined {
   background: transparent;
-  border: 1px solid #0078d4;
-  color: #0078d4;
+  border: 1px solid #8E9AAF;
+  color: #8E9AAF;
 }
 
 .fluent-btn-outlined:hover {
   background: #f3f2f1;
-  color: #106ebe;
-  border-color: #106ebe;
+  color: #68769C;
+  border-color: #68769C;
 }
 
 .fluent-btn-filled {
-  background: #0078d4;
-  border: 1px solid #0078d4;
+  background: #8E9AAF;
+  border: 1px solid #8E9AAF;
   color: white;
 }
 
 .fluent-btn-filled:hover {
-  background: #106ebe;
-  border-color: #106ebe;
+  background: #68769C;
+  border-color: #68769C;
 }
 
 .fluent-btn-split {
-  background: #0078d4;
-  border: 1px solid #0078d4;
+  background: #8E9AAF;
+  border: 1px solid #8E9AAF;
   color: white;
   position: relative;
   padding-right: 40px;

@@ -8,6 +8,76 @@ import React from 'react';
   }
   
   export default Api;
+  import React from 'react';
+  
+  const Api = () =>  {
+	return (
+	  <div>
+	  </div>
+	);
+  }
+  
+  export default Api;
+  import React from 'react';
+  
+  const Api = () =>  {
+	return (
+	  <div>
+	  </div>
+	);
+  }
+  
+  export default Api;
+  import React from 'react';
+  
+  const Api = () =>  {
+	return (
+	  <div>
+	  </div>
+	);
+  }
+  
+  export default Api;
+  import React from 'react';
+  
+  const Api = () =>  {
+	return (
+	  <div>
+	  </div>
+	);
+  }
+  
+  export default Api;
+  import React from 'react';
+  
+  const Api = () =>  {
+	return (
+	  <div>
+	  </div>
+	);
+  }
+  
+  export default Api;
+  import React from 'react';
+  
+  const Api = () =>  {
+	return (
+	  <div>
+	  </div>
+	);
+  }
+  
+  export default Api;
+  import React from 'react';
+  
+  const Api = () =>  {
+	return (
+	  <div>
+	  </div>
+	);
+  }
+  
+  export default Api;
   const { app } = require('@azure/functions');
 const { DefaultAzureCredential } = require('@azure/identity');
 const { OpenAIClient } = require('@azure/openai');

@@ -292,7 +292,7 @@
 /* MS Learn Mockup */
 .mslearn-mockup .demo-header-bar {
   height: 20px;
-  background: #e8e6df;
+  background: #E9ECEF;
   margin-bottom: 2px;
 }
 
@@ -409,7 +409,7 @@
 }
 
 .main-heading {
-  color: #323130;
+  color: #3C4858;
   font-size: 3.5rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
@@ -427,7 +427,7 @@
 }
 
 .main-subtitle {
-  color: #605e5c;
+  color: #68769C;
   font-size: 1.5rem;
   margin-bottom: 3rem;
   line-height: 1.4;
@@ -1070,7 +1070,7 @@
 
 .modal-header h2 {
   margin: 0;
-  color: #323130;
+  color: #3C4858;
   font-size: 20px;
   font-weight: 600;
 }
@@ -1080,14 +1080,14 @@
   border: none;
   font-size: 24px;
   cursor: pointer;
-  color: #605e5c;
+  color: #68769C;
   padding: 4px;
   border-radius: 4px;
 }
 
 .modal-close-btn:hover {
   background: #f3f2f1;
-  color: #323130;
+  color: #3C4858;
 }
 
 .modal-body {
@@ -1114,14 +1114,14 @@
 
 .benefit-item h4 {
   margin: 0 0 4px 0;
-  color: #323130;
+  color: #3C4858;
   font-size: 16px;
   font-weight: 600;
 }
 
 .benefit-item p {
   margin: 0;
-  color: #605e5c;
+  color: #68769C;
   font-size: 14px;
   line-height: 1.4;
 }
@@ -1154,7 +1154,7 @@
 
 .fluent-btn-secondary {
   background: transparent;
-  color: #323130;
+  color: #3C4858;
   border: 1px solid #d1d1d1;
   padding: 8px 16px;
   border-radius: 4px;
@@ -1171,7 +1171,7 @@
 .fluent-btn-secondary:hover {
   background: #f3f2f1;
   border-color: #c7c6c4;
-  color: #323130;
+  color: #3C4858;
 }
 
 /* Input Info Alert Styles */
@@ -1179,9 +1179,9 @@
   padding: 12px 16px;
   background: #f3f9fd;
   border: 1px solid #c7e0f4;
-  border-left: 4px solid #0078d4;
+  border-left: 4px solid #8E9AAF;
   border-radius: 4px;
-  color: #323130;
+  color: #3C4858;
   font-size: 14px;
   margin: 8px 0;
   display: flex;
@@ -1192,7 +1192,7 @@
 }
 
 .input-info-alert .alert-icon {
-  color: #0078d4;
+  color: #8E9AAF;
   font-size: 16px;
   margin-top: 1px;
   flex-shrink: 0;
@@ -1208,7 +1208,7 @@
 }
 
 .input-info-alert .alert-description {
-  color: #605e5c;
+  color: #68769C;
   line-height: 1.4;
 }
 
@@ -1595,12 +1595,12 @@
 
 .modal-icon {
   font-size: 20px;
-  color: #0078d4;
+  color: #8E9AAF;
 }
 
 .modal-description {
   margin: 0 0 20px 0;
-  color: #605e5c;
+  color: #68769C;
   font-size: 14px;
   line-height: 1.4;
 }
@@ -1624,6 +1624,6 @@
 }
 
 .upload-zone:hover {
-  border-color: #0078d4;
+  border-color: #8E9AAF;
   background: #f3f9ff;
 }

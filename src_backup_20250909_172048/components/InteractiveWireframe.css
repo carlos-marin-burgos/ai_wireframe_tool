@@ -47,8 +47,8 @@
 /* Drop zone styles */
 .drop-zone {
   position: absolute;
-  background: linear-gradient(45deg, #e8e6de22, #28a74522);
-  border: 2px dashed #e8e6de;
+  background: linear-gradient(45deg, #CBC2C222, #28a74522);
+  border: 2px dashed #CBC2C2;
   border-radius: 4px;
   opacity: 0;
   transition: opacity 0.2s ease;
@@ -66,7 +66,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #e8e6de;
+  color: #CBC2C2;
   font-weight: bold;
   font-size: 14px;
   text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);

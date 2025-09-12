@@ -8,7 +8,7 @@
   width: 100%;
   max-width: 1360px;
   height: 387px;
-  background: #E8E6DF;
+  background: #E9ECEF;
   flex: none;
   order: 0;
   flex-grow: 0;
@@ -79,7 +79,7 @@
   font-weight: 600;
   font-size: 40px;
   line-height: 52px;
-  background: linear-gradient(91.54deg, #0078D4 2.94%, #106ebe 78.45%);
+  background: linear-gradient(91.54deg, #8E9AAF 2.94%, #68769C 78.45%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -157,8 +157,8 @@
 }
 
 .hero-textfield:focus {
-  border-color: #0078D4;
-  box-shadow: 0 0 0 1px #0078D4;
+  border-color: #8E9AAF;
+  box-shadow: 0 0 0 1px #8E9AAF;
 }
 
 .hero-primary-button {
@@ -170,7 +170,7 @@
   gap: 6.75px;
   width: 108.75px;
   height: 40.5px;
-  background: #0078D4;
+  background: #8E9AAF;
   border-radius: 2px;
   border: none;
   flex: none;
@@ -187,11 +187,11 @@
 }
 
 .hero-primary-button:hover {
-  background: #106ebe;
+  background: #68769C;
 }
 
 .hero-primary-button:active {
-  background: #005a9e;
+  background: #68769C;
 }
 
 .hero-buttons-container {
@@ -223,7 +223,7 @@
 }
 
 .hero-secondary-button:hover {
-  border-color: #323130;
+  border-color: #3C4858;
   background: #f3f2f1;
 }
 
@@ -259,7 +259,7 @@
   height: 387px;
   left: -49px;
   top: 0px;
-  background: linear-gradient(90deg, #E8E6DF 0%, rgba(232, 230, 223, 0) 100%);
+  background: linear-gradient(90deg, #E9ECEF 0%, rgba(232, 230, 223, 0) 100%);
 }
 
 .hero-right-gradient {
@@ -268,7 +268,7 @@
   height: 386px;
   left: 413px;
   top: 0px;
-  background: linear-gradient(90deg, #E8E6DF 0%, rgba(232, 230, 223, 0) 100%);
+  background: linear-gradient(90deg, #E9ECEF 0%, rgba(232, 230, 223, 0) 100%);
   transform: rotate(-180deg);
 }
 

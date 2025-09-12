@@ -1,4 +1,4 @@
-const o={primary:{main:"#0078d4",secondary:"#106ebe",bg:"#ffffff",surface:"#f8f9fa",text:"#171717",textSecondary:"#605e5c",border:"#e1dfdd",accent:"#0078d4"},secondary:{main:"#8b5dae",secondary:"#6b46c1",bg:"#ffffff",surface:"#f8f9fa",text:"#171717",textSecondary:"#605e5c",border:"#e1dfdd",accent:"#8b5dae"},success:{main:"#107c10",secondary:"#0e6b0e",bg:"#ffffff",surface:"#f8f9fa",text:"#171717",textSecondary:"#605e5c",border:"#e1dfdd",accent:"#107c10"}},n=t=>`
+const o={primary:{main:"#8E9AAF",secondary:"#68769C",bg:"#ffffff",surface:"#f8f9fa",text:"#171717",textSecondary:"#68769C",border:"#e1dfdd",accent:"#8E9AAF"},secondary:{main:"#8b5dae",secondary:"#6b46c1",bg:"#ffffff",surface:"#f8f9fa",text:"#171717",textSecondary:"#68769C",border:"#e1dfdd",accent:"#8b5dae"},success:{main:"#107c10",secondary:"#0e6b0e",bg:"#ffffff",surface:"#f8f9fa",text:"#171717",textSecondary:"#68769C",border:"#e1dfdd",accent:"#107c10"}},n=t=>`
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { 
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
@@ -154,7 +154,7 @@ const o={primary:{main:"#0078d4",secondary:"#106ebe",bg:"#ffffff",surface:"#f8f9
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Learning Paths</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Certifications</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Q&A</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Sign in</button>
+                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Sign in</button>
             </nav>
         </div>
     </header>
@@ -311,7 +311,7 @@ const o={primary:{main:"#0078d4",secondary:"#106ebe",bg:"#ffffff",surface:"#f8f9
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Reports</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Analytics</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Settings</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Dashboard</button>
+                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Dashboard</button>
             </nav>
         </div>
     </header>
@@ -484,7 +484,7 @@ const o={primary:{main:"#0078d4",secondary:"#106ebe",bg:"#ffffff",surface:"#f8f9
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Templates</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Examples</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Support</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Create Form</button>
+                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Create Form</button>
             </nav>
         </div>
     </header>
@@ -636,7 +636,7 @@ const o={primary:{main:"#0078d4",secondary:"#106ebe",bg:"#ffffff",surface:"#f8f9
     <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
         <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
             <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
-                <svg width="24" height="24" fill="#0078d4" viewBox="0 0 24 24">
+                <svg width="24" height="24" fill="#8E9AAF" viewBox="0 0 24 24">
                     <path d="M11.25 4.533a9.707 9.707 0 00-6.984 2.708L3.482 6.457C5.283 4.457 8.145 3.25 11.25 3.25s5.967 1.207 7.768 3.207l-.784.784A9.707 9.707 0 0011.25 4.533z"/>
                 </svg>
                 <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
@@ -646,7 +646,7 @@ const o={primary:{main:"#0078d4",secondary:"#106ebe",bg:"#ffffff",surface:"#f8f9
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Learning Paths</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Certifications</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Q&A</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Browse</button>
+                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Browse</button>
             </nav>
         </div>
     </header>
@@ -780,7 +780,7 @@ const result = example();
     <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
         <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
             <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
-                <svg width="24" height="24" fill="#0078d4" viewBox="0 0 24 24">
+                <svg width="24" height="24" fill="#8E9AAF" viewBox="0 0 24 24">
                     <path d="M11.25 4.533a9.707 9.707 0 00-6.984 2.708L3.482 6.457C5.283 4.457 8.145 3.25 11.25 3.25s5.967 1.207 7.768 3.207l-.784.784A9.707 9.707 0 0011.25 4.533z"/>
                 </svg>
                 <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
@@ -790,7 +790,7 @@ const result = example();
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Documentation</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Community</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Support</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Get Started</button>
+                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Get Started</button>
             </nav>
         </div>
     </header>

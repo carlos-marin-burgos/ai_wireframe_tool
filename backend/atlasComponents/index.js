@@ -67,7 +67,7 @@ module.exports = async function (context, req) {
         <div class="atlas-component atlas-hero-error" style="background: #fff4f4; padding: 48px 32px; border-radius: 8px; border: 1px solid #fde7e7; text-align: center; font-family: 'Segoe UI', system-ui, sans-serif;">
             <div style="max-width: 600px; margin: 0 auto;">
                 <h3 style="font-size: 18px; font-weight: 600; color: #d13438; margin-bottom: 12px;">Atlas Hero Component Error</h3>
-                <p style="font-size: 14px; color: #605e5c; margin-bottom: 8px;">Unable to fetch from Figma Atlas Design Library</p>
+                <p style="font-size: 14px; color: #68769C; margin-bottom: 8px;">Unable to fetch from Figma Atlas Design Library</p>
                 <p style="font-size: 12px; color: #a19f9d; margin: 0;">Error: ${
                   error.message
                 }</p>

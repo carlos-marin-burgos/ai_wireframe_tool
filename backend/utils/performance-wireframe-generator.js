@@ -178,9 +178,9 @@ class FastWireframeGenerator {
             max-width: 400px;
         }
         .login-header { text-align: center; margin-bottom: 32px; }
-        .login-header h1 { color: #323130; font-size: 24px; margin-bottom: 8px; }
+        .login-header h1 { color: #3C4858; font-size: 24px; margin-bottom: 8px; }
         .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; color: #323130; font-weight: 500; }
+        .form-group label { display: block; margin-bottom: 8px; color: #3C4858; font-weight: 500; }
         .form-group input { 
             width: 100%; 
             padding: 12px; 
@@ -191,7 +191,7 @@ class FastWireframeGenerator {
         .btn-primary { 
             width: 100%; 
             padding: 12px; 
-            background: ${colorScheme === "primary" ? "#0078d4" : "#107c10"}; 
+            background: ${colorScheme === "primary" ? "#8E9AAF" : "#107c10"}; 
             color: white; 
             border: none; 
             border-radius: 4px; 
@@ -200,7 +200,7 @@ class FastWireframeGenerator {
         }
         .btn-primary:hover { opacity: 0.9; }
         .forgot-link { text-align: center; margin-top: 16px; }
-        .forgot-link a { color: #0078d4; text-decoration: none; font-size: 14px; }
+        .forgot-link a { color: #8E9AAF; text-decoration: none; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -255,10 +255,10 @@ class FastWireframeGenerator {
             border-radius: 0 0 8px 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        h1 { color: #323130; margin-bottom: 16px; }
+        h1 { color: #3C4858; margin-bottom: 16px; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
         .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; color: #323130; font-weight: 500; }
+        .form-group label { display: block; margin-bottom: 8px; color: #3C4858; font-weight: 500; }
         .form-group input, .form-group textarea { 
             width: 100%; 
             padding: 12px; 
@@ -269,7 +269,7 @@ class FastWireframeGenerator {
         .form-group textarea { height: 120px; resize: vertical; }
         .btn-primary { 
             padding: 12px 24px; 
-            background: ${colorScheme === "primary" ? "#0078d4" : "#107c10"}; 
+            background: ${colorScheme === "primary" ? "#8E9AAF" : "#107c10"}; 
             color: white; 
             border: none; 
             border-radius: 4px; 
@@ -339,9 +339,9 @@ class FastWireframeGenerator {
             border-radius: 8px; 
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-        .card h3 { color: #323130; margin-bottom: 16px; }
+        .card h3 { color: #3C4858; margin-bottom: 16px; }
         .metric { font-size: 32px; font-weight: bold; color: ${
-          colorScheme === "primary" ? "#0078d4" : "#107c10"
+          colorScheme === "primary" ? "#8E9AAF" : "#107c10"
         }; }
         .progress-bar { 
             background: #e1e5e9; 
@@ -350,7 +350,7 @@ class FastWireframeGenerator {
             margin: 16px 0;
         }
         .progress-fill { 
-            background: ${colorScheme === "primary" ? "#0078d4" : "#107c10"}; 
+            background: ${colorScheme === "primary" ? "#8E9AAF" : "#107c10"}; 
             height: 100%; 
             border-radius: 4px;
         }
@@ -363,7 +363,7 @@ class FastWireframeGenerator {
         }
         .btn { 
             padding: 8px 16px; 
-            background: ${colorScheme === "primary" ? "#0078d4" : "#107c10"}; 
+            background: ${colorScheme === "primary" ? "#8E9AAF" : "#107c10"}; 
             color: white; 
             border: none; 
             border-radius: 4px; 
@@ -429,7 +429,7 @@ class FastWireframeGenerator {
         .hero { 
             background: linear-gradient(135deg, ${
               colorScheme === "primary"
-                ? "#0078d4, #106ebe"
+                ? "#8E9AAF, #68769C"
                 : "#107c10, #0b6413"
             }); 
             color: white; 
@@ -440,7 +440,7 @@ class FastWireframeGenerator {
         .hero p { font-size: 20px; margin-bottom: 32px; opacity: 0.9; }
         .btn-hero { 
             background: white; 
-            color: ${colorScheme === "primary" ? "#0078d4" : "#107c10"}; 
+            color: ${colorScheme === "primary" ? "#8E9AAF" : "#107c10"}; 
             padding: 16px 32px; 
             border: none; 
             border-radius: 4px; 
@@ -453,15 +453,15 @@ class FastWireframeGenerator {
         .features { padding: 80px 20px; max-width: 1200px; margin: 0 auto; }
         .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
         .feature { text-align: center; padding: 32px; }
-        .feature h3 { margin-bottom: 16px; color: #323130; }
-        .feature p { color: #605e5c; }
+        .feature h3 { margin-bottom: 16px; color: #3C4858; }
+        .feature p { color: #68769C; }
         .cta { 
             background: #f8f9fa; 
             padding: 80px 20px; 
             text-align: center;
         }
-        .cta h2 { margin-bottom: 16px; color: #323130; }
-        .cta p { margin-bottom: 32px; color: #605e5c; font-size: 18px; }
+        .cta h2 { margin-bottom: 16px; color: #3C4858; }
+        .cta p { margin-bottom: 32px; color: #68769C; font-size: 18px; }
     </style>
 </head>
 <body>
@@ -509,7 +509,7 @@ class FastWireframeGenerator {
         body { 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             line-height: 1.6;
-            color: #323130;
+            color: #3C4858;
         }
         .header { 
             background: white; 
@@ -523,20 +523,20 @@ class FastWireframeGenerator {
         .article-title { 
             font-size: 32px; 
             margin-bottom: 8px; 
-            color: ${colorScheme === "primary" ? "#0078d4" : "#107c10"};
+            color: ${colorScheme === "primary" ? "#8E9AAF" : "#107c10"};
         }
         .article-meta { 
-            color: #605e5c; 
+            color: #68769C; 
             font-size: 14px; 
             margin-bottom: 16px;
         }
         .article-excerpt { 
             font-size: 18px; 
-            color: #605e5c; 
+            color: #68769C; 
             margin-bottom: 16px;
         }
         .read-more { 
-            color: ${colorScheme === "primary" ? "#0078d4" : "#107c10"}; 
+            color: ${colorScheme === "primary" ? "#8E9AAF" : "#107c10"}; 
             text-decoration: none; 
             font-weight: 500;
         }
@@ -549,7 +549,7 @@ class FastWireframeGenerator {
         .sidebar h3 { margin-bottom: 16px; }
         .tag { 
             display: inline-block; 
-            background: ${colorScheme === "primary" ? "#0078d4" : "#107c10"}; 
+            background: ${colorScheme === "primary" ? "#8E9AAF" : "#107c10"}; 
             color: white; 
             padding: 4px 8px; 
             border-radius: 4px; 
@@ -624,10 +624,10 @@ class FastWireframeGenerator {
         body { 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             line-height: 1.6;
-            color: #323130;
+            color: #3C4858;
         }
         .header { 
-            background: ${colorScheme === "primary" ? "#0078d4" : "#107c10"}; 
+            background: ${colorScheme === "primary" ? "#8E9AAF" : "#107c10"}; 
             color: white; 
             padding: 40px 20px; 
             text-align: center;
@@ -640,9 +640,9 @@ class FastWireframeGenerator {
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         h1 { margin-bottom: 16px; }
-        p { margin-bottom: 16px; color: #605e5c; }
+        p { margin-bottom: 16px; color: #68769C; }
         .btn { 
-            background: ${colorScheme === "primary" ? "#0078d4" : "#107c10"}; 
+            background: ${colorScheme === "primary" ? "#8E9AAF" : "#107c10"}; 
             color: white; 
             padding: 12px 24px; 
             border: none; 

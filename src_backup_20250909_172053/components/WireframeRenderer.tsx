@@ -56,12 +56,12 @@ const WireframeRenderer: React.FC<WireframeRendererProps> = ({
                 /* Microsoft Learn theme */
                 ${theme === 'microsoftlearn' ? `
                   :root {
-                    --primary: #0078d4;
-                    --secondary: #106ebe;
+                    --primary: #8E9AAF;
+                    --secondary: #68769C;
                     --accent: #50e6ff;
                     --background: #faf9f8;
-                    --text-primary: #323130;
-                    --text-secondary: #605e5c;
+                    --text-primary: #3C4858;
+                    --text-secondary: #68769C;
                     --border: #edebe9;
                   }
                   

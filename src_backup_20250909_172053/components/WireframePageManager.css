@@ -44,18 +44,18 @@
 }
 
 .breadcrumb-item:hover:not(.current) {
-  color: #323130;
+  color: #3C4858;
   text-decoration: underline;
 }
 
 .breadcrumb-item.current {
-  color: #323130;
+  color: #3C4858;
   font-weight: 600;
   cursor: default;
 }
 
 .breadcrumb-item:focus-visible {
-  outline: 2px solid #605e5c;
+  outline: 2px solid #68769C;
   outline-offset: 2px;
 }
 
@@ -80,7 +80,7 @@
   border-radius: 4px;
   padding: 6px 12px;
   font-size: 14px;
-  color: #323130;
+  color: #3C4858;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
@@ -101,19 +101,19 @@
 }
 
 .nav-button.primary {
-  background-color: #0078d4;
-  border-color: #0078d4;
+  background-color: #8E9AAF;
+  border-color: #8E9AAF;
   color: #ffffff;
 }
 
 .nav-button.primary:hover:not(:disabled) {
-  background-color: #106ebe;
-  border-color: #106ebe;
+  background-color: #68769C;
+  border-color: #68769C;
 }
 
 .page-indicator {
   font-size: 12px;
-  color: #605e5c;
+  color: #68769C;
   background-color: #f3f2f1;
   padding: 4px 8px;
   border-radius: 12px;
@@ -155,7 +155,7 @@
 .click-indicator {
   position: absolute;
   background-color: rgba(0, 120, 212, 0.1);
-  border: 2px dashed #0078d4;
+  border: 2px dashed #8E9AAF;
   border-radius: 4px;
   pointer-events: none;
   z-index: 1000;
@@ -164,12 +164,12 @@
 
 .click-indicator.hover {
   background-color: rgba(0, 120, 212, 0.2);
-  border-color: #106ebe;
+  border-color: #68769C;
 }
 
 .click-tooltip {
   position: absolute;
-  background-color: #323130;
+  background-color: #3C4858;
   color: #ffffff;
   padding: 6px 8px;
   border-radius: 4px;
@@ -187,7 +187,7 @@
   left: 50%;
   transform: translateX(-50%);
   border: 4px solid transparent;
-  border-top-color: #323130;
+  border-top-color: #3C4858;
 }
 
 /* Page overlay for linked elements */
@@ -201,7 +201,7 @@
   position: absolute;
   top: -8px;
   right: -8px;
-  background-color: #0078d4;
+  background-color: #8E9AAF;
   color: white;
   border-radius: 50%;
   width: 16px;
@@ -246,15 +246,15 @@
 .page-list-title {
   font-size: 14px;
   font-weight: 500;
-  color: #323130;
+  color: #3C4858;
   margin-bottom: 2px;
 }
 
 .page-list-meta {
   font-size: 12px;
-  color: #605e5c;
+  color: #68769C;
 }
 
 .page-list-parent {
-  color: #0078d4;
+  color: #8E9AAF;
 }

@@ -192,7 +192,7 @@ const LayoutManager: React.FC<LayoutManagerProps> = ({
                             🔒 Lock Layout
                         </button>
                         <div className="edit-mode-indicator">
-                            ✏️ Edit Mode Active
+                            Edit Mode Active
                         </div>
                     </div>
                 </div>

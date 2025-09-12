@@ -14,6 +14,7 @@ import {
     FiRotateCw,
     FiCpu,
     FiClock,
+    FiInfo,
     FiPause,
     FiPlay
 } from 'react-icons/fi';
@@ -39,8 +40,9 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
     onTokensExtracted,
     onFileProcessed
 }) => {
-    const [activeTab, setActiveTab] = useState<'url' | 'upload' | 'live'>('url');
+    const [activeTab, setActiveTab] = useState<'connect' | 'url' | 'upload' | 'live'>('connect');
     const [isConnected, setIsConnected] = useState(false);
+    const [authStatus, setAuthStatus] = useState<any>(null);
     const [accessToken, setAccessToken] = useState('');
     const [figmaUrl, setFigmaUrl] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -53,6 +55,115 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
     const [liveSyncEnabled, setLiveSyncEnabled] = useState(false);
     const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null);
     const [conversionProgress, setConversionProgress] = useState(0);
+
+    // Check OAuth status on component mount
+    useEffect(() => {
+        if (isOpen) {
+            checkOAuthStatus();
+        }
+    }, [isOpen]);
+
+    // Check existing OAuth connection status
+    const checkOAuthStatus = useCallback(async () => {
+        try {
+            const response = await fetch('http://localhost:7072/api/figmaOAuthStart');
+
+            if (!response.ok) {
+                const errorData = await response.json();
+
+                if (errorData.status === 'oauth_not_configured') {
+                    // OAuth is not configured, disable OAuth features and switch to manual tab
+                    setAuthStatus({
+                        status: 'oauth_not_configured',
+                        message: 'OAuth2 not configured - using manual token mode',
+                        error: errorData.message
+                    });
+                    setIsConnected(false);
+                    // Keep the connect tab active so users can see manual token input
+                    setActiveTab('connect');
+                    return;
+                }
+
+                throw new Error(errorData.error || 'OAuth status check failed');
+            }
+
+            const data = await response.json();
+            setAuthStatus(data);
+
+            if (data.status === 'already_authorized') {
+                setIsConnected(true);
+                setSuccess(`🔗 Already connected to Figma! Welcome back, ${data.user?.email || 'User'}`);
+                // Show connect tab when already authorized
+                setActiveTab('connect');
+            } else {
+                setIsConnected(false);
+                // Show connect tab when OAuth is configured but not authorized
+                setActiveTab('connect');
+            }
+        } catch (error) {
+            console.error('Error checking OAuth status:', error);
+            setAuthStatus({
+                status: 'oauth_error',
+                message: 'OAuth connection unavailable - using manual token mode',
+                error: error.message
+            });
+            setIsConnected(false);
+            // Default to connect tab when there are OAuth connection issues (manual token available there)
+            setActiveTab('connect');
+        }
+    }, []);    // Start OAuth flow
+    const handleOAuthConnect = useCallback(async () => {
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            // Get authorization URL from backend
+            const response = await fetch('http://localhost:7072/api/figmaOAuthStart', {
+                method: 'POST'
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+
+                if (errorData.status === 'oauth_not_configured') {
+                    setError('⚠️ OAuth is not configured. Please use the Manual Token section below to connect to Figma.');
+                    // Stay on connect tab where manual token input is available
+                    setActiveTab('connect');
+                    return;
+                }
+
+                throw new Error(errorData.error || 'Failed to get authorization URL');
+            }
+
+            const data = await response.json(); if (data.auth_url) {
+                // Open OAuth window
+                const authWindow = window.open(
+                    data.auth_url,
+                    'figma-oauth',
+                    'width=600,height=700,scrollbars=yes,resizable=yes'
+                );
+
+                // Poll for window closure or success
+                const pollTimer = setInterval(() => {
+                    if (authWindow?.closed) {
+                        clearInterval(pollTimer);
+                        // Re-check status after OAuth window closes
+                        setTimeout(() => {
+                            checkOAuthStatus();
+                        }, 1000);
+                    }
+                }, 1000);
+
+                setSuccess('🚀 Opening Figma OAuth window. Please authorize the application.');
+            } else {
+                setError('Failed to get authorization URL from backend');
+            }
+        } catch (error) {
+            setError(`OAuth connection failed: ${error.message}`);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [checkOAuthStatus]);
 
     // Clear messages after 5 seconds
     useEffect(() => {
@@ -117,7 +228,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                     <style>
                         body { margin: 0; padding: 20px; font-family: 'Segoe UI', sans-serif; background: #f5f5f5; }
                         .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-                        .header { background: #323130; color: white; padding: 20px; text-align: center; }
+                        .header { background: #3C4858; color: white; padding: 20px; text-align: center; }
                         .content { padding: 20px; text-align: center; }
                         .design-image { max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
                         .metadata { margin-top: 20px; padding: 16px; background: #f8f9fa; border-radius: 6px; }
@@ -359,14 +470,28 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
         setTimeout(() => onClose(), 2000);
     }, [exportFormat, onExport, onClose]);
 
-    const handleDisconnect = useCallback(() => {
-        setIsConnected(false);
-        setAccessToken('');
-        setFrames([]);
-        setSelectedFrames([]);
-        setFigmaUrl('');
-        figmaApi.setAccessToken('');
-        setSuccess('🔓 Disconnected from Figma. Your data has been cleared.');
+    const handleDisconnect = useCallback(async () => {
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            // In a full implementation, you'd call a backend endpoint to revoke tokens
+            // For now, we'll clear the local state and tokens
+            setIsConnected(false);
+            setAccessToken('');
+            setFrames([]);
+            setSelectedFrames([]);
+            setFigmaUrl('');
+            setAuthStatus(null);
+            figmaApi.setAccessToken('');
+
+            setSuccess('🔓 Disconnected from Figma. Your local session has been cleared.');
+            setActiveTab('connect');
+        } catch (error) {
+            setError(`Disconnect failed: ${error.message}`);
+        } finally {
+            setIsLoading(false);
+        }
     }, []);
 
     if (!isOpen) return null;
@@ -420,8 +545,16 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 {/* Tab Navigation */}
                 <div className="figma-tabs">
                     <button
-                        className={`figma-tab ${activeTab === 'url' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('url')}
+                        className={`figma-tab ${activeTab === 'connect' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('connect')}
+                    >
+                        <FiSettings />
+                        Connect
+                    </button>
+                    <button
+                        className={`figma-tab ${activeTab === 'url' ? 'active' : ''} ${!isConnected ? 'disabled' : ''}`}
+                        onClick={() => isConnected && setActiveTab('url')}
+                        disabled={!isConnected}
                     >
                         <FiLink />
                         URL Import
@@ -434,8 +567,9 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                         File Upload
                     </button>
                     <button
-                        className={`figma-tab ${activeTab === 'live' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('live')}
+                        className={`figma-tab ${activeTab === 'live' ? 'active' : ''} ${!isConnected ? 'disabled' : ''}`}
+                        onClick={() => isConnected && setActiveTab('live')}
+                        disabled={!isConnected}
                     >
                         <FiRefreshCw />
                         Live Sync
@@ -456,6 +590,163 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 )}
 
                 <div className="figma-modal-content">
+                    {/* Connect Tab */}
+                    {activeTab === 'connect' && (
+                        <div className="figma-tab-content">
+                            <div className="tab-description">
+                                <h3>🔗 Connect to Figma</h3>
+                                <p>Securely connect your Figma account to import designs with full OAuth2 authentication.</p>
+                            </div>
+
+                            {!isConnected ? (
+                                <div className="figma-connect-section">
+                                    <div className="figma-oauth-info">
+                                        <div className="oauth-feature">
+                                            <FiLink className="feature-icon" />
+                                            <div>
+                                                <h4>Secure OAuth2 Connection</h4>
+                                                <p>Connect using Figma's official OAuth2 flow. We never store your password.</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="oauth-feature">
+                                            <FiLayers className="feature-icon" />
+                                            <div>
+                                                <h4>Full File Access</h4>
+                                                <p>Access your Figma files, extract design tokens, and import components.</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="oauth-feature">
+                                            <FiRefreshCw className="feature-icon" />
+                                            <div>
+                                                <h4>Real-time Sync</h4>
+                                                <p>Keep your wireframes in sync with Figma file changes automatically.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="figma-connect-actions">
+                                        {/* Show OAuth button only if OAuth is configured */}
+                                        {authStatus?.status !== 'oauth_not_configured' && (
+                                            <button
+                                                className="figma-btn figma-btn-primary oauth-btn"
+                                                onClick={handleOAuthConnect}
+                                                disabled={isLoading}
+                                            >
+                                                {isLoading ? (
+                                                    <>
+                                                        <FiRefreshCw className="spinning" />
+                                                        Connecting...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <FiExternalLink />
+                                                        Connect with Figma OAuth
+                                                    </>
+                                                )}
+                                            </button>
+                                        )}
+
+                                        {/* Show OAuth not available message if not configured */}
+                                        {authStatus?.status === 'oauth_not_configured' && (
+                                            <div className="oauth-not-available">
+                                                <div className="info-message">
+                                                    <FiInfo className="info-icon" />
+                                                    <div>
+                                                        <h4>OAuth Not Configured</h4>
+                                                        <p>OAuth2 authentication is not set up. Please use the manual token method below.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        <div className="oauth-alternative">
+                                            <span className="oauth-divider">or</span>
+
+                                            <div className="manual-token-section">
+                                                <h4>Manual Token Connection</h4>
+                                                <p className="token-description">
+                                                    Have a Figma personal access token? You can connect manually:
+                                                </p>
+
+                                                <div className="figma-input-group">
+                                                    <label htmlFor="manual-token">Figma Personal Access Token</label>
+                                                    <input
+                                                        id="manual-token"
+                                                        type="password"
+                                                        placeholder="figd_..."
+                                                        value={accessToken}
+                                                        onChange={(e) => setAccessToken(e.target.value)}
+                                                        className="figma-input"
+                                                    />
+                                                    <small className="token-help">
+                                                        Get your token from <a href="https://www.figma.com/developers/api#access-tokens" target="_blank" rel="noopener noreferrer">Figma Settings</a>
+                                                    </small>
+                                                </div>
+
+                                                <button
+                                                    className="figma-btn figma-btn-outline"
+                                                    onClick={handleConnect}
+                                                    disabled={isLoading || !accessToken.trim()}
+                                                >
+                                                    {isLoading ? <FiRefreshCw className="spinning" /> : <FiLink />}
+                                                    Connect with Token
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="figma-connected-section">
+                                    <div className="connection-success">
+                                        <FiCheck className="success-icon" />
+                                        <div className="connection-details">
+                                            <h4>Successfully Connected!</h4>
+                                            {authStatus?.user && (
+                                                <p>Connected as: <strong>{authStatus.user.email || authStatus.user.handle}</strong></p>
+                                            )}
+                                            {authStatus?.expires_at && (
+                                                <p className="token-expiry">
+                                                    Token expires: {new Date(authStatus.expires_at).toLocaleDateString()}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="connected-actions">
+                                        <div className="action-grid">
+                                            <button
+                                                className="figma-btn figma-btn-primary"
+                                                onClick={() => setActiveTab('url')}
+                                            >
+                                                <FiLink />
+                                                Import from URL
+                                            </button>
+
+                                            <button
+                                                className="figma-btn figma-btn-primary"
+                                                onClick={() => setActiveTab('live')}
+                                            >
+                                                <FiRefreshCw />
+                                                Setup Live Sync
+                                            </button>
+                                        </div>
+
+                                        <button
+                                            className="figma-btn figma-btn-danger disconnect-btn"
+                                            onClick={handleDisconnect}
+                                            disabled={isLoading}
+                                        >
+                                            {isLoading ? <FiRefreshCw className="spinning" /> : <FiX />}
+                                            Disconnect
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
                     {/* URL Import Tab */}
                     {activeTab === 'url' && (
                         <div className="figma-tab-content">

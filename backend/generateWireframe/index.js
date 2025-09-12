@@ -1,6 +1,8 @@
 const { MinimalWireframeGenerator } = require("./minimal-wireframe-generator");
 const { TemplateManager, selectTemplate } = require("../template-manager");
 const crypto = require("crypto");
+// Import centralized color configuration
+const { WIREFRAME_COLORS } = require("../config/colors");
 
 // Initialize Minimal Generator and Template Manager
 const minimalGenerator = new MinimalWireframeGenerator();
@@ -110,13 +112,13 @@ async function generateWireframeFromDescription(
             box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
         }
         .title { 
-            color: #0078d4; 
+            color: ${WIREFRAME_COLORS.primary}; 
             font-size: 24px; 
             font-weight: bold; 
             margin-bottom: 20px; 
         }
         .button { 
-            background: #0078d4; 
+            background: ${WIREFRAME_COLORS.secondary}; 
             color: white; 
             padding: 12px 24px; 
             border: none; 
@@ -126,14 +128,14 @@ async function generateWireframeFromDescription(
             margin: 10px 5px;
         }
         .button:hover {
-            background: #106ebe;
+            background: ${WIREFRAME_COLORS.hover};
         }
         .card {
-            background: #f8f9fa;
+            background: ${WIREFRAME_COLORS.surface};
             padding: 20px;
             border-radius: 6px;
             margin: 15px 0;
-            border-left: 4px solid #0078d4;
+            border-left: 4px solid ${WIREFRAME_COLORS.primary};
         }
     </style>
 </head>
@@ -145,7 +147,7 @@ async function generateWireframeFromDescription(
             <p><strong>Description:</strong> ${description}</p>
         </div>
         <button class="button">Primary Action</button>
-        <button class="button" style="background: #6c757d;">Secondary Action</button>
+        <button class="button" style="background: ${WIREFRAME_COLORS.secondary};">Secondary Action</button>
     </div>
 </body>
 </html>`,
@@ -174,12 +176,40 @@ async function generateWireframeFromImageAnalysis(
       layoutType: imageAnalysis.layout?.type,
     });
 
-    // Extract components and their properties
+    // Extract components and their properties WITH EXACT COLORS
     const components = imageAnalysis.components || [];
     const layout = imageAnalysis.layout || { type: "grid", columns: 12 };
     const designTokens = imageAnalysis.designTokens || {};
-    const colors = designTokens.colors || ["#0078d4", "#ffffff", "#323130"];
+
+    // Use EXACT colors from analysis, or neutral wireframe fallbacks
+    const analyzedColors = designTokens.colors || [];
+    const colors =
+      analyzedColors.length > 0
+        ? analyzedColors
+        : ["#8E9AAF", "#FFFFFF", "#3C4858"]; // Neutral wireframe colors from your palette
     const fonts = designTokens.fonts || ["Segoe UI", "Arial", "sans-serif"];
+
+    // Extract unique colors from component properties
+    const componentColors = components.reduce((acc, comp) => {
+      const props = comp.properties || {};
+      if (props.backgroundColor) acc.add(props.backgroundColor);
+      if (props.textColor) acc.add(props.textColor);
+      if (props.borderColor) acc.add(props.borderColor);
+      if (props.color) acc.add(props.color);
+      return acc;
+    }, new Set());
+
+    const allColors = [...componentColors, ...colors];
+    const primaryColor = allColors[0] || "#8E9AAF"; // Medium blue-gray from your palette
+    const secondaryColor = allColors[1] || "#FFFFFF";
+    const textColor = allColors[2] || "#3C4858"; // Dark slate text for readability
+
+    logger.info("🎨 Using extracted colors", {
+      correlationId,
+      analyzedColors: analyzedColors,
+      componentColors: Array.from(componentColors),
+      finalColors: [primaryColor, secondaryColor, textColor],
+    });
 
     // Build component HTML from analysis
     let htmlContent = "";
@@ -217,7 +247,7 @@ async function generateWireframeFromImageAnalysis(
       htmlContent += `    <div class="row row-${rowIndex}">\n`;
 
       row.forEach((component, colIndex) => {
-        const componentHtml = generateComponentHtml(component, colors);
+        const componentHtml = generateComponentHtml(component, allColors);
         htmlContent += `      ${componentHtml}\n`;
       });
 
@@ -234,11 +264,11 @@ async function generateWireframeFromImageAnalysis(
     <link href="https://cdn.jsdelivr.net/npm/@fluentui/web-components/dist/web-components.min.js" rel="module">
     <style>
         :root {
-            --primary-color: ${colors[0] || "#0078d4"};
-            --secondary-color: ${colors[1] || "#ffffff"};
-            --text-color: ${colors[2] || "#323130"};
-            --accent-color: ${colors[3] || "#107c10"};
-            --background-color: ${colors[4] || "#faf9f8"};
+            --primary-color: ${primaryColor};
+            --secondary-color: ${secondaryColor};
+            --text-color: ${textColor};
+            --accent-color: ${allColors[3] || "#107c10"};
+            --background-color: ${allColors[4] || "#faf9f8"};
         }
         
         * {
@@ -301,7 +331,7 @@ async function generateWireframeFromImageAnalysis(
         }
         
         .button:hover {
-            background-color: #106ebe;
+            background-color: #68769C;
         }
         
         .button.secondary {
@@ -482,37 +512,53 @@ function generateComponentHtml(component, colors) {
   const type = component.type || "text";
   const properties = component.properties || {};
 
+  // Use actual colors from analysis
+  const bgColor =
+    properties.backgroundColor || properties.color || colors[0] || "#8E9AAF";
+  const textColor = properties.textColor || "#ffffff";
+  const borderColor = properties.borderColor || bgColor;
+  const fontSize = properties.fontSize || "14px";
+  const fontWeight = properties.fontWeight || "400";
+
+  const componentStyle = `
+    background-color: ${bgColor};
+    color: ${textColor};
+    border: 1px solid ${borderColor};
+    font-size: ${fontSize};
+    font-weight: ${fontWeight};
+  `.trim();
+
   switch (type.toLowerCase()) {
     case "button":
       const buttonStyle = properties.style || "primary";
-      const buttonClass =
-        buttonStyle === "secondary" ? "button secondary" : "button";
-      return `<button class="component ${buttonClass}">${
-        text || "Button"
-      }</button>`;
+      const actualText = text || "Button";
+      return `<button class="component button" style="${componentStyle}">${actualText}</button>`;
 
     case "input":
     case "textbox":
     case "text input":
-      return `<input type="text" class="component input" placeholder="${
-        text || "Enter text..."
-      }" />`;
+      const placeholderText = text || "Enter text...";
+      return `<input type="text" class="component input" style="${componentStyle}" placeholder="${placeholderText}" />`;
 
     case "text":
     case "label":
-      return `<span class="component text">${text || "Text content"}</span>`;
+      const displayText = text || "Text content";
+      return `<span class="component text" style="${componentStyle}">${displayText}</span>`;
 
     case "heading":
     case "title":
     case "h1":
     case "h2":
     case "h3":
-      return `<h2 class="component text heading">${text || "Heading"}</h2>`;
+      const headingText = text || "Heading";
+      const headingWeight = properties.fontWeight || "600";
+      return `<h2 class="component text heading" style="${componentStyle}; font-weight: ${headingWeight};">${headingText}</h2>`;
 
     case "card":
-      return `<div class="component card">
-        <h3>${text || "Card Title"}</h3>
-        <p>Card content goes here...</p>
+      const cardTitle = text || "Card Title";
+      return `<div class="component card" style="background: ${bgColor}; border: 1px solid ${borderColor}; color: ${textColor};">
+        <h3 style="color: ${textColor};">${cardTitle}</h3>
+        <p style="color: ${textColor};">Card content goes here...</p>
       </div>`;
 
     case "navigation":
@@ -521,30 +567,35 @@ function generateComponentHtml(component, colors) {
         ? text.split(/[,|]/).map((item) => item.trim())
         : ["Home", "About", "Contact"];
       const navLinks = navItems
-        .map((item) => `<a href="#" class="nav-link">${item}</a>`)
+        .map(
+          (item) =>
+            `<a href="#" class="nav-link" style="color: ${textColor};">${item}</a>`
+        )
         .join("\n        ");
-      return `<nav class="component navigation">
-        <div class="logo">Logo</div>
+      return `<nav class="component navigation" style="${componentStyle}">
+        <div class="logo" style="color: ${textColor};">Logo</div>
         ${navLinks}
       </nav>`;
 
     case "image":
     case "img":
-      return `<div class="component image-placeholder">
-        ${text || "[Image placeholder]"}
+      const imageText = text || "[Image placeholder]";
+      return `<div class="component image-placeholder" style="${componentStyle}">
+        ${imageText}
       </div>`;
 
     case "form":
-      return `<form class="component form">
+      return `<form class="component form" style="${componentStyle}">
         <div class="form-group">
-          <label class="label">Form field</label>
+          <label class="label" style="color: ${textColor};">Form field</label>
           <input type="text" class="input" placeholder="Enter value..." />
         </div>
         <button type="submit" class="button">Submit</button>
       </form>`;
 
     default:
-      return `<div class="component text">${text || `${type} component`}</div>`;
+      const defaultText = text || `${type} component`;
+      return `<div class="component text" style="${componentStyle}">${defaultText}</div>`;
   }
 }
 

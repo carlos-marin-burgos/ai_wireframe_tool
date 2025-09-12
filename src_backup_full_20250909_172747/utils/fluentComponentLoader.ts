@@ -168,16 +168,16 @@ class FluentComponentLoader {
 }
 
 .fluent-button-primary {
-  background: #0078d4;
+  background: #8E9AAF;
   color: white;
 }
 
 .fluent-button-primary:hover {
-  background: #106ebe;
+  background: #68769C;
 }
 
 .fluent-button-primary:active {
-  background: #005a9e;
+  background: #68769C;
 }`,
         tags: ["button", "primary", "action"],
         icon: "button",
@@ -214,12 +214,12 @@ class FluentComponentLoader {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
 }
 
 .fluent-card-content {
   padding: 12px 16px;
-  color: #605e5c;
+  color: #68769C;
 }
 
 .fluent-card-actions {

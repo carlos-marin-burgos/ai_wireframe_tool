@@ -75,13 +75,13 @@ async function generateWireframeFromDescription(
             box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
         }
         .title { 
-            color: #0078d4; 
+            color: #8E9AAF; 
             font-size: 24px; 
             font-weight: bold; 
             margin-bottom: 20px; 
         }
         .button { 
-            background: #0078d4; 
+            background: #8E9AAF; 
             color: white; 
             padding: 12px 24px; 
             border: none; 
@@ -91,14 +91,14 @@ async function generateWireframeFromDescription(
             margin: 10px 5px;
         }
         .button:hover {
-            background: #106ebe;
+            background: #68769C;
         }
         .card {
             background: #f8f9fa;
             padding: 20px;
             border-radius: 6px;
             margin: 15px 0;
-            border-left: 4px solid #0078d4;
+            border-left: 4px solid #8E9AAF;
         }
     </style>
 </head>

@@ -65,7 +65,7 @@
   margin: 0;
   font-size: 20px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -95,7 +95,7 @@
   border: none;
   font-size: 24px;
   cursor: pointer;
-  color: #605e5c;
+  color: #68769C;
   padding: 4px;
   border-radius: 4px;
   transition: all 0.2s ease;
@@ -108,7 +108,7 @@
 
 .close-button:hover {
   background-color: #f3f2f1;
-  color: #323130;
+  color: #3C4858;
 }
 
 /* Modal Animations */
@@ -149,25 +149,25 @@
 }
 
 .modal-button-primary {
-  background: #0078d4;
+  background: #8E9AAF;
   color: white;
-  border-color: #0078d4;
+  border-color: #8E9AAF;
 }
 
 .modal-button-primary:hover {
-  background: #106ebe;
-  border-color: #106ebe;
+  background: #68769C;
+  border-color: #68769C;
 }
 
 .modal-button-secondary {
   background: white;
-  color: #323130;
+  color: #3C4858;
   border-color: #8a8886;
 }
 
 .modal-button-secondary:hover {
   background: #f3f2f1;
-  border-color: #605e5c;
+  border-color: #68769C;
 }
 
 .modal-button-danger {
@@ -213,7 +213,7 @@
 }
 
 .modal-content:focus {
-  outline: 2px solid #0078d4;
+  outline: 2px solid #8E9AAF;
   outline-offset: 2px;
 }
 
@@ -223,14 +223,14 @@
   align-items: center;
   justify-content: center;
   padding: 40px;
-  color: #605e5c;
+  color: #68769C;
 }
 
 .modal-loading-spinner {
   width: 20px;
   height: 20px;
   border: 2px solid #f3f2f1;
-  border-top: 2px solid #0078d4;
+  border-top: 2px solid #8E9AAF;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-right: 12px;

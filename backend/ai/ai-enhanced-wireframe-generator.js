@@ -259,10 +259,10 @@ class AIEnhancedWireframeGenerator {
     <style>
         :root {
             --primary-color: ${
-              colorScheme === "primary" ? "#0078d4" : "#107c10"
+              colorScheme === "primary" ? "#8E9AAF" : "#107c10"
             };
             --secondary-color: #f3f2f1;
-            --text-color: #323130;
+            --text-color: #3C4858;
             --border-color: #edebe9;
         }
         
@@ -334,7 +334,7 @@ class AIEnhancedWireframeGenerator {
         .hero {
             text-align: center;
             padding: 60px 20px;
-            background: linear-gradient(135deg, var(--primary-color), #106ebe);
+            background: linear-gradient(135deg, var(--primary-color), #68769C);
             color: white;
             border-radius: 12px;
             margin-bottom: 40px;

@@ -68,12 +68,12 @@
   align-items: center;
   padding: 20px 24px;
   border-bottom: 1px solid #e1dfdd;
-  background: #f8f9fa;
+  background: #E9ECEF;
 }
 
 .modal-header h2 {
   margin: 0;
-  color: #323130;
+  color: #3C4858;
   font-size: 20px;
   font-weight: 600;
 }
@@ -82,7 +82,7 @@
   background: none;
   border: none;
   font-size: 24px;
-  color: #605e5c;
+  color: #68769C;
   cursor: pointer;
   padding: 0;
   width: 32px;
@@ -115,30 +115,30 @@
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  color: #605e5c;
+  color: #68769C;
   border-bottom: 2px solid transparent;
   transition: all 0.2s;
 }
 
 .tab-btn.active {
-  color: #0078d4;
-  border-bottom-color: #0078d4;
+  color: #8E9AAF;
+  border-bottom-color: #8E9AAF;
 }
 
 .tab-btn:hover {
-  color: #0078d4;
+  color: #8E9AAF;
 }
 
 .import-section h3 {
   margin: 0 0 8px 0;
-  color: #323130;
+  color: #3C4858;
   font-size: 18px;
   font-weight: 600;
 }
 
 .import-section p {
   margin: 0 0 20px 0;
-  color: #605e5c;
+  color: #68769C;
   line-height: 1.5;
 }
 
@@ -159,13 +159,13 @@
 
 .figma-url-input:focus {
   outline: none;
-  border-color: #0078d4;
+  border-color: #8E9AAF;
   box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
 }
 
 .import-btn {
   padding: 12px 24px;
-  background: #0078d4;
+  background: #8E9AAF;
   color: white;
   border: none;
   border-radius: 6px;
@@ -177,7 +177,7 @@
 }
 
 .import-btn:hover:not(:disabled) {
-  background: #005a9e;
+  background: #68769C;
 }
 
 .import-btn:disabled {
@@ -208,7 +208,7 @@
 }
 
 .upload-zone:hover {
-  border-color: #0078d4;
+  border-color: #8E9AAF;
   background: #f3f9ff;
 }
 
@@ -220,13 +220,13 @@
 .upload-zone > div:nth-child(2) {
   font-size: 16px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
   margin-bottom: 4px;
 }
 
 .upload-hint {
   font-size: 14px;
-  color: #605e5c;
+  color: #68769C;
 }
 
 /* Status Messages */
@@ -285,7 +285,7 @@
 .link-btn {
   background: none;
   border: none;
-  color: #0078d4;
+  color: #8E9AAF;
   cursor: pointer;
   text-decoration: underline;
   font-size: inherit;
@@ -293,20 +293,20 @@
 }
 
 .link-btn:hover {
-  color: #005a9e;
+  color: #68769C;
 }
 
 /* Connect Account Section */
 .connect-section h3 {
   margin: 0 0 8px 0;
-  color: #323130;
+  color: #3C4858;
   font-size: 18px;
   font-weight: 600;
 }
 
 .connect-section p {
   margin: 0 0 24px 0;
-  color: #605e5c;
+  color: #68769C;
   line-height: 1.5;
 }
 
@@ -325,7 +325,7 @@
 .input-group label {
   font-size: 14px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
 }
 
 .token-input {
@@ -338,17 +338,17 @@
 
 .token-input:focus {
   outline: none;
-  border-color: #0078d4;
+  border-color: #8E9AAF;
   box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
 }
 
 .input-hint {
   font-size: 12px;
-  color: #605e5c;
+  color: #68769C;
 }
 
 .input-hint a {
-  color: #0078d4;
+  color: #8E9AAF;
   text-decoration: none;
 }
 
@@ -358,7 +358,7 @@
 
 .connect-btn {
   padding: 12px 24px;
-  background: #0078d4;
+  background: #8E9AAF;
   color: white;
   border: none;
   border-radius: 6px;
@@ -370,7 +370,7 @@
 }
 
 .connect-btn:hover:not(:disabled) {
-  background: #005a9e;
+  background: #68769C;
 }
 
 .connect-btn:disabled {
@@ -408,7 +408,7 @@
 
 .connection-success p {
   margin: 0;
-  color: #323130;
+  color: #3C4858;
   font-size: 14px;
 }
 
@@ -419,7 +419,7 @@
 
 .primary-btn {
   padding: 12px 24px;
-  background: #0078d4;
+  background: #8E9AAF;
   color: white;
   border: none;
   border-radius: 6px;
@@ -430,13 +430,13 @@
 }
 
 .primary-btn:hover {
-  background: #005a9e;
+  background: #68769C;
 }
 
 .secondary-btn {
   padding: 12px 24px;
   background: transparent;
-  color: #323130;
+  color: #3C4858;
   border: 1px solid #e1dfdd;
   border-radius: 6px;
   font-size: 14px;
@@ -529,7 +529,7 @@
 .status-message {
   font-weight: 600;
   margin-bottom: 8px;
-  color: #212529;
+  color: #3C4858;
 }
 
 .status-close {
@@ -540,14 +540,14 @@
   border: none;
   font-size: 16px;
   cursor: pointer;
-  color: #6c757d;
+  color: #68769C;
   padding: 4px;
   border-radius: 4px;
   transition: background-color 0.2s;
 }
 
 .status-close:hover {
-  background: #f8f9fa;
+  background: #E9ECEF;
 }
 
 .status-details {

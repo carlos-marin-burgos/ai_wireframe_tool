@@ -44,7 +44,7 @@
 
 .modal-header h2 {
   margin: 0;
-  color: #323130;
+  color: #3C4858;
   font-size: 20px;
   font-weight: 600;
 }
@@ -54,14 +54,14 @@
   border: none;
   font-size: 20px;
   cursor: pointer;
-  color: #6c757d;
+  color: #68769C;
   padding: 8px;
   border-radius: 4px;
   transition: background-color 0.2s;
 }
 
 .close-button:hover {
-  background: #f8f9fa;
+  background: #E9ECEF;
   color: #495057;
 }
 
@@ -71,7 +71,7 @@
 
 .import-method-selection h3 {
   margin: 0 0 24px 0;
-  color: #323130;
+  color: #3C4858;
   font-size: 16px;
   font-weight: 600;
 }
@@ -108,14 +108,14 @@
 
 .method-info h4 {
   margin: 0 0 4px 0;
-  color: #323130;
+  color: #3C4858;
   font-size: 16px;
   font-weight: 600;
 }
 
 .method-info p {
   margin: 0;
-  color: #6c757d;
+  color: #68769C;
   font-size: 14px;
 }
 
@@ -127,7 +127,7 @@
 .url-import-section h3,
 .file-import-section h3 {
   margin: 0 0 20px 0;
-  color: #323130;
+  color: #3C4858;
   font-size: 16px;
   font-weight: 600;
 }
@@ -188,7 +188,7 @@
 .back-button {
   background: none;
   border: 1px solid #ced4da;
-  color: #6c757d;
+  color: #68769C;
   padding: 8px 16px;
   border-radius: 6px;
   font-size: 14px;
@@ -197,7 +197,7 @@
 }
 
 .back-button:hover {
-  background: #f8f9fa;
+  background: #E9ECEF;
   border-color: #adb5bd;
   color: #495057;
 }
@@ -221,7 +221,7 @@
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s;
-  background: #f8f9fa;
+  background: #E9ECEF;
 }
 
 .file-upload-label:hover {
@@ -237,14 +237,14 @@
 
 .upload-text h4 {
   margin: 0 0 4px 0;
-  color: #323130;
+  color: #3C4858;
   font-size: 16px;
   font-weight: 600;
 }
 
 .upload-text p {
   margin: 0;
-  color: #6c757d;
+  color: #68769C;
   font-size: 14px;
 }
 

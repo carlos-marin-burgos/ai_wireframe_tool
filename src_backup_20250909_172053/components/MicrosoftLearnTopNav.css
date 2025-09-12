@@ -3,9 +3,9 @@
 /* Microsoft Learn Color Palette */
 :root {
   /* Primary Microsoft Colors */
-  --ms-color-primary: #0078d4;
-  --ms-color-primary-hover: #106ebe;
-  --ms-color-primary-active: #005a9e;
+  --ms-color-primary: #8E9AAF;
+  --ms-color-primary-hover: #68769C;
+  --ms-color-primary-active: #68769C;
   --ms-color-primary-dark: #004578;
 
   /* Microsoft Learn Brand Colors */
@@ -27,8 +27,8 @@
   --ms-color-nav-border: #e1e1e1;
   --ms-color-text-primary: #1a1a1a;
   --ms-color-text-secondary: #5c5c5c;
-  --ms-color-text-link: #0078d4;
-  --ms-color-text-link-hover: #106ebe;
+  --ms-color-text-link: #8E9AAF;
+  --ms-color-text-link-hover: #68769C;
 
   /* Shadows */
   --ms-shadow-nav: 0 2px 4px rgba(0, 0, 0, 0.1);

@@ -125,7 +125,7 @@ const DemoImageSelector: React.FC<DemoImageSelectorProps> = ({
             </div>
 
             <div className="demo-note">
-                <p>💡 These are pre-configured wireframes for quick demonstrations. Each generates a different layout type with Microsoft's #e8e6df hero styling.</p>
+                <p>💡 These are pre-configured wireframes for quick demonstrations. Each generates a different layout type with Microsoft's #E9ECEF hero styling.</p>
             </div>
         </div>
     );

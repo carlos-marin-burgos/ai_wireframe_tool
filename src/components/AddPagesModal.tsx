@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FiX, FiCopy, FiTrash2 } from 'react-icons/fi';
 import './AddPagesModal.css';
+import { sanitizeGeneratedHtml, sanitizeGeneratedHtmlWithInlining } from '../utils/sanitizeGeneratedHtml';
 
 interface Page {
     id: string;
@@ -17,6 +18,123 @@ interface AddPagesModalProps {
     existingPages?: Page[];
     onGeneratePageContent?: (description: string, pageType: string) => Promise<string>; // New prop for AI generation
 }
+
+// Component for async preview rendering with CSS inlining
+const PagePreview: React.FC<{ page: Page; isExistingPage: boolean }> = ({ page, isExistingPage }) => {
+    const [previewData, setPreviewData] = useState<{
+        html: string;
+        styles: string;
+        hasContent: boolean;
+        isBlankContent: boolean;
+    }>({ html: '', styles: '', hasContent: false, isBlankContent: true });
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        const loadPreview = async () => {
+            if (!page.htmlContent) {
+                setPreviewData({ html: '', styles: '', hasContent: false, isBlankContent: true });
+                return;
+            }
+
+            setIsLoading(true);
+            try {
+                // Try inlining CSS first, fallback to regular sanitization
+                const sanitized = await sanitizeGeneratedHtmlWithInlining(page.htmlContent, true);
+                const pageContent = sanitized.html;
+                const hasContent = Boolean(pageContent && pageContent.trim());
+                const isBlankContent = !hasContent || pageContent.trim() === '<p>No content available</p>' || pageContent.includes('No content available');
+
+                console.log(`🖼️ Preview for ${page.name} (with inlining):`, {
+                    id: page.id,
+                    hasContent,
+                    isBlankContent,
+                    contentLength: pageContent?.length || 0,
+                    stylesLength: sanitized.styles?.length || 0,
+                    inlinedLength: sanitized.inlinedStyles?.length || 0,
+                    hasExternalLinks: (sanitized.links?.length || 0) > 0,
+                    hasInlineStyles: pageContent?.includes('style=') || false
+                });
+
+                setPreviewData({
+                    html: pageContent,
+                    styles: sanitized.styles || '',
+                    hasContent,
+                    isBlankContent
+                });
+            } catch (error) {
+                console.warn(`Failed to inline CSS for ${page.name}, using fallback:`, error);
+                // Fallback to regular sanitization
+                const sanitized = sanitizeGeneratedHtml(page.htmlContent, true);
+                const pageContent = sanitized.html;
+                const hasContent = Boolean(pageContent && pageContent.trim());
+                const isBlankContent = !hasContent || pageContent.trim() === '<p>No content available</p>' || pageContent.includes('No content available');
+
+                setPreviewData({
+                    html: pageContent,
+                    styles: sanitized.styles || '',
+                    hasContent,
+                    isBlankContent
+                });
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadPreview();
+    }, [page.htmlContent, page.name, page.id]);
+
+    const { html, styles, hasContent, isBlankContent } = previewData;
+
+    return (
+        <div className="page-preview">
+            <div className="preview-label">
+                {isExistingPage ? 'Current Wireframe:' : 'Generated Content:'}
+                {isLoading && <span className="preview-loading"> (Loading CSS...)</span>}
+            </div>
+            <div className={`preview-container ${isBlankContent ? 'empty' : ''}`}>
+                {hasContent && !isBlankContent ? (
+                    <iframe
+                        srcDoc={`<!DOCTYPE html><html><head><meta charset='utf-8'/><base target="_blank"/><style>
+html,body{margin:0;padding:0;box-sizing:border-box;width:100%;height:100%;overflow:hidden;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;line-height:1.1;font-size:8px;padding:2px;}
+*{max-width:100% !important;animation:none !important;transition:none !important;}
+img{max-width:100%;height:auto;display:block;}
+button,a{pointer-events:none !important;}
+/* Compact mini preview styling - force tighter spacing */
+h1,h2,h3,h4,h5,h6{font-size:12px;margin:1px 0;line-height:1.1;font-weight:600;}
+p{font-size:8px;margin:1px 0;line-height:1.1;}
+div{margin:0 !important;padding:1px 2px !important;}
+section,article,main{margin:0 !important;padding:1px !important;}
+/* Force content to fill space */
+.container,div[style*="max-width"]{max-width:100% !important;width:100% !important;margin:0 !important;}
+div[style*="padding"]{padding:2px 4px !important;}
+div[style*="margin"]{margin:1px 0 !important;}
+/* Override any large dimensions */
+div[style*="height"]{min-height:auto !important;}
+/* Compact forms and inputs */
+input,textarea,button{font-size:7px;padding:1px 2px;margin:0;}
+/* Make headers more compact */
+div[style*="background"][style*="padding"]{padding:2px 4px !important;margin:0 !important;}
+${styles}
+</style></head><body>${html}</body></html>`}
+                        className="wireframe-mini-preview"
+                        title={`${page.name} Preview`}
+                        sandbox="allow-same-origin"
+                    />
+                ) : (
+                    <div className="preview-empty-state">
+                        <div className="preview-empty-icon">
+                            {isExistingPage ? '📄' : '🤖'}
+                        </div>
+                        <div>
+                            {isExistingPage ? 'No content yet' : 'Content will be generated'}
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
 
 const AddPagesModal: React.FC<AddPagesModalProps> = ({
     isOpen,
@@ -80,17 +198,17 @@ const AddPagesModal: React.FC<AddPagesModalProps> = ({
         `;
 
         const headerStyles = `
-            color: #323130; margin: 0 0 24px 0; font-size: 28px; font-weight: 600;
+            color: #3C4858; margin: 0 0 24px 0; font-size: 28px; font-weight: 600;
         `;
 
         const buttonStyles = `
-            background: #0078d4; color: white; border: none; padding: 12px 24px; 
+            background: #8E9AAF; color: white; border: none; padding: 12px 24px; 
             border-radius: 4px; cursor: pointer; font-weight: 600; margin: 8px;
             transition: background-color 0.2s ease;
         `;
 
         const secondaryButtonStyles = `
-            background: #f3f2f1; color: #323130; border: 1px solid #e1dfdd; 
+            background: #f3f2f1; color: #3C4858; border: 1px solid #e1dfdd; 
             padding: 12px 24px; border-radius: 4px; cursor: pointer; margin: 8px;
             transition: background-color 0.2s ease;
         `;
@@ -102,7 +220,7 @@ const AddPagesModal: React.FC<AddPagesModalProps> = ({
 
         // Microsoft Learn hero background (beige accent color)
         const heroStyles = `
-            background: #E8E6DF; 
+            background: #E9ECEF; 
             padding: 60px 40px; border-radius: 12px; margin: 20px 0;
             text-align: center; border: 1px solid #e1dfdd;
         `;
@@ -115,7 +233,7 @@ const AddPagesModal: React.FC<AddPagesModalProps> = ({
                             <div style="${cardStyles} max-width: 500px; position: relative; z-index: 1001;">
                                 <button style="position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
                                 <h2 style="${headerStyles} font-size: 24px;">${name}</h2>
-                                <p style="color: #605e5c; margin: 0 0 24px 0;">${description}</p>
+                                <p style="color: #68769C; margin: 0 0 24px 0;">${description}</p>
                                 <div style="display: flex; gap: 12px; justify-content: flex-end;">
                                     <button style="${secondaryButtonStyles}">Cancel</button>
                                     <button style="${buttonStyles}">Confirm</button>
@@ -130,7 +248,7 @@ const AddPagesModal: React.FC<AddPagesModalProps> = ({
                     <div style="${baseStyles}">
                         <div style="${cardStyles}">
                             <h3 style="${headerStyles} font-size: 20px; margin-bottom: 16px;">${name} Component</h3>
-                            <p style="color: #605e5c; margin: 0 0 20px 0;">${description}</p>
+                            <p style="color: #68769C; margin: 0 0 20px 0;">${description}</p>
                             <div style="border: 2px dashed #e1dfdd; padding: 20px; text-align: center; border-radius: 8px;">
                                 <p style="color: #a19f9d; margin: 0;">Component content goes here</p>
                                 <p style="color: #a19f9d; margin: 8px 0 0 0; font-size: 14px;">Customize this ${type} based on your needs</p>
@@ -148,14 +266,14 @@ const AddPagesModal: React.FC<AddPagesModalProps> = ({
                     return `
                         <div style="${baseStyles}">
                             <h1 style="${headerStyles}">${name}</h1>
-                            <p style="color: #605e5c; margin: 0 0 32px 0;">${description}</p>
+                            <p style="color: #68769C; margin: 0 0 32px 0;">${description}</p>
                             <form style="${cardStyles}">
                                 <div style="margin-bottom: 20px;">
-                                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #323130;">Field Name</label>
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #3C4858;">Field Name</label>
                                     <input type="text" style="width: 100%; padding: 12px; border: 1px solid #e1dfdd; border-radius: 4px; font-size: 16px;" placeholder="Enter value...">
                                 </div>
                                 <div style="margin-bottom: 20px;">
-                                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #323130;">Description</label>
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #3C4858;">Description</label>
                                     <textarea style="width: 100%; padding: 12px; border: 1px solid #e1dfdd; border-radius: 4px; font-size: 16px; min-height: 100px;" placeholder="Enter description..."></textarea>
                                 </div>
                                 <button type="submit" style="${buttonStyles}">Submit</button>
@@ -167,28 +285,28 @@ const AddPagesModal: React.FC<AddPagesModalProps> = ({
                         <div style="${baseStyles}">
                             <div style="${heroStyles}">
                                 <h1 style="${headerStyles} margin-bottom: 16px;">${name}</h1>
-                                <p style="color: #605e5c; margin: 0; font-size: 18px;">${description}</p>
+                                <p style="color: #68769C; margin: 0; font-size: 18px;">${description}</p>
                             </div>
                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 32px;">
                                 <div style="${cardStyles}">
-                                    <h3 style="margin: 0 0 12px 0; color: #323130; font-size: 16px;">Total Users</h3>
-                                    <p style="font-size: 32px; font-weight: bold; margin: 0; color: #0078d4;">1,234</p>
+                                    <h3 style="margin: 0 0 12px 0; color: #3C4858; font-size: 16px;">Total Users</h3>
+                                    <p style="font-size: 32px; font-weight: bold; margin: 0; color: #8E9AAF;">1,234</p>
                                     <p style="font-size: 14px; color: #107c10; margin: 8px 0 0 0;">↗ +12% vs last month</p>
                                 </div>
                                 <div style="${cardStyles}">
-                                    <h3 style="margin: 0 0 12px 0; color: #323130; font-size: 16px;">Active Sessions</h3>
-                                    <p style="font-size: 32px; font-weight: bold; margin: 0; color: #0078d4;">5,678</p>
+                                    <h3 style="margin: 0 0 12px 0; color: #3C4858; font-size: 16px;">Active Sessions</h3>
+                                    <p style="font-size: 32px; font-weight: bold; margin: 0; color: #8E9AAF;">5,678</p>
                                     <p style="font-size: 14px; color: #107c10; margin: 8px 0 0 0;">↗ +8% vs last month</p>
                                 </div>
                                 <div style="${cardStyles}">
-                                    <h3 style="margin: 0 0 12px 0; color: #323130; font-size: 16px;">Completion Rate</h3>
-                                    <p style="font-size: 32px; font-weight: bold; margin: 0; color: #0078d4;">87%</p>
+                                    <h3 style="margin: 0 0 12px 0; color: #3C4858; font-size: 16px;">Completion Rate</h3>
+                                    <p style="font-size: 32px; font-weight: bold; margin: 0; color: #8E9AAF;">87%</p>
                                     <p style="font-size: 14px; color: #107c10; margin: 8px 0 0 0;">↗ +5% vs last month</p>
                                 </div>
                             </div>
                             <div style="${cardStyles}">
-                                <h3 style="margin: 0 0 16px 0; color: #323130;">Recent Activity</h3>
-                                <p style="color: #605e5c; margin: 0 0 20px 0;">Monitor real-time dashboard metrics and analytics.</p>
+                                <h3 style="margin: 0 0 16px 0; color: #3C4858;">Recent Activity</h3>
+                                <p style="color: #68769C; margin: 0 0 20px 0;">Monitor real-time dashboard metrics and analytics.</p>
                                 <div style="display: flex; gap: 12px; flex-wrap: wrap;">
                                     <button style="${buttonStyles}">View Details</button>
                                     <button style="${secondaryButtonStyles}">Export Data</button>
@@ -200,7 +318,7 @@ const AddPagesModal: React.FC<AddPagesModalProps> = ({
                     return `
                         <div style="${baseStyles}">
                             <h1 style="${headerStyles}">${name}</h1>
-                            <p style="color: #605e5c; margin: 0 0 32px 0;">${description}</p>
+                            <p style="color: #68769C; margin: 0 0 32px 0;">${description}</p>
                             <div style="${cardStyles}">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                                     <input type="search" style="padding: 12px; border: 1px solid #e1dfdd; border-radius: 4px; width: 300px;" placeholder="Search items...">
@@ -232,11 +350,11 @@ const AddPagesModal: React.FC<AddPagesModalProps> = ({
                         <div style="${baseStyles}">
                             <div style="${heroStyles}">
                                 <h1 style="${headerStyles} margin-bottom: 16px;">${name}</h1>
-                                <p style="color: #605e5c; margin: 0; font-size: 18px;">${description}</p>
+                                <p style="color: #68769C; margin: 0; font-size: 18px;">${description}</p>
                             </div>
                             <div style="${cardStyles}">
-                                <h2 style="color: #323130; margin: 0 0 16px 0;">Welcome to ${name}</h2>
-                                <p style="color: #605e5c; line-height: 1.6;">This page is ready for your content. You can customize it by asking me to generate specific content or modify the layout.</p>
+                                <h2 style="color: #3C4858; margin: 0 0 16px 0;">Welcome to ${name}</h2>
+                                <p style="color: #68769C; line-height: 1.6;">This page is ready for your content. You can customize it by asking me to generate specific content or modify the layout.</p>
                                 <div style="margin: 24px 0;">
                                     <button style="${buttonStyles}">Get Started</button>
                                     <button style="${secondaryButtonStyles}">Learn More</button>
@@ -359,14 +477,14 @@ const AddPagesModal: React.FC<AddPagesModalProps> = ({
             const fallbackContent = `
                 <div style="max-width: 1200px; margin: 0 auto; padding: 40px 20px; font-family: 'Segoe UI', sans-serif; background: #ffffff; min-height: 100vh;">
                     <div style="background: linear-gradient(135deg, #fff4e6 0%, #fef3c7 100%); padding: 60px 40px; border-radius: 12px; margin: 20px 0; text-align: center; border: 1px solid #e1dfdd;">
-                        <h1 style="color: #323130; margin: 0 0 16px 0; font-size: 28px; font-weight: 600;">📄 ${newPageName.trim()}</h1>
-                        <p style="color: #605e5c; margin: 0 0 16px 0; font-size: 16px;">
+                        <h1 style="color: #3C4858; margin: 0 0 16px 0; font-size: 28px; font-weight: 600;">📄 ${newPageName.trim()}</h1>
+                        <p style="color: #68769C; margin: 0 0 16px 0; font-size: 16px;">
                             ${newPageDescription.trim()}
                         </p>
                         <p style="color: #a19f9d; margin: 0 0 24px 0; font-size: 14px;">
                             AI content generation temporarily unavailable. Ask me to "generate content for ${newPageName.trim()}" to try again.
                         </p>
-                        <button style="background: #0078d4; color: white; border: none; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-weight: 600; transition: background-color 0.2s ease;">
+                        <button style="background: #8E9AAF; color: white; border: none; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-weight: 600; transition: background-color 0.2s ease;">
                             Generate Content
                         </button>
                     </div>
@@ -583,18 +701,8 @@ const AddPagesModal: React.FC<AddPagesModalProps> = ({
                                                 <p className="page-description">{page.description}</p>
                                             )}
 
-                                            {/* Wireframe Preview for existing pages */}
-                                            {isExistingPage && page.htmlContent && (
-                                                <div className="page-preview">
-                                                    <div className="preview-label">Current Wireframe:</div>
-                                                    <div className="preview-container">
-                                                        <div
-                                                            className="wireframe-mini-preview"
-                                                            dangerouslySetInnerHTML={{ __html: page.htmlContent }}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            )}
+                                            {/* Wireframe Preview for all pages */}
+                                            <PagePreview page={page} isExistingPage={isExistingPage} />
                                         </div>
                                     );
                                 })}

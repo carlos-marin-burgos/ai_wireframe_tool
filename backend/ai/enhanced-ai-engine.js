@@ -571,7 +571,7 @@ ${currentWireframe ? `Current wireframe provided: Yes` : ""}
 
 Focus on Microsoft Learn design principles:
 - Use tan/gold color palette (#F2CC60, #E6B800) for banners, hero sections, and primary backgrounds
-- Blue colors (#0078d4, #106ebe) are acceptable for buttons, links, and interactive elements
+- Blue colors (#8E9AAF, #68769C) are acceptable for buttons, links, and interactive elements
 - Emphasize learning and documentation structure
 - Include learning progress indicators
 - Add Microsoft Learn-style navigation with breadcrumbs

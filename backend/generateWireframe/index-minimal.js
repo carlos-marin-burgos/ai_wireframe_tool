@@ -44,7 +44,7 @@ async function generateSimpleWireframe(description) {
 
 Requirements:
 - Complete HTML document with DOCTYPE
-- Microsoft Learn style (Segoe UI, #0078d4 primary color)
+- Microsoft Learn style (Segoe UI, #8E9AAF primary color)
 - Responsive design with inline CSS
 - Professional layout with header, main content, and footer
 - Clean, modern appearance
@@ -92,7 +92,7 @@ function getFallbackTemplate(description) {
             color: #171717; 
         }
         .header { 
-            background: #0078d4; 
+            background: #8E9AAF; 
             color: white; 
             padding: 20px; 
             text-align: center; 
@@ -110,7 +110,7 @@ function getFallbackTemplate(description) {
             margin-bottom: 20px; 
         }
         .btn { 
-            background: #0078d4; 
+            background: #8E9AAF; 
             color: white; 
             padding: 12px 24px; 
             border: none; 

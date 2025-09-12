@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Synchronization Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        button {
+            background: #3B82F6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #2563EB;
+        }
+
+        .theme-demo {
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .color-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .color-sample {
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🎨 Theme Synchronization Test</h1>
+        <p>This demonstrates the complete end-to-end theme synchronization between frontend and backend wireframe
+            generation.</p>
+
+        <div class="status info" id="status">
+            Ready to test theme synchronization
+        </div>
+
+        <h3>Available Themes:</h3>
+        <button onclick="testTheme('neutral')">Neutral Theme</button>
+        <button onclick="testTheme('corporate')">Corporate Theme</button>
+        <button onclick="testTheme('creative')">Creative Theme</button>
+        <button onclick="testTheme('modern')">Modern Theme</button>
+        <button onclick="testTheme('warm')">Warm Theme</button>
+
+        <div id="theme-demo" class="theme-demo">
+            <h3>Current Theme Preview</h3>
+            <p>Click a theme button above to see the theme applied and synced with the backend.</p>
+        </div>
+
+        <div id="color-info" class="color-info">
+            <!-- Color samples will be inserted here -->
+        </div>
+
+        <h3>Backend Wireframe Generation Test:</h3>
+        <button onclick="generateWireframe()">Generate Test Wireframe</button>
+
+        <div id="wireframe-result" style="margin-top: 20px;">
+            <!-- Wireframe result will be shown here -->
+        </div>
+    </div>
+
+    <script>
+        const COLOR_THEMES = {
+            neutral: {
+                primary: '#8E9AAF',
+                secondary: '#68769C',
+                accent: '#3C4858',
+                light: '#E9ECEF',
+                medium: '#6B7280'
+            },
+            corporate: {
+                primary: '#3B82F6',
+                secondary: '#6366F1',
+                accent: '#8B5CF6',
+                light: '#F8FAFC',
+                medium: '#6B7280'
+            },
+            creative: {
+                primary: '#EC4899',
+                secondary: '#8B5CF6',
+                accent: '#F59E0B',
+                light: '#FEF3F2',
+                medium: '#94A3B8'
+            },
+            modern: {
+                primary: '#10B981',
+                secondary: '#059669',
+                accent: '#34D399',
+                light: '#F0FDF4',
+                medium: '#6B7280'
+            },
+            warm: {
+                primary: '#F97316',
+                secondary: '#EA580C',
+                accent: '#FB923C',
+                light: '#FFF7ED',
+                medium: '#78716C'
+            }
+        };
+
+        async function testTheme(themeName) {
+            const status = document.getElementById('status');
+            status.className = 'status info';
+            status.textContent = `Applying ${themeName} theme...`;
+
+            try {
+                // Apply theme colors to frontend
+                const colors = COLOR_THEMES[themeName];
+                applyThemeVisuals(themeName, colors);
+
+                // Sync with backend
+                const response = await fetch('http://localhost:7072/api/update-theme-colors', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        themeName: themeName,
+                        colors: colors
+                    })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    status.className = 'status success';
+                    status.innerHTML = `✅ ${themeName} theme applied successfully!<br>Backend colors updated for wireframe generation.`;
+                    displayColorInfo(result.appliedColors);
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+            } catch (error) {
+                status.className = 'status error';
+                status.textContent = `❌ Error applying ${themeName} theme: ${error.message}`;
+                console.error('Theme sync error:', error);
+            }
+        }
+
+        function applyThemeVisuals(themeName, colors) {
+            const demo = document.getElementById('theme-demo');
+            demo.style.backgroundColor = colors.light;
+            demo.style.border = `2px solid ${colors.primary}`;
+            demo.style.color = colors.primary;
+            demo.innerHTML = `
+                <h3 style="color: ${colors.primary};">Current Theme: ${themeName.toUpperCase()}</h3>
+                <p style="color: ${colors.medium};">This preview shows the ${themeName} theme colors applied.</p>
+                <div style="background: ${colors.primary}; color: white; padding: 10px; border-radius: 4px; margin: 10px 0;">
+                    Primary Color: ${colors.primary}
+                </div>
+                <div style="background: ${colors.secondary}; color: white; padding: 10px; border-radius: 4px; margin: 10px 0;">
+                    Secondary Color: ${colors.secondary}
+                </div>
+                <div style="background: ${colors.accent}; color: white; padding: 10px; border-radius: 4px;">
+                    Accent Color: ${colors.accent}
+                </div>
+            `;
+        }
+
+        function displayColorInfo(appliedColors) {
+            const colorInfo = document.getElementById('color-info');
+            const mainColors = ['primary', 'secondary', 'accent', 'light', 'medium'];
+
+            colorInfo.innerHTML = mainColors.map(colorKey => `
+                <div class="color-sample" style="background-color: ${appliedColors[colorKey]};">
+                    ${colorKey.toUpperCase()}<br>
+                    ${appliedColors[colorKey]}
+                </div>
+            `).join('');
+        }
+
+        async function generateWireframe() {
+            const result = document.getElementById('wireframe-result');
+            result.innerHTML = '<div class="status info">Generating wireframe with current theme...</div>';
+
+            try {
+                const response = await fetch('http://localhost:7072/api/generate-html-wireframe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        description: 'hero section with title and button using current theme colors'
+                    })
+                });
+
+                if (response.ok) {
+                    const wireframeData = await response.json();
+                    if (wireframeData.success) {
+                        result.innerHTML = `
+                            <div class="status success">✅ Wireframe generated successfully!</div>
+                            <p><strong>Processing time:</strong> ${wireframeData.metadata.processingTimeMs}ms</p>
+                            <details>
+                                <summary>View Generated HTML Code</summary>
+                                <pre style="background: #f5f5f5; padding: 10px; border-radius: 4px; overflow: auto; max-height: 400px;">${wireframeData.data.html.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+                            </details>
+                        `;
+                    } else {
+                        throw new Error(wireframeData.error || 'Generation failed');
+                    }
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+            } catch (error) {
+                result.innerHTML = `<div class="status error">❌ Error generating wireframe: ${error.message}</div>`;
+                console.error('Wireframe generation error:', error);
+            }
+        }
+
+        // Initialize with corporate theme
+        testTheme('corporate');
+    </script>
+</body>
+
+</html>

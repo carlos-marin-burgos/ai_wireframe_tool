@@ -9,7 +9,7 @@
     BlinkMacSystemFont,
     sans-serif
   );
-  background-color: #f8f9fa;
+  background-color: #E9ECEF;
   border-top: 1px solid #e1e1e1;
   margin-top: auto;
 }
@@ -17,7 +17,7 @@
 /* Main Footer Content */
 .ms-learn-footer-main {
   padding: 48px 0 32px;
-  background-color: #f8f9fa;
+  background-color: #E9ECEF;
 }
 
 .ms-learn-footer-container {
@@ -71,7 +71,7 @@
 }
 
 .ms-learn-footer-link:hover {
-  color: #0078d4;
+  color: #8E9AAF;
   text-decoration: underline;
 }
 
@@ -118,7 +118,7 @@
 }
 
 .ms-learn-footer-card-link {
-  color: #0078d4;
+  color: #8E9AAF;
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
@@ -126,7 +126,7 @@
 }
 
 .ms-learn-footer-card-link:hover {
-  color: #106ebe;
+  color: #68769C;
   text-decoration: underline;
 }
 
@@ -162,7 +162,7 @@
 
 .ms-learn-language-selector:hover {
   border-color: #a6a6a6;
-  background-color: #f8f9fa;
+  background-color: #E9ECEF;
 }
 
 /* Footer Utilities */
@@ -183,7 +183,7 @@
 }
 
 .ms-learn-footer-utility-link:hover {
-  color: #0078d4;
+  color: #8E9AAF;
   text-decoration: underline;
 }
 

@@ -187,14 +187,14 @@ module.exports = {
 
       .ms-header--light {
         --ms-color-background-primary: #ffffff;
-        --ms-color-text-primary: #323130;
+        --ms-color-text-primary: #3C4858;
         --ms-color-border-subtle: #e1dfdd;
       }
 
       .ms-header--dark {
         --ms-color-background-primary: #1b1a19;
         --ms-color-text-primary: #ffffff;
-        --ms-color-border-subtle: #323130;
+        --ms-color-border-subtle: #3C4858;
       }
 
       .ms-header-container {
@@ -251,7 +251,7 @@ module.exports = {
       }
 
       .ms-nav-link:hover {
-        color: #0078d4;
+        color: #8E9AAF;
       }
 
       .ms-header-actions {

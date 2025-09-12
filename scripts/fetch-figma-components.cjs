@@ -271,15 +271,15 @@ function generateMockHTML(node, systemType) {
 function generateButtonHTML(name, isFluentStyle) {
   const theme = isFluentStyle
     ? {
-        primary: "#0078d4",
+        primary: "#8E9AAF",
         background: "#ffffff",
-        text: "#323130",
+        text: "#3C4858",
         border: "#8a8886",
       }
     : {
-        primary: "#0078d4",
+        primary: "#8E9AAF",
         background: "#ffffff",
-        text: "#323130",
+        text: "#3C4858",
         border: "#e1e5e9",
       };
 
@@ -303,7 +303,7 @@ function generateButtonHTML(name, isFluentStyle) {
       " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
         ${name.replace(/button/i, "").trim() || "Button"}
       </button>
-      <p style="margin: 8px 0 0 0; font-size: 11px; color: #605e5c;">From Figma ${
+      <p style="margin: 8px 0 0 0; font-size: 11px; color: #68769C;">From Figma ${
         isFluentStyle ? "Fluent" : "Atlas"
       } Library</p>
     </div>`;
@@ -321,9 +321,9 @@ function generateCardHTML(name, isFluentStyle) {
       font-family: 'Segoe UI', sans-serif;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     ">
-      <h4 style="margin: 0 0 8px 0; color: #323130; font-size: 16px;">${name}</h4>
-      <p style="margin: 0 0 12px 0; color: #605e5c; font-size: 14px;">Sample content for ${name} component</p>
-      <div style="background: ${theme}; padding: 8px; border-radius: 4px; font-size: 11px; color: #605e5c;">
+      <h4 style="margin: 0 0 8px 0; color: #3C4858; font-size: 16px;">${name}</h4>
+      <p style="margin: 0 0 12px 0; color: #68769C; font-size: 14px;">Sample content for ${name} component</p>
+      <div style="background: ${theme}; padding: 8px; border-radius: 4px; font-size: 11px; color: #68769C;">
         From Figma ${isFluentStyle ? "Fluent" : "Atlas"} Library
       </div>
     </div>`;
@@ -338,13 +338,13 @@ function generateNavHTML(name, isFluentStyle) {
       padding: 12px; 
       font-family: 'Segoe UI', sans-serif;
     ">
-      <div style="font-weight: 600; color: #323130; margin-bottom: 8px; font-size: 14px;">${name}</div>
+      <div style="font-weight: 600; color: #3C4858; margin-bottom: 8px; font-size: 14px;">${name}</div>
       <div style="display: flex; gap: 16px;">
-        <a href="#" style="color: #0078d4; text-decoration: none; font-size: 14px;">Home</a>
-        <a href="#" style="color: #605e5c; text-decoration: none; font-size: 14px;">About</a>
-        <a href="#" style="color: #605e5c; text-decoration: none; font-size: 14px;">Contact</a>
+        <a href="#" style="color: #8E9AAF; text-decoration: none; font-size: 14px;">Home</a>
+        <a href="#" style="color: #68769C; text-decoration: none; font-size: 14px;">About</a>
+        <a href="#" style="color: #68769C; text-decoration: none; font-size: 14px;">Contact</a>
       </div>
-      <div style="margin-top: 8px; font-size: 11px; color: #605e5c;">
+      <div style="margin-top: 8px; font-size: 11px; color: #68769C;">
         From Figma ${isFluentStyle ? "Fluent" : "Atlas"} Library
       </div>
     </nav>`;
@@ -363,7 +363,7 @@ function generateGenericHTML(name, isFluentStyle) {
       <div style="
         width: 48px; 
         height: 48px; 
-        background: #0078d4; 
+        background: #8E9AAF; 
         border-radius: 8px; 
         margin: 0 auto 12px; 
         display: flex; 
@@ -374,8 +374,8 @@ function generateGenericHTML(name, isFluentStyle) {
       ">
         {name.charAt(0).toUpperCase()}
       </div>
-      <div style="font-weight: 600; color: #323130; margin-bottom: 4px; font-size: 14px;">${name}</div>
-      <div style="font-size: 11px; color: #605e5c;">From Figma ${
+      <div style="font-weight: 600; color: #3C4858; margin-bottom: 4px; font-size: 14px;">${name}</div>
+      <div style="font-size: 11px; color: #68769C;">From Figma ${
         isFluentStyle ? "Fluent" : "Atlas"
       } Library</div>
     </div>`;

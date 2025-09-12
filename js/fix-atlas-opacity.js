@@ -19,13 +19,13 @@ try {
 
   // Fix 1: Remove opacity from Atlas component labels and improve colors
   content = content.replace(
-    /color: #605e5c; margin: 0; opacity: 0\.8;/g,
-    "color: #323130; margin: 0; font-weight: 600;"
+    /color: #68769C; margin: 0; opacity: 0\.8;/g,
+    "color: #3C4858; margin: 0; font-weight: 600;"
   );
 
   content = content.replace(
     /color: #8a8886; margin: ([^;]+); opacity: 0\.6;/g,
-    "color: #605e5c; margin: $1; font-weight: 500;"
+    "color: #68769C; margin: $1; font-weight: 500;"
   );
 
   // Fix 2: Add background to Atlas component info sections for better contrast
@@ -40,7 +40,7 @@ try {
   // Fix 4: Ensure Atlas section background has good contrast
   content = content.replace(
     /color: #8a8886; font-size: 12px; opacity: 0\.8;/g,
-    "color: #323130; font-size: 12px; font-weight: 500;"
+    "color: #3C4858; font-size: 12px; font-weight: 500;"
   );
 
   fs.writeFileSync(filePath, content);
@@ -49,7 +49,7 @@ try {
   console.log("📝 Changes made:");
   console.log("   • Removed problematic opacity values from Atlas labels");
   console.log(
-    "   • Improved text colors (#323130 for primary, #605e5c for secondary)"
+    "   • Improved text colors (#3C4858 for primary, #68769C for secondary)"
   );
   console.log("   • Added font-weight for better readability");
   console.log("   • Added background containers for better contrast");

@@ -16,13 +16,13 @@
 .upload-header h3 {
   font-size: 24px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
   margin: 0 0 8px 0;
 }
 
 .upload-header p {
   font-size: 16px;
-  color: #605e5c;
+  color: #68769C;
   margin: 0;
 }
 
@@ -48,12 +48,12 @@
 }
 
 .upload-method:hover {
-  border-color: #0078d4;
+  border-color: #8E9AAF;
   background: #f8f9fa;
 }
 
 .upload-method.active {
-  border-color: #0078d4;
+  border-color: #8E9AAF;
   background: #f0f6ff;
   box-shadow: 0 2px 8px rgba(0, 120, 212, 0.2);
 }
@@ -76,7 +76,7 @@
 }
 
 .upload-method.active .method-icon {
-  background: #0078d4;
+  background: #8E9AAF;
   color: white;
 }
 
@@ -88,13 +88,13 @@
 .method-content h4 {
   font-size: 16px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
   margin: 0 0 4px 0;
 }
 
 .method-content p {
   font-size: 14px;
-  color: #605e5c;
+  color: #68769C;
   margin: 0 0 8px 0;
   line-height: 1.4;
 }
@@ -109,7 +109,7 @@
   display: inline-block;
   padding: 2px 6px;
   background: #e1e1e1;
-  color: #605e5c;
+  color: #68769C;
   font-size: 11px;
   font-weight: 500;
   border-radius: 4px;
@@ -118,7 +118,7 @@
 
 .upload-method.active .format-tag {
   background: #cce7ff;
-  color: #0078d4;
+  color: #8E9AAF;
 }
 
 /* Status Messages */
@@ -172,12 +172,12 @@
 }
 
 .upload-zone:hover {
-  border-color: #0078d4;
+  border-color: #8E9AAF;
   background: #f8f9fa;
 }
 
 .upload-zone.drag-active {
-  border-color: #0078d4;
+  border-color: #8E9AAF;
   background: #f0f6ff;
   transform: scale(1.02);
 }
@@ -199,13 +199,13 @@
 .upload-zone h4 {
   font-size: 18px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
   margin: 0 0 8px 0;
 }
 
 .upload-zone p {
   font-size: 14px;
-  color: #605e5c;
+  color: #68769C;
   margin: 0 0 4px 0;
 }
 
@@ -239,7 +239,7 @@
 .file-details h4 {
   font-size: 14px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
@@ -248,7 +248,7 @@
 
 .file-details p {
   font-size: 12px;
-  color: #605e5c;
+  color: #68769C;
   margin: 2px 0 0 0;
 }
 
@@ -261,7 +261,7 @@
   background: #f5f5f5;
   border: none;
   border-radius: 6px;
-  color: #605e5c;
+  color: #68769C;
   cursor: pointer;
   transition: all 0.2s ease;
   flex-shrink: 0;
@@ -298,7 +298,7 @@
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #0078d4 0%, #106ebe 100%);
+  background: linear-gradient(90deg, #8E9AAF 0%, #68769C 100%);
   border-radius: 4px;
   transition: width 0.3s ease;
   width: 0;
@@ -338,7 +338,7 @@
 .upload-progress span {
   font-size: 12px;
   font-weight: 600;
-  color: #0078d4;
+  color: #8E9AAF;
   min-width: 32px;
 }
 
@@ -355,7 +355,7 @@
   display: block;
   font-size: 14px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
   margin-bottom: 8px;
 }
 
@@ -371,7 +371,7 @@
 
 .url-input:focus {
   outline: none;
-  border-color: #0078d4;
+  border-color: #8E9AAF;
   box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.1);
 }
 
@@ -385,7 +385,7 @@
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  background: #0078d4;
+  background: #8E9AAF;
   color: white;
   border: none;
   border-radius: 6px;
@@ -397,7 +397,7 @@
 }
 
 .import-url-btn:hover:not(:disabled) {
-  background: #106ebe;
+  background: #68769C;
   transform: translateY(-1px);
 }
 
@@ -433,14 +433,14 @@
 .figma-help h5 {
   font-size: 14px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
   margin: 0 0 8px 0;
 }
 
 .figma-help ol {
   margin: 0;
   padding-left: 20px;
-  color: #605e5c;
+  color: #68769C;
   font-size: 13px;
   line-height: 1.5;
 }
@@ -460,7 +460,7 @@
 .import-options h4 {
   font-size: 16px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
   margin: 0 0 16px 0;
 }
 
@@ -476,13 +476,13 @@
   gap: 8px;
   cursor: pointer;
   font-size: 14px;
-  color: #323130;
+  color: #3C4858;
 }
 
 .option-item input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  accent-color: #0078d4;
+  accent-color: #8E9AAF;
   cursor: pointer;
 }
 

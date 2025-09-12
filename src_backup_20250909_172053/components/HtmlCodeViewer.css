@@ -40,14 +40,14 @@
 
 .header-left h2 {
   margin: 0 0 4px 0;
-  color: #0078d4;
+  color: #8E9AAF;
   font-size: 24px;
   font-weight: 600;
 }
 
 .header-left p {
   margin: 0;
-  color: #605e5c;
+  color: #68769C;
   font-size: 14px;
 }
 
@@ -133,13 +133,13 @@
 }
 
 .footer-info small {
-  color: #605e5c;
+  color: #68769C;
   font-size: 12px;
 }
 
 .fluent-btn-secondary {
   background: transparent;
-  color: #323130;
+  color: #3C4858;
   border: 1px solid #d1d1d1;
   padding: 8px 16px;
   margin: 0 4px;

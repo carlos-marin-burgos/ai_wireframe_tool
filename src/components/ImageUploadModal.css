@@ -76,19 +76,19 @@
   margin: 0;
   font-size: 20px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
   line-height: 1.2;
 }
 
 .fluent-dialog-icon {
-  color: #0078d4;
+  color: #8E9AAF;
   font-size: 20px;
 }
 
 .fluent-close-btn {
   background: none;
   border: none;
-  color: #605e5c;
+  color: #68769C;
   cursor: pointer;
   padding: 8px;
   border-radius: 4px;
@@ -102,7 +102,7 @@
 
 .fluent-close-btn:hover {
   background: #f3f2f1;
-  color: #323130;
+  color: #3C4858;
 }
 
 .fluent-close-btn:active {
@@ -128,7 +128,7 @@
 }
 
 .fluent-dialog-description {
-  color: #605e5c;
+  color: #68769C;
   font-size: 14px;
   line-height: 1.4;
   margin: 0;
@@ -162,13 +162,13 @@
 }
 
 .fluent-upload-zone:hover {
-  border-color: #0078d4 !important;
+  border-color: #8E9AAF !important;
   background: #f3f9ff !important;
 }
 
 .fluent-upload-zone:focus-visible {
-  border-color: #0078d4 !important;
-  box-shadow: 0 0 0 1px #0078d4 !important;
+  border-color: #8E9AAF !important;
+  box-shadow: 0 0 0 1px #8E9AAF !important;
   outline: none !important;
 }
 
@@ -203,39 +203,39 @@
 }
 
 .fluent-button:focus-visible {
-  box-shadow: 0 0 0 2px #0078d4;
+  box-shadow: 0 0 0 2px #8E9AAF;
 }
 
 .fluent-button-primary {
-  background: #0078d4;
-  border-color: #0078d4;
+  background: #8E9AAF;
+  border-color: #8E9AAF;
   color: #ffffff;
 }
 
 .fluent-button-primary:hover {
-  background: #106ebe;
-  border-color: #106ebe;
+  background: #68769C;
+  border-color: #68769C;
 }
 
 .fluent-button-primary:active {
-  background: #005a9e;
-  border-color: #005a9e;
+  background: #68769C;
+  border-color: #68769C;
 }
 
 .fluent-button-secondary {
   background: #ffffff;
   border-color: #8a8886;
-  color: #323130;
+  color: #3C4858;
 }
 
 .fluent-button-secondary:hover {
   background: #f3f2f1;
-  border-color: #605e5c;
+  border-color: #68769C;
 }
 
 .fluent-button-secondary:active {
   background: #edebe9;
-  border-color: #323130;
+  border-color: #3C4858;
 }
 
 /* Responsive Design */
@@ -315,12 +315,12 @@
 
   .fluent-dialog-footer {
     border-top-color: #454545;
-    background: #323130;
+    background: #3C4858;
   }
 
   .fluent-button-secondary {
     background: #2d2d30;
-    border-color: #605e5c;
+    border-color: #68769C;
     color: #ffffff;
   }
 

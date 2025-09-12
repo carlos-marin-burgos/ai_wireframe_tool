@@ -52,7 +52,7 @@ function createSimpleFallback(description) {
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         .hero { 
-            background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%); 
+            background: linear-gradient(135deg, #8E9AAF 0%, #68769C 100%); 
             color: white; 
             padding: 60px 20px; 
             text-align: center; 
@@ -68,11 +68,11 @@ function createSimpleFallback(description) {
             box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
             border: 1px solid #e1dfdd; 
         }
-        .card h3 { color: #0078d4; margin-bottom: 15px; font-size: 1.5rem; }
-        .card p { color: #605e5c; margin-bottom: 20px; }
+        .card h3 { color: #8E9AAF; margin-bottom: 15px; font-size: 1.5rem; }
+        .card p { color: #68769C; margin-bottom: 20px; }
         .form-section { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
         .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #323130; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #3C4858; }
         .form-group input { 
             width: 100%; 
             padding: 12px; 
@@ -80,7 +80,7 @@ function createSimpleFallback(description) {
             border-radius: 4px; 
             font-size: 16px; 
         }
-        .form-group input:focus { border-color: #0078d4; outline: none; }
+        .form-group input:focus { border-color: #8E9AAF; outline: none; }
         .buttons { text-align: center; margin-top: 30px; }
         .btn { 
             display: inline-block; 
@@ -93,9 +93,9 @@ function createSimpleFallback(description) {
             cursor: pointer; 
             text-decoration: none; 
         }
-        .btn-primary { background: #0078d4; color: white; }
-        .btn-primary:hover { background: #005a9e; }
-        .btn-secondary { background: #edebe9; color: #323130; }
+        .btn-primary { background: #8E9AAF; color: white; }
+        .btn-primary:hover { background: #68769C; }
+        .btn-secondary { background: #edebe9; color: #3C4858; }
         .btn-secondary:hover { background: #d2d0ce; }
     </style>
 </head>
@@ -146,7 +146,7 @@ async function generateWithAI(description) {
   const prompt = `Create a complete HTML wireframe for Microsoft Learn platform based on: "${description}"
 
 Requirements:
-- Use Microsoft Learn design system (Blues: #0078d4, #005a9e; Grays: #f3f2f1, #605e5c)
+- Use Microsoft Learn design system (Blues: #8E9AAF, #68769C; Grays: #f3f2f1, #68769C)
 - Include Segoe UI font family
 - Make it responsive and accessible
 - Include the exact components requested in the description

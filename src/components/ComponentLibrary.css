@@ -376,14 +376,14 @@
 
 .atlas-button-preview.button-primary {
   color: #ffffff;
-  background-color: #0078d4;
-  border-color: #0078d4;
+  background-color: #8E9AAF;
+  border-color: #8E9AAF;
 }
 
 .atlas-button-preview.button-secondary {
-  color: #0078d4;
+  color: #8E9AAF;
   background-color: transparent;
-  border-color: #0078d4;
+  border-color: #8E9AAF;
 }
 
 .atlas-layout-preview {
@@ -481,8 +481,8 @@
 }
 
 .atlas-hero-preview {
-  background: #e8e6df;
-  color: #323130;
+  background: #E9ECEF;
+  color: #3C4858;
   padding: 20px 16px;
   border-radius: 6px;
   text-align: left;
@@ -498,7 +498,7 @@
   top: 0;
   bottom: 0;
   width: 3px;
-  background: linear-gradient(180deg, #e8e6df 0%, rgba(232, 230, 223, 0) 100%);
+  background: linear-gradient(180deg, #E9ECEF 0%, rgba(232, 230, 223, 0) 100%);
 }
 
 .atlas-hero-preview .hero-eyebrow {
@@ -507,20 +507,20 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-bottom: 6px;
-  color: #323130;
+  color: #3C4858;
 }
 
 .atlas-hero-preview .hero-title {
   font-weight: 600;
   font-size: 16px;
   margin-bottom: 8px;
-  color: #323130;
+  color: #3C4858;
   line-height: 1.2;
 }
 
 .atlas-hero-preview .hero-subtitle {
   font-size: 12px;
-  color: #323130;
+  color: #3C4858;
   margin-bottom: 12px;
   font-weight: 600;
   line-height: 1.4;
@@ -534,8 +534,8 @@
 
 .atlas-hero-preview .hero-btn-primary {
   background: transparent;
-  color: #0078d4;
-  border: 1px solid #0078d4;
+  color: #8E9AAF;
+  border: 1px solid #8E9AAF;
   padding: 4px 8px;
   border-radius: 2px;
   font-size: 10px;
@@ -544,9 +544,9 @@
 }
 
 .atlas-hero-preview .hero-btn-secondary {
-  background: #0078d4;
+  background: #8E9AAF;
   color: white;
-  border: 1px solid #0078d4;
+  border: 1px solid #8E9AAF;
   padding: 4px 8px;
   border-radius: 2px;
   font-size: 10px;
@@ -568,7 +568,7 @@
 
 .atlas-nav-preview .nav-logo {
   font-weight: 600;
-  color: #0078d4;
+  color: #8E9AAF;
 }
 
 .atlas-nav-preview .nav-items {
@@ -708,7 +708,7 @@
   cursor: pointer;
   font-size: 14px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
   transition: all 0.2s ease;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }

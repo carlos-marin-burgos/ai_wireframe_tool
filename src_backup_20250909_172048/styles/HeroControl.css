@@ -10,7 +10,7 @@
   border-radius: 12px;
   overflow: hidden;
   position: relative;
-  background: #E8E6DF;
+  background: #E9ECEF;
 }
 
 .hero-left-section {
@@ -39,14 +39,14 @@
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1.3;
-  color: #323130;
+  color: #3C4858;
   margin: 0;
 }
 
 .hero-summary {
   font-size: 1rem;
   line-height: 1.5;
-  color: #605e5c;
+  color: #68769C;
   margin: 0;
 }
 
@@ -75,7 +75,7 @@
 }
 
 .hero-textfield:focus {
-  border-color: #0078d4;
+  border-color: #8E9AAF;
   box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.1);
 }
 
@@ -99,25 +99,25 @@
 }
 
 .hero-primary-button {
-  background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+  background: linear-gradient(135deg, #8E9AAF 0%, #68769C 100%);
   color: white;
 }
 
 .hero-primary-button:hover {
-  background: linear-gradient(135deg, #106ebe 0%, #005a9e 100%);
+  background: linear-gradient(135deg, #68769C 0%, #68769C 100%);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 120, 212, 0.3);
 }
 
 .hero-secondary-button {
   background: #f8f9fa;
-  color: #323130;
+  color: #3C4858;
   border: 2px solid #e0e0e0;
 }
 
 .hero-secondary-button:hover {
   background: #e8f4fd;
-  border-color: #0078d4;
+  border-color: #8E9AAF;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -151,12 +151,12 @@
 
 .hero-left-gradient {
   left: 0;
-  background: linear-gradient(to right, var(--background-color, #E8E6DF), transparent);
+  background: linear-gradient(to right, var(--background-color, #E9ECEF), transparent);
 }
 
 .hero-right-gradient {
   right: 0;
-  background: linear-gradient(to left, var(--background-color, #E8E6DF), transparent);
+  background: linear-gradient(to left, var(--background-color, #E9ECEF), transparent);
 }
 
 /* ===== TABLET STYLES (768px and up) ===== */
@@ -329,7 +329,7 @@
   .hero-primary-button:hover {
     transform: none;
     box-shadow: none;
-    background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+    background: linear-gradient(135deg, #8E9AAF 0%, #68769C 100%);
   }
   
   .hero-secondary-button:hover {

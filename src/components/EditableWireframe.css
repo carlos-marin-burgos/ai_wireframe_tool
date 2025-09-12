@@ -14,7 +14,7 @@
   border: 1px solid #e1dfdd;
   border-radius: 4px;
   font-size: 14px;
-  color: #605e5c;
+  color: #68769C;
 }
 
 .toolbar-text {
@@ -45,7 +45,7 @@
 
 .editable-wireframe-container [data-editable="true"][contenteditable="true"] {
   background-color: rgba(0, 120, 212, 0.2) !important;
-  border: 2px solid #0078d4 !important;
+  border: 2px solid #8E9AAF !important;
   border-radius: 4px !important;
   padding: 2px 4px !important;
   outline: none !important;
@@ -73,7 +73,7 @@
   z-index: 9999 !important;
   opacity: 0.8 !important;
   background: white !important;
-  border: 2px solid #0078d4 !important;
+  border: 2px solid #8E9AAF !important;
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -91,7 +91,7 @@
 
 .editable-wireframe-container .gu-transit {
   opacity: 0.2 !important;
-  border: 2px dashed #0078d4 !important;
+  border: 2px dashed #8E9AAF !important;
   background: rgba(0, 120, 212, 0.1) !important;
 }
 
@@ -123,17 +123,17 @@
 
 .editable-wireframe-container .row.gu-over {
   background: rgba(0, 120, 212, 0.1) !important;
-  border-color: #0078d4 !important;
+  border-color: #8E9AAF !important;
 }
 
 /* Column styling */
 .editable-wireframe-container .col,
 .editable-wireframe-container [class*="col-"] {
   padding: 6px;
-  border: 1px dashed #dee2e6;
+  border: 1px dashed #CBC2C2;
   border-radius: 4px;
   margin: 2px 0;
-  background: #f8f9fa;
+  background: #E9ECEF;
   min-height: 40px;
   transition: all 0.2s ease;
 }

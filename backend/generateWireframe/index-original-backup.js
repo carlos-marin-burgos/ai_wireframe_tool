@@ -51,7 +51,7 @@ function createSimpleWireframe(description) {
             line-height: 1.5; 
         }
         .header { 
-            background: #0078d4; 
+            background: #8E9AAF; 
             color: white; 
             padding: 16px 24px; 
             display: flex; 
@@ -67,7 +67,7 @@ function createSimpleWireframe(description) {
             padding: 0 24px; 
         }
         .hero { 
-            background: #E8E6DF; 
+            background: #E9ECEF; 
             color: #161616; 
             padding: 60px 40px; 
             border-radius: 8px; 
@@ -81,7 +81,7 @@ function createSimpleWireframe(description) {
         }
         .hero p { font-size: 18px; margin-bottom: 24px; }
         .btn { 
-            background: #0078d4; 
+            background: #8E9AAF; 
             color: white; 
             padding: 12px 24px; 
             border: none; 
@@ -103,7 +103,7 @@ function createSimpleWireframe(description) {
             box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
             border: 1px solid #e1dfdd; 
         }
-        .card h3 { color: #0078d4; margin-bottom: 12px; }
+        .card h3 { color: #8E9AAF; margin-bottom: 12px; }
         .footer { 
             background: #ffffff; 
             border-top: 1px solid #e1dfdd; 
@@ -166,7 +166,7 @@ async function generateWireframeWithAI(description, theme = "microsoftlearn") {
     const prompt = `Create a complete HTML wireframe for Microsoft Learn platform based on: "${description}"
 
 Requirements:
-- Use Microsoft Learn design (Segoe UI font, #0078d4 primary color)
+- Use Microsoft Learn design (Segoe UI font, #8E9AAF primary color)
 - Include responsive layout with header, main content, and footer
 - Use semantic HTML and proper accessibility
 - Include inline CSS styling
@@ -580,12 +580,12 @@ CRITICAL REQUIREMENTS:
 - MANDATORY: DO NOT generate any <header> tags or header CSS - the site header is already provided
 - MANDATORY: DO NOT create any CSS rules for header, header::before, header::after, or any header pseudo-elements
 - The site header is already styled - just use it as the first body element
-- Use Microsoft Learn design system (Segoe UI font, #0078d4 primary color)
+- Use Microsoft Learn design system (Segoe UI font, #8E9AAF primary color)
 - Include proper semantic HTML structure
 - Add minimal inline CSS for content styling only (NOT for any header elements)
-- Use Microsoft Learn color palette: #0078d4 (primary), #f3f2f1 (background), #171717 (text)
-- For hero sections, banners, and footers use tan background: #E8E6DF (no blue backgrounds!)
-- Use tan (#E8E6DF) for card backgrounds and section backgrounds instead of blue
+- Use Microsoft Learn color palette: #8E9AAF (primary), #f3f2f1 (background), #171717 (text)
+- For hero sections, banners, and footers use tan background: #E9ECEF (no blue backgrounds!)
+- Use tan (#E9ECEF) for card backgrounds and section backgrounds instead of blue
 - Make it responsive and accessible
 - Add a clean footer with copyright
 - Use proper form controls and interactive elements
@@ -607,14 +607,14 @@ IMPORTANT:
 
 Style preferences:
 - Clean, professional Microsoft Learn aesthetic
-- Use tan (#E8E6DF) backgrounds for hero sections, banners, cards, and footers (NO BLUE backgrounds)
+- Use tan (#E9ECEF) backgrounds for hero sections, banners, cards, and footers (NO BLUE backgrounds)
 - Proper spacing and visual hierarchy
 - Consistent with Microsoft design principles
 - Modern, minimalist approach
 - ALWAYS include the official Microsoft Learn site header as the first element in the body
 
 BUTTON STYLING REQUIREMENTS:
-- Primary buttons: background: #0078d4; color: white; padding: 12px 24px; border: none; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer;
+- Primary buttons: background: #8E9AAF; color: white; padding: 12px 24px; border: none; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer;
 - Secondary buttons: background: transparent; color: #161616; border: 2px solid #161616; padding: 12px 24px; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer;
 - All buttons should have proper hover states and be properly sized
 - Use Microsoft Learn button styling, not generic HTML buttons
@@ -666,7 +666,7 @@ LAYOUT STRUCTURE:
 - Sections: ${layout.sections?.join(", ") || "main"}
 
 DESIGN TOKENS FROM IMAGE:
-- Colors: ${designTokens.colors?.join(", ") || "#0078d4, #ffffff"}
+- Colors: ${designTokens.colors?.join(", ") || "#8E9AAF, #ffffff"}
 - Fonts: ${designTokens.fonts?.join(", ") || "Segoe UI"}
 - Spacing: ${designTokens.spacing?.join("px, ") || "16, 24, 32"}px
 
@@ -1374,7 +1374,7 @@ function generateFormWireframe(description, colorScheme) {
             border: 1px solid #e1dfdd; 
         }
         .form-title { 
-            color: #0078d4; 
+            color: #8E9AAF; 
             margin-bottom: 24px; 
             font-size: 24px; 
             font-weight: 600; 
@@ -1386,7 +1386,7 @@ function generateFormWireframe(description, colorScheme) {
             display: block; 
             margin-bottom: 8px; 
             font-weight: 500; 
-            color: #323130; 
+            color: #3C4858; 
         }
         .form-control { 
             width: 100%; 
@@ -1399,11 +1399,11 @@ function generateFormWireframe(description, colorScheme) {
         }
         .form-control:focus { 
             outline: none; 
-            border-color: #0078d4; 
-            box-shadow: 0 0 0 1px #0078d4; 
+            border-color: #8E9AAF; 
+            box-shadow: 0 0 0 1px #8E9AAF; 
         }
         .btn { 
-            background: #0078d4; 
+            background: #8E9AAF; 
             color: white; 
             padding: 12px 24px; 
             border: none; 
@@ -1414,7 +1414,7 @@ function generateFormWireframe(description, colorScheme) {
             width: 100%;
         }
         .btn:hover { 
-            background: #106ebe; 
+            background: #68769C; 
         }
         .footer { 
             background: #ffffff; 
@@ -1496,29 +1496,29 @@ function generateDashboardWireframe(description, colorScheme) {
         .card-title { 
             font-size: 1rem; 
             font-weight: 600; 
-            color: #0078d4; 
+            color: #8E9AAF; 
             margin-bottom: 0.5rem; 
             line-height: 1.3;
         }
         .metric { 
             font-size: 1.5rem; 
             font-weight: 600; 
-            color: #0078d4; 
+            color: #8E9AAF; 
             margin-bottom: 0.25rem; 
         }
         .metric-label { 
             font-size: 0.8125rem; 
-            color: #605e5c; 
+            color: #68769C; 
         }
         .chart-placeholder { 
             height: 200px; 
-            background: #E8E6DF; 
-            border: 2px dashed #605e5c; 
+            background: #E9ECEF; 
+            border: 2px dashed #68769C; 
             border-radius: 8px; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            color: #605e5c; 
+            color: #68769C; 
             font-weight: 500; 
         }
         .table-container { 
@@ -1655,7 +1655,7 @@ function generateLandingWireframe(description, colorScheme) {
         }
         ${getBreadcrumbStyles()}
         .hero { 
-            background: #E8E6DF !important; 
+            background: #E9ECEF !important; 
             color: #161616 !important; 
             text-align: center; 
             padding: 120px 24px 80px; 
@@ -1685,7 +1685,7 @@ function generateLandingWireframe(description, colorScheme) {
         }
         .btn-primary { 
             background: white; 
-            color: #0078d4; 
+            color: #8E9AAF; 
             padding: 16px 32px; 
             border: none; 
             border-radius: 6px; 
@@ -1745,7 +1745,7 @@ function generateLandingWireframe(description, colorScheme) {
         .feature-icon { 
             width: 40px; 
             height: 40px; 
-            background: #0078d4; 
+            background: #8E9AAF; 
             border-radius: 4px; 
             margin: 0 auto 0.75rem; 
             display: flex; 
@@ -1757,12 +1757,12 @@ function generateLandingWireframe(description, colorScheme) {
         .feature-card h3 { 
             font-size: 1rem; 
             margin-bottom: 0.5rem; 
-            color: #0078d4;
+            color: #8E9AAF;
             font-weight: 600;
             line-height: 1.3;
         }
         .feature-card p { 
-            color: #605e5c;
+            color: #68769C;
             font-size: 0.8125rem;
             line-height: 1.4;
             margin: 0;
@@ -1880,7 +1880,7 @@ function generateContentWireframe(description, colorScheme) {
         }
         .highlight { 
             background: #f0f9ff; 
-            border-left: 4px solid #0078d4; 
+            border-left: 4px solid #8E9AAF; 
             padding: 16px 20px; 
             margin: 24px 0; 
             border-radius: 0 4px 4px 0; 
@@ -2004,7 +2004,7 @@ function createSimpleFallback(description, colorScheme) {
             padding: 0 24px; 
         }
         .hero { 
-            background: #E8E6DF !important; 
+            background: #E9ECEF !important; 
             color: #161616 !important; 
             padding: 60px 40px; 
             border-radius: 8px; 
@@ -2034,7 +2034,7 @@ function createSimpleFallback(description, colorScheme) {
             border: 1px solid #e1dfdd; 
         }
         .card h3 { 
-            color: #0078d4; 
+            color: #8E9AAF; 
             margin-bottom: 12px; 
             font-size: 20px; 
         }
@@ -2043,7 +2043,7 @@ function createSimpleFallback(description, colorScheme) {
             margin-bottom: 16px; 
         }
         .btn { 
-            background: #0078d4; 
+            background: #8E9AAF; 
             color: white; 
             padding: 12px 24px; 
             border: none; 
@@ -2054,7 +2054,7 @@ function createSimpleFallback(description, colorScheme) {
             display: inline-block; 
         }
         .btn:hover { 
-            background: #106ebe; 
+            background: #68769C; 
         }
         .footer { 
             background: #ffffff; 
@@ -2148,7 +2148,7 @@ function getBreadcrumbStyles() {
     .breadcrumb-item {
       background: #ffffff;
       border: 1px solid #e1dfdd;
-      color: #0078d4;
+      color: #8E9AAF;
       padding: 6px 12px;
       border-radius: 4px;
       font-size: 13px;
@@ -2158,16 +2158,16 @@ function getBreadcrumbStyles() {
     }
     .breadcrumb-item:hover {
       background: #f3f2f1;
-      border-color: #0078d4;
+      border-color: #8E9AAF;
     }
     .breadcrumb-item.active {
-      background: #0078d4;
+      background: #8E9AAF;
       color: white;
-      border-color: #0078d4;
+      border-color: #8E9AAF;
       cursor: default;
     }
     .breadcrumb-item.active:hover {
-      background: #0078d4;
+      background: #8E9AAF;
     }`;
 }
 

@@ -490,13 +490,13 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     switch (id) {
       // Microsoft Learn Layout Components
       case 'ms-learn-layout':
-        return `<div class="ms-learn-layout" style="margin: 10px; padding: 20px; border: 2px solid #0078d4; border-radius: 8px; background: #f8f9fa;">
-          <h3 style="color: #0078d4;">📄 Microsoft Learn Complete Layout</h3>
+        return `<div class="ms-learn-layout" style="margin: 10px; padding: 20px; border: 2px solid #8E9AAF; border-radius: 8px; background: #f8f9fa;">
+          <h3 style="color: #8E9AAF;">📄 Microsoft Learn Complete Layout</h3>
           <p>Complete Microsoft Learn page layout with top nav, hero, content sections, and footer</p>
         </div>`;
 
       case 'ms-learn-topnav':
-        return `<nav class="ms-learn-topnav" style="margin: 10px; padding: 15px; background: #0078d4; color: white; border-radius: 4px;">
+        return `<nav class="ms-learn-topnav" style="margin: 10px; padding: 15px; background: #8E9AAF; color: white; border-radius: 4px;">
           <h4 style="margin: 0; color: white;">🧭 Microsoft Learn Navigation</h4>
           <p style="margin: 5px 0 0 0; font-size: 14px; color: #e1f5fe;">Official Microsoft Learn top navigation with search, menus, and branding</p>
         </nav>`;
@@ -548,7 +548,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
                 cursor: pointer;
               ">🔍</button>
               <button class="profile-btn" style="
-                background: #0078D4;
+                background: #8E9AAF;
                 border: none;
                 color: white;
                 padding: 6px 12px;
@@ -561,35 +561,35 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
         </header>`;
 
       case 'ms-learn-hero':
-        return `<section class="ms-learn-hero" style="margin: 10px; padding: 30px; background: linear-gradient(135deg, #0078d4, #005a9e); color: white; border-radius: 8px; text-align: center;">
+        return `<section class="ms-learn-hero" style="margin: 10px; padding: 30px; background: linear-gradient(135deg, #8E9AAF, #68769C); color: white; border-radius: 8px; text-align: center;">
           <h2 style="margin: 0 0 10px 0; color: white;">🚀 Microsoft Learn Hero Section</h2>
           <p style="margin: 0; font-size: 16px;">Engaging hero section with call-to-action and learning paths</p>
         </section>`;
 
       case 'ms-learn-footer':
-        return `<footer class="ms-learn-footer" style="margin: 10px; padding: 20px; background: #323130; color: white; border-radius: 4px;">
+        return `<footer class="ms-learn-footer" style="margin: 10px; padding: 20px; background: #3C4858; color: white; border-radius: 4px;">
           <h4 style="margin: 0 0 10px 0; color: white;">🦶 Microsoft Learn Footer</h4>
           <p style="margin: 0; font-size: 14px; color: #d1d1d1;">Footer with community links and feedback options</p>
         </footer>`;
 
       // Atlas Button Components
       case 'atlas-button-primary':
-        return `<button class="button button-primary button-lg atlas-component" data-user-added="true" style="margin: 10px; padding: 12px 24px; background: #E8E6DE; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Primary Button'}</button>`;
+        return `<button class="button button-primary button-lg atlas-component" data-user-added="true" style="margin: 10px; padding: 12px 24px; background: #CBC2C2; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Primary Button'}</button>`;
 
       case 'atlas-button-primary-filled':
-        return `<button class="button button-primary-filled" style="margin: 10px; padding: 12px 24px; background: #0078d4; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Primary Filled Button'}</button>`;
+        return `<button class="button button-primary-filled" style="margin: 10px; padding: 12px 24px; background: #8E9AAF; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Primary Filled Button'}</button>`;
 
       case 'atlas-button-primary-clear':
-        return `<button class="button button-primary-clear" style="margin: 10px; padding: 12px 24px; background: transparent; color: #0078d4; border: 2px solid #0078d4; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Primary Clear Button'}</button>`;
+        return `<button class="button button-primary-clear" style="margin: 10px; padding: 12px 24px; background: transparent; color: #8E9AAF; border: 2px solid #8E9AAF; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Primary Clear Button'}</button>`;
 
       case 'atlas-button-secondary':
-        return `<button class="button button-secondary button-lg" style="margin: 10px; padding: 12px 24px; background: #f3f2f1; color: #323130; border: 1px solid #e1dfdd; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Secondary Button'}</button>`;
+        return `<button class="button button-secondary button-lg" style="margin: 10px; padding: 12px 24px; background: #f3f2f1; color: #3C4858; border: 1px solid #e1dfdd; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Secondary Button'}</button>`;
 
       case 'atlas-button-secondary-clear':
-        return `<button class="button button-secondary-clear" style="margin: 10px; padding: 12px 24px; background: transparent; color: #323130; border: 2px solid #e1dfdd; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Secondary Clear Button'}</button>`;
+        return `<button class="button button-secondary-clear" style="margin: 10px; padding: 12px 24px; background: transparent; color: #3C4858; border: 2px solid #e1dfdd; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Secondary Clear Button'}</button>`;
 
       case 'atlas-button-secondary-filled':
-        return `<button class="button button-secondary-filled" style="margin: 10px; padding: 12px 24px; background: #605e5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Secondary Filled Button'}</button>`;
+        return `<button class="button button-secondary-filled" style="margin: 10px; padding: 12px 24px; background: #68769C; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Secondary Filled Button'}</button>`;
 
       case 'atlas-button-danger':
         return `<button class="button button-danger" style="margin: 10px; padding: 12px 24px; background: #d13438; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Danger Button'}</button>`;
@@ -598,39 +598,39 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
         return `<button class="button button-success" style="margin: 10px; padding: 12px 24px; background: #107c10; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Success Button'}</button>`;
 
       case 'atlas-button-warning':
-        return `<button class="button button-warning" style="margin: 10px; padding: 12px 24px; background: #ffb900; color: #323130; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Warning Button'}</button>`;
+        return `<button class="button button-warning" style="margin: 10px; padding: 12px 24px; background: #ffb900; color: #3C4858; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">${defaultProps?.text || 'Warning Button'}</button>`;
 
       case 'atlas-button-loading':
-        return `<button class="button button-loading" style="margin: 10px; padding: 12px 24px; background: #0078d4; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;" disabled>⏳ Loading...</button>`;
+        return `<button class="button button-loading" style="margin: 10px; padding: 12px 24px; background: #8E9AAF; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;" disabled>⏳ Loading...</button>`;
 
       case 'atlas-button-small':
-        return `<button class="button button-small" style="margin: 10px; padding: 8px 16px; background: #0078d4; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; font-size: 12px;">${defaultProps?.text || 'Small Button'}</button>`;
+        return `<button class="button button-small" style="margin: 10px; padding: 8px 16px; background: #8E9AAF; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; font-size: 12px;">${defaultProps?.text || 'Small Button'}</button>`;
 
       case 'atlas-button-large':
-        return `<button class="button button-large" style="margin: 10px; padding: 16px 32px; background: #0078d4; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; font-size: 18px;">${defaultProps?.text || 'Large Button'}</button>`;
+        return `<button class="button button-large" style="margin: 10px; padding: 16px 32px; background: #8E9AAF; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; font-size: 18px;">${defaultProps?.text || 'Large Button'}</button>`;
 
       case 'atlas-button-block':
-        return `<button class="button button-block" style="margin: 10px; padding: 12px 24px; background: #0078d4; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; width: 100%; display: block;">${defaultProps?.text || 'Block Button'}</button>`;
+        return `<button class="button button-block" style="margin: 10px; padding: 12px 24px; background: #8E9AAF; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; width: 100%; display: block;">${defaultProps?.text || 'Block Button'}</button>`;
 
       case 'atlas-button-search':
-        return `<button class="button button-primary button-lg button-search" style="margin: 10px; padding: 12px 24px; background: #0078d4; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 8px;">🔍 ${defaultProps?.text || 'Search'}</button>`;
+        return `<button class="button button-primary button-lg button-search" style="margin: 10px; padding: 12px 24px; background: #8E9AAF; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 8px;">🔍 ${defaultProps?.text || 'Search'}</button>`;
 
       // Form Components
       case 'atlas-input':
         return `<div style="margin: 10px;">
-          <label style="display: block; margin-bottom: 5px; color: #323130; font-weight: 600;">${defaultProps?.label || 'Input Label'}</label>
+          <label style="display: block; margin-bottom: 5px; color: #3C4858; font-weight: 600;">${defaultProps?.label || 'Input Label'}</label>
           <input type="text" class="form-control" placeholder="${defaultProps?.placeholder || 'Enter text here...'}" style="width: 100%; padding: 8px 12px; border: 1px solid #e1dfdd; border-radius: 4px; font-family: 'Segoe UI', sans-serif;">
         </div>`;
 
       case 'atlas-textarea':
         return `<div style="margin: 10px;">
-          <label style="display: block; margin-bottom: 5px; color: #323130; font-weight: 600;">${defaultProps?.label || 'Textarea Label'}</label>
+          <label style="display: block; margin-bottom: 5px; color: #3C4858; font-weight: 600;">${defaultProps?.label || 'Textarea Label'}</label>
           <textarea class="form-control" placeholder="${defaultProps?.placeholder || 'Enter your text here...'}" rows="4" style="width: 100%; padding: 8px 12px; border: 1px solid #e1dfdd; border-radius: 4px; font-family: 'Segoe UI', sans-serif; resize: vertical;"></textarea>
         </div>`;
 
       case 'atlas-select':
         return `<div style="margin: 10px;">
-          <label style="display: block; margin-bottom: 5px; color: #323130; font-weight: 600;">${defaultProps?.label || 'Select Label'}</label>
+          <label style="display: block; margin-bottom: 5px; color: #3C4858; font-weight: 600;">${defaultProps?.label || 'Select Label'}</label>
           <select class="form-control" style="width: 100%; padding: 8px 12px; border: 1px solid #e1dfdd; border-radius: 4px; font-family: 'Segoe UI', sans-serif;">
             <option>Option 1</option>
             <option>Option 2</option>
@@ -640,7 +640,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
       case 'atlas-checkbox':
         return `<div style="margin: 10px;">
-          <label style="display: flex; align-items: center; color: #323130; font-weight: 500; cursor: pointer;">
+          <label style="display: flex; align-items: center; color: #3C4858; font-weight: 500; cursor: pointer;">
             <input type="checkbox" style="margin-right: 8px; width: 16px; height: 16px;">
             ${defaultProps?.label || 'Checkbox Label'}
           </label>
@@ -648,7 +648,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
       case 'atlas-radio':
         return `<div style="margin: 10px;">
-          <label style="display: flex; align-items: center; color: #323130; font-weight: 500; cursor: pointer;">
+          <label style="display: flex; align-items: center; color: #3C4858; font-weight: 500; cursor: pointer;">
             <input type="radio" name="radio-group" style="margin-right: 8px; width: 16px; height: 16px;">
             ${defaultProps?.label || 'Radio Button Label'}
           </label>
@@ -656,7 +656,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
       case 'atlas-toggle':
         return `<div style="margin: 10px;">
-          <label style="display: flex; align-items: center; color: #323130; font-weight: 500; cursor: pointer;">
+          <label style="display: flex; align-items: center; color: #3C4858; font-weight: 500; cursor: pointer;">
             <div style="position: relative; width: 44px; height: 24px; background: #e1dfdd; border-radius: 12px; margin-right: 8px; transition: background 0.3s;">
               <div style="position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: transform 0.3s;"></div>
             </div>
@@ -665,20 +665,20 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
         </div>`;
 
       case 'atlas-label':
-        return `<label style="margin: 10px; display: block; color: #323130; font-weight: 600; font-size: 14px;">${defaultProps?.text || 'Form Label'}</label>`;
+        return `<label style="margin: 10px; display: block; color: #3C4858; font-weight: 600; font-size: 14px;">${defaultProps?.text || 'Form Label'}</label>`;
 
       // Navigation Components
       case 'atlas-breadcrumb':
         return `<nav style="margin: 10px; padding: 10px; background: #f8f9fa; border-radius: 4px;">
-          <div style="color: #605e5c; font-size: 14px;">
-            🏠 <a href="#" style="color: #0078d4; text-decoration: none;">Home</a> &gt; 
-            <a href="#" style="color: #0078d4; text-decoration: none;">Category</a> &gt; 
-            <span style="color: #323130; font-weight: 600;">Current Page</span>
+          <div style="color: #68769C; font-size: 14px;">
+            🏠 <a href="#" style="color: #8E9AAF; text-decoration: none;">Home</a> &gt; 
+            <a href="#" style="color: #8E9AAF; text-decoration: none;">Category</a> &gt; 
+            <span style="color: #3C4858; font-weight: 600;">Current Page</span>
           </div>
         </nav>`;
 
       case 'atlas-site-header':
-        return `<header style="margin: 10px; padding: 20px; background: #323130; color: white; border-radius: 4px;">
+        return `<header style="margin: 10px; padding: 20px; background: #3C4858; color: white; border-radius: 4px;">
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <h3 style="margin: 0; color: white;">🌐 Atlas Site Header</h3>
             <nav style="display: flex; gap: 20px;">
@@ -693,7 +693,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
         return `<nav style="margin: 10px; padding: 15px; text-align: center;">
           <div style="display: inline-flex; gap: 5px;">
             <button style="padding: 8px 12px; border: 1px solid #e1dfdd; background: white; border-radius: 4px; cursor: pointer;">&laquo;</button>
-            <button style="padding: 8px 12px; border: 1px solid #0078d4; background: #0078d4; color: white; border-radius: 4px;">1</button>
+            <button style="padding: 8px 12px; border: 1px solid #8E9AAF; background: #8E9AAF; color: white; border-radius: 4px;">1</button>
             <button style="padding: 8px 12px; border: 1px solid #e1dfdd; background: white; border-radius: 4px; cursor: pointer;">2</button>
             <button style="padding: 8px 12px; border: 1px solid #e1dfdd; background: white; border-radius: 4px; cursor: pointer;">3</button>
             <button style="padding: 8px 12px; border: 1px solid #e1dfdd; background: white; border-radius: 4px; cursor: pointer;">&raquo;</button>
@@ -702,7 +702,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
       // Content Components
       case 'atlas-gradient-card':
-        return `<div class="gradient-card" style="margin: 10px; padding: 25px; background: linear-gradient(135deg, #0078d4, #005a9e); color: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,120,212,0.3);">
+        return `<div class="gradient-card" style="margin: 10px; padding: 25px; background: linear-gradient(135deg, #8E9AAF, #68769C); color: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,120,212,0.3);">
           <h4 style="margin: 0 0 10px 0; color: white;">✨ Gradient Card</h4>
           <p style="margin: 0; color: #e1f5fe;">A beautiful gradient card component with Microsoft Learn styling.</p>
         </div>`;
@@ -715,17 +715,17 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           ctaText: "Get Started",
           showSecondaryButton: true,
           secondaryCtaText: "Learn More",
-          backgroundColor: "#E8E6DF",
+          backgroundColor: "#E9ECEF",
           heroImageUrl: "hero-learn.svg"
         });
 
       case 'atlas-banner':
-        return `<div class="banner" style="margin: 10px; padding: 20px; background: #fff4ce; border: 1px solid #ffb900; border-radius: 4px; color: #323130;">
+        return `<div class="banner" style="margin: 10px; padding: 20px; background: #fff4ce; border: 1px solid #ffb900; border-radius: 4px; color: #3C4858;">
           <div style="display: flex; align-items: center; gap: 10px;">
             <span style="font-size: 20px;">ℹ️</span>
             <div>
-              <h4 style="margin: 0 0 5px 0; color: #323130;">Important Banner</h4>
-              <p style="margin: 0; color: #605e5c;">This is an informational banner component.</p>
+              <h4 style="margin: 0 0 5px 0; color: #3C4858;">Important Banner</h4>
+              <p style="margin: 0; color: #68769C;">This is an informational banner component.</p>
             </div>
           </div>
         </div>`;
@@ -733,26 +733,26 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
       // Layout Components
       case 'atlas-container':
         return `<div class="container" style="margin: 10px; padding: 20px; border: 1px solid #e1dfdd; border-radius: 4px; background: #f9f9f9;">
-          <h3 style="margin: 0 0 10px 0; color: #323130;">📦 Container</h3>
-          <p style="margin: 0; color: #605e5c;">This is a container component. Add your content here.</p>
+          <h3 style="margin: 0 0 10px 0; color: #3C4858;">📦 Container</h3>
+          <p style="margin: 0; color: #68769C;">This is a container component. Add your content here.</p>
         </div>`;
 
       case 'atlas-card':
         return `<div class="card atlas-component" data-user-added="true" style="margin: 10px; padding: 20px; border: 1px solid #e1dfdd; border-radius: 8px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-          <h4 style="margin: 0 0 10px 0; color: #323130;">💳 Card Title</h4>
-          <p style="margin: 0; color: #605e5c;">Card content goes here. This is a Microsoft Learn styled card component.</p>
+          <h4 style="margin: 0 0 10px 0; color: #3C4858;">💳 Card Title</h4>
+          <p style="margin: 0; color: #68769C;">Card content goes here. This is a Microsoft Learn styled card component.</p>
         </div>`;
 
       case 'atlas-heading':
-        return `<h2 style="margin: 10px; color: #323130; font-size: 2rem; font-weight: 600;">📝 ${defaultProps?.text || 'Heading Component'}</h2>`;
+        return `<h2 style="margin: 10px; color: #3C4858; font-size: 2rem; font-weight: 600;">📝 ${defaultProps?.text || 'Heading Component'}</h2>`;
 
       case 'atlas-text':
-        return `<p style="margin: 10px; color: #605e5c; line-height: 1.5; font-family: 'Segoe UI', sans-serif;">${defaultProps?.text || 'This is a text component. You can use it to display paragraphs of content with Microsoft Learn styling.'}</p>`;
+        return `<p style="margin: 10px; color: #68769C; line-height: 1.5; font-family: 'Segoe UI', sans-serif;">${defaultProps?.text || 'This is a text component. You can use it to display paragraphs of content with Microsoft Learn styling.'}</p>`;
 
       // Default fallback
       default:
-        return `<div style="margin: 10px; padding: 15px; border: 2px dashed #e1dfdd; border-radius: 4px; color: #605e5c; text-align: center; background: #f9f9f9;">
-          <h4 style="margin: 0 0 5px 0; color: #323130;">🔧 ${name || 'Unknown Component'}</h4>
+        return `<div style="margin: 10px; padding: 15px; border: 2px dashed #e1dfdd; border-radius: 4px; color: #68769C; text-align: center; background: #f9f9f9;">
+          <h4 style="margin: 0 0 5px 0; color: #3C4858;">🔧 ${name || 'Unknown Component'}</h4>
           <p style="margin: 0; font-size: 12px;">Component ID: ${id}</p>
         </div>`;
     }
@@ -829,7 +829,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     const componentWrapper = `
       <div class="atlas-component-wrapper mt-4" data-user-added="true" style="
         background: rgba(255, 255, 255, 0.95);
-        border: 2px solid #0078d4;
+        border: 2px solid #8E9AAF;
         border-radius: 8px;
         padding: 15px;
         margin: 15px 0;
@@ -886,8 +886,8 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           min-height: 400px; 
         }
         .button { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; }
-        .button-primary { background: #0078d4; color: white; }
-        .button-secondary { background: #f3f2f1; color: #323130; border: 1px solid #e1dfdd; }
+        .button-primary { background: #8E9AAF; color: white; }
+        .button-secondary { background: #f3f2f1; color: #3C4858; border: 1px solid #e1dfdd; }
         .button-lg { padding: 12px 24px; }
         .button-search { display: inline-flex; align-items: center; gap: 8px; }
         
@@ -900,7 +900,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           animation: atlasSlideIn 0.6s ease-out;
           transition: all 0.3s ease;
           background: rgba(255, 255, 255, 0.95);
-          border: 2px solid #0078d4;
+          border: 2px solid #8E9AAF;
           border-radius: 8px;
           padding: 15px;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -924,7 +924,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
             <div class="row mb-4">
                 <div class="col-12">
                     <h1 class="h3 text-primary mb-1">Component Library Wireframe</h1>
-                    <p style="color: #605e5c; font-size: 14px;">Components are added to the Fluent UI layout and can be rearranged using drag & drop.</p>
+                    <p style="color: #68769C; font-size: 14px;">Components are added to the Fluent UI layout and can be rearranged using drag & drop.</p>
                 </div>
             </div>
             <div class="row">
@@ -1168,8 +1168,8 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     components.forEach((component, index) => {
       if (component.wireframeHtml) {
         combinedHtml += `
-          <div class="figma-imported-component" data-component-name="${component.componentName}" style="margin: 20px 0; padding: 20px; border: 2px solid #0078d4; border-radius: 8px; background: rgba(255,255,255,0.95);">
-            <h4 style="margin: 0 0 15px 0; color: #0078d4; font-size: 16px;">📦 ${component.componentName}</h4>
+          <div class="figma-imported-component" data-component-name="${component.componentName}" style="margin: 20px 0; padding: 20px; border: 2px solid #8E9AAF; border-radius: 8px; background: rgba(255,255,255,0.95);">
+            <h4 style="margin: 0 0 15px 0; color: #8E9AAF; font-size: 16px;">📦 ${component.componentName}</h4>
             ${component.wireframeHtml}
           </div>
         `;

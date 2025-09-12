@@ -6,6 +6,7 @@
     "analyzeImage",
     "analyzeUIImage",
     "atlasComponents",
+    "directImageToWireframe",
     "figmaComponents",
     "figmaImport",
     "figmaNodeImporter",
@@ -20,6 +21,7 @@
     "githubAuthStart",
     "health",
     "openai-health",
+    "updateThemeColors",
     "wireframeAnalyze"
   ],
   "logging": {

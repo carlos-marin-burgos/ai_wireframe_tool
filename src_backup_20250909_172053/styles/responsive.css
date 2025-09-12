@@ -247,7 +247,7 @@ xl: 1200px+ (large desktop)
 .form-responsive input:focus,
 .form-responsive textarea:focus,
 .form-responsive select:focus {
-  border-color: #0078d4;
+  border-color: #8E9AAF;
   box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.1);
 }
 

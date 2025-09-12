@@ -18,3 +18,83 @@ import React from 'react';
   }
   
   export default GeneratePageContinuation;
+  import React from 'react';
+  
+  const GeneratePageContinuation = () =>  {
+	return (
+	  <div>
+	  </div>
+	);
+  }
+  
+  export default GeneratePageContinuation;
+  import React from 'react';
+  
+  const GeneratePageContinuation = () =>  {
+	return (
+	  <div>
+	  </div>
+	);
+  }
+  
+  export default GeneratePageContinuation;
+  import React from 'react';
+  
+  const GeneratePageContinuation = () =>  {
+	return (
+	  <div>
+	  </div>
+	);
+  }
+  
+  export default GeneratePageContinuation;
+  import React from 'react';
+  
+  const GeneratePageContinuation = () =>  {
+	return (
+	  <div>
+	  </div>
+	);
+  }
+  
+  export default GeneratePageContinuation;
+  import React from 'react';
+  
+  const GeneratePageContinuation = () =>  {
+	return (
+	  <div>
+	  </div>
+	);
+  }
+  
+  export default GeneratePageContinuation;
+  import React from 'react';
+  
+  const GeneratePageContinuation = () =>  {
+	return (
+	  <div>
+	  </div>
+	);
+  }
+  
+  export default GeneratePageContinuation;
+  import React from 'react';
+  
+  const GeneratePageContinuation = () =>  {
+	return (
+	  <div>
+	  </div>
+	);
+  }
+  
+  export default GeneratePageContinuation;
+  import React from 'react';
+  
+  const GeneratePageContinuation = () =>  {
+	return (
+	  <div>
+	  </div>
+	);
+  }
+  
+  export default GeneratePageContinuation;

@@ -1067,17 +1067,17 @@ class FigmaService {
       const heroNode = heroResponse.data.nodes["14647:163530"];
 
       const colors = {
-        // Default Atlas colors (fallback)
-        background: "#e8e6df",
-        text: "#171717",
-        primaryButton: "#0078d4",
-        secondaryButton: "#242424",
-        accent: "#0064b5",
-        badge: "#002050",
-        white: "#ffffff",
-        lightGray: "#f5f5f5",
-        mediumGray: "#8a8886",
-        stroke: "#e1e5e9",
+        // Neutral wireframe colors instead of branded Atlas colors
+        background: "#f8f9fa", // Light gray background
+        text: "#212529", // Dark gray text
+        primaryButton: "#6c757d", // Neutral gray primary button
+        secondaryButton: "#5a6268", // Darker gray secondary button
+        accent: "#495057", // Dark gray accent
+        badge: "#6c757d", // Neutral gray badge
+        white: "#ffffff", // White
+        lightGray: "#f8f9fa", // Light gray
+        mediumGray: "#6c757d", // Medium gray
+        stroke: "#dee2e6", // Light gray borders
       };
 
       // Extract actual colors from the hero node if available
@@ -1094,9 +1094,9 @@ class FigmaService {
                   .padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
 
                 // Map specific color values to our palette
-                if (hex === "#e8e6df") colors.background = hex;
+                if (hex === "#E9ECEF") colors.background = hex;
                 if (hex === "#171717") colors.text = hex;
-                if (hex === "#0078d4") colors.primaryButton = hex;
+                if (hex === "#8E9AAF") colors.primaryButton = hex;
                 if (hex === "#242424") colors.secondaryButton = hex;
                 if (hex === "#0064b5") colors.accent = hex;
                 if (hex === "#002050") colors.badge = hex;
@@ -1118,18 +1118,18 @@ class FigmaService {
       return colors;
     } catch (error) {
       console.error("❌ Error extracting Atlas colors:", error.message);
-      // Return default Atlas colors
+      // Return professional wireframe colors as fallback
       return {
-        background: "#e8e6df",
-        text: "#171717",
-        primaryButton: "#0078d4",
-        secondaryButton: "#242424",
-        accent: "#0064b5",
-        badge: "#002050",
-        white: "#ffffff",
-        lightGray: "#f5f5f5",
-        mediumGray: "#8a8886",
-        stroke: "#e1e5e9",
+        background: "#F8F9FA", // Very light gray background
+        text: "#3C4858", // Dark slate text for readability
+        primaryButton: "#8E9AAF", // Medium blue-gray primary button
+        secondaryButton: "#68769C", // Darker blue-gray secondary button
+        accent: "#3C4858", // Dark slate accent
+        badge: "#8E9AAF", // Medium blue-gray badge
+        white: "#FFFFFF", // Pure white
+        lightGray: "#E9ECEF", // Very light gray
+        mediumGray: "#CBC2C2", // Light warm gray
+        stroke: "#E9ECEF", // Very light borders
       };
     }
   }
@@ -1667,7 +1667,7 @@ class FigmaService {
         <div class="atlas-component atlas-hero-figma" data-node-id="${nodeId}" style="max-width: 100%; overflow: hidden;">
             <img src="${imageUrl}" alt="Atlas Hero Component from Figma" style="width: 100%; height: auto; display: block; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);" />
             <div class="atlas-hero-overlay" style="text-align: center; margin-top: 12px;">
-                <p style="font-size: 12px; color: #605e5c; margin: 0; opacity: 0.8;">Official Atlas Design Library Hero Component (Node: ${nodeId})</p>
+                <p style="font-size: 12px; color: #68769C; margin: 0; opacity: 0.8;">Official Atlas Design Library Hero Component (Node: ${nodeId})</p>
                 <p style="font-size: 11px; color: #8a8886; margin: 4px 0 0 0; opacity: 0.6;">Fetched directly from Figma Atlas Design Library</p>
             </div>
         </div>`;
@@ -1680,7 +1680,7 @@ class FigmaService {
     return `
     <div class="atlas-component atlas-hero-fallback" data-node-id="${nodeId}" style="background: #f8f9fa; padding: 48px 32px; border-radius: 8px; border: 2px dashed #e1e5e9; text-align: center; font-family: 'Segoe UI', system-ui, sans-serif;">
         <div style="max-width: 600px; margin: 0 auto;">
-            <h2 style="font-size: 24px; font-weight: 600; color: #605e5c; margin-bottom: 16px;">Atlas Hero Component</h2>
+            <h2 style="font-size: 24px; font-weight: 600; color: #68769C; margin-bottom: 16px;">Atlas Hero Component</h2>
             <p style="font-size: 16px; color: #8a8886; margin-bottom: 20px;">Unable to fetch from Figma Atlas Design Library</p>
             <p style="font-size: 12px; color: #a19f9d; margin: 0;">Node ID: ${nodeId}</p>
             <p style="font-size: 11px; color: #c8c6c4; margin: 4px 0 0 0;">Please check Figma connection and permissions</p>
@@ -1729,7 +1729,7 @@ class FigmaService {
                  alt="${altText}" 
                  style="width: 100%; height: auto; display: block; object-fit: contain;" />
             <div class="atlas-component-info" style="text-align: center; margin-top: 8px; padding: 8px;">
-                <p style="font-size: 11px; color: #605e5c; margin: 0; opacity: 0.8;">Official Atlas Design Library ${componentLabel}</p>
+                <p style="font-size: 11px; color: #68769C; margin: 0; opacity: 0.8;">Official Atlas Design Library ${componentLabel}</p>
                 <p style="font-size: 10px; color: #8a8886; margin: 2px 0 0 0; opacity: 0.6;">Node ID: ${nodeId} • Fetched from Figma</p>
             </div>
         </div>`;
@@ -1760,10 +1760,10 @@ class FigmaService {
       options.type || "learning-path"
     }" style="background: #f8f9fa; padding: 24px; border-radius: 8px; border: 2px dashed #e1e5e9; text-align: center; font-family: 'Segoe UI', system-ui, sans-serif; max-width: 400px;">
         <div style="font-size: 32px; margin-bottom: 12px; opacity: 0.6;">${icon}</div>
-        <h3 style="font-size: 16px; font-weight: 600; color: #323130; margin-bottom: 8px;">Atlas ${componentLabel}</h3>
-        <p style="font-size: 14px; color: #605e5c; margin-bottom: 12px; line-height: 1.4;">Unable to fetch from Figma Atlas Design Library</p>
+        <h3 style="font-size: 16px; font-weight: 600; color: #3C4858; margin-bottom: 8px;">Atlas ${componentLabel}</h3>
+        <p style="font-size: 14px; color: #68769C; margin-bottom: 12px; line-height: 1.4;">Unable to fetch from Figma Atlas Design Library</p>
         <div style="background: #e1f5fe; padding: 8px 12px; border-radius: 4px; margin-bottom: 8px;">
-            <p style="font-size: 12px; color: #0078d4; margin: 0; font-weight: 500;">Node ID: ${nodeId}</p>
+            <p style="font-size: 12px; color: #8E9AAF; margin: 0; font-weight: 500;">Node ID: ${nodeId}</p>
         </div>
         <p style="font-size: 11px; color: #a19f9d; margin: 0;">Please check Figma connection and permissions</p>
         <p style="font-size: 10px; color: #c8c6c4; margin: 4px 0 0 0;">Atlas Design Library: PuWj05uKXhfbqrhmJLtCij</p>
@@ -1783,8 +1783,8 @@ class FigmaService {
             --fluent-neutral-background-1: #ffffff;
             --fluent-neutral-background-2: #f5f5f5;
             --fluent-neutral-stroke-1: #e0e0e0;
-            --fluent-brand-background-primary: #0078d4;
-            --fluent-brand-background-secondary: #106ebe;
+            --fluent-brand-background-primary: #8E9AAF;
+            --fluent-brand-background-secondary: #68769C;
             --fluent-border-radius-medium: 6px;
             --fluent-shadow-2: 0px 2px 4px rgba(0, 0, 0, 0.1);
             --fluent-shadow-4: 0px 4px 8px rgba(0, 0, 0, 0.12);
@@ -2287,7 +2287,7 @@ class FigmaService {
         .atlas-hero {
           padding: 60px 40px;
           background: #f5f1eb;
-          color: #323130;
+          color: #3C4858;
           border-radius: 8px;
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -2306,12 +2306,12 @@ class FigmaService {
           font-weight: 700;
           margin: 0 0 20px 0;
           line-height: 1.2;
-          color: #323130;
+          color: #3C4858;
         }
 
         .atlas-hero-subtitle {
           font-size: 20px;
-          color: #605e5c;
+          color: #68769C;
           margin: 0 0 30px 0;
           line-height: 1.6;
         }

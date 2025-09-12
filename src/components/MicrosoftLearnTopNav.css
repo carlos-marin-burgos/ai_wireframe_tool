@@ -1,38 +1,38 @@
-/* Microsoft Learn Top Navigation - Official Colors and Styling */
+/* Microsoft Learn Top Navigation - Centralized Colors and Styling */
 
-/* Microsoft Learn Color Palette */
+/* Microsoft Learn Color Palette - Using Centralized System */
 :root {
-  /* Primary Microsoft Colors */
-  --ms-color-primary: #0078d4;
-  --ms-color-primary-hover: #106ebe;
-  --ms-color-primary-active: #005a9e;
-  --ms-color-primary-dark: #004578;
+  /* Primary Microsoft Colors - Using Centralized Variables */
+  --ms-color-primary: var(--color-primary);
+  --ms-color-primary-hover: var(--color-secondary);
+  --ms-color-primary-active: var(--color-secondary);
+  --ms-color-primary-dark: var(--color-accent);
 
-  /* Microsoft Learn Brand Colors */
-  --ms-color-white: #ffffff;
-  --ms-color-gray-50: #f8f9fa;
-  --ms-color-gray-100: #f1f1f1;
-  --ms-color-gray-200: #e1e1e1;
-  --ms-color-gray-300: #d1d1d1;
-  --ms-color-gray-400: #a6a6a6;
-  --ms-color-gray-500: #737373;
-  --ms-color-gray-600: #5c5c5c;
-  --ms-color-gray-700: #3d3d3d;
-  --ms-color-gray-800: #2d2d2d;
-  --ms-color-gray-900: #1a1a1a;
+  /* Microsoft Learn Brand Colors - Using Centralized Variables */
+  --ms-color-white: var(--color-white);
+  --ms-color-gray-50: var(--color-light);
+  --ms-color-gray-100: var(--color-surface);
+  --ms-color-gray-200: var(--color-border);
+  --ms-color-gray-300: var(--color-muted);
+  --ms-color-gray-400: var(--color-text-muted);
+  --ms-color-gray-500: var(--color-text-secondary);
+  --ms-color-gray-600: var(--color-text-secondary);
+  --ms-color-gray-700: var(--color-text);
+  --ms-color-gray-800: var(--color-text);
+  --ms-color-gray-900: var(--color-text);
 
-  /* Microsoft Learn UI Colors */
-  --ms-color-banner-bg: #ffffff;
-  --ms-color-nav-bg: #ffffff;
-  --ms-color-nav-border: #e1e1e1;
-  --ms-color-text-primary: #1a1a1a;
-  --ms-color-text-secondary: #5c5c5c;
-  --ms-color-text-link: #0078d4;
-  --ms-color-text-link-hover: #106ebe;
+  /* Microsoft Learn UI Colors - Using Centralized Variables */
+  --ms-color-banner-bg: var(--color-background);
+  --ms-color-nav-bg: var(--color-background);
+  --ms-color-nav-border: var(--color-border);
+  --ms-color-text-primary: var(--color-text);
+  --ms-color-text-secondary: var(--color-text-secondary);
+  --ms-color-text-link: var(--color-primary);
+  --ms-color-text-link-hover: var(--color-secondary);
 
-  /* Shadows */
-  --ms-shadow-nav: 0 2px 4px rgba(0, 0, 0, 0.1);
-  --ms-shadow-dropdown: 0 4px 16px rgba(0, 0, 0, 0.15);
+  /* Shadows - Using Centralized Variables */
+  --ms-shadow-nav: var(--shadow-small);
+  --ms-shadow-dropdown: var(--shadow-large);
 
   /* Typography */
   --ms-font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont,

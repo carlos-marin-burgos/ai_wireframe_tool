@@ -14,14 +14,14 @@ interface FallbackWireframeOptions {
 // Color scheme definitions
 const COLOR_SCHEMES = {
   microsoft: {
-    main: "#0078d4",
-    secondary: "#106ebe",
+    main: "#8E9AAF",
+    secondary: "#68769C",
     bg: "#ffffff",
     surface: "#f8f9fa",
-    text: "#323130",
-    textSecondary: "#605e5c",
+    text: "#3C4858",
+    textSecondary: "#68769C",
     border: "#e1e5e9",
-    accent: "#0078d4",
+    accent: "#8E9AAF",
     headerBg: "#ffffff",
     headerText: "#000000",
   },
@@ -31,7 +31,7 @@ const COLOR_SCHEMES = {
     bg: "#ffffff",
     surface: "#f8f9fa",
     text: "#171717",
-    textSecondary: "#605e5c",
+    textSecondary: "#68769C",
     border: "#e1dfdd",
     accent: "#8b5dae",
     headerBg: "#ffffff",
@@ -43,7 +43,7 @@ const COLOR_SCHEMES = {
     bg: "#ffffff",
     surface: "#f8f9fa",
     text: "#171717",
-    textSecondary: "#605e5c",
+    textSecondary: "#68769C",
     border: "#e1dfdd",
     accent: "#107c10",
     headerBg: "#ffffff",
@@ -259,7 +259,7 @@ const generateLandingPage = (
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Learning Paths</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Certifications</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Q&A</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Sign in</button>
+                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Sign in</button>
             </nav>
         </div>
     </header>
@@ -432,7 +432,7 @@ const generateDashboard = (
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Reports</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Analytics</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Settings</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Dashboard</button>
+                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Dashboard</button>
             </nav>
         </div>
     </header>
@@ -620,7 +620,7 @@ const generateForm = (
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Templates</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Examples</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Support</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Create Form</button>
+                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Create Form</button>
             </nav>
         </div>
     </header>
@@ -793,7 +793,7 @@ const generateContent = (
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Learning Paths</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Certifications</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Q&A</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Browse</button>
+                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Browse</button>
             </nav>
         </div>
     </header>
@@ -948,7 +948,7 @@ const generateGeneric = (
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Documentation</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Community</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Support</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Get Started</button>
+                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Get Started</button>
             </nav>
         </div>
     </header>
@@ -1159,7 +1159,7 @@ const generateCustomForm = (description: string, _theme: string, colorScheme: st
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Templates</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Examples</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Support</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Create Form</button>
+                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Create Form</button>
             </nav>
         </div>
     </header>

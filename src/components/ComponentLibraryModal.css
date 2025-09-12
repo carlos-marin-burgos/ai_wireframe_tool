@@ -46,7 +46,7 @@
 .fluentui-logo {
   width: 24px;
   height: 24px;
-  background: linear-gradient(135deg, #0078d4, #106ebe);
+  background: linear-gradient(135deg, #8E9AAF, #68769C);
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -59,7 +59,7 @@
 
 .component-library-title h2 {
   margin: 0;
-  color: #323130;
+  color: #3C4858;
 }
 
 .component-library-close {
@@ -67,11 +67,11 @@
   border: none;
   font-size: 24px;
   cursor: pointer;
-  color: #605e5c;
+  color: #68769C;
 }
 
 .component-library-close:hover {
-  color: #323130;
+  color: #3C4858;
 }
 
 .component-library-content {
@@ -94,7 +94,7 @@
   margin: 0 0 16px 0;
   font-size: 16px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
 }
 
 .category-filters {
@@ -111,7 +111,7 @@
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
-  color: #323130;
+  color: #3C4858;
   transition: all 0.2s ease;
   display: flex;
   justify-content: space-between;
@@ -124,13 +124,13 @@
 
 .category-button.active {
   background: #e1f5fe;
-  color: #0078d4;
+  color: #8E9AAF;
   font-weight: 600;
 }
 
 .category-count {
   font-size: 12px;
-  color: #605e5c;
+  color: #68769C;
   background: #edebe9;
   padding: 2px 6px;
   border-radius: 10px;
@@ -140,7 +140,7 @@
 
 .category-button.active .category-count {
   background: #c7e0f4;
-  color: #0078d4;
+  color: #8E9AAF;
 }
 
 /* Main Content Area */
@@ -165,14 +165,14 @@
 }
 
 .component-item:hover {
-  border-color: #0078d4;
+  border-color: #8E9AAF;
   box-shadow: 0 2px 8px rgba(0, 120, 212, 0.1);
 }
 
 .component-preview {
   padding: 16px;
   border-bottom: 1px solid #e1e5e9;
-  background: #f8f9fa;
+  background: #E9ECEF;
   min-height: 80px;
   display: flex;
   align-items: center;
@@ -187,18 +187,18 @@
 
 .component-info h4 {
   margin: 0 0 4px 0;
-  color: #323130;
+  color: #3C4858;
 }
 
 .component-info p {
   margin: 0 0 8px 0;
-  color: #605e5c;
+  color: #68769C;
   font-size: 14px;
 }
 
 .component-category {
   background: #e1f5fe;
-  color: #0078d4;
+  color: #8E9AAF;
   padding: 2px 8px;
   border-radius: 12px;
   font-size: 12px;
@@ -230,7 +230,7 @@
 }
 
 .ai-generation-button {
-  background: #0078d4;
+  background: #8E9AAF;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -245,7 +245,7 @@
 }
 
 .ai-generation-button:hover {
-  background: #106ebe;
+  background: #68769C;
 }
 
 /* Responsive Design */

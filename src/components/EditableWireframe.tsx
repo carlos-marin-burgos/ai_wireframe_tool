@@ -161,7 +161,7 @@ const EditableWireframe: React.FC<EditableWireframeProps> = ({
 
         // Style for editing mode (EXACTLY like test page)
         element.style.backgroundColor = 'rgba(0, 120, 212, 0.2)';
-        element.style.border = '2px solid #0078d4';
+        element.style.border = '2px solid #8E9AAF';
         element.style.borderRadius = '4px';
         element.style.padding = '2px 4px';
 
@@ -301,7 +301,7 @@ const EditableWireframe: React.FC<EditableWireframeProps> = ({
         <div className="editable-wireframe">
             <div className="wireframe-toolbar">
                 <span className="toolbar-text">
-                    {isEditing ? '✏️ Editing mode - Click outside or press Enter to save' : '🖱️ Click any text to edit'}
+                    {isEditing ? 'Editing mode - Click outside or press Enter to save' : 'Click any text to edit'}
                 </span>
             </div>
             <div

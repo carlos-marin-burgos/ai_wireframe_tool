@@ -65,16 +65,16 @@ module.exports = async function (context, req) {
 }
 
 .btn-primary {
-  background-color: #0078d4;
+  background-color: #8E9AAF;
   color: #ffffff;
 }
 
 .btn-primary:hover {
-  background-color: #106ebe;
+  background-color: #68769C;
 }
 
 .btn-primary:active {
-  background-color: #005a9e;
+  background-color: #68769C;
 }
 
 .btn-text {
@@ -91,18 +91,18 @@ module.exports = async function (context, req) {
 </button>`,
         cssCode: `.btn-secondary {
   background-color: transparent;
-  color: #0078d4;
-  border: 1px solid #0078d4;
+  color: #8E9AAF;
+  border: 1px solid #8E9AAF;
 }
 
 .btn-secondary:hover {
-  background-color: #0078d4;
+  background-color: #8E9AAF;
   color: #ffffff;
 }
 
 .btn-secondary:active {
-  background-color: #005a9e;
-  border-color: #005a9e;
+  background-color: #68769C;
+  border-color: #68769C;
 }`,
       },
       "atlas-hero-001": {
@@ -128,7 +128,7 @@ module.exports = async function (context, req) {
   </div>
 </section>`,
         cssCode: `.hero-section {
-  background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+  background: linear-gradient(135deg, #8E9AAF 0%, #68769C 100%);
   color: white;
   padding: 80px 20px;
   min-height: 500px;
@@ -230,7 +230,7 @@ module.exports = async function (context, req) {
   display: block;
   font-size: 14px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
   margin-bottom: 4px;
 }
 
@@ -247,8 +247,8 @@ module.exports = async function (context, req) {
 
 .form-input:focus {
   outline: none;
-  border-color: #0078d4;
-  box-shadow: 0 0 0 1px #0078d4;
+  border-color: #8E9AAF;
+  box-shadow: 0 0 0 1px #8E9AAF;
 }
 
 .form-input::placeholder {
@@ -257,7 +257,7 @@ module.exports = async function (context, req) {
 
 .form-helper {
   font-size: 12px;
-  color: #605e5c;
+  color: #68769C;
   margin-top: 4px;
 }`,
       },
@@ -301,7 +301,7 @@ module.exports = async function (context, req) {
 
 .card-image {
   height: 180px;
-  background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+  background: linear-gradient(135deg, #8E9AAF 0%, #68769C 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -318,7 +318,7 @@ module.exports = async function (context, req) {
 
 .card-category {
   font-size: 12px;
-  color: #0078d4;
+  color: #8E9AAF;
   font-weight: 600;
   text-transform: uppercase;
   margin-bottom: 8px;
@@ -328,12 +328,12 @@ module.exports = async function (context, req) {
   font-size: 18px;
   font-weight: 600;
   margin: 0 0 12px 0;
-  color: #323130;
+  color: #3C4858;
 }
 
 .card-description {
   font-size: 14px;
-  color: #605e5c;
+  color: #68769C;
   line-height: 1.4;
   margin: 0 0 16px 0;
 }
@@ -392,8 +392,8 @@ module.exports = async function (context, req) {
 
 .form-select:focus {
   outline: none;
-  border-color: #0078d4;
-  box-shadow: 0 0 0 1px #0078d4;
+  border-color: #8E9AAF;
+  box-shadow: 0 0 0 1px #8E9AAF;
 }`,
       },
       "fluent-nav-001": {
@@ -442,7 +442,7 @@ module.exports = async function (context, req) {
 
 .brand-link {
   text-decoration: none;
-  color: #323130;
+  color: #3C4858;
   font-size: 20px;
   font-weight: 600;
 }
@@ -455,7 +455,7 @@ module.exports = async function (context, req) {
 
 .nav-link {
   text-decoration: none;
-  color: #605e5c;
+  color: #68769C;
   font-size: 14px;
   padding: 8px 12px;
   border-radius: 4px;
@@ -464,7 +464,7 @@ module.exports = async function (context, req) {
 
 .nav-link:hover,
 .nav-link.active {
-  color: #0078d4;
+  color: #8E9AAF;
   background-color: #f3f2f1;
 }
 
@@ -528,7 +528,7 @@ module.exports = async function (context, req) {
   </div>
 </footer>`,
         cssCode: `.footer-section {
-  background-color: #323130;
+  background-color: #3C4858;
   color: #ffffff;
   padding: 60px 20px 20px;
   margin-top: auto;
@@ -667,18 +667,18 @@ module.exports = async function (context, req) {
 }
 
 .breadcrumb-link {
-  color: #0078d4;
+  color: #8E9AAF;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .breadcrumb-link:hover {
-  color: #106ebe;
+  color: #68769C;
   text-decoration: underline;
 }
 
 .breadcrumb-current .breadcrumb-text {
-  color: #323130;
+  color: #3C4858;
   font-weight: 600;
 }`,
       },
@@ -700,7 +700,7 @@ module.exports = async function (context, req) {
   gap: 8px;
   cursor: pointer;
   font-size: 14px;
-  color: #323130;
+  color: #3C4858;
 }
 
 .checkbox-input {
@@ -723,8 +723,8 @@ module.exports = async function (context, req) {
 }
 
 .checkbox-input:checked + .checkbox-indicator {
-  background-color: #0078d4;
-  border-color: #0078d4;
+  background-color: #8E9AAF;
+  border-color: #8E9AAF;
 }
 
 .checkbox-input:checked + .checkbox-indicator::after {
@@ -776,7 +776,7 @@ module.exports = async function (context, req) {
 .radio-legend {
   font-size: 14px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
   margin-bottom: 8px;
 }
 
@@ -792,7 +792,7 @@ module.exports = async function (context, req) {
   gap: 8px;
   cursor: pointer;
   font-size: 14px;
-  color: #323130;
+  color: #3C4858;
 }
 
 .radio-input {
@@ -815,7 +815,7 @@ module.exports = async function (context, req) {
 }
 
 .radio-input:checked + .radio-indicator {
-  border-color: #0078d4;
+  border-color: #8E9AAF;
 }
 
 .radio-input:checked + .radio-indicator::after {
@@ -823,7 +823,7 @@ module.exports = async function (context, req) {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #0078d4;
+  background-color: #8E9AAF;
 }
 
 .radio-input:focus + .radio-indicator {
@@ -861,7 +861,7 @@ module.exports = async function (context, req) {
 .notification-success {
   background-color: #dff6dd;
   border-left-color: #107c10;
-  color: #323130;
+  color: #3C4858;
 }
 
 .notification-content {
@@ -903,7 +903,7 @@ module.exports = async function (context, req) {
   border: none;
   font-size: 20px;
   cursor: pointer;
-  color: #605e5c;
+  color: #68769C;
   padding: 4px;
   border-radius: 2px;
   transition: background-color 0.2s ease;
@@ -944,13 +944,13 @@ module.exports = async function (context, req) {
 .progress-label {
   font-size: 14px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
 }
 
 .progress-percentage {
   font-size: 14px;
   font-weight: 600;
-  color: #0078d4;
+  color: #8E9AAF;
 }
 
 .progress-bar {
@@ -964,14 +964,14 @@ module.exports = async function (context, req) {
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #0078d4 0%, #106ebe 100%);
+  background: linear-gradient(90deg, #8E9AAF 0%, #68769C 100%);
   border-radius: 4px;
   transition: width 0.3s ease;
 }
 
 .progress-details {
   font-size: 12px;
-  color: #605e5c;
+  color: #68769C;
 }`,
       },
       "atlas-sidebar-001": {
@@ -1038,7 +1038,7 @@ module.exports = async function (context, req) {
 .sidebar-title {
   font-size: 18px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
   margin: 0;
 }
 
@@ -1047,7 +1047,7 @@ module.exports = async function (context, req) {
   border: none;
   font-size: 18px;
   cursor: pointer;
-  color: #605e5c;
+  color: #68769C;
   display: none;
 }
 
@@ -1080,7 +1080,7 @@ module.exports = async function (context, req) {
 
 .sidebar-module.current {
   background-color: #deecf9;
-  border-right: 3px solid #0078d4;
+  border-right: 3px solid #8E9AAF;
 }
 
 .module-icon {
@@ -1096,7 +1096,7 @@ module.exports = async function (context, req) {
 .module-title {
   flex: 1;
   font-size: 14px;
-  color: #323130;
+  color: #3C4858;
   font-weight: 500;
 }
 
@@ -1143,9 +1143,9 @@ module.exports = async function (context, req) {
 
         // Apply design system preferences
         if (options.designSystem === "fluent") {
-          cssCode = cssCode.replace(/#0078d4/g, "#0078d4"); // Keep Fluent blue
+          cssCode = cssCode.replace(/#8E9AAF/g, "#8E9AAF"); // Keep Fluent blue
         } else if (options.designSystem === "atlas") {
-          cssCode = cssCode.replace(/#0078d4/g, "#0078d4"); // Keep Atlas blue
+          cssCode = cssCode.replace(/#8E9AAF/g, "#8E9AAF"); // Keep Atlas blue
         }
 
         // Apply responsive option
@@ -1166,7 +1166,7 @@ module.exports = async function (context, req) {
   padding: 8px;
   margin: 4px;
   font-family: monospace;
-  color: #605e5c;
+  color: #68769C;
 }
         `
           : cssCode;

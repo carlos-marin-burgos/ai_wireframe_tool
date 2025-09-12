@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixed Image-to-Wireframe Matching Test</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .status {
+            text-align: center;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .upload-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 2px dashed #dee2e6;
+            text-align: center;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .file-input-wrapper:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .image-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .panel-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .uploaded-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .generated-wireframe {
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            overflow: hidden;
+            background: white;
+            min-height: 400px;
+        }
+
+        .generated-wireframe iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+            border-radius: 10px;
+        }
+
+        .analysis-details {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+        }
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .analysis-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .analysis-item h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .components-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .component-tag {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .color-palette {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .color-swatch {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .color-swatch::after {
+            content: attr(data-color);
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8em;
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+            font-size: 1.2em;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .accuracy-meter {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .accuracy-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .accuracy-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997, #17a2b8);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🎯 Fixed Image-to-Wireframe Matching</h1>
+        <div id="status" class="status" style="display: none;"></div>
+
+        <div class="upload-section">
+            <h3>Upload an image to test the FIXED matching system</h3>
+            <p>This version extracts EXACT text content and colors from your image!</p>
+            <br>
+            <label for="file-input" class="file-input-wrapper">
+                📁 Choose Image File
+                <input type="file" id="file-input" accept="image/*">
+            </label>
+        </div>
+
+        <div class="comparison-container" id="comparison" style="display: none;">
+            <div class="image-panel">
+                <h3 class="panel-title">📸 Original Image</h3>
+                <img id="uploaded-image" class="uploaded-image" alt="Uploaded image">
+            </div>
+
+            <div class="image-panel">
+                <h3 class="panel-title">🎨 Generated Wireframe</h3>
+                <div class="generated-wireframe" id="wireframe-container">
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div>
+                        Analyzing image and generating exact wireframe...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="analysis-details" id="analysis" style="display: none;">
+            <h3>🔍 Analysis Results</h3>
+            <div class="accuracy-meter">
+                <h4>Matching Accuracy</h4>
+                <div class="accuracy-bar">
+                    <div class="accuracy-fill" id="accuracy-fill" style="width: 0%;"></div>
+                </div>
+                <span id="accuracy-text">0%</span>
+            </div>
+
+            <div class="analysis-grid">
+                <div class="analysis-item">
+                    <h4>🧩 Components Detected</h4>
+                    <div id="components-list" class="components-list"></div>
+                </div>
+
+                <div class="analysis-item">
+                    <h4>🎨 Extracted Colors</h4>
+                    <div id="color-palette" class="color-palette"></div>
+                </div>
+
+                <div class="analysis-item">
+                    <h4>📝 Text Content</h4>
+                    <div id="text-content"></div>
+                </div>
+
+                <div class="analysis-item">
+                    <h4>📊 Technical Details</h4>
+                    <div id="technical-details"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const status = document.getElementById('status');
+        const comparison = document.getElementById('comparison');
+        const uploadedImage = document.getElementById('uploaded-image');
+        const loading = document.getElementById('loading');
+        const wireframeContainer = document.getElementById('wireframe-container');
+        const analysis = document.getElementById('analysis');
+
+        function showStatus(message, type) {
+            status.textContent = message;
+            status.className = `status ${type}`;
+            status.style.display = 'block';
+        }
+
+        function hideStatus() {
+            status.style.display = 'none';
+        }
+
+        async function analyzeAndGenerateWireframe(file) {
+            try {
+                hideStatus();
+                comparison.style.display = 'grid';
+                analysis.style.display = 'none';
+
+                // Show uploaded image
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    uploadedImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+
+                // Convert to base64 for API
+                const base64 = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result.split(',')[1]);
+                    reader.readAsDataURL(file);
+                });
+
+                // Step 1: Analyze image with improved prompt
+                showStatus('🔍 Analyzing image with GPT-4V (extracting EXACT colors and text)...', 'success');
+
+                const analysisResponse = await fetch('http://localhost:7071/api/analyzeUIImage', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        imageBase64: `data:image/png;base64,${base64}`,
+                        prompt: 'Analyze this UI image and extract EXACT text content and EXACT colors. Return structured JSON with precise color codes and actual text found in the image.'
+                    })
+                });
+
+                if (!analysisResponse.ok) {
+                    throw new Error(`Analysis failed: ${analysisResponse.status}`);
+                }
+
+                const analysisResult = await analysisResponse.json();
+                console.log('📸 Analysis Result:', analysisResult);
+
+                if (!analysisResult.success) {
+                    throw new Error(analysisResult.error || 'Failed to analyze image');
+                }
+
+                const imageAnalysis = analysisResult.analysis;
+
+                // Step 2: Generate wireframe using the analysis
+                showStatus('🎨 Generating wireframe with exact colors and text...', 'success');
+
+                const wireframeResponse = await fetch('http://localhost:7071/api/generate-html-wireframe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        description: `Generate wireframe matching the uploaded image exactly`,
+                        imageAnalysis: imageAnalysis,
+                        colorScheme: 'extracted'
+                    })
+                });
+
+                if (!wireframeResponse.ok) {
+                    throw new Error(`Wireframe generation failed: ${wireframeResponse.status}`);
+                }
+
+                const wireframeResult = await wireframeResponse.json();
+                console.log('🎨 Wireframe Result:', wireframeResult);
+
+                if (!wireframeResult.success) {
+                    throw new Error(wireframeResult.error || 'Failed to generate wireframe');
+                }
+
+                // Step 3: Display results
+                loading.style.display = 'none';
+
+                // Create iframe with wireframe
+                const iframe = document.createElement('iframe');
+                iframe.srcdoc = wireframeResult.data.html;
+                wireframeContainer.appendChild(iframe);
+
+                // Show analysis details
+                displayAnalysisResults(imageAnalysis, wireframeResult);
+                analysis.style.display = 'block';
+
+                showStatus('✅ SUCCESS! Image-to-wireframe matching completed with exact colors and text!', 'success');
+
+            } catch (error) {
+                console.error('❌ Error:', error);
+                loading.style.display = 'none';
+                showStatus(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        function displayAnalysisResults(imageAnalysis, wireframeResult) {
+            // Components
+            const componentsList = document.getElementById('components-list');
+            componentsList.innerHTML = '';
+            if (imageAnalysis.components && imageAnalysis.components.length > 0) {
+                imageAnalysis.components.forEach(comp => {
+                    const tag = document.createElement('div');
+                    tag.className = 'component-tag';
+                    tag.textContent = `${comp.type}: "${comp.text || 'No text'}"`;
+                    componentsList.appendChild(tag);
+                });
+            } else {
+                componentsList.innerHTML = '<em>No components detected</em>';
+            }
+
+            // Colors
+            const colorPalette = document.getElementById('color-palette');
+            colorPalette.innerHTML = '';
+            const colors = imageAnalysis.designTokens?.colors || [];
+            if (colors.length > 0) {
+                colors.forEach(color => {
+                    const swatch = document.createElement('div');
+                    swatch.className = 'color-swatch';
+                    swatch.style.backgroundColor = color;
+                    swatch.setAttribute('data-color', color);
+                    colorPalette.appendChild(swatch);
+                });
+            } else {
+                colorPalette.innerHTML = '<em>No colors extracted</em>';
+            }
+
+            // Text content
+            const textContent = document.getElementById('text-content');
+            const allText = imageAnalysis.components?.map(c => c.text).filter(Boolean) || [];
+            textContent.innerHTML = allText.length > 0
+                ? allText.map(t => `<div>"${t}"</div>`).join('')
+                : '<em>No text detected</em>';
+
+            // Technical details
+            const technicalDetails = document.getElementById('technical-details');
+            technicalDetails.innerHTML = `
+                <div><strong>Components:</strong> ${imageAnalysis.components?.length || 0}</div>
+                <div><strong>Confidence:</strong> ${Math.round((imageAnalysis.confidence || 0) * 100)}%</div>
+                <div><strong>Layout:</strong> ${imageAnalysis.layout?.type || 'Unknown'}</div>
+                <div><strong>Processing:</strong> ${imageAnalysis.processingTimeMs}ms</div>
+                <div><strong>Model:</strong> ${imageAnalysis.model || 'N/A'}</div>
+            `;
+
+            // Accuracy meter
+            const accuracy = imageAnalysis.confidence || 0;
+            const accuracyFill = document.getElementById('accuracy-fill');
+            const accuracyText = document.getElementById('accuracy-text');
+
+            setTimeout(() => {
+                accuracyFill.style.width = `${accuracy * 100}%`;
+                accuracyText.textContent = `${Math.round(accuracy * 100)}% Match Accuracy`;
+            }, 500);
+        }
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.type.startsWith('image/')) {
+                    analyzeAndGenerateWireframe(file);
+                } else {
+                    showStatus('❌ Please select a valid image file.', 'error');
+                }
+            }
+        });
+
+        // Show initial status
+        showStatus('🚀 Ready! Upload an image to test the FIXED matching system.', 'success');
+    </script>
+</body>
+
+</html>

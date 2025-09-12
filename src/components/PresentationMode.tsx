@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { FiX, FiChevronLeft, FiChevronRight, FiMaximize, FiMinimize } from 'react-icons/fi';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { FiX, FiChevronLeft, FiChevronRight, FiMaximize, FiMinimize, FiDroplet } from 'react-icons/fi';
 import './PresentationMode.css';
+import { sanitizeGeneratedHtml, sanitizeGeneratedHtmlWithInlining } from '../utils/sanitizeGeneratedHtml';
 
 interface PresentationModeProps {
     isOpen: boolean;
@@ -15,6 +16,173 @@ interface PresentationModeProps {
     }>;
 }
 
+// Component for async iframe rendering with CSS inlining
+const PresentationIframe: React.FC<{ content: string; styleMode: 'raw' | 'neutral' }> = ({ content, styleMode }) => {
+    const [srcDoc, setSrcDoc] = useState<string>('');
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const loadContent = async () => {
+            setIsLoading(true);
+            try {
+                // Use inlining version for better CSS fidelity
+                const sanitized = await sanitizeGeneratedHtmlWithInlining(content, true);
+                // Minimal reset always applied (non-intrusive)
+                const minimalReset = `body{margin:0;padding:16px;box-sizing:border-box;}*{box-sizing:border-box;}img{max-width:100%;height:auto;}`;
+
+                // Neutral overlay (scoped) only when styleMode === 'neutral'
+                const neutralScoped = `
+                .presentation-base{--primary:#8E9AAF;--secondary:#68769C;--accent:#3C4858;--background:#E9ECEF;--text-primary:#3C4858;--text-secondary:#68769C;--border-color:#CBC2C2;--highlight:#8E9AAF;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.6;color:var(--text-primary);} 
+                .presentation-base h1,.presentation-base h2,.presentation-base h3,.presentation-base h4,.presentation-base h5,.presentation-base h6{margin-top:0;margin-bottom:.75rem;color:var(--text-primary);} 
+                .presentation-base .container,.presentation-base .section,.presentation-base .card{border:1px solid var(--border-color);border-radius:6px;padding:16px;margin-bottom:16px;background:#fff;} 
+                .presentation-base button{background:var(--primary);color:#fff;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;font-family:inherit;} 
+                .presentation-base button:hover{background:var(--secondary);} 
+                .presentation-base input,.presentation-base textarea,.presentation-base select{border:1px solid var(--border-color);border-radius:4px;padding:8px 12px;font-family:inherit;font-size:14px;color:var(--text-primary);} 
+                .presentation-base input:focus,.presentation-base textarea:focus,.presentation-base select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 2px rgba(142,154,175,.2);} 
+                .presentation-base a{color:var(--primary);text-decoration:none;} 
+                .presentation-base a:hover{color:var(--secondary);text-decoration:underline;} 
+                .presentation-base .nav,.presentation-base .navigation{background:var(--background);border:1px solid var(--border-color);padding:12px;border-radius:6px;margin-bottom:16px;} 
+                .presentation-base .hero,.presentation-base .header{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;padding:24px;border-radius:8px;margin-bottom:20px;} 
+                .presentation-base .hero h1,.presentation-base .hero h2,.presentation-base .hero h3,.presentation-base .header h1,.presentation-base .header h2,.presentation-base .header h3{color:#fff;} 
+                .presentation-base .sidebar{background:var(--background);border:1px solid var(--border-color);padding:16px;border-radius:6px;} 
+                .presentation-base table{width:100%;border-collapse:collapse;margin-bottom:16px;} 
+                .presentation-base th,.presentation-base td{border:1px solid var(--border-color);padding:8px 12px;text-align:left;} 
+                .presentation-base th{background:var(--background);font-weight:600;color:var(--text-primary);} 
+                @media (max-width:768px){.presentation-base{padding:12px;}.presentation-base .container,.presentation-base .section,.presentation-base .card{padding:12px;margin-bottom:12px;}}
+                `;
+
+                const wrapperStart = styleMode === 'neutral' ? '<div class="presentation-base">' : '<div class="presentation-raw">';
+                const wrapperEnd = '</div>';
+
+                const doc = `<!DOCTYPE html><html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>${sanitized.styles ? `<style>${sanitized.styles}</style>` : ''}<style>${minimalReset}${styleMode === 'neutral' ? neutralScoped : ''}</style></head><body>${wrapperStart}${sanitized.html}${wrapperEnd}</body></html>`;
+
+                setSrcDoc(doc);
+            } catch (error) {
+                console.warn('Failed to inline CSS in presentation, using fallback:', error);
+                // Fallback to regular sanitization if inlining fails
+                const sanitized = sanitizeGeneratedHtml(content, true);
+                const minimalReset = `body{margin:0;padding:16px;box-sizing:border-box;}*{box-sizing:border-box;}img{max-width:100%;height:auto;}`;
+                const neutralScoped = `
+                .presentation-base{--primary:#8E9AAF;--secondary:#68769C;--accent:#3C4858;--background:#E9ECEF;--text-primary:#3C4858;--text-secondary:#68769C;--border-color:#CBC2C2;--highlight:#8E9AAF;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.6;color:var(--text-primary);} 
+                .presentation-base h1,.presentation-base h2,.presentation-base h3,.presentation-base h4,.presentation-base h5,.presentation-base h6{margin-top:0;margin-bottom:.75rem;color:var(--text-primary);} 
+                .presentation-base .container,.presentation-base .section,.presentation-base .card{border:1px solid var(--border-color);border-radius:6px;padding:16px;margin-bottom:16px;background:#fff;} 
+                .presentation-base button{background:var(--primary);color:#fff;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;font-family:inherit;} 
+                .presentation-base button:hover{background:var(--secondary);} 
+                .presentation-base input,.presentation-base textarea,.presentation-base select{border:1px solid var(--border-color);border-radius:4px;padding:8px 12px;font-family:inherit;font-size:14px;color:var(--text-primary);} 
+                .presentation-base input:focus,.presentation-base textarea:focus,.presentation-base select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 2px rgba(142,154,175,.2);} 
+                .presentation-base a{color:var(--primary);text-decoration:none;} 
+                .presentation-base a:hover{color:var(--secondary);text-decoration:underline;} 
+                .presentation-base .nav,.presentation-base .navigation{background:var(--background);border:1px solid var(--border-color);padding:12px;border-radius:6px;margin-bottom:16px;} 
+                .presentation-base .hero,.presentation-base .header{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;padding:24px;border-radius:8px;margin-bottom:20px;} 
+                .presentation-base .hero h1,.presentation-base .hero h2,.presentation-base .hero h3,.presentation-base .header h1,.presentation-base .header h2,.presentation-base .header h3{color:#fff;} 
+                .presentation-base .sidebar{background:var(--background);border:1px solid var(--border-color);padding:16px;border-radius:6px;} 
+                .presentation-base table{width:100%;border-collapse:collapse;margin-bottom:16px;} 
+                .presentation-base th,.presentation-base td{border:1px solid var(--border-color);padding:8px 12px;text-align:left;} 
+                .presentation-base th{background:var(--background);font-weight:600;color:var(--text-primary);} 
+                @media (max-width:768px){.presentation-base{padding:12px;}.presentation-base .container,.presentation-base .section,.presentation-base .card{padding:12px;margin-bottom:12px;}}
+                `;
+                const wrapperStart = styleMode === 'neutral' ? '<div class="presentation-base">' : '<div class="presentation-raw">';
+                const wrapperEnd = '</div>';
+                const doc = `<!DOCTYPE html><html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>${(sanitized.links || []).map(h => `<link rel="stylesheet" href="${h}"/>`).join('')}${sanitized.styles ? `<style>${sanitized.styles}</style>` : ''}<style>${minimalReset}${styleMode === 'neutral' ? neutralScoped : ''}</style></head><body>${wrapperStart}${sanitized.html}${wrapperEnd}</body></html>`;
+                setSrcDoc(doc);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadContent();
+    }, [content, styleMode]);
+
+    if (isLoading) {
+        return (
+            <div className="wireframe-iframe loading-placeholder">
+                <div>Loading presentation...</div>
+            </div>
+        );
+    }
+
+    return (
+        <iframe
+            srcDoc={srcDoc}
+            className="wireframe-iframe"
+            title="Page Preview"
+            sandbox="allow-same-origin"
+        />
+    );
+};
+
+// Component for thumbnail iframes with CSS inlining
+const ThumbnailIframe: React.FC<{ content: string; title: string }> = ({ content, title }) => {
+    const [srcDoc, setSrcDoc] = useState<string>('');
+
+    useEffect(() => {
+        const loadContent = async () => {
+            try {
+                // Use inlining version for better CSS fidelity
+                const sanitized = await sanitizeGeneratedHtmlWithInlining(content, true);
+
+                // Simple fixed scaling for thumbnails
+                const scalingScript = `
+                <script>
+                document.body.style.transform = 'scale(0.08)';
+                document.body.style.transformOrigin = 'top left';
+                document.body.style.width = '1250px';
+                document.body.style.height = '750px';
+                document.body.style.margin = '0';
+                document.documentElement.style.overflow = 'hidden';
+                </script>`;
+
+                const doc = `<!DOCTYPE html><html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>${sanitized.styles ? `<style>${sanitized.styles}</style>` : ''}</head><body>${sanitized.html}${scalingScript}</body></html>`;
+                setSrcDoc(doc);
+            } catch (error) {
+                console.warn('Failed to inline CSS in thumbnail, using fallback:', error);
+                // Fallback to regular sanitization
+                const sanitized = sanitizeGeneratedHtml(content, true);
+                const scalingScript = `
+                <script>
+                setTimeout(() => {
+                    const body = document.body;
+                    const html = document.documentElement;
+                    
+                    const contentWidth = Math.max(body.scrollWidth || 0, body.offsetWidth || 0, html.clientWidth || 0, html.scrollWidth || 0, html.offsetWidth || 0);
+                    const contentHeight = Math.max(body.scrollHeight || 0, body.offsetHeight || 0, html.clientHeight || 0, html.scrollHeight || 0, html.offsetHeight || 0);
+                    
+                    // Target dimensions should match the CSS container: 100x60px
+                    const targetW = 100;
+                    const targetH = 60;
+                    
+                    const scaleX = targetW / Math.max(contentWidth, 1);
+                    const scaleY = targetH / Math.max(contentHeight, 1);
+                    const scale = Math.min(scaleX, scaleY, 1);
+                    
+                    body.style.transform = 'scale(' + scale + ')';
+                    body.style.transformOrigin = 'top left';
+                    body.style.width = (contentWidth) + 'px';
+                    body.style.height = (contentHeight) + 'px';
+                    
+                    html.style.width = (contentWidth * scale) + 'px';
+                    html.style.height = (contentHeight * scale) + 'px';
+                    html.style.overflow = 'hidden';
+                }, 100);
+                </script>`;
+                const doc = `<!DOCTYPE html><html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>${(sanitized.links || []).map(h => `<link rel="stylesheet" href="${h}"/>`).join('')}${sanitized.styles ? `<style>${sanitized.styles}</style>` : ''}</head><body>${sanitized.html}${scalingScript}</body></html>`;
+                setSrcDoc(doc);
+            }
+        };
+
+        loadContent();
+    }, [content]);
+
+    return (
+        <iframe
+            srcDoc={srcDoc}
+            className="thumbnail-iframe"
+            title={title}
+            sandbox="allow-same-origin"
+        />
+    );
+};
+
 const PresentationMode: React.FC<PresentationModeProps> = ({
     isOpen,
     onClose,
@@ -25,6 +193,7 @@ const PresentationMode: React.FC<PresentationModeProps> = ({
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [showChrome, setShowChrome] = useState(true);
+    const [styleMode, setStyleMode] = useState<'raw' | 'neutral'>('raw'); // 'raw' preserves AI styles; 'neutral' adds overlay
     const hideUiTimerRef = useRef<number | null>(null);
     const rootRef = useRef<HTMLDivElement | null>(null);
     const sessionKey = `presentation_last_index_${wireframeName}`;
@@ -169,6 +338,13 @@ const PresentationMode: React.FC<PresentationModeProps> = ({
                     <div className="toolbar-right">
                         <button
                             className="presentation-btn"
+                            onClick={() => setStyleMode(m => m === 'raw' ? 'neutral' : 'raw')}
+                            title={styleMode === 'raw' ? 'Apply Neutral Overlay (impose consistent palette)' : 'Show Raw AI Styles (original)'}
+                        >
+                            <FiDroplet />
+                        </button>
+                        <button
+                            className="presentation-btn"
                             onClick={toggleFullscreen}
                             title={isFullscreen ? 'Exit Fullscreen (F)' : 'Fullscreen (F)'}
                         >
@@ -225,12 +401,7 @@ const PresentationMode: React.FC<PresentationModeProps> = ({
                     )}
 
                     <div className="wireframe-display">
-                        <iframe
-                            srcDoc={currentPage.content}
-                            className="wireframe-iframe"
-                            title={`${currentPage.name} Preview`}
-                            sandbox="allow-same-origin allow-scripts"
-                        />
+                        <PresentationIframe content={currentPage.content} styleMode={styleMode} />
                         {/* Click zones for quick navigation in fullscreen */}
                         {isFullscreen && (
                             <>
@@ -260,11 +431,9 @@ const PresentationMode: React.FC<PresentationModeProps> = ({
                                 title={page.name}
                             >
                                 <div className="thumbnail-preview">
-                                    <iframe
-                                        srcDoc={page.content}
-                                        className="thumbnail-iframe"
+                                    <ThumbnailIframe
+                                        content={page.content}
                                         title={`${page.name} Thumbnail`}
-                                        sandbox="allow-same-origin"
                                     />
                                 </div>
                                 <span className="thumbnail-label">{page.name}</span>

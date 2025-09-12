@@ -121,16 +121,16 @@ function convertReactToDisplayHTML(reactCode, description) {
         }
         
         /* Additional Tailwind-like styles for better rendering */
-        .bg-primary { background-color: #0078d4; }
-        .bg-primary-light { background-color: #106ebe; }
-        .bg-primary-dark { background-color: #005a9e; }
-        .text-primary { color: #0078d4; }
-        .border-primary { border-color: #0078d4; }
-        .ring-primary { --tw-ring-color: #0078d4; }
-        .focus\\:ring-primary:focus { --tw-ring-color: #0078d4; box-shadow: 0 0 0 2px #0078d4; }
-        .focus\\:border-primary:focus { border-color: #0078d4; }
-        .hover\\:bg-primary-dark:hover { background-color: #005a9e; }
-        .hover\\:bg-primary-light:hover { background-color: #106ebe; }
+        .bg-primary { background-color: #8E9AAF; }
+        .bg-primary-light { background-color: #68769C; }
+        .bg-primary-dark { background-color: #68769C; }
+        .text-primary { color: #8E9AAF; }
+        .border-primary { border-color: #8E9AAF; }
+        .ring-primary { --tw-ring-color: #8E9AAF; }
+        .focus\\:ring-primary:focus { --tw-ring-color: #8E9AAF; box-shadow: 0 0 0 2px #8E9AAF; }
+        .focus\\:border-primary:focus { border-color: #8E9AAF; }
+        .hover\\:bg-primary-dark:hover { background-color: #68769C; }
+        .hover\\:bg-primary-light:hover { background-color: #68769C; }
     </style>
 </head>
 <body>
@@ -219,7 +219,7 @@ function generateSimpleFallback(description, colorScheme) {
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        h1 { color: #0078d4; margin-bottom: 20px; }
+        h1 { color: #8E9AAF; margin-bottom: 20px; }
         p { color: #666; line-height: 1.6; margin-bottom: 15px; }
         .placeholder { 
             background: #e9ecef; 

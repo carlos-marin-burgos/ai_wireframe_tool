@@ -173,7 +173,7 @@ class WireframeApiService {
       }
       .preview-title { 
         margin-bottom: 24px; 
-        color: #323130; 
+        color: #3C4858; 
         border-bottom: 1px solid #e1e5e9; 
         padding-bottom: 16px; 
       }

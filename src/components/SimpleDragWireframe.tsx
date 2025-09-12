@@ -1,3 +1,19 @@
+/*
+ * Enhanced SimpleDragWireframe Component
+ * 
+ * Features:
+ * 1. Cross-container moves - Elements can be moved between .row, .col, .section, etc.
+ * 2. Drag mode toggle - Button to enable/disable dragging to prevent accidental moves
+ * 3. Ordering metadata - Semantic structure tracking for better diffing
+ * 
+ * Usage:
+ * <SimpleDragWireframe 
+ *   htmlContent={wireframeHtml}
+ *   onUpdateContent={(newHtml) => setWireframeHtml(newHtml)}
+ *   onOrderingChange={(metadata) => console.log('Structure changed:', metadata)}
+ * />
+ */
+
 import React, { useEffect, useRef, useState } from 'react';
 import dragula from 'dragula';
 import 'dragula/dist/dragula.css';
@@ -17,7 +33,51 @@ interface SimpleDragWireframeProps {
     onOrderingChange?: (metadata: OrderingMetadata[]) => void;
 }
 
-// HTML sanitization function to prevent broken HTML display
+// Generate ordering metadata from DOM structure
+function generateOrderingMetadata(element: Element, index: number = 0): OrderingMetadata {
+    const id = element.id || `element-${element.tagName.toLowerCase()}-${index}`;
+
+    return {
+        id,
+        tagName: element.tagName.toLowerCase(),
+        className: element.className || undefined,
+        textContent: element.textContent?.trim().substring(0, 50) || undefined,
+        children: Array.from(element.children).map((child, childIndex) =>
+            generateOrderingMetadata(child, childIndex)
+        )
+    };
+}
+
+// Find all containers that can accept drops (rows, cols, sections, etc.)
+function findDragContainers(rootElement: HTMLElement): HTMLElement[] {
+    const containers = [rootElement]; // Always include the root
+
+    // More conservative approach - only add containers that make sense for drag operations
+    const selectors = [
+        '.row', '.col', '.column',
+        '.container', '.container-fluid', '.section', '.grid',
+        '[data-droppable="true"]',
+        '.card-body', '.panel-body',
+        'main', 'section', 'article', // Removed header, footer, nav, aside as they're usually not drop targets
+        '.hero', '.hero-section', '.hero-banner',
+        'form', '.form-section', '.form-group'
+    ];
+
+    selectors.forEach(selector => {
+        const elements = rootElement.querySelectorAll(selector);
+        elements.forEach(el => {
+            if (el instanceof HTMLElement) {
+                // Additional check: only add if element has sufficient content area for drops
+                const rect = el.getBoundingClientRect();
+                if (rect.width > 50 && rect.height > 30) {
+                    containers.push(el);
+                }
+            }
+        });
+    });
+
+    return [...new Set(containers)]; // Remove duplicates
+}
 function sanitizeHTML(html: string): string {
     if (!html || typeof html !== 'string') {
         return '';
@@ -77,204 +137,657 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
     const containerRef = useRef<HTMLDivElement>(null);
     const dragulaRef = useRef<any>(null);
     const [isDragEnabled, setIsDragEnabled] = useState(false);
+    const isDragEnabledRef = useRef<boolean>(false); // live flag for event handlers
+    const [dragContainers, setDragContainers] = useState<HTMLElement[]>([]);
+    const currentEditingRef = useRef<HTMLElement | null>(null);
+    const augmentedRef = useRef<boolean>(false);
+    const editableTaggedRef = useRef<boolean>(false);
+    const insertionMarkerRef = useRef<HTMLDivElement | null>(null);
+    const activeDragElementRef = useRef<HTMLElement | null>(null);
+    const mouseMoveHandlerRef = useRef<((e: MouseEvent) => void) | null>(null);
+    const cleanupMarkerRef = useRef<(() => void) | null>(null);
+    const simpleModeRef = useRef<boolean>(false); // fallback simple direct-children mode
+    const reinitRequestedRef = useRef<boolean>(false);
 
-    // Function to make elements editable
-    const makeElementsEditable = (container: HTMLElement) => {
+    // Create (once) the insertion marker element
+    const getInsertionMarker = () => {
+        if (!insertionMarkerRef.current) {
+            const marker = document.createElement('div');
+            marker.className = 'insertion-gap-marker';
+            marker.setAttribute('aria-hidden', 'true');
+            insertionMarkerRef.current = marker;
+        }
+        return insertionMarkerRef.current!;
+    };
+
+    // Determine target container under pointer (supports cross-container)
+    const resolveContainerFromPoint = (clientX: number, clientY: number): HTMLElement | null => {
+        const el = document.elementFromPoint(clientX, clientY) as HTMLElement | null;
+        if (!el) return null;
+        return el.closest('.dragula-container.drag-enabled') as HTMLElement | null;
+    };
+
+    // Position insertion marker based on pointer Y relative to siblings
+    const updateInsertionMarker = (evt: MouseEvent) => {
+        const container = resolveContainerFromPoint(evt.clientX, evt.clientY) || containerRef.current;
         if (!container) return;
+        const marker = getInsertionMarker();
+        // Collect candidate siblings (direct children only)
+        const children = Array.from(container.children).filter(ch => ch !== marker && ch !== activeDragElementRef.current) as HTMLElement[];
+        if (children.length === 0) {
+            // Empty container -> append marker
+            if (marker.parentElement !== container) container.appendChild(marker);
+            return;
+        }
+        // Find insertion point
+        const y = evt.clientY;
+        let placed = false;
+        for (let i = 0; i < children.length; i++) {
+            const rect = children[i].getBoundingClientRect();
+            const midpoint = rect.top + rect.height / 2;
+            if (y < midpoint) {
+                if (children[i].previousSibling === marker) {
+                    placed = true; break;
+                }
+                container.insertBefore(marker, children[i]);
+                placed = true;
+                break;
+            }
+        }
+        if (!placed) {
+            if (children[children.length - 1].nextSibling !== marker) {
+                container.appendChild(marker);
+            }
+        }
+    };
 
-        const editableSelectors = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'a', 'button', 'li', 'td', 'th', 'label'];
+    // Remove editable markers (used when entering drag mode)
+    const clearEditableMarkers = () => {
+        if (!containerRef.current) return;
+        const tagged = containerRef.current.querySelectorAll('[data-editable="true"]');
+        tagged.forEach(n => n.removeAttribute('data-editable'));
+        editableTaggedRef.current = false;
+    };
 
-        editableSelectors.forEach(selector => {
-            const elements = container.querySelectorAll(selector);
-            elements.forEach(element => {
-                if (element instanceof HTMLElement && element.textContent?.trim() &&
-                    !element.classList.contains('dragula-container')) {
+    // Clear any inline hover outlines left from edit mode
+    const clearInlineHoverStyles = () => {
+        if (!containerRef.current) return;
+        const outlined = containerRef.current.querySelectorAll('[style]');
+        outlined.forEach(node => {
+            if (!(node instanceof HTMLElement)) return;
+            // We only clear the lightweight hover outline, not active editing outline (which should already be finished)
+            if (node.style.outline === '1px solid rgb(0, 123, 255)' || node.style.outline === '1px solid #007bff') {
+                node.style.outline = '1px solid transparent';
+            }
+        });
+    };
 
-                    // Only make it editable if it doesn't contain other editable elements
-                    const hasEditableChildren = element.querySelector('h1, h2, h3, h4, h5, h6, p, span, a, button, li, td, th, label');
+    // Tag elements that are eligible for inline text editing with data-editable
+    const markEditableElements = () => {
+        if (!containerRef.current) return;
+        editableTaggedRef.current = true;
+        const candidates = containerRef.current.querySelectorAll('h1,h2,h3,h4,h5,h6,p,span,a,button,label,li,td,th,div');
+        candidates.forEach(node => {
+            if (!(node instanceof HTMLElement)) return;
+            if (node.getAttribute('data-editing') === 'true') return;
+            // Reuse existing heuristic
+            if (isEligibleEditable(node)) {
+                node.setAttribute('data-editable', 'true');
+            } else {
+                node.removeAttribute('data-editable');
+            }
+        });
+    };
 
-                    if (!hasEditableChildren) {
-                        element.setAttribute('data-editable', 'true');
-                        element.addEventListener('click', handleElementClick);
-                    }
+    // Tag structural blocks (forms, hero, card groups) as draggable blocks if they are not already direct children
+    const augmentDraggableBlocks = () => {
+        if (!containerRef.current) return;
+        if (augmentedRef.current) return; // run once per content load
+        const root = containerRef.current;
 
-                    // Mark container elements (divs, sections, articles, etc.) as draggable if they have content
-                    // but don't make them editable if they contain other editable elements
-                    if ((element.tagName === 'DIV' || element.tagName === 'SECTION' ||
-                        element.tagName === 'ARTICLE' || element.tagName === 'ASIDE' ||
-                        element.classList.contains('card') || element.classList.contains('block'))
-                        && element.textContent?.trim().length > 10) {
-                        element.setAttribute('data-draggable', 'true');
-                        // Don't make containers editable, only their text content
-                    } else if (!hasEditableChildren) {
-                        // Only text elements without children get both editable and draggable
-                        element.setAttribute('data-draggable', 'true');
-                    }
+        // Clear any existing draggable-block classes first
+        root.querySelectorAll('.draggable-block').forEach(el => {
+            el.classList.remove('draggable-block');
+            el.removeAttribute('data-struct-block');
+        });
+
+        const blockSelectors = [
+            'form', '.form-section', '.form-group',
+            '.hero', '.hero-section', '.hero-banner',
+            '.card-group', '.card', '.feature', '.feature-block',
+            'header:not(.ms-learn-topnav)', 'footer:not(.ms-learn-topnav)',
+            'nav:not(.ms-learn-nav)', 'aside', 'main', 'section', 'article'
+        ];
+
+        // First pass: mark structural elements
+        let markedCount = 0;
+        blockSelectors.forEach(sel => {
+            root.querySelectorAll(sel).forEach(node => {
+                if (!(node instanceof HTMLElement)) return;
+                // Avoid marking the root container itself
+                if (node === root) return;
+                // Skip elements that are too small or likely to be decorative
+                const rect = node.getBoundingClientRect();
+                if (rect.width < 50 || rect.height < 30) return;
+                // Skip if it's inside another draggable block (to avoid nested draggables)
+                if (node.closest('.draggable-block')) return;
+
+                node.classList.add('draggable-block');
+                node.setAttribute('data-struct-block', sel);
+                markedCount++;
+            });
+        });
+
+        // Fallback: if nothing was tagged, mark first-level element children
+        if (markedCount === 0) {
+            const firstLevel = Array.from(root.children).filter(el =>
+                el.tagName !== 'STYLE' &&
+                el.tagName !== 'SCRIPT' &&
+                !el.classList.contains('insertion-gap-marker')
+            ) as HTMLElement[];
+
+            firstLevel.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.width > 20 && rect.height > 20) {
+                    el.classList.add('draggable-block');
+                    el.setAttribute('data-struct-block', 'auto-first-level');
+                    markedCount++;
                 }
             });
+        }
+
+        // If still nothing marked, force-mark visible elements
+        if (markedCount === 0) {
+            const allElements = Array.from(root.querySelectorAll('*')).filter(el => {
+                if (!(el instanceof HTMLElement)) return false;
+                if (el === root) return false;
+                const rect = el.getBoundingClientRect();
+                return rect.width > 50 && rect.height > 30;
+            }) as HTMLElement[];
+
+            // Take the first few large elements
+            allElements.slice(0, 5).forEach(el => {
+                if (!el.closest('.draggable-block')) {
+                    el.classList.add('draggable-block');
+                    el.setAttribute('data-struct-block', 'fallback');
+                    markedCount++;
+                }
+            });
+        }
+
+        // eslint-disable-next-line no-console
+        console.log('[Wireframe Drag] Draggable blocks marked:', markedCount);
+        augmentedRef.current = true;
+    };
+
+    // Finish editing helper
+    const finishEditing = (el: HTMLElement | null, save: boolean = true) => {
+        if (!el) return;
+        if (el.contentEditable === 'true') {
+            el.contentEditable = 'false';
+        }
+        el.style.outline = '';
+        el.style.backgroundColor = '';
+        el.style.border = '';
+        el.removeAttribute('data-editing');
+        if (save && containerRef.current && onUpdateContent) {
+            onUpdateContent(containerRef.current.innerHTML);
+        }
+        currentEditingRef.current = null;
+    };
+
+    // Function to update ordering metadata
+    const updateOrderingMetadata = () => {
+        if (!containerRef.current || !onOrderingChange) return;
+
+        const metadata = Array.from(containerRef.current.children).map((child, index) =>
+            generateOrderingMetadata(child, index)
+        );
+        onOrderingChange(metadata);
+    };
+
+    // Function to toggle drag mode
+    const toggleDragMode = () => {
+        const next = !isDragEnabledRef.current;
+        isDragEnabledRef.current = next; // update ref first so immediate drags see correct state
+        setIsDragEnabled(next);
+    };
+
+    // Heuristic to decide if an element is eligible for inline editing
+    const isEligibleEditable = (el: HTMLElement): boolean => {
+        if (!el) return false;
+        if (!el.textContent || !el.textContent.trim()) return false;
+        const tag = el.tagName;
+        const always = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'SPAN', 'A', 'BUTTON', 'LABEL', 'LI', 'TD', 'TH'];
+        if (always.includes(tag)) return true;
+        // Allow DIV only if it is mostly text (no block children)
+        if (tag === 'DIV') {
+            const blockChild = Array.from(el.children).some(c => /^(DIV|SECTION|HEADER|FOOTER|UL|OL|NAV|MAIN|ASIDE|TABLE)$/i.test(c.tagName));
+            return !blockChild;
+        }
+        return false;
+    };
+
+    // Apply hover styles dynamically (delegated) so we don't attach per-node listeners
+    const applyHoverStyling = (container: HTMLElement) => {
+        container.addEventListener('mouseover', (e) => {
+            if (isDragEnabledRef.current) return; // live check
+            const target = e.target as HTMLElement;
+            if (!container.contains(target)) return;
+            if (target && isEligibleEditable(target) && target.contentEditable !== 'true') {
+                target.style.outline = '1px solid #007bff';
+                target.style.cursor = 'text';
+            }
+        });
+        container.addEventListener('mouseout', (e) => {
+            const target = e.target as HTMLElement;
+            if (target && target.getAttribute('data-editing') !== 'true' && target.contentEditable !== 'true') {
+                target.style.outline = '1px solid transparent';
+            }
         });
     };
 
     // Handle click on editable elements
-    const handleElementClick = (event: Event) => {
-        if (isDragEnabled) return; // Don't allow editing in drag mode
+    // Delegated click handler installed on container only
+    const handleContainerClick = (e: MouseEvent) => {
+        if (isDragEnabledRef.current) return; // editing disabled in drag mode (live ref)
+        if (!containerRef.current) return;
+        const target = e.target as HTMLElement;
+        if (!target || !containerRef.current.contains(target)) return;
 
-        event.stopPropagation();
-        const element = event.target as HTMLElement;
-        if (!element || element.contentEditable === 'true') return;
+        // Walk up to find eligible editable element (some clicks may hit nested spans)
+        let el: HTMLElement | null = target;
+        const stopNode = containerRef.current;
+        while (el && el !== stopNode && !isEligibleEditable(el)) {
+            el = el.parentElement;
+        }
+        if (!el || el === stopNode) return;
 
-        element.contentEditable = 'true';
-        element.focus();
+        // If clicking same editing element -> reselect
+        if (currentEditingRef.current === el && el.contentEditable === 'true') {
+            const range = document.createRange();
+            range.selectNodeContents(el);
+            const sel = window.getSelection();
+            sel?.removeAllRanges();
+            sel?.addRange(range);
+            return;
+        }
 
+        // Finish previous element
+        if (currentEditingRef.current && currentEditingRef.current !== el) {
+            finishEditing(currentEditingRef.current);
+        }
+
+        // Start editing new element
+        el.contentEditable = 'true';
+        el.setAttribute('data-editing', 'true');
+        el.style.backgroundColor = 'rgba(0,123,255,0.12)';
+        el.style.outline = '2px solid #0d6efd';
+        el.focus();
+        currentEditingRef.current = el;
+        // Remove generic editable tag while actively editing (avoid double styles)
+        el.removeAttribute('data-editable');
         const range = document.createRange();
-        range.selectNodeContents(element);
+        range.selectNodeContents(el);
         const selection = window.getSelection();
         selection?.removeAllRanges();
         selection?.addRange(range);
 
+        const handleKeyDown = (kev: KeyboardEvent) => {
+            if (kev.key === 'Enter' && !kev.shiftKey) {
+                kev.preventDefault();
+                finishEditing(el);
+            } else if (kev.key === 'Escape') {
+                kev.preventDefault();
+                finishEditing(el); // treat same as commit for simplicity
+            }
+        };
         const handleBlur = () => {
-            element.contentEditable = 'false';
-            element.removeEventListener('blur', handleBlur);
-            element.removeEventListener('keydown', handleKeyDown);
-
-            if (containerRef.current && onUpdateContent) {
-                onUpdateContent(containerRef.current.innerHTML);
-            }
+            setTimeout(() => {
+                if (currentEditingRef.current === el) finishEditing(el);
+                el.removeEventListener('keydown', handleKeyDown);
+                el.removeEventListener('blur', handleBlur);
+            }, 40);
         };
-
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                element.blur();
-            }
-            if (e.key === 'Escape') {
-                e.preventDefault();
-                element.blur();
-            }
-        };
-
-        element.addEventListener('blur', handleBlur);
-        element.addEventListener('keydown', handleKeyDown);
+        el.addEventListener('keydown', handleKeyDown);
+        el.addEventListener('blur', handleBlur);
     };
 
-    const toggleDragMode = () => {
-        setIsDragEnabled(!isDragEnabled);
-    };
-
-    // HTML content effect - runs when htmlContent changes
-    useEffect(() => {
-        if (!containerRef.current) return;
-
-        // Sanitize and parse the HTML content safely
-        const sanitizedHTML = sanitizeHTML(htmlContent);
-
-        try {
-            // Use innerHTML only after sanitization
-            containerRef.current.innerHTML = sanitizedHTML;
-        } catch (error) {
-            containerRef.current.innerHTML = `<div style="padding: 20px; color: #dc3545; font-family: 'Segoe UI', sans-serif;">
-                <p><strong>❌ Wireframe Rendering Error</strong></p>
-                <p>Could not render the wireframe. Please try regenerating it.</p>
-            </div>`;
-        }
-    }, [htmlContent]);
-
-    // Separate effect for managing editable elements - runs when content or drag mode changes
-    useEffect(() => {
-        if (!containerRef.current) return;
-
-        // Clean up existing event listeners
-        const existingEditableElements = containerRef.current.querySelectorAll('[data-editable="true"]');
-        existingEditableElements.forEach(element => {
-            element.removeEventListener('click', handleElementClick);
-            element.removeAttribute('data-editable');
-            element.removeAttribute('data-draggable');
-        });
-
-        // Re-attach editable functionality
-        makeElementsEditable(containerRef.current);
-
-        return () => {
-            if (containerRef.current) {
-                const editableElements = containerRef.current.querySelectorAll('[data-editable="true"]');
-                editableElements.forEach(element => {
-                    element.removeEventListener('click', handleElementClick);
-                });
-            }
-        };
-    }, [htmlContent, isDragEnabled]); // Re-run when drag mode changes
-
-    // Dragula effect - runs when drag mode changes
-    useEffect(() => {
-        if (!containerRef.current) return;
-
+    // Helper to (re)initialize dragula with provided containers
+    const initDragula = (containers: HTMLElement[]) => {
         if (dragulaRef.current) {
-            dragulaRef.current.destroy();
+            try { dragulaRef.current.destroy(); } catch { }
         }
 
-        // Initialize dragula with better container detection
-        dragulaRef.current = dragula([containerRef.current], {
-            moves: function (el, source, handle, sibling) {
-                const element = el as HTMLElement;
-                // Only allow dragging if drag mode is enabled and element is not currently being edited
-                const isCurrentlyEditable = element.contentEditable === 'true';
-                const hasText = element.textContent?.trim().length > 0;
+        // Filter out invalid containers
+        const validContainers = containers.filter(container =>
+            container &&
+            container instanceof HTMLElement &&
+            document.contains(container) &&
+            !container.classList.contains('insertion-gap-marker')
+        );
 
-                // Allow moving elements that have content and are not being edited
-                return isDragEnabled && !isCurrentlyEditable && hasText;
+        // eslint-disable-next-line no-console
+        console.log('[Wireframe Drag] Initializing dragula. Container count:', validContainers.length, 'Simple mode:', simpleModeRef.current);
+
+        dragulaRef.current = dragula(validContainers, {
+            moves: function (el, source, handle, sibling) {
+                // Only allow moves if drag mode is enabled (ref-based to avoid stale closures)
+                if (!isDragEnabledRef.current) return false;
+                // Disallow moving the insertion marker itself just in case
+                if (el && el.classList && el.classList.contains('insertion-gap-marker')) return false;
+                // Prevent dragging the root container's direct child if it is acting as a global wrapper containing all other elements
+                if (containerRef.current) {
+                    if (el === containerRef.current) return false; // never root itself
+                }
+                // In simple mode, only direct children of the root container are draggable
+                if (simpleModeRef.current && containerRef.current) {
+                    if (el && el.parentElement !== containerRef.current) return false;
+                }
+
+                // Ensure the element is actually draggable
+                if (!(el instanceof HTMLElement)) return false;
+
+                // Check if element has minimum size for dragging
+                const rect = el.getBoundingClientRect();
+                if (rect.width < 10 || rect.height < 10) return false;
+
+                return true;
             },
             accepts: function (el, target, source, sibling) {
-                // Allow dropping into the main container or any child container
-                return target === containerRef.current || containerRef.current?.contains(target);
+                if (!(target instanceof HTMLElement)) return false;
+                if (simpleModeRef.current) {
+                    // Only allow reordering inside the single root container in simple mode
+                    return target === containerRef.current;
+                }
+
+                // Ensure target is in our valid containers list
+                return validContainers.includes(target);
             },
-            copy: false,
-            revertOnSpill: true,
-            removeOnSpill: false
+            invalid: function (el, handle) {
+                // Don't allow dragging of form inputs, buttons, links
+                if (!(el instanceof HTMLElement)) return true;
+                // Explicitly block the insertion marker
+                if (el.classList && el.classList.contains('insertion-gap-marker')) return true;
+                // Block root container itself (should never be draggable) or accidental wrapper remainders
+                if (containerRef.current && el === containerRef.current) return true;
+
+                // Block sticky/fixed positioned elements as they often cause issues
+                const computedStyle = window.getComputedStyle(el);
+                if (computedStyle.position === 'sticky' || computedStyle.position === 'fixed') return true;
+
+                return (
+                    el.tagName === 'INPUT' ||
+                    el.tagName === 'BUTTON' ||
+                    el.tagName === 'A' ||
+                    el.contentEditable === 'true' ||
+                    el.hasAttribute('contenteditable')
+                );
+            }
         });
 
+        // Add drag state class toggles & insertion marker handling + verbose debug
+        dragulaRef.current.on('drag', (el: Element) => {
+            if (containerRef.current) containerRef.current.classList.add('dragging-active');
+            activeDragElementRef.current = el as HTMLElement;
+            // eslint-disable-next-line no-console
+            console.log('[Wireframe Drag] drag start ->', (el as HTMLElement).tagName, el.className);
+            const marker = getInsertionMarker();
+            marker.style.display = 'block';
+            // Attach mousemove handler once per drag
+            if (!mouseMoveHandlerRef.current) {
+                mouseMoveHandlerRef.current = (e: MouseEvent) => updateInsertionMarker(e);
+                window.addEventListener('mousemove', mouseMoveHandlerRef.current, { passive: true });
+            }
+        });
+        const cleanupMarker = () => {
+            activeDragElementRef.current = null;
+            const marker = insertionMarkerRef.current;
+            if (marker && marker.parentElement) marker.parentElement.removeChild(marker);
+            if (mouseMoveHandlerRef.current) {
+                window.removeEventListener('mousemove', mouseMoveHandlerRef.current);
+                mouseMoveHandlerRef.current = null;
+            }
+        };
+        // Store for external access (e.g., when toggling drag mode off mid-drag)
+        cleanupMarkerRef.current = cleanupMarker;
+        dragulaRef.current.on('cancel', () => {
+            if (containerRef.current) containerRef.current.classList.remove('dragging-active');
+            // eslint-disable-next-line no-console
+            console.log('[Wireframe Drag] drag cancel');
+            cleanupMarker();
+        });
         dragulaRef.current.on('drop', () => {
+            if (containerRef.current) containerRef.current.classList.remove('dragging-active');
+            // eslint-disable-next-line no-console
+            console.log('[Wireframe Drag] drop');
+            cleanupMarker();
             if (containerRef.current && onUpdateContent) {
                 try {
                     const newContent = containerRef.current.innerHTML;
                     onUpdateContent(newContent);
-
-                    // Generate ordering metadata if callback provided
-                    if (onOrderingChange) {
-                        const metadata = generateOrderingMetadata(containerRef.current);
-                        onOrderingChange(metadata);
-                    }
+                    updateOrderingMetadata();
+                    // Re-run augmentation in case structure changed
+                    augmentedRef.current = false;
+                    augmentDraggableBlocks();
+                    markEditableElements();
                 } catch (error) {
-                    // Silent error handling for drag operations
+                    // Silent error handling
                 }
             }
         });
-
-        return () => {
-            if (dragulaRef.current) {
-                dragulaRef.current.destroy();
-            }
-        };
-    }, [isDragEnabled, onUpdateContent, onOrderingChange]);
-
-    // Generate ordering metadata from DOM structure
-    const generateOrderingMetadata = (element: Element): OrderingMetadata[] => {
-        const metadata: OrderingMetadata[] = [];
-
-        Array.from(element.children).forEach((child, index) => {
-            if (child instanceof HTMLElement) {
-                const childMetadata: OrderingMetadata = {
-                    id: child.id || `element-${index}`,
-                    tagName: child.tagName.toLowerCase(),
-                    className: child.className,
-                    textContent: child.textContent?.substring(0, 50) || '',
-                    children: generateOrderingMetadata(child)
-                };
-                metadata.push(childMetadata);
-            }
+        dragulaRef.current.on('shadow', (el: Element, container: Element) => {
+            // eslint-disable-next-line no-console
+            console.log('[Wireframe Drag] shadow placeholder in', container === containerRef.current ? 'ROOT' : (container as HTMLElement).className);
+        });
+        dragulaRef.current.on('over', (el: Element, container: Element) => {
+            // eslint-disable-next-line no-console
+            console.log('[Wireframe Drag] over container', container === containerRef.current ? 'ROOT' : (container as HTMLElement).className);
+        });
+        dragulaRef.current.on('out', (el: Element, container: Element) => {
+            // eslint-disable-next-line no-console
+            console.log('[Wireframe Drag] out container', container === containerRef.current ? 'ROOT' : (container as HTMLElement).className);
         });
 
-        return metadata;
+        updateOrderingMetadata();
     };
+
+    // Primary effect: parse HTML and build containers when content changes OR when reinit requested
+    useEffect(() => {
+        if (!containerRef.current) return;
+        // If a manual re-init (simple/normal toggle) requested, skip reparsing HTML
+        if (reinitRequestedRef.current) {
+            reinitRequestedRef.current = false;
+            try {
+                const containers = simpleModeRef.current
+                    ? [containerRef.current] // only root container
+                    : (() => {
+                        const list = findDragContainers(containerRef.current);
+                        const direct = Array.from(containerRef.current.children) as HTMLElement[];
+                        if (direct.length === 1) {
+                            const only = direct[0];
+                            if (!list.includes(only)) list.push(only);
+                        }
+
+                        // Filter to ensure valid containers
+                        return list.filter(container =>
+                            container &&
+                            container instanceof HTMLElement &&
+                            document.contains(container) &&
+                            container.getBoundingClientRect().width > 0 &&
+                            container.getBoundingClientRect().height > 0
+                        );
+                    })();
+
+                setDragContainers(containers);
+                initDragula(containers);
+            } catch (error) {
+                console.warn('[Wireframe Drag] Reinit error, falling back to simple mode:', error);
+                simpleModeRef.current = true;
+                setDragContainers([containerRef.current]);
+                initDragula([containerRef.current]);
+            }
+            return;
+        }
+
+        // Fresh parse path
+        if (dragulaRef.current) {
+            try { dragulaRef.current.destroy(); } catch { }
+        }
+        const sanitizedHTML = sanitizeHTML(htmlContent);
+        try {
+            containerRef.current.innerHTML = sanitizedHTML;
+            const elementChildren = Array.from(containerRef.current.children).filter(c => !(c.tagName === 'STYLE' || c.tagName === 'SCRIPT')) as HTMLElement[];
+            if (!simpleModeRef.current) {
+                if (elementChildren.length === 1) {
+                    const sole = elementChildren[0];
+                    const wrapperClassMatch = /(wireframe|wrapper|content|inner|layout|root|canvas)/i.test(sole.className || '');
+                    const wrapperTagMatch = /^(DIV|MAIN|SECTION)$/i.test(sole.tagName);
+                    if (wrapperTagMatch && wrapperClassMatch) {
+                        const fragment = document.createDocumentFragment();
+                        Array.from(sole.childNodes).forEach(n => fragment.appendChild(n));
+                        containerRef.current.replaceChild(fragment, sole);
+                    } else {
+                        Array.from(sole.children).forEach(ch => {
+                            if (ch instanceof HTMLElement && !ch.classList.contains('draggable-block')) ch.classList.add('draggable-block');
+                        });
+                    }
+                }
+            }
+            augmentedRef.current = false;
+            Array.from(containerRef.current.querySelectorAll('*')).forEach(n => {
+                (n as HTMLElement).style.outline = '1px solid transparent';
+            });
+            augmentDraggableBlocks();
+            markEditableElements();
+        } catch (e) {
+            console.warn('[Wireframe Drag] HTML parsing error:', e);
+            containerRef.current.innerHTML = '<div style="padding:20px;color:#dc3545;font-family:Segoe UI,sans-serif"><p><strong>❌ Render Error</strong></p><p>Failed to render wireframe. Switching to simple mode.</p></div>';
+            // Force simple mode on parse errors
+            simpleModeRef.current = true;
+        }
+        const containers = simpleModeRef.current
+            ? [containerRef.current]
+            : (() => {
+                try {
+                    const list = findDragContainers(containerRef.current!);
+                    const direct = Array.from(containerRef.current!.children) as HTMLElement[];
+                    if (direct.length === 1) {
+                        const only = direct[0];
+                        if (!list.includes(only)) list.push(only);
+                    }
+
+                    // Ensure all containers are valid and accessible
+                    const validContainers = list.filter(container =>
+                        container &&
+                        container instanceof HTMLElement &&
+                        document.contains(container) &&
+                        container.getBoundingClientRect().width > 0 &&
+                        container.getBoundingClientRect().height > 0
+                    );
+
+                    // If no valid containers found, fallback to simple mode
+                    if (validContainers.length <= 1) {
+                        console.warn('[Wireframe Drag] No valid containers found, falling back to simple mode');
+                        simpleModeRef.current = true;
+                        return [containerRef.current!];
+                    }
+
+                    return validContainers;
+                } catch (error) {
+                    console.warn('[Wireframe Drag] Container detection error, falling back to simple mode:', error);
+                    simpleModeRef.current = true;
+                    return [containerRef.current!];
+                }
+            })();
+        setDragContainers(containers);
+        initDragula(containers);
+    }, [htmlContent, onUpdateContent, onOrderingChange]);
+
+    // Hotkeys: Alt+1 simple mode, Alt+2 normal mode
+    useEffect(() => {
+        const keyHandler = (e: KeyboardEvent) => {
+            if (!containerRef.current) return;
+            if (e.altKey && e.key === '1') {
+                if (!simpleModeRef.current) {
+                    simpleModeRef.current = true;
+                    reinitRequestedRef.current = true;
+                    // eslint-disable-next-line no-console
+                    console.log('[Wireframe Drag] Switching to SIMPLE mode (root-only).');
+                    // Trigger re-init via state noop change
+                    setIsDragEnabled(v => v); // force effect cycle
+                }
+            } else if (e.altKey && e.key === '2') {
+                if (simpleModeRef.current) {
+                    simpleModeRef.current = false;
+                    reinitRequestedRef.current = true;
+                    // eslint-disable-next-line no-console
+                    console.log('[Wireframe Drag] Switching to NORMAL mode (multi-container).');
+                    setIsDragEnabled(v => v);
+                }
+            }
+        };
+        window.addEventListener('keydown', keyHandler);
+        return () => window.removeEventListener('keydown', keyHandler);
+    }, []);
+
+    // Debug instrumentation (press Alt+D to log containers & first-level items)
+    useEffect(() => {
+        const handler = (e: KeyboardEvent) => {
+            if (e.altKey && (e.key === 'd' || e.key === 'D')) {
+                if (!containerRef.current) return;
+                const firstLevel = Array.from(containerRef.current.children).map(el => (el as HTMLElement).tagName + '.' + (el as HTMLElement).className);
+                // eslint-disable-next-line no-console
+                console.log('[Wireframe Debug] Containers:', dragContainers.map(c => c.tagName + '.' + c.className));
+                // eslint-disable-next-line no-console
+                console.log('[Wireframe Debug] First-level children:', firstLevel);
+            }
+        };
+        window.addEventListener('keydown', handler);
+        return () => window.removeEventListener('keydown', handler);
+    }, [dragContainers]);
+
+    // Update cursor styles and event listeners when drag mode changes
+    useEffect(() => {
+        if (!containerRef.current) return;
+        // ref already set in toggle, still keep in sync in case state changed externally
+        isDragEnabledRef.current = isDragEnabled;
+        // When toggling drag mode on, finalize any editing and clear markers
+        if (isDragEnabled) {
+            if (currentEditingRef.current) finishEditing(currentEditingRef.current);
+            clearEditableMarkers();
+            clearInlineHoverStyles();
+        } else {
+            // Switching back to edit mode -> re-tag eligible elements
+            markEditableElements();
+            // Ensure any stray insertion marker / listeners are removed on mode exit
+            if (cleanupMarkerRef.current) {
+                cleanupMarkerRef.current();
+            }
+        }
+    }, [isDragEnabled]);
+
+    // Install delegated listeners once
+    useEffect(() => {
+        if (!containerRef.current) return;
+        const c = containerRef.current;
+        c.addEventListener('click', handleContainerClick);
+        applyHoverStyling(c);
+        const handleDoc = (e: MouseEvent) => {
+            if (!c) return;
+            const t = e.target as Node;
+            if (currentEditingRef.current && t && !c.contains(t)) {
+                finishEditing(currentEditingRef.current);
+            }
+        };
+        document.addEventListener('mousedown', handleDoc);
+        // Initial tagging after listeners attach
+        markEditableElements();
+        return () => {
+            c.removeEventListener('click', handleContainerClick);
+            document.removeEventListener('mousedown', handleDoc);
+        };
+    }, []);
 
     return (
         <div className="simple-drag-wireframe">
@@ -286,23 +799,29 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
                     title={isDragEnabled ? "Click to disable drag mode" : "Click to enable drag mode"}
                 >
                     {isDragEnabled ? (
-                        <>🔒 <span>Drag Mode: ON</span></>
+                        <>
+                            🔒 <span>Drag Mode: ON</span>
+                        </>
                     ) : (
-                        <>🔓 <span>Drag Mode: OFF</span></>
+                        <>
+                            🔓 <span>Drag Mode: OFF</span>
+                        </>
                     )}
                 </button>
-                <small className="drag-mode-hint">
-                    {isDragEnabled
-                        ? "You can drag and drop elements. Click to lock."
-                        : "Drag mode disabled. Click to enable dragging."
-                    }
-                </small>
+                <span className="drag-mode-hint">
+                    {simpleModeRef.current ? 'Simple Mode' : 'Normal Mode'} |
+                    {dragContainers.length} containers |
+                    Alt+1: Simple, Alt+2: Normal, Alt+D: Debug
+                </span>
             </div>
 
+            {/* Main wireframe container */}
             <div
                 ref={containerRef}
                 className={`dragula-container ${isDragEnabled ? 'drag-enabled' : 'drag-disabled'}`}
             ></div>
+
+            {/* Cross-container info bar removed per user request */}
         </div>
     );
 };

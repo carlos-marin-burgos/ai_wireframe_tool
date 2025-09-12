@@ -63,7 +63,7 @@ async function fetchRealAtlasHero() {
             overflow: hidden;
         }
         .atlas-hero-header {
-            background: linear-gradient(135deg, #0078d4, #106ebe);
+            background: linear-gradient(135deg, #8E9AAF, #68769C);
             color: white;
             padding: 20px;
             text-align: center;
@@ -94,18 +94,18 @@ async function fetchRealAtlasHero() {
         .atlas-hero-detail-label {
             font-size: 12px;
             font-weight: 600;
-            color: #605e5c;
+            color: #68769C;
             margin-bottom: 4px;
             text-transform: uppercase;
         }
         .atlas-hero-detail-value {
             font-size: 14px;
-            color: #323130;
+            color: #3C4858;
             word-break: break-all;
         }
         .atlas-hero-link {
             display: inline-block;
-            background: #0078d4;
+            background: #8E9AAF;
             color: white;
             padding: 10px 20px;
             text-decoration: none;
@@ -114,7 +114,7 @@ async function fetchRealAtlasHero() {
             transition: background 0.2s ease;
         }
         .atlas-hero-link:hover {
-            background: #106ebe;
+            background: #68769C;
         }
     </style>
 </head>

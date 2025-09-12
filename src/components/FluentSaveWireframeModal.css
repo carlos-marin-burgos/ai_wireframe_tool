@@ -75,7 +75,7 @@
   margin: 0;
   font-size: 20px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -134,7 +134,7 @@
 .fluent-section-title {
   font-size: 16px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
   margin: 0 0 16px 0;
   display: flex;
   align-items: center;
@@ -156,7 +156,7 @@
   gap: 6px;
   font-size: 14px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
   margin-bottom: 6px;
 }
 
@@ -168,19 +168,19 @@
   border-radius: 4px;
   font-size: 14px;
   font-family: inherit;
-  color: #323130;
+  color: #3C4858;
   background: #ffffff;
   transition: all 0.1s ease;
   outline: none;
 }
 
 .fluent-input:hover {
-  border-color: #323130;
+  border-color: #3C4858;
 }
 
 .fluent-input:focus {
-  border-color: #0078d4;
-  box-shadow: 0 0 0 1px #0078d4;
+  border-color: #8E9AAF;
+  box-shadow: 0 0 0 1px #8E9AAF;
 }
 
 .fluent-input:disabled {
@@ -191,7 +191,7 @@
 }
 
 .fluent-input::placeholder {
-  color: #605e5c;
+  color: #68769C;
 }
 
 /* Textarea */
@@ -202,7 +202,7 @@
   border-radius: 4px;
   font-size: 14px;
   font-family: inherit;
-  color: #323130;
+  color: #3C4858;
   background: #ffffff;
   transition: all 0.1s ease;
   outline: none;
@@ -211,12 +211,12 @@
 }
 
 .fluent-textarea:hover {
-  border-color: #323130;
+  border-color: #3C4858;
 }
 
 .fluent-textarea:focus {
-  border-color: #0078d4;
-  box-shadow: 0 0 0 1px #0078d4;
+  border-color: #8E9AAF;
+  box-shadow: 0 0 0 1px #8E9AAF;
 }
 
 /* Input Group for Tag Field */
@@ -253,7 +253,7 @@
   border-radius: 16px;
   padding: 4px 8px 4px 12px;
   font-size: 12px;
-  color: #323130;
+  color: #3C4858;
   transition: all 0.1s ease;
 }
 
@@ -272,7 +272,7 @@
   border: none;
   padding: 2px;
   border-radius: 50%;
-  color: #605e5c;
+  color: #68769C;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -283,7 +283,7 @@
 
 .fluent-tag-remove:hover {
   background: #d2d0ce;
-  color: #323130;
+  color: #3C4858;
 }
 
 /* Button Styles */
@@ -314,50 +314,50 @@
 
 /* Primary Button */
 .fluent-button-primary {
-  background: #0078d4;
+  background: #8E9AAF;
   color: #ffffff;
-  border-color: #0078d4;
+  border-color: #8E9AAF;
 }
 
 .fluent-button-primary:hover:not(:disabled) {
-  background: #106ebe;
-  border-color: #106ebe;
+  background: #68769C;
+  border-color: #68769C;
 }
 
 .fluent-button-primary:active:not(:disabled) {
-  background: #005a9e;
-  border-color: #005a9e;
+  background: #68769C;
+  border-color: #68769C;
 }
 
 .fluent-button-primary:focus-visible {
-  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #0078d4;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #8E9AAF;
 }
 
 /* Secondary Button */
 .fluent-button-secondary {
   background: #ffffff;
-  color: #323130;
+  color: #3C4858;
   border-color: #8a8886;
 }
 
 .fluent-button-secondary:hover:not(:disabled) {
   background: #f3f2f1;
-  border-color: #323130;
+  border-color: #3C4858;
 }
 
 .fluent-button-secondary:active:not(:disabled) {
   background: #edebe9;
-  border-color: #323130;
+  border-color: #3C4858;
 }
 
 .fluent-button-secondary:focus-visible {
-  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #323130;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #3C4858;
 }
 
 /* Ghost Button */
 .fluent-button-ghost {
   background: transparent;
-  color: #323130;
+  color: #3C4858;
   border-color: transparent;
 }
 
@@ -401,7 +401,7 @@
 }
 
 .fluent-radio:checked + .fluent-radio-indicator {
-  border-color: #0078d4;
+  border-color: #8E9AAF;
 }
 
 .fluent-radio:checked + .fluent-radio-indicator::after {
@@ -412,20 +412,20 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #0078d4;
+  background: #8E9AAF;
 }
 
 .fluent-radio-option:hover .fluent-radio-indicator {
-  border-color: #323130;
+  border-color: #3C4858;
 }
 
 .fluent-radio-option:hover .fluent-radio:checked + .fluent-radio-indicator {
-  border-color: #106ebe;
+  border-color: #68769C;
 }
 
 .fluent-radio-label {
   font-size: 14px;
-  color: #323130;
+  color: #3C4858;
   cursor: pointer;
 }
 
@@ -464,8 +464,8 @@
 }
 
 .fluent-checkbox:checked + .fluent-checkbox-indicator {
-  border-color: #0078d4;
-  background: #0078d4;
+  border-color: #8E9AAF;
+  background: #8E9AAF;
 }
 
 .fluent-checkbox-check {
@@ -480,19 +480,19 @@
 }
 
 .fluent-checkbox-option:hover .fluent-checkbox-indicator {
-  border-color: #323130;
+  border-color: #3C4858;
 }
 
 .fluent-checkbox-option:hover
   .fluent-checkbox:checked
   + .fluent-checkbox-indicator {
-  border-color: #106ebe;
-  background: #106ebe;
+  border-color: #68769C;
+  background: #68769C;
 }
 
 .fluent-checkbox-label {
   font-size: 14px;
-  color: #323130;
+  color: #3C4858;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -518,7 +518,7 @@
 
 .fluent-info-label {
   font-size: 12px;
-  color: #605e5c;
+  color: #68769C;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -526,7 +526,7 @@
 
 .fluent-info-value {
   font-size: 14px;
-  color: #323130;
+  color: #3C4858;
   font-weight: 600;
 }
 
@@ -575,12 +575,12 @@
   text-align: center;
   font-size: 20px;
   margin-bottom: 8px;
-  color: #323130;
+  color: #3C4858;
 }
 
 .fluent-dialog-description {
   text-align: center;
-  color: #605e5c;
+  color: #68769C;
   font-size: 14px;
   margin: 0;
   line-height: 1.4;
@@ -628,7 +628,7 @@
 
 /* Focus Management */
 .fluent-dialog:focus-visible {
-  outline: 2px solid #0078d4;
+  outline: 2px solid #8E9AAF;
   outline-offset: -2px;
 }
 

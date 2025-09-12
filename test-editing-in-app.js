@@ -140,7 +140,7 @@
 
     // Style for editing
     element.style.backgroundColor = "rgba(0, 120, 212, 0.2)";
-    element.style.border = "2px solid #0078d4";
+    element.style.border = "2px solid #8E9AAF";
     element.style.borderRadius = "4px";
     element.style.padding = "2px 4px";
 

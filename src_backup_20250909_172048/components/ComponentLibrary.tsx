@@ -131,7 +131,7 @@ const SAMPLE_COMPONENTS: ComponentLibraryItem[] = [
             title: 'Build your next great idea',
             summary: 'Transform your vision into reality with Microsoft Learn',
             eyebrow: 'MICROSOFT LEARN',
-            backgroundColor: '#E8E6DF'
+            backgroundColor: '#E9ECEF'
         },
         icon: '🎯'
     },

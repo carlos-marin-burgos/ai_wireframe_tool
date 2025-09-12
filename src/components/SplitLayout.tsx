@@ -469,16 +469,16 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         // Create a simple placeholder wireframe for the new page
         const placeholderHtml = `
           <div style="max-width: 1200px; margin: 0 auto; padding: 40px 20px; font-family: 'Segoe UI', sans-serif; background: #ffffff; min-height: 100vh;">
-            <div style="background: #E8E6DF; padding: 60px 40px; border-radius: 12px; margin: 20px 0; text-align: center; border: 1px solid #e1dfdd;">
-              <h1 style="color: #323130; margin: 0 0 16px 0; font-size: 28px; font-weight: 600;">📄 ${currentPage.name}</h1>
-              <p style="color: #605e5c; margin: 0 0 24px 0; font-size: 16px;">
+            <div style="background: #E9ECEF; padding: 60px 40px; border-radius: 12px; margin: 20px 0; text-align: center; border: 1px solid #e1dfdd;">
+              <h1 style="color: #3C4858; margin: 0 0 16px 0; font-size: 28px; font-weight: 600;">📄 ${currentPage.name}</h1>
+              <p style="color: #68769C; margin: 0 0 24px 0; font-size: 16px;">
                 This is a new ${currentPage.type || 'page'}. Click the buttons below or ask me to generate content for this page.
               </p>
               <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-                <button style="background: #0078d4; color: white; border: none; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-weight: 600; transition: background-color 0.2s ease;">
+                <button style="background: #8E9AAF; color: white; border: none; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-weight: 600; transition: background-color 0.2s ease;">
                   Generate Content
                 </button>
-                <button style="background: #f3f2f1; color: #323130; border: 1px solid #e1dfdd; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-weight: 600; transition: background-color 0.2s ease;">
+                <button style="background: #f3f2f1; color: #3C4858; border: 1px solid #e1dfdd; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-weight: 600; transition: background-color 0.2s ease;">
                   Copy from First Page
                 </button>
               </div>
@@ -561,9 +561,15 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     setIsFigmaModalOpen(true);
   }, []);
 
-  const handleFigmaImport = useCallback((html: string, fileName: string) => {
+  const handleFigmaImport = useCallback((html: string, fileName: string, tokens?: any) => {
     // Handle Figma file import
     console.log('Importing Figma file:', fileName);
+
+    if (tokens) {
+      console.log('🎨 Design tokens extracted:', tokens);
+      // Apply design tokens to the current theme if needed
+      addMessage('ai', `🎨 Extracted ${tokens.colors?.length || 0} color tokens, ${tokens.typography?.length || 0} typography tokens from "${fileName}".`);
+    }
 
     // Set the imported HTML as the current wireframe
     if (setHtmlWireframe) {
@@ -573,6 +579,19 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     addMessage('ai', `✅ Successfully imported "${fileName}" from Figma! The wireframe has been converted and is ready for editing.`);
     setIsFigmaModalOpen(false);
   }, [setHtmlWireframe, addMessage]);
+
+  const handleTokensExtracted = useCallback((tokens: any) => {
+    console.log('🎨 Design tokens extracted in SplitLayout:', tokens);
+    // Handle design tokens - could update the theme or store for later use
+    if (tokens) {
+      addMessage('ai', `🎨 Design tokens extracted: ${tokens.colors?.length || 0} colors, ${tokens.typography?.length || 0} fonts, ${tokens.spacing?.length || 0} spacing values.`);
+    }
+  }, [addMessage]);
+
+  const handleFileProcessed = useCallback((file: File, data: any) => {
+    console.log('📄 File processed in SplitLayout:', file.name, data);
+    // Handle processed file data - could be used for analytics or additional processing
+  }, []);
 
   // HTML Import handler
   const handleImportHtml = useCallback(() => {
@@ -1404,14 +1423,14 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       />
 
       {/* Figma Integration Modal */}
-      {/* TODO: Re-enable when FigmaIntegrationModal is implemented
       <FigmaIntegrationModal
         isOpen={isFigmaModalOpen}
         onClose={() => setIsFigmaModalOpen(false)}
         onImport={handleFigmaImport}
         onExport={handleFigmaExport}
+        onTokensExtracted={handleTokensExtracted}
+        onFileProcessed={handleFileProcessed}
       />
-      */}
 
       {/* Image Analysis Modal */}
       {/* TODO: Re-enable when ImageAnalysisModal is implemented
@@ -1583,7 +1602,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
           id: page.id,
           name: page.name,
           description: page.description,
-          content: pageContents[page.id] || htmlWireframe || '<p>No content available</p>'
+          content: pageContents[page.id] || page.htmlContent || htmlWireframe || '<p>No content available</p>'
         })) : htmlWireframe ? [{
           id: 'main',
           name: 'Main Wireframe',

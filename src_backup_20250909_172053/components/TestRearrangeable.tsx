@@ -14,7 +14,7 @@ const TestRearrangeable: React.FC<TestRearrangeableProps> = ({ htmlContent = '' 
                     <div class="card" style="padding: 20px; background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; margin-bottom: 20px;">
                         <h3>Feature Card 1</h3>
                         <p>This is a draggable card component that you can rearrange!</p>
-                        <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px;">Learn More</button>
+                        <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px;">Learn More</button>
                     </div>
                 </div>
                 <div class="col-sm-4">
@@ -46,7 +46,7 @@ const TestRearrangeable: React.FC<TestRearrangeableProps> = ({ htmlContent = '' 
                         <p>Another 6-column component that can be rearranged with the others.</p>
                         <form style="margin-top: 16px;">
                             <input type="text" placeholder="Your email" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-right: 8px;">
-                            <button type="submit" style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px;">Subscribe</button>
+                            <button type="submit" style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px;">Subscribe</button>
                         </form>
                     </div>
                 </div>
@@ -63,7 +63,7 @@ const TestRearrangeable: React.FC<TestRearrangeableProps> = ({ htmlContent = '' 
         {
             name: 'Button',
             type: 'button-group',
-            html: '<button style="background: #0078d4; color: white; border: none; padding: 12px 24px; border-radius: 4px;">New Button</button>',
+            html: '<button style="background: #8E9AAF; color: white; border: none; padding: 12px 24px; border-radius: 4px;">New Button</button>',
             defaultWidth: 3,
             icon: '🔘'
         },
@@ -86,7 +86,7 @@ const TestRearrangeable: React.FC<TestRearrangeableProps> = ({ htmlContent = '' 
     return (
         <div style={{ padding: '20px', height: '100vh' }}>
             <div style={{
-                background: 'linear-gradient(135deg, #0078d4 0%, #106ebe 100%)',
+                background: 'linear-gradient(135deg, #8E9AAF 0%, #68769C 100%)',
                 color: 'white',
                 padding: '20px',
                 borderRadius: '8px',

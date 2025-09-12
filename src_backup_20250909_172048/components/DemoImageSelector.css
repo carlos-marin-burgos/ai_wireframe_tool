@@ -25,7 +25,7 @@
 }
 
 .demo-icon {
-  color: #0078d4;
+  color: #8E9AAF;
   font-size: 20px;
 }
 
@@ -59,13 +59,13 @@
 }
 
 .demo-card:hover {
-  border-color: #0078d4;
+  border-color: #8E9AAF;
   box-shadow: 0 4px 12px rgba(0, 120, 212, 0.1);
   transform: translateY(-2px);
 }
 
 .demo-card.selected {
-  border-color: #0078d4;
+  border-color: #8E9AAF;
   background: #f8fafe;
 }
 
@@ -138,7 +138,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background: #0078d4;
+  background: #8E9AAF;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -152,7 +152,7 @@
 }
 
 .demo-btn:hover {
-  background: #106ebe;
+  background: #68769C;
   transform: translateY(-1px);
 }
 
@@ -160,7 +160,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #0078d4;
+  color: #8E9AAF;
   font-size: 13px;
   font-weight: 500;
   justify-content: center;
@@ -171,7 +171,7 @@
   width: 14px;
   height: 14px;
   border: 2px solid #e1dfdd;
-  border-top: 2px solid #0078d4;
+  border-top: 2px solid #8E9AAF;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -186,7 +186,7 @@
 }
 
 .demo-note {
-  background: #e8e6df;
+  background: #E9ECEF;
   border-radius: 8px;
   padding: 16px;
   text-align: center;

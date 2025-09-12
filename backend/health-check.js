@@ -60,7 +60,7 @@ class WireframeHealthChecker {
           },
           {
             name: 'Contains Microsoft Learn styling',
-            passed: html && html.includes('Segoe UI') && html.includes('#0078d4'),
+            passed: html && html.includes('Segoe UI') && html.includes('#8E9AAF'),
             value: html ? 'Styling detected' : 'No styling'
           },
           {

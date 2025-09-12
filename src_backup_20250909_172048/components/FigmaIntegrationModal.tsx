@@ -117,7 +117,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                     <style>
                         body { margin: 0; padding: 20px; font-family: 'Segoe UI', sans-serif; background: #f5f5f5; }
                         .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-                        .header { background: #323130; color: white; padding: 20px; text-align: center; }
+                        .header { background: #3C4858; color: white; padding: 20px; text-align: center; }
                         .content { padding: 20px; text-align: center; }
                         .design-image { max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
                         .metadata { margin-top: 20px; padding: 16px; background: #f8f9fa; border-radius: 6px; }

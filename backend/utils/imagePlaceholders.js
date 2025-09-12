@@ -6,15 +6,15 @@
 // Microsoft Learn themed placeholders using inline SVG data URLs
 const MS_LEARN_PLACEHOLDERS = {
   primary: (width, height, text = "Image") =>
-    createSVGPlaceholder(width, height, text, "#0078d4", "#ffffff"),
+    createSVGPlaceholder(width, height, text, "#8E9AAF", "#ffffff"),
   secondary: (width, height, text = "Image") =>
-    createSVGPlaceholder(width, height, text, "#106ebe", "#ffffff"),
+    createSVGPlaceholder(width, height, text, "#68769C", "#ffffff"),
   neutral: (width, height, text = "Image") =>
-    createSVGPlaceholder(width, height, text, "#f3f2f1", "#323130"),
+    createSVGPlaceholder(width, height, text, "#f3f2f1", "#3C4858"),
   avatar: (size) =>
     createSVGPlaceholder(size, size, "👤", "#ca5010", "#ffffff"),
   icon: (size, text = "🔲") =>
-    createSVGPlaceholder(size, size, text, "#605e5c", "#ffffff"),
+    createSVGPlaceholder(size, size, text, "#68769C", "#ffffff"),
 };
 
 /**

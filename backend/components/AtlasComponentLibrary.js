@@ -64,14 +64,14 @@ class AtlasComponentLibrary {
         
         /* Microsoft Learn Colors */
         .background-color-primary { 
-          background-color: #0078d4; 
+          background-color: #8E9AAF; 
           background-image: var(--background-image-pattern);
           background-size: 200px;
           background-repeat: repeat;
         }
         .color-primary-invert { color: white; }
         .background-color-body-accent { background-color: #f8f9fa; }
-        .gradient-border-right { border-right: 4px solid #0078d4; }
+        .gradient-border-right { border-right: 4px solid #8E9AAF; }
         .gradient-border-body-accent { border-right: 4px solid #e1dfdd; }
         .border { border: 1px solid #e1dfdd; }
         .border-radius-lg { border-radius: 8px; }
@@ -123,15 +123,15 @@ class AtlasComponentLibrary {
         /* Base Microsoft Learn Styles */
         body { 
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; 
-          color: #323130; 
+          color: #3C4858; 
           line-height: 1.6; 
         }
         p { margin: 0 0 16px 0; }
-        h1, h2, h3, h4, h5, h6 { margin: 0 0 16px 0; color: #323130; }
+        h1, h2, h3, h4, h5, h6 { margin: 0 0 16px 0; color: #3C4858; }
         
         /* Legacy Atlas Styles */
-        .atlas-hero { background: #E8E6DF; padding: 60px 0; text-align: center; }
-        .atlas-button { background: #0078d4; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; }
+        .atlas-hero { background: #E9ECEF; padding: 60px 0; text-align: center; }
+        .atlas-button { background: #8E9AAF; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; }
         .atlas-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 16px; }
         .atlas-textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 16px; resize: vertical; }
         .atlas-footer { background: #333; color: white; padding: 40px 0; text-align: center; }

@@ -44,7 +44,7 @@
 
 .modal-header h2 {
   margin: 0;
-  color: #323130;
+  color: #3C4858;
   font-size: 20px;
   font-weight: 600;
 }
@@ -71,7 +71,7 @@
 
 .import-method-selection h3 {
   margin: 0 0 24px 0;
-  color: #323130;
+  color: #3C4858;
   font-size: 16px;
   font-weight: 600;
 }
@@ -108,7 +108,7 @@
 
 .method-info h4 {
   margin: 0 0 4px 0;
-  color: #323130;
+  color: #3C4858;
   font-size: 16px;
   font-weight: 600;
 }
@@ -127,7 +127,7 @@
 .url-import-section h3,
 .file-import-section h3 {
   margin: 0 0 20px 0;
-  color: #323130;
+  color: #3C4858;
   font-size: 16px;
   font-weight: 600;
 }
@@ -237,7 +237,7 @@
 
 .upload-text h4 {
   margin: 0 0 4px 0;
-  color: #323130;
+  color: #3C4858;
   font-size: 16px;
   font-weight: 600;
 }

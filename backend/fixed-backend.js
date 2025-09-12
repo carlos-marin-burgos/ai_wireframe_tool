@@ -36,8 +36,8 @@ app.post("/api/generate-html-wireframe", (req, res) => {
   // Mock wireframe generation
   const wireframe = `
         <div style="max-width: 800px; margin: 0 auto; padding: 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
-            <header style="border-bottom: 2px solid #0078d4; padding-bottom: 20px; margin-bottom: 30px;">
-                <h1 style="color: #e8e6df; margin: 0;">Generated Wireframe</h1>
+            <header style="border-bottom: 2px solid #8E9AAF; padding-bottom: 20px; margin-bottom: 30px;">
+                <h1 style="color: #E9ECEF; margin: 0;">Generated Wireframe</h1>
                 <p style="color: #666; margin: 10px 0 0 0;">Based on: "${wireframePrompt}"</p>
             </header>
             
@@ -52,8 +52,8 @@ app.post("/api/generate-html-wireframe", (req, res) => {
                 <section style="border: 1px solid #e1e1e1; border-radius: 8px; padding: 20px;">
                     <h3 style="color: #333; margin-top: 0;">Interactive Elements</h3>
                     <div style="display: flex; gap: 10px; margin: 15px 0;">
-                        <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px;">Primary Action</button>
-                        <button style="background: transparent; color: #0078d4; border: 1px solid #0078d4; padding: 8px 16px; border-radius: 4px;">Secondary Action</button>
+                        <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px;">Primary Action</button>
+                        <button style="background: transparent; color: #8E9AAF; border: 1px solid #8E9AAF; padding: 8px 16px; border-radius: 4px;">Secondary Action</button>
                     </div>
                 </section>
             </main>

@@ -6,6 +6,8 @@ const {
   generateMicrosoftFooterHTML,
 } = require("./components/HeroGenerator");
 const { createFallbackWireframe } = require("./fallback-generator");
+// Import centralized color configuration
+const { WIREFRAME_COLORS, ColorUtils } = require("./config/colors");
 
 // Import Enhanced AI System
 const {
@@ -88,19 +90,19 @@ app.get("/", (req, res) => {
             border-radius: 8px; 
             box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
         }
-        h1 { color: #0078d4; margin-bottom: 1rem; }
+        h1 { color: #3C4858; margin-bottom: 1rem; }
         .endpoint { 
-            background: #f8f9fa; 
+            background: #E9ECEF; 
             padding: 1rem; 
-            border-left: 4px solid #0078d4; 
+            border-left: 4px solid #8E9AAF; 
             margin: 1rem 0; 
         }
-        .method { color: #28a745; font-weight: bold; }
+        .method { color: #68769C; font-weight: bold; }
         .url { font-family: monospace; background: #e9ecef; padding: 0.2rem 0.4rem; }
-        .test-section { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #dee2e6; }
+        .test-section { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #CBC2C2; }
         textarea { width: 100%; height: 100px; margin: 0.5rem 0; padding: 0.5rem; }
         button { 
-            background: #0078d4; 
+            background: #8E9AAF; 
             color: white; 
             border: none; 
             padding: 0.75rem 1.5rem; 
@@ -108,11 +110,11 @@ app.get("/", (req, res) => {
             cursor: pointer; 
             font-size: 1rem;
         }
-        button:hover { background: #106ebe; }
+        button:hover { background: #68769C; }
         .result { 
             margin-top: 1rem; 
             padding: 1rem; 
-            background: #f8f9fa; 
+            background: #E9ECEF; 
             border-radius: 4px; 
             white-space: pre-wrap; 
         }
@@ -471,43 +473,43 @@ async function generateWireframeWithAI(
     console.log("🧠 Generating PURE AI wireframe for:", description);
     console.log(`🎨 Theme: ${designTheme}, Color Scheme: ${colorScheme}`);
 
-    // Define color schemes for AI to use
+    // Use centralized color schemes for wireframes
     const colorSchemes = {
       primary: {
-        main: "#0078d4",
-        secondary: "#106ebe",
-        bg: "#ffffff",
-        text: "#323130",
-        border: "#e5e5e5",
-        banner: "#E8E6DF",
+        main: WIREFRAME_COLORS.primary,
+        secondary: WIREFRAME_COLORS.secondary,
+        bg: WIREFRAME_COLORS.background,
+        text: WIREFRAME_COLORS.text,
+        border: WIREFRAME_COLORS.border,
+        banner: WIREFRAME_COLORS.surface,
       },
       success: {
-        main: "#107c10",
-        secondary: "#0b6413",
-        bg: "#f1faf1",
-        text: "#000000",
-        border: "#e5e5e5",
+        main: WIREFRAME_COLORS.primary,
+        secondary: WIREFRAME_COLORS.secondary,
+        bg: WIREFRAME_COLORS.surface,
+        text: WIREFRAME_COLORS.text,
+        border: WIREFRAME_COLORS.border,
       },
       info: {
-        main: "#d1ccf0",
-        secondary: "#c3b8eb",
-        bg: "#ebf3fc",
-        text: "#000000",
-        border: "#e5e5e5",
+        main: WIREFRAME_COLORS.primary,
+        secondary: WIREFRAME_COLORS.secondary,
+        bg: WIREFRAME_COLORS.surface,
+        text: WIREFRAME_COLORS.text,
+        border: WIREFRAME_COLORS.border,
       },
       warning: {
-        main: "#ffb900",
-        secondary: "#d19700",
-        bg: "#fff9e6",
-        text: "#000000",
-        border: "#e5e5e5",
+        main: WIREFRAME_COLORS.primary,
+        secondary: WIREFRAME_COLORS.secondary,
+        bg: WIREFRAME_COLORS.surface,
+        text: WIREFRAME_COLORS.text,
+        border: WIREFRAME_COLORS.border,
       },
       danger: {
-        main: "#d13438",
-        secondary: "#c50f1f",
-        bg: "#fdf3f4",
-        text: "#000000",
-        border: "#e5e5e5",
+        main: WIREFRAME_COLORS.primary,
+        secondary: WIREFRAME_COLORS.secondary,
+        bg: WIREFRAME_COLORS.surface,
+        text: WIREFRAME_COLORS.text,
+        border: WIREFRAME_COLORS.border,
       },
     };
 
@@ -564,24 +566,24 @@ REQUIREMENTS:
 10. MAKE it look polished and production-ready
 
 COLOR USAGE GUIDELINES:
-- Use PRIMARY COLOR (#0078d4) for buttons, links, and interactive elements
-- Use BANNER/HERO BACKGROUND (#E8E6DF) for large background sections, hero areas, and banners
-- Keep button backgrounds blue (#0078d4) - do not change button colors
-- Use banner background color only for large sections, not for buttons or small elements
+- Use NEUTRAL GRAY (#68769C) for buttons, links, and interactive elements  
+- Use LIGHT GRAY BACKGROUND (#E9ECEF) for large background sections, hero areas, and banners
+- Keep neutral color scheme throughout - gray buttons and borders for wireframe appearance
+- Use light gray background only for large sections, not for buttons or small elements
 
-HERO SECTION DESIGN REQUIREMENTS:
-- Use exact Microsoft Learn Accent Hero pattern with background-color-body-accent (#E8E6DF)
-- Implement hero-image class structure: section.hero.hero-image
-- Background images: Use CSS custom properties --hero-background-image-light and --hero-background-image-dark
-- Gradient border: Add gradient-border-right gradient-border-body-accent
-- Content structure: Use .hero-content div with proper typography classes
-- Typography: letter-spacing-wide text-transform-uppercase for eyebrow, font-size-h1 font-weight-semibold for title
-- Buttons: Use .button.border.button-clear class structure
+WIREFRAME DESIGN REQUIREMENTS:
+- Use neutral wireframe styling with light gray backgrounds (#E9ECEF)
+- Implement clean section structure with proper spacing
+- Background colors: Use light gray (#E9ECEF) for sections, white (#ffffff) for content cards
+- Borders: Use light gray borders (#CBC2C2) for definition
+- Content structure: Use proper semantic HTML with clear visual hierarchy
+- Typography: Clean, readable fonts with good contrast (dark gray #3C4858 text)
+- Buttons: Use neutral gray (#68769C) buttons with proper styling
 
 IMPORTANT INSTRUCTIONS:
 - Build EXACTLY what the user asked for
 - If they want "two textboxes", create exactly two textboxes
-- If they want a "dashboard", create a dashboard layout
+- If they want a "dashboard", create a dashboard layout  
 - If they want a "contact form", create a contact form
 - Be creative and comprehensive - don't just create basic elements
 - Include proper styling for a polished, professional look
@@ -664,42 +666,42 @@ async function generateIntelligentFallback(
     return createFallbackWireframe(description, designTheme, colorScheme);
   }
 
-  // Define color schemes
+  // Use centralized color schemes for wireframes
   const colorSchemes = {
     primary: {
-      main: "#0078d4",
-      secondary: "#106ebe",
-      bg: "#ffffff",
-      text: "#323130",
-      border: "#e5e5e5",
+      main: WIREFRAME_COLORS.primary,
+      secondary: WIREFRAME_COLORS.secondary,
+      bg: WIREFRAME_COLORS.background,
+      text: WIREFRAME_COLORS.text,
+      border: WIREFRAME_COLORS.border,
     },
     success: {
-      main: "#107c10",
-      secondary: "#0b6413",
-      bg: "#f1faf1",
-      text: "#000000",
-      border: "#e5e5e5",
+      main: WIREFRAME_COLORS.primary,
+      secondary: WIREFRAME_COLORS.secondary,
+      bg: WIREFRAME_COLORS.surface,
+      text: WIREFRAME_COLORS.text,
+      border: WIREFRAME_COLORS.border,
     },
     info: {
-      main: "#0078d4",
-      secondary: "#106ebe",
-      bg: "#ebf3fc",
-      text: "#000000",
-      border: "#e5e5e5",
+      main: WIREFRAME_COLORS.primary,
+      secondary: WIREFRAME_COLORS.secondary,
+      bg: WIREFRAME_COLORS.surface,
+      text: WIREFRAME_COLORS.text,
+      border: WIREFRAME_COLORS.border,
     },
     warning: {
-      main: "#ffb900",
-      secondary: "#d19700",
-      bg: "#fff9e6",
-      text: "#000000",
-      border: "#e5e5e5",
+      main: WIREFRAME_COLORS.primary,
+      secondary: WIREFRAME_COLORS.secondary,
+      bg: WIREFRAME_COLORS.surface,
+      text: WIREFRAME_COLORS.text,
+      border: WIREFRAME_COLORS.border,
     },
     danger: {
-      main: "#d13438",
-      secondary: "#c50f1f",
-      bg: "#fdf3f4",
-      text: "#000000",
-      border: "#e5e5e5",
+      main: WIREFRAME_COLORS.primary,
+      secondary: WIREFRAME_COLORS.secondary,
+      bg: WIREFRAME_COLORS.surface,
+      text: WIREFRAME_COLORS.text,
+      border: WIREFRAME_COLORS.border,
     },
   };
 
@@ -1072,16 +1074,16 @@ function generateGeneralWireframe(description, colors) {
 function generateEmergencyFallback(description, designTheme, colorScheme) {
   return `
   <div style="max-width: 600px; margin: 40px auto; padding: 32px; border: 1px solid #e5e5e5; border-radius: 8px; background: #ffffff; font-family: 'Segoe UI', system-ui, sans-serif;">
-    <h2 style="color: #323130; font-size: 24px; font-weight: 600; margin: 0 0 16px 0; text-align: center;">⚠️ Service Temporarily Unavailable</h2>
-    <p style="color: #605e5c; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0; text-align: center;">
+    <h2 style="color: #3C4858; font-size: 24px; font-weight: 600; margin: 0 0 16px 0; text-align: center;">⚠️ Service Temporarily Unavailable</h2>
+    <p style="color: #8E9AAF; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0; text-align: center;">
       We're experiencing technical difficulties with our wireframe generation service. Please try again in a few moments.
     </p>
-    <div style="background: #f8f9fa; padding: 20px; border-radius: 6px; border-left: 4px solid #d1ccf0;">
-      <p style="color: #323130; margin: 0 0 8px 0; font-weight: 500;">Your request:</p>
-      <p style="color: #605e5c; margin: 0; font-style: italic;">"${description}"</p>
+    <div style="background: #E9ECEF; padding: 20px; border-radius: 6px; border-left: 4px solid #8E9AAF;">
+      <p style="color: #3C4858; margin: 0 0 8px 0; font-weight: 500;">Your request:</p>
+      <p style="color: #8E9AAF; margin: 0; font-style: italic;">"${description}"</p>
     </div>
     <div style="text-align: center; margin-top: 24px;">
-      <button style="background: #0078d4; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 16px; font-weight: 500; cursor: pointer; font-family: inherit;">
+      <button style="background: #8E9AAF; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 16px; font-weight: 500; cursor: pointer; font-family: inherit;">
         Try Again
       </button>
     </div>

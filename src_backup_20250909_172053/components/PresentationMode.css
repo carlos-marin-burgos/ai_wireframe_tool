@@ -85,7 +85,7 @@
 .presentation-description {
   margin: 4px 0 0 0;
   font-size: 14px;
-  color: #605e5c;
+  color: #68769C;
 }
 
 .presentation-controls {
@@ -102,7 +102,7 @@
   border: none;
   border-radius: 6px;
   background: #f3f2f1;
-  color: #323130;
+  color: #3C4858;
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 16px;
@@ -161,7 +161,7 @@
   height: 44px;
   border: none;
   border-radius: 50%;
-  background: #0078d4;
+  background: #8E9AAF;
   color: white;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -169,7 +169,7 @@
 }
 
 .nav-btn:hover:not(:disabled) {
-  background: #106ebe;
+  background: #68769C;
   transform: scale(1.05);
 }
 
@@ -186,11 +186,11 @@
   gap: 8px;
   font-size: 16px;
   font-weight: 500;
-  color: #323130;
+  color: #3C4858;
 }
 
 .current-page {
-  color: #0078d4;
+  color: #8E9AAF;
   font-weight: 600;
 }
 
@@ -224,7 +224,7 @@
 .page-description {
   margin: 4px 0 0 0;
   font-size: 14px;
-  color: #605e5c;
+  color: #68769C;
 }
 
 .wireframe-display {
@@ -268,14 +268,14 @@
 }
 .toolbar-description {
   font-size: 12px;
-  color: #605e5c;
+  color: #68769C;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .toolbar-date {
   font-size: 12px;
-  color: #605e5c;
+  color: #68769C;
 }
 .toolbar-right {
   display: flex;
@@ -318,13 +318,13 @@
 }
 
 .thumbnail:hover {
-  border-color: #0078d4;
+  border-color: #8E9AAF;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 120, 212, 0.15);
 }
 
 .thumbnail.active {
-  border-color: #0078d4;
+  border-color: #8E9AAF;
   background: #f0f8ff;
 }
 
@@ -350,7 +350,7 @@
 .thumbnail-label {
   font-size: 12px;
   font-weight: 500;
-  color: #323130;
+  color: #3C4858;
   text-align: center;
   line-height: 1.2;
 }
@@ -365,7 +365,7 @@
 }
 
 .presentation-help small {
-  color: #605e5c;
+  color: #68769C;
   font-size: 12px;
 }
 
@@ -432,7 +432,7 @@
 .presentation-btn:focus,
 .nav-btn:focus,
 .thumbnail:focus {
-  outline: 2px solid #0078d4;
+  outline: 2px solid #8E9AAF;
   outline-offset: 2px;
 }
 
@@ -459,12 +459,12 @@
 }
 
 .presentation-mode.fullscreen .thumbnail:hover {
-  border-color: #0078d4;
+  border-color: #8E9AAF;
   background: rgba(255, 255, 255, 0.2);
 }
 
 .presentation-mode.fullscreen .thumbnail.active {
-  border-color: #0078d4;
+  border-color: #8E9AAF;
   background: rgba(0, 120, 212, 0.2);
 }
 

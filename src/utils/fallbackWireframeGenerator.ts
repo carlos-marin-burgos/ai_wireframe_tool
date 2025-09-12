@@ -11,45 +11,190 @@ interface FallbackWireframeOptions {
 
 // Removed unused interface WireframeTemplate
 
-// Color scheme definitions
+// Neutral wireframe color palette - Professional and clean wireframe aesthetics
 const COLOR_SCHEMES = {
-  microsoft: {
-    main: "#0078d4",
-    secondary: "#106ebe",
-    bg: "#ffffff",
-    surface: "#f8f9fa",
-    text: "#323130",
-    textSecondary: "#605e5c",
-    border: "#e1e5e9",
-    accent: "#0078d4",
-    headerBg: "#ffffff",
-    headerText: "#000000",
+  // Primary wireframe scheme using neutral grays
+  primary: {
+    main: "#8E9AAF", // Medium blue-gray (from your palette)
+    secondary: "#68769C", // Darker blue-gray
+    bg: "#F8F9FA", // Very light gray background
+    surface: "#FFFFFF", // White surface areas
+    text: "#3C4858", // Dark slate gray for text
+    textSecondary: "#8E9AAF", // Medium gray for secondary text
+    border: "#DEE2E6", // Light gray borders
+    accent: "#68769C", // Darker accent color
+    headerBg: "#FFFFFF", // White header background
+    headerText: "#3C4858", // Dark text on header
   },
+  // Secondary neutral scheme
   secondary: {
-    main: "#8b5dae",
-    secondary: "#6b46c1",
-    bg: "#ffffff",
-    surface: "#f8f9fa",
-    text: "#171717",
-    textSecondary: "#605e5c",
-    border: "#e1dfdd",
-    accent: "#8b5dae",
-    headerBg: "#ffffff",
-    headerText: "#000000",
+    main: "#CBC2C2", // Light warm gray (from your palette)
+    secondary: "#8E9AAF", // Blue-gray for contrast
+    bg: "#F8F9FA", // Very light background
+    surface: "#FFFFFF", // White surfaces
+    text: "#3C4858", // Dark text
+    textSecondary: "#68769C", // Medium blue-gray text
+    border: "#E9ECEF", // Subtle borders
+    accent: "#68769C", // Blue-gray accent
+    headerBg: "#FFFFFF", // White header
+    headerText: "#3C4858", // Dark header text
   },
-  success: {
-    main: "#107c10",
-    secondary: "#0e6b0e",
-    bg: "#ffffff",
-    surface: "#f8f9fa",
-    text: "#171717",
-    textSecondary: "#605e5c",
-    border: "#e1dfdd",
-    accent: "#107c10",
-    headerBg: "#ffffff",
-    headerText: "#000000",
+  // Dark wireframe scheme
+  dark: {
+    main: "#3C4858", // Dark slate (from your palette)
+    secondary: "#68769C", // Medium blue-gray
+    bg: "#8E9AAF", // Medium gray background
+    surface: "#CBC2C2", // Light gray surfaces
+    text: "#FFFFFF", // White text for contrast
+    textSecondary: "#F8F9FA", // Very light gray text
+    border: "#68769C", // Medium gray borders
+    accent: "#CBC2C2", // Light gray accent
+    headerBg: "#3C4858", // Dark header
+    headerText: "#FFFFFF", // White header text
+  },
+  // Light wireframe scheme
+  light: {
+    main: "#E9ECEF", // Very light gray (from your palette)
+    secondary: "#CBC2C2", // Light warm gray
+    bg: "#FFFFFF", // Pure white background
+    surface: "#F8F9FA", // Very light gray surfaces
+    text: "#3C4858", // Dark text
+    textSecondary: "#8E9AAF", // Medium gray text
+    border: "#E9ECEF", // Very light borders
+    accent: "#68769C", // Blue-gray accent for contrast
+    headerBg: "#F8F9FA", // Light gray header
+    headerText: "#3C4858", // Dark header text
   },
 };
+
+// ==============================================================
+// Accessibility Utilities (WCAG 2.1 Contrast Compliance Helpers)
+// ==============================================================
+function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
+  const cleaned = hex.replace("#", "").trim();
+  if (cleaned.length === 3) {
+    const r = parseInt(cleaned[0] + cleaned[0], 16);
+    const g = parseInt(cleaned[1] + cleaned[1], 16);
+    const b = parseInt(cleaned[2] + cleaned[2], 16);
+    return { r, g, b };
+  }
+  if (cleaned.length === 6) {
+    const r = parseInt(cleaned.slice(0, 2), 16);
+    const g = parseInt(cleaned.slice(2, 4), 16);
+    const b = parseInt(cleaned.slice(4, 6), 16);
+    return { r, g, b };
+  }
+  return null;
+}
+
+function relativeLuminance(hex: string): number {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return 0;
+  const transform = (c: number) => {
+    const s = c / 255;
+    return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+  };
+  const r = transform(rgb.r);
+  const g = transform(rgb.g);
+  const b = transform(rgb.b);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+function contrastRatio(foreground: string, background: string): number {
+  const L1 = relativeLuminance(foreground);
+  const L2 = relativeLuminance(background);
+  const lighter = Math.max(L1, L2);
+  const darker = Math.min(L1, L2);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+function pickAccessibleTextColor(bg: string, min = 4.5): string {
+  // Try dark first, then white
+  const dark = "#111111";
+  const white = "#FFFFFF";
+  const contrastDark = contrastRatio(dark, bg);
+  const contrastWhite = contrastRatio(white, bg);
+  if (contrastDark >= min && contrastWhite >= min) {
+    // Return whichever gives higher contrast
+    return contrastDark >= contrastWhite ? dark : white;
+  }
+  if (contrastDark >= min) return dark;
+  if (contrastWhite >= min) return white;
+  // Neither meets threshold – return higher ratio as fallback
+  return contrastDark >= contrastWhite ? dark : white;
+}
+
+interface AccessibleColors {
+  [key: string]: any; // original palette props
+  accessibleOnMain: string;
+  accessibleOnSecondary: string;
+  accessibleOnHeaderBg: string;
+  accessibleOnAccent: string;
+  _accessibilityAdjustments?: string[]; // diagnostics
+}
+
+function getAccessiblePalette(base: any): AccessibleColors {
+  const adjusted: AccessibleColors = {
+    ...base,
+    accessibleOnMain: pickAccessibleTextColor(base.main),
+    accessibleOnSecondary: pickAccessibleTextColor(base.secondary),
+    accessibleOnHeaderBg: pickAccessibleTextColor(
+      base.headerBg || base.surface || base.bg
+    ),
+    accessibleOnAccent: pickAccessibleTextColor(base.accent || base.main),
+    _accessibilityAdjustments: [],
+  };
+
+  // Ensure headerText has contrast vs headerBg
+  if (base.headerText && base.headerBg) {
+    const cr = contrastRatio(base.headerText, base.headerBg);
+    if (cr < 4.5) {
+      const replacement = pickAccessibleTextColor(base.headerBg);
+      if (replacement !== base.headerText) {
+        adjusted._accessibilityAdjustments?.push(
+          `headerText modified (${
+            base.headerText
+          } -> ${replacement}) contrast=${cr.toFixed(2)}`
+        );
+        adjusted.headerText = replacement;
+      }
+    }
+  }
+
+  // Text vs background
+  if (base.text && base.bg) {
+    const cr = contrastRatio(base.text, base.bg);
+    if (cr < 4.5) {
+      const replacement = pickAccessibleTextColor(base.bg);
+      if (replacement !== base.text) {
+        adjusted._accessibilityAdjustments?.push(
+          `text modified (${base.text} -> ${replacement}) contrast=${cr.toFixed(
+            2
+          )}`
+        );
+        adjusted.text = replacement;
+      }
+    }
+  }
+
+  // Secondary text – allow 3:1 if considered large/secondary, else upgrade
+  if (base.textSecondary && base.bg) {
+    const cr = contrastRatio(base.textSecondary, base.bg);
+    if (cr < 3) {
+      const replacement = pickAccessibleTextColor(base.bg, 3);
+      if (replacement !== base.textSecondary) {
+        adjusted._accessibilityAdjustments?.push(
+          `textSecondary modified (${
+            base.textSecondary
+          } -> ${replacement}) contrast=${cr.toFixed(2)}`
+        );
+        adjusted.textSecondary = replacement;
+      }
+    }
+  }
+
+  return adjusted;
+}
 
 // Base CSS for all wireframes
 const getBaseCSS = (colors: any) => `
@@ -86,9 +231,9 @@ const getBaseCSS = (colors: any) => `
     transition: color 0.2s; 
   }
   .nav a:hover { color: ${colors.main}; }
-  .btn-primary { 
-    background: ${colors.main}; 
-    color: white; 
+    .btn-primary { 
+        background: ${colors.main}; 
+        color: ${colors.accessibleOnMain}; 
     padding: 12px 24px; 
     border: none; 
     border-radius: 4px; 
@@ -98,7 +243,9 @@ const getBaseCSS = (colors: any) => `
     transition: background 0.2s; 
     cursor: pointer; 
   }
-  .btn-primary:hover { background: ${colors.secondary}; }
+    .btn-primary:hover { background: ${colors.secondary}; color: ${
+  colors.accessibleOnSecondary
+}; }
   .btn-secondary { 
     background: transparent; 
     color: ${colors.main}; 
@@ -111,10 +258,10 @@ const getBaseCSS = (colors: any) => `
     transition: all 0.2s; 
     cursor: pointer; 
   }
-  .btn-secondary:hover { 
-    background: ${colors.main}; 
-    color: white; 
-  }
+    .btn-secondary:hover { 
+        background: ${colors.main}; 
+        color: ${colors.accessibleOnMain}; 
+    }
   .card { 
     background: white; 
     padding: 24px; 
@@ -139,20 +286,20 @@ const getBaseCSS = (colors: any) => `
   .fallback-notice strong { color: #8a6914; }
 `;
 
-// Microsoft Learn Header Template
-const getMicrosoftLearnHeader = (colors: any) => `
+// Generic Header Template
+const getGenericHeader = (colors: any) => `
   <header style="background: ${colors.headerBg || "#ffffff"}; color: ${
   colors.headerText || "#000000"
 }; padding: 12px 24px; border-bottom: 1px solid #e5e5e5; font-family: 'Segoe UI', system-ui, sans-serif;">
     <div style="display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto;">
       <div style="display: flex; align-items: center;">
-        <svg aria-hidden="true" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; margin-right: 16px;">
-          <path d="M11.5216 0.5H0V11.9067H11.5216V0.5Z" fill="#f25022" />
-          <path d="M24.2418 0.5H12.7202V11.9067H24.2418V0.5Z" fill="#7fba00" />
-          <path d="M11.5216 13.0933H0V24.5H11.5216V13.0933Z" fill="#00a4ef" />
-          <path d="M24.2418 13.0933H12.7202V24.5H24.2418V13.0933Z" fill="#ffb900" />
-        </svg>
-        <div style="width: 1px; height: 24px; background: #e1e5e9; margin-right: 16px;"></div>
+        <div style="width: 32px; height: 32px; background: ${
+          colors.main
+        }; border-radius: 6px; margin-right: 16px; display: flex; align-items: center; justify-content: center;">
+          <div style="width: 16px; height: 16px; background: ${
+            colors.accessibleOnMain
+          }; border-radius: 2px;"></div>
+        </div>
         <span style="font-weight: 600; font-size: 16px; color: ${
           colors.headerText || "#000000"
         };">Platform</span>
@@ -178,9 +325,19 @@ const generateLandingPage = (
   _theme: string,
   colorScheme: string
 ): string => {
-  const colors =
+  const baseColors =
     COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] ||
-    COLOR_SCHEMES.microsoft;
+    COLOR_SCHEMES.primary;
+  const colors = getAccessiblePalette(baseColors);
+  if (
+    colors._accessibilityAdjustments &&
+    colors._accessibilityAdjustments.length
+  ) {
+    console.log(
+      "♿ Accessibility adjustments applied (landing template):",
+      colors._accessibilityAdjustments
+    );
+  }
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -223,7 +380,7 @@ const generateLandingPage = (
             width: 64px; 
             height: 64px; 
             background: ${colors.main}; 
-            color: white; 
+            color: ${colors.accessibleOnMain}; 
             border-radius: 50%; 
             display: flex; 
             align-items: center; 
@@ -243,7 +400,7 @@ const generateLandingPage = (
     </style>
 </head>
 <body>
-    ${getMicrosoftLearnHeader(colors)}
+    ${getGenericHeader(colors)}
             </div>
         </div>
     </section>
@@ -280,9 +437,19 @@ const generateDashboard = (
   _theme: string,
   colorScheme: string
 ): string => {
-  const colors =
+  const baseColors =
     COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] ||
-    COLOR_SCHEMES.microsoft;
+    COLOR_SCHEMES.primary;
+  const colors = getAccessiblePalette(baseColors);
+  if (
+    colors._accessibilityAdjustments &&
+    colors._accessibilityAdjustments.length
+  ) {
+    console.log(
+      "♿ Accessibility adjustments applied (dashboard template):",
+      colors._accessibilityAdjustments
+    );
+  }
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -388,11 +555,16 @@ const generateDashboard = (
 </head>
 <body>
     <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
+    <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
         <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
             <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
                 <div style="width: 24px; height: 24px; background: ${
                   colors.main
-                }; border-radius: 4px;"></div>
+                }; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                    <div style="width: 12px; height: 12px; background: ${
+                      colors.accessibleOnMain
+                    }; border-radius: 2px;"></div>
+                </div>
                 <span style="font-size: 16px; font-weight: 600; color: #24292f;">Dashboard</span>
             </div>
             <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
@@ -400,7 +572,7 @@ const generateDashboard = (
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Reports</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Analytics</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Settings</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Dashboard</button>
+                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Dashboard</button>
             </nav>
         </div>
     </header>
@@ -480,9 +652,19 @@ const generateForm = (
   _theme: string,
   colorScheme: string
 ): string => {
-  const colors =
+  const baseColors =
     COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] ||
-    COLOR_SCHEMES.microsoft;
+    COLOR_SCHEMES.primary;
+  const colors = getAccessiblePalette(baseColors);
+  if (
+    colors._accessibilityAdjustments &&
+    colors._accessibilityAdjustments.length
+  ) {
+    console.log(
+      "♿ Accessibility adjustments applied (form template):",
+      colors._accessibilityAdjustments
+    );
+  }
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -558,7 +740,7 @@ const generateForm = (
         .form-submit { 
             width: 100%; 
             background: ${colors.main}; 
-            color: white; 
+            color: ${colors.accessibleOnMain}; 
             padding: 16px; 
             border: none; 
             border-radius: 4px; 
@@ -569,6 +751,7 @@ const generateForm = (
         }
         .form-submit:hover { 
             background: ${colors.secondary}; 
+            color: ${colors.accessibleOnSecondary};
         }
     </style>
 </head>
@@ -576,15 +759,21 @@ const generateForm = (
     <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
         <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
             <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
-               <img src="/windowsLogo.png" alt="Microsoft Logo" width="24" height="24">
-                <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
+                <div style="width: 24px; height: 24px; background: ${
+                  colors.main
+                }; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                    <div style="width: 12px; height: 12px; background: ${
+                      colors.accessibleOnMain
+                    }; border-radius: 2px;"></div>
+                </div>
+                <span style="font-size: 16px; font-weight: 600; color: #24292f;">Platform</span>
             </div>
             <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Forms</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Templates</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Examples</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Support</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Create Form</button>
+                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Create Form</button>
             </nav>
         </div>
     </header>
@@ -653,9 +842,19 @@ const generateContent = (
   _theme: string,
   colorScheme: string
 ): string => {
-  const colors =
+  const baseColors =
     COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] ||
-    COLOR_SCHEMES.microsoft;
+    COLOR_SCHEMES.primary;
+  const colors = getAccessiblePalette(baseColors);
+  if (
+    colors._accessibilityAdjustments &&
+    colors._accessibilityAdjustments.length
+  ) {
+    console.log(
+      "♿ Accessibility adjustments applied (content template):",
+      colors._accessibilityAdjustments
+    );
+  }
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -749,15 +948,21 @@ const generateContent = (
     <header class="docs-header" style="background: #f8f9fa; padding: 12px 0; border-bottom: 1px solid #e1e4e8;">
         <div class="docs-header-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
             <div class="docs-header-brand" style="display: flex; align-items: center; gap: 12px;">
-                <img src="/windowsLogo.png" alt="Microsoft Logo" width="24" height="24">
-                <span style="font-size: 16px; font-weight: 600; color: #24292f;">Microsoft Learn</span>
+                <div style="width: 24px; height: 24px; background: ${
+                  colors.main
+                }; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                    <div style="width: 12px; height: 12px; background: ${
+                      colors.accessibleOnMain
+                    }; border-radius: 2px;"></div>
+                </div>
+                <span style="font-size: 16px; font-weight: 600; color: #24292f;">Articles</span>
             </div>
             <nav class="docs-header-nav" style="display: flex; align-items: center; gap: 24px;">
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Documentation</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Learning Paths</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Certifications</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Q&A</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Browse</button>
+                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Browse</button>
             </nav>
         </div>
     </header>
@@ -836,7 +1041,7 @@ const result = example();
                         <span class="tag">Tutorial</span>
                         <span class="tag">Best Practices</span>
                         <span class="tag">Development</span>
-                        <span class="tag">Microsoft Learn</span>
+                        <span class="tag">Platform</span>
                     </div>
                 </div>
             </article>
@@ -852,9 +1057,19 @@ const generateGeneric = (
   _theme: string,
   colorScheme: string
 ): string => {
-  const colors =
+  const baseColors =
     COLOR_SCHEMES[colorScheme as keyof typeof COLOR_SCHEMES] ||
-    COLOR_SCHEMES.microsoft;
+    COLOR_SCHEMES.primary;
+  const colors = getAccessiblePalette(baseColors);
+  if (
+    colors._accessibilityAdjustments &&
+    colors._accessibilityAdjustments.length
+  ) {
+    console.log(
+      "♿ Accessibility adjustments applied (generic template):",
+      colors._accessibilityAdjustments
+    );
+  }
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -912,7 +1127,7 @@ const generateGeneric = (
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Documentation</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Community</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Support</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Get Started</button>
+                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Get Started</button>
             </nav>
         </div>
     </header>
@@ -1123,7 +1338,7 @@ const generateCustomForm = (description: string, _theme: string, colorScheme: st
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Templates</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Examples</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Support</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Create Form</button>
+                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Create Form</button>
             </nav>
         </div>
     </header>

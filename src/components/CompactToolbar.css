@@ -41,7 +41,7 @@
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: #605e5c;
+  color: #68769C;
   font-size: 16px;
   position: relative;
 }
@@ -49,7 +49,7 @@
 .compact-btn:hover {
   background: #f3f2f1;
   border-color: #e1dfdd;
-  color: #323130;
+  color: #3C4858;
 }
 
 .compact-btn:active {
@@ -64,29 +64,29 @@
 }
 
 .compact-btn.enhanced-active {
-  background: #0078d4;
+  background: #8E9AAF;
   color: white;
-  border-color: #0078d4;
+  border-color: #8E9AAF;
   box-shadow: 0 2px 4px rgba(0, 120, 212, 0.2);
 }
 
 .compact-btn.enhanced-active:hover {
 =======
-  border-color: #0078d4;
-  box-shadow: 0 0 0 1px #0078d4;
+  border-color: #8E9AAF;
+  box-shadow: 0 0 0 1px #8E9AAF;
 }
 
 /* Primary button (Save) */
 .compact-btn-primary {
-  background: #0078d4;
+  background: #8E9AAF;
   color: white;
-  border-color: #0078d4;
+  border-color: #8E9AAF;
 }
 
 .compact-btn-primary:hover {
 >>>>>>> c45591cd7c4527069b42e97fad093bcdd3b64ed7
-  background: #106ebe;
-  border-color: #106ebe;
+  background: #68769C;
+  border-color: #68769C;
   color: white;
 }
 
@@ -98,13 +98,13 @@
 
 .compact-btn.edit-toggle:not(.active) {
   background: #f0f9ff;
-  color: #0078d4;
+  color: #8E9AAF;
   border-color: #cce7ff;
 }
 
 .compact-btn.edit-toggle:not(.active):hover {
   background: #dbeafe;
-  color: #106ebe;
+  color: #68769C;
   border-color: #93c5fd;
 }
 
@@ -121,8 +121,8 @@
   color: white;
 =======
 .compact-btn-primary:active {
-  background: #005a9e;
-  border-color: #005a9e;
+  background: #68769C;
+  border-color: #68769C;
 >>>>>>> c45591cd7c4527069b42e97fad093bcdd3b64ed7
 }
 
@@ -160,7 +160,7 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
-  color: #323130;
+  color: #3C4858;
   text-align: left;
   transition: background-color 0.2s ease;
 }
@@ -244,7 +244,7 @@
   left: 50%;
   transform: translateX(-50%);
 >>>>>>> c45591cd7c4527069b42e97fad093bcdd3b64ed7
-  background: #323130;
+  background: #3C4858;
   color: white;
   padding: 6px 8px;
   border-radius: 4px;
@@ -262,7 +262,7 @@
   left: 50%;
   transform: translateX(-50%);
   border: 4px solid transparent;
-  border-bottom-color: #323130;
+  border-bottom-color: #3C4858;
 }
 
 /* Responsive adjustments */
@@ -301,7 +301,7 @@
   left: 50%;
   transform: translateX(-50%);
   border: 4px solid transparent;
-  border-top-color: #323130;
+  border-top-color: #3C4858;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;

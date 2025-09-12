@@ -80,17 +80,17 @@ const AddPagesModal: React.FC<AddPagesModalProps> = ({
         `;
 
         const headerStyles = `
-            color: #323130; margin: 0 0 24px 0; font-size: 28px; font-weight: 600;
+            color: #3C4858; margin: 0 0 24px 0; font-size: 28px; font-weight: 600;
         `;
 
         const buttonStyles = `
-            background: #0078d4; color: white; border: none; padding: 12px 24px; 
+            background: #8E9AAF; color: white; border: none; padding: 12px 24px; 
             border-radius: 4px; cursor: pointer; font-weight: 600; margin: 8px;
             transition: background-color 0.2s ease;
         `;
 
         const secondaryButtonStyles = `
-            background: #f3f2f1; color: #323130; border: 1px solid #e1dfdd; 
+            background: #f3f2f1; color: #3C4858; border: 1px solid #e1dfdd; 
             padding: 12px 24px; border-radius: 4px; cursor: pointer; margin: 8px;
             transition: background-color 0.2s ease;
         `;
@@ -102,7 +102,7 @@ const AddPagesModal: React.FC<AddPagesModalProps> = ({
 
         // Microsoft Learn hero background (beige accent color)
         const heroStyles = `
-            background: #E8E6DF; 
+            background: #E9ECEF; 
             padding: 60px 40px; border-radius: 12px; margin: 20px 0;
             text-align: center; border: 1px solid #e1dfdd;
         `;
@@ -115,7 +115,7 @@ const AddPagesModal: React.FC<AddPagesModalProps> = ({
                             <div style="${cardStyles} max-width: 500px; position: relative; z-index: 1001;">
                                 <button style="position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
                                 <h2 style="${headerStyles} font-size: 24px;">${name}</h2>
-                                <p style="color: #605e5c; margin: 0 0 24px 0;">${description}</p>
+                                <p style="color: #68769C; margin: 0 0 24px 0;">${description}</p>
                                 <div style="display: flex; gap: 12px; justify-content: flex-end;">
                                     <button style="${secondaryButtonStyles}">Cancel</button>
                                     <button style="${buttonStyles}">Confirm</button>
@@ -130,7 +130,7 @@ const AddPagesModal: React.FC<AddPagesModalProps> = ({
                     <div style="${baseStyles}">
                         <div style="${cardStyles}">
                             <h3 style="${headerStyles} font-size: 20px; margin-bottom: 16px;">${name} Component</h3>
-                            <p style="color: #605e5c; margin: 0 0 20px 0;">${description}</p>
+                            <p style="color: #68769C; margin: 0 0 20px 0;">${description}</p>
                             <div style="border: 2px dashed #e1dfdd; padding: 20px; text-align: center; border-radius: 8px;">
                                 <p style="color: #a19f9d; margin: 0;">Component content goes here</p>
                                 <p style="color: #a19f9d; margin: 8px 0 0 0; font-size: 14px;">Customize this ${type} based on your needs</p>
@@ -148,14 +148,14 @@ const AddPagesModal: React.FC<AddPagesModalProps> = ({
                     return `
                         <div style="${baseStyles}">
                             <h1 style="${headerStyles}">${name}</h1>
-                            <p style="color: #605e5c; margin: 0 0 32px 0;">${description}</p>
+                            <p style="color: #68769C; margin: 0 0 32px 0;">${description}</p>
                             <form style="${cardStyles}">
                                 <div style="margin-bottom: 20px;">
-                                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #323130;">Field Name</label>
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #3C4858;">Field Name</label>
                                     <input type="text" style="width: 100%; padding: 12px; border: 1px solid #e1dfdd; border-radius: 4px; font-size: 16px;" placeholder="Enter value...">
                                 </div>
                                 <div style="margin-bottom: 20px;">
-                                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #323130;">Description</label>
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #3C4858;">Description</label>
                                     <textarea style="width: 100%; padding: 12px; border: 1px solid #e1dfdd; border-radius: 4px; font-size: 16px; min-height: 100px;" placeholder="Enter description..."></textarea>
                                 </div>
                                 <button type="submit" style="${buttonStyles}">Submit</button>
@@ -167,28 +167,28 @@ const AddPagesModal: React.FC<AddPagesModalProps> = ({
                         <div style="${baseStyles}">
                             <div style="${heroStyles}">
                                 <h1 style="${headerStyles} margin-bottom: 16px;">${name}</h1>
-                                <p style="color: #605e5c; margin: 0; font-size: 18px;">${description}</p>
+                                <p style="color: #68769C; margin: 0; font-size: 18px;">${description}</p>
                             </div>
                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 32px;">
                                 <div style="${cardStyles}">
-                                    <h3 style="margin: 0 0 12px 0; color: #323130; font-size: 16px;">Total Users</h3>
-                                    <p style="font-size: 32px; font-weight: bold; margin: 0; color: #0078d4;">1,234</p>
+                                    <h3 style="margin: 0 0 12px 0; color: #3C4858; font-size: 16px;">Total Users</h3>
+                                    <p style="font-size: 32px; font-weight: bold; margin: 0; color: #8E9AAF;">1,234</p>
                                     <p style="font-size: 14px; color: #107c10; margin: 8px 0 0 0;">↗ +12% vs last month</p>
                                 </div>
                                 <div style="${cardStyles}">
-                                    <h3 style="margin: 0 0 12px 0; color: #323130; font-size: 16px;">Active Sessions</h3>
-                                    <p style="font-size: 32px; font-weight: bold; margin: 0; color: #0078d4;">5,678</p>
+                                    <h3 style="margin: 0 0 12px 0; color: #3C4858; font-size: 16px;">Active Sessions</h3>
+                                    <p style="font-size: 32px; font-weight: bold; margin: 0; color: #8E9AAF;">5,678</p>
                                     <p style="font-size: 14px; color: #107c10; margin: 8px 0 0 0;">↗ +8% vs last month</p>
                                 </div>
                                 <div style="${cardStyles}">
-                                    <h3 style="margin: 0 0 12px 0; color: #323130; font-size: 16px;">Completion Rate</h3>
-                                    <p style="font-size: 32px; font-weight: bold; margin: 0; color: #0078d4;">87%</p>
+                                    <h3 style="margin: 0 0 12px 0; color: #3C4858; font-size: 16px;">Completion Rate</h3>
+                                    <p style="font-size: 32px; font-weight: bold; margin: 0; color: #8E9AAF;">87%</p>
                                     <p style="font-size: 14px; color: #107c10; margin: 8px 0 0 0;">↗ +5% vs last month</p>
                                 </div>
                             </div>
                             <div style="${cardStyles}">
-                                <h3 style="margin: 0 0 16px 0; color: #323130;">Recent Activity</h3>
-                                <p style="color: #605e5c; margin: 0 0 20px 0;">Monitor real-time dashboard metrics and analytics.</p>
+                                <h3 style="margin: 0 0 16px 0; color: #3C4858;">Recent Activity</h3>
+                                <p style="color: #68769C; margin: 0 0 20px 0;">Monitor real-time dashboard metrics and analytics.</p>
                                 <div style="display: flex; gap: 12px; flex-wrap: wrap;">
                                     <button style="${buttonStyles}">View Details</button>
                                     <button style="${secondaryButtonStyles}">Export Data</button>
@@ -200,7 +200,7 @@ const AddPagesModal: React.FC<AddPagesModalProps> = ({
                     return `
                         <div style="${baseStyles}">
                             <h1 style="${headerStyles}">${name}</h1>
-                            <p style="color: #605e5c; margin: 0 0 32px 0;">${description}</p>
+                            <p style="color: #68769C; margin: 0 0 32px 0;">${description}</p>
                             <div style="${cardStyles}">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                                     <input type="search" style="padding: 12px; border: 1px solid #e1dfdd; border-radius: 4px; width: 300px;" placeholder="Search items...">
@@ -232,11 +232,11 @@ const AddPagesModal: React.FC<AddPagesModalProps> = ({
                         <div style="${baseStyles}">
                             <div style="${heroStyles}">
                                 <h1 style="${headerStyles} margin-bottom: 16px;">${name}</h1>
-                                <p style="color: #605e5c; margin: 0; font-size: 18px;">${description}</p>
+                                <p style="color: #68769C; margin: 0; font-size: 18px;">${description}</p>
                             </div>
                             <div style="${cardStyles}">
-                                <h2 style="color: #323130; margin: 0 0 16px 0;">Welcome to ${name}</h2>
-                                <p style="color: #605e5c; line-height: 1.6;">This page is ready for your content. You can customize it by asking me to generate specific content or modify the layout.</p>
+                                <h2 style="color: #3C4858; margin: 0 0 16px 0;">Welcome to ${name}</h2>
+                                <p style="color: #68769C; line-height: 1.6;">This page is ready for your content. You can customize it by asking me to generate specific content or modify the layout.</p>
                                 <div style="margin: 24px 0;">
                                     <button style="${buttonStyles}">Get Started</button>
                                     <button style="${secondaryButtonStyles}">Learn More</button>
@@ -359,14 +359,14 @@ const AddPagesModal: React.FC<AddPagesModalProps> = ({
             const fallbackContent = `
                 <div style="max-width: 1200px; margin: 0 auto; padding: 40px 20px; font-family: 'Segoe UI', sans-serif; background: #ffffff; min-height: 100vh;">
                     <div style="background: linear-gradient(135deg, #fff4e6 0%, #fef3c7 100%); padding: 60px 40px; border-radius: 12px; margin: 20px 0; text-align: center; border: 1px solid #e1dfdd;">
-                        <h1 style="color: #323130; margin: 0 0 16px 0; font-size: 28px; font-weight: 600;">📄 ${newPageName.trim()}</h1>
-                        <p style="color: #605e5c; margin: 0 0 16px 0; font-size: 16px;">
+                        <h1 style="color: #3C4858; margin: 0 0 16px 0; font-size: 28px; font-weight: 600;">📄 ${newPageName.trim()}</h1>
+                        <p style="color: #68769C; margin: 0 0 16px 0; font-size: 16px;">
                             ${newPageDescription.trim()}
                         </p>
                         <p style="color: #a19f9d; margin: 0 0 24px 0; font-size: 14px;">
                             AI content generation temporarily unavailable. Ask me to "generate content for ${newPageName.trim()}" to try again.
                         </p>
-                        <button style="background: #0078d4; color: white; border: none; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-weight: 600; transition: background-color 0.2s ease;">
+                        <button style="background: #8E9AAF; color: white; border: none; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-weight: 600; transition: background-color 0.2s ease;">
                             Generate Content
                         </button>
                     </div>

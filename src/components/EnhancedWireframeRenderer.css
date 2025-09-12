@@ -6,7 +6,7 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
-  background: #f8f9fa;
+  background: #E9ECEF;
   border-radius: 8px;
   overflow: hidden;
   font-family: "Segoe UI", system-ui, sans-serif;
@@ -44,7 +44,7 @@
   border-radius: 4px;
   font-size: 13px;
   font-weight: 500;
-  color: #605e5c;
+  color: #68769C;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
@@ -52,11 +52,11 @@
 
 .mode-btn:hover {
   background: rgba(0, 120, 212, 0.1);
-  color: #0078d4;
+  color: #8E9AAF;
 }
 
 .mode-btn.active {
-  background: #0078d4;
+  background: #8E9AAF;
   color: white;
   box-shadow: 0 2px 4px rgba(0, 120, 212, 0.2);
 }
@@ -84,7 +84,7 @@
 }
 
 .control-group label {
-  color: #323130;
+  color: #3C4858;
   font-weight: 500;
   white-space: nowrap;
 }
@@ -95,7 +95,7 @@
   border-radius: 4px;
   padding: 4px 8px;
   font-size: 12px;
-  color: #323130;
+  color: #3C4858;
   cursor: pointer;
   transition: border-color 0.2s ease;
   min-width: 100px;
@@ -107,8 +107,8 @@
 
 .control-select:focus {
   outline: none;
-  border-color: #0078d4;
-  box-shadow: 0 0 0 1px #0078d4;
+  border-color: #8E9AAF;
+  box-shadow: 0 0 0 1px #8E9AAF;
 }
 
 .checkbox-label {
@@ -131,7 +131,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background: #0078d4;
+  background: #8E9AAF;
   color: white;
   border: none;
   border-radius: 4px;
@@ -143,7 +143,7 @@
 }
 
 .add-component-btn:hover {
-  background: #106ebe;
+  background: #68769C;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 120, 212, 0.3);
 }
@@ -179,12 +179,12 @@
 }
 
 .split-pane h4 {
-  background: #f8f9fa;
+  background: #E9ECEF;
   margin: 0;
   padding: 12px 16px;
   font-size: 14px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
   border-bottom: 1px solid #e1dfdd;
 }
 
@@ -232,21 +232,21 @@
   justify-content: space-between;
   padding: 16px 20px;
   border-bottom: 1px solid #e1dfdd;
-  background: #f8f9fa;
+  background: #E9ECEF;
 }
 
 .library-header h3 {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
 }
 
 .close-btn {
   background: none;
   border: none;
   font-size: 24px;
-  color: #605e5c;
+  color: #68769C;
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
@@ -256,7 +256,7 @@
 
 .close-btn:hover {
   background: rgba(0, 0, 0, 0.1);
-  color: #323130;
+  color: #3C4858;
 }
 
 .library-content {
@@ -273,11 +273,11 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  background: #f8f9fa;
+  background: #E9ECEF;
   border-top: 1px solid #e1dfdd;
   padding: 8px 20px;
   font-size: 12px;
-  color: #605e5c;
+  color: #68769C;
 }
 
 .status-item {
@@ -287,7 +287,7 @@
 }
 
 .status-item strong {
-  color: #323130;
+  color: #3C4858;
   font-weight: 600;
 }
 
@@ -429,12 +429,12 @@
    ============================================ */
 
 .mode-btn:focus {
-  outline: 2px solid #0078d4;
+  outline: 2px solid #8E9AAF;
   outline-offset: 2px;
 }
 
 .control-select:focus {
-  outline: 2px solid #0078d4;
+  outline: 2px solid #8E9AAF;
   outline-offset: 2px;
 }
 
@@ -444,7 +444,7 @@
 }
 
 .close-btn:focus {
-  outline: 2px solid #0078d4;
+  outline: 2px solid #8E9AAF;
   outline-offset: 2px;
 }
 

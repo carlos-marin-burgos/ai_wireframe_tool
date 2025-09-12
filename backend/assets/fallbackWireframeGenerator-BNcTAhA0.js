@@ -1,4 +1,4 @@
-const o={microsoft:{main:"#0078d4",secondary:"#106ebe",bg:"#ffffff",surface:"#f8f9fa",text:"#323130",textSecondary:"#605e5c",border:"#e1e5e9",accent:"#0078d4",headerBg:"#ffffff",headerText:"#000000"},secondary:{main:"#8b5dae",secondary:"#6b46c1",bg:"#ffffff",surface:"#f8f9fa",text:"#171717",textSecondary:"#605e5c",border:"#e1dfdd",accent:"#8b5dae",headerBg:"#ffffff",headerText:"#000000"},success:{main:"#107c10",secondary:"#0e6b0e",bg:"#ffffff",surface:"#f8f9fa",text:"#171717",textSecondary:"#605e5c",border:"#e1dfdd",accent:"#107c10",headerBg:"#ffffff",headerText:"#000000"}},n=t=>`
+const o={microsoft:{main:"#8E9AAF",secondary:"#68769C",bg:"#ffffff",surface:"#f8f9fa",text:"#3C4858",textSecondary:"#68769C",border:"#e1e5e9",accent:"#8E9AAF",headerBg:"#ffffff",headerText:"#000000"},secondary:{main:"#8b5dae",secondary:"#6b46c1",bg:"#ffffff",surface:"#f8f9fa",text:"#171717",textSecondary:"#68769C",border:"#e1dfdd",accent:"#8b5dae",headerBg:"#ffffff",headerText:"#000000"},success:{main:"#107c10",secondary:"#0e6b0e",bg:"#ffffff",surface:"#f8f9fa",text:"#171717",textSecondary:"#68769C",border:"#e1dfdd",accent:"#107c10",headerBg:"#ffffff",headerText:"#000000"}},n=t=>`
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { 
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
@@ -178,7 +178,7 @@ const o={microsoft:{main:"#0078d4",secondary:"#106ebe",bg:"#ffffff",surface:"#f8
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Learning Paths</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Certifications</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Q&A</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Sign in</button>
+                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Sign in</button>
             </nav>
         </div>
     </header>
@@ -336,7 +336,7 @@ const o={microsoft:{main:"#0078d4",secondary:"#106ebe",bg:"#ffffff",surface:"#f8
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Reports</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Analytics</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Settings</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Dashboard</button>
+                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Dashboard</button>
             </nav>
         </div>
     </header>
@@ -509,7 +509,7 @@ const o={microsoft:{main:"#0078d4",secondary:"#106ebe",bg:"#ffffff",surface:"#f8
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Templates</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Examples</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Support</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Create Form</button>
+                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Create Form</button>
             </nav>
         </div>
     </header>
@@ -669,7 +669,7 @@ const o={microsoft:{main:"#0078d4",secondary:"#106ebe",bg:"#ffffff",surface:"#f8
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Learning Paths</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Certifications</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Q&A</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Browse</button>
+                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Browse</button>
             </nav>
         </div>
     </header>
@@ -811,7 +811,7 @@ const result = example();
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Documentation</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Community</a>
                 <a href="#" style="color: #656d76; text-decoration: none; font-weight: 500; font-size: 14px;">Support</a>
-                <button style="background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Get Started</button>
+                <button style="background: #8E9AAF; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;">Get Started</button>
             </nav>
         </div>
     </header>

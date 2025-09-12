@@ -82,11 +82,11 @@ app.get("/test", (req, res) => {
             border-radius: 8px; 
             box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
         }
-        h1 { color: #0078d4; margin-bottom: 1rem; }
+        h1 { color: #8E9AAF; margin-bottom: 1rem; }
         .endpoint { 
             background: #f8f9fa; 
             padding: 1rem; 
-            border-left: 4px solid #0078d4; 
+            border-left: 4px solid #8E9AAF; 
             margin: 1rem 0; 
         }
         .method { color: #28a745; font-weight: bold; }
@@ -94,7 +94,7 @@ app.get("/test", (req, res) => {
         .test-section { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #dee2e6; }
         textarea { width: 100%; height: 100px; margin: 0.5rem 0; padding: 0.5rem; }
         button { 
-            background: #0078d4; 
+            background: #8E9AAF; 
             color: white; 
             border: none; 
             padding: 0.75rem 1.5rem; 
@@ -102,7 +102,7 @@ app.get("/test", (req, res) => {
             cursor: pointer; 
             font-size: 1rem;
         }
-        button:hover { background: #106ebe; }
+        button:hover { background: #68769C; }
         .result { 
             margin-top: 1rem; 
             padding: 1rem; 
@@ -1036,10 +1036,10 @@ async function generateWireframeWithAI(
     // Define color schemes for AI to use
     const colorSchemes = {
       primary: {
-        main: "#0078d4",
-        secondary: "#106ebe",
+        main: "#8E9AAF",
+        secondary: "#68769C",
         bg: "#ffffff",
-        text: "#323130",
+        text: "#3C4858",
         border: "#e5e5e5",
         banner: "#ffffff",
         headerBg: "#ffffff",

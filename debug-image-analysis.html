@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Image Analysis</title>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+        }
+
+        .section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+        }
+
+        pre {
+            background: #f5f5f5;
+            padding: 10px;
+            overflow: auto;
+        }
+
+        canvas {
+            border: 1px solid #000;
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Debug Image Analysis</h1>
+
+    <div class="section">
+        <h2>Step 1: Create Test UI Image</h2>
+        <button onclick="createTestImage()">Create Test UI Image</button>
+        <br>
+        <canvas id="testCanvas" width="800" height="600"></canvas>
+    </div>
+
+    <div class="section">
+        <h2>Step 2: Test Analysis</h2>
+        <button onclick="analyzeTestImage()" id="analyzeBtn" disabled>Analyze Created Image</button>
+        <div id="analysisResult"></div>
+    </div>
+
+    <div class="section">
+        <h2>Step 3: Test Wireframe Generation</h2>
+        <button onclick="generateWireframe()" id="wireframeBtn" disabled>Generate Wireframe</button>
+        <div id="wireframeResult"></div>
+    </div>
+
+    <script>
+        let testImageBase64 = null;
+        let analysisData = null;
+
+        function createTestImage() {
+            const canvas = document.getElementById('testCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // Clear canvas
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, 800, 600);
+
+            // Header with blue background
+            ctx.fillStyle = '#0078d4';
+            ctx.fillRect(0, 0, 800, 80);
+
+            // Header text
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 24px Arial';
+            ctx.fillText('My Website', 20, 45);
+
+            // Navigation
+            ctx.font = '16px Arial';
+            ctx.fillText('Home', 200, 45);
+            ctx.fillText('About', 280, 45);
+            ctx.fillText('Contact', 360, 45);
+
+            // Main content area
+            ctx.fillStyle = '#f8f9fa';
+            ctx.fillRect(20, 100, 760, 400);
+
+            // Title
+            ctx.fillStyle = '#212529';
+            ctx.font = 'bold 32px Arial';
+            ctx.fillText('Welcome to Our Site', 40, 150);
+
+            // Subtitle
+            ctx.fillStyle = '#6c757d';
+            ctx.font = '18px Arial';
+            ctx.fillText('This is a sample description text', 40, 190);
+
+            // Button
+            ctx.fillStyle = '#28a745';
+            ctx.fillRect(40, 220, 120, 40);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 16px Arial';
+            ctx.fillText('Get Started', 50, 245);
+
+            // Secondary button
+            ctx.fillStyle = '#dc3545';
+            ctx.fillRect(180, 220, 100, 40);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText('Learn More', 190, 245);
+
+            // Input field
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(40, 280, 200, 30);
+            ctx.strokeStyle = '#ced4da';
+            ctx.strokeRect(40, 280, 200, 30);
+            ctx.fillStyle = '#6c757d';
+            ctx.font = '14px Arial';
+            ctx.fillText('Enter your email', 50, 300);
+
+            // Card
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(300, 150, 200, 150);
+            ctx.strokeStyle = '#dee2e6';
+            ctx.strokeRect(300, 150, 200, 150);
+
+            ctx.fillStyle = '#212529';
+            ctx.font = 'bold 16px Arial';
+            ctx.fillText('Feature Card', 310, 180);
+
+            ctx.fillStyle = '#6c757d';
+            ctx.font = '14px Arial';
+            ctx.fillText('This is a feature', 310, 210);
+            ctx.fillText('description', 310, 230);
+
+            // Convert to base64
+            testImageBase64 = canvas.toDataURL().split(',')[1];
+            document.getElementById('analyzeBtn').disabled = false;
+
+            console.log('✅ Test image created with:', {
+                colors: ['#0078d4', '#ffffff', '#f8f9fa', '#212529', '#6c757d', '#28a745', '#dc3545', '#ced4da', '#dee2e6'],
+                text: ['My Website', 'Home', 'About', 'Contact', 'Welcome to Our Site', 'This is a sample description text', 'Get Started', 'Learn More', 'Enter your email', 'Feature Card', 'This is a feature', 'description']
+            });
+        }
+
+        async function analyzeTestImage() {
+            if (!testImageBase64) return;
+
+            document.getElementById('analysisResult').innerHTML = '<p>🔍 Analyzing image...</p>';
+
+            try {
+                const response = await fetch('http://localhost:7071/api/analyzeUIImage', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        imageBase64: `data:image/png;base64,${testImageBase64}`,
+                        prompt: `Analyze this UI screenshot and return EXACT JSON with:
+{
+  "components": [
+    {
+      "id": "component-1",
+      "type": "header|nav|text|button|input|card",
+      "bounds": {"x": number, "y": number, "width": number, "height": number},
+      "text": "EXACT_TEXT_FROM_IMAGE",
+      "properties": {
+        "backgroundColor": "#exact_hex_color",
+        "textColor": "#exact_text_color",
+        "fontSize": "16px",
+        "fontWeight": "normal|bold"
+      },
+      "confidence": 0.9
+    }
+  ],
+  "designTokens": {
+    "colors": ["#0078d4", "#ffffff", "#f8f9fa", "#212529", "#6c757d", "#28a745", "#dc3545"],
+    "fonts": ["Arial"],
+    "spacing": [20, 40, 80]
+  },
+  "layout": {"type": "flex", "columns": 1},
+  "wireframeDescription": "Header with blue background, navigation, main content with title, buttons and input field",
+  "confidence": 0.85
+}
+Extract ALL visible text EXACTLY as it appears. Return ONLY valid JSON.`
+                    })
+                });
+
+                const data = await response.json();
+                console.log('📊 Analysis response:', data);
+
+                document.getElementById('analysisResult').innerHTML = `
+                    <h3>Analysis Result:</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+
+                if (data.success && data.analysis) {
+                    analysisData = data.analysis;
+                    document.getElementById('wireframeBtn').disabled = false;
+                } else {
+                    document.getElementById('analysisResult').innerHTML += `
+                        <p style="color: red;">❌ Analysis failed or returned invalid data</p>
+                    `;
+                }
+
+            } catch (error) {
+                console.error('❌ Analysis error:', error);
+                document.getElementById('analysisResult').innerHTML = `
+                    <p style="color: red;">❌ Error: ${error.message}</p>
+                `;
+            }
+        }
+
+        async function generateWireframe() {
+            if (!analysisData) return;
+
+            document.getElementById('wireframeResult').innerHTML = '<p>🎨 Generating wireframe...</p>';
+
+            try {
+                const response = await fetch('http://localhost:7071/api/generate-html-wireframe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        description: 'Generate wireframe matching the analyzed image exactly',
+                        imageAnalysis: analysisData,
+                        colorScheme: 'extracted'
+                    })
+                });
+
+                const data = await response.json();
+                console.log('🎨 Wireframe response:', data);
+
+                if (data.success && data.data && data.data.html) {
+                    document.getElementById('wireframeResult').innerHTML = `
+                        <h3>Generated Wireframe:</h3>
+                        <iframe srcdoc='${data.data.html.replace(/'/g, '&apos;')}' width="100%" height="600" style="border: 1px solid #ccc;"></iframe>
+                        <details>
+                            <summary>HTML Source</summary>
+                            <pre>${data.data.html}</pre>
+                        </details>
+                    `;
+                } else {
+                    document.getElementById('wireframeResult').innerHTML = `
+                        <p style="color: red;">❌ Wireframe generation failed</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+
+            } catch (error) {
+                console.error('❌ Wireframe error:', error);
+                document.getElementById('wireframeResult').innerHTML = `
+                    <p style="color: red;">❌ Error: ${error.message}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+
+</html>

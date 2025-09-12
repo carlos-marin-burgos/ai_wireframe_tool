@@ -88,11 +88,30 @@ const ensureString = (value: unknown): string => {
   }
   if (typeof value === "string") {
     let cleaned = value.trim();
-    // Remove any markdown artifacts
-    cleaned = cleaned.replace(/^[0'"]+|[0'"]+$/g, "");
-    cleaned = cleaned.replace(/^'''html\s*/gi, "");
+
+    // ROBUST HTML EXTRACTION - handles AI responses with explanations
+    // 1. Try to find complete HTML document
+    let htmlStart = cleaned.indexOf("<!DOCTYPE html>");
+    if (htmlStart !== -1) {
+      let htmlEnd = cleaned.lastIndexOf("</html>");
+      if (htmlEnd !== -1) {
+        cleaned = cleaned.substring(htmlStart, htmlEnd + 7);
+      }
+    } else {
+      // 2. Try to find HTML tag
+      htmlStart = cleaned.indexOf("<html");
+      if (htmlStart !== -1) {
+        let htmlEnd = cleaned.lastIndexOf("</html>");
+        if (htmlEnd !== -1) {
+          cleaned = cleaned.substring(htmlStart, htmlEnd + 7);
+        }
+      }
+    }
+
+    // Remove any remaining markdown artifacts
     cleaned = cleaned.replace(/^```html\s*/gi, "");
     cleaned = cleaned.replace(/```\s*$/gi, "");
+    cleaned = cleaned.replace(/^['"]+|['"]+$/g, "");
 
     // Apply wireframe placeholder removal
     cleaned = removeWireframePlaceholders(cleaned);
@@ -101,8 +120,27 @@ const ensureString = (value: unknown): string => {
   }
   try {
     let stringValue = String(value).trim();
-    stringValue = stringValue.replace(/^[0'"]+|[0'"]+$/g, "");
-    stringValue = stringValue.replace(/^'''html\s*/gi, "");
+
+    // ROBUST HTML EXTRACTION for non-string values
+    let htmlStart = stringValue.indexOf("<!DOCTYPE html>");
+    if (htmlStart !== -1) {
+      let htmlEnd = stringValue.lastIndexOf("</html>");
+      if (htmlEnd !== -1) {
+        stringValue = stringValue.substring(htmlStart, htmlEnd + 7);
+      }
+    } else {
+      htmlStart = stringValue.indexOf("<html");
+      if (htmlStart !== -1) {
+        let htmlEnd = stringValue.lastIndexOf("</html>");
+        if (htmlEnd !== -1) {
+          stringValue = stringValue.substring(htmlStart, htmlEnd + 7);
+        }
+      }
+    }
+
+    stringValue = stringValue.replace(/^```html\s*/gi, "");
+    stringValue = stringValue.replace(/```\s*$/gi, "");
+    stringValue = stringValue.replace(/^['"]+|['"]+$/g, "");
     stringValue = stringValue.replace(/^```html\s*/gi, "");
     stringValue = stringValue.replace(/```\s*$/gi, "");
 

@@ -11,10 +11,10 @@
 :root {
   /* Colors */
   --atlas-color-primary: #f2cc60;
-  --atlas-color-primary-hover: #106ebe;
-  --atlas-color-primary-pressed: #005a9e;
-  --atlas-color-secondary: #605e5c;
-  --atlas-color-accent: #0078d4;
+  --atlas-color-primary-hover: #68769C;
+  --atlas-color-primary-pressed: #68769C;
+  --atlas-color-secondary: #68769C;
+  --atlas-color-accent: #8E9AAF;
 
   /* Neutral colors */
   --atlas-color-neutral-10: #faf9f8;
@@ -27,9 +27,9 @@
   --atlas-color-neutral-80: #a19f9d;
   --atlas-color-neutral-90: #8a8886;
   --atlas-color-neutral-100: #797775;
-  --atlas-color-neutral-110: #605e5c;
+  --atlas-color-neutral-110: #68769C;
   --atlas-color-neutral-120: #484644;
-  --atlas-color-neutral-130: #323130;
+  --atlas-color-neutral-130: #3C4858;
   --atlas-color-neutral-140: #201f1e;
   --atlas-color-neutral-150: #16110e;
   --atlas-color-neutral-160: #11100f;

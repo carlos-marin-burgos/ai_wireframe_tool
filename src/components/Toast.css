@@ -24,7 +24,7 @@
 }
 
 .toast-info {
-  border-left-color: #0078d4;
+  border-left-color: #8E9AAF;
 }
 
 .toast-warning {
@@ -58,7 +58,7 @@
 }
 
 .toast-message {
-  color: #323130;
+  color: #3C4858;
   font-size: 14px;
   font-weight: 500;
   line-height: 1.4;
@@ -68,7 +68,7 @@
   background: none;
   border: none;
   font-size: 18px;
-  color: #605e5c;
+  color: #68769C;
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;

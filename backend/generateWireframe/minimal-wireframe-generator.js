@@ -3,6 +3,8 @@
  */
 
 const { OpenAI } = require("openai");
+// Import centralized color configuration
+const { WIREFRAME_COLORS, ColorUtils } = require("../config/colors");
 
 class MinimalWireframeGenerator {
   constructor() {
@@ -24,14 +26,19 @@ class MinimalWireframeGenerator {
   }
 
   async generateWireframe(description, colorScheme = "primary") {
-    // Minimal, natural prompt - let AI be intelligent
+    // Get centralized colors for the prompt
+    const colors = WIREFRAME_COLORS;
+    const colorPalette = `Primary: ${colors.primary}, Secondary: ${colors.secondary}, Dark: ${colors.dark}, Light: ${colors.light}, Subtle: ${colors.medium}`;
+
+    // Minimal, natural prompt - let AI be intelligent with our neutral color palette
     const prompt = `Create a modern, responsive HTML wireframe for: "${description}"
 
 Requirements:
 - Complete HTML document with inline CSS
-- Professional, clean design
-- Color scheme: ${colorScheme}
-- Modern web design standards
+- Professional, clean design using neutral color palette
+- Use these neutral colors: ${colorPalette}
+- Avoid Microsoft branded colors (#6c757d, #5a6268, #f8f9fa, #212529, #dee2e6)
+- Modern web design standards with professional aesthetic
 
 Generate the complete HTML now:`;
 
@@ -42,7 +49,7 @@ Generate the complete HTML now:`;
           {
             role: "system",
             content:
-              "You are a professional web designer. Create clean, modern HTML wireframes with inline CSS styling.",
+              "You are a professional web designer specializing in neutral, modern wireframe aesthetics. Create clean HTML wireframes using the neutral color palette: Primary #8E9AAF, Secondary #68769C, Dark #3C4858, Light #E9ECEF, Subtle #CBC2C2. Avoid Microsoft branded colors like #6c757d, #5a6268, #f8f9fa, #212529, #dee2e6.",
           },
           {
             role: "user",

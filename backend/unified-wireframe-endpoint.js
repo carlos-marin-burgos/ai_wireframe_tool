@@ -57,7 +57,7 @@ async function handleWireframeRequest(context, req) {
     <style>
         body { font-family: 'Segoe UI', sans-serif; padding: 20px; background: #f3f2f1; }
         .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
-        h1 { color: #0078d4; }
+        h1 { color: #8E9AAF; }
     </style>
 </head>
 <body>

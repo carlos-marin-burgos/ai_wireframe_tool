@@ -69,18 +69,9 @@
 
 /* ===== DRAG STATE STYLING ===== */
 
+/* Removed drag-disabled overlay for cleaner UI */
 .dragula-container.drag-disabled {
-  opacity: 0.8;
-  /* Don't use pointer-events: none as it prevents scrolling */
-}
-
-.dragula-container.drag-disabled * {
-  /* Only prevent dragging on child elements, not scrolling */
-  -webkit-user-drag: none;
-  -khtml-user-drag: none;
-  -moz-user-drag: none;
-  -o-user-drag: none;
-  /* user-drag: none; - not a standard property */
+  opacity: 1;
 }
 
 .dragula-container.drag-enabled {
@@ -110,26 +101,7 @@
   outline-offset: 2px;
 }
 
-.dragula-container.drag-enabled .row:hover::after,
-.dragula-container.drag-enabled .col:hover::after,
-.dragula-container.drag-enabled .column:hover::after,
-.dragula-container.drag-enabled .container:hover::after,
-.dragula-container.drag-enabled .section:hover::after,
-.dragula-container.drag-enabled .grid:hover::after,
-.dragula-container.drag-enabled [data-droppable="true"]:hover::after {
-  content: "Drop zone";
-  position: absolute;
-  top: -20px;
-  left: 4px;
-  background: #10b981;
-  color: white;
-  padding: 2px 6px;
-  border-radius: 3px;
-  font-size: 10px;
-  white-space: nowrap;
-  z-index: 1000;
-  pointer-events: none;
-}
+/* Removed explicit 'Drop zone' label for cleaner UI */
 
 /* ===== EXISTING DRAGULA STYLES ===== */
 
@@ -158,24 +130,24 @@
   min-height: 0; /* Important for flex child scrolling */
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments - ONLY apply in drag mode */
 @media (max-width: 1200px) {
-  .dragula-container {
+  .dragula-container.drag-enabled {
     padding: 8px;
   }
 
-  .dragula-container > * {
+  .dragula-container.drag-enabled > * {
     margin: 8px 0 !important;
     padding: 8px !important;
   }
 }
 
 @media (max-width: 768px) {
-  .dragula-container {
+  .dragula-container.drag-enabled {
     padding: 5px;
   }
 
-  .dragula-container > * {
+  .dragula-container.drag-enabled > * {
     margin: 5px 0 !important;
     padding: 6px !important;
     font-size: 14px;
@@ -247,40 +219,40 @@
 }
 
 /* Make ALL elements in the container visible and draggable */
+/* Base children styling (neutral until drag mode) */
 .dragula-container > * {
-  opacity: 1 !important;
+  position: relative;
+  transition: all 0.18s ease;
+}
+
+/* Only show block borders while drag mode enabled ON DRAGGABLE ELEMENTS */
+.drag-enabled .draggable-block {
+  position: relative;
   background: #ffffff !important;
   border: 2px dashed #dee2e6 !important;
   padding: 10px !important;
   margin: 10px !important;
   cursor: move !important;
   border-radius: 6px;
-  transition: all 0.2s ease;
-  position: relative;
-}
-
-/* Newly marked draggable nested blocks */
-.dragula-container .draggable-block {
-  position: relative;
-  border: 2px dashed #d1d5db;
-  margin: 8px 0;
-  padding: 8px;
-  cursor: move;
-  background: #fff;
   transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
-/* Hover effects for draggable blocks only when drag mode is ON */
-.dragula-container.drag-enabled .draggable-block:hover {
-  border-color: #10b981;
-  background-color: rgba(16, 185, 129, 0.05);
+/* Override sticky/fixed positioning during drag mode to prevent conflicts */
+.drag-enabled .draggable-block[style*="position: sticky"],
+.drag-enabled .draggable-block[style*="position: fixed"] {
+  position: relative !important;
 }
 
-/* Hover effects for editable draggable blocks only when drag mode is OFF */
-.dragula-container.drag-disabled .draggable-block[data-editable="true"]:hover {
-  border-color: #6b7280;
-  background-color: #f9fafb;
-  cursor: text;
+/* Ensure sticky elements don't interfere with dragula */
+.dragula-container.drag-enabled [style*="position: sticky"],
+.dragula-container.drag-enabled [style*="position: fixed"] {
+  z-index: 1 !important; /* Lower z-index during drag mode */
+}
+
+/* Hover state for draggable blocks in drag mode */
+.drag-enabled .draggable-block:hover {
+  border-color: #6b7280 !important;
+  background-color: #f9fafb !important;
 }
 
 /* Inner blocks should not inherit heavy outer padding duplication */
@@ -318,102 +290,116 @@
   border-radius: 6px;
 }
 
-/* Override for header and footer elements to maintain their original styling */
-.dragula-container > header {
-  background-color: #e8e6df !important;
-  color: #000 !important;
+/* Override for header and footer elements - ONLY in drag mode */
+.dragula-container.drag-enabled
+  > header:not(.ms-learn-topnav):not(.atlas-top-navigation) {
+  background-color: #f8f9fa !important;
+  color: #3c4858 !important;
   text-align: left;
   padding: 1em 0 !important;
   padding-left: 20px !important;
   border: 2px dashed #dee2e6 !important;
 }
 
-.dragula-container > footer {
-  background-color: #e8e6de !important;
-  color: #000 !important;
+.dragula-container.drag-enabled > footer:not(.ms-learn-topnav) {
+  background-color: #f8f9fa !important;
+  color: #3c4858 !important;
   text-align: center;
   padding: 1em 0 !important;
-  border: 2px dashed #d0ccbf !important;
+  border: 2px dashed #dee2e6 !important;
 }
 
-/* Override for nav elements to maintain readability */
-.dragula-container > nav {
+/* Override for nav elements to maintain readability - ONLY in drag mode */
+.dragula-container.drag-enabled
+  > nav:not(.ms-learn-nav):not(.ms-learn-primary-nav) {
   background-color: #2c3e50 !important;
   color: #fff !important;
   padding: 1em !important;
   border: 2px dashed #34495e !important;
 }
 
-/* Remove generic hover effects - replaced with specific ones below */
-/* .dragula-container > *:hover - REMOVED for better UX */
-
-/* Hover effects for precise element targeting */
-.dragula-container.drag-disabled [data-editable="true"] {
-  position: relative;
+/* Preserve Microsoft Learn navigation styling during drag mode */
+.dragula-container.drag-enabled .ms-learn-topnav,
+.dragula-container.drag-enabled .atlas-top-navigation {
+  position: relative !important; /* Override sticky during drag */
+  z-index: 1 !important;
+  border: 2px dashed #0078d4 !important;
 }
 
-.dragula-container.drag-disabled [data-editable="true"]:hover {
+.dragula-container.drag-enabled .ms-learn-nav,
+.dragula-container.drag-enabled .ms-learn-primary-nav {
+  border: 2px dashed #0078d4 !important;
+}
+
+/* Hover border only in drag mode */
+.drag-enabled .draggable-block:hover {
   border-color: rgba(75, 85, 99, 0.8) !important;
-  background-color: rgba(75, 85, 99, 0.05) !important;
-  cursor: text;
 }
 
-/* Remove parent hover effects when child is being hovered */
-.dragula-container.drag-disabled
-  [data-editable="true"]
-  [data-editable="true"]:hover {
+/* Drag hover indicator: vertical green line (replaces icon) */
+.drag-enabled.dragging-active .draggable-block:hover::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: 4px;
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.4),
+    0 0 6px rgba(16, 185, 129, 0.55);
+  pointer-events: none;
+  z-index: 12;
+  opacity: 0.95;
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+/* Slight pulse effect on continuous hover */
+.drag-enabled.dragging-active .draggable-block:hover::before {
+  animation: dragLinePulse 1.4s ease-in-out infinite;
+}
+
+/* Insertion gap marker (between siblings) */
+.insertion-gap-marker {
+  height: 8px;
+  margin: 4px 0;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #10b981, #34d399);
+  box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.4),
+    0 0 6px rgba(16, 185, 129, 0.45);
   position: relative;
-  z-index: 1;
+  transition: transform 0.12s ease, background 0.25s ease;
+  animation: insertionPulse 1.6s ease-in-out infinite;
+  pointer-events: none; /* never block pointer / drag hit testing */
+  -webkit-user-select: none;
+  user-select: none;
 }
 
-.dragula-container.drag-disabled
-  [data-editable="true"]:has([data-editable="true"]:hover) {
-  border-color: transparent !important;
-  background-color: transparent !important;
-  cursor: default;
+@keyframes insertionPulse {
+  0%,
+  100% {
+    opacity: 0.95;
+  }
+  50% {
+    opacity: 0.55;
+  }
 }
 
-/* Draggable element hover effects when drag mode is ON */
-.dragula-container.drag-enabled [data-draggable="true"]:hover {
-  border-color: rgba(16, 185, 129, 0.8) !important;
-  background-color: rgba(16, 185, 129, 0.05) !important;
-  cursor: grab;
+/* Suppress block hover borders while dragging for cleaner gap focus */
+.drag-enabled.dragging-active .draggable-block:hover {
+  border-color: #dee2e6 !important;
 }
 
-.dragula-container.drag-enabled
-  [data-draggable="true"]:has([data-draggable="true"]:hover) {
-  border-color: transparent !important;
-  background-color: transparent !important;
-  cursor: default;
-}
-
-/* Edit icon on hover for editable elements only */
-.dragula-container.drag-disabled [data-editable="true"]:hover::before {
-  content: "✏️";
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  font-size: 12px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 3px;
-  padding: 2px 4px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  pointer-events: none;
-  z-index: 1000;
-}
-
-/* Drag icon on hover for draggable elements only */
-.dragula-container.drag-enabled [data-draggable="true"]:hover::before {
-  content: "⋮⋮";
-  position: absolute;
-  top: 50%;
-  right: 8px;
-  transform: translateY(-50%) rotate(90deg);
-  font-size: 16px;
-  color: #e8e6de;
-  font-weight: bold;
-  pointer-events: none;
-  z-index: 10;
+@keyframes dragLinePulse {
+  0%,
+  100% {
+    opacity: 0.95;
+    transform: scaleX(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scaleX(0.85);
+  }
 }
 
 /* Bootstrap column styling */
@@ -428,14 +414,8 @@
   transition: all 0.2s ease;
 }
 
-/* Hover effects for columns only when appropriate */
-.dragula-container.drag-enabled .col:hover,
-.dragula-container.drag-enabled [class*="col-"]:hover {
-  border-color: rgba(16, 185, 129, 0.8);
-}
-
-.dragula-container.drag-disabled .col[data-editable="true"]:hover,
-.dragula-container.drag-disabled [class*="col-"][data-editable="true"]:hover {
+.dragula-container .col:hover,
+.dragula-container [class*="col-"]:hover {
   border-color: rgba(75, 85, 99, 0.8);
 }
 
@@ -446,7 +426,7 @@
   z-index: 9999 !important;
   opacity: 1 !important;
   background: white !important;
-  border: 2px solid #e8e6de !important;
+  border: 2px solid #dee2e6 !important;
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -465,7 +445,7 @@
 .simple-drag-wireframe .gu-transit {
   opacity: 1 !important;
   background: white !important;
-  border: 2px dashed #e8e6de !important;
+  border: 2px dashed #dee2e6 !important;
   transition: border-color 0.2s ease !important;
 }
 
@@ -494,7 +474,7 @@
 
 .dragula-container .row.gu-over {
   background: #e7f3ff !important;
-  border-color: #e8e6de !important;
+  border-color: #dee2e6 !important;
 }
 
 /* Force buttons to be fully opaque */
@@ -523,41 +503,32 @@
 
 /* ===== INLINE EDITING STYLES ===== */
 
-/* Editable elements hover state */
-[data-editable="true"]:hover {
-  outline: 2px dashed #6b7280 !important;
-  outline-offset: 2px;
+/* Editable elements visual affordance (only those explicitly tagged) */
+/* Scoped to drag-disabled (editing mode) so no edit affordances in drag mode */
+.dragula-container.drag-disabled [data-editable="true"] {
   position: relative;
+  transition: background-color 0.15s ease, outline-color 0.15s ease;
+}
+.dragula-container.drag-disabled [data-editable="true"]:hover {
+  outline: 1px solid #2d6cdf !important;
+  outline-offset: 2px;
+  background: rgba(45, 108, 223, 0.08) !important;
+  cursor: text !important;
 }
 
-/* Show different cursors for different areas */
-[data-editable="true"]:hover {
-  cursor: pointer !important; /* For text content */
-}
-
-/* But allow drag cursor on borders/padding */
-.dragula-container > *:hover {
-  cursor: move !important;
-}
-
-/* Text areas get pointer cursor */
-[data-editable="true"]:hover {
-  cursor: pointer !important;
-}
-
-/* Tooltip for editable elements */
-[data-editable="true"]:hover::after {
-  content: "Click to edit";
+/* Subtle pill label to show editability */
+.dragula-container.drag-disabled [data-editable="true"]:hover::after {
+  content: "Editable";
   position: absolute;
-  top: -25px;
+  top: -18px;
   left: 0;
-  background: #6b7280;
-  color: white;
+  background: #2d6cdf;
+  color: #fff;
   padding: 2px 6px;
-  border-radius: 3px;
+  border-radius: 4px;
   font-size: 10px;
-  white-space: nowrap;
-  z-index: 1000;
+  font-weight: 500;
+  letter-spacing: 0.5px;
   pointer-events: none;
 }
 

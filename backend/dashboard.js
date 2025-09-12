@@ -274,7 +274,7 @@ function getDashboardPage(req, res) {
         }
         
         .openai-status-header {
-            background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%);
+            background: linear-gradient(135deg, #8E9AAF 0%, #68769C 100%);
             color: white;
             padding: 20px 25px;
             display: flex;

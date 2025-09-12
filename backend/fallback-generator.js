@@ -2,6 +2,8 @@ const { validateWireframeParams } = require("./types");
 const { TemplateManager, selectTemplate } = require("./template-manager");
 const { generateSiteHeaderHTML } = require("./components/SiteHeaderGenerator");
 const AtlasComponentLibrary = require("./components/AtlasComponentLibrary");
+// Import centralized color configuration
+const { WIREFRAME_COLORS, ColorUtils } = require("./config/colors");
 
 // Initialize template manager and Atlas library
 const templateManager = new TemplateManager();
@@ -35,23 +37,8 @@ function createFallbackWireframe(
     colorScheme: validColorScheme,
   } = validated;
 
-  // Microsoft Learn Design System - Official Colors
-  const colors = {
-    primary: "#0078d4", // Microsoft Learn Primary Blue
-    blue: "#0078d4", // Microsoft Learn Blue
-    green: "#107c10", // Microsoft Learn Green
-    purple: "#5c2d91", // Microsoft Learn Purple
-    red: "#d13438", // Microsoft Learn Red
-    orange: "#ff8c00", // Microsoft Learn Orange
-    teal: "#008272", // Microsoft Learn Teal
-    gray: "#605e5c", // Microsoft Learn Gray
-    // Microsoft Learn Hero/Banner Specific Colors - UPDATED TO USE TAN BACKGROUNDS
-    heroBackground: "#E8E6DF", // Primary hero background - Tan color (no blue!)
-    heroGradientStart: "#E8E6DF", // Gradient start (Tan)
-    heroGradientEnd: "#D4D1C7", // Gradient end (Slightly darker tan)
-    heroText: "#161616", // Hero text color - Black text for tan background
-    heroSecondary: "#605e5c", // Secondary hero text
-  };
+  // Professional Wireframe Color Palette - Using centralized colors
+  const colors = WIREFRAME_COLORS;
 
   const primaryColor = colors[validColorScheme] || colors.primary;
 
@@ -398,7 +385,7 @@ function detectHeroSection(desc) {
  */
 function extractColors(desc) {
   const colors = {};
-  if (desc.includes("blue")) colors.accent = "#0078d4";
+  if (desc.includes("blue")) colors.accent = "#8E9AAF";
   if (desc.includes("green")) colors.accent = "#107c10";
   if (desc.includes("red")) colors.accent = "#d13438";
   if (desc.includes("purple")) colors.accent = "#5c2d91";
@@ -684,7 +671,7 @@ function generateIntelligentStyles(
     body {
       font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       line-height: 1.6;
-      color: #323130;
+      color: #3C4858;
       background: ${requirements.modern ? "#faf9f8" : "#f3f2f1"};
       font-size: 14px;
       ${
@@ -703,10 +690,10 @@ function generateIntelligentStyles(
     .hero-section {
       background: ${
         hasHero
-          ? "#E8E6DF" // Use tan background for hero sections (no blue!)
+          ? "#E9ECEF" // Use tan background for hero sections (no blue!)
           : requirements.modern
-          ? "#E8E6DF" // Use tan background for modern headers too
-          : "#E8E6DF" // Always use tan background (no blue!)
+          ? "#E9ECEF" // Use tan background for modern headers too
+          : "#E9ECEF" // Always use tan background (no blue!)
       };
       color: #161616; // Black text for tan background
       padding: ${
@@ -759,7 +746,7 @@ function generateIntelligentStyles(
     }
     
     .content-section h2 {
-      color: #323130;
+      color: #3C4858;
       font-size: 2rem;
       font-weight: 600;
       margin-bottom: 1.5rem;
@@ -767,7 +754,7 @@ function generateIntelligentStyles(
     }
     
     .content-section p {
-      color: #605e5c;
+      color: #68769C;
       font-size: 1rem;
       line-height: 1.6;
       margin-bottom: 1.5rem;
@@ -803,26 +790,26 @@ function generateIntelligentStyles(
     }
     
     .btn-primary {
-      background: #0078d4;
+      background: #8E9AAF;
       color: white;
-      border: 2px solid #0078d4;
+      border: 2px solid #8E9AAF;
     }
     
     .btn-primary:hover {
-      background: #106ebe;
-      border-color: #106ebe;
+      background: #68769C;
+      border-color: #68769C;
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(0,120,212,0.4);
     }
     
     .btn-secondary {
       background: transparent;
-      color: #0078d4;
-      border: 2px solid #0078d4;
+      color: #8E9AAF;
+      border: 2px solid #8E9AAF;
     }
     
     .btn-secondary:hover {
-      background: #0078d4;
+      background: #8E9AAF;
       color: white;
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(0,120,212,0.3);
@@ -854,7 +841,7 @@ function generateIntelligentStyles(
       display: block;
       margin-bottom: 0.5rem;
       font-weight: 600;
-      color: #323130;
+      color: #3C4858;
       font-size: 0.875rem;
     }
     
@@ -873,13 +860,13 @@ function generateIntelligentStyles(
     .form-group input:focus,
     .form-group textarea:focus {
       outline: none;
-      border-color: #0078d4;
+      border-color: #8E9AAF;
       box-shadow: 0 0 0 2px rgba(0,120,212,0.3);
     }
     
     .form-group input:hover,
     .form-group textarea:hover {
-      border-color: #323130;
+      border-color: #3C4858;
     }
     
     .form-group textarea {
@@ -951,7 +938,7 @@ function generateIntelligentStyles(
       font-size: 0.6875rem;
       font-weight: 600;
       text-transform: uppercase;
-      color: #605e5c;
+      color: #68769C;
       letter-spacing: 0.5px;
       margin: 0 0 0.25rem 0;
     }
@@ -960,7 +947,7 @@ function generateIntelligentStyles(
       grid-area: title;
       font-size: 1rem;
       font-weight: 600;
-      color: #0078d4;
+      color: #8E9AAF;
       text-decoration: none;
       margin: 0 0 0.5rem 0;
       line-height: 1.3;
@@ -971,7 +958,7 @@ function generateIntelligentStyles(
     }
     
     .card-title:hover {
-      color: #106ebe;
+      color: #68769C;
       text-decoration: underline;
     }
     
@@ -985,7 +972,7 @@ function generateIntelligentStyles(
     
     .card-template-detail {
       grid-area: detail;
-      color: #605e5c;
+      color: #68769C;
       font-size: 0.8125rem;
       line-height: 1.4;
       margin-top: 0.25rem;
@@ -996,7 +983,7 @@ function generateIntelligentStyles(
     }
     
     .card-content-description {
-      color: #605e5c;
+      color: #68769C;
       font-size: 0.8125rem;
       line-height: 1.5;
       margin: 0.5rem 0 0 0;
@@ -1062,12 +1049,12 @@ function generateIntelligentStyles(
     }
     
     progress::-webkit-progress-value {
-      background: #0078d4;
+      background: #8E9AAF;
       border-radius: 3px;
     }
     
     progress::-moz-progress-bar {
-      background: #0078d4;
+      background: #8E9AAF;
       border-radius: 3px;
       border: none;
     }

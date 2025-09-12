@@ -35,7 +35,7 @@ app.post("/api/generate-wireframe", (req, res) => {
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         .header { 
-            background: linear-gradient(135deg, #0078d4, #106ebe); 
+            background: linear-gradient(135deg, #8E9AAF, #68769C); 
             color: white; 
             padding: 60px 0; 
             text-align: center; 
@@ -58,10 +58,10 @@ app.post("/api/generate-wireframe", (req, res) => {
             transition: transform 0.3s ease;
         }
         .card:hover { transform: translateY(-5px); }
-        .card h3 { color: #0078d4; margin-bottom: 1rem; font-size: 1.5rem; }
+        .card h3 { color: #8E9AAF; margin-bottom: 1rem; font-size: 1.5rem; }
         .card p { color: #666; }
         .cta { 
-            background: #0078d4; 
+            background: #8E9AAF; 
             color: white; 
             padding: 15px 30px; 
             border: none; 
@@ -72,7 +72,7 @@ app.post("/api/generate-wireframe", (req, res) => {
             transition: background 0.3s ease;
             margin: 30px 0;
         }
-        .cta:hover { background: #106ebe; }
+        .cta:hover { background: #68769C; }
         .footer { 
             background: #333; 
             color: white; 

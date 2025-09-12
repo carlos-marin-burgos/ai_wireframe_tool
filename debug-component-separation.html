@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Component Separation Test</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+
+        .demo-wireframe {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .section {
+            margin: 15px 0;
+            padding: 15px;
+            border: 2px dashed #dee2e6;
+            border-radius: 6px;
+            background: #f8f9fa;
+        }
+
+        .section h3 {
+            margin: 0 0 10px 0;
+            color: #495057;
+        }
+
+        .section p {
+            margin: 5px 0;
+            color: #6c757d;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🧪 Component Separation Demo</h1>
+
+    <div class="demo-wireframe">
+        <h2>Before Processing (Single Block)</h2>
+        <div style="padding: 20px; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 5px;">
+            <p>This represents typical HTML content that comes as one block:</p>
+            <pre style="background: #f8f9fa; padding: 15px; border-radius: 5px; overflow-x: auto;">
+&lt;div&gt;
+    &lt;header&gt;&lt;h1&gt;Website Title&lt;/h1&gt;&lt;/header&gt;
+    &lt;nav&gt;&lt;ul&gt;&lt;li&gt;Home&lt;/li&gt;&lt;li&gt;About&lt;/li&gt;&lt;/ul&gt;&lt;/nav&gt;
+    &lt;main&gt;&lt;p&gt;Main content here&lt;/p&gt;&lt;/main&gt;
+    &lt;footer&gt;&lt;p&gt;Footer content&lt;/p&gt;&lt;/footer&gt;
+&lt;/div&gt;
+            </pre>
+            <p><strong>❌ Problem:</strong> This is just one big element - nothing to drag around!</p>
+        </div>
+    </div>
+
+    <div class="demo-wireframe">
+        <h2>After Processing (Separated Components)</h2>
+        <p>The SimpleDragWireframe component now automatically separates content into draggable sections:</p>
+
+        <div class="section">
+            <h3>🔧 Header Section</h3>
+            <p>Website Title - Now draggable as separate element</p>
+        </div>
+
+        <div class="section">
+            <h3>🔧 Navigation Section</h3>
+            <p>Home | About | Contact - Independent draggable component</p>
+        </div>
+
+        <div class="section">
+            <h3>🔧 Main Content Section</h3>
+            <p>Main content area - Can be moved independently</p>
+        </div>
+
+        <div class="section">
+            <h3>🔧 Footer Section</h3>
+            <p>Footer content - Separate draggable element</p>
+        </div>
+
+        <div
+            style="margin-top: 20px; padding: 15px; background: #d4edda; border: 1px solid #c3e6cb; border-radius: 5px;">
+            <h4>✅ Solution Implemented:</h4>
+            <ol>
+                <li><strong>Automatic Detection:</strong> Finds semantic elements (header, nav, main, section, etc.)
+                </li>
+                <li><strong>Smart Separation:</strong> Breaks content into logical draggable chunks</li>
+                <li><strong>Fallback Creation:</strong> Creates artificial sections when no structure is found</li>
+                <li><strong>Visual Feedback:</strong> Shows drag handles and hover effects</li>
+                <li><strong>Element Counter:</strong> Displays how many draggable elements were created</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="demo-wireframe">
+        <h2>🎯 How It Works Now</h2>
+        <div style="background: #e7f3ff; padding: 15px; border: 1px solid #b3d9ff; border-radius: 5px;">
+            <h4>The makeDraggableElements() function:</h4>
+            <ol>
+                <li><strong>Scans for semantic elements</strong> (header, nav, main, section, etc.)</li>
+                <li><strong>Makes direct children draggable</strong> if they already exist as separate elements</li>
+                <li><strong>Creates artificial sections</strong> if content is in one block</li>
+                <li><strong>Adds data attributes</strong> (data-draggable-item="true")</li>
+                <li><strong>Applies CSS classes</strong> for visual styling</li>
+            </ol>
+
+            <p><strong>🔥 Result:</strong> Even if you paste in one big HTML block, you'll get separate draggable
+                components!</p>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -135,7 +135,7 @@ function generateSimpleFallback(description, colorScheme) {
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        h1 { color: #0078d4; margin-bottom: 20px; }
+        h1 { color: #8E9AAF; margin-bottom: 20px; }
         p { color: #666; line-height: 1.6; margin-bottom: 15px; }
         .placeholder { 
             background: #e9ecef; 

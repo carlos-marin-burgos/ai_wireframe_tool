@@ -76,13 +76,13 @@ function generateLearnHomePageTemplate(prompt) {
         
         .button-primary {
             color: #ffffff;
-            background-color: #0078d4;
-            border-color: #0078d4;
+            background-color: #8E9AAF;
+            border-color: #8E9AAF;
         }
         
         .button-primary:hover:not(:disabled) {
-            background-color: #106ebe;
-            border-color: #106ebe;
+            background-color: #68769C;
+            border-color: #68769C;
         }
         
         /* Base layout system */
@@ -99,7 +99,7 @@ function generateLearnHomePageTemplate(prompt) {
         .hero-section {
             width: 100%;
             min-height: 350px;
-            background: #E8E6DF;
+            background: #E9ECEF;
             padding: 20px;
             gap: 24px;
         }
@@ -162,7 +162,7 @@ function generateLearnHomePageTemplate(prompt) {
             
             <!-- Profile -->
             <div style="display: flex; align-items: center; gap: 8px; margin-left: auto;">
-                <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #0078d4, #106ebe); border: 2px solid #0078d4; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">U</div>
+                <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #8E9AAF, #68769C); border: 2px solid #8E9AAF; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">U</div>
             </div>
         </div>
     </header>
@@ -172,7 +172,7 @@ function generateLearnHomePageTemplate(prompt) {
         <div class="content-container hero-container">
             <div class="hero-content-wrapper display-block">
                 <div class="display-flex" style="flex-direction: column; gap: 24px; width: 100%;">
-                    <h1 style="font-family: 'Segoe UI'; font-weight: 600; font-size: 36px; line-height: 44px; background: linear-gradient(91.54deg, #0078D4 2.94%, #C73ECC 78.45%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 0 0 16px 0;">Learning for everyone, everywhere</h1>
+                    <h1 style="font-family: 'Segoe UI'; font-weight: 600; font-size: 36px; line-height: 44px; background: linear-gradient(91.54deg, #8E9AAF 2.94%, #C73ECC 78.45%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 0 0 16px 0;">Learning for everyone, everywhere</h1>
                     
                     <p style="font-family: 'Segoe UI'; font-weight: 400; font-size: 16px; line-height: 22px; color: #161616; margin: 0 0 24px 0;">Explore Microsoft product documentation, training, credentials, Q&A, code references, and shows.</p>
                     

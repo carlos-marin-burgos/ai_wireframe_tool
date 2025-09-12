@@ -4,7 +4,7 @@
   align-items: center;
   gap: 4px;
   font-size: 11px;
-  color: #605e5c;
+  color: #68769C;
   margin-left: 8px;
 }
 
@@ -13,7 +13,7 @@
 }
 
 .suggestion-speed-indicator.ai {
-  color: #0078d4;
+  color: #8E9AAF;
 }
 
 .suggestion-speed-indicator.cached {
@@ -75,7 +75,7 @@
   align-items: center;
   gap: 6px;
   padding: 8px 12px;
-  color: #605e5c;
+  color: #68769C;
   font-size: 12px;
 }
 
@@ -88,7 +88,7 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background-color: #0078d4;
+  background-color: #8E9AAF;
   animation: loading-bounce 1.4s infinite ease-in-out;
 }
 
@@ -121,10 +121,10 @@
   align-items: center;
   gap: 12px;
   padding: 4px 8px;
-  background: #f8f9fa;
+  background: #E9ECEF;
   border-radius: 4px;
   font-size: 10px;
-  color: #605e5c;
+  color: #68769C;
   margin-top: 4px;
 }
 
@@ -136,7 +136,7 @@
 
 .suggestion-metric-value {
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
 }
 
 /* Suggestion item enhancements */
@@ -161,7 +161,7 @@
 }
 
 .ai-suggestion-item.ai::before {
-  background: #0078d4;
+  background: #8E9AAF;
 }
 
 .ai-suggestion-item.cached::before {

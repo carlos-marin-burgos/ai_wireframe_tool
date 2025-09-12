@@ -46,7 +46,7 @@
     sans-serif;
   font-size: 20px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
   letter-spacing: -0.02em;
 }
 
@@ -91,13 +91,13 @@
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: #605e5c;
+  color: #68769C;
   font-size: 18px;
 }
 
 .navbar-toolbar-btn:hover {
   background: rgba(255, 255, 255, 0.15);
-  color: #323130;
+  color: #3C4858;
   transform: scale(1.05);
 }
 
@@ -126,7 +126,7 @@
 
 /* Microsoft Fluent Design focus styles */
 .navbar-toolbar-btn:focus {
-  outline: 2px solid #0078d4;
+  outline: 2px solid #8E9AAF;
   outline-offset: 2px;
   border-color: transparent;
 }

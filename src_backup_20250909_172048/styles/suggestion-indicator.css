@@ -16,8 +16,8 @@
 /* Base indicator styles */
 .suggestion-indicator--loading {
   background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-  border: 1px solid #0078d4;
-  color: #0078d4;
+  border: 1px solid #8E9AAF;
+  color: #8E9AAF;
 }
 
 .suggestion-indicator--success {

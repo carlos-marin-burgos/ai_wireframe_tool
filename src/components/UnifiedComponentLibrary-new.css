@@ -32,7 +32,7 @@
 
 .unified-library-header h2 {
   margin: 0;
-  color: #0078d4;
+  color: #8E9AAF;
 }
 
 .unified-library-close {
@@ -74,14 +74,14 @@
 }
 
 .unified-library-component:hover {
-  border-color: #0078d4;
+  border-color: #8E9AAF;
   box-shadow: 0 2px 8px rgba(0, 120, 212, 0.2);
 }
 
 .unified-library-component-preview {
   margin-bottom: 12px;
   padding: 12px;
-  background: #f8f9fa;
+  background: #E9ECEF;
   border-radius: 4px;
   min-height: 60px;
   display: flex;
@@ -93,18 +93,18 @@
   margin: 0 0 8px 0;
   font-size: 14px;
   font-weight: 600;
-  color: #323130;
+  color: #3C4858;
 }
 
 .unified-library-component-info p {
   margin: 0 0 8px 0;
   font-size: 12px;
-  color: #605e5c;
+  color: #68769C;
 }
 
 .unified-library-component-category {
   font-size: 11px;
-  background: #0078d4;
+  background: #8E9AAF;
   color: white;
   padding: 2px 6px;
   border-radius: 12px;

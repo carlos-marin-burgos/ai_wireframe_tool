@@ -25,10 +25,10 @@ const HeroControl: React.FC<HeroControlProps> = ({
   showSecondaryButton = false,
   showImage = true,
   imageUrl,
-  backgroundColor = "#E8E6DF",
+  backgroundColor = "#F8F9FA", // Neutral light gray instead of beige
   className = ""
 }) => {
-  const heroStyle = backgroundColor !== "#E8E6DF" ? { backgroundColor } : {};
+  const heroStyle = backgroundColor !== "#F8F9FA" ? { backgroundColor } : {};
   const imageStyle = imageUrl ? { backgroundImage: `url(${imageUrl})` } : {};
 
   return (

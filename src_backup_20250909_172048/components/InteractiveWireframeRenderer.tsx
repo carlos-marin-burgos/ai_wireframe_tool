@@ -132,7 +132,7 @@ const InteractiveWireframeRenderer: React.FC<InteractiveWireframeRendererProps> 
       const style = doc.createElement('style');
       style.textContent = `
         .wireframe-hover-element {
-          outline: 2px dashed #0078d4 !important;
+          outline: 2px dashed #8E9AAF !important;
           outline-offset: 2px !important;
           background-color: rgba(0, 120, 212, 0.05) !important;
           transition: all 0.2s ease !important;
@@ -147,7 +147,7 @@ const InteractiveWireframeRenderer: React.FC<InteractiveWireframeRendererProps> 
           position: absolute !important;
           top: -8px !important;
           right: -8px !important;
-          background-color: #0078d4 !important;
+          background-color: #8E9AAF !important;
           color: white !important;
           border-radius: 50% !important;
           width: 16px !important;
@@ -296,12 +296,12 @@ const InteractiveWireframeRenderer: React.FC<InteractiveWireframeRendererProps> 
           font-size: 16px !important;
           font-weight: 600 !important;
           margin: 0 0 8px 0 !important;
-          color: #323130 !important;
+          color: #3C4858 !important;
         }
         
         .microsoftlearn-theme .ms-learn-card-description {
           font-size: 14px !important;
-          color: #605e5c !important;
+          color: #68769C !important;
           margin: 0 !important;
         }
         
@@ -314,7 +314,7 @@ const InteractiveWireframeRenderer: React.FC<InteractiveWireframeRendererProps> 
         }
         
         .microsoftlearn-theme .ms-learn-button {
-          background-color: #0078d4 !important;
+          background-color: #8E9AAF !important;
           color: white !important;
           border: none !important;
           border-radius: 4px !important;
@@ -326,7 +326,7 @@ const InteractiveWireframeRenderer: React.FC<InteractiveWireframeRendererProps> 
         }
         
         .microsoftlearn-theme .ms-learn-button:hover {
-          background-color: #106ebe !important;
+          background-color: #68769C !important;
         }
         
         button, input[type="button"], input[type="submit"], .btn, .button {
