@@ -12,7 +12,6 @@
     "figmaNodeImporter",
     "figmaOAuthCallback",
     "figmaOAuthStart",
-    "frontend",
     "generateSuggestions",
     "generateWireframe",
     "generateWireframeEnhanced",
@@ -21,8 +20,10 @@
     "githubAuthStart",
     "health",
     "openai-health",
+    "testFigma",
     "updateThemeColors",
-    "wireframeAnalyze"
+    "wireframeAnalyze",
+    "frontend"
   ],
   "logging": {
     "applicationInsights": {

@@ -18,6 +18,8 @@ interface FigmaUrlImporterProps {
     onClose: () => void;
 }
 
+import { API_CONFIG, getApiUrl } from '../config/api';
+
 const FigmaUrlImporter: React.FC<FigmaUrlImporterProps> = ({
     onComponentImported,
     onClose
@@ -44,7 +46,7 @@ const FigmaUrlImporter: React.FC<FigmaUrlImporterProps> = ({
         try {
             console.log('🎯 Importing from Figma URL:', figmaUrl);
 
-            const response = await fetch('http://localhost:7072/api/figmaNodeImporter', {
+            const response = await fetch(getApiUrl('/api/figmaNodeImporter'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

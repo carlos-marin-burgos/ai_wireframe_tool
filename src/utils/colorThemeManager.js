@@ -1,3 +1,5 @@
+import { getApiUrl } from "../config/api.ts";
+
 /**
  * Color Theme Manager for Designetica
  *
@@ -135,19 +137,16 @@ export async function applyColorTheme(themeName) {
  */
 async function syncThemeWithBackend(themeName, colors) {
   try {
-    const response = await fetch(
-      "http://localhost:7072/api/update-theme-colors",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          themeName,
-          colors,
-        }),
-      }
-    );
+    const response = await fetch(getApiUrl("/api/update-theme-colors"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        themeName,
+        colors,
+      }),
+    });
 
     if (!response.ok) {
       const errorData = await response.json();

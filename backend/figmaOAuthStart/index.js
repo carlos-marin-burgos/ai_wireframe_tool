@@ -17,12 +17,27 @@ module.exports = async function (context, req) {
   }
 
   try {
+    // Debug logging for OAuth credentials
+    console.log("🔍 Debug - Environment variables:", {
+      hasClientId: !!process.env.FIGMA_CLIENT_ID,
+      clientIdValue: process.env.FIGMA_CLIENT_ID
+        ? process.env.FIGMA_CLIENT_ID.substring(0, 8) + "..."
+        : "undefined",
+      hasClientSecret: !!process.env.FIGMA_CLIENT_SECRET,
+      clientSecretValue: process.env.FIGMA_CLIENT_SECRET
+        ? process.env.FIGMA_CLIENT_SECRET.substring(0, 8) + "..."
+        : "undefined",
+      redirectUri: process.env.FIGMA_REDIRECT_URI,
+    });
+
     // Check if OAuth credentials are configured first
     const hasOAuthCredentials =
       process.env.FIGMA_CLIENT_ID &&
       process.env.FIGMA_CLIENT_SECRET &&
       process.env.FIGMA_CLIENT_ID !== "YOUR_FIGMA_CLIENT_ID" &&
-      process.env.FIGMA_CLIENT_SECRET !== "YOUR_FIGMA_CLIENT_SECRET";
+      process.env.FIGMA_CLIENT_ID !== "YOUR_FIGMA_CLIENT_ID_HERE" &&
+      process.env.FIGMA_CLIENT_SECRET !== "YOUR_FIGMA_CLIENT_SECRET" &&
+      process.env.FIGMA_CLIENT_SECRET !== "YOUR_FIGMA_CLIENT_SECRET_HERE";
 
     if (!hasOAuthCredentials) {
       console.log(
@@ -50,17 +65,43 @@ module.exports = async function (context, req) {
     }
 
     // Only try to import and use OAuth setup if credentials are available
-    const figmaSetup = await import("../figma-oauth2-setup.js");
-    const { generateAuthUrl, loadTokens, testFigmaAccess } = figmaSetup;
+    // Note: Temporarily skip the setup import to avoid ES module issues
+    const generateAuthUrl = (state) => {
+      // Determine redirect URI based on environment
+      let redirectUri = process.env.FIGMA_REDIRECT_URI;
 
-    // Check if we already have valid tokens
-    const existingTokens = loadTokens();
+      if (!redirectUri) {
+        // Auto-detect based on request headers
+        const host = req.headers.host;
+        if (host && host.includes("azurestaticapps.net")) {
+          redirectUri = `https://${host}/api/figmaOAuthCallback`;
+        } else {
+          redirectUri = "http://localhost:7071/api/figmaOAuthCallback";
+        }
+      }
+
+      const params = new URLSearchParams({
+        client_id: process.env.FIGMA_CLIENT_ID,
+        redirect_uri: redirectUri,
+        scope: "file_read",
+        response_type: "code",
+      });
+
+      if (state) {
+        params.append("state", state);
+      }
+
+      return `https://www.figma.com/oauth?${params.toString()}`;
+    };
+
+    // Check if we already have valid tokens (simplified for now)
+    const existingTokens = null; // TODO: Implement token loading
 
     if (existingTokens && !existingTokens.expired) {
       console.log("✅ Valid OAuth2 tokens found");
 
       // Test the token to make sure it's still valid
-      const testResult = await testFigmaAccess(existingTokens.access_token);
+      const testResult = { success: false }; // TODO: Implement token testing
 
       if (testResult.success) {
         context.res.status = 200;

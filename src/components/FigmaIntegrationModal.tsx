@@ -23,13 +23,15 @@ import { figmaApi, FigmaFile as ApiFigmaFile, FigmaFrame } from '../services/fig
 import { tokenExtractor, DesignTokenCollection } from '../services/figmaTokenExtractor';
 import FigmaFileUpload from './FigmaFileUpload';
 
+import { API_CONFIG, getApiUrl } from '../config/api';
+
 interface FigmaIntegrationModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onImport: (html: string, fileName: string, tokens?: DesignTokenCollection) => void;
-    onExport: (format: 'figma-file' | 'figma-components') => void;
+    onImport?: (htmlContent: string, fileName: string, tokens?: DesignTokenCollection) => void;
+    onExport?: (format: 'figma-file' | 'figma-components') => void;
     onTokensExtracted?: (tokens: DesignTokenCollection) => void;
-    onFileProcessed?: (file: File, data: any) => void;
+    onFileProcessed?: (file: File | ApiFigmaFile, data?: any) => void;
 }
 
 const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
@@ -66,7 +68,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
     // Check existing OAuth connection status
     const checkOAuthStatus = useCallback(async () => {
         try {
-            const response = await fetch('http://localhost:7072/api/figmaOAuthStart');
+            const response = await fetch(getApiUrl('/api/figmaOAuthStart'));
 
             if (!response.ok) {
                 const errorData = await response.json();
@@ -118,7 +120,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 
         try {
             // Get authorization URL from backend
-            const response = await fetch('http://localhost:7072/api/figmaOAuthStart', {
+            const response = await fetch(getApiUrl('/api/figmaOAuthStart'), {
                 method: 'POST'
             });
 
@@ -464,7 +466,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
     }, [selectedFrames, frames, figmaUrl, onImport, onClose, extractedTokens]);
 
     const handleExport = useCallback(() => {
-        onExport(exportFormat);
+        onExport?.(exportFormat);
         const fileType = exportFormat === 'figma-file' ? 'HTML file' : 'JSON data file';
         setSuccess(`🎉 ${fileType} download started! Check your browser's Downloads folder.`);
         setTimeout(() => onClose(), 2000);

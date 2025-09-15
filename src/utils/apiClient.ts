@@ -84,7 +84,7 @@ function getReadableErrorMessage(error: Error): string {
 
   if (error.message.includes("Failed to fetch")) {
     if (isDevelopment) {
-      return "Unable to connect to the local backend server. Please ensure the Azure Functions backend is running on localhost:7072";
+      return "Unable to connect to the local backend server. Please ensure the Azure Functions backend is running on localhost:7071";
     } else {
       return "Unable to connect to the backend server. Please check your internet connection or try again later.";
     }
@@ -181,7 +181,7 @@ export async function apiRequest<T>(
       window.location.hostname === "localhost"
     ) {
       const alternates = [
-        "http://localhost:7072",
+        "http://localhost:7071",
         "http://localhost:5001",
       ].filter((u) => u !== primary);
       return [primary, ...alternates];
