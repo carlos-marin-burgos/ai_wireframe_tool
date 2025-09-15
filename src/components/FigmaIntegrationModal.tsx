@@ -68,38 +68,49 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
     // Check existing OAuth connection status
     const checkOAuthStatus = useCallback(async () => {
         try {
-            const response = await fetch(getApiUrl('/api/figmaOAuthStart'));
+            const response = await fetch(getApiUrl('/api/figmaOAuthStart?format=json'), {
+                headers: { 'Accept': 'application/json' }
+            });
+
+            // Attempt to parse JSON safely even on non-2xx if response type is JSON
+            const contentType = response.headers.get('Content-Type') || '';
+            const isJson = contentType.includes('application/json');
 
             if (!response.ok) {
-                const errorData = await response.json();
-
-                if (errorData.status === 'oauth_not_configured') {
-                    // OAuth is not configured, disable OAuth features and switch to manual tab
-                    setAuthStatus({
-                        status: 'oauth_not_configured',
-                        message: 'OAuth2 not configured - using manual token mode',
-                        error: errorData.message
-                    });
-                    setIsConnected(false);
-                    // Keep the connect tab active so users can see manual token input
-                    setActiveTab('connect');
-                    return;
+                if (isJson) {
+                    const errorData = await response.json();
+                    if (errorData.status === 'oauth_not_configured') {
+                        setAuthStatus({
+                            status: 'oauth_not_configured',
+                            message: 'OAuth2 not configured - using manual token mode',
+                            error: errorData.message
+                        });
+                        setIsConnected(false);
+                        setActiveTab('connect');
+                        return;
+                    }
+                    throw new Error(errorData.error || 'OAuth status check failed');
+                } else {
+                    throw new Error('OAuth status check failed (non-JSON response)');
                 }
-
-                throw new Error(errorData.error || 'OAuth status check failed');
             }
 
-            const data = await response.json();
-            setAuthStatus(data);
+            if (isJson) {
+                const data = await response.json();
+                setAuthStatus(data);
 
-            if (data.status === 'already_authorized') {
-                setIsConnected(true);
-                setSuccess(`🔗 Already connected to Figma! Welcome back, ${data.user?.email || 'User'}`);
-                // Show connect tab when already authorized
-                setActiveTab('connect');
+                if (data.status === 'already_authorized') {
+                    setIsConnected(true);
+                    setSuccess(`🔗 Already connected to Figma! Welcome back, ${data.user?.email || 'User'}`);
+                    setActiveTab('connect');
+                } else {
+                    setIsConnected(false);
+                    setActiveTab('connect');
+                }
             } else {
+                // Fallback: Received HTML (likely interactive auth page); treat as not yet authorized
+                setAuthStatus({ status: 'authorization_required', message: 'Authorization required (interactive page returned)' });
                 setIsConnected(false);
-                // Show connect tab when OAuth is configured but not authorized
                 setActiveTab('connect');
             }
         } catch (error) {
@@ -107,10 +118,9 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
             setAuthStatus({
                 status: 'oauth_error',
                 message: 'OAuth connection unavailable - using manual token mode',
-                error: error.message
+                error: error instanceof Error ? error.message : String(error)
             });
             setIsConnected(false);
-            // Default to connect tab when there are OAuth connection issues (manual token available there)
             setActiveTab('connect');
         }
     }, []);    // Start OAuth flow

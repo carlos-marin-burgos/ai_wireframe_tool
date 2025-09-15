@@ -1,4 +1,4 @@
-import { API_ENDPOINT } from '../config';
+import { getApiUrl } from "../config/api";
 
 /**
  * Check if the backend service is available
@@ -6,10 +6,10 @@ import { API_ENDPOINT } from '../config';
  */
 export const checkBackendConnectivity = async (): Promise<boolean> => {
   try {
-    const response = await fetch(`${API_ENDPOINT}/health`);
+    const response = await fetch(getApiUrl("/api/health"));
     return response.ok;
   } catch (error) {
-    console.error('Backend connectivity check failed:', error);
+    console.error("Backend connectivity check failed:", error);
     return false;
   }
 };
@@ -30,7 +30,9 @@ export const scheduleBackendRetry = async (
 
   const attemptConnection = async () => {
     if (retryCount >= maxRetries) {
-      console.error('Maximum retry attempts reached. Backend is not available.');
+      console.error(
+        "Maximum retry attempts reached. Backend is not available."
+      );
       return;
     }
 
@@ -39,7 +41,9 @@ export const scheduleBackendRetry = async (
       callback();
     } else {
       retryCount++;
-      console.log(`Retrying backend connection... Attempt ${retryCount}/${maxRetries}`);
+      console.log(
+        `Retrying backend connection... Attempt ${retryCount}/${maxRetries}`
+      );
       setTimeout(attemptConnection, delayMs);
     }
   };

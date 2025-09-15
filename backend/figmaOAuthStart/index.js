@@ -73,7 +73,11 @@ module.exports = async function (context, req) {
       if (!redirectUri) {
         // Auto-detect based on request headers
         const host = req.headers.host;
-        if (host && host.includes("azurestaticapps.net")) {
+        if (
+          host &&
+          (host.includes("azurewebsites.net") ||
+            host.includes("azurestaticapps.net"))
+        ) {
           redirectUri = `https://${host}/api/figmaOAuthCallback`;
         } else {
           redirectUri = "http://localhost:7071/api/figmaOAuthCallback";
@@ -122,7 +126,27 @@ module.exports = async function (context, req) {
     console.log("🔗 Generated OAuth2 authorization URL");
 
     if (req.method === "GET") {
-      // Return authorization page
+      // Content negotiation: if the caller explicitly requests JSON (Accept header or format param), return JSON status instead of HTML page
+      const acceptHeader = (req.headers["accept"] || "").toLowerCase();
+      const wantsJson =
+        acceptHeader.includes("application/json") ||
+        (req.query &&
+          (req.query.format === "json" || req.query.response_type === "json"));
+
+      if (wantsJson) {
+        context.res.status = 200;
+        context.res.headers["Content-Type"] = "application/json";
+        context.res.body = {
+          status: "authorization_required",
+          auth_url: authUrl,
+          mode: "json",
+          message:
+            "Open auth_url in a browser window to authorize Figma access",
+        };
+        return;
+      }
+
+      // Return interactive authorization HTML page (default)
       const authPage = `
 <!DOCTYPE html>
 <html lang="en">

@@ -41,7 +41,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
+  padding: 4px 12px;
   border: none;
   border-radius: 6px;
   font-weight: 500;
@@ -52,12 +52,12 @@
 }
 
 .drag-toggle-btn.enabled {
-  background: #0078d4; /* Microsoft blue */
+  background: #194a7a; /* Microsoft blue */
   color: white;
 }
 
 .drag-toggle-btn.enabled:hover {
-  background: #005a9e; /* Darker Microsoft blue */
+  background: #476f95; /* Darker Microsoft blue */
 }
 
 .drag-toggle-btn.disabled {
@@ -565,29 +565,22 @@
 /* Scoped to drag-disabled (editing mode) so no edit affordances in drag mode */
 .dragula-container.drag-disabled [data-editable="true"] {
   position: relative;
-  transition: background-color 0.15s ease, outline-color 0.15s ease;
-}
-.dragula-container.drag-disabled [data-editable="true"]:hover {
-  outline: 1px solid #2d6cdf !important;
-  outline-offset: 2px;
-  background: rgba(45, 108, 223, 0.08) !important;
-  cursor: text !important;
+  transition: background-color 0.2s ease, outline-color 0.2s ease,
+    box-shadow 0.2s ease;
+  /* Add subtle visual indicator that this element is editable */
+  outline: 1px dashed rgba(45, 108, 223, 0.3) !important;
+  outline-offset: 1px;
+  background: rgba(45, 108, 223, 0.03) !important;
+  border-radius: 2px;
 }
 
-/* Subtle pill label to show editability */
-.dragula-container.drag-disabled [data-editable="true"]:hover::after {
-  content: "Editable";
-  position: absolute;
-  top: -18px;
-  left: 0;
-  background: #2d6cdf;
-  color: #fff;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  pointer-events: none;
+.dragula-container.drag-disabled [data-editable="true"]:hover {
+  outline: 2px solid #2d6cdf !important;
+  outline-offset: 2px;
+  background: rgba(45, 108, 223, 0.12) !important;
+  cursor: text !important;
+  box-shadow: 0 0 8px rgba(45, 108, 223, 0.2) !important;
+  transform: scale(1.01);
 }
 
 /* Active editing state */

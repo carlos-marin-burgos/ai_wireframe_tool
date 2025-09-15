@@ -4,6 +4,8 @@ import "./index.css";
 import "./styles/colors.css"; // Centralized color system
 import "./styles/themes.css";
 import App from "./App";
+// Production safety layer: prevent accidental localhost calls in deployed builds
+import "./runtime/productionSafety";
 
 // Expose React globally for dynamic code execution
 declare global {

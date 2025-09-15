@@ -357,14 +357,52 @@ const DragWireframe: React.FC<DragWireframeProps> = ({
     const isEligibleEditable = (el: HTMLElement): boolean => {
         if (!el) return false;
         if (!el.textContent || !el.textContent.trim()) return false;
+
         const tag = el.tagName;
-        const always = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'SPAN', 'A', 'BUTTON', 'LABEL', 'LI', 'TD', 'TH'];
-        if (always.includes(tag)) return true;
-        // Allow DIV only if it is mostly text (no block children)
-        if (tag === 'DIV') {
-            const blockChild = Array.from(el.children).some(c => /^(DIV|SECTION|HEADER|FOOTER|UL|OL|NAV|MAIN|ASIDE|TABLE)$/i.test(c.tagName));
-            return !blockChild;
+        const classList = Array.from(el.classList);
+
+        // Never make structural/container elements editable
+        const containerClasses = ['card', 'card-body', 'card-header', 'card-footer', 'container', 'container-fluid', 'row', 'col', 'navbar', 'nav', 'section', 'hero', 'jumbotron'];
+        if (containerClasses.some(cls => classList.includes(cls))) {
+            return false;
         }
+
+        // Never make elements with Bootstrap grid classes editable
+        if (classList.some(cls => cls.match(/^col-/) || cls === 'col')) {
+            return false;
+        }
+
+        // Always editable text elements
+        const alwaysEditable = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'SPAN', 'A', 'BUTTON', 'LABEL', 'LI', 'TD', 'TH'];
+        if (alwaysEditable.includes(tag)) {
+            // But not if they contain other block elements
+            const hasBlockChildren = Array.from(el.children).some(child => {
+                const childTag = child.tagName;
+                return ['DIV', 'SECTION', 'HEADER', 'FOOTER', 'UL', 'OL', 'NAV', 'MAIN', 'ASIDE', 'TABLE', 'FORM'].includes(childTag);
+            });
+            return !hasBlockChildren;
+        }
+
+        // For DIVs, be very restrictive - only if it's clearly a text wrapper
+        if (tag === 'DIV') {
+            // Must not have any child elements at all (pure text div)
+            if (el.children.length > 0) return false;
+
+            // Must have substantial text content
+            if (el.textContent.trim().length < 5) return false;
+
+            // Must not have container-like classes
+            const hasContainerClass = classList.some(cls =>
+                cls.includes('card') ||
+                cls.includes('container') ||
+                cls.includes('wrapper') ||
+                cls.includes('section') ||
+                cls.includes('row') ||
+                cls.includes('col')
+            );
+            return !hasContainerClass;
+        }
+
         return false;
     };
 

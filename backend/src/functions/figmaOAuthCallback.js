@@ -40,7 +40,7 @@ app.http("figmaOAuthCallback", {
                             <div class="error">
                                 <p>Figma authorization was denied or failed.</p>
                                 <p>Error: ${error}</p>
-                                <p><a href="/figma/oauth/start">Try again</a></p>
+                                <p><a href="/api/figmaOAuthStart">Try again</a></p>
                             </div>
                         </body>
                         </html>

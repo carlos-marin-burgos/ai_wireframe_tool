@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editable Wireframe Highlighting Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Load the enhanced editable highlighting styles */
+        /* ===== INLINE EDITING STYLES ===== */
+
+        /* Editable elements visual affordance (only those explicitly tagged) */
+        /* Scoped to drag-disabled (editing mode) so no edit affordances in drag mode */
+        .dragula-container.drag-disabled [data-editable="true"] {
+            position: relative;
+            transition: background-color 0.2s ease, outline-color 0.2s ease, box-shadow 0.2s ease;
+            /* Add subtle visual indicator that this element is editable */
+            outline: 1px dashed rgba(45, 108, 223, 0.3) !important;
+            outline-offset: 1px;
+            background: rgba(45, 108, 223, 0.03) !important;
+            border-radius: 2px;
+        }
+
+        .dragula-container.drag-disabled [data-editable="true"]:hover {
+            outline: 2px solid #2d6cdf !important;
+            outline-offset: 2px;
+            background: rgba(45, 108, 223, 0.12) !important;
+            cursor: text !important;
+            box-shadow: 0 0 8px rgba(45, 108, 223, 0.2) !important;
+            transform: scale(1.01);
+        }
+
+        /* Enhanced pill label to show editability */
+        .dragula-container.drag-disabled [data-editable="true"]:hover::after {
+            content: "✏️ Click to edit";
+            position: absolute;
+            top: -22px;
+            left: 0;
+            background: #2d6cdf;
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            pointer-events: none;
+            white-space: nowrap;
+            box-shadow: 0 2px 6px rgba(45, 108, 223, 0.4);
+            z-index: 1000;
+            animation: editablePulse 0.3s ease-in-out;
+        }
+
+        /* Add a subtle pulse animation for the editable indicator */
+        @keyframes editablePulse {
+            0% {
+                opacity: 0;
+                transform: translateY(5px) scale(0.8);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Add subtle editable highlighting mode - when drag is OFF, show all potential editable elements */
+        .dragula-container.drag-disabled {
+            position: relative;
+        }
+
+        .dragula-container.drag-disabled::before {
+            content: "💡 Hover over text to see editable elements";
+            position: sticky;
+            top: 10px;
+            left: 10px;
+            background: rgba(45, 108, 223, 0.95);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            z-index: 100;
+            pointer-events: none;
+            opacity: 0.8;
+            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            animation: fadeInOut 4s ease-in-out;
+            width: fit-content;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            20% {
+                opacity: 0.9;
+                transform: translateY(0);
+            }
+
+            80% {
+                opacity: 0.9;
+                transform: translateY(0);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Active editing state */
+        [contenteditable="true"] {
+            outline: 2px solid #6b7280 !important;
+            outline-offset: 2px;
+            background-color: rgba(107, 114, 128, 0.1) !important;
+            cursor: text !important;
+        }
+
+        [contenteditable="true"]:focus {
+            outline: 2px solid #4b5563 !important;
+            background-color: rgba(75, 85, 99, 0.15) !important;
+        }
+
+        /* Demo specific styling */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .demo-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+        }
+
+        .demo-toggle {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .toggle-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: #2d6cdf;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .toggle-btn:hover {
+            background: #1a5cbd;
+            transform: translateY(-1px);
+        }
+
+        .toggle-btn.active {
+            background: #22c55e;
+        }
+
+        /* Wireframe content styles */
+        .wireframe-content {
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 400px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1>🎨 Editable Wireframe Highlighting Demo</h1>
+            <p>See how editable elements are highlighted in the wireframe</p>
+        </div>
+
+        <div class="demo-toggle">
+            <button id="toggleBtn" class="toggle-btn active">
+                ✏️ Edit Mode: ON (Hover to see editable elements)
+            </button>
+        </div>
+
+        <!-- Sample wireframe content -->
+        <div id="wireframeContainer" class="dragula-container drag-disabled show-editable-highlights wireframe-content">
+
+            <!-- Hero Section -->
+            <div class="container-fluid py-5 bg-primary text-white text-center">
+                <h1>Welcome to Our Amazing Product</h1>
+                <p class="lead">Transform your business with our cutting-edge solution that delivers results you can
+                    measure.</p>
+                <a href="#" class="btn btn-light btn-lg">Get Started Today</a>
+            </div>
+
+            <!-- Features Section -->
+            <div class="container py-5">
+                <div class="row text-center mb-5">
+                    <div class="col-12">
+                        <h2>Why Choose Us?</h2>
+                        <p class="text-muted">Here are the key benefits of our platform</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <div class="text-primary mb-3">
+                                    <i class="fas fa-rocket fa-3x"></i>
+                                </div>
+                                <h5 class="card-title">Fast Performance</h5>
+                                <p class="card-text">Lightning-fast load times and smooth user experience across all
+                                    devices.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <div class="text-success mb-3">
+                                    <i class="fas fa-shield-alt fa-3x"></i>
+                                </div>
+                                <h5 class="card-title">Secure & Reliable</h5>
+                                <p class="card-text">Enterprise-grade security with 99.9% uptime guarantee for peace of
+                                    mind.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <div class="text-info mb-3">
+                                    <i class="fas fa-users fa-3x"></i>
+                                </div>
+                                <h5 class="card-title">24/7 Support</h5>
+                                <p class="card-text">Round-the-clock customer support from our expert team whenever you
+                                    need help.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Section -->
+            <div class="container-fluid py-5 bg-light">
+                <div class="container">
+                    <div class="row text-center">
+                        <div class="col-md-3 mb-4">
+                            <h3 class="display-4 text-primary">500K+</h3>
+                            <p class="text-muted">Happy Customers</p>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <h3 class="display-4 text-success">99.9%</h3>
+                            <p class="text-muted">Uptime Guarantee</p>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <h3 class="display-4 text-info">24/7</h3>
+                            <p class="text-muted">Expert Support</p>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <h3 class="display-4 text-warning">150+</h3>
+                            <p class="text-muted">Countries Served</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="container py-5">
+                <div class="row">
+                    <div class="col-md-8 mx-auto text-center">
+                        <h2>Ready to Get Started?</h2>
+                        <p class="lead mb-4">Join thousands of satisfied customers and transform your business today.
+                        </p>
+                        <div class="d-grid gap-2 d-md-block">
+                            <button class="btn btn-primary btn-lg me-2">Start Free Trial</button>
+                            <button class="btn btn-outline-primary btn-lg">Contact Sales</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Initialize editable elements based on the improved logic
+        function initializeEditableElements() {
+            const container = document.getElementById('wireframeContainer');
+
+            // Clear any existing data-editable attributes
+            container.querySelectorAll('[data-editable]').forEach(el => {
+                el.removeAttribute('data-editable');
+            });
+
+            // Apply the same logic as the React component
+            const candidates = container.querySelectorAll('h1,h2,h3,h4,h5,h6,p,span,a,button,label,li,td,th,div');
+
+            candidates.forEach(el => {
+                if (isEligibleEditable(el)) {
+                    el.setAttribute('data-editable', 'true');
+                }
+            });
+        }
+
+        // Improved logic to match the React component
+        function isEligibleEditable(el) {
+            if (!el) return false;
+            if (!el.textContent || !el.textContent.trim()) return false;
+
+            const tag = el.tagName;
+            const classList = Array.from(el.classList);
+
+            // Never make structural/container elements editable
+            const containerClasses = ['card', 'card-body', 'card-header', 'card-footer', 'container', 'container-fluid', 'row', 'col', 'navbar', 'nav', 'section', 'hero', 'jumbotron'];
+            if (containerClasses.some(cls => classList.includes(cls))) {
+                return false;
+            }
+
+            // Never make elements with Bootstrap grid classes editable
+            if (classList.some(cls => cls.match(/^col-/) || cls === 'col')) {
+                return false;
+            }
+
+            // Always editable text elements
+            const alwaysEditable = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'SPAN', 'A', 'BUTTON', 'LABEL', 'LI', 'TD', 'TH'];
+            if (alwaysEditable.includes(tag)) {
+                // But not if they contain other block elements
+                const hasBlockChildren = Array.from(el.children).some(child => {
+                    const childTag = child.tagName;
+                    return ['DIV', 'SECTION', 'HEADER', 'FOOTER', 'UL', 'OL', 'NAV', 'MAIN', 'ASIDE', 'TABLE', 'FORM'].includes(childTag);
+                });
+                return !hasBlockChildren;
+            }
+
+            // For DIVs, be very restrictive - only if it's clearly a text wrapper
+            if (tag === 'DIV') {
+                // Must not have any child elements at all (pure text div)
+                if (el.children.length > 0) return false;
+
+                // Must have substantial text content
+                if (el.textContent.trim().length < 5) return false;
+
+                // Must not have container-like classes
+                const hasContainerClass = classList.some(cls =>
+                    cls.includes('card') ||
+                    cls.includes('container') ||
+                    cls.includes('wrapper') ||
+                    cls.includes('section') ||
+                    cls.includes('row') ||
+                    cls.includes('col')
+                );
+                return !hasContainerClass;
+            }
+
+            return false;
+        }
+        // Demo toggle functionality
+        const toggleBtn = document.getElementById('toggleBtn');
+        const container = document.getElementById('wireframeContainer');
+        let isEditMode = true;
+
+        // Initialize editable elements on page load
+        initializeEditableElements();
+
+        toggleBtn.addEventListener('click', () => {
+            isEditMode = !isEditMode;
+
+            if (isEditMode) {
+                container.classList.remove('drag-enabled');
+                container.classList.add('drag-disabled', 'show-editable-highlights');
+                toggleBtn.textContent = '✏️ Edit Mode: ON (Hover to see editable elements)';
+                toggleBtn.classList.add('active');
+            } else {
+                container.classList.remove('drag-disabled', 'show-editable-highlights');
+                container.classList.add('drag-enabled');
+                toggleBtn.textContent = '🔒 Edit Mode: OFF (Highlighting disabled)';
+                toggleBtn.classList.remove('active');
+            }
+        });
+
+        // Add click functionality to make elements actually editable
+        container.addEventListener('click', (e) => {
+            if (!isEditMode) return;
+
+            const target = e.target;
+            if (target.getAttribute('data-editable') === 'true') {
+                e.preventDefault();
+
+                // Remove previous contenteditable
+                const prevEditing = container.querySelector('[contenteditable="true"]');
+                if (prevEditing) {
+                    prevEditing.contentEditable = 'false';
+                    prevEditing.removeAttribute('data-editing');
+                }
+
+                // Make this element editable
+                target.contentEditable = 'true';
+                target.setAttribute('data-editing', 'true');
+                target.focus();
+
+                // Select all text
+                const range = document.createRange();
+                range.selectNodeContents(target);
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+
+                // Handle blur
+                target.addEventListener('blur', () => {
+                    target.contentEditable = 'false';
+                    target.removeAttribute('data-editing');
+                }, { once: true });
+
+                // Handle Enter key
+                target.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter' && !event.shiftKey) {
+                        event.preventDefault();
+                        target.blur();
+                    }
+                }, { once: true });
+            }
+        });
+
+        console.log('🎨 Editable Wireframe Demo loaded!');
+        console.log('💡 Hover over elements with blue dashed borders to see edit indicators');
+        console.log('✏️ Click on highlighted elements to edit them inline');
+    </script>
+</body>
+
+</html>

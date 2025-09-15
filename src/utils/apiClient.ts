@@ -173,17 +173,18 @@ export async function apiRequest<T>(
 
   let lastError: Error | null = null;
 
-  // Build list of base URLs to try (multi-port resilience in dev)
+  // Build list of base URLs to try (multi-port resilience in dev only)
   const baseUrls: string[] = (() => {
     const primary = API_CONFIG.BASE_URL;
+    // Only try alternate ports in actual development environment
     if (
+      import.meta.env.DEV &&
       typeof window !== "undefined" &&
-      window.location.hostname === "localhost"
+      (window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1" ||
+        window.location.hostname === "[::1]")
     ) {
-      const alternates = [
-        "http://localhost:7071",
-        "http://localhost:5001",
-      ].filter((u) => u !== primary);
+      const alternates = ["http://localhost:7071"].filter((u) => u !== primary);
       return [primary, ...alternates];
     }
     return [primary];

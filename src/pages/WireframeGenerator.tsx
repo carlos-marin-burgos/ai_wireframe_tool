@@ -1,29 +1,33 @@
 import React, { useState } from 'react';
 import ComponentPreview from '../components/ComponentPreview';
+import { getApiUrl } from '../config/api';
 
-const WireframeGenerator: React.FC = () => {
+interface WireframeGeneratorProps {
+    onGenerate?: (description: string) => void;
+}
+
+const WireframeGenerator: React.FC<WireframeGeneratorProps> = ({ onGenerate }) => {
     const [description, setDescription] = useState('');
+    const [generatedComponent, setGeneratedComponent] = useState<string>('');
     const [loading, setLoading] = useState(false);
-    const [generatedComponent, setGeneratedComponent] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [mode, setMode] = useState<'wireframe' | 'component'>('wireframe');
 
-    const generateWireframe = async () => {
+    const handleGenerate = async () => {
         if (!description.trim()) {
-            alert('Please enter a description');
+            setError('Please enter a description');
             return;
         }
 
         setLoading(true);
         setError(null);
-        setGeneratedComponent(null);
 
         try {
             const endpoint = mode === 'wireframe'
                 ? '/api/generate-react-wireframe'
                 : '/api/generate-react-component';
 
-            const response = await fetch(`http://localhost:5001${endpoint}`, {
+            const response = await fetch(getApiUrl(endpoint), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -65,8 +69,8 @@ const WireframeGenerator: React.FC = () => {
                                 <button
                                     onClick={() => setMode('wireframe')}
                                     className={`px-4 py-2 rounded-lg ${mode === 'wireframe'
-                                            ? 'bg-purple-600 text-white'
-                                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                        ? 'bg-purple-600 text-white'
+                                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                                         }`}
                                 >
                                     🖼️ Wireframe
@@ -74,8 +78,8 @@ const WireframeGenerator: React.FC = () => {
                                 <button
                                     onClick={() => setMode('component')}
                                     className={`px-4 py-2 rounded-lg ${mode === 'component'
-                                            ? 'bg-green-600 text-white'
-                                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                        ? 'bg-green-600 text-white'
+                                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                                         }`}
                                 >
                                     ⚛️ Component
@@ -101,7 +105,7 @@ const WireframeGenerator: React.FC = () => {
                         </div>
 
                         <button
-                            onClick={generateWireframe}
+                            onClick={handleGenerate}
                             disabled={loading || !description.trim()}
                             className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
