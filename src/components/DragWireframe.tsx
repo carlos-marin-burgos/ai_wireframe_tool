@@ -1,5 +1,5 @@
 /*
- * Enhanced SimpleDragWireframe Component
+ * Enhanced DragWireframe Component
  * 
  * Features:
  * 1. Cross-container moves - Elements can be moved between .row, .col, .section, etc.
@@ -7,7 +7,7 @@
  * 3. Ordering metadata - Semantic structure tracking for better diffing
  * 
  * Usage:
- * <SimpleDragWireframe 
+ * <DragWireframe 
  *   htmlContent={wireframeHtml}
  *   onUpdateContent={(newHtml) => setWireframeHtml(newHtml)}
  *   onOrderingChange={(metadata) => console.log('Structure changed:', metadata)}
@@ -17,7 +17,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import dragula from 'dragula';
 import 'dragula/dist/dragula.css';
-import './SimpleDragWireframe.css';
+import './DragWireframe.css';
 
 interface OrderingMetadata {
     id: string;
@@ -27,7 +27,7 @@ interface OrderingMetadata {
     children: OrderingMetadata[];
 }
 
-interface SimpleDragWireframeProps {
+interface DragWireframeProps {
     htmlContent: string;
     onUpdateContent?: (newContent: string) => void;
     onOrderingChange?: (metadata: OrderingMetadata[]) => void;
@@ -129,7 +129,7 @@ function sanitizeHTML(html: string): string {
     }
 }
 
-const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
+const DragWireframe: React.FC<DragWireframeProps> = ({
     htmlContent,
     onUpdateContent,
     onOrderingChange
@@ -757,9 +757,16 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
             if (currentEditingRef.current) finishEditing(currentEditingRef.current);
             clearEditableMarkers();
             clearInlineHoverStyles();
+            // Reset augmentation and re-run it to mark elements as draggable
+            augmentedRef.current = false;
+            augmentDraggableBlocks();
         } else {
             // Switching back to edit mode -> re-tag eligible elements
             markEditableElements();
+            // Clear all draggable-block classes when turning drag mode off
+            containerRef.current.querySelectorAll('.draggable-block').forEach(el => {
+                el.classList.remove('draggable-block');
+            });
             // Ensure any stray insertion marker / listeners are removed on mode exit
             if (cleanupMarkerRef.current) {
                 cleanupMarkerRef.current();
@@ -790,7 +797,7 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
     }, []);
 
     return (
-        <div className="simple-drag-wireframe">
+        <div className="drag-wireframe">
             {/* Drag Mode Toggle */}
             <div className="drag-mode-controls">
                 <button
@@ -808,11 +815,7 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
                         </>
                     )}
                 </button>
-                <span className="drag-mode-hint">
-                    {simpleModeRef.current ? 'Simple Mode' : 'Normal Mode'} |
-                    {dragContainers.length} containers |
-                    Alt+1: Simple, Alt+2: Normal, Alt+D: Debug
-                </span>
+
             </div>
 
             {/* Main wireframe container */}
@@ -826,4 +829,4 @@ const SimpleDragWireframe: React.FC<SimpleDragWireframeProps> = ({
     );
 };
 
-export default SimpleDragWireframe;
+export default DragWireframe;

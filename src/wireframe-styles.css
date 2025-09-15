@@ -1,3 +1,16 @@
+/* ============================================
+   WIREFRAME STYLES - CONSOLIDATED
+   ============================================
+   
+   This file contains ALL wireframe-related styles:
+   - Wireframe appearance and layout
+   - Navigation and header styling
+   - Content-specific styles (formerly wireframe-content.css)
+   - Microsoft Learn theming
+   
+   Note: Drag functionality styles are in DragWireframe.css
+   ============================================ */
+
 /* Wireframe Styles - Independent CSS for Wireframe Components */
 
 /* This file is dedicated to wireframe-specific styles only */
@@ -25,55 +38,49 @@
    WIREFRAME CONTAINER & LAYOUT
    ============================================ */
 
-/* Split Layout for Wireframe Page - These styles are now in SplitLayout.css */
-/* 
-.split-layout {
-  display: grid;
-  grid-template-columns: 350px 1fr;
-  height: cal.ms-header-containe.ms-header-brand,
-.microsoft-learn-header .logo-section {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}icrosoft-learn-header .header-container {
-  max-width: 1200px;
-  m  background: #F2CC60;rgin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  height: 60px;
-} 60px);
-  background: #E9ECEF;
-}
-
-.left-pane {
+/* Main wireframe container with rounded corners */
+.wireframe-preview {
   background: white;
-  border-right: 1px solid #e5e5e5;
-  overflow-y: auto;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+  border-radius: 16px; /* Rounded corners for wireframe container */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: auto;
+  min-height: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  opacity: 0;
+  animation: fadeIn 0.5s ease forwards;
 }
 
-.right-pane {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background: #ffffff;
-}
-*/
-
-/* ============================================
-   WIREFRAME COMPONENTS
-   ============================================ */
-
-/* Basic Header Styles for Wireframes */
-header {
-  background-color: #cbc2c2;
-  color: #ccc;
+/* Better wireframe styling for headers - only in wireframe previews */
+.wireframe-preview header {
+  background-color: #0078d4; /* Microsoft blue instead of gray */
+  color: #ffffff; /* White text on blue background */
   padding: 1em;
+  border-radius: 8px; /* Rounded corners for headers */
+}
+
+/* Better wireframe styling for navigation - only in wireframe previews */
+.wireframe-preview nav {
+  background-color: #0078d4; /* Microsoft blue */
+  color: #ffffff; /* White text */
+  padding: 12px 24px;
+  border-radius: 8px; /* Rounded corners for nav */
+}
+
+.wireframe-preview nav * {
+  color: #ffffff !important; /* Ensure all nav text is white - only in wireframes */
+}
+
+.wireframe-preview nav a {
+  color: #ffffff !important;
+  text-decoration: none;
+}
+
+.wireframe-preview nav a:hover {
+  color: #f0f0f0 !important;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 4px 8px;
 }
 
 /* ============================================
@@ -1161,4 +1168,127 @@ ul ul ul {
   .ms-header-actions {
     gap: 8px;
   }
+}
+
+/* ============================================
+   WIREFRAME CONTENT STYLES (formerly wireframe-content.css)
+   ============================================ */
+
+/* 
+   Wireframe Content CSS
+   This section contains styles that are ONLY applied to wireframe content
+   These styles are injected directly into the iframe
+*/
+
+.wireframe-content {
+  font-family: "Segoe UI Variable Text", "Segoe UI", -apple-system, system-ui,
+    sans-serif;
+  line-height: 1.5;
+  color: #212121;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 100%;
+  padding: 24px;
+  padding-bottom: 40px; /* Add extra bottom padding to prevent cut-off */
+  background-color: white;
+}
+
+/* Atlas Layout Classes */
+.atlas-grid {
+  display: grid !important;
+  gap: 16px !important;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+}
+
+.atlas-container {
+  width: 100% !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 0 16px !important;
+}
+
+.atlas-stack {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+}
+
+/* Microsoft Learn Specific Styling */
+.microsoftlearn-theme {
+  font-family: "Segoe UI Variable Text", "Segoe UI", -apple-system, system-ui,
+    sans-serif !important;
+  background-color: #ffffff !important;
+  color: #212121 !important;
+}
+
+/* Microsoft Learn Cards */
+.microsoftlearn-theme .ms-learn-card {
+  font-family: "Segoe UI Variable Text", "Segoe UI", -apple-system, system-ui,
+    sans-serif !important;
+  border: 1px solid #eaeaea !important;
+  border-radius: 6px !important;
+  box-shadow: 0 1.6px 3.6px 0 rgba(0, 0, 0, 0.132),
+    0 0.3px 0.9px 0 rgba(0, 0, 0, 0.108) !important;
+  background-color: #ffffff !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  transition: all 0.15s ease-in-out !important;
+  max-width: 350px !important;
+  margin: 24px !important;
+}
+
+.microsoftlearn-theme .ms-learn-card:hover {
+  box-shadow: 0 6.4px 14.4px 0 rgba(0, 0, 0, 0.132),
+    0 1.2px 3.6px 0 rgba(0, 0, 0, 0.108) !important;
+  transform: translateY(-1px) !important;
+}
+
+.microsoftlearn-theme .ms-learn-card-header {
+  padding: 16px 16px 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.microsoftlearn-theme .ms-learn-card-content {
+  padding: 16px !important;
+  flex-grow: 1 !important;
+}
+
+.microsoftlearn-theme .ms-learn-card-title {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  margin: 0 0 8px 0 !important;
+  color: #3c4858 !important;
+}
+
+.microsoftlearn-theme .ms-learn-card-description {
+  font-size: 14px !important;
+  color: #68769c !important;
+  margin: 0 !important;
+}
+
+.microsoftlearn-theme .ms-learn-card-footer {
+  padding: 16px !important;
+  border-top: 1px solid #eaeaea !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.microsoftlearn-theme .ms-learn-button {
+  background-color: #8e9aaf !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 8px 16px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: background-color 0.15s ease-in-out !important;
+}
+
+.microsoftlearn-theme .ms-learn-button:hover {
+  background-color: #68769c !important;
 }

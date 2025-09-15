@@ -126,8 +126,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
-  padding: 16px;
+  gap: 16px;
+  padding: 8px 16px;
   background: #e9ecef;
   border-bottom: 1px solid #e1dfdd;
   flex-shrink: 0;
@@ -157,15 +157,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   border: none;
   border-radius: 50%;
   background: #8e9aaf;
   color: white;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .nav-btn:hover:not(:disabled) {
@@ -183,8 +183,8 @@
 .page-indicator {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 16px;
+  gap: 6px;
+  font-size: 14px;
   font-weight: 500;
   color: #3c4858;
 }
@@ -308,14 +308,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 12px;
+  gap: 6px;
+  padding: 8px;
   border: 2px solid transparent;
   border-radius: 8px;
   background: #fff;
   cursor: pointer;
   transition: all 0.2s ease;
-  min-width: 120px;
+  min-width: 80px;
 }
 
 .thumbnail:hover {
@@ -330,26 +330,37 @@
 }
 
 .thumbnail-preview {
-  width: 100px;
-  height: 60px;
+  width: 60px;
+  height: 40px;
   border-radius: 4px;
   overflow: hidden;
   border: 1px solid #e1dfdd;
+  position: relative;
 }
 
 .thumbnail-iframe {
-  width: 100%;
-  height: 100%;
+  width: 300px;
+  height: 200px;
+  transform: scale(0.2);
+  transform-origin: top left;
   border: none;
   pointer-events: none;
+  display: block;
+  margin: 0;
+  padding: 0;
+  background: white;
 }
 
 .thumbnail-label {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   color: #3c4858;
   text-align: center;
   line-height: 1.2;
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Help */
@@ -383,7 +394,7 @@
   }
 
   .presentation-nav {
-    padding: 12px;
+    padding: 6px 12px;
   }
 
   .page-header {
@@ -399,13 +410,13 @@
   }
 
   .thumbnail {
-    min-width: 100px;
-    padding: 8px;
+    min-width: 70px;
+    padding: 6px;
   }
 
   .thumbnail-preview {
-    width: 80px;
-    height: 48px;
+    width: 50px;
+    height: 32px;
   }
 }
 

@@ -1,9 +1,26 @@
+/* ============================================
+   DRAG WIREFRAME - DRAG FUNCTIONALITY ONLY
+   ============================================
+   
+   This file contains ONLY drag/drop functionality styles.
+   For wireframe appearance and content styling, see:
+   - wireframe-styles.css (main wireframe styling)
+   
+   ============================================ */
+
+:root {
+  --z-index-drag-controls: 99;
+  --z-index-drag-mirror: 9999;
+  --z-index-drag-sticky: 1;
+  /* Add more z-index variables here as needed */
+}
+
 /* ===== DRAG MODE CONTROLS ===== */
 
 .drag-mode-controls {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: var(--z-index-drag-controls);
   background: rgba(255, 255, 255, 0.95);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
@@ -12,6 +29,9 @@
   padding: 12px 16px;
   margin-bottom: 16px;
   display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   align-items: center;
   gap: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -32,12 +52,12 @@
 }
 
 .drag-toggle-btn.enabled {
-  background: #10b981;
+  background: #0078d4; /* Microsoft blue */
   color: white;
 }
 
 .drag-toggle-btn.enabled:hover {
-  background: #059669;
+  background: #005a9e; /* Darker Microsoft blue */
 }
 
 .drag-toggle-btn.disabled {
@@ -74,6 +94,18 @@
   opacity: 1;
 }
 
+/* Reset ONLY the drag-specific styling when drag is disabled, preserve original content styling */
+.dragula-container.drag-disabled .draggable-block {
+  border: none !important; /* Remove drag borders */
+  cursor: auto !important; /* Remove move cursor */
+  /* Do NOT reset background, padding, margin - let original styles show */
+}
+
+/* Remove drag handles when drag is disabled */
+.dragula-container.drag-disabled .draggable-block::after {
+  display: none !important;
+}
+
 .dragula-container.drag-enabled {
   position: relative;
 }
@@ -105,7 +137,7 @@
 
 /* ===== EXISTING DRAGULA STYLES ===== */
 
-.simple-drag-wireframe {
+.drag-wireframe {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
@@ -228,99 +260,102 @@
 /* Only show block borders while drag mode enabled ON DRAGGABLE ELEMENTS */
 .drag-enabled .draggable-block {
   position: relative;
-  background: #ffffff !important;
-  border: 2px dashed #dee2e6 !important;
+  background: #ffffff !important; /* Keep white background for contrast */
+  border: 2px dashed #0078d4 !important; /* More visible Microsoft blue border */
   padding: 10px !important;
   margin: 10px !important;
   cursor: move !important;
-  border-radius: 6px;
+  border-radius: 10px !important; /* Slightly more rounded in drag mode for better wireframe look */
   transition: border-color 0.15s ease, background-color 0.15s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important; /* Subtle shadow for depth */
 }
 
 /* Override sticky/fixed positioning during drag mode to prevent conflicts */
 .drag-enabled .draggable-block[style*="position: sticky"],
 .drag-enabled .draggable-block[style*="position: fixed"] {
-  position: relative !important;
-}
+  .dragula-container.drag-enabled [style*="position: sticky"],
+  .dragula-container.drag-enabled [style*="position: fixed"] {
+    z-index: var(
+      --z-index-drag-sticky
+    ) !important; /* Lower z-index during drag mode */
+  }
+  .dragula-container.drag-enabled [style*="position: sticky"],
+  .dragula-container.drag-enabled [style*="position: fixed"] {
+    z-index: 1 !important; /* Lower z-index during drag mode */
+  }
 
-/* Ensure sticky elements don't interfere with dragula */
-.dragula-container.drag-enabled [style*="position: sticky"],
-.dragula-container.drag-enabled [style*="position: fixed"] {
-  z-index: 1 !important; /* Lower z-index during drag mode */
-}
+  /* Hover state for draggable blocks in drag mode */
+  .drag-enabled .draggable-block:hover {
+    border-color: #005a9e !important; /* Darker blue on hover */
+    background-color: #f8fcff !important; /* Very light blue tint instead of gray */
+  }
 
-/* Hover state for draggable blocks in drag mode */
-.drag-enabled .draggable-block:hover {
-  border-color: #6b7280 !important;
-  background-color: #f9fafb !important;
-}
+  /* Inner blocks should not inherit heavy outer padding duplication */
+  .dragula-container .draggable-block .draggable-block {
+    margin: 6px 0;
+    padding: 6px;
+  }
 
-/* Inner blocks should not inherit heavy outer padding duplication */
-.dragula-container .draggable-block .draggable-block {
-  margin: 6px 0;
-  padding: 6px;
-}
+  /* Provide handle indicator */
+  .dragula-container .draggable-block::after {
+    content: "⋮⋮";
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    font-size: 14px;
+    color: #9ca3af;
+    pointer-events: none;
+    transform: rotate(90deg);
+  }
 
-/* Provide handle indicator */
-.dragula-container .draggable-block::after {
-  content: "⋮⋮";
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  font-size: 14px;
-  color: #9ca3af;
-  pointer-events: none;
-  transform: rotate(90deg);
-}
+  /* HTML5 drag fallback styles */
+  .html5-dragging {
+    opacity: 0.6 !important;
+    border-color: #6b7280 !important;
+  }
 
-/* HTML5 drag fallback styles */
-.html5-dragging {
-  opacity: 0.6 !important;
-  border-color: #6b7280 !important;
-}
+  .html5-drag-over {
+    outline: 2px dashed #6b7280;
+  }
 
-.html5-drag-over {
-  outline: 2px dashed #6b7280;
-}
+  .html5-drag-placeholder {
+    border: 2px dashed #6b7280;
+    background: rgba(107, 114, 128, 0.08);
+    margin: 6px 0;
+    border-radius: 6px;
+  }
 
-.html5-drag-placeholder {
-  border: 2px dashed #6b7280;
-  background: rgba(107, 114, 128, 0.08);
-  margin: 6px 0;
-  border-radius: 6px;
-}
+  /* Better header styling - preserve original design */
+  .dragula-container.drag-enabled
+    > header:not(.ms-learn-topnav):not(.atlas-top-navigation) {
+    /* Don't force white background - preserve original styling */
+    color: inherit !important; /* Keep original text colors */
+    text-align: inherit;
+    padding: inherit !important;
+    border: 2px dashed #0078d4 !important; /* Just add drag border */
+  }
 
-/* Override for header and footer elements - ONLY in drag mode */
-.dragula-container.drag-enabled
-  > header:not(.ms-learn-topnav):not(.atlas-top-navigation) {
-  background-color: #f8f9fa !important;
-  color: #3c4858 !important;
-  text-align: left;
-  padding: 1em 0 !important;
-  padding-left: 20px !important;
-  border: 2px dashed #dee2e6 !important;
-}
+  .dragula-container.drag-enabled > footer:not(.ms-learn-topnav) {
+    /* Don't force white background - preserve original styling */
+    color: inherit !important; /* Keep original text colors */
+    text-align: inherit;
+    padding: inherit !important;
+    border: 2px dashed #0078d4 !important; /* Just add drag border */
+  }
 
-.dragula-container.drag-enabled > footer:not(.ms-learn-topnav) {
-  background-color: #f8f9fa !important;
-  color: #3c4858 !important;
-  text-align: center;
-  padding: 1em 0 !important;
-  border: 2px dashed #dee2e6 !important;
-}
-
-/* Override for nav elements to maintain readability - ONLY in drag mode */
-.dragula-container.drag-enabled
-  > nav:not(.ms-learn-nav):not(.ms-learn-primary-nav) {
-  background-color: #2c3e50 !important;
-  color: #fff !important;
-  padding: 1em !important;
-  border: 2px dashed #34495e !important;
-}
-
-/* Preserve Microsoft Learn navigation styling during drag mode */
-.dragula-container.drag-enabled .ms-learn-topnav,
-.dragula-container.drag-enabled .atlas-top-navigation {
+  /* Better nav styling - preserve original design */
+  .dragula-container.drag-enabled
+    > nav:not(.ms-learn-nav):not(.ms-learn-primary-nav) {
+    /* Don't override background and text colors - preserve wireframe styling */
+    border: 2px dashed #0078d4 !important; /* Just add drag border */
+  }
+  /* Preserve Microsoft Learn navigation styling during drag mode */
+  .dragula-container.drag-enabled .ms-learn-topnav,
+  .dragula-container.drag-enabled .atlas-top-navigation {
+    position: relative !important; /* Override sticky during drag */
+    z-index: var(--z-index-drag-sticky) !important;
+    border: 2px dashed #0078d4 !important;
+  }
   position: relative !important; /* Override sticky during drag */
   z-index: 1 !important;
   border: 2px dashed #0078d4 !important;
@@ -406,24 +441,25 @@
 .dragula-container .col,
 .dragula-container [class*="col-"] {
   padding: 8px;
-  border: 2px dashed #dee2e6;
+  border: 2px dashed #0078d4; /* More visible blue border */
   border-radius: 6px;
   margin: 4px 0;
-  background: #f8f9fa;
+  background: #ffffff; /* White background for better contrast */
   min-height: 100px;
   transition: all 0.2s ease;
 }
 
 .dragula-container .col:hover,
 .dragula-container [class*="col-"]:hover {
-  border-color: rgba(75, 85, 99, 0.8);
+  border: 2px solid #dee2e6 !important;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Dragula specific styles - prevent ALL transparency */
-.simple-drag-wireframe .gu-mirror {
+.drag-wireframe .gu-mirror {
   position: fixed !important;
   margin: 0 !important;
-  z-index: 9999 !important;
+  z-index: var(--z-index-drag-mirror) !important;
   opacity: 1 !important;
   background: white !important;
   border: 2px solid #dee2e6 !important;
@@ -431,61 +467,83 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.simple-drag-wireframe .gu-hide {
+.drag-wireframe .gu-hide {
   display: none !important;
 }
 
-.simple-drag-wireframe .gu-unselectable {
+.drag-wireframe .gu-unselectable {
   -webkit-user-select: none !important;
   -moz-user-select: none !important;
   -ms-user-select: none !important;
   user-select: none !important;
 }
 
-.simple-drag-wireframe .gu-transit {
+.drag-wireframe .gu-transit {
   opacity: 1 !important;
   background: white !important;
   border: 2px dashed #dee2e6 !important;
   transition: border-color 0.2s ease !important;
 }
 
-.simple-drag-wireframe .gu-transit:hover {
+.drag-wireframe .gu-transit:hover {
   border-color: rgba(75, 85, 99, 0.8) !important;
 }
 
 /* Force ALL elements to be visible */
-.simple-drag-wireframe * {
+.drag-wireframe * {
   opacity: 1 !important;
 }
 
-.simple-drag-wireframe .dragula-container * {
+.drag-wireframe .dragula-container * {
   opacity: 1 !important;
+}
+
+/* Preserve original wireframe styling with minimal drag mode changes */
+
+/* Fix white-on-white text issues in drag mode only where needed */
+.dragula-container.drag-enabled .draggable-block {
+  background: #ffffff !important; /* Ensure white background for contrast in draggable areas */
+  border-radius: 8px !important; /* Moderate rounded corners for draggable elements */
+}
+
+/* Ensure links remain visible */
+.dragula-container.drag-enabled a {
+  color: #0078d4 !important;
+  text-decoration: underline !important;
 }
 
 /* Drop zone highlighting */
 .dragula-container .row {
   min-height: 80px;
   padding: 10px;
-  border: 1px solid #e9ecef;
+  border: 1px solid #d1d5db; /* More visible gray border */
   border-radius: 8px;
   margin-bottom: 15px;
-  background: white;
+  background: white; /* Keep white background */
 }
 
 .dragula-container .row.gu-over {
-  background: #e7f3ff !important;
-  border-color: #dee2e6 !important;
+  background: #eff6ff !important; /* Light blue highlight */
+  border-color: #0078d4 !important; /* Blue border when dragging over */
 }
 
-/* Force buttons to be fully opaque */
-.simple-drag-wireframe .btn,
-.simple-drag-wireframe button,
-.simple-drag-wireframe input[type="button"],
-.simple-drag-wireframe input[type="submit"] {
+/* Force buttons to be fully opaque and visible */
+.drag-wireframe .btn,
+.drag-wireframe button,
+.drag-wireframe input[type="button"],
+.drag-wireframe input[type="submit"] {
   opacity: 1 !important;
   visibility: visible !important;
-  background-color: #6c757d !important; /* Neutral gray color */
+  background-color: #0078d4 !important; /* Microsoft blue for better visibility */
   color: white !important;
+  border: 1px solid #005a9e !important; /* Darker border for definition */
+}
+
+.drag-wireframe .btn:hover,
+.drag-wireframe button:hover,
+.drag-wireframe input[type="button"]:hover,
+.drag-wireframe input[type="submit"]:hover {
+  background-color: #005a9e !important; /* Darker blue on hover */
 }
 
 /* Prevent error messages from being draggable */

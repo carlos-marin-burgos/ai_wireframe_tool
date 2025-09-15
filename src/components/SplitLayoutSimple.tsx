@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import "./SplitLayout.css";
 import SuggestionSourceIndicator from "./SuggestionSourceIndicator";
 import LoadingOverlay from "./LoadingOverlay";
-import SimpleDragWireframe from "./SimpleDragWireframe";
+import DragWireframe from "./DragWireframe";
 import EnhancedMessage from "./EnhancedMessage";
 import ComponentPreview from "./ComponentPreview";
 import AddPagesModal from './AddPagesModal';
@@ -16,6 +16,7 @@ import {
   FiCpu,
   FiChevronLeft,
   FiChevronRight,
+  FiImage,
 } from 'react-icons/fi';
 
 interface SplitLayoutProps {
@@ -90,6 +91,12 @@ const SplitLayoutSimple: React.FC<SplitLayoutProps> = ({
   const [isAddPagesModalOpen, setIsAddPagesModalOpen] = useState(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [isImageUploadModalOpen, setIsImageUploadModalOpen] = useState(false);
+  const [isDemoModeEnabled, setIsDemoModeEnabled] = useState(true); // Demo mode toggle
+
+  // Image upload modal handler
+  const openImageUploadModal = useCallback(() => {
+    setIsImageUploadModalOpen(true);
+  }, []);
 
   // Function to validate chat input - check if it's only numbers
   const validateChatInput = (input: string): boolean => {
@@ -110,6 +117,41 @@ const SplitLayoutSimple: React.FC<SplitLayoutProps> = ({
     console.log('🧹 SplitLayout mounted - clearing AI suggestions');
     setShowAiSuggestions(false);
   }, [setShowAiSuggestions]);
+
+  // Keyboard shortcut for demo mode toggle (Ctrl+Shift+D or Cmd+Shift+D)
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key === 'D') {
+        event.preventDefault();
+        setIsDemoModeEnabled(prev => {
+          const newMode = !prev;
+          console.log(`🎭 Demo mode ${newMode ? 'enabled' : 'disabled'}`);
+          // Show a temporary notification
+          const notification = document.createElement('div');
+          notification.innerHTML = `<div style="
+            position: fixed; 
+            top: 20px; 
+            right: 20px; 
+            background: ${newMode ? '#0078d4' : '#6c757d'}; 
+            color: white; 
+            padding: 12px 16px; 
+            border-radius: 4px; 
+            z-index: 9999; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+          ">
+            🎭 Demo Mode ${newMode ? 'Enabled' : 'Disabled'}
+          </div>`;
+          document.body.appendChild(notification);
+          setTimeout(() => document.body.removeChild(notification), 2000);
+          return newMode;
+        });
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // Debounced AI suggestion trigger on typing
   useEffect(() => {
@@ -213,6 +255,17 @@ const SplitLayoutSimple: React.FC<SplitLayoutProps> = ({
 
   return (
     <div className={`split-layout ${isLeftPanelCollapsed ? 'left-panel-collapsed' : ''}`}>
+      {/* Demo Mode Indicator */}
+      {isDemoModeEnabled && (
+        <div
+          className="demo-mode-indicator"
+          onClick={() => setIsDemoModeEnabled(false)}
+          title="Demo mode is active. Click to disable or press Ctrl+Shift+D"
+        >
+          🎭 Demo Mode
+        </div>
+      )}
+
       {/* Panel Toggle Button */}
       <button
         className="panel-toggle-btn"
@@ -389,7 +442,7 @@ const SplitLayoutSimple: React.FC<SplitLayoutProps> = ({
                     />
                   </div>
                 ) : (
-                  <SimpleDragWireframe
+                  <DragWireframe
                     htmlContent={htmlWireframe}
                     onUpdateContent={(newContent) => {
                       setHtmlWireframe(newContent);
@@ -488,6 +541,17 @@ const SplitLayoutSimple: React.FC<SplitLayoutProps> = ({
               )}
             </button>
 
+            {/* Image Upload Button */}
+            <button
+              type="button"
+              className="ai-assistant-submit secondary-action"
+              onClick={openImageUploadModal}
+              title="Upload an image to generate wireframe from existing UI"
+            >
+              <FiImage />
+              Upload Image
+            </button>
+
             {loading && (
               <button
                 type="button"
@@ -577,6 +641,7 @@ const SplitLayoutSimple: React.FC<SplitLayoutProps> = ({
               console.log('Image analyzed:', imageUrl, fileName);
               setIsImageUploadModalOpen(false);
             }}
+            demoMode={isDemoModeEnabled} // Use state variable for demo mode
           />
         )}
       </div>

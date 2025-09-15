@@ -9,9 +9,10 @@ import DownloadModal from "./DownloadModal";
 import DevPlaybooksLibrary from "./DevPlaybooksLibrary";
 import FigmaComponentsLibrary from "./FigmaComponentsLibrary";
 import EnhancedComponentLibrary from "./EnhancedComponentLibrary";
-import SimpleDragWireframe from "./SimpleDragWireframe";
+import DragWireframe from "./DragWireframe";
 import EnhancedMessage from "./EnhancedMessage";
 import ImageUploadZone from "./ImageUploadZone";
+import ImageUploadModal from "./ImageUploadModal";
 import PageNavigation from "./PageNavigation";
 import LoadingSpinner from "./LoadingSpinner";
 import HtmlCodeViewer from "./HtmlCodeViewer";
@@ -1248,7 +1249,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                   </div>
                 ) : (
                   // Show HTML wireframe
-                  <SimpleDragWireframe
+                  <DragWireframe
                     htmlContent={currentPageId ? (pageContents[currentPageId] || htmlWireframe) : htmlWireframe}
                     onUpdateContent={(newContent) => {
                       if (currentPageId) {
@@ -1460,41 +1461,15 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         existingWireframe={wireframeToUpdate}
       />
 
-      {/* Image Upload Modal - simplified like LandingPage */}
-      {showImageUpload && onImageUpload && onAnalyzeImage && (
-        <div className="modal-overlay" onClick={() => setShowImageUpload(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            {/* Modal Header */}
-            <div className="modal-header">
-              <div className="modal-title">
-                <FiImage className="modal-icon" />
-                <h2>Upload Image to Wireframe</h2>
-              </div>
-              <button className="modal-close-btn" onClick={() => setShowImageUpload(false)} title="Close modal">
-                <FiX />
-              </button>
-            </div>
-
-            {/* Modal Body */}
-            <div className="modal-body">
-              <div className="upload-content">
-                <p className="modal-description">
-                  Upload an image of a UI design, wireframe, or website screenshot to generate a wireframe based on its layout.
-                </p>
-
-                <div className="upload-zone-container">
-                  <ImageUploadZone
-                    onImageUpload={onImageUpload}
-                    onAnalyzeImage={onAnalyzeImage}
-                    isAnalyzing={isAnalyzingImage}
-                    className="upload-zone"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Image Upload Modal with Demo Mode */}
+      <ImageUploadModal
+        isOpen={showImageUpload}
+        onClose={() => setShowImageUpload(false)}
+        onImageUpload={onImageUpload}
+        onAnalyzeImage={onAnalyzeImage}
+        isAnalyzing={isAnalyzingImage}
+        demoMode={true}
+      />
 
       {/* Figma Integration Modal */}
       <FigmaIntegrationModal

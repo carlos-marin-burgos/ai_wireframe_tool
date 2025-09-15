@@ -1,38 +1,45 @@
 // NUCLEAR OPTION: Single unified endpoint that handles ALL wireframe requests
 // This eliminates the API mismatch problem FOREVER
+// Now with built-in accessibility validation
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
+const {
+  AccessibilityValidationMiddleware,
+} = require("./accessibility/validation-middleware");
+
+// Initialize accessibility middleware
+const accessibilityMiddleware = new AccessibilityValidationMiddleware();
 
 // Import the actual wireframe generation logic
 let generateWireframeMain;
 try {
-  generateWireframeMain = require('./generateWireframe/index.js');
+  generateWireframeMain = require("./generateWireframe/index.js");
 } catch (error) {
-  console.error('Could not load main wireframe function:', error);
+  console.error("Could not load main wireframe function:", error);
 }
 
 // Unified handler function
 async function handleWireframeRequest(context, req) {
-  console.log('🔥 UNIFIED ENDPOINT: Handling wireframe request');
-  console.log('🔥 Method:', req.method);
-  console.log('🔥 URL:', req.url);
-  console.log('🔥 Headers:', JSON.stringify(req.headers, null, 2));
-  console.log('🔥 Body:', JSON.stringify(req.body, null, 2));
+  console.log("🔥 UNIFIED ENDPOINT: Handling wireframe request");
+  console.log("🔥 Method:", req.method);
+  console.log("🔥 URL:", req.url);
+  console.log("🔥 Headers:", JSON.stringify(req.headers, null, 2));
+  console.log("🔥 Body:", JSON.stringify(req.body, null, 2));
 
   // Set CORS headers for all responses
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
   };
 
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
     context.res = {
       status: 200,
-      headers: corsHeaders
+      headers: corsHeaders,
     };
     return;
   }
@@ -41,7 +48,7 @@ async function handleWireframeRequest(context, req) {
     // Call the main wireframe generation function
     if (generateWireframeMain) {
       await generateWireframeMain(context, req);
-      console.log('✅ UNIFIED ENDPOINT: Successfully generated wireframe');
+      console.log("✅ UNIFIED ENDPOINT: Successfully generated wireframe");
     } else {
       // Fallback response if main function not available
       context.res = {
@@ -64,26 +71,26 @@ async function handleWireframeRequest(context, req) {
     <div class="container">
         <h1>Wireframe Generated Successfully</h1>
         <p>This is a fallback wireframe response. The unified endpoint is working!</p>
-        <p>Request: ${req.body?.description || 'No description provided'}</p>
+        <p>Request: ${req.body?.description || "No description provided"}</p>
     </div>
 </body>
 </html>`,
           source: "unified-fallback",
           aiGenerated: false,
           processingTimeMs: 100,
-          fallback: true
-        }
+          fallback: true,
+        },
       };
     }
   } catch (error) {
-    console.error('❌ UNIFIED ENDPOINT ERROR:', error);
+    console.error("❌ UNIFIED ENDPOINT ERROR:", error);
     context.res = {
       status: 500,
       headers: corsHeaders,
       body: {
         error: "Unified endpoint error",
-        message: error.message
-      }
+        message: error.message,
+      },
     };
   }
 }

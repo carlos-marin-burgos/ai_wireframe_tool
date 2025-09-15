@@ -3,10 +3,15 @@ const { TemplateManager, selectTemplate } = require("../template-manager");
 const crypto = require("crypto");
 // Import centralized color configuration
 const { WIREFRAME_COLORS } = require("../config/colors");
+// Import accessibility validation
+const {
+  AccessibilityValidationMiddleware,
+} = require("../accessibility/validation-middleware");
 
-// Initialize Minimal Generator and Template Manager
+// Initialize components
 const minimalGenerator = new MinimalWireframeGenerator();
 const templateManager = new TemplateManager();
+const accessibilityMiddleware = new AccessibilityValidationMiddleware();
 
 // Logger utility
 const logger = {
@@ -685,12 +690,34 @@ module.exports = async function (context, req) {
 
     const processingTime = Date.now() - startTime;
 
+    // 🚨 Apply accessibility validation and fixes
+    const accessibilityResult = accessibilityMiddleware.validateAndFixWireframe(
+      result.html,
+      { enforceCompliance: true, logIssues: true }
+    );
+
+    // Use the accessibility-validated HTML
+    const finalHtml = accessibilityResult.content;
+
+    // Log accessibility status
+    if (accessibilityResult.wasFixed) {
+      logger.info("🎯 Wireframe accessibility issues automatically fixed", {
+        correlationId,
+        issuesFound: accessibilityResult.issues.length,
+        isNowValid: accessibilityResult.isValid,
+      });
+    } else if (accessibilityResult.isValid) {
+      logger.info("✅ Wireframe passed accessibility validation", {
+        correlationId,
+      });
+    }
+
     // Success response
     context.res.status = 200;
     context.res.body = {
       success: true,
       data: {
-        html: result.html,
+        html: finalHtml, // Use accessibility-validated HTML
         reactCode: result.reactCode,
         source: result.source,
         aiGenerated: result.aiGenerated,
@@ -705,6 +732,12 @@ module.exports = async function (context, req) {
         description:
           description.substring(0, 100) +
           (description.length > 100 ? "..." : ""),
+        accessibility: {
+          isCompliant: accessibilityResult.isValid,
+          wasFixed: accessibilityResult.wasFixed,
+          issuesFound: accessibilityResult.issues.length,
+          wcagLevel: accessibilityResult.isValid ? "AA" : "Partial",
+        },
       },
     };
 

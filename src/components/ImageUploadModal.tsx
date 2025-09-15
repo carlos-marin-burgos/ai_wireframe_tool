@@ -1,6 +1,7 @@
-import React from 'react';
-import { FiX, FiImage, FiUpload } from 'react-icons/fi';
+import React, { useState, useCallback } from 'react';
+import { FiX, FiImage, FiUpload, FiStar } from 'react-icons/fi';
 import ImageUploadZone from './ImageUploadZone';
+import DemoImageGallery from './DemoImageGallery';
 import './ImageUploadModal.css';
 
 interface ImageUploadModalProps {
@@ -9,6 +10,7 @@ interface ImageUploadModalProps {
     onImageUpload: (file: File) => void;
     onAnalyzeImage: (imageUrl: string, fileName: string) => void;
     isAnalyzing?: boolean;
+    demoMode?: boolean; // Add demo mode prop
 }
 
 const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
@@ -16,9 +18,26 @@ const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
     onClose,
     onImageUpload,
     onAnalyzeImage,
-    isAnalyzing = false
+    isAnalyzing = false,
+    demoMode = false
 }) => {
+    const [uploadMode, setUploadMode] = useState<'upload' | 'demo'>('upload');
+    const [selectedDemo, setSelectedDemo] = useState<string | null>(null);
+
+    const handleDemoSelect = useCallback((demoImage: any) => {
+        setSelectedDemo(demoImage.id);
+
+        // Simulate the demo analysis with mock data
+        setTimeout(() => {
+            // Create a mock file object for the demo
+            const mockFileName = `${demoImage.name.toLowerCase().replace(/\s+/g, '-')}.png`;
+            onAnalyzeImage(demoImage.url, mockFileName);
+        }, 500);
+    }, [onAnalyzeImage]);
+
     if (!isOpen) return null;
+
+    const currentMode = demoMode ? uploadMode : 'upload';
 
     return (
         <div className="fluent-modal-backdrop" onClick={onClose}>
@@ -34,29 +53,78 @@ const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
                     </button>
                 </div>
 
+                {/* Mode Switcher (only show in demo mode) */}
+                {demoMode && (
+                    <div className="upload-mode-switcher">
+                        <button
+                            className={`mode-btn ${currentMode === 'upload' ? 'active' : ''}`}
+                            onClick={() => setUploadMode('upload')}
+                        >
+                            <FiUpload className="mode-icon" />
+                            Upload Your Image
+                        </button>
+                        <button
+                            className={`mode-btn ${currentMode === 'demo' ? 'active' : ''}`}
+                            onClick={() => setUploadMode('demo')}
+                        >
+                            <FiStar className="mode-icon" />
+                            Demo Gallery
+                        </button>
+                    </div>
+                )}
+
                 {/* Fluent Dialog Body */}
                 <div className="fluent-dialog-body">
-                    <div className="fluent-upload-content">
-                        <p className="fluent-dialog-description">
-                            Upload an image of a UI design, wireframe, or website screenshot to generate a wireframe based on its layout.
-                        </p>
+                    {currentMode === 'upload' ? (
+                        <div className="fluent-upload-content">
+                            <p className="fluent-dialog-description">
+                                Upload an image of a UI design, wireframe, or website screenshot to generate a wireframe based on its layout.
+                            </p>
 
-                        <div className="fluent-upload-zone-container">
-                            <ImageUploadZone
-                                onImageUpload={onImageUpload}
-                                onAnalyzeImage={onAnalyzeImage}
-                                isAnalyzing={isAnalyzing}
-                                className="fluent-upload-zone"
+                            <div className="fluent-upload-zone-container">
+                                <ImageUploadZone
+                                    onImageUpload={onImageUpload}
+                                    onAnalyzeImage={onAnalyzeImage}
+                                    isAnalyzing={isAnalyzing}
+                                    className="fluent-upload-zone"
+                                />
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="demo-gallery-content">
+                            <DemoImageGallery
+                                onSelectDemo={handleDemoSelect}
+                                selectedDemo={selectedDemo}
                             />
                         </div>
-                    </div>
+                    )}
                 </div>
 
                 {/* Fluent Dialog Footer */}
                 <div className="fluent-dialog-footer">
-                    <button className="fluent-button fluent-button-secondary" onClick={onClose}>
-                        Cancel
-                    </button>
+                    {currentMode === 'demo' && selectedDemo ? (
+                        <div className="demo-footer-actions">
+                            <button
+                                className="fluent-button fluent-button-primary"
+                                onClick={() => {
+                                    const demoImage = selectedDemo; // You might want to pass more details here
+                                    onClose();
+                                }}
+                            >
+                                Generate Wireframe from Demo
+                            </button>
+                            <button
+                                className="fluent-button fluent-button-secondary"
+                                onClick={onClose}
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    ) : (
+                        <button className="fluent-button fluent-button-secondary" onClick={onClose}>
+                            Cancel
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

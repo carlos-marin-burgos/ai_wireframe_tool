@@ -5,7 +5,9 @@
  */
 
 const { OpenAI } = require("openai");
-const { AccessibilityColorValidator } = require("./accessibility/color-validator");
+const {
+  AccessibilityColorValidator,
+} = require("./accessibility/color-validator");
 
 class PureAIWireframeGenerator {
   constructor() {
@@ -25,7 +27,7 @@ class PureAIWireframeGenerator {
         "api-key": process.env.AZURE_OPENAI_KEY,
       },
     });
-    
+
     // Initialize accessibility validator
     this.accessibilityValidator = new AccessibilityColorValidator();
   }
@@ -100,9 +102,13 @@ class PureAIWireframeGenerator {
       // Validate accessibility if enabled
       let accessibilityValidation = null;
       if (accessibility) {
-        accessibilityValidation = this.accessibilityValidator.validateHtmlColors(reactCode);
+        accessibilityValidation =
+          this.accessibilityValidator.validateHtmlColors(reactCode);
         if (!accessibilityValidation.isValid) {
-          console.warn('⚠️ Generated wireframe has accessibility issues:', accessibilityValidation.issues);
+          console.warn(
+            "⚠️ Generated wireframe has accessibility issues:",
+            accessibilityValidation.issues
+          );
           // Log but don't reject - provide feedback for improvement
         }
       }
@@ -115,7 +121,7 @@ class PureAIWireframeGenerator {
         description,
         aiGenerated: true,
         source: "pure-ai",
-        accessibilityValidation: accessibilityValidation
+        accessibilityValidation: accessibilityValidation,
       };
     } catch (error) {
       console.error("AI wireframe generation failed:", error);
@@ -207,8 +213,10 @@ RULES:
 
   buildAdvancedPrompt(description, options) {
     const uniqueId = Date.now() + "-" + Math.random().toString(36).substr(2, 9);
-    
-    const accessibilityRequirements = options.accessibility !== false ? `
+
+    const accessibilityRequirements =
+      options.accessibility !== false
+        ? `
 
 🚨 ACCESSIBILITY REQUIREMENTS (MANDATORY):
 - Use ONLY these approved colors: #0078d4, #106ebe, #323130, #ffffff, #f3f2f1, #edebe9, #605e5c
@@ -216,7 +224,8 @@ RULES:
 - Include proper ARIA labels and semantic HTML
 - Make all interactive elements keyboard accessible
 - Use proper heading hierarchy (h1, h2, h3)
-` : '';
+`
+        : "";
 
     return (
       "Create a React component wireframe that EXACTLY matches this specification: " +
@@ -246,10 +255,10 @@ RULES:
     } else if (cleaned.startsWith("```")) {
       cleaned = cleaned.replace(/^```[a-zA-Z]*\n?/, "").replace(/\n?```$/, "");
     }
-    
+
     // Apply accessibility color fixes
     cleaned = this.enforceAccessibleColors(cleaned);
-    
+
     return cleaned;
   }
 
@@ -257,40 +266,74 @@ RULES:
    * Enforce accessible color usage by replacing problematic colors
    */
   enforceAccessibleColors(code) {
-    const approvedColors = this.accessibilityValidator.getApprovedColorPalette();
-    
+    const approvedColors =
+      this.accessibilityValidator.getApprovedColorPalette();
+
     // Replace common inaccessible color patterns
     const colorReplacements = [
       // Replace generic Tailwind colors with approved ones
-      { pattern: /bg-blue-500/g, replacement: `bg-blue-600" style={{backgroundColor: '${approvedColors.primary}'}}` },
-      { pattern: /bg-green-500/g, replacement: `bg-blue-600" style={{backgroundColor: '${approvedColors.primary}'}}` },
-      { pattern: /bg-red-500/g, replacement: `bg-blue-700" style={{backgroundColor: '${approvedColors.secondary}'}}` },
-      { pattern: /bg-yellow-500/g, replacement: `bg-gray-100" style={{backgroundColor: '${approvedColors.background}'}}` },
-      { pattern: /bg-purple-500/g, replacement: `bg-blue-600" style={{backgroundColor: '${approvedColors.primary}'}}` },
-      { pattern: /bg-pink-500/g, replacement: `bg-blue-600" style={{backgroundColor: '${approvedColors.primary}'}}` },
-      
+      {
+        pattern: /bg-blue-500/g,
+        replacement: `bg-blue-600" style={{backgroundColor: '${approvedColors.primary}'}}`,
+      },
+      {
+        pattern: /bg-green-500/g,
+        replacement: `bg-blue-600" style={{backgroundColor: '${approvedColors.primary}'}}`,
+      },
+      {
+        pattern: /bg-red-500/g,
+        replacement: `bg-blue-700" style={{backgroundColor: '${approvedColors.secondary}'}}`,
+      },
+      {
+        pattern: /bg-yellow-500/g,
+        replacement: `bg-gray-100" style={{backgroundColor: '${approvedColors.background}'}}`,
+      },
+      {
+        pattern: /bg-purple-500/g,
+        replacement: `bg-blue-600" style={{backgroundColor: '${approvedColors.primary}'}}`,
+      },
+      {
+        pattern: /bg-pink-500/g,
+        replacement: `bg-blue-600" style={{backgroundColor: '${approvedColors.primary}'}}`,
+      },
+
       // Replace text colors
-      { pattern: /text-gray-500/g, replacement: `text-gray-600" style={{color: '${approvedColors.textSecondary}'}}` },
-      { pattern: /text-gray-400/g, replacement: `text-gray-600" style={{color: '${approvedColors.textSecondary}'}}` },
-      { pattern: /text-gray-300/g, replacement: `text-gray-800" style={{color: '${approvedColors.text}'}}` },
-      
+      {
+        pattern: /text-gray-500/g,
+        replacement: `text-gray-600" style={{color: '${approvedColors.textSecondary}'}}`,
+      },
+      {
+        pattern: /text-gray-400/g,
+        replacement: `text-gray-600" style={{color: '${approvedColors.textSecondary}'}}`,
+      },
+      {
+        pattern: /text-gray-300/g,
+        replacement: `text-gray-800" style={{color: '${approvedColors.text}'}}`,
+      },
+
       // Replace border colors
-      { pattern: /border-gray-300/g, replacement: `border-gray-200" style={{borderColor: '${approvedColors.border}'}}` },
-      { pattern: /border-gray-400/g, replacement: `border-gray-200" style={{borderColor: '${approvedColors.border}'}}` },
-      
+      {
+        pattern: /border-gray-300/g,
+        replacement: `border-gray-200" style={{borderColor: '${approvedColors.border}'}}`,
+      },
+      {
+        pattern: /border-gray-400/g,
+        replacement: `border-gray-200" style={{borderColor: '${approvedColors.border}'}}`,
+      },
+
       // Remove or replace problematic hex colors
       { pattern: /#999999/g, replacement: approvedColors.textSecondary },
       { pattern: /#cccccc/g, replacement: approvedColors.border },
       { pattern: /#808080/g, replacement: approvedColors.textSecondary },
       { pattern: /lightgray/g, replacement: approvedColors.background },
-      { pattern: /yellow/g, replacement: approvedColors.background }
+      { pattern: /yellow/g, replacement: approvedColors.background },
     ];
-    
+
     let processedCode = code;
-    colorReplacements.forEach(({pattern, replacement}) => {
+    colorReplacements.forEach(({ pattern, replacement }) => {
       processedCode = processedCode.replace(pattern, replacement);
     });
-    
+
     return processedCode;
   }
 }

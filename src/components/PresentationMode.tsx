@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { FiX, FiChevronLeft, FiChevronRight, FiMaximize, FiMinimize, FiDroplet } from 'react-icons/fi';
+import { FiX, FiChevronLeft, FiChevronRight, FiMaximize, FiMinimize } from 'react-icons/fi';
 import './PresentationMode.css';
 import { sanitizeGeneratedHtml, sanitizeGeneratedHtmlWithInlining } from '../utils/sanitizeGeneratedHtml';
 
@@ -111,61 +111,57 @@ const PresentationIframe: React.FC<{ content: string; styleMode: 'raw' | 'neutra
     );
 };
 
-// Component for thumbnail iframes with CSS inlining
+// Component for thumbnail iframes with CSS inlining (same as AddPagesModal)
 const ThumbnailIframe: React.FC<{ content: string; title: string }> = ({ content, title }) => {
     const [srcDoc, setSrcDoc] = useState<string>('');
 
     useEffect(() => {
         const loadContent = async () => {
             try {
-                // Use inlining version for better CSS fidelity
+                // Use same approach as AddPagesModal for consistency
                 const sanitized = await sanitizeGeneratedHtmlWithInlining(content, true);
 
-                // Simple fixed scaling for thumbnails
-                const scalingScript = `
-                <script>
-                document.body.style.transform = 'scale(0.08)';
-                document.body.style.transformOrigin = 'top left';
-                document.body.style.width = '1250px';
-                document.body.style.height = '750px';
-                document.body.style.margin = '0';
-                document.documentElement.style.overflow = 'hidden';
-                </script>`;
+                // Use the same compact styling as AddPagesModal
+                const doc = `<!DOCTYPE html><html><head><meta charset='utf-8'/><base target="_blank"/><style>
+html,body{margin:0;padding:0;box-sizing:border-box;width:100%;height:100%;overflow:hidden;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;line-height:1.1;font-size:8px;padding:2px;}
+*{max-width:100% !important;animation:none !important;transition:none !important;}
+img{max-width:100%;height:auto;display:block;}
+button,a{pointer-events:none !important;}
+/* Compact mini preview styling - force tighter spacing */
+h1,h2,h3,h4,h5,h6{font-size:12px;margin:1px 0;line-height:1.1;font-weight:600;}
+p{font-size:8px;margin:1px 0;line-height:1.1;}
+div{margin:0 !important;padding:1px 2px !important;}
+section,article,main{margin:0 !important;padding:1px !important;}
+/* Force content to fill space */
+.container,div[style*="max-width"]{max-width:100% !important;width:100% !important;margin:0 !important;}
+div[style*="padding"]{padding:2px 4px !important;}
+div[style*="margin"]{margin:1px 0 !important;}
+/* Override any large dimensions */
+div[style*="height"]{min-height:auto !important;}
+/* Compact forms and inputs */
+input,textarea,button{font-size:7px;padding:1px 2px;margin:0;}
+/* Make headers more compact */
+div[style*="background"][style*="padding"]{padding:2px 4px !important;margin:0 !important;}
+${sanitized.styles || ''}
+</style></head><body>${sanitized.html}</body></html>`;
 
-                const doc = `<!DOCTYPE html><html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>${sanitized.styles ? `<style>${sanitized.styles}</style>` : ''}</head><body>${sanitized.html}${scalingScript}</body></html>`;
                 setSrcDoc(doc);
             } catch (error) {
                 console.warn('Failed to inline CSS in thumbnail, using fallback:', error);
-                // Fallback to regular sanitization
+                // Fallback to regular sanitization with same styling
                 const sanitized = sanitizeGeneratedHtml(content, true);
-                const scalingScript = `
-                <script>
-                setTimeout(() => {
-                    const body = document.body;
-                    const html = document.documentElement;
-                    
-                    const contentWidth = Math.max(body.scrollWidth || 0, body.offsetWidth || 0, html.clientWidth || 0, html.scrollWidth || 0, html.offsetWidth || 0);
-                    const contentHeight = Math.max(body.scrollHeight || 0, body.offsetHeight || 0, html.clientHeight || 0, html.scrollHeight || 0, html.offsetHeight || 0);
-                    
-                    // Target dimensions should match the CSS container: 100x60px
-                    const targetW = 100;
-                    const targetH = 60;
-                    
-                    const scaleX = targetW / Math.max(contentWidth, 1);
-                    const scaleY = targetH / Math.max(contentHeight, 1);
-                    const scale = Math.min(scaleX, scaleY, 1);
-                    
-                    body.style.transform = 'scale(' + scale + ')';
-                    body.style.transformOrigin = 'top left';
-                    body.style.width = (contentWidth) + 'px';
-                    body.style.height = (contentHeight) + 'px';
-                    
-                    html.style.width = (contentWidth * scale) + 'px';
-                    html.style.height = (contentHeight * scale) + 'px';
-                    html.style.overflow = 'hidden';
-                }, 100);
-                </script>`;
-                const doc = `<!DOCTYPE html><html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>${(sanitized.links || []).map(h => `<link rel="stylesheet" href="${h}"/>`).join('')}${sanitized.styles ? `<style>${sanitized.styles}</style>` : ''}</head><body>${sanitized.html}${scalingScript}</body></html>`;
+                const doc = `<!DOCTYPE html><html><head><meta charset='utf-8'/><style>
+html,body{margin:0;padding:0;box-sizing:border-box;width:100%;height:100%;overflow:hidden;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;line-height:1.1;font-size:8px;padding:2px;}
+*{max-width:100% !important;animation:none !important;transition:none !important;}
+img{max-width:100%;height:auto;display:block;}
+button,a{pointer-events:none !important;}
+h1,h2,h3,h4,h5,h6{font-size:12px;margin:1px 0;line-height:1.1;font-weight:600;}
+p{font-size:8px;margin:1px 0;line-height:1.1;}
+div{margin:0 !important;padding:1px 2px !important;}
+${sanitized.styles || ''}
+</style></head><body>${sanitized.html}</body></html>`;
                 setSrcDoc(doc);
             }
         };
@@ -336,13 +332,6 @@ const PresentationMode: React.FC<PresentationModeProps> = ({
                         <div className="toolbar-date">{dateLabel}</div>
                     </div>
                     <div className="toolbar-right">
-                        <button
-                            className="presentation-btn"
-                            onClick={() => setStyleMode(m => m === 'raw' ? 'neutral' : 'raw')}
-                            title={styleMode === 'raw' ? 'Apply Neutral Overlay (impose consistent palette)' : 'Show Raw AI Styles (original)'}
-                        >
-                            <FiDroplet />
-                        </button>
                         <button
                             className="presentation-btn"
                             onClick={toggleFullscreen}
