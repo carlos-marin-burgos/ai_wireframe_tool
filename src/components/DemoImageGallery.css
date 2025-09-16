@@ -810,8 +810,8 @@
   height: 20px;
   background: linear-gradient(
     45deg,
-    #0078d4 0%,
-    #0078d4 30%,
+    #194a7a0%,
+    #194a7a30%,
     transparent 30%,
     transparent 40%,
     #28a745 40%,
@@ -1090,7 +1090,7 @@
 
 .mockup-header {
   height: 16%;
-  background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+  background: linear-gradient(135deg, #194a7a0%, #106ebe 100%);
   border-radius: 4px 4px 0 0;
   position: relative;
   display: flex;
@@ -1170,7 +1170,7 @@
 .mockup-button {
   width: 40%;
   height: 8px;
-  background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+  background: linear-gradient(135deg, #194a7a0%, #106ebe 100%);
   border-radius: 4px;
   position: relative;
   margin-top: 4px;
@@ -1213,7 +1213,7 @@
   transform: translateX(-50%);
   width: 12px;
   height: 12px;
-  background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+  background: linear-gradient(135deg, #194a7a0%, #106ebe 100%);
   border-radius: 50%;
 }
 
@@ -1383,7 +1383,7 @@
   left: 6px;
   width: 70%;
   height: 8px;
-  background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+  background: linear-gradient(135deg, #194a7a0%, #106ebe 100%);
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 120, 212, 0.3);
 }
@@ -1433,8 +1433,8 @@
   height: 65%;
   background: radial-gradient(
       ellipse at 20% 80%,
-      #0078d4 0%,
-      #0078d4 8%,
+      #194a7a0%,
+      #194a7a8%,
       transparent 8%
     ),
     radial-gradient(
@@ -1721,12 +1721,7 @@
 }
 
 .mockup-item:nth-child(1)::after {
-  background: linear-gradient(
-      to right,
-      #0078d4 0%,
-      #0078d4 70%,
-      transparent 70%
-    ),
+  background: linear-gradient(to right, #194a7a0%, #194a7a70%, transparent 70%),
     linear-gradient(
       to bottom,
       transparent 0%,
@@ -1735,8 +1730,8 @@
       #495057 45%,
       transparent 45%,
       transparent 65%,
-      #0078d4 65%,
-      #0078d4 85%,
+      #194a7a65%,
+      #194a7a85%,
       transparent 85%
     );
 }
@@ -1795,7 +1790,7 @@
 }
 
 .mockup-nav-item.active {
-  background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+  background: linear-gradient(135deg, #194a7a0%, #106ebe 100%);
   border-color: #0078d4;
   box-shadow: 0 2px 4px rgba(0, 120, 212, 0.3);
 }
@@ -2026,7 +2021,7 @@
   left: 25%;
   right: 25%;
   height: 30%;
-  background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+  background: linear-gradient(135deg, #194a7a0%, #106ebe 100%);
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 120, 212, 0.3),
     inset 0 0 0 1px rgba(255, 255, 255, 0.2);
@@ -2120,7 +2115,7 @@
 
 .mockup-buy-btn {
   height: 16px;
-  background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+  background: linear-gradient(135deg, #194a7a0%, #106ebe 100%);
   border-radius: 6px;
   position: relative;
   box-shadow: 0 2px 4px rgba(0, 120, 212, 0.3);

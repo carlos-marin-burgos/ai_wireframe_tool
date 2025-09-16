@@ -62,18 +62,18 @@ class AtlasComponentLibrary {
         .margin-top-md { margin-top: 32px; }
         .margin-top-sm { margin-top: 12px; }
         
-        /* Microsoft Learn Colors */
+        /* Blue Monochromatic Colors */
         .background-color-primary { 
-          background-color: #8E9AAF; 
+          background-color: #194a7a; 
           background-image: var(--background-image-pattern);
           background-size: 200px;
           background-repeat: repeat;
         }
         .color-primary-invert { color: white; }
-        .background-color-body-accent { background-color: #f8f9fa; }
-        .gradient-border-right { border-right: 4px solid #8E9AAF; }
-        .gradient-border-body-accent { border-right: 4px solid #e1dfdd; }
-        .border { border: 1px solid #e1dfdd; }
+        .background-color-body-accent { background-color: #d1dbe4; }
+        .gradient-border-right { border-right: 4px solid #476f95; }
+        .gradient-border-body-accent { border-right: 4px solid #a3b7ca; }
+        .border { border: 1px solid #a3b7ca; }
         .border-radius-lg { border-radius: 8px; }
         .box-shadow-heavy { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
         .padding-sm { padding: 24px; }
@@ -123,19 +123,19 @@ class AtlasComponentLibrary {
         /* Base Microsoft Learn Styles */
         body { 
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; 
-          color: #3C4858; 
+          color: #194a7a; 
           line-height: 1.6; 
         }
         p { margin: 0 0 16px 0; }
-        h1, h2, h3, h4, h5, h6 { margin: 0 0 16px 0; color: #3C4858; }
+        h1, h2, h3, h4, h5, h6 { margin: 0 0 16px 0; color: #194a7a; }
         
-        /* Legacy Atlas Styles */
-        .atlas-hero { background: #E9ECEF; padding: 60px 0; text-align: center; }
-        .atlas-button { background: #8E9AAF; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; }
-        .atlas-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 16px; }
-        .atlas-textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 16px; resize: vertical; }
-        .atlas-footer { background: #333; color: white; padding: 40px 0; text-align: center; }
-        .atlas-card { border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        /* Blue Monochromatic Atlas Styles */
+        .atlas-hero { background: #d1dbe4; padding: 60px 0; text-align: center; }
+        .atlas-button { background: #194a7a; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; }
+        .atlas-input { width: 100%; padding: 12px; border: 1px solid #a3b7ca; border-radius: 4px; margin-bottom: 16px; }
+        .atlas-textarea { width: 100%; padding: 12px; border: 1px solid #a3b7ca; border-radius: 4px; margin-bottom: 16px; resize: vertical; }
+        .atlas-footer { background: #194a7a; color: white; padding: 40px 0; text-align: center; }
+        .atlas-card { border: 1px solid #a3b7ca; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
         .atlas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
       </style>
     `;
@@ -194,7 +194,7 @@ class AtlasComponentLibrary {
   generateSiteHeader(options = {}) {
     // Use Microsoft Learn site header instead of generic blue header
     return `
-      <div style="display: flex; align-items: center; padding: 12px 24px; background: white; border-bottom: 1px solid #e1e5e9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+      <div style="display: flex; align-items: center; padding: 12px 24px; background: white; border-bottom: 1px solid #a3b7ca; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
         <!-- Microsoft logo -->
         <a href="https://www.microsoft.com" aria-label="Microsoft" style="display: flex; align-items: center; margin-right: 16px; text-decoration: none;">
           <svg aria-hidden="true" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;">
@@ -206,7 +206,7 @@ class AtlasComponentLibrary {
         </a>
 
         <!-- Divider -->
-        <div style="width: 1px; height: 24px; background: #e1e5e9; margin-right: 16px;"></div>
+        <div style="width: 1px; height: 24px; background: #a3b7ca; margin-right: 16px;"></div>
 
         <!-- Brand -->
         <a href="#" class="ms-learn-brand">

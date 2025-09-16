@@ -45,24 +45,15 @@ var uniqueSuffix = uniqueString(subscription().id, resourceGroup().id, location,
 var abbreviations = loadJsonContent('abbreviations.json')
 
 // Resource names using the token
-<<<<<<< HEAD
 var openAiAccountName = take('${abbreviations.cognitiveServices}-${environmentName}-${uniqueSuffix}', 64)
 var storageAccountName = take('${abbreviations.storageAccount}${replace(environmentName, '-', '')}${uniqueSuffix}', 24)
 var logAnalyticsName = take('${abbreviations.logAnalyticsWorkspace}-${environmentName}-${uniqueSuffix}', 63)
 var applicationInsightsName = '${abbreviations.applicationInsights}-${environmentName}-${uniqueSuffix}'
 var userAssignedIdentityName = '${abbreviations.userAssignedIdentity}-${environmentName}-${uniqueSuffix}'
 var staticWebAppName = '${abbreviations.staticWebApp}-${environmentName}-${uniqueSuffix}'
-=======
-var openAiAccountName = take('${abbreviations.cognitiveServices}-${environmentName}-${resourceToken}', 64)
-var storageAccountName = take('${abbreviations.storageAccount}${replace(environmentName, '-', '')}${resourceToken}', 24)
-var logAnalyticsName = take('${abbreviations.logAnalyticsWorkspace}-${environmentName}-${resourceToken}', 63)
-var applicationInsightsName = '${abbreviations.applicationInsights}-${environmentName}-${resourceToken}'
-var userAssignedIdentityName = '${abbreviations.userAssignedIdentity}-${environmentName}-${resourceToken}'
-var staticWebAppName = '${abbreviations.staticWebApp}-${environmentName}-${resourceToken}'
-var keyVaultName = take('${abbreviations.keyVault}-${environmentName}-${resourceToken}', 24)
-var functionAppName = '${abbreviations.functionApp}-${environmentName}-${resourceToken}'
-var appServicePlanName = '${abbreviations.appServicePlan}-${environmentName}-${resourceToken}'
->>>>>>> c45591cd7c4527069b42e97fad093bcdd3b64ed7
+var keyVaultName = take('${abbreviations.keyVault}-${environmentName}-${uniqueSuffix}', 24)
+var functionAppName = '${abbreviations.functionApp}-${environmentName}-${uniqueSuffix}'
+var appServicePlanName = '${abbreviations.appServicePlan}-${environmentName}-${uniqueSuffix}'
 
 // Tags for all resources
 var tags = {
@@ -222,30 +213,21 @@ resource openAiModelDeployment 'Microsoft.CognitiveServices/accounts/deployments
   }
 ]
 
-// App Service Plan for Azure Functions (Premium)
+// App Service Plan for Azure Functions (Consumption)
 resource appServicePlan 'Microsoft.Web/serverfarms@2023-12-01' = {
   name: appServicePlanName
   location: location
   tags: tags
   sku: {
-    name: 'EP1'
-    tier: 'ElasticPremium'
-    size: 'EP1'
-    family: 'EP'
-    capacity: 1
+    name: 'Y1'
+    tier: 'Dynamic'
+    size: 'Y1'
+    family: 'Y'
+    capacity: 0
   }
-  kind: 'elastic'
+  kind: 'functionapp'
   properties: {
-    perSiteScaling: false
-    elasticScaleEnabled: true
-    maximumElasticWorkerCount: 20
-    isSpot: false
     reserved: true
-    isXenon: false
-    hyperV: false
-    targetWorkerCount: 0
-    targetWorkerSizeId: 0
-    zoneRedundant: false
   }
 }
 
@@ -264,21 +246,8 @@ resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
   properties: {
     serverFarmId: appServicePlan.id
     reserved: true
-    isXenon: false
-    hyperV: false
-    vnetRouteAllEnabled: false
-    vnetImagePullEnabled: false
-    vnetContentShareEnabled: false
     siteConfig: {
-      numberOfWorkers: 1
       linuxFxVersion: 'NODE|20'
-      acrUseManagedIdentityCreds: false
-      alwaysOn: true
-      http20Enabled: false
-      functionAppScaleLimit: 200
-      minimumElasticInstanceCount: 1
-      use32BitWorkerProcess: false
-      ftpsState: 'FtpsOnly'
       appSettings: [
         {
           name: 'AzureWebJobsStorage__accountName'
@@ -341,14 +310,12 @@ resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
       }
     }
     httpsOnly: true
-    redundancyMode: 'None'
-    storageAccountRequired: false
     keyVaultReferenceIdentity: userAssignedIdentity.id
   }
 }
 
-// Note: Using Static Web App with integrated APIs instead of separate Function App
-// This provides better integration and simpler deployment
+// Note: Using separate Function App for backend services
+// Static Web App can be added later for frontend hosting if needed
 
 // Optimized role assignments (removed redundant ones)
 // Storage Blob Data Owner includes both Contributor and Reader permissions
@@ -458,114 +425,11 @@ resource keyVaultSecretsUserRoleAssignment 'Microsoft.Authorization/roleAssignme
 // - AZURE_OPENAI_API_VERSION: '2024-08-01-preview'
 // - FUNCTIONS_ENDPOINT: 'https://{functionApp.properties.defaultHostName}'
 
-// ========================================
-// Function App for Backend APIs
-// ========================================
-var functionAppName = '${abbreviations.functionApp}-${environmentName}-${uniqueSuffix}'
-var hostingPlanName = '${abbreviations.appServicePlan}-${environmentName}-${uniqueSuffix}'
-
-resource hostingPlan 'Microsoft.Web/serverfarms@2023-12-01' = {
-  name: hostingPlanName
-  location: 'eastus2'
-  tags: tags
-  sku: {
-    name: 'Y1'
-    tier: 'Dynamic'
-  }
-  properties: {
-    reserved: false
-  }
-}
-
-resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
-  name: functionAppName
-  location: 'eastus2'
-  kind: 'functionapp'
-  tags: union(tags, {
-    'azd-service-name': 'backend'
-  })
-  properties: {
-    serverFarmId: hostingPlan.id
-    siteConfig: {
-      appSettings: [
-        {
-          name: 'AzureWebJobsStorage'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
-        }
-        {
-          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
-        }
-        {
-          name: 'WEBSITE_CONTENTSHARE'
-          value: toLower(functionAppName)
-        }
-        {
-          name: 'FUNCTIONS_EXTENSION_VERSION'
-          value: '~4'
-        }
-        {
-          name: 'WEBSITE_NODE_DEFAULT_VERSION'
-          value: '~20'
-        }
-        {
-          name: 'FUNCTIONS_WORKER_RUNTIME'
-          value: 'node'
-        }
-        {
-          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-          value: applicationInsights.properties.ConnectionString
-        }
-        {
-          name: 'AZURE_CLIENT_ID'
-          value: userAssignedIdentity.properties.clientId
-        }
-        {
-          name: 'AZURE_OPENAI_ENDPOINT'
-          value: openAiAccount.properties.endpoint
-        }
-        {
-          name: 'AZURE_OPENAI_API_VERSION'
-          value: '2024-08-01-preview'
-        }
-        {
-          name: 'AZURE_OPENAI_DEPLOYMENT'
-          value: 'gpt-4o'
-        }
-        {
-          name: 'AZURE_OPENAI_KEY'
-          value: openAiAccount.listKeys().key1
-        }
-        {
-          name: 'NODE_ENV'
-          value: 'production'
-        }
-      ]
-      cors: {
-        allowedOrigins: [
-          'https://brave-island-04ba9f70f.2.azurestaticapps.net'
-          'https://make.powerapps.com'
-          'https://make.powerautomate.com'
-          'https://flow.microsoft.com'
-          'https://powerapps.microsoft.com'
-          'http://localhost:5173'
-          'https://localhost:5173'
-        ]
-        supportCredentials: false
-      }
-    }
-    httpsOnly: true
-  }
-  identity: {
-    type: 'UserAssigned'
-    userAssignedIdentities: {
-      '${userAssignedIdentity.id}': {}
-    }
-  }
-}
+// Note: Static Web App can be added later for frontend hosting
+// For now, focusing on Function App deployment for OAuth integration
 
 // ========================================
-// Static Web App for Frontend with Integrated APIs
+// Static Web App for Frontend
 // ========================================
 resource staticWebApp 'Microsoft.Web/staticSites@2023-12-01' = {
   name: staticWebAppName

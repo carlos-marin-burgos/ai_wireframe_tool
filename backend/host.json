@@ -12,6 +12,7 @@
     "figmaNodeImporter",
     "figmaOAuthCallback",
     "figmaOAuthStart",
+    "figmaOAuthDiagnostics",
     "generateSuggestions",
     "generateWireframe",
     "generateWireframeEnhanced",

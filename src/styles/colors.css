@@ -10,25 +10,56 @@
 
 :root {
   /* ========================================
-     PRIMARY WIREFRAME COLOR PALETTE
+     PRIMARY WIREFRAME COLOR PALETTE - WCAG COMPLIANT
      ======================================== */
 
-  /* Core Colors */
-  --color-primary: #8e9aaf; /* Medium blue-gray - main accent color */
-  --color-secondary: #68769c; /* Darker blue-gray - secondary actions */
-  --color-accent: #3c4858; /* Dark slate gray - strong accents */
-  --color-light: #e9ecef; /* Very light gray - backgrounds, cards */
-  --color-medium: #cbc2c2; /* Light warm gray - subtle surfaces */
-  --color-dark: #3c4858; /* Dark slate gray - text, headers */
+  /* Blue Monochromatic Theme */
+  --color-primary-light: #d1dbe4; /* Lightest blue-gray */
+  --color-primary-medium-light: #a3b7ca; /* Light blue-gray */
+  --color-primary-medium: #7593af; /* Medium blue */
+  --color-primary-medium-dark: #476f95; /* Darker blue */
+  --color-primary-dark: #194a7a; /* Darkest blue */
+
+  /* Semantic color mappings - WCAG Compliant */
+  --color-background-light: var(
+    --color-primary-light
+  ); /* Light blue backgrounds */
+  --color-background-medium: var(
+    --color-primary-medium-light
+  ); /* Medium backgrounds */
+  --color-border: var(--color-primary-medium); /* Blue borders */
+  --color-accent: var(--color-primary-medium-dark); /* Blue accents */
+  --color-primary: var(--color-primary-dark); /* Primary blue */
+
+  /* Text colors - HIGH CONTRAST for accessibility */
+  --color-text: #000000; /* Black text for maximum contrast */
+  --color-text-muted: var(
+    --color-primary-dark
+  ); /* Dark blue for muted text (only on light backgrounds) */
+  --color-text-on-dark: #ffffff; /* White text for dark backgrounds */
+  --color-text-link: var(
+    --color-primary-dark
+  ); /* Dark blue for links (only on light backgrounds) */
+
+  /* Legacy compatibility mappings */
+  --color-secondary: var(--color-primary-medium); /* Maps to medium blue */
+  --color-light: var(--color-primary-light); /* Maps to lightest blue */
+  --color-medium: var(--color-primary-medium-light); /* Maps to light blue */
+  --color-dark: var(--color-text); /* Maps to black text */
 
   /* Alpha Variants for Transparency Effects */
-  --color-primary-alpha: rgba(142, 154, 175, 0.1);
-  --color-secondary-alpha: rgba(104, 118, 156, 0.1);
-  --color-accent-alpha: rgba(60, 72, 88, 0.1);
+  --color-primary-alpha: rgba(25, 74, 122, 0.1); /* Dark blue with alpha */
+  --color-secondary-alpha: rgba(
+    117,
+    147,
+    175,
+    0.1
+  ); /* Medium blue with alpha */
+  --color-accent-alpha: rgba(71, 111, 149, 0.1); /* Accent blue with alpha */
 
   /* RGB Values (for rgba() usage) */
-  --color-primary-rgb: 142, 154, 175;
-  --color-secondary-rgb: 104, 118, 156;
+  --color-primary-rgb: 25, 74, 122; /* Dark blue RGB */
+  --color-secondary-rgb: 117, 147, 175; /* Medium blue RGB */
   --color-accent-rgb: 60, 72, 88;
 
   /* Text Colors */

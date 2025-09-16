@@ -1,764 +1,503 @@
-const { MinimalWireframeGenerator } = require("./minimal-wireframe-generator");
-const { TemplateManager, selectTemplate } = require("../template-manager");
-const crypto = require("crypto");
+// Unified Intelligent Wireframe Generator
+// Purpose: Generate HTML wireframes via OpenAI with maximum intelligence and optional component integration
+
+const { OpenAI } = require("openai");
 // Import centralized color configuration
-const { WIREFRAME_COLORS } = require("../config/colors");
-// Import accessibility validation
-const {
-  AccessibilityValidationMiddleware,
-} = require("../accessibility/validation-middleware");
+const { WIREFRAME_COLORS, ColorUtils } = require("../config/colors");
 
-// Initialize components
-const minimalGenerator = new MinimalWireframeGenerator();
-const templateManager = new TemplateManager();
-const accessibilityMiddleware = new AccessibilityValidationMiddleware();
+// Fluent UI Playbook imports and utilities
+const fluentPlaybook = {
+  // Fluent UI Web Components CDN
+  webComponentsCSS:
+    "https://unpkg.com/@fluentui/web-components/dist/fluent-design-system.css",
+  webComponentsJS:
+    "https://unpkg.com/@fluentui/web-components/dist/web-components.min.js",
 
-// Logger utility
-const logger = {
-  info: (message, data = {}) => {
-    console.log(`[INFO] ${message}`, data);
-  },
-  error: (message, error, data = {}) => {
-    console.error(`[ERROR] ${message}`, error, data);
-  },
-  warn: (message, data = {}) => {
-    console.warn(`[WARN] ${message}`, data);
+  // Fluent UI React CSS (if needed)
+  reactCSS: "https://unpkg.com/@fluentui/react/dist/css/fabric.min.css",
+
+  // Common Fluent Playbook patterns
+  patterns: {
+    navigation:
+      "https://docs.microsoft.com/en-us/fluent-ui/web-components/components/navigation",
+    cards:
+      "https://docs.microsoft.com/en-us/fluent-ui/web-components/components/card",
+    forms:
+      "https://docs.microsoft.com/en-us/fluent-ui/web-components/components/form",
+    buttons:
+      "https://docs.microsoft.com/en-us/fluent-ui/web-components/components/button",
   },
 };
 
-// Simple wireframe generator - reliable and fast
-async function generateWireframeFromDescription(
-  description,
-  colorScheme,
-  correlationId
-) {
+// --- Fluent Playbook component injection helper ---
+function addFluentPlaybookComponents(html) {
+  if (!html || typeof html !== "string") return html;
+
+  console.log("🎨 Processing wireframe for Fluent Playbook components...");
+
+  // Inject Fluent UI CSS and JS into the head
+  const fluentResources = `
+    <link rel="stylesheet" href="${fluentPlaybook.webComponentsCSS}">
+    <script type="module" src="${fluentPlaybook.webComponentsJS}"></script>
+  `;
+
+  // Add Fluent resources to head
+  if (html.includes("</head>")) {
+    html = html.replace("</head>", `  ${fluentResources}\n</head>`);
+  }
+
+  // Replace common elements with Fluent UI Web Components
+  html = html.replace(
+    /<button([^>]*)>(.*?)<\/button>/gi,
+    "<fluent-button$1>$2</fluent-button>"
+  );
+  html = html.replace(
+    /<input([^>]*type="text"[^>]*)>/gi,
+    "<fluent-text-field$1></fluent-text-field>"
+  );
+  html = html.replace(
+    /<input([^>]*type="email"[^>]*)>/gi,
+    '<fluent-text-field$1 type="email"></fluent-text-field>'
+  );
+  html = html.replace(
+    /<input([^>]*type="password"[^>]*)>/gi,
+    '<fluent-text-field$1 type="password"></fluent-text-field>'
+  );
+  html = html.replace(/<select([^>]*)>/gi, "<fluent-select$1>");
+  html = html.replace(/<\/select>/gi, "</fluent-select>");
+  html = html.replace(/<option([^>]*)>/gi, "<fluent-option$1>");
+  html = html.replace(/<\/option>/gi, "</fluent-option>");
+
+  console.log("✅ Fluent Playbook components injected successfully");
+  return html;
+}
+
+// --- Atlas component injection helper ---
+function addAtlasComponents(html, description) {
+  if (!html || typeof html !== "string") return html;
+
+  console.log("🎨 Processing wireframe for Atlas components...");
+
+  // Atlas component image URLs (proper Microsoft Learn badges)
+  // Atlas learning components using pure HTML/CSS (no images)
+  const atlasComponents = {
+    hero: generateAtlasHeroHTML(),
+    learningPath: generateLearningPathHTML(),
+    module: generateModuleCardHTML(),
+  };
+
+  // Helper functions to generate pure HTML/CSS components
+  function generateAtlasHeroHTML() {
+    return `
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; padding: 40px; color: white; text-align: center; box-shadow: 0 8px 24px rgba(102,126,234,0.3);">
+      <div style="max-width: 800px; margin: 0 auto;">
+        <h1 style="margin: 0 0 16px 0; font-size: 48px; font-weight: 700; font-family: 'Segoe UI', sans-serif;">Master Microsoft Technologies</h1>
+        <p style="margin: 0 0 32px 0; font-size: 20px; opacity: 0.9; font-family: 'Segoe UI', sans-serif;">Accelerate your career with hands-on learning paths and industry-recognized certifications</p>
+        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+          <button style="background: white; color: #667eea; border: none; padding: 16px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">Start Learning</button>
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid white; padding: 14px 30px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">Explore Paths</button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function generateLearningPathHTML() {
+    return `
+    <div style="background: white; border: 1px solid #e1e5e9; border-radius: 16px; padding: 24px; font-family: 'Segoe UI', sans-serif; width: 100%; max-width: 100%; box-shadow: 0 4px 16px rgba(0,0,0,0.1); box-sizing: border-box;">
+      <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; height: 120px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; position: relative;">
+        <div style="color: white; text-align: center;">
+          <div style="font-size: 32px; margin-bottom: 8px;">🎓</div>
+          <div style="font-size: 14px; font-weight: 600; opacity: 0.9;">Learning Path</div>
+        </div>
+        <div style="position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.9); color: #667eea; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">6 modules</div>
+      </div>
+      <div style="margin-bottom: 16px;">
+        <h3 style="margin: 0 0 8px 0; font-size: clamp(16px, 4vw, 20px); font-weight: 600; color: #1a1a1a;">Azure Fundamentals</h3>
+        <p style="margin: 0 0 12px 0; color: #6b7280; font-size: clamp(13px, 3vw, 15px); line-height: 1.5;">Learn the fundamentals of cloud computing and how Azure provides secure, reliable cloud services.</p>
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+          <div style="flex: 1; height: 6px; background: #f1f5f9; border-radius: 3px; overflow: hidden;">
+            <div style="width: 65%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+          </div>
+          <span style="font-size: 12px; color: #6b7280; font-weight: 500; white-space: nowrap;">65%</span>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+          <span style="background: #f0f2ff; color: #667eea; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 500;">Beginner</span>
+          <span style="background: #f0f2ff; color: #667eea; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 500;">4h 30m</span>
+        </div>
+        <button style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap;">Continue</button>
+      </div>
+    </div>`;
+  }
+
+  function generateModuleCardHTML() {
+    return `
+    <div style="background: white; border: 1px solid #e1e5e9; border-radius: 12px; padding: 20px; font-family: 'Segoe UI', sans-serif; width: 100%; max-width: 100%; box-shadow: 0 2px 12px rgba(0,0,0,0.08); box-sizing: border-box;">
+      <div style="display: flex; align-items: flex-start; gap: 16px; margin-bottom: 16px;">
+        <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+          <div style="color: white; font-size: 20px;">📚</div>
+        </div>
+        <div style="flex: 1; min-width: 0;">
+          <h4 style="margin: 0 0 6px 0; font-size: clamp(14px, 3.5vw, 18px); font-weight: 600; color: #1a1a1a;">Introduction to Azure</h4>
+          <p style="margin: 0; color: #6b7280; font-size: clamp(12px, 3vw, 14px); line-height: 1.4;">Understand core Azure concepts and services in this foundational module.</p>
+        </div>
+      </div>
+      <div style="margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="font-size: 12px; color: #6b7280; font-weight: 500;">Progress</span>
+          <span style="font-size: 12px; color: #1a1a1a; font-weight: 600; white-space: nowrap;">3 of 5 units</span>
+        </div>
+        <div style="width: 100%; height: 6px; background: #f1f5f9; border-radius: 3px; overflow: hidden;">
+          <div style="width: 60%; height: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%);"></div>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+          <span style="background: #ecfdf5; color: #047857; padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: 500;">25 min</span>
+          <span style="background: #eff6ff; color: #1d4ed8; padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: 500;">Beginner</span>
+        </div>
+        <button style="background: #667eea; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap;">Continue</button>
+      </div>
+    </div>`;
+  }
+
+  // Check if description SPECIFICALLY requests learning components
+  const requestsLearningComponents =
+    /add.*learning|include.*learning|with.*learning.*path|with.*module|learning.*component|atlas.*learning|atlas.*module/i.test(
+      description
+    );
+
+  console.log(`🔍 Atlas component check:
+    Description: "${description}"
+    Specifically requests learning components: ${requestsLearningComponents}`);
+
+  if (!requestsLearningComponents) {
+    console.log("ℹ️ Learning components not specifically requested, skipping");
+    return html; // Only add Atlas learning components when specifically requested
+  }
+
+  let processedHtml = html;
+
+  // 1. Replace hero sections with Atlas Hero
+  const heroPattern =
+    /<section[^>]*class="[^"]*hero[^"]*"[^>]*>[\s\S]*?<\/section>/gi;
+  if (processedHtml.match(heroPattern)) {
+    processedHtml = processedHtml.replace(
+      heroPattern,
+      `<section class="hero atlas-hero-section">
+        <div class="container">
+          <div class="atlas-component atlas-hero-figma" data-node-id="14647:163530" style="max-width: 100%; overflow: hidden;">
+              ${atlasComponents.hero}
+              <div class="atlas-hero-overlay" style="text-align: center; margin-top: 12px; background: rgba(255,255,255,0.95); padding: 8px; border-radius: 6px; border: 1px solid #e1e1e1;">
+                  <p style="font-size: 12px; color: #3C4858; margin: 0; font-weight: 600;">✅ Atlas Hero Component (Node: 14647:163530)</p>
+                  <p style="font-size: 11px; color: #68769C; margin: 4px 0 0 0; font-weight: 500;">🎨 Pure HTML/CSS Component</p>
+              </div>
+          </div>
+        </div>
+      </section>`
+    );
+    console.log("✅ Hero section replaced with Atlas Hero component");
+  }
+
+  // 2. Add learning content section if learning platform and not already present
+  if (
+    !processedHtml.includes("atlas-learning-path-card-figma") &&
+    !processedHtml.includes("atlas-module-card-figma")
+  ) {
+    const learningSection = `
+    <!-- Atlas Learning Content Section -->
+    <section class="learning-content atlas-learning-section" style="padding: 60px 0; background: ${WIREFRAME_COLORS.surface};">
+        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+            <h2 style="text-align: center; margin-bottom: 40px; color: #3C4858;">🎓 Learning Path</h2>
+            <div class="learning-grid" style="display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 50px; width: 100%;">
+                <div class="atlas-component atlas-learning-path-card-figma" data-node-id="14315:162386" data-type="learning-path" style="width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    ${atlasComponents.learningPath}
+                </div>
+            </div>
+            
+            <h2 style="text-align: center; margin-bottom: 40px; color: #3C4858;">📚 Modules</h2>
+            <div class="modules-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; width: 100%;">
+                <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    ${atlasComponents.module}
+                </div>
+                <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    ${atlasComponents.module}
+                </div>
+                <div class="atlas-component atlas-module-card-figma" data-node-id="14315:162386" data-type="module" style="width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    ${atlasComponents.module}
+                </div>
+            </div>
+        </div>
+    </section>`;
+
+    // Insert before footer to maintain proper page structure
+    if (processedHtml.includes("</footer>")) {
+      processedHtml = processedHtml.replace(
+        "<footer",
+        learningSection + "\n    <footer"
+      );
+    } else if (processedHtml.includes("</main>")) {
+      processedHtml = processedHtml.replace(
+        "</main>",
+        learningSection + "\n</main>"
+      );
+    } else if (processedHtml.includes("</body>")) {
+      processedHtml = processedHtml.replace(
+        "</body>",
+        learningSection + "\n</body>"
+      );
+    } else {
+      processedHtml += learningSection;
+    }
+    console.log("✅ Added Atlas learning content section");
+  }
+
+  // Count and log Atlas components
+  const heroCount = (processedHtml.match(/atlas-hero-figma/g) || []).length;
+  const moduleCount = (processedHtml.match(/atlas-module-card-figma/g) || [])
+    .length;
+  const learningPathCount = (
+    processedHtml.match(/atlas-learning-path-card-figma/g) || []
+  ).length;
+
+  console.log(
+    `🎯 Atlas components added: Hero: ${heroCount}, Modules: ${moduleCount}, Learning Paths: ${learningPathCount}`
+  );
+
+  return processedHtml;
+}
+
+// --- OpenAI initialization (supports local dev via local.settings.json) ---
+let openai = null;
+
+function initializeOpenAI() {
   try {
-    // First check if we should use a template
-    const selectedTemplate = selectTemplate(description);
-
-    if (selectedTemplate) {
-      logger.info("🎯 TEMPLATE SELECTED: Using template instead of AI", {
-        correlationId,
-        template: selectedTemplate,
-        description: description.substring(0, 100) + "...",
-      });
-
+    // Try to load local.settings.json for development if env not set
+    if (!process.env.AZURE_OPENAI_KEY) {
+      const fs = require("fs");
+      const path = require("path");
       try {
-        const templateHtml = await templateManager.loadTemplate(
-          selectedTemplate
+        const localSettingsPath = path.join(
+          __dirname,
+          "..",
+          "local.settings.json"
         );
-        return {
-          html: templateHtml,
-          reactCode: null,
-          source: "template-system",
-          aiGenerated: false,
-          unlimited: true,
-          framework: "html",
-          styling: "inline-css",
-        };
-      } catch (templateError) {
-        logger.warn("⚠️ Template loading failed, falling back to AI", {
-          correlationId,
-          template: selectedTemplate,
-          error: templateError.message,
+        const localSettings = JSON.parse(
+          fs.readFileSync(localSettingsPath, "utf8")
+        );
+
+        console.log(
+          "📁 Loading local.settings.json for unified wireframe generator..."
+        );
+
+        Object.keys(localSettings.Values || {}).forEach((key) => {
+          if (!process.env[key]) process.env[key] = localSettings.Values[key];
         });
-        // Continue to AI generation if template fails
+      } catch (e) {
+        // ignore if file not present
       }
     }
 
-    logger.info("🎯 MINIMAL GENERATION: Testing natural AI intelligence", {
-      correlationId,
-      description: description.substring(0, 100) + "...",
-      colorScheme,
-      approach: "minimal-ai-generator",
-    });
+    if (process.env.AZURE_OPENAI_KEY && process.env.AZURE_OPENAI_ENDPOINT) {
+      const endpoint = process.env.AZURE_OPENAI_ENDPOINT.replace(/\/$/, "");
+      const deployment = process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o";
+      const apiVersion =
+        process.env.AZURE_OPENAI_API_VERSION || "2024-08-01-preview";
 
-    // Use Minimal Generator to test AI's natural intelligence
-    const result = await minimalGenerator.generateWireframe(
-      description,
-      colorScheme
-    );
-
-    return {
-      html: result.html,
-      reactCode: null, // Not needed for static HTML
-      source: result.source,
-      aiGenerated: true,
-      unlimited: true,
-      framework: result.framework,
-      styling: result.styling,
-    };
-  } catch (error) {
-    logger.error("Simple wireframe generation failed", error, {
-      correlationId,
-    });
-
-    // Return a simple fallback
-    return {
-      html: `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${description}</title>
-    <style>
-        body { 
-            font-family: 'Segoe UI', system-ui, sans-serif; 
-            padding: 20px; 
-            background: #f5f5f5; 
-            margin: 0;
-        }
-        .container { 
-            max-width: 600px; 
-            margin: 0 auto; 
-            background: white; 
-            padding: 30px; 
-            border-radius: 8px; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
-        }
-        .title { 
-            color: ${WIREFRAME_COLORS.primary}; 
-            font-size: 24px; 
-            font-weight: bold; 
-            margin-bottom: 20px; 
-        }
-        .button { 
-            background: ${WIREFRAME_COLORS.secondary}; 
-            color: white; 
-            padding: 12px 24px; 
-            border: none; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            font-size: 16px;
-            margin: 10px 5px;
-        }
-        .button:hover {
-            background: ${WIREFRAME_COLORS.hover};
-        }
-        .card {
-            background: ${WIREFRAME_COLORS.surface};
-            padding: 20px;
-            border-radius: 6px;
-            margin: 15px 0;
-            border-left: 4px solid ${WIREFRAME_COLORS.primary};
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1 class="title">Wireframe: ${description}</h1>
-        <div class="card">
-            <p>Simple, reliable wireframe generated successfully.</p>
-            <p><strong>Description:</strong> ${description}</p>
-        </div>
-        <button class="button">Primary Action</button>
-        <button class="button" style="background: ${WIREFRAME_COLORS.secondary};">Secondary Action</button>
-    </div>
-</body>
-</html>`,
-      reactCode: null,
-      source: "fallback",
-      aiGenerated: false,
-      unlimited: true,
-      framework: "html",
-      styling: "inline-css",
-    };
-  }
-}
-
-// Image-based wireframe generator using GPT-4V analysis
-async function generateWireframeFromImageAnalysis(
-  imageAnalysis,
-  description,
-  colorScheme,
-  correlationId
-) {
-  try {
-    logger.info("📸 Starting image-based wireframe generation", {
-      correlationId,
-      componentsCount: imageAnalysis.components.length,
-      confidence: imageAnalysis.confidence,
-      layoutType: imageAnalysis.layout?.type,
-    });
-
-    // Extract components and their properties WITH EXACT COLORS
-    const components = imageAnalysis.components || [];
-    const layout = imageAnalysis.layout || { type: "grid", columns: 12 };
-    const designTokens = imageAnalysis.designTokens || {};
-
-    // Use EXACT colors from analysis, or neutral wireframe fallbacks
-    const analyzedColors = designTokens.colors || [];
-    const colors =
-      analyzedColors.length > 0
-        ? analyzedColors
-        : ["#8E9AAF", "#FFFFFF", "#3C4858"]; // Neutral wireframe colors from your palette
-    const fonts = designTokens.fonts || ["Segoe UI", "Arial", "sans-serif"];
-
-    // Extract unique colors from component properties
-    const componentColors = components.reduce((acc, comp) => {
-      const props = comp.properties || {};
-      if (props.backgroundColor) acc.add(props.backgroundColor);
-      if (props.textColor) acc.add(props.textColor);
-      if (props.borderColor) acc.add(props.borderColor);
-      if (props.color) acc.add(props.color);
-      return acc;
-    }, new Set());
-
-    const allColors = [...componentColors, ...colors];
-    const primaryColor = allColors[0] || "#8E9AAF"; // Medium blue-gray from your palette
-    const secondaryColor = allColors[1] || "#FFFFFF";
-    const textColor = allColors[2] || "#3C4858"; // Dark slate text for readability
-
-    logger.info("🎨 Using extracted colors", {
-      correlationId,
-      analyzedColors: analyzedColors,
-      componentColors: Array.from(componentColors),
-      finalColors: [primaryColor, secondaryColor, textColor],
-    });
-
-    // Build component HTML from analysis
-    let htmlContent = "";
-    const componentsByPosition = components.sort((a, b) => {
-      const aY = a.bounds?.y || 0;
-      const bY = b.bounds?.y || 0;
-      if (Math.abs(aY - bY) < 5) {
-        // Same row
-        return (a.bounds?.x || 0) - (b.bounds?.x || 0);
-      }
-      return aY - bY;
-    });
-
-    // Group components by approximate rows
-    const rows = [];
-    let currentRow = [];
-    let lastY = -1;
-
-    componentsByPosition.forEach((component) => {
-      const y = component.bounds?.y || 0;
-      if (lastY === -1 || Math.abs(y - lastY) < 10) {
-        // Same row
-        currentRow.push(component);
-      } else {
-        // New row
-        if (currentRow.length > 0) rows.push(currentRow);
-        currentRow = [component];
-      }
-      lastY = y;
-    });
-    if (currentRow.length > 0) rows.push(currentRow);
-
-    // Generate HTML for each row
-    rows.forEach((row, rowIndex) => {
-      htmlContent += `    <div class="row row-${rowIndex}">\n`;
-
-      row.forEach((component, colIndex) => {
-        const componentHtml = generateComponentHtml(component, allColors);
-        htmlContent += `      ${componentHtml}\n`;
+      openai = new OpenAI({
+        apiKey: process.env.AZURE_OPENAI_KEY,
+        baseURL: `${endpoint}/openai/deployments/${deployment}`,
+        defaultQuery: { "api-version": apiVersion },
+        defaultHeaders: { "api-key": process.env.AZURE_OPENAI_KEY },
       });
 
-      htmlContent += `    </div>\n`;
-    });
+      console.log("✅ OpenAI client initialized for unified wireframe generator");
+      return true;
+    }
 
-    // Create the complete HTML with extracted colors and layout
-    const wireframeHtml = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generated Wireframe from Image Analysis</title>
-    <link href="https://cdn.jsdelivr.net/npm/@fluentui/web-components/dist/web-components.min.js" rel="module">
-    <style>
-        :root {
-            --primary-color: ${primaryColor};
-            --secondary-color: ${secondaryColor};
-            --text-color: ${textColor};
-            --accent-color: ${allColors[3] || "#107c10"};
-            --background-color: ${allColors[4] || "#faf9f8"};
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: ${fonts[0] || "Segoe UI"}, ${
-      fonts[1] || "Arial"
-    }, sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.5;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            ${
-              layout.type === "grid"
-                ? `display: grid; grid-template-columns: repeat(${
-                    layout.columns || 12
-                  }, 1fr); gap: 20px;`
-                : ""
-            }
-        }
-        
-        .row {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 20px;
-            ${layout.type === "grid" ? "grid-column: 1 / -1;" : ""}
-        }
-        
-        .component {
-            position: relative;
-            border-radius: 4px;
-            transition: all 0.2s ease;
-        }
-        
-        .component:hover {
-            box-shadow: 0 4px 12px rgba(0, 120, 212, 0.15);
-            transform: translateY(-1px);
-        }
-        
-        .button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        
-        .button:hover {
-            background-color: #68769C;
-        }
-        
-        .button.secondary {
-            background-color: transparent;
-            color: var(--primary-color);
-            border: 1px solid var(--primary-color);
-        }
-        
-        .input {
-            padding: 8px 12px;
-            border: 1px solid #d2d0ce;
-            border-radius: 4px;
-            font-size: 14px;
-            min-width: 200px;
-        }
-        
-        .input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 1px var(--primary-color);
-        }
-        
-        .text {
-            font-size: 14px;
-            line-height: 1.4;
-        }
-        
-        .text.heading {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        
-        .text.subheading {
-            font-size: 18px;
-            font-weight: 500;
-            margin-bottom: 6px;
-        }
-        
-        .card {
-            background: white;
-            border: 1px solid #e1dfdd;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .navigation {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            padding: 16px 0;
-            border-bottom: 1px solid #e1dfdd;
-            margin-bottom: 20px;
-        }
-        
-        .logo {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--primary-color);
-        }
-        
-        .nav-link {
-            color: var(--text-color);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 8px 16px;
-            border-radius: 4px;
-            transition: background-color 0.2s;
-        }
-        
-        .nav-link:hover {
-            background-color: #f3f2f1;
-        }
-        
-        .image-placeholder {
-            background-color: #f3f2f1;
-            border: 2px dashed #d2d0ce;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 120px;
-            color: #8a8886;
-            font-style: italic;
-        }
-        
-        .form {
-            background: white;
-            padding: 24px;
-            border-radius: 8px;
-            border: 1px solid #e1dfdd;
-        }
-        
-        .form-group {
-            margin-bottom: 16px;
-        }
-        
-        .label {
-            display: block;
-            margin-bottom: 4px;
-            font-weight: 500;
-            font-size: 14px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-${htmlContent}    </div>
-
-    <script>
-        console.log('📸 Wireframe generated from image analysis:', {
-            componentsDetected: ${components.length},
-            confidence: ${imageAnalysis.confidence || 0},
-            layoutType: '${layout.type}',
-            colorsUsed: ${JSON.stringify(colors)}
-        });
-        
-        // Add basic interactivity
-        document.querySelectorAll('.button').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                console.log('Button clicked:', e.target.textContent);
-                e.target.style.transform = 'scale(0.95)';
-                setTimeout(() => e.target.style.transform = '', 150);
-            });
-        });
-        
-        document.querySelectorAll('.input').forEach(input => {
-            input.addEventListener('focus', (e) => {
-                console.log('Input focused:', e.target.placeholder || 'input');
-            });
-        });
-    </script>
-</body>
-</html>`;
-
-    logger.info("✅ Image-based wireframe generation completed", {
-      correlationId,
-      htmlLength: wireframeHtml.length,
-      componentsProcessed: components.length,
-    });
-
-    return {
-      html: wireframeHtml,
-      reactCode: null,
-      source: "image-analysis-enhanced",
-      aiGenerated: true,
-      unlimited: true,
-      framework: "html",
-      styling: "inline-css",
-      imageAnalysis: {
-        confidence: imageAnalysis.confidence,
-        componentsCount: components.length,
-        layoutType: layout.type,
-      },
-    };
-  } catch (error) {
-    logger.error("❌ Image-based wireframe generation failed", error, {
-      correlationId,
-    });
-
-    // Fallback to description-based generation
-    logger.info("🔄 Falling back to description-based generation", {
-      correlationId,
-    });
-    return await generateWireframeFromDescription(
-      description,
-      colorScheme,
-      correlationId
+    console.log(
+      "⚠️ OpenAI environment variables not fully configured for unified wireframe generator"
     );
+    return false;
+  } catch (error) {
+    console.error(
+      "❌ Failed to initialize OpenAI client for unified generator:",
+      error
+    );
+    return false;
   }
 }
 
-// Helper function to generate HTML for individual components
-function generateComponentHtml(component, colors) {
-  const bounds = component.bounds || {};
-  const text = component.text || "";
-  const type = component.type || "text";
-  const properties = component.properties || {};
+// Initialize on module load
+initializeOpenAI();
 
-  // Use actual colors from analysis
-  const bgColor =
-    properties.backgroundColor || properties.color || colors[0] || "#8E9AAF";
-  const textColor = properties.textColor || "#ffffff";
-  const borderColor = properties.borderColor || bgColor;
-  const fontSize = properties.fontSize || "14px";
-  const fontWeight = properties.fontWeight || "400";
+// --- AI wireframe generation using OpenAI ---
+async function generateWithAI(description, options = {}) {
+  if (!openai) throw new Error("OpenAI not initialized");
 
-  const componentStyle = `
-    background-color: ${bgColor};
-    color: ${textColor};
-    border: 1px solid ${borderColor};
-    font-size: ${fontSize};
-    font-weight: ${fontWeight};
-  `.trim();
+  const theme = options.theme || "professional";
+  const colorScheme = options.colorScheme || "blue";
+  const fastMode = options.fastMode !== false;
 
-  switch (type.toLowerCase()) {
-    case "button":
-      const buttonStyle = properties.style || "primary";
-      const actualText = text || "Button";
-      return `<button class="component button" style="${componentStyle}">${actualText}</button>`;
+  const prompt = `Create a complete, modern HTML wireframe for: ${description}\n\nRequirements:\n- Use modern CSS with flexbox/grid\n- Include semantic HTML structure\n- ${theme} theme with ${colorScheme} color scheme\n- Mobile-responsive design\n- Include proper meta tags and DOCTYPE\n- Use inline CSS for complete standalone file\n- Focus ONLY on the requested component/feature\n- NO navigation bars, headers, footers, or branding unless specifically requested\n- Keep designs clean and minimal\n- IMPORTANT: Color contrast rules - ALWAYS use dark text (#333 or #000) on light backgrounds (#fff, ${
+    WIREFRAME_COLORS.surface
+  }, #E9ECEF). For headers with #E9ECEF background, use black text (#333 or #000) for optimal readability.\n- Avoid opacity values below 0.9 for text to ensure readability\n${
+    fastMode
+      ? "- Keep it simple and fast to load"
+      : "- Include rich interactions and detailed styling"
+  }\n\nReturn only the complete HTML code, no explanations.`;
 
-    case "input":
-    case "textbox":
-    case "text input":
-      const placeholderText = text || "Enter text...";
-      return `<input type="text" class="component input" style="${componentStyle}" placeholder="${placeholderText}" />`;
+  const deployment = process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o";
 
-    case "text":
-    case "label":
-      const displayText = text || "Text content";
-      return `<span class="component text" style="${componentStyle}">${displayText}</span>`;
+  const completion = await openai.chat.completions.create({
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a professional web developer who creates clean, minimal wireframes focused ONLY on the requested component. DO NOT include navigation bars, headers, footers, or branding unless specifically requested. Keep it simple and focused.",
+      },
+      { role: "user", content: prompt },
+    ],
+    model: deployment,
+    max_tokens: 4000,
+    temperature: 0.7,
+  });
 
-    case "heading":
-    case "title":
-    case "h1":
-    case "h2":
-    case "h3":
-      const headingText = text || "Heading";
-      const headingWeight = properties.fontWeight || "600";
-      return `<h2 class="component text heading" style="${componentStyle}; font-weight: ${headingWeight};">${headingText}</h2>`;
+  const html = completion.choices?.[0]?.message?.content || "";
 
-    case "card":
-      const cardTitle = text || "Card Title";
-      return `<div class="component card" style="background: ${bgColor}; border: 1px solid ${borderColor}; color: ${textColor};">
-        <h3 style="color: ${textColor};">${cardTitle}</h3>
-        <p style="color: ${textColor};">Card content goes here...</p>
-      </div>`;
+  // Comprehensive markdown cleanup
+  const cleanedHtml = html
+    .replace(/```html\n?/g, "")
+    .replace(/```javascript\n?/g, "")
+    .replace(/```css\n?/g, "")
+    .replace(/```\n?/g, "")
+    .replace(/`{3,}/g, "")
+    .trim();
 
-    case "navigation":
-    case "nav":
-      const navItems = text
-        ? text.split(/[,|]/).map((item) => item.trim())
-        : ["Home", "About", "Contact"];
-      const navLinks = navItems
-        .map(
-          (item) =>
-            `<a href="#" class="nav-link" style="color: ${textColor};">${item}</a>`
-        )
-        .join("\n        ");
-      return `<nav class="component navigation" style="${componentStyle}">
-        <div class="logo" style="color: ${textColor};">Logo</div>
-        ${navLinks}
-      </nav>`;
+  console.log("🧹 OpenAI Response Cleanup (MAXIMUM INTELLIGENCE):");
+  console.log("Raw response length:", html.length);
+  console.log("Cleaned response length:", cleanedHtml.length);
+  console.log(
+    "First 100 chars of cleaned response:",
+    cleanedHtml.substring(0, 100)
+  );
 
-    case "image":
-    case "img":
-      const imageText = text || "[Image placeholder]";
-      return `<div class="component image-placeholder" style="${componentStyle}">
-        ${imageText}
-      </div>`;
-
-    case "form":
-      return `<form class="component form" style="${componentStyle}">
-        <div class="form-group">
-          <label class="label" style="color: ${textColor};">Form field</label>
-          <input type="text" class="input" placeholder="Enter value..." />
-        </div>
-        <button type="submit" class="button">Submit</button>
-      </form>`;
-
-    default:
-      const defaultText = text || `${type} component`;
-      return `<div class="component text" style="${componentStyle}">${defaultText}</div>`;
-  }
+  return cleanedHtml;
 }
 
-// Main Azure Function
+// --- Azure Function handler ---
 module.exports = async function (context, req) {
   const startTime = Date.now();
-  const correlationId = crypto.randomUUID();
-
-  // Set CORS headers
-  context.res.headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    "Content-Type": "application/json",
-  };
-
-  // Handle preflight requests
-  if (req.method === "OPTIONS") {
-    context.res.status = 200;
-    context.res.body = "";
-    return;
-  }
-
-  // Only allow POST requests for wireframe generation
-  if (req.method !== "POST") {
-    context.res.status = 405;
-    context.res.body = { error: "Method not allowed" };
-    return;
-  }
 
   try {
+    // Set CORS headers
+    context.res = {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Content-Type": "application/json",
+      },
+    };
+
+    // Handle preflight
+    if (req.method === "OPTIONS") {
+      context.res.status = 200;
+      context.res.body = "";
+      return;
+    }
+
+    if (req.method !== "POST") {
+      context.res.status = 405;
+      context.res.body = JSON.stringify({ error: "Method not allowed" });
+      return;
+    }
+
     const {
       description,
-      colorScheme = "primary",
-      imageAnalysis,
+      theme,
+      colorScheme,
+      fastMode,
+      includeAtlas = false,
     } = req.body || {};
 
     if (!description) {
       context.res.status = 400;
-      context.res.body = {
-        success: false,
-        error: "Description is required",
-        correlationId,
-      };
+      context.res.body = JSON.stringify({ error: "Description is required" });
       return;
     }
 
-    logger.info("🎯 Processing wireframe generation request", {
-      correlationId,
-      hasImageAnalysis: !!imageAnalysis,
-      componentsDetected: imageAnalysis?.components?.length || 0,
-      confidence: imageAnalysis?.confidence,
-      layoutType: imageAnalysis?.layout?.type,
+    // Ensure OpenAI client
+    if (!openai) {
+      const initialized = initializeOpenAI();
+      if (!initialized) {
+        context.res.status = 503;
+        context.res.body = JSON.stringify({
+          success: false,
+          error: "AI_SERVICE_UNAVAILABLE",
+          message: "AI service is not available. Please check configuration.",
+        });
+        return;
+      }
+    }
+
+    // Generate base wireframe
+    let html = await generateWithAI(description, {
+      theme,
+      colorScheme,
+      fastMode,
     });
 
-    // Generate wireframe - prioritize image analysis if available
-    let result;
-    if (
-      imageAnalysis &&
-      imageAnalysis.components &&
-      imageAnalysis.components.length > 0
-    ) {
-      logger.info("📸 Using image-based wireframe generation", {
-        correlationId,
-        componentsDetected: imageAnalysis.components.length,
-        confidence: imageAnalysis.confidence,
-        layoutType: imageAnalysis.layout?.type,
-      });
+    if (!html || !html.includes("<!DOCTYPE html>") || html.length < 500) {
+      throw new Error("AI response insufficient or invalid");
+    }
 
-      result = await generateWireframeFromImageAnalysis(
-        imageAnalysis,
-        description,
-        colorScheme,
-        correlationId
-      );
-    } else {
-      logger.info("📝 Using description-based wireframe generation", {
-        correlationId,
-      });
+    // No automatic injections - clean wireframe generation
+    console.log("✅ Clean wireframe generation without automatic injections");
 
-      result = await generateWireframeFromDescription(
-        description,
-        colorScheme,
-        correlationId
-      );
+    // Only apply Atlas components if explicitly requested
+    if (includeAtlas) {
+      html = addAtlasComponents(html, description);
+    }
+
+    // Only apply Fluent components if explicitly requested
+    if (req.body?.includeFluent) {
+      html = addFluentPlaybookComponents(html);
     }
 
     const processingTime = Date.now() - startTime;
 
-    // 🚨 Apply accessibility validation and fixes
-    const accessibilityResult = accessibilityMiddleware.validateAndFixWireframe(
-      result.html,
-      { enforceCompliance: true, logIssues: true }
-    );
+    // Stats
+    const atlasStats = {
+      hero: (html.match(/atlas-hero-figma/g) || []).length,
+      modules: (html.match(/atlas-module-card-figma/g) || []).length,
+      learningPaths: (html.match(/atlas-learning-path-card-figma/g) || [])
+        .length,
+    };
 
-    // Use the accessibility-validated HTML
-    const finalHtml = accessibilityResult.content;
-
-    // Log accessibility status
-    if (accessibilityResult.wasFixed) {
-      logger.info("🎯 Wireframe accessibility issues automatically fixed", {
-        correlationId,
-        issuesFound: accessibilityResult.issues.length,
-        isNowValid: accessibilityResult.isValid,
-      });
-    } else if (accessibilityResult.isValid) {
-      logger.info("✅ Wireframe passed accessibility validation", {
-        correlationId,
-      });
-    }
-
-    // Success response
     context.res.status = 200;
     context.res.body = {
       success: true,
-      data: {
-        html: finalHtml, // Use accessibility-validated HTML
-        reactCode: result.reactCode,
-        source: result.source,
-        aiGenerated: result.aiGenerated,
-        unlimited: result.unlimited,
-        framework: result.framework,
-        styling: result.styling,
-      },
+      html,
       metadata: {
-        correlationId,
-        processingTimeMs: processingTime,
+        theme: theme || "professional",
+        colorScheme: colorScheme || "blue",
+        fastMode: fastMode !== false,
+        includeAtlas: includeAtlas === true,
+        atlasComponents: atlasStats,
         generatedAt: new Date().toISOString(),
-        description:
-          description.substring(0, 100) +
-          (description.length > 100 ? "..." : ""),
-        accessibility: {
-          isCompliant: accessibilityResult.isValid,
-          wasFixed: accessibilityResult.wasFixed,
-          issuesFound: accessibilityResult.issues.length,
-          wcagLevel: accessibilityResult.isValid ? "AA" : "Partial",
-        },
+        processingTimeMs: processingTime,
+        descriptionPreview: description.substring(0, 200),
       },
     };
-
-    logger.info("✅ Minimal wireframe generation completed", {
-      correlationId,
-      processingTime,
-      framework: result.framework,
-    });
   } catch (error) {
-    logger.error("❌ Wireframe generation failed", error, { correlationId });
-
+    console.error("❌ Enhanced wireframe generation failed:", error);
     context.res.status = 500;
     context.res.body = {
       success: false,
-      error: "Internal server error",
-      correlationId,
-      details: error.message,
+      error: error.message,
+      details: error.stack,
     };
   }
 };
-
-// Export the generation function for testing
-module.exports.generateWireframeFromDescription =
-  generateWireframeFromDescription;

@@ -1,9 +1,0 @@
-{
-  "name": "generate-wireframe-function",
-  "version": "1.0.0",
-  "description": "Wireframe generation function",
-  "main": "index.js",
-  "dependencies": {
-    "openai": "^5.6.0"
-  }
-}

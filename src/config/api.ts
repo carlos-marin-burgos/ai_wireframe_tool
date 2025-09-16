@@ -54,8 +54,8 @@ export const API_CONFIG = {
   ],
 
   ENDPOINTS: {
-    // NUCLEAR OPTION: Single endpoint that works no matter what
-    GENERATE_WIREFRAME: "/api/generate-html-wireframe",
+    // ✨ MAXIMUM INTELLIGENCE AI SYSTEM - Enhanced Generator with sophisticated prompts
+    GENERATE_WIREFRAME: "/api/generate-wireframe-enhanced",
     GENERATE_REACT_COMPONENT: "/api/generate-react-component", // NEW: Lovable-style component generation
     GENERATE_WIREFRAME_ENHANCED: "/api/generate-wireframe-enhanced",
     GENERATE_FLUENT_WIREFRAME: "/api/generate-fluent-wireframe",
@@ -74,8 +74,8 @@ export const API_CONFIG = {
   BASE_URL:
     import.meta.env.VITE_BACKEND_BASE_URL ||
     (isDevelopment || isLocalhost
-      ? `http://localhost:7071`
-      : "https://func-designetica-prod-xabnur6oyusju.azurewebsites.net"),
+      ? "" // Use relative URLs in development to go through Vite proxy
+      : "https://func-original-app-pgno4orkguix6.azurewebsites.net"),
 };
 
 // Health check to verify backend has AI capabilities
@@ -84,7 +84,7 @@ export const verifyBackendAI = async (baseUrl: string): Promise<boolean> => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-    const response = await fetch(`${baseUrl}/api/generate-html-wireframe`, {
+    const response = await fetch(`${baseUrl}/api/generate-wireframe-enhanced`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

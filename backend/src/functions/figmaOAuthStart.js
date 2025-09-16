@@ -4,18 +4,23 @@ const { app } = require("@azure/functions");
  * Figma OAuth2 Authorization Endpoint
  * Initiates the OAuth2 flow by redirecting to Figma authorization
  */
+// NOTE: Frontend currently calls /api/figmaOAuthStart so we keep the function name but
+// also expose a friendly route alias "figmaOAuthStart" (no nested path) for consistency.
 app.http("figmaOAuthStart", {
-  methods: ["GET"],
+  methods: ["GET", "POST"],
   authLevel: "anonymous",
-  route: "figma/oauth/start",
+  // Provide both legacy explicit route and flat route (Functions will map name -> /api/figmaOAuthStart)
+  route: "figmaOAuthStart",
   handler: async (request, context) => {
-    context.log("Starting Figma OAuth2 flow");
+    context.log("🚀 Starting Figma OAuth2 flow");
 
     try {
       const clientId = process.env.FIGMA_CLIENT_ID;
+      // SINGLE SOURCE OF TRUTH for redirect URI
       const redirectUri =
         process.env.FIGMA_REDIRECT_URI ||
-        "http://localhost:7072/api/figma/oauth/callback";
+        process.env.FIGMA_REDIRECT_URI_DEV ||
+        "http://localhost:7071/api/figmaOAuthCallback"; // Matches callback function route
 
       if (!clientId) {
         return {
@@ -33,13 +38,37 @@ app.http("figmaOAuthStart", {
       // For now, we'll include it in the redirect and validate on callback
 
       const authUrl = new URL("https://www.figma.com/oauth");
-      authUrl.searchParams.append("client_id", clientId);
-      authUrl.searchParams.append("redirect_uri", redirectUri);
-      authUrl.searchParams.append("scope", "file_read");
-      authUrl.searchParams.append("response_type", "code");
-      authUrl.searchParams.append("state", state);
+      authUrl.searchParams.set("client_id", clientId);
+      authUrl.searchParams.set("redirect_uri", redirectUri);
+      authUrl.searchParams.set("scope", "file_read");
+      authUrl.searchParams.set("response_type", "code");
+      authUrl.searchParams.set("state", state);
+
+      context.log("🔐 OAuth Authorization URL Prepared", {
+        clientId: clientId.slice(0, 6) + "***",
+        redirectUri,
+        state,
+      });
 
       // Return redirect response
+      // Support JSON discovery for frontend status check (?format=json)
+      const urlObj = new URL(request.url);
+      const wantsJson =
+        urlObj.searchParams.get("format") === "json" ||
+        request.headers.get("accept")?.includes("application/json");
+
+      if (wantsJson) {
+        return {
+          status: 200,
+          jsonBody: {
+            status: "authorization_required",
+            auth_url: authUrl.toString(),
+            redirect_uri: redirectUri,
+            state,
+          },
+        };
+      }
+
       return {
         status: 302,
         headers: {

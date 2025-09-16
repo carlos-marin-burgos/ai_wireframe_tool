@@ -174,7 +174,7 @@ function generateLearnHomePageTemplate(prompt) {
                 <div class="display-flex" style="flex-direction: column; gap: 24px; width: 100%;">
                     <h1 style="font-family: 'Segoe UI'; font-weight: 600; font-size: 36px; line-height: 44px; background: linear-gradient(91.54deg, #8E9AAF 2.94%, #C73ECC 78.45%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 0 0 16px 0;">Learning for everyone, everywhere</h1>
                     
-                    <p style="font-family: 'Segoe UI'; font-weight: 400; font-size: 16px; line-height: 22px; color: #161616; margin: 0 0 24px 0;">Explore Microsoft product documentation, training, credentials, Q&A, code references, and shows.</p>
+                    <p style="font-family: 'Segoe UI'; font-weight: 400; font-size: 16px; line-height: 22px; color: #194a7a; margin: 0 0 24px 0;">Explore Microsoft product documentation, training, credentials, Q&A, code references, and shows.</p>
                     
                     <div class="display-block display-flex-tablet" style="gap: 8px; max-width: 500px;">
                         <input type="text" placeholder="Search Microsoft Learn" style="box-sizing: border-box; flex: 1; padding: 12px; background: #FFFFFF; border: 1px solid #505050; border-radius: 2px; font-family: 'Segoe UI'; font-weight: 400; font-size: 16px; color: #505050; width: 100%; margin-bottom: 8px;">

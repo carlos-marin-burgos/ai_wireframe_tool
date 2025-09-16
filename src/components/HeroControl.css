@@ -8,11 +8,11 @@
   width: 100%;
   max-width: 1360px;
   height: 387px;
-  background: #E9ECEF;
+  background: #e9ecef;
   flex: none;
   order: 0;
   flex-grow: 0;
-  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .hero-left-section {
@@ -74,12 +74,12 @@
 .hero-title {
   width: 534px;
   height: 104px;
-  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 40px;
   line-height: 52px;
-  background: linear-gradient(91.54deg, #8E9AAF 2.94%, #68769C 78.45%);
+  background: linear-gradient(91.54deg, #8e9aaf 2.94%, #68769c 78.45%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -93,12 +93,12 @@
 .hero-summary {
   width: 534px;
   height: 44px;
-  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 22px;
-  color: #161616;
+  color: #194a7a;
   flex: none;
   order: 3;
   align-self: stretch;
@@ -140,14 +140,14 @@
   padding: 5.75px 10.25px;
   width: 400px;
   height: 40.5px;
-  background: #FFFFFF;
+  background: #ffffff;
   border: 1px solid #505050;
   border-radius: 2px;
   flex: none;
   order: 1;
   align-self: stretch;
   flex-grow: 0;
-  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -157,8 +157,8 @@
 }
 
 .hero-textfield:focus {
-  border-color: #8E9AAF;
-  box-shadow: 0 0 0 1px #8E9AAF;
+  border-color: #8e9aaf;
+  box-shadow: 0 0 0 1px #8e9aaf;
 }
 
 .hero-primary-button {
@@ -170,28 +170,28 @@
   gap: 6.75px;
   width: 108.75px;
   height: 40.5px;
-  background: #8E9AAF;
+  background: #194a7a !important;
   border-radius: 2px;
   border: none;
   flex: none;
   order: 1;
   flex-grow: 0;
   cursor: pointer;
-  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 18px;
   line-height: 23px;
-  color: #FFFFFF;
+  color: #d1dbe4;
   transition: background-color 0.2s ease;
 }
 
 .hero-primary-button:hover {
-  background: #68769C;
+  background: #a3b7ca;
 }
 
 .hero-primary-button:active {
-  background: #68769C;
+  background: #7593af;
 }
 
 .hero-buttons-container {
@@ -209,26 +209,26 @@
   gap: 8px;
   width: 70px;
   height: 38px;
-  border: 1px solid #8E8E8E;
+  border: 1px solid #7593af !important;
   border-radius: 2px;
   background: transparent;
   cursor: pointer;
-  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
   line-height: 26px;
-  color: #161616;
+  color: #194a7a;
   transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .hero-secondary-button:hover {
-  border-color: #3C4858;
+  border-color: #476f95;
   background: #f3f2f1;
 }
 
 .hero-secondary-button:active {
-  background: #edebe9;
+  background: #476f95;
 }
 
 .hero-image-container {
@@ -259,7 +259,7 @@
   height: 387px;
   left: -49px;
   top: 0px;
-  background: linear-gradient(90deg, #E9ECEF 0%, rgba(232, 230, 223, 0) 100%);
+  background: linear-gradient(90deg, #e9ecef 0%, rgba(232, 230, 223, 0) 100%);
 }
 
 .hero-right-gradient {
@@ -268,7 +268,7 @@
   height: 386px;
   left: 413px;
   top: 0px;
-  background: linear-gradient(90deg, #E9ECEF 0%, rgba(232, 230, 223, 0) 100%);
+  background: linear-gradient(90deg, #e9ecef 0%, rgba(232, 230, 223, 0) 100%);
   transform: rotate(-180deg);
 }
 
@@ -280,73 +280,73 @@
     height: auto;
     padding: 24px;
   }
-  
+
   .hero-left-section {
     width: 100%;
     height: auto;
     padding: 32px 0px;
   }
-  
+
   .hero-icon-text {
     width: 100%;
     height: auto;
   }
-  
+
   .hero-text-section {
     width: 100%;
     height: auto;
   }
-  
+
   .hero-top-section {
     width: 100%;
     height: auto;
   }
-  
+
   .hero-title {
     width: 100%;
     height: auto;
     font-size: 32px;
     line-height: 42px;
   }
-  
+
   .hero-summary {
     width: 100%;
     height: auto;
   }
-  
+
   .hero-search-container {
     width: 100%;
     flex-direction: column;
     gap: 16px;
     height: auto;
   }
-  
+
   .hero-textfield-container {
     width: 100%;
   }
-  
+
   .hero-textfield {
     width: 100%;
   }
-  
+
   .hero-primary-button {
     width: auto;
     min-width: 108.75px;
   }
-  
+
   .hero-image-container {
     width: 100%;
     height: 300px;
     order: 0;
   }
-  
+
   .hero-image {
     width: 100%;
     height: 100%;
     left: 0;
     top: 0;
   }
-  
+
   .hero-left-gradient,
   .hero-right-gradient {
     display: none;
@@ -358,22 +358,22 @@
     font-size: 28px;
     line-height: 36px;
   }
-  
+
   .hero-summary {
     font-size: 14px;
     line-height: 20px;
   }
-  
+
   .hero-search-container {
     gap: 12px;
   }
-  
+
   .hero-textfield {
     font-size: 16px;
     padding: 8px 12px;
     height: 44px;
   }
-  
+
   .hero-primary-button {
     height: 44px;
     font-size: 16px;

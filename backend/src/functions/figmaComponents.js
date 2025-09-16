@@ -324,7 +324,7 @@ function generateWireframeFromFrames(frames, images, fileName) {
             overflow: hidden;
         }
         .figma-header {
-            background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%);
+            background: linear-gradient(135deg, #194a7a 0%, #476f95 100%);
             color: white;
             padding: 30px;
             text-align: center;

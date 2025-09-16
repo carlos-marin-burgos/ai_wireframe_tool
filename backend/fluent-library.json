@@ -1,67 +1,188 @@
 {
-  "lastUpdated": "2025-08-06T17:36:31.658Z",
-  "source": "microsoft/fluentui-enhanced",
-  "totalComponents": 6,
   "components": [
     {
-      "id": "fluent-github-menu",
-      "name": "Fluent Menu",
-      "description": "Official Microsoft Fluent UI menu component with dropdown functionality",
-      "category": "GitHub Fluent",
-      "htmlCode": "<!-- Fluent UI Menu Component -->\n<div class=\"fluent-menu-container\" style=\"position: relative; display: inline-block; margin-bottom: 16px;\">\n  <button class=\"fluent-menu-trigger\"\n          style=\"\n            font-family: 'Segoe UI', sans-serif;\n            font-size: 14px;\n            font-weight: 600;\n            padding: 8px 32px 8px 12px;\n            border: 1px solid #8a8886;\n            border-radius: 4px;\n            background-color: #ffffff;\n            color: #323130;\n            cursor: pointer;\n            transition: border-color 0.2s;\n            background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"%23605e5c\"><path d=\"M7 10l5 5 5-5z\"/></svg>');\n            background-repeat: no-repeat;\n            background-position: right 8px center;\n            background-size: 16px;\n          \"\n          onclick=\"toggleFluentMenu(this)\"\n          onfocus=\"this.style.borderColor='#0078d4';\"\n          onblur=\"this.style.borderColor='#8a8886';\">\n    Menu Options\n  </button>\n  <div class=\"fluent-menu-popup\" id=\"fluent-menu-popup\"\n       style=\"\n         position: absolute;\n         top: 100%;\n         left: 0;\n         min-width: 200px;\n         background: #ffffff;\n         border: 1px solid #e1e5e9;\n         border-radius: 4px;\n         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);\n         z-index: 1000;\n         display: none;\n         font-family: 'Segoe UI', sans-serif;\n       \">\n    <div class=\"fluent-menu-item\" \n         style=\"padding: 8px 12px; cursor: pointer; color: #323130; font-size: 14px;\"\n         onmouseover=\"this.style.backgroundColor='#f3f2f1';\"\n         onmouseout=\"this.style.backgroundColor='transparent';\">\n      Menu Item 1\n    </div>\n    <div class=\"fluent-menu-item\" \n         style=\"padding: 8px 12px; cursor: pointer; color: #323130; font-size: 14px;\"\n         onmouseover=\"this.style.backgroundColor='#f3f2f1';\"\n         onmouseout=\"this.style.backgroundColor='transparent';\">\n      Menu Item 2\n    </div>\n    <div class=\"fluent-menu-item\" \n         style=\"padding: 8px 12px; cursor: pointer; color: #323130; font-size: 14px;\"\n         onmouseover=\"this.style.backgroundColor='#f3f2f1';\"\n         onmouseout=\"this.style.backgroundColor='transparent';\">\n      Menu Item 3\n    </div>\n  </div>\n</div>\n\n<script>\nfunction toggleFluentMenu(button) {\n  const popup = button.nextElementSibling;\n  const isVisible = popup.style.display === 'block';\n  popup.style.display = isVisible ? 'none' : 'block';\n}\n</script>",
-      "source": "fluent-ui-github",
-      "lastUpdated": "2025-08-06T17:36:31.654Z",
-      "githubPath": "@fluentui/react-menu"
+      "id": "fluent-button-primary",
+      "name": "Button (Primary)",
+      "description": "Primary action button with emphasis styling",
+      "category": "Buttons",
+      "githubPath": "react-components/react-button",
+      "htmlCode": "<button style=\"background: #0078d4; color: white; border: none; padding: 8px 20px; border-radius: 4px; font-family: 'Segoe UI', sans-serif; font-weight: 600; cursor: pointer; font-size: 14px;\">Primary Button</button>"
     },
     {
-      "id": "fluent-github-avatar",
-      "name": "Fluent Avatar",
-      "description": "Official Microsoft Fluent UI avatar component with initials and image support",
-      "category": "GitHub Fluent",
-      "htmlCode": "<!-- Fluent UI Avatar Component -->\n<div class=\"fluent-avatar-container\" style=\"display: flex; align-items: center; gap: 16px; margin-bottom: 16px;\">\n  <!-- Small Avatar with Initials -->\n  <div class=\"fluent-avatar-small\"\n       style=\"\n         width: 32px;\n         height: 32px;\n         border-radius: 50%;\n         background: linear-gradient(135deg, #0078d4, #106ebe);\n         color: #ffffff;\n         display: flex;\n         align-items: center;\n         justify-content: center;\n         font-family: 'Segoe UI', sans-serif;\n         font-size: 12px;\n         font-weight: 600;\n       \">\n    JD\n  </div>\n  \n  <!-- Medium Avatar -->\n  <div class=\"fluent-avatar-medium\"\n       style=\"\n         width: 40px;\n         height: 40px;\n         border-radius: 50%;\n         background: linear-gradient(135deg, #00bcf2, #0078d4);\n         color: #ffffff;\n         display: flex;\n         align-items: center;\n         justify-content: center;\n         font-family: 'Segoe UI', sans-serif;\n         font-size: 14px;\n         font-weight: 600;\n       \">\n    MS\n  </div>\n  \n  <!-- Large Avatar with Image -->\n  <div class=\"fluent-avatar-large\"\n       style=\"\n         width: 56px;\n         height: 56px;\n         border-radius: 50%;\n         background: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"%23605e5c\"><path d=\"M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z\"/></svg>') center/cover;\n         border: 2px solid #e1e5e9;\n       \">\n  </div>\n</div>",
-      "source": "fluent-ui-github",
-      "lastUpdated": "2025-08-06T17:36:31.658Z",
-      "githubPath": "@fluentui/react-avatar"
+      "id": "fluent-button-secondary",
+      "name": "Button (Secondary)",
+      "description": "Secondary action button with outline styling",
+      "category": "Buttons",
+      "githubPath": "react-components/react-button",
+      "htmlCode": "<button style=\"background: transparent; color: #0078d4; border: 1px solid #0078d4; padding: 7px 19px; border-radius: 4px; font-family: 'Segoe UI', sans-serif; font-weight: 600; cursor: pointer; font-size: 14px;\">Secondary Button</button>"
     },
     {
-      "id": "fluent-github-badge",
-      "name": "Fluent Badge",
-      "description": "Official Microsoft Fluent UI badge component for status and notifications",
-      "category": "GitHub Fluent",
-      "htmlCode": "<!-- Fluent UI Badge Component -->\n<div class=\"fluent-badge-container\" style=\"display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 16px;\">\n  <!-- Default Badge -->\n  <span class=\"fluent-badge-default\"\n        style=\"\n          font-family: 'Segoe UI', sans-serif;\n          font-size: 12px;\n          font-weight: 600;\n          padding: 2px 8px;\n          border-radius: 12px;\n          background-color: #f3f2f1;\n          color: #323130;\n          white-space: nowrap;\n        \">\n    Default\n  </span>\n  \n  <!-- Success Badge -->\n  <span class=\"fluent-badge-success\"\n        style=\"\n          font-family: 'Segoe UI', sans-serif;\n          font-size: 12px;\n          font-weight: 600;\n          padding: 2px 8px;\n          border-radius: 12px;\n          background-color: #107c10;\n          color: #ffffff;\n          white-space: nowrap;\n        \">\n    Success\n  </span>\n  \n  <!-- Warning Badge -->\n  <span class=\"fluent-badge-warning\"\n        style=\"\n          font-family: 'Segoe UI', sans-serif;\n          font-size: 12px;\n          font-weight: 600;\n          padding: 2px 8px;\n          border-radius: 12px;\n          background-color: #ff8c00;\n          color: #ffffff;\n          white-space: nowrap;\n        \">\n    Warning\n  </span>\n  \n  <!-- Error Badge -->\n  <span class=\"fluent-badge-error\"\n        style=\"\n          font-family: 'Segoe UI', sans-serif;\n          font-size: 12px;\n          font-weight: 600;\n          padding: 2px 8px;\n          border-radius: 12px;\n          background-color: #d13438;\n          color: #ffffff;\n          white-space: nowrap;\n        \">\n    Error\n  </span>\n  \n  <!-- Notification Badge -->\n  <div style=\"position: relative; display: inline-block;\">\n    <button style=\"\n             font-family: 'Segoe UI', sans-serif;\n             padding: 8px 16px;\n             border: 1px solid #8a8886;\n             border-radius: 4px;\n             background: #ffffff;\n             color: #323130;\n             cursor: pointer;\n           \">\n      Notifications\n    </button>\n    <span class=\"fluent-badge-notification\"\n          style=\"\n            position: absolute;\n            top: -4px;\n            right: -4px;\n            min-width: 16px;\n            height: 16px;\n            border-radius: 50%;\n            background-color: #d13438;\n            color: #ffffff;\n            font-family: 'Segoe UI', sans-serif;\n            font-size: 10px;\n            font-weight: 600;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            padding: 0 4px;\n          \">\n      3\n    </span>\n  </div>\n</div>",
-      "source": "fluent-ui-github",
-      "lastUpdated": "2025-08-06T17:36:31.658Z",
-      "githubPath": "@fluentui/react-badge"
+      "id": "fluent-button-subtle",
+      "name": "Button (Subtle)",
+      "description": "Subtle button for less prominent actions",
+      "category": "Buttons",
+      "githubPath": "react-components/react-button",
+      "htmlCode": "<button style=\"background: transparent; color: #323130; border: none; padding: 8px 20px; border-radius: 4px; font-family: 'Segoe UI', sans-serif; font-weight: 600; cursor: pointer; font-size: 14px;\">Subtle Button</button>"
     },
     {
-      "id": "fluent-github-tabs",
-      "name": "Fluent Tabs",
-      "description": "Official Microsoft Fluent UI tabs component with multiple panels",
-      "category": "GitHub Fluent",
-      "htmlCode": "<!-- Fluent UI Tabs Component -->\n<div class=\"fluent-tabs-container\" style=\"margin-bottom: 16px; font-family: 'Segoe UI', sans-serif;\">\n  <div class=\"fluent-tabs-list\" \n       style=\"\n         display: flex;\n         border-bottom: 1px solid #e1e5e9;\n         margin-bottom: 16px;\n       \">\n    <button class=\"fluent-tab active\" \n            data-tab=\"tab1\"\n            style=\"\n              padding: 12px 16px;\n              border: none;\n              background: transparent;\n              color: #0078d4;\n              font-family: 'Segoe UI', sans-serif;\n              font-size: 14px;\n              font-weight: 600;\n              cursor: pointer;\n              border-bottom: 2px solid #0078d4;\n              transition: all 0.2s;\n            \"\n            onclick=\"switchFluentTab(this, 'tab1')\">\n      Tab 1\n    </button>\n    <button class=\"fluent-tab\" \n            data-tab=\"tab2\"\n            style=\"\n              padding: 12px 16px;\n              border: none;\n              background: transparent;\n              color: #605e5c;\n              font-family: 'Segoe UI', sans-serif;\n              font-size: 14px;\n              font-weight: 600;\n              cursor: pointer;\n              border-bottom: 2px solid transparent;\n              transition: all 0.2s;\n            \"\n            onmouseover=\"this.style.color='#323130';\"\n            onmouseout=\"if(!this.classList.contains('active')) this.style.color='#605e5c';\"\n            onclick=\"switchFluentTab(this, 'tab2')\">\n      Tab 2\n    </button>\n    <button class=\"fluent-tab\" \n            data-tab=\"tab3\"\n            style=\"\n              padding: 12px 16px;\n              border: none;\n              background: transparent;\n              color: #605e5c;\n              font-family: 'Segoe UI', sans-serif;\n              font-size: 14px;\n              font-weight: 600;\n              cursor: pointer;\n              border-bottom: 2px solid transparent;\n              transition: all 0.2s;\n            \"\n            onmouseover=\"this.style.color='#323130';\"\n            onmouseout=\"if(!this.classList.contains('active')) this.style.color='#605e5c';\"\n            onclick=\"switchFluentTab(this, 'tab3')\">\n      Tab 3\n    </button>\n  </div>\n  \n  <div class=\"fluent-tab-panels\">\n    <div class=\"fluent-tab-panel active\" id=\"tab1\" style=\"display: block;\">\n      <h3 style=\"margin: 0 0 12px 0; color: #323130; font-size: 16px; font-weight: 600;\">Panel 1 Content</h3>\n      <p style=\"margin: 0; color: #605e5c; line-height: 20px;\">This is the content for the first tab panel. It contains relevant information and controls.</p>\n    </div>\n    <div class=\"fluent-tab-panel\" id=\"tab2\" style=\"display: none;\">\n      <h3 style=\"margin: 0 0 12px 0; color: #323130; font-size: 16px; font-weight: 600;\">Panel 2 Content</h3>\n      <p style=\"margin: 0; color: #605e5c; line-height: 20px;\">This is the content for the second tab panel with different information and features.</p>\n    </div>\n    <div class=\"fluent-tab-panel\" id=\"tab3\" style=\"display: none;\">\n      <h3 style=\"margin: 0 0 12px 0; color: #323130; font-size: 16px; font-weight: 600;\">Panel 3 Content</h3>\n      <p style=\"margin: 0; color: #605e5c; line-height: 20px;\">This is the content for the third tab panel showcasing additional functionality.</p>\n    </div>\n  </div>\n</div>\n\n<script>\nfunction switchFluentTab(button, tabId) {\n  // Remove active class from all tabs\n  const tabs = button.parentElement.querySelectorAll('.fluent-tab');\n  tabs.forEach(tab => {\n    tab.classList.remove('active');\n    tab.style.color = '#605e5c';\n    tab.style.borderBottomColor = 'transparent';\n  });\n  \n  // Add active class to clicked tab\n  button.classList.add('active');\n  button.style.color = '#0078d4';\n  button.style.borderBottomColor = '#0078d4';\n  \n  // Hide all panels\n  const panels = button.closest('.fluent-tabs-container').querySelectorAll('.fluent-tab-panel');\n  panels.forEach(panel => {\n    panel.style.display = 'none';\n  });\n  \n  // Show target panel\n  document.getElementById(tabId).style.display = 'block';\n}\n</script>",
-      "source": "fluent-ui-github",
-      "lastUpdated": "2025-08-06T17:36:31.658Z",
-      "githubPath": "@fluentui/react-tabs"
+      "id": "fluent-compound-button",
+      "name": "CompoundButton",
+      "description": "Button with primary and secondary text content",
+      "category": "Buttons",
+      "githubPath": "react-components/react-button",
+      "htmlCode": "<button style=\"background: #0078d4; color: white; border: none; padding: 12px 20px; border-radius: 4px; font-family: 'Segoe UI', sans-serif; cursor: pointer; text-align: left; min-width: 200px;\"><div style=\"font-weight: 600; font-size: 14px; margin-bottom: 2px;\">Compound Button</div><div style=\"font-size: 12px; opacity: 0.9;\">Secondary text content</div></button>"
     },
     {
-      "id": "fluent-github-tooltip",
-      "name": "Fluent Tooltip",
-      "description": "Official Microsoft Fluent UI tooltip component with hover functionality",
-      "category": "GitHub Fluent",
-      "htmlCode": "<!-- Fluent UI Tooltip Component -->\n<div class=\"fluent-tooltip-container\" style=\"display: inline-flex; gap: 24px; align-items: center; margin-bottom: 16px;\">\n  <!-- Button with Tooltip -->\n  <div class=\"fluent-tooltip-wrapper\" style=\"position: relative; display: inline-block;\">\n    <button class=\"fluent-button-with-tooltip\"\n            style=\"\n              font-family: 'Segoe UI', sans-serif;\n              padding: 8px 16px;\n              border: 1px solid #0078d4;\n              border-radius: 4px;\n              background: #0078d4;\n              color: #ffffff;\n              cursor: pointer;\n              font-size: 14px;\n              font-weight: 600;\n            \"\n            onmouseenter=\"showFluentTooltip(this)\"\n            onmouseleave=\"hideFluentTooltip(this)\">\n      Hover for Tooltip\n    </button>\n    <div class=\"fluent-tooltip\"\n         style=\"\n           position: absolute;\n           bottom: 100%;\n           left: 50%;\n           transform: translateX(-50%);\n           margin-bottom: 8px;\n           padding: 8px 12px;\n           background: #323130;\n           color: #ffffff;\n           font-family: 'Segoe UI', sans-serif;\n           font-size: 12px;\n           border-radius: 4px;\n           white-space: nowrap;\n           opacity: 0;\n           visibility: hidden;\n           transition: opacity 0.2s, visibility 0.2s;\n           z-index: 1000;\n         \">\n      This is a helpful tooltip message\n      <div style=\"\n             position: absolute;\n             top: 100%;\n             left: 50%;\n             transform: translateX(-50%);\n             width: 0;\n             height: 0;\n             border-left: 4px solid transparent;\n             border-right: 4px solid transparent;\n             border-top: 4px solid #323130;\n           \"></div>\n    </div>\n  </div>\n  \n  <!-- Icon with Tooltip -->\n  <div class=\"fluent-tooltip-wrapper\" style=\"position: relative; display: inline-block;\">\n    <div class=\"fluent-icon-with-tooltip\"\n         style=\"\n           width: 24px;\n           height: 24px;\n           border-radius: 50%;\n           background: #605e5c;\n           color: #ffffff;\n           display: flex;\n           align-items: center;\n           justify-content: center;\n           cursor: help;\n           font-family: 'Segoe UI', sans-serif;\n           font-size: 14px;\n           font-weight: bold;\n         \"\n         onmouseenter=\"showFluentTooltip(this)\"\n         onmouseleave=\"hideFluentTooltip(this)\">\n      ?\n    </div>\n    <div class=\"fluent-tooltip\"\n         style=\"\n           position: absolute;\n           bottom: 100%;\n           left: 50%;\n           transform: translateX(-50%);\n           margin-bottom: 8px;\n           padding: 8px 12px;\n           background: #323130;\n           color: #ffffff;\n           font-family: 'Segoe UI', sans-serif;\n           font-size: 12px;\n           border-radius: 4px;\n           white-space: nowrap;\n           opacity: 0;\n           visibility: hidden;\n           transition: opacity 0.2s, visibility 0.2s;\n           z-index: 1000;\n           max-width: 200px;\n           white-space: normal;\n         \">\n      More detailed information about this feature or control\n      <div style=\"\n             position: absolute;\n             top: 100%;\n             left: 50%;\n             transform: translateX(-50%);\n             width: 0;\n             height: 0;\n             border-left: 4px solid transparent;\n             border-right: 4px solid transparent;\n             border-top: 4px solid #323130;\n           \"></div>\n    </div>\n  </div>\n</div>\n\n<script>\nfunction showFluentTooltip(element) {\n  const tooltip = element.querySelector('.fluent-tooltip');\n  if (tooltip) {\n    tooltip.style.opacity = '1';\n    tooltip.style.visibility = 'visible';\n  }\n}\n\nfunction hideFluentTooltip(element) {\n  const tooltip = element.querySelector('.fluent-tooltip');\n  if (tooltip) {\n    tooltip.style.opacity = '0';\n    tooltip.style.visibility = 'hidden';\n  }\n}\n</script>",
-      "source": "fluent-ui-github",
-      "lastUpdated": "2025-08-06T17:36:31.658Z",
-      "githubPath": "@fluentui/react-tooltip"
+      "id": "fluent-toggle-button",
+      "name": "ToggleButton",
+      "description": "Button that can be toggled between checked and unchecked states",
+      "category": "Buttons",
+      "githubPath": "react-components/react-button",
+      "htmlCode": "<button style=\"background: #f3f2f1; color: #323130; border: 1px solid #8a8886; padding: 8px 20px; border-radius: 4px; font-family: 'Segoe UI', sans-serif; font-weight: 600; cursor: pointer; font-size: 14px;\">Toggle Button</button>"
     },
     {
-      "id": "fluent-github-slider",
-      "name": "Fluent Slider",
-      "description": "Official Microsoft Fluent UI slider component for value selection",
-      "category": "GitHub Fluent",
-      "htmlCode": "<!-- Fluent UI Slider Component -->\n<div class=\"fluent-slider-container\" style=\"margin-bottom: 24px; font-family: 'Segoe UI', sans-serif;\">\n  <!-- Horizontal Slider -->\n  <div style=\"margin-bottom: 20px;\">\n    <label style=\"display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #323130;\">\n      Volume: <span id=\"slider1-value\">50</span>%\n    </label>\n    <div class=\"fluent-slider-horizontal\" style=\"position: relative; width: 200px; height: 20px;\">\n      <div class=\"fluent-slider-track\"\n           style=\"\n             position: absolute;\n             top: 50%;\n             left: 0;\n             right: 0;\n             height: 4px;\n             background: #e1e5e9;\n             border-radius: 2px;\n             transform: translateY(-50%);\n           \"></div>\n      <div class=\"fluent-slider-filled\"\n           id=\"slider1-filled\"\n           style=\"\n             position: absolute;\n             top: 50%;\n             left: 0;\n             width: 50%;\n             height: 4px;\n             background: #0078d4;\n             border-radius: 2px;\n             transform: translateY(-50%);\n           \"></div>\n      <div class=\"fluent-slider-thumb\"\n           id=\"slider1-thumb\"\n           style=\"\n             position: absolute;\n             top: 50%;\n             left: 50%;\n             width: 16px;\n             height: 16px;\n             background: #0078d4;\n             border: 2px solid #ffffff;\n             border-radius: 50%;\n             transform: translate(-50%, -50%);\n             cursor: pointer;\n             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);\n             transition: transform 0.1s;\n           \"\n           onmousedown=\"startFluentSliderDrag(event, 'slider1')\"\n           onmouseover=\"this.style.transform='translate(-50%, -50%) scale(1.1)';\"\n           onmouseout=\"this.style.transform='translate(-50%, -50%) scale(1)';\">\n      </div>\n    </div>\n  </div>\n  \n  <!-- Range Slider -->\n  <div style=\"margin-bottom: 20px;\">\n    <label style=\"display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #323130;\">\n      Price Range: $<span id=\"slider2-min\">20</span> - $<span id=\"slider2-max\">80</span>\n    </label>\n    <div class=\"fluent-slider-horizontal\" style=\"position: relative; width: 200px; height: 20px;\">\n      <div class=\"fluent-slider-track\"\n           style=\"\n             position: absolute;\n             top: 50%;\n             left: 0;\n             right: 0;\n             height: 4px;\n             background: #e1e5e9;\n             border-radius: 2px;\n             transform: translateY(-50%);\n           \"></div>\n      <div class=\"fluent-slider-filled\"\n           id=\"slider2-filled\"\n           style=\"\n             position: absolute;\n             top: 50%;\n             left: 20%;\n             width: 60%;\n             height: 4px;\n             background: #0078d4;\n             border-radius: 2px;\n             transform: translateY(-50%);\n           \"></div>\n      <div class=\"fluent-slider-thumb\"\n           id=\"slider2-thumb-min\"\n           style=\"\n             position: absolute;\n             top: 50%;\n             left: 20%;\n             width: 16px;\n             height: 16px;\n             background: #0078d4;\n             border: 2px solid #ffffff;\n             border-radius: 50%;\n             transform: translate(-50%, -50%);\n             cursor: pointer;\n             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);\n           \"\n           onmousedown=\"startFluentSliderDrag(event, 'slider2', 'min')\">\n      </div>\n      <div class=\"fluent-slider-thumb\"\n           id=\"slider2-thumb-max\"\n           style=\"\n             position: absolute;\n             top: 50%;\n             left: 80%;\n             width: 16px;\n             height: 16px;\n             background: #0078d4;\n             border: 2px solid #ffffff;\n             border-radius: 50%;\n             transform: translate(-50%, -50%);\n             cursor: pointer;\n             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);\n           \"\n           onmousedown=\"startFluentSliderDrag(event, 'slider2', 'max')\">\n      </div>\n    </div>\n  </div>\n</div>\n\n<script>\nlet isDragging = false;\nlet currentSlider = null;\nlet currentType = null;\n\nfunction startFluentSliderDrag(event, sliderId, type = 'single') {\n  isDragging = true;\n  currentSlider = sliderId;\n  currentType = type;\n  event.preventDefault();\n  \n  document.addEventListener('mousemove', handleFluentSliderDrag);\n  document.addEventListener('mouseup', stopFluentSliderDrag);\n}\n\nfunction handleFluentSliderDrag(event) {\n  if (!isDragging) return;\n  \n  const slider = document.querySelector(`#${currentSlider}-thumb${currentType === 'single' ? '' : '-' + currentType}`).closest('.fluent-slider-horizontal');\n  const rect = slider.getBoundingClientRect();\n  const percent = Math.max(0, Math.min(100, ((event.clientX - rect.left) / rect.width) * 100));\n  \n  if (currentSlider === 'slider1') {\n    updateSingleSlider(percent);\n  } else if (currentSlider === 'slider2') {\n    updateRangeSlider(percent, currentType);\n  }\n}\n\nfunction stopFluentSliderDrag() {\n  isDragging = false;\n  currentSlider = null;\n  currentType = null;\n  document.removeEventListener('mousemove', handleFluentSliderDrag);\n  document.removeEventListener('mouseup', stopFluentSliderDrag);\n}\n\nfunction updateSingleSlider(percent) {\n  const thumb = document.getElementById('slider1-thumb');\n  const filled = document.getElementById('slider1-filled');\n  const value = document.getElementById('slider1-value');\n  \n  thumb.style.left = percent + '%';\n  filled.style.width = percent + '%';\n  value.textContent = Math.round(percent);\n}\n\nfunction updateRangeSlider(percent, type) {\n  const minThumb = document.getElementById('slider2-thumb-min');\n  const maxThumb = document.getElementById('slider2-thumb-max');\n  const filled = document.getElementById('slider2-filled');\n  const minValue = document.getElementById('slider2-min');\n  const maxValue = document.getElementById('slider2-max');\n  \n  let minPercent = parseFloat(minThumb.style.left) || 20;\n  let maxPercent = parseFloat(maxThumb.style.left) || 80;\n  \n  if (type === 'min' && percent <= maxPercent) {\n    minPercent = percent;\n    minThumb.style.left = percent + '%';\n  } else if (type === 'max' && percent >= minPercent) {\n    maxPercent = percent;\n    maxThumb.style.left = percent + '%';\n  }\n  \n  filled.style.left = minPercent + '%';\n  filled.style.width = (maxPercent - minPercent) + '%';\n  minValue.textContent = Math.round(minPercent);\n  maxValue.textContent = Math.round(maxPercent);\n}\n</script>",
-      "source": "fluent-ui-github",
-      "lastUpdated": "2025-08-06T17:36:31.658Z",
-      "githubPath": "@fluentui/react-slider"
+      "id": "fluent-input",
+      "name": "Input",
+      "description": "Text input field for single-line text entry",
+      "category": "Inputs",
+      "githubPath": "react-components/react-input",
+      "htmlCode": "<div style=\"margin-bottom: 16px;\"><label style=\"display: block; margin-bottom: 4px; font-family: 'Segoe UI', sans-serif; font-weight: 600; color: #323130; font-size: 14px;\">Label</label><input type=\"text\" placeholder=\"Enter text here\" style=\"width: 100%; max-width: 300px; padding: 8px 12px; border: 1px solid #8a8886; border-radius: 2px; font-family: 'Segoe UI', sans-serif; font-size: 14px;\" /></div>"
+    },
+    {
+      "id": "fluent-textarea",
+      "name": "Textarea",
+      "description": "Multi-line text input field",
+      "category": "Inputs",
+      "githubPath": "react-components/react-textarea",
+      "htmlCode": "<div style=\"margin-bottom: 16px;\"><label style=\"display: block; margin-bottom: 4px; font-family: 'Segoe UI', sans-serif; font-weight: 600; color: #323130; font-size: 14px;\">Description</label><textarea placeholder=\"Enter description here\" style=\"width: 100%; max-width: 300px; padding: 8px 12px; border: 1px solid #8a8886; border-radius: 2px; font-family: 'Segoe UI', sans-serif; font-size: 14px; min-height: 80px; resize: vertical;\"></textarea></div>"
+    },
+    {
+      "id": "fluent-combobox",
+      "name": "Combobox",
+      "description": "Dropdown with text input and selectable options",
+      "category": "Inputs",
+      "githubPath": "react-components/react-combobox",
+      "htmlCode": "<div style=\"margin-bottom: 16px;\"><label style=\"display: block; margin-bottom: 4px; font-family: 'Segoe UI', sans-serif; font-weight: 600; color: #323130; font-size: 14px;\">Select Option</label><select style=\"width: 100%; max-width: 300px; padding: 8px 12px; border: 1px solid #8a8886; border-radius: 2px; font-family: 'Segoe UI', sans-serif; font-size: 14px; background: white;\"><option>Choose an option...</option><option>Option 1</option><option>Option 2</option><option>Option 3</option></select></div>"
+    },
+    {
+      "id": "fluent-checkbox",
+      "name": "Checkbox",
+      "description": "Checkbox for boolean input",
+      "category": "Inputs",
+      "githubPath": "react-components/react-checkbox",
+      "htmlCode": "<div style=\"display: flex; align-items: center; gap: 8px; margin-bottom: 12px; font-family: 'Segoe UI', sans-serif;\"><input type=\"checkbox\" id=\"checkbox1\" style=\"margin: 0; width: 16px; height: 16px;\" /><label for=\"checkbox1\" style=\"color: #323130; cursor: pointer; font-size: 14px;\">I agree to the terms and conditions</label></div>"
+    },
+    {
+      "id": "fluent-radio-group",
+      "name": "RadioGroup",
+      "description": "Group of radio buttons for single selection",
+      "category": "Inputs",
+      "githubPath": "react-components/react-radio",
+      "htmlCode": "<div style=\"font-family: 'Segoe UI', sans-serif;\"><div style=\"margin-bottom: 8px; font-weight: 600; color: #323130; font-size: 14px;\">Choose an option:</div><div style=\"display: flex; flex-direction: column; gap: 8px;\"><label style=\"display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px;\"><input type=\"radio\" name=\"options\" value=\"option1\" /><span>Option 1</span></label><label style=\"display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px;\"><input type=\"radio\" name=\"options\" value=\"option2\" /><span>Option 2</span></label><label style=\"display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px;\"><input type=\"radio\" name=\"options\" value=\"option3\" /><span>Option 3</span></label></div></div>"
+    },
+    {
+      "id": "fluent-switch",
+      "name": "Switch",
+      "description": "Toggle switch for on/off states",
+      "category": "Inputs",
+      "githubPath": "react-components/react-switch",
+      "htmlCode": "<div style=\"display: flex; align-items: center; gap: 8px; font-family: 'Segoe UI', sans-serif;\"><div style=\"width: 40px; height: 20px; background: #8a8886; border-radius: 20px; position: relative; cursor: pointer;\"><div style=\"width: 16px; height: 16px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: transform 0.2s;\"></div></div><label style=\"color: #323130; cursor: pointer; font-size: 14px;\">Enable notifications</label></div>"
+    },
+    {
+      "id": "fluent-card",
+      "name": "Card",
+      "description": "Container for grouping related content",
+      "category": "Layout",
+      "githubPath": "react-components/react-card",
+      "htmlCode": "<div style=\"background: white; border: 1px solid #e1e5e9; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-family: 'Segoe UI', sans-serif; max-width: 300px;\"><h3 style=\"margin: 0 0 12px 0; font-size: 18px; font-weight: 600; color: #323130;\">Card Title</h3><p style=\"margin: 0 0 16px 0; color: #605e5c; line-height: 1.5; font-size: 14px;\">This is a sample card with some content. Cards are great for grouping related information.</p><button style=\"background: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 14px;\">Action</button></div>"
+    },
+    {
+      "id": "fluent-divider",
+      "name": "Divider",
+      "description": "Visual separator between content sections",
+      "category": "Layout",
+      "githubPath": "react-components/react-divider",
+      "htmlCode": "<div style=\"margin: 16px 0;\"><hr style=\"border: none; height: 1px; background: #e1e5e9; margin: 0;\" /></div>"
+    },
+    {
+      "id": "fluent-breadcrumb",
+      "name": "Breadcrumb",
+      "description": "Navigation breadcrumb trail",
+      "category": "Navigation",
+      "githubPath": "react-components/react-breadcrumb",
+      "htmlCode": "<nav style=\"font-family: 'Segoe UI', sans-serif; font-size: 14px;\"><ol style=\"list-style: none; padding: 0; margin: 0; display: flex; align-items: center;\"><li><a href=\"#\" style=\"color: #0078d4; text-decoration: none;\">Home</a></li><li style=\"margin: 0 8px; color: #8a8886;\">/</li><li><a href=\"#\" style=\"color: #0078d4; text-decoration: none;\">Category</a></li><li style=\"margin: 0 8px; color: #8a8886;\">/</li><li style=\"color: #323130;\">Current Page</li></ol></nav>"
+    },
+    {
+      "id": "fluent-tab-list",
+      "name": "TabList",
+      "description": "Horizontal tab navigation",
+      "category": "Navigation",
+      "githubPath": "react-components/react-tabs",
+      "htmlCode": "<div style=\"font-family: 'Segoe UI', sans-serif;\"><div style=\"display: flex; border-bottom: 1px solid #e1e5e9;\"><button style=\"background: none; border: none; padding: 12px 16px; cursor: pointer; font-size: 14px; font-weight: 600; color: #0078d4; border-bottom: 2px solid #0078d4;\">Tab 1</button><button style=\"background: none; border: none; padding: 12px 16px; cursor: pointer; font-size: 14px; color: #605e5c; border-bottom: 2px solid transparent;\">Tab 2</button><button style=\"background: none; border: none; padding: 12px 16px; cursor: pointer; font-size: 14px; color: #605e5c; border-bottom: 2px solid transparent;\">Tab 3</button></div><div style=\"padding: 20px 0;\"><p style=\"margin: 0; color: #323130;\">Content for Tab 1</p></div></div>"
+    },
+    {
+      "id": "fluent-avatar",
+      "name": "Avatar",
+      "description": "User profile image or initials",
+      "category": "Data Display",
+      "githubPath": "react-components/react-avatar",
+      "htmlCode": "<div style=\"width: 40px; height: 40px; border-radius: 50%; background: #0078d4; display: flex; align-items: center; justify-content: center; color: white; font-family: 'Segoe UI', sans-serif; font-weight: 600; font-size: 16px;\">JD</div>"
+    },
+    {
+      "id": "fluent-badge",
+      "name": "Badge",
+      "description": "Small status or count indicator",
+      "category": "Data Display",
+      "githubPath": "react-components/react-badge",
+      "htmlCode": "<span style=\"background: #d13438; color: white; font-family: 'Segoe UI', sans-serif; font-size: 12px; font-weight: 600; padding: 2px 6px; border-radius: 10px; min-width: 16px; text-align: center; display: inline-block;\">3</span>"
+    },
+    {
+      "id": "fluent-progress-bar",
+      "name": "ProgressBar",
+      "description": "Visual progress indicator",
+      "category": "Data Display",
+      "githubPath": "react-components/react-progress",
+      "htmlCode": "<div style=\"font-family: 'Segoe UI', sans-serif; margin-bottom: 16px;\"><div style=\"margin-bottom: 8px; font-weight: 600; color: #323130; font-size: 14px;\">Progress: 60%</div><div style=\"width: 100%; max-width: 300px; height: 8px; background: #f3f2f1; border-radius: 4px; overflow: hidden;\"><div style=\"width: 60%; height: 100%; background: #0078d4; transition: width 0.3s ease;\"></div></div></div>"
+    },
+    {
+      "id": "fluent-spinner",
+      "name": "Spinner",
+      "description": "Loading spinner indicator",
+      "category": "Data Display",
+      "githubPath": "react-components/react-spinner",
+      "htmlCode": "<div style=\"display: flex; align-items: center; gap: 12px; font-family: 'Segoe UI', sans-serif;\"><div style=\"width: 20px; height: 20px; border: 2px solid #f3f2f1; border-top: 2px solid #0078d4; border-radius: 50%; animation: spin 1s linear infinite;\"></div><span style=\"color: #323130; font-size: 14px;\">Loading...</span></div><style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>"
+    },
+    {
+      "id": "fluent-message-bar",
+      "name": "MessageBar",
+      "description": "Notification message with status styling",
+      "category": "Feedback",
+      "githubPath": "react-components/react-message-bar",
+      "htmlCode": "<div style=\"background: #f3f9fd; border: 1px solid #cfe4fa; border-left: 4px solid #0078d4; padding: 12px 16px; border-radius: 4px; font-family: 'Segoe UI', sans-serif; margin-bottom: 16px;\"><div style=\"display: flex; align-items: center; gap: 8px;\"><span style=\"color: #004578; font-weight: 600; font-size: 14px;\">Info</span><span style=\"color: #323130; font-size: 14px;\">This is an informational message.</span></div></div>"
+    },
+    {
+      "id": "fluent-toast",
+      "name": "Toast",
+      "description": "Temporary notification popup",
+      "category": "Feedback",
+      "githubPath": "react-components/react-toast",
+      "htmlCode": "<div style=\"background: white; border: 1px solid #e1e5e9; border-radius: 8px; padding: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.15); font-family: 'Segoe UI', sans-serif; max-width: 300px;\"><div style=\"display: flex; align-items: center; gap: 12px;\"><div style=\"width: 4px; height: 40px; background: #107c10; border-radius: 2px;\"></div><div><div style=\"font-weight: 600; color: #323130; font-size: 14px; margin-bottom: 4px;\">Success!</div><div style=\"color: #605e5c; font-size: 14px;\">Your action was completed successfully.</div></div></div></div>"
+    },
+    {
+      "id": "fluent-menu",
+      "name": "Menu",
+      "description": "Dropdown menu with selectable options",
+      "category": "Overlays",
+      "githubPath": "react-components/react-menu",
+      "htmlCode": "<div style=\"background: white; border: 1px solid #e1e5e9; border-radius: 4px; box-shadow: 0 4px 16px rgba(0,0,0,0.15); font-family: 'Segoe UI', sans-serif; min-width: 200px;\"><div style=\"padding: 4px 0;\"><div style=\"padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130;\" onmouseover=\"this.style.background='#f3f2f1'\" onmouseout=\"this.style.background='transparent'\">Menu Item 1</div><div style=\"padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130;\" onmouseover=\"this.style.background='#f3f2f1'\" onmouseout=\"this.style.background='transparent'\">Menu Item 2</div><hr style=\"border: none; height: 1px; background: #e1e5e9; margin: 4px 0;\" /><div style=\"padding: 8px 12px; cursor: pointer; font-size: 14px; color: #323130;\" onmouseover=\"this.style.background='#f3f2f1'\" onmouseout=\"this.style.background='transparent'\">Menu Item 3</div></div></div>"
+    },
+    {
+      "id": "fluent-toolbar",
+      "name": "Toolbar",
+      "description": "Container for action buttons and controls",
+      "category": "Navigation",
+      "githubPath": "react-components/react-toolbar",
+      "htmlCode": "<div style=\"background: #f8f9fa; border: 1px solid #e1e5e9; border-radius: 4px; padding: 8px; display: flex; align-items: center; gap: 8px; font-family: 'Segoe UI', sans-serif;\"><button style=\"background: none; border: none; padding: 8px; cursor: pointer; border-radius: 4px; font-size: 14px;\">Cut</button><button style=\"background: none; border: none; padding: 8px; cursor: pointer; border-radius: 4px; font-size: 14px;\">Copy</button><button style=\"background: none; border: none; padding: 8px; cursor: pointer; border-radius: 4px; font-size: 14px;\">Paste</button><div style=\"width: 1px; height: 20px; background: #e1e5e9; margin: 0 4px;\"></div><button style=\"background: none; border: none; padding: 8px; cursor: pointer; border-radius: 4px; font-size: 14px;\">Undo</button><button style=\"background: none; border: none; padding: 8px; cursor: pointer; border-radius: 4px; font-size: 14px;\">Redo</button></div>"
     }
   ]
 }

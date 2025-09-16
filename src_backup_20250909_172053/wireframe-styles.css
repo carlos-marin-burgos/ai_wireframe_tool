@@ -99,7 +99,7 @@ header {
 /* Secondary Heading Styles */
 .wireframe-subheading,
 .section-title {
-  color: #161616;
+  color: #d1dbe4 !important;
   font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 24px;
   font-weight: 600;
@@ -111,7 +111,7 @@ header {
 /* Tertiary Heading Styles */
 .wireframe-section-header,
 .subsection-title {
-  color: #161616;
+  color: #d1dbe4;
   font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 20px;
   font-weight: 600;
@@ -124,7 +124,7 @@ header {
 .wireframe-preview h1,
 .wireframe-content h1,
 .generated-wireframe h1 {
-  color: #161616 !important;
+  color: #d1dbe4 !important;
   font-feature-settings: "liga" off, "clig" off !important;
   font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif !important;
   font-size: 32px !important;

@@ -1,10 +1,265 @@
 const express = require("express");
 const cors = require("cors");
+const fs = require("fs");
+const path = require("path");
 const { OpenAI } = require("openai");
+const { WIREFRAME_COLORS } = require("./config/colors");
+const {
+  AccessibilityColorValidator,
+} = require("./accessibility/color-validator");
 
 // NO MORE MICROSOFT LEARN IMPORTS - CLEAN SLATE
 
 require("dotenv").config();
+
+// Initialize accessibility validator
+const accessibilityValidator = new AccessibilityColorValidator();
+
+// 🎯 QUICK TEMPLATES MANAGER
+class QuickTemplateManager {
+  constructor() {
+    this.templatesPath = path.join(__dirname, "templates");
+    this.templates = new Map();
+    this.loadTemplates();
+  }
+
+  loadTemplates() {
+    const templateConfigs = [
+      {
+        id: "microsoft-learn-home",
+        name: "Microsoft Learn Homepage",
+        description:
+          "Complete learning platform homepage with navigation, hero, and course sections",
+        category: "Education",
+        file: "microsoft-learn-home.html",
+        keywords: [
+          "learning",
+          "education",
+          "homepage",
+          "courses",
+          "microsoft learn",
+        ],
+        preview: "Hero section with learning paths and featured courses",
+      },
+      {
+        id: "certification-tracker",
+        name: "Certification Tracker",
+        description:
+          "Progress tracking dashboard for certifications and learning modules",
+        category: "Dashboard",
+        file: "certification-tracker.html",
+        keywords: [
+          "certification",
+          "progress",
+          "tracker",
+          "dashboard",
+          "learning progress",
+        ],
+        preview:
+          "Progress cards with completion status and certification paths",
+      },
+      {
+        id: "microsoft-docs",
+        name: "Documentation Layout",
+        description:
+          "Clean documentation layout with navigation and content structure",
+        category: "Documentation",
+        file: "microsoft-docs.html",
+        keywords: [
+          "documentation",
+          "docs",
+          "technical",
+          "articles",
+          "reference",
+        ],
+        preview: "Sidebar navigation with main content area for documentation",
+      },
+      {
+        id: "azure-learning-path",
+        name: "Azure Learning Path",
+        description:
+          "Azure-specific learning content with modules and hands-on labs",
+        category: "Education",
+        file: "azure-learning-path.html",
+        keywords: ["azure", "cloud", "learning path", "modules", "hands-on"],
+        preview: "Azure-branded learning modules with progress indicators",
+      },
+      {
+        id: "microsoft-learning-plan",
+        name: "Learning Plan",
+        description:
+          "Structured learning plan with modules, assessments, and timeline",
+        category: "Education",
+        file: "microsoft-learning-plan.html",
+        keywords: [
+          "learning plan",
+          "modules",
+          "timeline",
+          "structured learning",
+        ],
+        preview:
+          "Timeline-based learning plan with module cards and assessments",
+      },
+    ];
+
+    templateConfigs.forEach((config) => {
+      this.templates.set(config.id, config);
+    });
+
+    console.log(`📚 Loaded ${this.templates.size} quick templates`);
+  }
+
+  getTemplates() {
+    return Array.from(this.templates.values());
+  }
+
+  getTemplate(templateId) {
+    return this.templates.get(templateId);
+  }
+
+  async generateFromTemplate(templateId, customization = {}) {
+    const template = this.getTemplate(templateId);
+    if (!template) {
+      throw new Error(`Template '${templateId}' not found`);
+    }
+
+    const filePath = path.join(this.templatesPath, template.file);
+
+    try {
+      let htmlContent = fs.readFileSync(filePath, "utf8");
+
+      // Apply customizations and color palette updates
+      htmlContent = await this.applyCustomizations(
+        htmlContent,
+        customization,
+        template
+      );
+
+      // Apply accessibility validation and fixes
+      const contrastValidation =
+        accessibilityValidator.validateHtmlColors(htmlContent);
+      let accessibilityStatus = "passed";
+      let fixes = [];
+
+      if (!contrastValidation.isValid) {
+        console.log(
+          `⚠️ Template ${templateId} has accessibility issues:`,
+          contrastValidation.issues.length
+        );
+
+        const fixResult = accessibilityValidator.fixContrastIssues(htmlContent);
+        if (fixResult.hasChanges) {
+          htmlContent = fixResult.fixedContent;
+          fixes = fixResult.fixes;
+          accessibilityStatus = "fixed";
+          console.log(
+            `✅ Applied ${fixes.length} accessibility fixes to template ${templateId}`
+          );
+        } else {
+          accessibilityStatus = "issues_detected";
+        }
+      }
+
+      return {
+        html: htmlContent,
+        template: template,
+        accessibility: {
+          status: accessibilityStatus,
+          validationResults: contrastValidation,
+          appliedFixes: fixes,
+        },
+        customizations: customization,
+        generatedBy: "QuickTemplate",
+        timestamp: new Date().toISOString(),
+      };
+    } catch (error) {
+      console.error(`❌ Error loading template ${templateId}:`, error);
+      throw new Error(`Failed to load template: ${error.message}`);
+    }
+  }
+
+  async applyCustomizations(htmlContent, customization, template) {
+    // Update colors to use our blue monochromatic palette
+    const colorMappings = {
+      "#0078d4": WIREFRAME_COLORS.primary, // Microsoft blue → Dark blue
+      "#106ebe": WIREFRAME_COLORS.secondary, // Secondary blue → Medium blue
+      "#005a9e": WIREFRAME_COLORS.primary, // Dark blue → Primary
+      "#E9ECEF": WIREFRAME_COLORS.light, // Light gray → Light blue
+      "#f1f1f1": WIREFRAME_COLORS.lightest, // Very light → Lightest blue
+      "#faf9f8": WIREFRAME_COLORS.lightest, // Background → Lightest blue
+      "#ffffff": WIREFRAME_COLORS.white, // White stays white
+    };
+
+    // Apply color palette updates
+    for (const [oldColor, newColor] of Object.entries(colorMappings)) {
+      const regex = new RegExp(oldColor, "gi");
+      htmlContent = htmlContent.replace(regex, newColor);
+    }
+
+    // Apply title customization
+    if (customization.title) {
+      htmlContent = htmlContent.replace(/\{\{title\}\}/g, customization.title);
+      htmlContent = htmlContent.replace(
+        /<title>.*?<\/title>/i,
+        `<title>${customization.title}</title>`
+      );
+    }
+
+    // Apply content customization
+    if (customization.heroTitle) {
+      htmlContent = htmlContent.replace(
+        /Welcome to.*?Platform/g,
+        customization.heroTitle
+      );
+    }
+
+    if (customization.heroDescription) {
+      htmlContent = htmlContent.replace(
+        /Built with your React components for.*?$/gm,
+        customization.heroDescription
+      );
+    }
+
+    return htmlContent;
+  }
+
+  findTemplateByKeywords(query) {
+    const queryLower = query.toLowerCase();
+    const matches = [];
+
+    for (const template of this.templates.values()) {
+      let score = 0;
+
+      // Check name match
+      if (template.name.toLowerCase().includes(queryLower)) {
+        score += 3;
+      }
+
+      // Check keyword matches
+      const matchingKeywords = template.keywords.filter(
+        (keyword) =>
+          queryLower.includes(keyword) || keyword.includes(queryLower)
+      );
+      score += matchingKeywords.length * 2;
+
+      // Check description match
+      if (template.description.toLowerCase().includes(queryLower)) {
+        score += 1;
+      }
+
+      if (score > 0) {
+        matches.push({ template, score });
+      }
+    }
+
+    // Sort by score (highest first)
+    matches.sort((a, b) => b.score - a.score);
+    return matches.map((match) => match.template);
+  }
+}
+
+// Initialize Quick Templates Manager
+const quickTemplateManager = new QuickTemplateManager();
 
 // Initialize OpenAI client for Azure OpenAI
 let openai = null;
@@ -302,7 +557,16 @@ app.get("/test", (req, res) => {
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {
-  res.json({ status: "healthy", timestamp: new Date().toISOString() });
+  const templateCount = quickTemplateManager.getTemplates().length;
+  res.json({
+    status: "healthy",
+    timestamp: new Date().toISOString(),
+    features: {
+      aiWireframes: !!openai,
+      quickTemplates: templateCount,
+      accessibilityValidation: true,
+    },
+  });
 });
 
 // Azure OpenAI monitoring status endpoint
@@ -459,6 +723,101 @@ function checkRateLimit() {
   return { rateLimited: false };
 }
 
+// 🎯 QUICK TEMPLATES ENDPOINTS
+
+// Get all available quick templates
+app.get("/api/quick-templates", async (req, res) => {
+  try {
+    const templates = quickTemplateManager.getTemplates();
+    res.json({
+      templates,
+      count: templates.length,
+      success: true,
+    });
+  } catch (error) {
+    console.error("❌ Error fetching quick templates:", error);
+    res.status(500).json({
+      error: "Failed to fetch templates",
+      message: error.message,
+    });
+  }
+});
+
+// Generate wireframe from quick template
+app.post("/api/quick-template", async (req, res) => {
+  try {
+    const { templateId, customization = {} } = req.body;
+
+    if (!templateId) {
+      return res.status(400).json({
+        error: "Template ID is required",
+        availableTemplates: quickTemplateManager
+          .getTemplates()
+          .map((t) => t.id),
+      });
+    }
+
+    console.log(`🎯 Quick Template Request: ${templateId}`);
+    console.log(`🎨 Customizations:`, customization);
+
+    const result = await quickTemplateManager.generateFromTemplate(
+      templateId,
+      customization
+    );
+
+    console.log(`✅ Quick template ${templateId} generated successfully`);
+    console.log(`🛡️ Accessibility status: ${result.accessibility.status}`);
+
+    res.json(result);
+  } catch (error) {
+    console.error("❌ Error generating quick template:", error);
+
+    if (error.message.includes("not found")) {
+      return res.status(404).json({
+        error: "Template not found",
+        message: error.message,
+        availableTemplates: quickTemplateManager
+          .getTemplates()
+          .map((t) => t.id),
+      });
+    }
+
+    res.status(500).json({
+      error: "Failed to generate template",
+      message: error.message,
+    });
+  }
+});
+
+// Search templates by keywords
+app.post("/api/search-templates", async (req, res) => {
+  try {
+    const { query } = req.body;
+
+    if (!query || query.trim().length === 0) {
+      return res.status(400).json({
+        error: "Search query is required",
+      });
+    }
+
+    const matchingTemplates =
+      quickTemplateManager.findTemplateByKeywords(query);
+
+    res.json({
+      query,
+      matches: matchingTemplates,
+      count: matchingTemplates.length,
+      success: true,
+    });
+  } catch (error) {
+    console.error("❌ Error searching templates:", error);
+    res.status(500).json({
+      error: "Failed to search templates",
+      message: error.message,
+    });
+  }
+});
+
 // MAIN WIREFRAME GENERATION ENDPOINT - PURE AI-FIRST APPROACH
 app.post("/api/generate-html-wireframe", async (req, res) => {
   const {
@@ -498,8 +857,39 @@ app.post("/api/generate-html-wireframe", async (req, res) => {
     if (aiGeneratedHtml) {
       console.log("✅ AI generation successful!");
 
+      // 🛡️ STEP 2: Apply accessibility validation and auto-fix
+      console.log("🔍 Running accessibility validation...");
+      const contrastValidation =
+        accessibilityValidator.validateHtmlColors(aiGeneratedHtml);
+
+      let finalHtml = aiGeneratedHtml;
+      let accessibilityStatus = "passed";
+      let fixes = [];
+
+      if (!contrastValidation.isValid) {
+        console.log(
+          "⚠️ Accessibility issues detected:",
+          contrastValidation.issues.length
+        );
+
+        // Automatically fix contrast issues
+        const fixResult =
+          accessibilityValidator.fixContrastIssues(aiGeneratedHtml);
+        if (fixResult.hasChanges) {
+          finalHtml = fixResult.fixedContent;
+          fixes = fixResult.fixes;
+          accessibilityStatus = "fixed";
+          console.log(`✅ Applied ${fixes.length} accessibility fixes:`, fixes);
+        } else {
+          accessibilityStatus = "issues_detected";
+          console.log("⚠️ Issues detected but could not auto-fix");
+        }
+      } else {
+        console.log("✅ All accessibility checks passed!");
+      }
+
       return res.json({
-        html: aiGeneratedHtml,
+        html: finalHtml,
         fallback: false,
         cached: false,
         theme: designTheme,
@@ -507,6 +897,11 @@ app.post("/api/generate-html-wireframe", async (req, res) => {
         generatedBy: "AI",
         timestamp: new Date().toISOString(),
         aiPowered: true,
+        accessibility: {
+          status: accessibilityStatus,
+          validationResults: contrastValidation,
+          appliedFixes: fixes,
+        },
       });
     }
 
@@ -1033,17 +1428,20 @@ async function generateWireframeWithAI(
     console.log("🧠 Generating PURE AI wireframe for:", description);
     console.log(`🎨 Theme: ${designTheme}, Color Scheme: ${colorScheme}`);
 
-    // Define color schemes for AI to use
+    // Define color schemes for AI to use - NEW BLUE MONOCHROMATIC THEME
     const colorSchemes = {
       primary: {
-        main: "#8E9AAF",
-        secondary: "#68769C",
-        bg: "#ffffff",
-        text: "#3C4858",
-        border: "#e5e5e5",
-        banner: "#ffffff",
-        headerBg: "#ffffff",
-        headerText: "#000000",
+        main: "#194a7a", // Darkest blue - for primary buttons and accents
+        secondary: "#476f95", // Medium-dark blue - for secondary elements
+        bg: "#ffffff", // White background - for main content areas
+        text: "#194a7a", // Dark blue text - ONLY on white/light backgrounds
+        border: "#a3b7ca", // Light blue-gray border
+        banner: "#d1dbe4", // Light blue-gray surface - for hero sections
+        headerBg: "#ffffff", // White header background
+        headerText: "#194a7a", // Dark blue header text - ONLY on white backgrounds
+        buttonText: "#ffffff", // WHITE text - for buttons with dark blue backgrounds
+        lightBg: "#d1dbe4", // Light backgrounds
+        lightText: "#194a7a", // Dark text on light backgrounds
       },
       success: {
         main: "#107c10",
@@ -1108,9 +1506,53 @@ async function generateWireframeWithAI(
     // CLEAN AI PROMPT - Let AI be naturally intelligent
     const prompt = `Create a modern, responsive HTML wireframe for: "${description}"
 
+CRITICAL COLOR CONTRAST REQUIREMENTS:
+- Use ONLY these blue monochromatic colors: #194a7a (dark blue), #476f95 (medium-dark blue), #7593af (medium blue), #a3b7ca (light blue-gray), #d1dbe4 (lightest blue-gray), #ffffff (white)
+- NEVER use old colors like #007bff, #0078d4, #8E9AAF, #68769C, or any purple/violet colors
+
+MANDATORY CONTRAST RULES (NO EXCEPTIONS):
+- Background #194a7a (dark blue) → Text MUST be #ffffff (white)
+- Background #476f95 (medium-dark blue) → Text MUST be #ffffff (white)
+- Background #7593af (medium blue) → Text MUST be #ffffff (white)
+- Background #a3b7ca (light blue-gray) → Text MUST be #194a7a (dark blue)
+- Background #d1dbe4 (lightest blue-gray) → Text MUST be #194a7a (dark blue)
+- Background #ffffff (white) → Text MUST be #194a7a (dark blue)
+
+NEVER COMBINE:
+- Dark backgrounds with dark text
+- Light backgrounds with white text
+- Any background with black text (#000000)
+
+SPECIFIC COLOR USAGE (FOLLOW EXACTLY):
+- Primary buttons: background #194a7a (dark blue), text #ffffff (white) ✓
+- Secondary buttons: background #476f95 (medium-dark blue), text #ffffff (white) ✓
+- Tertiary/Light buttons: background #d1dbe4 (light blue-gray), text #194a7a (dark blue) ✓
+- Outline buttons: background transparent, border #194a7a, text #194a7a ✓
+- Main content backgrounds: #ffffff (white) with text #194a7a (dark blue) ✓
+- Hero sections: background #d1dbe4 (light blue-gray) with text #194a7a (dark blue) ✓
+- Borders and dividers: #a3b7ca (light blue-gray)
+
+CRITICAL: If you use a LIGHT background (#d1dbe4, #a3b7ca, #ffffff) you MUST use DARK text (#194a7a)
+CRITICAL: If you use a DARK background (#194a7a, #476f95) you MUST use WHITE text (#ffffff)
+
+NEVER DO THESE COMBINATIONS:
+- #d1dbe4 background with #ffffff text (light background + white text = BAD!)
+- #194a7a text on #476f95 background (dark text on dark background = BAD!)
+- Any light background (#d1dbe4, #a3b7ca, #ffffff) with white text (#ffffff)
+
+EXAMPLES OF CORRECT CSS:
+PRIMARY BUTTON: background-color: #194a7a; color: #ffffff;
+SECONDARY BUTTON: background-color: #476f95; color: #ffffff;
+TERTIARY/LIGHT BUTTON: background-color: #d1dbe4; color: #194a7a;
+HERO SECTION: background-color: #d1dbe4; color: #194a7a;
+
+WRONG EXAMPLES (NEVER DO THIS):
+BAD SECONDARY BUTTON: background-color: #d1dbe4; color: #ffffff; (light bg + white text = BAD!)
+BAD LIGHT ELEMENT: background-color: #a3b7ca; color: #ffffff; (light bg + white text = BAD!)
+
 Requirements:
 - Complete HTML document with inline CSS and JavaScript
-- Professional, clean design
+- Professional, clean design with proper contrast
 - Color scheme: ${colorScheme}
 - Modern web design standards
 - Fully responsive design (desktop, tablet, mobile)${mobileInstructions}${responsiveInstructions}
@@ -1125,7 +1567,7 @@ Generate the complete HTML now:`;
           {
             role: "system",
             content:
-              "You are a professional web designer specializing in responsive design. Create clean, modern HTML wireframes with inline CSS styling and JavaScript functionality. When mobile navigation is requested, always include a working hamburger menu with proper CSS animations and JavaScript toggle functionality. Use semantic HTML5 elements and modern CSS Grid/Flexbox layouts.",
+              "You are a professional web designer specializing in responsive design and accessible color schemes. Create clean, modern HTML wireframes with inline CSS styling and JavaScript functionality. ALWAYS use the blue monochromatic color palette: #194a7a, #476f95, #7593af, #a3b7ca, #d1dbe4, #ffffff. CRITICAL BUTTON RULES: Primary buttons use background #194a7a + white text. Secondary buttons use background #476f95 + white text. Any button with light background (#d1dbe4, #a3b7ca) MUST use dark text (#194a7a). NEVER put white text on light backgrounds! NEVER use old colors like #007bff, #0078d4, #8E9AAF, or purple/violet colors. When mobile navigation is requested, always include a working hamburger menu with proper CSS animations and JavaScript toggle functionality. Use semantic HTML5 elements and modern CSS Grid/Flexbox layouts.",
           },
           {
             role: "user",
@@ -1189,7 +1631,16 @@ app.listen(PORT, () => {
     `🎯 Wireframe generation: http://localhost:${PORT}/api/generate-html-wireframe`
   );
   console.log(
+    `📚 Quick templates: http://localhost:${PORT}/api/quick-templates`
+  );
+  console.log(
+    `⚡ Generate from template: http://localhost:${PORT}/api/quick-template`
+  );
+  console.log(
     `🧠 AI-first approach: Always tries AI generation first, smart fallbacks when needed`
+  );
+  console.log(
+    `🛡️ Accessibility validation: Automatic contrast checking and fixing enabled`
   );
 });
 

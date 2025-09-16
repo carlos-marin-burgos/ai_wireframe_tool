@@ -216,7 +216,7 @@ const DragWireframe: React.FC<DragWireframeProps> = ({
         outlined.forEach(node => {
             if (!(node instanceof HTMLElement)) return;
             // We only clear the lightweight hover outline, not active editing outline (which should already be finished)
-            if (node.style.outline === '1px solid rgb(0, 123, 255)' || node.style.outline === '1px solid #007bff') {
+            if (node.style.outline === '1px solid var(--color-primary-medium)' || node.style.outline === '1px solid rgb(117, 147, 175)') {
                 node.style.outline = '1px solid transparent';
             }
         });
@@ -413,7 +413,7 @@ const DragWireframe: React.FC<DragWireframeProps> = ({
             const target = e.target as HTMLElement;
             if (!container.contains(target)) return;
             if (target && isEligibleEditable(target) && target.contentEditable !== 'true') {
-                target.style.outline = '1px solid #007bff';
+                target.style.outline = '1px solid var(--color-primary-medium)';
                 target.style.cursor = 'text';
             }
         });
@@ -459,8 +459,8 @@ const DragWireframe: React.FC<DragWireframeProps> = ({
         // Start editing new element
         el.contentEditable = 'true';
         el.setAttribute('data-editing', 'true');
-        el.style.backgroundColor = 'rgba(0,123,255,0.12)';
-        el.style.outline = '2px solid #0d6efd';
+        el.style.backgroundColor = 'var(--color-background-light)';
+        el.style.outline = '2px solid var(--color-primary-medium-dark)';
         el.focus();
         currentEditingRef.current = el;
         // Remove generic editable tag while actively editing (avoid double styles)

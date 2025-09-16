@@ -7,9 +7,9 @@ const { app } = require("@azure/functions");
 app.http("figmaOAuthCallback", {
   methods: ["GET"],
   authLevel: "anonymous",
-  route: "figma/oauth/callback",
+  // Keep route name aligned with start function; explicit route omitted so default becomes /api/figmaOAuthCallback
   handler: async (request, context) => {
-    context.log("Handling Figma OAuth2 callback");
+    context.log("🔁 Handling Figma OAuth2 callback", { url: request.url });
 
     try {
       const url = new URL(request.url);
@@ -58,14 +58,24 @@ app.http("figmaOAuthCallback", {
       }
 
       // Exchange code for access token
+      const wantsDebug = url.searchParams.get("debug") === "1";
       const tokenResponse = await exchangeCodeForToken(code, context);
 
       if (!tokenResponse.success) {
+        if (wantsDebug) {
+          return {
+            status: 400,
+            jsonBody: {
+              error: "Token Exchange Failed",
+              message: tokenResponse.error,
+              debug: tokenResponse.debug || null,
+              redirectUriUsed: tokenResponse.redirectUri,
+            },
+          };
+        }
         return {
           status: 400,
-          headers: {
-            "Content-Type": "text/html",
-          },
+          headers: { "Content-Type": "text/html" },
           body: createErrorPage("Token Exchange Failed", tokenResponse.error),
         };
       }
@@ -106,47 +116,65 @@ async function exchangeCodeForToken(code, context) {
     const clientSecret = process.env.FIGMA_CLIENT_SECRET;
     const redirectUri =
       process.env.FIGMA_REDIRECT_URI ||
-      "http://localhost:7072/api/figma/oauth/callback";
+      process.env.FIGMA_REDIRECT_URI_DEV ||
+      "http://localhost:7071/api/figmaOAuthCallback";
 
     if (!clientId || !clientSecret) {
       throw new Error("Missing Figma OAuth2 credentials");
     }
 
+    const form = new URLSearchParams();
+    form.set("client_id", clientId);
+    form.set("client_secret", clientSecret);
+    form.set("redirect_uri", redirectUri);
+    form.set("code", code);
+    form.set("grant_type", "authorization_code");
+
+    context.log("📤 Exchanging code for token", {
+      redirectUri,
+      codePreview: code.substring(0, 6) + "***",
+    });
+
     const response = await fetch("https://www.figma.com/api/oauth/token", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
       },
-      body: JSON.stringify({
-        client_id: clientId,
-        client_secret: clientSecret,
-        redirect_uri: redirectUri,
-        code: code,
-        grant_type: "authorization_code",
-      }),
+      body: form.toString(),
     });
 
-    const data = await response.json();
+    const rawText = await response.text();
+    let data;
+    try {
+      data = JSON.parse(rawText);
+    } catch (e) {
+      data = { parseError: e.message, rawText };
+    }
 
     if (!response.ok) {
-      context.log.error("Token exchange failed:", data);
+      context.log.error("❌ Token exchange failed", {
+        status: response.status,
+        statusText: response.statusText,
+        data,
+      });
       return {
         success: false,
-        error: data.error || "Token exchange failed",
+        error: data.error || data.message || "Token exchange failed",
+        debug: {
+          status: response.status,
+          statusText: response.statusText,
+          raw: data,
+        },
+        redirectUri,
       };
     }
 
-    context.log("Token exchange successful");
-    return {
-      success: true,
-      data: data,
-    };
+    context.log("✅ Token exchange successful");
+    return { success: true, data };
   } catch (error) {
-    context.log.error("Token exchange error:", error);
-    return {
-      success: false,
-      error: error.message,
-    };
+    context.log.error("💥 Token exchange error", { message: error.message });
+    return { success: false, error: error.message, redirectUri };
   }
 }
 
@@ -224,7 +252,7 @@ function createSuccessPage(tokens, userInfo) {
                     text-align: center;
                 }
                 .btn {
-                    background: #007bff;
+                    background: #194a7a;
                     color: white;
                     padding: 12px 24px;
                     border: none;
@@ -313,7 +341,7 @@ function createErrorPage(title, error) {
             <style>
                 body { font-family: system-ui; padding: 40px; text-align: center; }
                 .error { color: #d73a49; background: #ffeef0; padding: 20px; border-radius: 6px; }
-                .btn { background: #007bff; color: white; padding: 12px 24px; border: none; border-radius: 6px; text-decoration: none; }
+                .btn { background: #194a7a; color: white; padding: 12px 24px; border: none; border-radius: 6px; text-decoration: none; }
             </style>
         </head>
         <body>

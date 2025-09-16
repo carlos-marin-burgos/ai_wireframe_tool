@@ -11,7 +11,35 @@
    Note: Drag functionality styles are in DragWireframe.css
    ============================================ */
 
-/* Wireframe Styles - Independent CSS for Wireframe Components */
+/* CSS Variables for consistent theming */
+:root {
+  /* Blue Monochromatic Theme */
+  --color-primary-light: #d1dbe4; /* Lightest blue-gray */
+  --color-primary-medium-light: #a3b7ca; /* Light blue-gray */
+  --color-primary-medium: #7593af; /* Medium blue */
+  --color-primary-medium-dark: #476f95; /* Darker blue */
+  --color-primary-dark: #194a7a; /* Darkest blue */
+
+  /* Semantic color mappings - WCAG Compliant */
+  --color-background-light: var(
+    --color-primary-light
+  ); /* Light blue backgrounds */
+  --color-background-medium: var(
+    --color-primary-medium-light
+  ); /* Medium backgrounds */
+  --color-border: var(--color-primary-medium); /* Blue borders */
+  --color-accent: var(--color-primary-medium-dark); /* Blue accents */
+
+  /* Text colors - HIGH CONTRAST for accessibility */
+  --color-text: #000000; /* Black text for maximum contrast */
+  --color-text-muted: var(
+    --color-primary-dark
+  ); /* Dark blue for muted text (only on light backgrounds) */
+  --color-text-on-dark: #ffffff; /* White text for dark backgrounds */
+  --color-text-link: var(
+    --color-primary-dark
+  ); /* Dark blue for links (only on light backgrounds) */
+} /* Wireframe Styles - Independent CSS for Wireframe Components */
 
 /* This file is dedicated to wireframe-specific styles only */
 /* Main app styles should go in App.css */
@@ -26,12 +54,12 @@
   top: 0;
   z-index: 1000;
   background: #ffffff;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--color-border, #e0e0e0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .atlas-top-navigation:hover {
-  border-bottom-color: #c8c6c4;
+  border-bottom-color: var(--color-border, #c8c6c4);
 }
 
 /* ============================================
@@ -53,7 +81,10 @@
 
 /* Better wireframe styling for headers - only in wireframe previews */
 .wireframe-preview header {
-  background-color: #0078d4; /* Microsoft blue instead of gray */
+  background-color: var(
+    --color-primary-dark,
+    #0078d4
+  ); /* Microsoft blue instead of gray */
   color: #ffffff; /* White text on blue background */
   padding: 1em;
   border-radius: 8px; /* Rounded corners for headers */
@@ -61,7 +92,7 @@
 
 /* Better wireframe styling for navigation - only in wireframe previews */
 .wireframe-preview nav {
-  background-color: #0078d4; /* Microsoft blue */
+  background-color: var(--color-primary-dark, #0078d4); /* Microsoft blue */
   color: #ffffff; /* White text */
   padding: 12px 24px;
   border-radius: 8px; /* Rounded corners for nav */
@@ -92,7 +123,7 @@
 .wireframe-title,
 .main-heading,
 .primary-title {
-  color: var(--color-text, #161616);
+  color: var(--color-text, #194a7a);
   font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 28px;
   font-style: normal;
@@ -105,7 +136,7 @@
 /* Secondary Heading Styles */
 .wireframe-subheading,
 .section-title {
-  color: var(--color-text, #161616);
+  color: var(--color-text, #194a7a);
   font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 20px;
   font-weight: 600;
@@ -117,7 +148,7 @@
 /* Tertiary Heading Styles */
 .wireframe-section-header,
 .subsection-title {
-  color: var(--color-text, #161616);
+  color: var(--color-text, #194a7a);
   font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 16px;
   font-weight: 600;
@@ -130,7 +161,7 @@
 .wireframe-preview h1,
 .wireframe-content h1,
 .generated-wireframe h1 {
-  color: var(--color-text, #161616) !important;
+  color: var(--color-text, #194a7a) !important;
   font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif !important;
   font-size: 28px !important;
   font-style: normal !important;
@@ -144,7 +175,7 @@
 .wireframe-preview h2,
 .wireframe-content h2,
 .generated-wireframe h2 {
-  color: var(--color-text, #161616) !important;
+  color: var(--color-text, #194a7a) !important;
   font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif !important;
   font-size: 20px !important;
   font-weight: 600 !important;
@@ -155,7 +186,7 @@
 .wireframe-preview h3,
 .wireframe-content h3,
 .generated-wireframe h3 {
-  color: var(--color-text, #161616) !important;
+  color: var(--color-text, #194a7a) !important;
   font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif !important;
   font-size: 16px !important;
   font-weight: 600 !important;
@@ -223,7 +254,7 @@ ul.nav-list,
 .nav-links a,
 .nav-list a {
   text-decoration: none;
-  color: #3c4858;
+  color: var(--color-text, #3c4858);
   padding: 0.5rem 1rem;
   border-radius: 4px;
   transition: background-color 0.2s ease;
@@ -232,8 +263,8 @@ ul.nav-list,
 
 .nav-links a:hover,
 .nav-list a:hover {
-  background-color: #f3f2f1;
-  color: #3c4858;
+  background-color: var(--color-background-light, #f3f2f1);
+  color: var(--color-text, #3c4858);
 }
 
 /* ============================================
@@ -259,12 +290,12 @@ ul.nav-list,
 }
 
 .wireframe-nav-item:hover {
-  background-color: #f3f2f1;
+  background-color: var(--color-background-light, #f3f2f1);
 }
 
 /* Navigation links */
 .wireframe-nav-link {
-  color: #000000;
+  color: var(--color-text, #000000);
   text-decoration: none;
   font-size: 14px;
   padding: 8px 12px;
@@ -274,8 +305,8 @@ ul.nav-list,
 }
 
 .wireframe-nav-link:hover {
-  background-color: #f3f2f1;
-  color: #000000;
+  background-color: var(--color-background-light, #f3f2f1);
+  color: var(--color-text, #000000);
 }
 
 /* Microsoft Learn header styles */
@@ -285,7 +316,7 @@ ul.nav-list,
   gap: 12px;
   font-weight: 600;
   font-size: 16px;
-  color: #000000;
+  color: var(--color-text, #000000);
 }
 
 /* Sidebar Navigation Lists */
@@ -299,7 +330,7 @@ ul.nav-list,
 .sidebar li,
 .side-nav li {
   margin: 0;
-  border-bottom: 1px solid #f3f2f1;
+  border-bottom: 1px solid var(--color-background-light, #f3f2f1);
 }
 
 .sidebar a,
@@ -307,7 +338,7 @@ ul.nav-list,
   display: block;
   padding: 0.75rem 1rem;
   text-decoration: none;
-  color: #68769c;
+  color: var(--color-text-muted, #68769c);
   font-size: 0.9rem;
   transition: all 0.2s ease;
 }
@@ -316,9 +347,9 @@ ul.nav-list,
 .side-nav a:hover,
 .sidebar a.active,
 .side-nav a.active {
-  background-color: #e9ecef;
-  color: #3c4858;
-  border-left: 3px solid #cbc2c2;
+  background-color: var(--color-background-medium, #e9ecef);
+  color: var(--color-text, #3c4858);
+  border-left: 3px solid var(--color-border, #cbc2c2);
 }
 
 /* Learning Objectives Lists */
@@ -332,7 +363,7 @@ ul.nav-list,
 .learning-objectives li,
 .module-content li {
   margin: 0.4rem 0;
-  color: #68769c;
+  color: var(--color-text-muted, #68769c);
   font-size: 0.875rem;
   line-height: 1.5;
 }
@@ -358,22 +389,22 @@ ol.breadcrumb {
 .breadcrumb li:not(:last-child)::after {
   content: "/";
   margin-left: 0.5rem;
-  color: #a19f9d;
+  color: var(--color-text-muted, #a19f9d);
 }
 
 .breadcrumb a {
   text-decoration: none;
-  color: #68769c;
+  color: var(--color-text-muted, #68769c);
   transition: color 0.2s ease;
 }
 
 .breadcrumb a:hover {
-  color: #3c4858;
+  color: var(--color-text, #3c4858);
   text-decoration: underline;
 }
 
 .breadcrumb .active {
-  color: #3c4858;
+  color: var(--color-text, #3c4858);
   font-weight: 500;
 }
 
@@ -390,7 +421,7 @@ ol.breadcrumb {
   margin: 0.75rem 0;
   padding-left: 1.5rem;
   position: relative;
-  color: #3c4858;
+  color: var(--color-text, #3c4858);
 }
 
 .features li::before,
@@ -410,7 +441,7 @@ div:not([class]) ul:not([class]) {
   list-style-type: disc;
   margin: 0.75rem 0;
   padding-left: 1.5rem;
-  color: #3c4858;
+  color: var(--color-text, #3c4858);
 }
 
 .content li:not([class]),
@@ -427,7 +458,7 @@ ol:not([class]) {
   list-style-type: decimal;
   margin: 0.75rem 0;
   padding-left: 1.5rem;
-  color: #3c4858;
+  color: var(--color-text, #3c4858);
 }
 
 /* Nested Lists */
@@ -460,7 +491,7 @@ ul ul ul {
   margin: 0.5rem 0;
   padding-left: 1.5rem;
   position: relative;
-  color: #68769c;
+  color: var(--color-text-muted, #68769c);
   font-size: 0.875rem;
 }
 
@@ -469,7 +500,7 @@ ul ul ul {
   content: "•";
   position: absolute;
   left: 0;
-  color: #cbc2c2;
+  color: var(--color-border, #cbc2c2);
   font-weight: bold;
   font-size: 1.2rem;
 }
@@ -489,7 +520,7 @@ ul ul ul {
   margin: 1rem 0;
   padding-left: 2.5rem;
   position: relative;
-  color: #3c4858;
+  color: var(--color-text, #3c4858);
 }
 
 .steps li::before,
@@ -499,7 +530,7 @@ ul ul ul {
   left: 0;
   top: 0;
   background: #cbc2c2;
-  color: #3c4858;
+  color: var(--color-text, #3c4858);
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 50%;
@@ -512,14 +543,14 @@ ul ul ul {
 
 /* Onboarding Section */
 .onboarding h3 {
-  color: #3c4858;
+  color: var(--color-text, #3c4858);
   font-size: 1.2rem;
   font-weight: 600;
   margin: 0 0 0.5rem 0;
 }
 
 .onboarding p {
-  color: #68769c;
+  color: var(--color-text-muted, #68769c);
   font-size: 0.9rem;
   margin: 0;
   line-height: 1.4;
@@ -543,7 +574,7 @@ ul ul ul {
 }
 
 .control-group label {
-  color: #3c4858;
+  color: var(--color-text, #3c4858);
   font-weight: 500;
   font-size: 0.9rem;
 }
@@ -575,7 +606,7 @@ ul ul ul {
 }
 
 .radio-label {
-  color: #3c4858;
+  color: var(--color-text, #3c4858);
   font-size: 0.9rem;
 }
 
@@ -584,7 +615,7 @@ ul ul ul {
   border: 1px solid #d1d1d1;
   border-radius: 6px;
   background: white;
-  color: #3c4858;
+  color: var(--color-text, #3c4858);
   font-size: 0.9rem;
   cursor: pointer;
 }
@@ -615,7 +646,7 @@ ul ul ul {
 .secondary-btn {
   background: linear-gradient(to bottom, #ffffff, #f5f5f5);
   border: 1px solid rgba(0, 0, 0, 0.1);
-  color: #3c4858;
+  color: var(--color-text, #3c4858);
   padding: 10px 18px;
   border-radius: 8px;
   cursor: pointer;
@@ -663,7 +694,7 @@ ul ul ul {
   padding: 9px 16px;
   border: 1px solid rgba(0, 0, 0, 0.08);
   background: #ffffff;
-  color: #3c4858;
+  color: var(--color-text, #3c4858);
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.9rem;
@@ -715,7 +746,7 @@ ul ul ul {
   padding: 10px 18px;
   border: none;
   background: transparent;
-  color: #68769c;
+  color: var(--color-text-muted, #68769c);
   cursor: pointer;
   border-radius: 8px;
   font-size: 0.95rem;
@@ -731,7 +762,7 @@ ul ul ul {
 
 .tab-btn:hover {
   background: rgba(243, 242, 241, 0.8);
-  color: #3c4858;
+  color: var(--color-text, #3c4858);
   transform: translateY(-1px);
 }
 
@@ -774,7 +805,7 @@ ul ul ul {
   padding: 9px 16px;
   border: 1px solid rgba(0, 0, 0, 0.08);
   background: #ffffff;
-  color: #3c4858;
+  color: var(--color-text, #3c4858);
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.9rem;
@@ -941,7 +972,7 @@ ul ul ul {
 .ms-header--dark,
 .microsoft-learn-header {
   background: #2b2b2b;
-  border-bottom-color: #68769c;
+  border-bottom-color: var(--color-text-muted, #68769c);
   color: #ffffff;
   padding: 12px 24px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -980,7 +1011,7 @@ ul ul ul {
 .microsoft-learn-header .ms-logo {
   font-size: 18px;
   font-weight: 600;
-  color: #000000;
+  color: var(--color-text, #000000);
 }
 
 .ms-header--dark .ms-header-title,
@@ -1013,7 +1044,7 @@ ul ul ul {
 .ms-nav-link,
 .microsoft-learn-header .main-nav a {
   text-decoration: none;
-  color: #000000;
+  color: var(--color-text, #000000);
   font-size: 14px;
   font-weight: 500;
   padding: 8px 12px;
@@ -1025,7 +1056,7 @@ ul ul ul {
 .ms-nav-link:hover,
 .microsoft-learn-header .main-nav a:hover {
   background: #f3f2f1;
-  color: #000000;
+  color: var(--color-text, #000000);
 }
 
 .ms-header--dark .ms-nav-link,
@@ -1071,7 +1102,7 @@ ul ul ul {
 .ms-search-icon {
   position: absolute;
   left: 12px;
-  color: #68769c;
+  color: var(--color-text-muted, #68769c);
   font-size: 16px;
 }
 
@@ -1091,7 +1122,7 @@ ul ul ul {
   width: 32px;
   height: 32px;
   background: #f3f2f1;
-  color: #3c4858;
+  color: var(--color-text, #3c4858);
   transition: background-color 0.2s ease;
 }
 
@@ -1184,7 +1215,7 @@ ul ul ul {
   font-family: "Segoe UI Variable Text", "Segoe UI", -apple-system, system-ui,
     sans-serif;
   line-height: 1.5;
-  color: #212121;
+  color: var(--color-primary-dark, #212121);
   display: grid;
   grid-template-rows: auto 1fr;
   min-height: 100%;
@@ -1218,14 +1249,14 @@ ul ul ul {
   font-family: "Segoe UI Variable Text", "Segoe UI", -apple-system, system-ui,
     sans-serif !important;
   background-color: #ffffff !important;
-  color: #212121 !important;
+  color: var(--color-primary-dark, #212121) !important;
 }
 
 /* Microsoft Learn Cards */
 .microsoftlearn-theme .ms-learn-card {
   font-family: "Segoe UI Variable Text", "Segoe UI", -apple-system, system-ui,
     sans-serif !important;
-  border: 1px solid #eaeaea !important;
+  border: 1px solid var(--color-primary-light, #eaeaea) !important;
   border-radius: 6px !important;
   box-shadow: 0 1.6px 3.6px 0 rgba(0, 0, 0, 0.132),
     0 0.3px 0.9px 0 rgba(0, 0, 0, 0.108) !important;
@@ -1260,25 +1291,25 @@ ul ul ul {
   font-size: 16px !important;
   font-weight: 600 !important;
   margin: 0 0 8px 0 !important;
-  color: #3c4858 !important;
+  color: var(--color-primary-medium-dark, #3c4858) !important;
 }
 
 .microsoftlearn-theme .ms-learn-card-description {
   font-size: 14px !important;
-  color: #68769c !important;
+  color: var(--color-primary-medium, #68769c) !important;
   margin: 0 !important;
 }
 
 .microsoftlearn-theme .ms-learn-card-footer {
   padding: 16px !important;
-  border-top: 1px solid #eaeaea !important;
+  border-top: 1px solid var(--color-primary-light, #eaeaea) !important;
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
 }
 
 .microsoftlearn-theme .ms-learn-button {
-  background-color: #8e9aaf !important;
+  background-color: var(--color-primary-medium-light, #8e9aaf) !important;
   color: white !important;
   border: none !important;
   border-radius: 4px !important;
@@ -1290,5 +1321,5 @@ ul ul ul {
 }
 
 .microsoftlearn-theme .ms-learn-button:hover {
-  background-color: #68769c !important;
+  background-color: var(--color-primary-medium, #68769c) !important;
 }

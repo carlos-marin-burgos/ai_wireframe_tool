@@ -25,7 +25,7 @@
 }
 
 .demo-icon {
-  color: #8E9AAF;
+  color: #8e9aaf;
   font-size: 20px;
 }
 
@@ -59,13 +59,13 @@
 }
 
 .demo-card:hover {
-  border-color: #8E9AAF;
+  border-color: #8e9aaf;
   box-shadow: 0 4px 12px rgba(0, 120, 212, 0.1);
   transform: translateY(-2px);
 }
 
 .demo-card.selected {
-  border-color: #8E9AAF;
+  border-color: #8e9aaf;
   background: #f8fafe;
 }
 
@@ -77,7 +77,7 @@
 .demo-image-container {
   position: relative;
   height: 120px;
-  background: #E9ECEF;
+  background: #e9ecef;
   border-radius: 8px;
   margin-bottom: 16px;
   overflow: hidden;
@@ -138,7 +138,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background: #8E9AAF;
+  background: #8e9aaf;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -152,7 +152,7 @@
 }
 
 .demo-btn:hover {
-  background: #68769C;
+  background: #68769c;
   transform: translateY(-1px);
 }
 
@@ -160,7 +160,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #8E9AAF;
+  color: #8e9aaf;
   font-size: 13px;
   font-weight: 500;
   justify-content: center;
@@ -171,7 +171,7 @@
   width: 14px;
   height: 14px;
   border: 2px solid #e1dfdd;
-  border-top: 2px solid #8E9AAF;
+  border-top: 2px solid #8e9aaf;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -186,7 +186,7 @@
 }
 
 .demo-note {
-  background: #E9ECEF;
+  background: #e9ecef;
   border-radius: 8px;
   padding: 16px;
   text-align: center;
@@ -194,7 +194,7 @@
 
 .demo-note p {
   font-size: 13px;
-  color: #161616;
+  color: #194a7a;
   margin: 0;
   line-height: 1.4;
 }

@@ -1,8 +1,8 @@
 /* Microsoft Learn Hero Section - Official Colors and Styling */
 
 .ms-learn-hero {
-  background: #E9ECEF !important; /* Always use the specified background color */
-  color: #161616 !important; /* Black text color */
+  background: #e9ecef !important; /* Always use the specified background color */
+  color: #194a7a !important; /* Blue text color */
   padding: 80px 0 64px;
   position: relative;
   overflow: hidden;
@@ -47,7 +47,7 @@
   font-weight: 700;
   line-height: 1.2;
   margin: 0;
-  color: #161616 !important; /* Black text */
+  color: #194a7a !important; /* Blue text */
   text-shadow: none; /* Remove text shadow for better readability on light background */
 }
 
@@ -56,7 +56,7 @@
   font-weight: 400;
   line-height: 1.5;
   margin: 0;
-  color: #161616 !important; /* Black text */
+  color: #194a7a !important; /* Blue text */
   opacity: 0.9;
   max-width: 600px;
 }
@@ -66,7 +66,7 @@
   font-weight: 400;
   line-height: 1.6;
   margin: 0;
-  color: #161616 !important; /* Black text */
+  color: #194a7a !important; /* Blue text */
   opacity: 0.8;
   max-width: 600px;
 }
@@ -94,13 +94,13 @@
 }
 
 .ms-learn-hero-btn-primary {
-  background-color: #8E9AAF;
+  background-color: #8e9aaf;
   color: #ffffff;
-  border-color: #8E9AAF;
+  border-color: #8e9aaf;
 }
 
 .ms-learn-hero-btn-primary:hover {
-  background-color: #E9ECEF;
+  background-color: #e9ecef;
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }

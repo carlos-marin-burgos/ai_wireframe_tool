@@ -66,10 +66,10 @@ module.exports = async function (context, req) {
       }
     }
 
-    // Use test data only as final fallback
-    if (components.length === 0) {
-      context.log("🔄 Using test data as fallback...");
-      const testComponents = getTestComponents(atlasFileId || "test-file-id");
+    // Use test data as fallback (always load for demo purposes)
+    if (components.length === 0 || !figmaToken) {
+      context.log("🔄 Using test data...");
+      const testComponents = getTestComponents(atlasFileId || "demo-file-id");
       components.push(...testComponents);
     }
 

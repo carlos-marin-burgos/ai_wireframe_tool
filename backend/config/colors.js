@@ -5,34 +5,34 @@
  * To change the color scheme, modify colors here and they will apply everywhere.
  */
 
-// MAIN WIREFRAME COLOR PALETTE
+// MAIN WIREFRAME COLOR PALETTE - New Blue Monochromatic Theme
 const WIREFRAME_COLORS = {
-  // Primary blue palette
-  primary: "#0078d4",
-  secondary: "#106ebe",
-  accent: "#005a9e",
-  light: "#f3f9fd",
-  medium: "#deecf9",
-  dark: "#005a9e",
-  text: "#005a9e",
-  textSecondary: "#0078d4",
-  textLight: "#106ebe",
-  border: "#f3f9fd",
-  background: "#FFFFFF",
-  surface: "#f3f9fd",
-  heroBackground: "#f3f9fd",
-  heroGradientStart: "#f3f9fd",
-  heroGradientEnd: "#deecf9",
-  heroText: "#005a9e",
-  heroSecondary: "#0078d4",
-  buttonPrimary: "#0078d4",
-  buttonSecondary: "#106ebe",
-  buttonText: "#FFFFFF",
-  buttonBorder: "#0078d4",
-  hover: "#106ebe",
-  active: "#005a9e",
-  focus: "#0078d4",
-  disabled: "#deecf9",
+  // Blue monochromatic palette matching frontend CSS variables
+  primary: "#194a7a", // Darkest blue (--color-primary-dark)
+  secondary: "#476f95", // Medium-dark blue (--color-primary-medium-dark)
+  accent: "#7593af", // Medium blue (--color-primary-medium)
+  light: "#d1dbe4", // Lightest blue-gray (--color-primary-light)
+  medium: "#a3b7ca", // Light blue-gray (--color-primary-medium-light)
+  dark: "#194a7a", // Darkest blue
+  text: "#194a7a", // Dark blue text
+  textSecondary: "#476f95", // Medium-dark blue text
+  textLight: "#7593af", // Medium blue text
+  border: "#a3b7ca", // Light blue-gray border
+  background: "#FFFFFF", // White background
+  surface: "#d1dbe4", // Light blue-gray surface
+  heroBackground: "#d1dbe4", // Light hero background
+  heroGradientStart: "#d1dbe4", // Light blue-gray
+  heroGradientEnd: "#a3b7ca", // Medium light blue-gray
+  heroText: "#194a7a", // Dark blue hero text
+  heroSecondary: "#476f95", // Medium-dark blue secondary text
+  buttonPrimary: "#194a7a", // Dark blue primary button
+  buttonSecondary: "#476f95", // Medium-dark blue secondary button
+  buttonText: "#FFFFFF", // White button text
+  buttonBorder: "#194a7a", // Dark blue button border
+  hover: "#476f95", // Medium-dark blue hover
+  active: "#194a7a", // Dark blue active
+  focus: "#7593af", // Medium blue focus
+  disabled: "#a3b7ca", // Light blue-gray disabled
 };
 
 // SEMANTIC COLOR VARIANTS (for specific use cases)
@@ -172,4 +172,3 @@ module.exports = {
   semanticColors: SEMANTIC_COLORS,
   utils: ColorUtils,
 };
-;

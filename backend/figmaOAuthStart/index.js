@@ -78,10 +78,20 @@ module.exports = async function (context, req) {
           (host.includes("azurewebsites.net") ||
             host.includes("azurestaticapps.net"))
         ) {
-          redirectUri = `https://${host}/api/figmaOAuthCallback`;
+          // Production environment - use production URI
+          redirectUri =
+            process.env.FIGMA_REDIRECT_URI_PROD ||
+            `https://${host}/api/figmaOAuthCallback`;
+          console.log(`🔧 Using PRODUCTION redirect URI: ${redirectUri}`);
         } else {
-          redirectUri = "http://localhost:7071/api/figmaOAuthCallback";
+          // Development environment - use development URI
+          redirectUri =
+            process.env.FIGMA_REDIRECT_URI_DEV ||
+            "http://localhost:7071/api/figmaOAuthCallback";
+          console.log(`🔧 Using DEVELOPMENT redirect URI: ${redirectUri}`);
         }
+      } else {
+        console.log(`🔧 Using configured redirect URI: ${redirectUri}`);
       }
 
       const params = new URLSearchParams({

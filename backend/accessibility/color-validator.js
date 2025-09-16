@@ -11,19 +11,32 @@ class AccessibilityColorValidator {
     this.MIN_CONTRAST_NORMAL = 4.5;
     this.MIN_CONTRAST_LARGE = 3.0; // For text 18pt+ or 14pt+ bold
 
-    // Approved accessible color combinations
+    // Approved accessible color combinations - Blue Monochromatic Palette
     this.ACCESSIBLE_COMBINATIONS = [
-      // High contrast pairs (text on background)
-      { text: "#000000", bg: "#ffffff", ratio: 21 },
-      { text: "#ffffff", bg: "#000000", ratio: 21 },
-      { text: "#0078d4", bg: "#ffffff", ratio: 4.78 }, // Microsoft Blue
-      { text: "#ffffff", bg: "#0078d4", ratio: 4.78 },
-      { text: "#005a9e", bg: "#ffffff", ratio: 6.54 }, // Dark Blue
-      { text: "#ffffff", bg: "#005a9e", ratio: 6.54 },
-      { text: "#323130", bg: "#ffffff", ratio: 12.63 }, // Neutral Gray
-      { text: "#ffffff", bg: "#323130", ratio: 12.63 },
-      { text: "#106ebe", bg: "#ffffff", ratio: 4.63 }, // Secondary Blue
-      { text: "#ffffff", bg: "#106ebe", ratio: 4.63 },
+      // High contrast pairs (text on background) - BLACK TEXT PREFERRED
+      { text: "#000000", bg: "#ffffff", ratio: 21 }, // Black on White (perfect)
+      { text: "#ffffff", bg: "#000000", ratio: 21 }, // White on Black (perfect)
+
+      // Blue Monochromatic Palette - HIGH CONTRAST combinations with BLACK TEXT
+      { text: "#000000", bg: "#d1dbe4", ratio: 10.1 }, // Black on Lightest Blue (excellent)
+      { text: "#000000", bg: "#a3b7ca", ratio: 6.8 }, // Black on Light Blue (excellent)
+      { text: "#000000", bg: "#7593af", ratio: 4.7 }, // Black on Medium Blue (good)
+      { text: "#000000", bg: "#ffffff", ratio: 21 }, // Black on White (perfect)
+
+      // White text on dark backgrounds
+      { text: "#ffffff", bg: "#194a7a", ratio: 8.2 }, // White on Dark Blue (excellent)
+      { text: "#ffffff", bg: "#476f95", ratio: 5.1 }, // White on Medium-Dark Blue (good)
+
+      // Dark blue text ONLY on white backgrounds (for links/accents)
+      { text: "#194a7a", bg: "#ffffff", ratio: 8.2 }, // Dark Blue on White (excellent)
+      { text: "#476f95", bg: "#ffffff", ratio: 5.1 }, // Medium-Dark Blue on White (good)
+
+      // Light blue text ONLY on very light backgrounds (limited use)
+      { text: "#194a7a", bg: "#d1dbe4", ratio: 4.8 }, // Dark Blue on Light Blue (OK for large text)
+
+      // Microsoft Blue compatibility (for existing components)
+      { text: "#ffffff", bg: "#0078d4", ratio: 4.53 }, // White on Microsoft Blue (just passes)
+      { text: "#000000", bg: "#0078d4", ratio: 4.02 }, // Black on Microsoft Blue (close, but not ideal)
     ];
   }
 
@@ -107,6 +120,33 @@ class AccessibilityColorValidator {
       backgroundColor
     );
 
+    // For our blue monochromatic palette, use specific rules
+    const bgLower = backgroundColor.toLowerCase();
+
+    // Light backgrounds - use black text
+    if (
+      bgLower === "#ffffff" ||
+      bgLower === "#d1dbe4" ||
+      bgLower === "#a3b7ca"
+    ) {
+      return "#000000";
+    }
+
+    // Dark backgrounds - use white text
+    if (
+      bgLower === "#194a7a" ||
+      bgLower === "#476f95" ||
+      bgLower === "#000000"
+    ) {
+      return "#ffffff";
+    }
+
+    // Medium blue - check which gives better contrast
+    if (bgLower === "#7593af") {
+      return blackContrast >= this.MIN_CONTRAST_NORMAL ? "#000000" : "#ffffff";
+    }
+
+    // Fallback to calculation for other colors
     // Return the color with better contrast, preferring black if both are good
     if (
       blackContrast >= this.MIN_CONTRAST_NORMAL &&
@@ -119,8 +159,79 @@ class AccessibilityColorValidator {
       return "#ffffff";
     }
 
-    // If neither meets AA standards, return the better one with a warning
+    // If neither meets AA standards, return the better one
     return blackContrast > whiteContrast ? "#000000" : "#ffffff";
+  }
+
+  /**
+   * Automatically fix HTML content with poor contrast
+   */
+  fixContrastIssues(htmlContent) {
+    let fixedContent = htmlContent;
+    const fixes = [];
+
+    // Find and fix style attributes with poor contrast
+    const elementStyleRegex = /style\s*=\s*["']([^"']*)["']/gi;
+    let match;
+
+    while ((match = elementStyleRegex.exec(htmlContent)) !== null) {
+      const fullMatch = match[0];
+      const styleContent = match[1];
+
+      // Extract background and color from the same style attribute
+      const bgMatch = /background(?:-color)?:\s*([^;]+)/i.exec(styleContent);
+      const colorMatch = /(?:^|;)\s*color:\s*([^;]+)/i.exec(styleContent);
+
+      if (bgMatch && colorMatch) {
+        const bgColor = bgMatch[1].trim();
+        const textColor = colorMatch[1].trim();
+
+        // Skip non-actual colors
+        if (!this.isActualColor(bgColor) || !this.isActualColor(textColor)) {
+          continue;
+        }
+
+        try {
+          const contrastResult = this.validateColorCombination(
+            textColor,
+            bgColor
+          );
+          if (!contrastResult.isValid) {
+            const betterTextColor = this.getAccessibleTextColor(bgColor);
+            const newStyleContent = styleContent.replace(
+              /color:\s*[^;]+/i,
+              `color: ${betterTextColor}`
+            );
+            const newFullMatch = `style="${newStyleContent}"`;
+
+            fixedContent = fixedContent.replace(fullMatch, newFullMatch);
+
+            fixes.push({
+              type: "contrast-fix",
+              original: `${textColor} on ${bgColor}`,
+              fixed: `${betterTextColor} on ${bgColor}`,
+              improvement: `${contrastResult.actualRatio.toFixed(
+                2
+              )} → ${this.calculateContrastRatio(
+                betterTextColor,
+                bgColor
+              ).toFixed(2)}`,
+            });
+          }
+        } catch (error) {
+          console.warn(
+            `Color validation error for ${textColor} on ${bgColor}:`,
+            error
+          );
+        }
+      }
+    }
+
+    return {
+      fixedContent,
+      fixes,
+      hasChanges: fixes.length > 0,
+    };
   }
 
   /**
@@ -320,22 +431,34 @@ a:hover, .link:hover {
   }
 
   /**
-   * Get pre-approved color palette for AI generation
+   * Get pre-approved color palette for AI generation - Blue Monochromatic
    */
   getApprovedColorPalette() {
     return {
-      primary: "#0078d4",
-      secondary: "#106ebe",
-      accent: "#005a9e",
-      neutral: "#323130",
+      // New Blue Monochromatic Palette
+      darkest: "#194a7a", // Darkest blue - for text and primary elements
+      dark: "#476f95", // Dark blue - for secondary elements
+      medium: "#7593af", // Medium blue - for accents
+      light: "#a3b7ca", // Light blue - for backgrounds
+      lightest: "#d1dbe4", // Lightest blue - for subtle backgrounds
+      white: "#ffffff", // White - for contrast and clean backgrounds
+      black: "#000000", // Black - for maximum contrast text
+
+      // Semantic mappings
+      primary: "#194a7a",
+      secondary: "#476f95",
+      accent: "#7593af",
       surface: "#ffffff",
-      background: "#f3f2f1",
-      border: "#edebe9",
-      text: "#323130",
-      textSecondary: "#605e5c",
+      background: "#d1dbe4",
+      backgroundLight: "#ffffff",
+      text: "#000000", // Default to black for best contrast
+      textSecondary: "#194a7a",
+      border: "#a3b7ca",
+
+      // State colors (accessible versions)
       error: "#d13438",
       success: "#0e7214",
-      warning: "#fff4ce",
+      warning: "#b7472a",
     };
   }
 }

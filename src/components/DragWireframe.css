@@ -13,6 +13,34 @@
   --z-index-drag-mirror: 9999;
   --z-index-drag-sticky: 1;
   /* Add more z-index variables here as needed */
+
+  /* Blue Monochromatic Theme */
+  --color-primary-light: #d1dbe4; /* Lightest blue-gray */
+  --color-primary-medium-light: #a3b7ca; /* Light blue-gray */
+  --color-primary-medium: #7593af; /* Medium blue */
+  --color-primary-medium-dark: #476f95; /* Darker blue */
+  --color-primary-dark: #194a7a; /* Darkest blue */
+
+  /* Semantic color mappings - WCAG Compliant */
+  --color-background-light: var(
+    --color-primary-light
+  ); /* Light blue backgrounds */
+  --color-background-medium: var(
+    --color-primary-medium-light
+  ); /* Medium backgrounds */
+  --color-border: var(--color-primary-medium); /* Blue borders */
+  --color-accent: var(--color-primary-medium-dark); /* Blue accents */
+  --color-primary: var(--color-primary-dark); /* Primary blue */
+
+  /* Text colors - HIGH CONTRAST for accessibility */
+  --color-text: #000000; /* Black text for maximum contrast */
+  --color-text-muted: var(
+    --color-primary-dark
+  ); /* Dark blue for muted text (only on light backgrounds) */
+  --color-text-on-dark: #ffffff; /* White text for dark backgrounds */
+  --color-text-link: var(
+    --color-primary-dark
+  ); /* Dark blue for links (only on light backgrounds) */
 }
 
 /* ===== DRAG MODE CONTROLS ===== */
@@ -24,7 +52,7 @@
   background: rgba(255, 255, 255, 0.95);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-primary-medium-light);
   border-radius: 8px;
   padding: 12px 16px;
   margin-bottom: 16px;
@@ -52,25 +80,25 @@
 }
 
 .drag-toggle-btn.enabled {
-  background: #194a7a; /* Microsoft blue */
+  background: var(--color-primary-dark);
   color: white;
 }
 
 .drag-toggle-btn.enabled:hover {
-  background: #476f95; /* Darker Microsoft blue */
+  background: var(--color-primary-medium-dark);
 }
 
 .drag-toggle-btn.disabled {
-  background: #6b7280;
+  background: var(--color-primary-medium);
   color: white;
 }
 
 .drag-toggle-btn.disabled:hover {
-  background: #4b5563;
+  background: var(--color-primary-medium-dark);
 }
 
 .drag-mode-hint {
-  color: #6b7280;
+  color: var(--color-primary-medium);
   font-size: 12px;
   font-style: italic;
 }
@@ -78,12 +106,12 @@
 .drag-info {
   margin-top: 8px;
   padding: 8px 12px;
-  background: #f3f4f6;
+  background: var(--color-background-light);
   border-radius: 6px;
 }
 
 .drag-info small {
-  color: #374151;
+  color: var(--color-primary-medium-dark);
   font-size: 12px;
 }
 
@@ -129,7 +157,7 @@
 .dragula-container.drag-enabled .section:hover,
 .dragula-container.drag-enabled .grid:hover,
 .dragula-container.drag-enabled [data-droppable="true"]:hover {
-  outline: 2px dashed #10b981;
+  outline: 2px dashed var(--color-accent);
   outline-offset: 2px;
 }
 
@@ -261,13 +289,13 @@
 .drag-enabled .draggable-block {
   position: relative;
   background: #ffffff !important; /* Keep white background for contrast */
-  border: 2px dashed #0078d4 !important; /* More visible Microsoft blue border */
+  border: 2px dashed var(--color-border) !important;
   padding: 10px !important;
   margin: 10px !important;
   cursor: move !important;
-  border-radius: 10px !important; /* Slightly more rounded in drag mode for better wireframe look */
+  border-radius: 10px !important;
   transition: border-color 0.15s ease, background-color 0.15s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important; /* Subtle shadow for depth */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Override sticky/fixed positioning during drag mode to prevent conflicts */
@@ -286,8 +314,8 @@
 
   /* Hover state for draggable blocks in drag mode */
   .drag-enabled .draggable-block:hover {
-    border-color: #005a9e !important; /* Darker blue on hover */
-    background-color: #f8fcff !important; /* Very light blue tint instead of gray */
+    border-color: var(--color-accent) !important;
+    background-color: var(--color-background-light) !important;
   }
 
   /* Inner blocks should not inherit heavy outer padding duplication */
@@ -303,7 +331,7 @@
     top: 6px;
     right: 6px;
     font-size: 14px;
-    color: #9ca3af;
+    color: var(--color-primary-medium);
     pointer-events: none;
     transform: rotate(90deg);
   }
@@ -311,15 +339,15 @@
   /* HTML5 drag fallback styles */
   .html5-dragging {
     opacity: 0.6 !important;
-    border-color: #6b7280 !important;
+    border-color: var(--color-primary-medium) !important;
   }
 
   .html5-drag-over {
-    outline: 2px dashed #6b7280;
+    outline: 2px dashed var(--color-primary-medium);
   }
 
   .html5-drag-placeholder {
-    border: 2px dashed #6b7280;
+    border: 2px dashed var(--color-primary-medium);
     background: rgba(107, 114, 128, 0.08);
     margin: 6px 0;
     border-radius: 6px;
@@ -332,7 +360,7 @@
     color: inherit !important; /* Keep original text colors */
     text-align: inherit;
     padding: inherit !important;
-    border: 2px dashed #0078d4 !important; /* Just add drag border */
+    border: 2px dashed var(--color-primary-dark) !important; /* Just add drag border */
   }
 
   .dragula-container.drag-enabled > footer:not(.ms-learn-topnav) {
@@ -340,35 +368,35 @@
     color: inherit !important; /* Keep original text colors */
     text-align: inherit;
     padding: inherit !important;
-    border: 2px dashed #0078d4 !important; /* Just add drag border */
+    border: 2px dashed var(--color-primary-dark) !important; /* Just add drag border */
   }
 
   /* Better nav styling - preserve original design */
   .dragula-container.drag-enabled
     > nav:not(.ms-learn-nav):not(.ms-learn-primary-nav) {
     /* Don't override background and text colors - preserve wireframe styling */
-    border: 2px dashed #0078d4 !important; /* Just add drag border */
+    border: 2px dashed var(--color-primary-dark) !important; /* Just add drag border */
   }
   /* Preserve Microsoft Learn navigation styling during drag mode */
   .dragula-container.drag-enabled .ms-learn-topnav,
   .dragula-container.drag-enabled .atlas-top-navigation {
     position: relative !important; /* Override sticky during drag */
     z-index: var(--z-index-drag-sticky) !important;
-    border: 2px dashed #0078d4 !important;
+    border: 2px dashed var(--color-primary-dark) !important;
   }
   position: relative !important; /* Override sticky during drag */
   z-index: 1 !important;
-  border: 2px dashed #0078d4 !important;
+  border: 2px dashed var(--color-primary-dark) !important;
 }
 
 .dragula-container.drag-enabled .ms-learn-nav,
 .dragula-container.drag-enabled .ms-learn-primary-nav {
-  border: 2px dashed #0078d4 !important;
+  border: 2px dashed var(--color-primary-dark) !important;
 }
 
 /* Hover border only in drag mode */
 .drag-enabled .draggable-block:hover {
-  border-color: rgba(75, 85, 99, 0.8) !important;
+  border-color: var(--color-primary-medium) !important;
 }
 
 /* Drag hover indicator: vertical green line (replaces icon) */
@@ -422,7 +450,7 @@
 
 /* Suppress block hover borders while dragging for cleaner gap focus */
 .drag-enabled.dragging-active .draggable-block:hover {
-  border-color: #dee2e6 !important;
+  border-color: var(--color-primary-medium-light) !important;
 }
 
 @keyframes dragLinePulse {
@@ -441,7 +469,7 @@
 .dragula-container .col,
 .dragula-container [class*="col-"] {
   padding: 8px;
-  border: 2px dashed #0078d4; /* More visible blue border */
+  border: 2px dashed var(--color-primary-dark); /* More visible blue border */
   border-radius: 6px;
   margin: 4px 0;
   background: #ffffff; /* White background for better contrast */
@@ -451,7 +479,7 @@
 
 .dragula-container .col:hover,
 .dragula-container [class*="col-"]:hover {
-  border: 2px solid #dee2e6 !important;
+  border: 2px solid var(--color-primary-medium) !important;
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -462,7 +490,7 @@
   z-index: var(--z-index-drag-mirror) !important;
   opacity: 1 !important;
   background: white !important;
-  border: 2px solid #dee2e6 !important;
+  border: 2px solid var(--color-primary-medium) !important;
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -481,12 +509,12 @@
 .drag-wireframe .gu-transit {
   opacity: 1 !important;
   background: white !important;
-  border: 2px dashed #dee2e6 !important;
+  border: 2px dashed var(--color-primary-medium) !important;
   transition: border-color 0.2s ease !important;
 }
 
 .drag-wireframe .gu-transit:hover {
-  border-color: rgba(75, 85, 99, 0.8) !important;
+  border-color: var(--color-primary-medium-dark) !important;
 }
 
 /* Force ALL elements to be visible */
@@ -508,7 +536,7 @@
 
 /* Ensure links remain visible */
 .dragula-container.drag-enabled a {
-  color: #0078d4 !important;
+  color: var(--color-primary-dark) !important;
   text-decoration: underline !important;
 }
 
@@ -516,15 +544,15 @@
 .dragula-container .row {
   min-height: 80px;
   padding: 10px;
-  border: 1px solid #d1d5db; /* More visible gray border */
+  border: 1px solid var(--color-primary-medium-light); /* More visible border using variable */
   border-radius: 8px;
   margin-bottom: 15px;
   background: white; /* Keep white background */
 }
 
 .dragula-container .row.gu-over {
-  background: #eff6ff !important; /* Light blue highlight */
-  border-color: #0078d4 !important; /* Blue border when dragging over */
+  background: var(--color-background-light) !important;
+  border-color: var(--color-border) !important;
 }
 
 /* Force buttons to be fully opaque and visible */
@@ -534,16 +562,16 @@
 .drag-wireframe input[type="submit"] {
   opacity: 1 !important;
   visibility: visible !important;
-  background-color: #0078d4 !important; /* Microsoft blue for better visibility */
+  background-color: var(--color-primary-dark) !important;
   color: white !important;
-  border: 1px solid #005a9e !important; /* Darker border for definition */
+  border: 1px solid var(--color-accent) !important;
 }
 
 .drag-wireframe .btn:hover,
 .drag-wireframe button:hover,
 .drag-wireframe input[type="button"]:hover,
 .drag-wireframe input[type="submit"]:hover {
-  background-color: #005a9e !important; /* Darker blue on hover */
+  background-color: var(--color-accent) !important;
 }
 
 /* Prevent error messages from being draggable */
@@ -568,32 +596,32 @@
   transition: background-color 0.2s ease, outline-color 0.2s ease,
     box-shadow 0.2s ease;
   /* Add subtle visual indicator that this element is editable */
-  outline: 1px dashed rgba(45, 108, 223, 0.3) !important;
+  outline: 1px dashed rgba(117, 147, 175, 0.4) !important;
   outline-offset: 1px;
-  background: rgba(45, 108, 223, 0.03) !important;
+  background: rgba(117, 147, 175, 0.05) !important;
   border-radius: 2px;
 }
 
 .dragula-container.drag-disabled [data-editable="true"]:hover {
-  outline: 2px solid #2d6cdf !important;
+  outline: 2px solid var(--color-border) !important;
   outline-offset: 2px;
-  background: rgba(45, 108, 223, 0.12) !important;
+  background: rgba(117, 147, 175, 0.15) !important;
   cursor: text !important;
-  box-shadow: 0 0 8px rgba(45, 108, 223, 0.2) !important;
+  box-shadow: 0 0 8px rgba(117, 147, 175, 0.3) !important;
   transform: scale(1.01);
 }
 
 /* Active editing state */
 [contenteditable="true"] {
-  outline: 2px solid #6b7280 !important;
+  outline: 2px solid var(--color-accent) !important;
   outline-offset: 2px;
-  background-color: rgba(107, 114, 128, 0.1) !important;
+  background-color: rgba(71, 111, 149, 0.1) !important;
   cursor: text !important;
 }
 
 [contenteditable="true"]:focus {
-  outline: 2px solid #4b5563 !important;
-  background-color: rgba(75, 85, 99, 0.15) !important;
+  outline: 2px solid var(--color-primary-dark) !important;
+  background-color: rgba(71, 111, 149, 0.2) !important;
 }
 
 /* Override drag cursor for editable elements when editing */

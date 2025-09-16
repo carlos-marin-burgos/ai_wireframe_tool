@@ -7,7 +7,28 @@
     <title>Editable Wireframe Highlighting Demo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Load the enhanced editable highlighting styles */
+        /* Load the enhanced editable highlighting styles with new color palette */
+        :root {
+            /* New Color Palette - Blue Monochromatic Theme */
+            --color-primary-light: #D1DBE4;
+            /* Lightest blue-gray */
+            --color-primary-medium-light: #A3B7CA;
+            /* Light blue-gray */
+            --color-primary-medium: #7593AF;
+            /* Medium blue */
+            --color-primary-medium-dark: #476F95;
+            /* Darker blue */
+            --color-primary-dark: #194A7A;
+            /* Darkest blue */
+
+            /* Semantic color mappings */
+            --color-background-light: var(--color-primary-light);
+            --color-background-medium: var(--color-primary-medium-light);
+            --color-border: var(--color-primary-medium);
+            --color-accent: var(--color-primary-medium-dark);
+            --color-primary: var(--color-primary-dark);
+        }
+
         /* ===== INLINE EDITING STYLES ===== */
 
         /* Editable elements visual affordance (only those explicitly tagged) */
@@ -16,18 +37,18 @@
             position: relative;
             transition: background-color 0.2s ease, outline-color 0.2s ease, box-shadow 0.2s ease;
             /* Add subtle visual indicator that this element is editable */
-            outline: 1px dashed rgba(45, 108, 223, 0.3) !important;
+            outline: 1px dashed rgba(117, 147, 175, 0.4) !important;
             outline-offset: 1px;
-            background: rgba(45, 108, 223, 0.03) !important;
+            background: rgba(117, 147, 175, 0.05) !important;
             border-radius: 2px;
         }
 
         .dragula-container.drag-disabled [data-editable="true"]:hover {
-            outline: 2px solid #2d6cdf !important;
+            outline: 2px solid var(--color-border) !important;
             outline-offset: 2px;
-            background: rgba(45, 108, 223, 0.12) !important;
+            background: rgba(117, 147, 175, 0.15) !important;
             cursor: text !important;
-            box-shadow: 0 0 8px rgba(45, 108, 223, 0.2) !important;
+            box-shadow: 0 0 8px rgba(117, 147, 175, 0.3) !important;
             transform: scale(1.01);
         }
 
@@ -160,7 +181,7 @@
             padding: 10px 20px;
             border: none;
             border-radius: 25px;
-            background: #2d6cdf;
+            background: var(--color-primary-dark);
             color: white;
             font-weight: 600;
             cursor: pointer;
@@ -168,17 +189,17 @@
         }
 
         .toggle-btn:hover {
-            background: #1a5cbd;
+            background: var(--color-accent);
             transform: translateY(-1px);
         }
 
         .toggle-btn.active {
-            background: #22c55e;
+            background: var(--color-primary-medium);
         }
 
         /* Wireframe content styles */
         .wireframe-content {
-            border: 2px dashed #dee2e6;
+            border: 2px dashed var(--color-border);
             border-radius: 8px;
             padding: 20px;
             min-height: 400px;
