@@ -1,9 +1,9 @@
 /**
  * Validated API Configuration System
- * 
+ *
  * This module provides a centralized, validated API configuration that prevents
  * endpoint mismatches by validating endpoints at build time and runtime.
- * 
+ *
  * Features:
  * - Type-safe endpoint definitions
  * - Runtime endpoint validation
@@ -12,25 +12,25 @@
  * - Build-time endpoint checking
  */
 
-import { getApiValidator } from './apiEndpointValidator';
-import { getApiHealthChecker } from './apiHealthChecker';
+import { getApiValidator } from "./apiEndpointValidator";
+import { getApiHealthChecker } from "./apiHealthChecker";
 
 // Define the actual available Azure Functions endpoints
 // This should match the actual function.json files in the backend
 const ACTUAL_AZURE_FUNCTIONS = [
-  '/api/generate-wireframe',
-  '/api/generate-suggestions', 
-  '/api/figmaOAuthCallback',
-  '/api/figmaOAuthStart',
-  '/api/figmaOAuthDiagnostics',
-  '/api/githubAuthCallback',
-  '/api/githubAuthStart',
-  '/api/health',
+  "/api/generate-wireframe",
+  "/api/generate-suggestions",
+  "/api/figmaOAuthCallback",
+  "/api/figmaOAuthStart",
+  "/api/figmaOAuthDiagnostics",
+  "/api/githubAuthCallback",
+  "/api/githubAuthStart",
+  "/api/health",
   // Add more as needed based on your backend/function.json files
 ] as const;
 
 // Type for validated endpoints
-type ValidatedEndpoint = typeof ACTUAL_AZURE_FUNCTIONS[number];
+type ValidatedEndpoint = (typeof ACTUAL_AZURE_FUNCTIONS)[number];
 
 // Endpoint categories for better organization
 interface EndpointCategories {
@@ -53,24 +53,25 @@ interface EndpointCategories {
 // Validated endpoint configuration
 export const VALIDATED_API_ENDPOINTS: EndpointCategories = {
   AI_GENERATION: {
-    GENERATE_WIREFRAME: '/api/generate-wireframe',
-    GENERATE_SUGGESTIONS: '/api/generate-suggestions',
+    GENERATE_WIREFRAME: "/api/generate-wireframe",
+    GENERATE_SUGGESTIONS: "/api/generate-suggestions",
   },
   AUTHENTICATION: {
-    FIGMA_OAUTH_START: '/api/figmaOAuthStart',
-    FIGMA_OAUTH_CALLBACK: '/api/figmaOAuthCallback',
-    FIGMA_OAUTH_DIAGNOSTICS: '/api/figmaOAuthDiagnostics',
-    GITHUB_AUTH_START: '/api/githubAuthStart',
-    GITHUB_AUTH_CALLBACK: '/api/githubAuthCallback',
+    FIGMA_OAUTH_START: "/api/figmaOAuthStart",
+    FIGMA_OAUTH_CALLBACK: "/api/figmaOAuthCallback",
+    FIGMA_OAUTH_DIAGNOSTICS: "/api/figmaOAuthDiagnostics",
+    GITHUB_AUTH_START: "/api/githubAuthStart",
+    GITHUB_AUTH_CALLBACK: "/api/githubAuthCallback",
   },
   SYSTEM: {
-    HEALTH: '/api/health',
+    HEALTH: "/api/health",
   },
 };
 
 // Flattened endpoints array for validation
-export const ALL_VALIDATED_ENDPOINTS: string[] = Object.values(VALIDATED_API_ENDPOINTS)
-  .flatMap(category => Object.values(category)) as string[];
+export const ALL_VALIDATED_ENDPOINTS: string[] = Object.values(
+  VALIDATED_API_ENDPOINTS
+).flatMap((category) => Object.values(category)) as string[];
 
 // Base URL configuration with validation
 export class ValidatedApiConfig {
@@ -86,20 +87,20 @@ export class ValidatedApiConfig {
   private determineBaseUrl(): string {
     // Priority: environment variable > development default > production fallback
     const envUrl = import.meta.env.VITE_BACKEND_BASE_URL;
-    const devUrl = 'http://localhost:7071';
+    const devUrl = "http://localhost:7071";
     const prodUrl = window.location.origin;
 
     if (envUrl) {
-      console.log('🔧 Using API base URL from environment:', envUrl);
+      console.log("🔧 Using API base URL from environment:", envUrl);
       return envUrl;
     }
 
     if (import.meta.env.DEV) {
-      console.log('🔧 Using development API base URL:', devUrl);
+      console.log("🔧 Using development API base URL:", devUrl);
       return devUrl;
     }
 
-    console.log('🔧 Using production API base URL:', prodUrl);
+    console.log("🔧 Using production API base URL:", prodUrl);
     return prodUrl;
   }
 
@@ -124,7 +125,10 @@ export class ValidatedApiConfig {
   /**
    * Make a safe API call with automatic endpoint validation
    */
-  async safeFetch(endpoint: ValidatedEndpoint, options: RequestInit = {}): Promise<Response> {
+  async safeFetch(
+    endpoint: ValidatedEndpoint,
+    options: RequestInit = {}
+  ): Promise<Response> {
     if (!this.isValidated) {
       await this.validateConfiguration();
     }
@@ -136,31 +140,38 @@ export class ValidatedApiConfig {
    * Validate the entire API configuration
    */
   async validateConfiguration(): Promise<boolean> {
-    console.log('🔍 Validating API configuration...');
-    
+    console.log("🔍 Validating API configuration...");
+
     try {
-      const healthCheck = await this.healthChecker.performHealthCheck(ALL_VALIDATED_ENDPOINTS);
-      
+      const healthCheck = await this.healthChecker.performHealthCheck(
+        ALL_VALIDATED_ENDPOINTS
+      );
+
       if (healthCheck.unavailableEndpoints > 0) {
-        console.warn('⚠️ Some API endpoints are not available. Application may have limited functionality.');
-        
+        console.warn(
+          "⚠️ Some API endpoints are not available. Application may have limited functionality."
+        );
+
         // In development, this is more serious
         if (import.meta.env.DEV) {
-          console.error('❌ API validation failed in development mode.');
-          console.error('💡 Make sure your Azure Functions are running on the correct port.');
-          console.error('💡 Check that all function.json files match the VALIDATED_API_ENDPOINTS configuration.');
+          console.error("❌ API validation failed in development mode.");
+          console.error(
+            "💡 Make sure your Azure Functions are running on the correct port."
+          );
+          console.error(
+            "💡 Check that all function.json files match the VALIDATED_API_ENDPOINTS configuration."
+          );
         }
-        
+
         this.isValidated = false;
         return false;
       }
 
-      console.log('✅ API configuration validation successful');
+      console.log("✅ API configuration validation successful");
       this.isValidated = true;
       return true;
-      
     } catch (error) {
-      console.error('❌ API configuration validation failed:', error);
+      console.error("❌ API configuration validation failed:", error);
       this.isValidated = false;
       return false;
     }
@@ -179,7 +190,7 @@ export class ValidatedApiConfig {
   resetValidation(): void {
     this.isValidated = false;
     this.validator.clearCache();
-    console.log('🔄 API validation state reset');
+    console.log("🔄 API validation state reset");
   }
 
   /**
@@ -202,20 +213,24 @@ export function getValidatedApiConfig(): ValidatedApiConfig {
 
 // Convenience functions for common operations
 export async function makeValidatedApiCall(
-  endpoint: ValidatedEndpoint, 
+  endpoint: ValidatedEndpoint,
   options: RequestInit = {}
 ): Promise<Response> {
   const config = getValidatedApiConfig();
   return config.safeFetch(endpoint, options);
 }
 
-export async function getValidatedEndpointUrl(endpoint: ValidatedEndpoint): Promise<string> {
+export async function getValidatedEndpointUrl(
+  endpoint: ValidatedEndpoint
+): Promise<string> {
   const config = getValidatedApiConfig();
   return config.getEndpoint(endpoint);
 }
 
 // Development helper to check if an endpoint exists
-export function isEndpointValidated(endpoint: string): endpoint is ValidatedEndpoint {
+export function isEndpointValidated(
+  endpoint: string
+): endpoint is ValidatedEndpoint {
   return ALL_VALIDATED_ENDPOINTS.includes(endpoint as ValidatedEndpoint);
 }
 
