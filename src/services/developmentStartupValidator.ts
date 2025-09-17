@@ -282,7 +282,15 @@ export async function runStartupValidation(): Promise<StartupValidationResult> {
 
 // Auto-run if in development mode
 if (import.meta.env.DEV) {
-  runStartupValidation().catch((error) => {
-    console.error("Startup validation failed:", error);
-  });
+  runStartupValidation()
+    .then(async () => {
+      // Sync with discovered endpoints after startup validation
+      const { syncWithDiscoveredEndpoints } = await import(
+        "./validatedApiConfig"
+      );
+      await syncWithDiscoveredEndpoints();
+    })
+    .catch((error) => {
+      console.error("Startup validation failed:", error);
+    });
 }

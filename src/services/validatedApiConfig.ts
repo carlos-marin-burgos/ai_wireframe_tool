@@ -14,6 +14,8 @@
 
 import { getApiValidator } from "./apiEndpointValidator";
 import { getApiHealthChecker } from "./apiHealthChecker";
+import { apiDiscoveryService } from "./apiDiscoveryService";
+import { DISCOVERED_ENDPOINTS } from "../../discovered-api-types";
 
 // Define the actual available Azure Functions endpoints
 // This should match the actual function.json files in the backend
@@ -237,3 +239,42 @@ export function isEndpointValidated(
 // Export types and constants
 export type { ValidatedEndpoint, EndpointCategories };
 export { ACTUAL_AZURE_FUNCTIONS };
+
+// Enhanced API discovery integration
+export async function syncWithDiscoveredEndpoints(): Promise<void> {
+  console.log("🔄 Syncing validated config with discovered endpoints...");
+
+  const discoveryResult = await apiDiscoveryService.discoverEndpoints();
+  const discoveredEndpoints = discoveryResult.discoveredEndpoints
+    .filter((e) => e.isAvailable)
+    .map((e) => e.endpoint);
+
+  // Check if our configured endpoints match discovered ones
+  const missingEndpoints = ALL_VALIDATED_ENDPOINTS.filter(
+    (endpoint) =>
+      !discoveredEndpoints.some((discovered) =>
+        discovered.includes(endpoint.replace("/api/", ""))
+      )
+  );
+
+  const extraEndpoints = DISCOVERED_ENDPOINTS.filter(
+    (discovered) =>
+      !ALL_VALIDATED_ENDPOINTS.some((configured) =>
+        discovered.includes(configured.replace("/api/", ""))
+      )
+  );
+
+  if (missingEndpoints.length > 0) {
+    console.warn(
+      "⚠️ Configured endpoints not found in Azure Functions:",
+      missingEndpoints
+    );
+  }
+
+  if (extraEndpoints.length > 0) {
+    console.info("💡 Additional Azure Functions available:", extraEndpoints);
+  }
+
+  const report = apiDiscoveryService.generateDiscoveryReport(discoveryResult);
+  console.log(report);
+}

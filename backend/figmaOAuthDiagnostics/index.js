@@ -21,6 +21,7 @@ module.exports = async function (context, req) {
     FIGMA_CLIENT_SECRET: mask(process.env.FIGMA_CLIENT_SECRET),
     FIGMA_REDIRECT_URI: process.env.FIGMA_REDIRECT_URI || null,
     FIGMA_REDIRECT_URI_DEV: process.env.FIGMA_REDIRECT_URI_DEV || null,
+    FIGMA_REDIRECT_URI_PROD: process.env.FIGMA_REDIRECT_URI_PROD || null,
     derivedRedirectUri,
     callbackMatches,
     guidance: callbackMatches

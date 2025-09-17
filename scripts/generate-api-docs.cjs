@@ -9,26 +9,14 @@
 const fs = require('fs');
 const path = require('path');
 
-interface FunctionDefinition {
-  name: string;
-  route?: string;
-  methods: string[];
-  authLevel: string;
-  description?: string;
-}
-
-interface ApiDocumentation {
-  functions: FunctionDefinition[];
-  endpoints: string[];
-  generatedAt: string;
-  backendPath: string;
-}
-
 class ApiDocumentationGenerator {
-  constructor(private backendPath: string, private outputPath: string) {}
+  constructor(backendPath, outputPath) {
+    this.backendPath = backendPath;
+    this.outputPath = outputPath;
+  }
 
-  async scanAzureFunctions(): Promise<FunctionDefinition[]> {
-    const functions: FunctionDefinition[] = [];
+  async scanAzureFunctions() {
+    const functions = [];
     
     if (!fs.existsSync(this.backendPath)) {
       throw new Error(`Backend path does not exist: ${this.backendPath}`);
@@ -58,8 +46,8 @@ class ApiDocumentationGenerator {
     return functions.sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  private parseFunctionDefinition(name: string, config: any): FunctionDefinition | null {
-    const httpTrigger = config.bindings?.find((binding: any) => 
+  parseFunctionDefinition(name, config) {
+    const httpTrigger = config.bindings?.find((binding) => 
       binding.type === 'httpTrigger'
     );
 
@@ -76,13 +64,13 @@ class ApiDocumentationGenerator {
     };
   }
 
-  async generate(): Promise<ApiDocumentation> {
+  async generate() {
     console.log(`📖 Generating API documentation from ${this.backendPath}...`);
     
     const functions = await this.scanAzureFunctions();
     const endpoints = functions.map(f => `/api/${f.route || f.name}`);
     
-    const documentation: ApiDocumentation = {
+    const documentation = {
       functions,
       endpoints,
       generatedAt: new Date().toISOString(),

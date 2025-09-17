@@ -4,6 +4,9 @@
 const { OpenAI } = require("openai");
 // Import centralized color configuration
 const { WIREFRAME_COLORS, ColorUtils } = require("../config/colors");
+const {
+  AccessibilityValidationMiddleware,
+} = require("../accessibility/validation-middleware");
 
 // Fluent UI Playbook imports and utilities
 const fluentPlaybook = {
@@ -312,7 +315,9 @@ function initializeOpenAI() {
         defaultHeaders: { "api-key": process.env.AZURE_OPENAI_KEY },
       });
 
-      console.log("✅ OpenAI client initialized for unified wireframe generator");
+      console.log(
+        "✅ OpenAI client initialized for unified wireframe generator"
+      );
       return true;
     }
 
@@ -340,9 +345,9 @@ async function generateWithAI(description, options = {}) {
   const colorScheme = options.colorScheme || "blue";
   const fastMode = options.fastMode !== false;
 
-  const prompt = `Create a complete, modern HTML wireframe for: ${description}\n\nRequirements:\n- Use modern CSS with flexbox/grid\n- Include semantic HTML structure\n- ${theme} theme with ${colorScheme} color scheme\n- Mobile-responsive design\n- Include proper meta tags and DOCTYPE\n- Use inline CSS for complete standalone file\n- Focus ONLY on the requested component/feature\n- NO navigation bars, headers, footers, or branding unless specifically requested\n- Keep designs clean and minimal\n- IMPORTANT: Color contrast rules - ALWAYS use dark text (#333 or #000) on light backgrounds (#fff, ${
+  const prompt = `Create a complete, modern HTML wireframe for: ${description}\n\nRequirements:\n- Use modern CSS with flexbox/grid\n- Include semantic HTML structure\n- ${theme} theme with ${colorScheme} color scheme\n- Mobile-responsive design\n- Include proper meta tags and DOCTYPE\n- Use inline CSS for complete standalone file\n- Focus ONLY on the requested component/feature\n- NO navigation bars, headers, footers, or branding unless specifically requested\n- Keep designs clean and minimal\n\n🎨 CRITICAL ACCESSIBILITY & READABILITY RULES:\n- BUTTONS: Use high-contrast combinations only:\n  • Primary buttons: background: #194a7a (dark blue) + color: #ffffff (white text)\n  • Secondary buttons: background: #ffffff (white) + color: #194a7a (dark blue) + border: 2px solid #194a7a\n  • Danger buttons: background: #d13438 (red) + color: #ffffff (white text)\n  • Success buttons: background: #107c10 (green) + color: #ffffff (white text)\n- TEXT CONTRAST: ALWAYS use dark text (#333 or #194a7a) on light backgrounds (#fff, ${
     WIREFRAME_COLORS.surface
-  }, #E9ECEF). For headers with #E9ECEF background, use black text (#333 or #000) for optimal readability.\n- Avoid opacity values below 0.9 for text to ensure readability\n${
+  }, #E9ECEF)\n- NEVER use opacity below 1.0 for button text or important content\n- NEVER use light text on light backgrounds or dark text on dark backgrounds\n- Button hover states: darken background by 15% while maintaining white text\n- Minimum button padding: 12px 24px for adequate click targets\n- All buttons must have border-radius: 4px for consistency\n${
     fastMode
       ? "- Keep it simple and fast to load"
       : "- Include rich interactions and detailed styling"
@@ -355,7 +360,7 @@ async function generateWithAI(description, options = {}) {
       {
         role: "system",
         content:
-          "You are a professional web developer who creates clean, minimal wireframes focused ONLY on the requested component. DO NOT include navigation bars, headers, footers, or branding unless specifically requested. Keep it simple and focused.",
+          "You are a professional web developer who creates clean, minimal wireframes with PERFECT ACCESSIBILITY. CRITICAL: All buttons must have high contrast (dark blue #194a7a background with white text, or white background with dark blue text and border). NEVER use light colors on light backgrounds or dark colors on dark backgrounds. DO NOT include navigation bars, headers, footers, or branding unless specifically requested. Focus ONLY on the requested component with readable, accessible design.",
       },
       { role: "user", content: prompt },
     ],
@@ -384,6 +389,93 @@ async function generateWithAI(description, options = {}) {
   );
 
   return cleanedHtml;
+}
+
+// --- Button Readability Fixer ---
+function fixButtonReadability(html) {
+  console.log("🔧 Applying button readability fixes...");
+
+  let fixedHtml = html;
+
+  // Fix common button readability issues
+  const buttonFixes = [
+    // Fix buttons with poor contrast combinations
+    {
+      pattern: /background-color:\s*#0078d4[^;]*;[^}]*color:\s*#0078d4/gi,
+      replacement: "background-color: #194a7a; color: #ffffff",
+      description: "Blue on blue button text",
+    },
+    {
+      pattern: /background:\s*#0078d4[^;]*;[^}]*color:\s*#0078d4/gi,
+      replacement: "background: #194a7a; color: #ffffff",
+      description: "Blue on blue button (shorthand)",
+    },
+
+    // Fix light text on light backgrounds
+    {
+      pattern:
+        /background[^:]*:\s*#(?:fff|ffffff|f8f9fa|e9ecef)[^;]*;[^}]*color:\s*#(?:fff|ffffff|f8f9fa|e9ecef)/gi,
+      replacement: "background-color: #194a7a; color: #ffffff",
+      description: "Light text on light background",
+    },
+
+    // Fix buttons with insufficient opacity
+    {
+      pattern: /(\.button[^{]*{[^}]*opacity:\s*0\.[1-8][^}]*})/gi,
+      replacement: (match) =>
+        match.replace(/opacity:\s*0\.[1-8]/, "opacity: 1.0"),
+      description: "Low opacity buttons",
+    },
+
+    // Fix Microsoft blue buttons to use accessible colors
+    {
+      pattern: /background[^:]*:\s*#0078d4/gi,
+      replacement: "background-color: #194a7a",
+      description: "Microsoft blue to accessible dark blue",
+    },
+
+    // Ensure button text is white on dark backgrounds
+    {
+      pattern:
+        /(background[^:]*:\s*#(?:194a7a|476f95|005a9e|d13438|107c10)[^;]*;[^}]*color:\s*#)(?:000|333|194a7a|476f95)/gi,
+      replacement: "$1ffffff",
+      description: "Dark button backgrounds should have white text",
+    },
+  ];
+
+  let fixesApplied = 0;
+  buttonFixes.forEach((fix) => {
+    const beforeLength = fixedHtml.length;
+    if (typeof fix.replacement === "function") {
+      fixedHtml = fixedHtml.replace(fix.pattern, fix.replacement);
+    } else {
+      fixedHtml = fixedHtml.replace(fix.pattern, fix.replacement);
+    }
+    const afterLength = fixedHtml.length;
+    if (beforeLength !== afterLength) {
+      fixesApplied++;
+      console.log(`   ✓ Fixed: ${fix.description}`);
+    }
+  });
+
+  // Add button hover states for better UX
+  if (fixedHtml.includes(".button") && !fixedHtml.includes(".button:hover")) {
+    const hoverCSS = `
+        .button:hover, button:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(25, 74, 122, 0.3);
+        }
+        .button:active, button:active {
+          transform: translateY(0);
+        }`;
+
+    fixedHtml = fixedHtml.replace("</style>", hoverCSS + "\n    </style>");
+    fixesApplied++;
+    console.log("   ✓ Added button hover states");
+  }
+
+  console.log(`🎯 Applied ${fixesApplied} button readability fixes`);
+  return fixedHtml;
 }
 
 // --- Azure Function handler ---
@@ -464,6 +556,26 @@ module.exports = async function (context, req) {
     // Only apply Fluent components if explicitly requested
     if (req.body?.includeFluent) {
       html = addFluentPlaybookComponents(html);
+    }
+
+    // 🎯 ALWAYS apply button readability fixes
+    html = fixButtonReadability(html);
+
+    // 🛡️ Apply comprehensive accessibility validation
+    const accessibilityMiddleware = new AccessibilityValidationMiddleware();
+    const accessibilityResult = accessibilityMiddleware.validateAndFixWireframe(
+      html,
+      {
+        enforceCompliance: true,
+        logIssues: true,
+      }
+    );
+
+    if (accessibilityResult.fixedHtml !== html) {
+      html = accessibilityResult.fixedHtml;
+      console.log(
+        `🔧 Applied ${accessibilityResult.report.issuesFixed} accessibility fixes`
+      );
     }
 
     const processingTime = Date.now() - startTime;

@@ -29,6 +29,7 @@
     "check-corruption": "node scripts/check-corruption.cjs",
     "monitor": "node scripts/monitor-corruption.cjs",
     "health": "npm run check-corruption && echo '✅ All systems healthy!'",
+    "api:docs": "node scripts/generate-api-docs.cjs",
     "validate-design": "./scripts/validate-design.sh",
     "fix-design": "./scripts/validate-design.sh && echo '🎨 Design is current!'",
     "dev-safe": "npm run validate-design && npm run dev",
