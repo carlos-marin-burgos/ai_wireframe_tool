@@ -3,10 +3,23 @@
   "Values": {
     "FUNCTIONS_WORKER_RUNTIME": "node",
     "AzureWebJobsStorage": "",
-    "AZURE_OPENAI_KEY": "your-azure-openai-key-here",
+    "AZURE_OPENAI_KEY": "YOUR_AZURE_OPENAI_KEY_HERE",
+    "AZURE_OPENAI_API_KEY": "YOUR_AZURE_OPENAI_KEY_HERE",
     "AZURE_OPENAI_ENDPOINT": "https://your-resource-name.openai.azure.com/",
-    "AZURE_OPENAI_DEPLOYMENT": "your-deployment-name",
-    "NODE_ENV": "development"
+    "AZURE_OPENAI_DEPLOYMENT": "gpt-4o",
+    "AZURE_OPENAI_API_VERSION": "2024-08-01-preview",
+    "NODE_ENV": "development",
+    "GITHUB_CLIENT_ID": "YOUR_GITHUB_CLIENT_ID_HERE",
+    "GITHUB_CLIENT_SECRET": "YOUR_GITHUB_CLIENT_SECRET_HERE",
+    "GITHUB_OAUTH_SCOPES": "repo,user:email",
+    "GITHUB_REDIRECT_URL": "http://localhost:7071/api/github/auth/callback",
+    "FIGMA_ACCESS_TOKEN": "[REDACTED]",
+    "FIGMA_FILE_ID": "YOUR_FIGMA_FILE_ID_HERE",
+    "FIGMA_CLIENT_ID": "YOUR_FIGMA_CLIENT_ID_HERE",
+    "FIGMA_CLIENT_SECRET": "YOUR_FIGMA_CLIENT_SECRET_HERE",
+    "FIGMA_REDIRECT_URI": "http://localhost:7071/api/figmaOAuthCallback",
+    "FIGMA_REDIRECT_URI_PROD": "https://func-designetica-prod-xabnur6oyusju.azurewebsites.net/api/figmaOAuthCallback",
+    "FIGMA_REDIRECT_URI_DEV": "http://localhost:7071/api/figmaOAuthCallback"
   },
   "Host": {
     "CORS": "*",
