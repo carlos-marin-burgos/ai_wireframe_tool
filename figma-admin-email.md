@@ -19,7 +19,7 @@ I'm working on a design tool integration that connects our internal design syste
 
 **Working:**
 
-- Personal Access Token authentication (`[REDACTED]`)
+- Personal Access Token authentication (`[REDACTED - Personal Access Token]`)
 - Individual API access to Figma files and components
 - Single-user functionality
 
