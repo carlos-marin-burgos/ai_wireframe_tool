@@ -23,8 +23,8 @@ show_status() {
     echo ""
     
     echo -e "${GREEN}🌟 PRODUCTION URLs:${NC}"
-    echo "  Frontend: https://brave-island-04ba9f70f.2.azurestaticapps.net"
-    echo "  Backend:  https://func-designetica-vdlmicyosd4ua.azurewebsites.net"
+    echo "  Frontend: https://lemon-field-08a1a0b0f.1.azurestaticapps.net"
+    echo "  Backend:  https://func-designetica-prod-xabnur6oyusju.azurewebsites.net"
     echo ""
     
     echo -e "${YELLOW}🧪 Testing Production Health:${NC}"
@@ -78,22 +78,35 @@ quick_deploy() {
     echo -e "${YELLOW}⚡ Quick Deploy (code only)...${NC}"
     echo ""
     
-    # Ensure we're using the right environment
-    azd env select designetica
-    
-    # Build the frontend
+    # Build the frontend first
     echo -e "${YELLOW}📦 Building frontend...${NC}"
     npm run build
     
-    # Deploy just the code
-    echo -e "${YELLOW}☁️  Deploying code to Azure...${NC}"
-    azd deploy -e designetica
+    # Deploy via GitHub Actions (ONLY way to update lemon-field)
+    echo -e "${YELLOW}☁️  Deploying to lemon-field via GitHub Actions...${NC}"
+    echo "Committing and pushing changes to trigger GitHub Actions deployment..."
+    
+    # Check if there are changes to commit
+    if [[ -n $(git status --porcelain) ]]; then
+        git add .
+        git commit -m "Deploy: Update frontend build $(date)"
+        git push
+        echo "✅ Changes pushed! GitHub Actions will deploy to lemon-field."
+    else
+        echo "⚠️  No changes detected. Triggering empty commit..."
+        git commit --allow-empty -m "Deploy: Force update $(date)"
+        git push
+        echo "✅ Empty commit pushed! GitHub Actions will redeploy lemon-field."
+    fi
     
     echo ""
-    echo -e "${GREEN}✅ Quick deployment completed!${NC}"
+    echo -e "${GREEN}✅ Deployment initiated via GitHub Actions!${NC}"
     echo ""
-    echo -e "${BLUE}🌐 Your application is live at:${NC}"
-    echo "   https://brave-island-04ba9f70f.2.azurestaticapps.net"
+    echo -e "${BLUE}🌐 Your application will be live at:${NC}"
+    echo "   https://lemon-field-08a1a0b0f.1.azurestaticapps.net"
+    echo ""
+    echo -e "${YELLOW}📈 Monitor deployment progress:${NC}"
+    echo "   https://github.com/carlos-marin-burgos/ai_wireframe_tool/actions"
 }
 
 # Function to test the production site

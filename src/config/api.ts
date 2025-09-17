@@ -54,10 +54,10 @@ export const API_CONFIG = {
   ],
 
   ENDPOINTS: {
-    // ✨ MAXIMUM INTELLIGENCE AI SYSTEM - Enhanced Generator with sophisticated prompts
-    GENERATE_WIREFRAME: "/api/generate-wireframe-enhanced",
+    // ✨ AI Wireframe Generation - Using the correct Azure Function endpoint
+    GENERATE_WIREFRAME: "/api/generate-wireframe",
     GENERATE_REACT_COMPONENT: "/api/generate-react-component", // NEW: Lovable-style component generation
-    GENERATE_WIREFRAME_ENHANCED: "/api/generate-wireframe-enhanced",
+    GENERATE_WIREFRAME_ENHANCED: "/api/generate-wireframe",
     GENERATE_FLUENT_WIREFRAME: "/api/generate-fluent-wireframe",
     GENERATE_SUGGESTIONS: "/api/generate-suggestions",
     GET_TEMPLATE: "/api/get-template",
@@ -84,7 +84,7 @@ export const verifyBackendAI = async (baseUrl: string): Promise<boolean> => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-    const response = await fetch(`${baseUrl}/api/generate-wireframe-enhanced`, {
+    const response = await fetch(`${baseUrl}/api/generate-wireframe`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

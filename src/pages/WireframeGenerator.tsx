@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ComponentPreview from '../components/ComponentPreview';
-import { getApiUrl } from '../config/api';
+import { VALIDATED_API_ENDPOINTS, makeValidatedApiCall } from '../services/validatedApiConfig';
 
 interface WireframeGeneratorProps {
     onGenerate?: (description: string) => void;
@@ -23,26 +23,28 @@ const WireframeGenerator: React.FC<WireframeGeneratorProps> = ({ onGenerate }) =
         setError(null);
 
         try {
-            const endpoint = mode === 'wireframe'
-                ? '/api/generate-react-wireframe'
-                : '/api/generate-react-component';
-
-            const response = await fetch(getApiUrl(endpoint), {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    description,
-                    componentType: mode === 'wireframe' ? 'wireframe' : 'page',
-                    designTheme: mode === 'wireframe' ? 'wireframe' : 'modern'
-                })
-            });
+            // Use validated API call that automatically checks endpoint availability
+            const response = await makeValidatedApiCall(
+                VALIDATED_API_ENDPOINTS.AI_GENERATION.GENERATE_WIREFRAME,
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        description,
+                        theme: mode === 'wireframe' ? 'wireframe' : 'modern',
+                        colorScheme: 'blue',
+                        fastMode: true,
+                        includeAtlas: false
+                    })
+                }
+            );
 
             const data = await response.json();
 
-            if (data.component) {
-                setGeneratedComponent(data.component);
+            if (data.success && data.html) {
+                setGeneratedComponent(data.html);
             } else {
-                setError(data.error || 'Failed to generate component');
+                setError(data.error || 'Failed to generate wireframe');
             }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Unknown error');
@@ -55,7 +57,7 @@ const WireframeGenerator: React.FC<WireframeGeneratorProps> = ({ onGenerate }) =
         <div className="max-w-6xl mx-auto p-6">
             <div className="bg-white rounded-lg shadow-lg p-6">
                 <h1 className="text-3xl font-bold text-gray-800 mb-6">
-                    🎨 Lovable-Style Component Generator
+                    🎨 AI Wireframe Generator
                 </h1>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -73,7 +75,7 @@ const WireframeGenerator: React.FC<WireframeGeneratorProps> = ({ onGenerate }) =
                                         : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                                         }`}
                                 >
-                                    🖼️ Wireframe
+                                    🖼️ Simple Wireframe
                                 </button>
                                 <button
                                     onClick={() => setMode('component')}
@@ -82,7 +84,7 @@ const WireframeGenerator: React.FC<WireframeGeneratorProps> = ({ onGenerate }) =
                                         : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                                         }`}
                                 >
-                                    ⚛️ Component
+                                    🎨 Enhanced Wireframe
                                 </button>
                             </div>
                         </div>
@@ -96,8 +98,8 @@ const WireframeGenerator: React.FC<WireframeGeneratorProps> = ({ onGenerate }) =
                                 rows={4}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 placeholder={`Example: ${mode === 'wireframe'
-                                    ? 'Create a dashboard wireframe with sidebar navigation, main content area, and header'
-                                    : 'Create a modern user profile card with avatar, name, email, and action buttons'
+                                    ? 'Create a simple dashboard with sidebar navigation, main content area, and header'
+                                    : 'Create a modern learning platform homepage with hero section, course cards, and user navigation'
                                     }`}
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
@@ -111,7 +113,7 @@ const WireframeGenerator: React.FC<WireframeGeneratorProps> = ({ onGenerate }) =
                         >
                             {loading
                                 ? '🔄 Generating...'
-                                : `🚀 Generate ${mode === 'wireframe' ? 'Wireframe' : 'Component'}`
+                                : `🚀 Generate ${mode === 'wireframe' ? 'Simple Wireframe' : 'Enhanced Wireframe'}`
                             }
                         </button>
 
@@ -125,13 +127,13 @@ const WireframeGenerator: React.FC<WireframeGeneratorProps> = ({ onGenerate }) =
                     {/* Preview Section */}
                     <div className="space-y-4">
                         <h2 className="text-xl font-semibold text-gray-800">
-                            {mode === 'wireframe' ? '🎨 Wireframe Preview' : '⚛️ Component Preview'}
+                            {mode === 'wireframe' ? '🎨 Simple Wireframe Preview' : '✨ Enhanced Wireframe Preview'}
                         </h2>
 
                         {loading && (
                             <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
                                 <div className="animate-spin h-8 w-8 border-b-2 border-blue-600 rounded-full mx-auto mb-4"></div>
-                                <p className="text-gray-600">Generating your {mode}...</p>
+                                <p className="text-gray-600">Generating your wireframe...</p>
                             </div>
                         )}
 
@@ -144,7 +146,7 @@ const WireframeGenerator: React.FC<WireframeGeneratorProps> = ({ onGenerate }) =
 
                         {!loading && !generatedComponent && !error && (
                             <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center text-gray-500">
-                                <p>Your generated {mode} will appear here</p>
+                                <p>Your generated wireframe will appear here</p>
                             </div>
                         )}
                     </div>
@@ -154,7 +156,7 @@ const WireframeGenerator: React.FC<WireframeGeneratorProps> = ({ onGenerate }) =
                     <div className="mt-6 pt-6 border-t border-gray-200">
                         <details>
                             <summary className="cursor-pointer text-lg font-medium text-gray-700 hover:text-gray-900">
-                                📝 View Generated Code
+                                📝 View Generated HTML Code
                             </summary>
                             <pre className="mt-4 bg-gray-50 border rounded-lg p-4 overflow-x-auto text-sm">
                                 {generatedComponent}

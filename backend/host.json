@@ -23,8 +23,7 @@
     "openai-health",
     "testFigma",
     "updateThemeColors",
-    "wireframeAnalyze",
-    "frontend"
+    "wireframeAnalyze"
   ],
   "logging": {
     "applicationInsights": {
