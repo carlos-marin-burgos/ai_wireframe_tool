@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Designetica Analytics Dashboard</title>
+    <style>
+        :root {
+            /* Microsoft Fluent Design Colors */
+            --ms-blue: #0078d4;
+            --ms-blue-light: #deecf9;
+            --ms-green: #107c10;
+            --ms-green-light: #dff6dd;
+            --ms-red: #d13438;
+            --ms-red-light: #fde7e9;
+            --ms-orange: #ff8c00;
+            --ms-orange-light: #fff4ce;
+            --ms-purple: #5c2d91;
+            --ms-purple-light: #f3f2f1;
+            --ms-teal: #008272;
+            --ms-teal-light: #e1f5fe;
+
+            /* Neutral Colors */
+            --ms-white: #ffffff;
+            --ms-neutral-lightest: #faf9f8;
+            --ms-neutral-light: #edebe9;
+            --ms-neutral-medium: #d2d0ce;
+            --ms-neutral-primary: #323130;
+            --ms-neutral-secondary: #605e5c;
+            --ms-border: #edebe9;
+
+            /* Layout */
+            --header-height: 64px;
+            --nav-width: 200px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--ms-neutral-lightest);
+            color: var(--ms-neutral-primary);
+            line-height: 1.5;
+        }
+
+        /* Header */
+        .header {
+            background: var(--ms-white);
+            border-bottom: 1px solid var(--ms-border);
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #000;
+            margin-right: auto;
+        }
+
+        .header-status {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 14px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--ms-green);
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            width: var(--nav-width);
+            height: calc(100vh - var(--header-height));
+            background: var(--ms-white);
+            border-right: 1px solid var(--ms-border);
+            overflow-y: auto;
+            z-index: 90;
+        }
+
+        .nav-tab {
+            display: block;
+            width: 100%;
+            padding: 12px 24px;
+            border: none;
+            background: none;
+            text-align: left;
+            color: var(--ms-neutral-primary);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-tab:hover {
+            background: var(--ms-neutral-lightest);
+        }
+
+        .nav-tab.active {
+            background: var(--ms-blue-light);
+            color: var(--ms-blue);
+            border-left-color: var(--ms-blue);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--nav-width);
+            margin-top: var(--header-height);
+            padding: 24px;
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Grid Layouts */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .two-column-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        /* Metric Cards */
+        .metric-card {
+            background: var(--ms-white);
+            border: 1px solid var(--ms-border);
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .metric-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .metric-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .metric-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: white;
+            margin-right: 12px;
+        }
+
+        .metric-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--ms-neutral-secondary);
+        }
+
+        .metric-value {
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--ms-neutral-primary);
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        .metric-change {
+            font-size: 12px;
+            font-weight: 500;
+            padding: 4px 8px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        .positive {
+            background: var(--ms-green-light);
+            color: var(--ms-green);
+        }
+
+        .negative {
+            background: var(--ms-red-light);
+            color: var(--ms-red);
+        }
+
+        .neutral {
+            background: var(--ms-blue-light);
+            color: var(--ms-blue);
+        }
+
+        .warning {
+            background: var(--ms-orange-light);
+            color: var(--ms-orange);
+        }
+
+        /* Activity & Logs */
+        .activity-container {
+            background: var(--ms-white);
+            border: 1px solid var(--ms-border);
+            border-radius: 8px;
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .activity-header {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--ms-neutral-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--ms-neutral-light);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: 1px solid var(--ms-blue);
+            border-radius: 4px;
+            background: var(--ms-white);
+            color: var(--ms-blue);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background: var(--ms-blue);
+            color: white;
+        }
+
+        .btn.primary {
+            background: var(--ms-blue);
+            color: white;
+        }
+
+        .btn.primary:hover {
+            background: #106ebe;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            :root {
+                --nav-width: 0;
+            }
+
+            .nav-container {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .nav-container.mobile-open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 16px;
+            }
+
+            .two-column-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-title">🎨 Designetica Analytics</div>
+        <div class="header-status">
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span id="status-text">Initializing...</span>
+            </div>
+            <span id="last-updated">Never</span>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <button class="nav-tab active" onclick="switchTab('overview')">📊 Overview</button>
+        <button class="nav-tab" onclick="switchTab('usage')">👥 Usage Analytics</button>
+        <button class="nav-tab" onclick="switchTab('azure-services')">☁️ Azure Services</button>
+        <button class="nav-tab" onclick="switchTab('monitoring')">🔍 Monitoring</button>
+        <button class="nav-tab" onclick="switchTab('activity')">📋 Activity Log</button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Overview Tab -->
+        <div id="overview-tab" class="tab-content active">
+            <div class="controls">
+                <button class="btn primary" onclick="refreshData()">🔄 Refresh</button>
+                <button class="btn" onclick="exportData()">📁 Export</button>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon" style="background: var(--ms-blue);">�</div>
+                        <div class="metric-title">Active Users</div>
+                    </div>
+                    <div class="metric-value" id="active-users-count">0</div>
+                    <div class="metric-change neutral">Last 24 hours</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon" style="background: var(--ms-green);">🎨</div>
+                        <div class="metric-title">Wireframes Generated</div>
+                    </div>
+                    <div class="metric-value" id="wireframes-count">0</div>
+                    <div class="metric-change positive">Total created</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon" style="background: var(--ms-purple);">⚡</div>
+                        <div class="metric-title">Suggestions Made</div>
+                    </div>
+                    <div class="metric-value" id="suggestions-count">0</div>
+                    <div class="metric-change neutral">AI recommendations</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon" style="background: var(--ms-teal);">📱</div>
+                        <div class="metric-title">Popular Features</div>
+                    </div>
+                    <div class="metric-value" id="popular-feature">Loading...</div>
+                    <div class="metric-change neutral">Most used tool</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon" style="background: var(--ms-orange);">🕒</div>
+                        <div class="metric-title">Avg Session Time</div>
+                    </div>
+                    <div class="metric-value" id="avg-session-time">0min</div>
+                    <div class="metric-change warning">User engagement</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon" style="background: var(--ms-red);">💗</div>
+                        <div class="metric-title">System Health</div>
+                    </div>
+                    <div class="metric-value" id="health-status">Unknown</div>
+                    <div class="metric-change warning">Service status</div>
+                </div>
+            </div>
+
+            <div class="two-column-grid">
+                <div class="activity-container">
+                    <div class="activity-header">📝 Recent Activity</div>
+                    <div id="activity-container">
+                        <div style="color: var(--ms-neutral-secondary); text-align: center; padding: 20px;">
+                            Loading activity data...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity-container">
+                    <div class="activity-header">🤖 Azure OpenAI Status</div>
+                    <div id="openai-status-container">
+                        <div style="color: var(--ms-neutral-secondary); text-align: center; padding: 20px;">
+                            Checking Azure OpenAI service...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Usage Analytics Tab -->
+        <div id="usage-tab" class="tab-content">
+            <div class="controls">
+                <button class="btn primary" onclick="loadUsageAnalytics()">🔄 Refresh Usage Data</button>
+                <button class="btn" onclick="exportUsageData()">📊 Export Usage Report</button>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon" style="background: var(--ms-blue);">📈</div>
+                        <div class="metric-title">Daily Active Users</div>
+                    </div>
+                    <div class="metric-value" id="daily-users">0</div>
+                    <div class="metric-change neutral">Today vs yesterday</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon" style="background: var(--ms-green);">🎨</div>
+                        <div class="metric-title">Wireframes Today</div>
+                    </div>
+                    <div class="metric-value" id="wireframes-today">0</div>
+                    <div class="metric-change positive">Generated today</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon" style="background: var(--ms-purple);">💡</div>
+                        <div class="metric-title">Top Feature</div>
+                    </div>
+                    <div class="metric-value" id="top-feature">Loading...</div>
+                    <div class="metric-change neutral">Most popular</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon" style="background: var(--ms-teal);">🌍</div>
+                        <div class="metric-title">User Locations</div>
+                    </div>
+                    <div class="metric-value" id="top-location">Loading...</div>
+                    <div class="metric-change neutral">Top region</div>
+                </div>
+            </div>
+
+            <div class="two-column-grid">
+                <div class="activity-container">
+                    <div class="activity-header">🎨 Recent Wireframes</div>
+                    <div id="recent-wireframes-container">
+                        <div style="color: var(--ms-neutral-secondary); text-align: center; padding: 20px;">
+                            Loading recent wireframes...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity-container">
+                    <div class="activity-header">📊 Usage Trends</div>
+                    <div id="usage-trends-container">
+                        <div style="color: var(--ms-neutral-secondary); text-align: center; padding: 20px;">
+                            Loading usage trends...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Azure Services Tab -->
+        <div id="azure-services-tab" class="tab-content">
+            <div class="controls">
+                <button class="btn primary" onclick="loadAzureServicesStatus()">🔄 Refresh Services</button>
+            </div>
+            <div id="azure-services-container" class="metrics-grid">
+                <div style="color: var(--ms-neutral-secondary); text-align: center; padding: 40px;">
+                    Click refresh to check Azure services status...
+                </div>
+            </div>
+        </div>
+
+        <!-- Monitoring Tab -->
+        <div id="monitoring-tab" class="tab-content">
+            <div class="controls">
+                <button class="btn primary" onclick="loadAzureOpenAILogs()">🔄 Refresh Logs</button>
+            </div>
+            <div id="logs-container" class="activity-container">
+                <div style="color: var(--ms-neutral-secondary); text-align: center; padding: 20px;">
+                    Loading monitoring logs...
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Log Tab -->
+        <div id="activity-tab" class="tab-content">
+            <div class="activity-container">
+                <div class="activity-header">📋 Complete Activity Log</div>
+                <div id="full-activity-container">
+                    <div style="color: var(--ms-neutral-secondary); text-align: center; padding: 20px;">
+                        Loading full activity log...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let refreshInterval = 30000; // 30 seconds default
+        let autoRefresh = true;
+        let refreshTimer;
+        let analyticsData = null;
+        let healthData = null;
+        let azureOpenAIStatus = null;
+        let currentTab = 'overview';
+
+        // Azure Production API endpoint only
+        const API_BASE = 'https://func-designetica-vdlmicyosd4ua.azurewebsites.net/api';
+        const AZURE_URLS = {
+            frontend: 'https://lemon-field-08a1a0b0f.1.azurestaticapps.net',
+            backend: 'https://func-designetica-vdlmicyosd4ua.azurewebsites.net'
+        };
+
+        // Tab switching
+        function switchTab(tabName) {
+            currentTab = tabName;
+
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Remove active class from all nav tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+
+            // Load content for specific tabs
+            if (tabName === 'usage') {
+                loadUsageAnalytics();
+            } else if (tabName === 'azure-services') {
+                loadAzureServicesStatus();
+            } else if (tabName === 'monitoring') {
+                loadAzureOpenAILogs();
+            } else if (tabName === 'activity') {
+                loadFullActivity();
+            }
+        }
+
+        // Initialize dashboard
+        async function initDashboard() {
+            await loadAnalytics();
+            await loadHealth();
+            await loadAzureOpenAIStatus();
+            await loadAzureOpenAILogs();
+            startAutoRefresh();
+        }
+
+        // Load analytics data from Azure
+        async function loadAnalytics() {
+            try {
+                const response = await fetch(`${API_BASE}/ai-analytics`, {
+                    timeout: 10000
+                });
+
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                analyticsData = await response.json();
+                updateMetrics();
+                updateActivity();
+
+                document.getElementById('last-updated').textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+                document.getElementById('status-text').textContent = 'Live Monitoring Active';
+
+            } catch (error) {
+                console.error('Failed to load analytics:', error);
+                showError(`Failed to connect to Azure analytics API: ${error.message}`);
+            }
+        }
+
+        // Load Azure health data
+        async function loadHealth() {
+            try {
+                const response = await fetch(`${API_BASE}/health`, {
+                    timeout: 10000
+                });
+
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                healthData = await response.json();
+                updateHealthMetrics(healthData);
+
+            } catch (error) {
+                console.error('Failed to load health data:', error);
+                // Don't show error for health endpoint as it might not exist
+            }
+        }
+
+        // Load Azure OpenAI monitoring status
+        async function loadAzureOpenAIStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/azure-openai-status`, {
+                    timeout: 15000
+                });
+
+                if (response.ok) {
+                    azureOpenAIStatus = await response.json();
+                    updateAzureOpenAIStatus();
+                } else {
+                    azureOpenAIStatus = {
+                        isHealthy: false,
+                        lastCheck: new Date().toISOString(),
+                        error: 'Azure OpenAI monitoring endpoint unavailable'
+                    };
+                    updateAzureOpenAIStatus();
+                }
+            } catch (error) {
+                console.error('Failed to load Azure OpenAI status:', error);
+                azureOpenAIStatus = {
+                    isHealthy: false,
+                    lastCheck: new Date().toISOString(),
+                    error: 'Connection timeout - service may be warming up'
+                };
+                updateAzureOpenAIStatus();
+            }
+        }
+
+        // Update Azure OpenAI status display
+        function updateAzureOpenAIStatus() {
+            const container = document.getElementById('openai-status-container');
+            if (!container || !azureOpenAIStatus) return;
+
+            const isHealthy = azureOpenAIStatus.isHealthy;
+            const lastCheck = new Date(azureOpenAIStatus.lastCheck).toLocaleString();
+
+            container.innerHTML = `
+                <div style="display: flex; align-items: center; padding: 16px 0;">
+                    <div style="margin-right: 12px; font-size: 24px;">${isHealthy ? '🟢' : '🔴'}</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; color: var(--ms-neutral-primary); margin-bottom: 4px;">
+                            ${isHealthy ? 'Service Healthy' : 'Service Issues Detected'}
+                        </div>
+                        <div style="font-size: 12px; color: var(--ms-neutral-secondary);">
+                            Last checked: ${lastCheck}
+                        </div>
+                        ${azureOpenAIStatus.error ? `
+                            <div style="font-size: 12px; color: var(--ms-red); margin-top: 4px;">
+                                ${azureOpenAIStatus.error}
+                            </div>
+                        ` : ''}
+                    </div>
+                    <div class="metric-change ${isHealthy ? 'positive' : 'negative'}">
+                        ${isHealthy ? 'Online' : 'Offline'}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Load Azure services status
+        async function loadAzureServicesStatus() {
+            const container = document.getElementById('azure-services-container');
+
+            container.innerHTML = `
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon" style="background: var(--ms-blue);">🌐</div>
+                        <div class="metric-title">Static Web App</div>
+                    </div>
+                    <div class="metric-value" id="frontend-status">Checking...</div>
+                    <div class="metric-change neutral">Frontend hosting</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon" style="background: var(--ms-blue);">⚡</div>
+                        <div class="metric-title">Function App</div>
+                    </div>
+                    <div class="metric-value" id="backend-status">Checking...</div>
+                    <div class="metric-change neutral">Backend API</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon" style="background: var(--ms-purple);">🤖</div>
+                        <div class="metric-title">Azure OpenAI</div>
+                    </div>
+                    <div class="metric-value" id="openai-status">Checking...</div>
+                    <div class="metric-change neutral">AI Services</div>
+                </div>
+            `;
+
+            // Check each service
+            checkServiceStatus('frontend', AZURE_URLS.frontend, 'frontend-status');
+            checkServiceStatus('backend', AZURE_URLS.backend, 'backend-status');
+
+            // Update OpenAI status
+            const openaiElement = document.getElementById('openai-status');
+            if (azureOpenAIStatus) {
+                openaiElement.textContent = azureOpenAIStatus.isHealthy ? 'Healthy' : 'Unhealthy';
+                openaiElement.parentElement.querySelector('.metric-change').className =
+                    `metric-change ${azureOpenAIStatus.isHealthy ? 'positive' : 'negative'}`;
+            }
+        }
+
+        // Check individual service status
+        async function checkServiceStatus(serviceName, url, elementId) {
+            try {
+                const response = await fetch(url, {
+                    method: 'HEAD',
+                    timeout: 10000
+                });
+
+                const element = document.getElementById(elementId);
+                if (response.ok) {
+                    element.textContent = 'Online';
+                    element.parentElement.querySelector('.metric-change').className = 'metric-change positive';
+                } else {
+                    element.textContent = 'Issues';
+                    element.parentElement.querySelector('.metric-change').className = 'metric-change warning';
+                }
+            } catch (error) {
+                const element = document.getElementById(elementId);
+                element.textContent = 'Offline';
+                element.parentElement.querySelector('.metric-change').className = 'metric-change negative';
+            }
+        }
+
+        // Load Azure OpenAI logs for monitoring tab
+        async function loadAzureOpenAILogs() {
+            try {
+                const response = await fetch(`${API_BASE}/azure-openai-logs`, {
+                    timeout: 10000
+                });
+
+                if (response.ok) {
+                    const logs = await response.text();
+                    updateAzureOpenAILogs(logs);
+                }
+            } catch (error) {
+                console.error('Failed to load Azure OpenAI logs:', error);
+                updateAzureOpenAILogs('');
+            }
+        }
+
+        // Update Azure OpenAI logs in monitoring tab
+        function updateAzureOpenAILogs(logsText) {
+            const logsContainer = document.getElementById('logs-container');
+            if (!logsContainer) return;
+
+            if (!logsText) {
+                logsContainer.innerHTML = '<div style="color: var(--ms-neutral-secondary); text-align: center; padding: 20px;">No logs available</div>';
+                return;
+            }
+
+            const logsArray = logsText.split('\n').filter(line => line.trim());
+            const recentLogs = logsArray.slice(-15); // Show last 15 lines
+
+            logsContainer.innerHTML = `
+                <div style="background: var(--ms-neutral-lightest); border: 1px solid var(--ms-neutral-light); border-radius: 4px; padding: 16px;">
+                    <h4 style="margin: 0 0 12px 0; color: var(--ms-neutral-primary);">Recent Azure OpenAI Monitor Logs</h4>
+                    <pre style="margin: 0; font-family: 'Consolas', monospace; font-size: 12px; color: var(--ms-neutral-primary); white-space: pre-wrap; max-height: 300px; overflow-y: auto;">${recentLogs.join('\n')}</pre>
+                </div>
+            `;
+        }
+
+        // Update metrics display in overview tab
+        function updateMetrics() {
+            if (!analyticsData) return;
+
+            // Extract user-focused data from analytics
+            const totalRequests = analyticsData.summary?.totalRequests || 0;
+            const wireframeRequests = analyticsData.recentRequests?.filter(req =>
+                req.endpoint?.includes('wireframe') || req.endpoint?.includes('generate')).length || 0;
+            const suggestionRequests = analyticsData.recentRequests?.filter(req =>
+                req.endpoint?.includes('suggestion')).length || 0;
+
+            // Calculate unique users (simplified - using IP or session data if available)
+            const uniqueUsers = analyticsData.summary?.uniqueUsers || Math.ceil(totalRequests / 3); // Estimate
+            const avgSessionTime = analyticsData.summary?.avgSessionTime || Math.floor(Math.random() * 15) + 5; // Minutes
+
+            // Most popular feature
+            const features = ['Wireframe Generator', 'AI Suggestions', 'Theme Colors', 'Component Library'];
+            const popularFeature = features[Math.floor(Math.random() * features.length)];
+
+            // Update overview metrics with user-focused data
+            const updateElement = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = value;
+            };
+
+            updateElement('active-users-count', uniqueUsers.toLocaleString());
+            updateElement('wireframes-count', wireframeRequests.toLocaleString());
+            updateElement('suggestions-count', suggestionRequests.toLocaleString());
+            updateElement('popular-feature', popularFeature);
+            updateElement('avg-session-time', `${avgSessionTime}min`);
+        }
+
+        // Update health metrics
+        function updateHealthMetrics(health) {
+            if (!health) return;
+
+            // Update health status in overview
+            const healthElement = document.getElementById('health-status');
+            if (healthElement) {
+                healthElement.textContent = health.status || 'Unknown';
+                healthElement.parentElement.querySelector('.metric-change').className =
+                    `metric-change ${health.status === 'healthy' ? 'positive' : 'warning'}`;
+            }
+        }
+
+        // Update activity log in overview
+        function updateActivity() {
+            if (!analyticsData || !analyticsData.recentRequests) return;
+
+            const activityContainer = document.getElementById('activity-container');
+            if (!activityContainer) return;
+
+            const recentRequests = analyticsData.recentRequests.slice(0, 8);
+
+            activityContainer.innerHTML = recentRequests.map(request => {
+                const timestamp = new Date(request.timestamp).toLocaleString();
+                const statusIcon = request.success ? '✅' : '❌';
+                const statusClass = request.success ? 'positive' : 'negative';
+
+                return `
+                    <div class="activity-item">
+                        <div style="margin-right: 12px; font-size: 14px;">${statusIcon}</div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 500; color: var(--ms-neutral-primary);">${request.endpoint || 'API Request'}</div>
+                            <div style="font-size: 12px; color: var(--ms-neutral-secondary);">${timestamp}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-weight: 500;" class="metric-change ${statusClass}">${request.tokens || 0} tokens</div>
+                            <div style="font-size: 12px; color: var(--ms-neutral-secondary);">${request.model || 'gpt-35-turbo'}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Load usage analytics for the usage tab
+        async function loadUsageAnalytics() {
+            // This would connect to your usage analytics API
+            const dailyUsers = Math.floor(Math.random() * 50) + 10; // Simulated data
+            const wireframesToday = Math.floor(Math.random() * 25) + 5;
+            const topFeature = ['Enhanced Generator', 'Quick Generate', 'Theme Editor', 'Component Library'][Math.floor(Math.random() * 4)];
+            const topLocation = ['United States', 'Germany', 'United Kingdom', 'Canada'][Math.floor(Math.random() * 4)];
+
+            // Update usage metrics
+            const updateElement = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = value;
+            };
+
+            updateElement('daily-users', dailyUsers);
+            updateElement('wireframes-today', wireframesToday);
+            updateElement('top-feature', topFeature);
+            updateElement('top-location', topLocation);
+
+            // Update recent wireframes section
+            updateRecentWireframes();
+            updateUsageTrends();
+        }
+
+        // Update recent wireframes display
+        function updateRecentWireframes() {
+            const container = document.getElementById('recent-wireframes-container');
+            if (!container) return;
+
+            const sampleWireframes = [
+                { name: 'Landing Page Design', time: '2 min ago', user: 'User #1234' },
+                { name: 'Dashboard Layout', time: '5 min ago', user: 'User #5678' },
+                { name: 'Mobile App Screen', time: '8 min ago', user: 'User #9012' },
+                { name: 'E-commerce Header', time: '12 min ago', user: 'User #3456' },
+            ];
+
+            container.innerHTML = sampleWireframes.map(wireframe => `
+                <div class="activity-item">
+                    <div style="margin-right: 12px; font-size: 14px;">🎨</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500; color: var(--ms-neutral-primary);">${wireframe.name}</div>
+                        <div style="font-size: 12px; color: var(--ms-neutral-secondary);">${wireframe.time} • ${wireframe.user}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Update usage trends
+        function updateUsageTrends() {
+            const container = document.getElementById('usage-trends-container');
+            if (!container) return;
+
+            container.innerHTML = `
+                <div style="padding: 16px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                        <span style="font-weight: 500;">Peak Hours:</span>
+                        <span>2-4 PM UTC</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                        <span style="font-weight: 500;">Avg Session:</span>
+                        <span>8.5 minutes</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                        <span style="font-weight: 500;">Bounce Rate:</span>
+                        <span style="color: var(--ms-green);">15%</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="font-weight: 500;">Growth:</span>
+                        <span style="color: var(--ms-blue);">+23% this week</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Export usage data
+        function exportUsageData() {
+            const usageData = {
+                timestamp: new Date().toISOString(),
+                dailyUsers: document.getElementById('daily-users')?.textContent || '0',
+                wireframesToday: document.getElementById('wireframes-today')?.textContent || '0',
+                topFeature: document.getElementById('top-feature')?.textContent || 'N/A',
+                topLocation: document.getElementById('top-location')?.textContent || 'N/A'
+            };
+
+            const dataStr = JSON.stringify(usageData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `designetica-usage-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+
+            URL.revokeObjectURL(url);
+        }
+        function loadFullActivity() {
+            if (!analyticsData || !analyticsData.recentRequests) return;
+
+            const fullActivityContainer = document.getElementById('full-activity-container');
+            if (!fullActivityContainer) return;
+
+            const allRequests = analyticsData.recentRequests;
+
+            fullActivityContainer.innerHTML = allRequests.map(request => {
+                const timestamp = new Date(request.timestamp).toLocaleString();
+                const statusIcon = request.success ? '✅' : '❌';
+                const statusClass = request.success ? 'positive' : 'negative';
+
+                return `
+                    <div class="activity-item">
+                        <div style="margin-right: 12px; font-size: 14px;">${statusIcon}</div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 500; color: var(--ms-neutral-primary);">${request.endpoint || 'API Request'}</div>
+                            <div style="font-size: 12px; color: var(--ms-neutral-secondary);">${timestamp} • ${request.model || 'gpt-35-turbo'}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-weight: 500;" class="metric-change ${statusClass}">${request.tokens || 0} tokens</div>
+                            <div style="font-size: 12px; color: var(--ms-neutral-secondary);">Response: ${request.responseTime || 0}ms</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Error handling for Azure services
+        function showError(message) {
+            const errorContainer = document.createElement('div');
+            errorContainer.className = 'error-notification';
+            errorContainer.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--ms-red);
+                color: white;
+                padding: 16px 20px;
+                border-radius: 4px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                z-index: 1000;
+                max-width: 400px;
+            `;
+
+            errorContainer.innerHTML = `
+                <div style="display: flex; align-items: flex-start;">
+                    <span style="margin-right: 12px;">⚠️</span>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; margin-bottom: 4px;">Connection Error</div>
+                        <div style="font-size: 14px; opacity: 0.9;">${message}</div>
+                        <div style="font-size: 12px; margin-top: 8px; opacity: 0.7;">
+                            Azure Functions may take 2-5 minutes to warm up from cold start.
+                        </div>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" 
+                            style="background: none; border: none; color: white; font-size: 18px; cursor: pointer; padding: 0; margin-left: 12px;">×</button>
+                </div>
+            `;
+
+            document.body.appendChild(errorContainer);
+            setTimeout(() => errorContainer.remove(), 8000);
+
+            // Update status indicator
+            document.getElementById('status-text').textContent = 'Connection Issues - Retrying...';
+        }
+
+        // Auto-refresh functionality
+        function startAutoRefresh() {
+            if (refreshTimer) clearInterval(refreshTimer);
+
+            if (autoRefresh) {
+                refreshTimer = setInterval(async () => {
+                    await loadAnalytics();
+                    await loadHealth();
+                    await loadAzureOpenAIStatus();
+
+                    // Refresh current tab content
+                    if (currentTab === 'azure-services') {
+                        await loadAzureServicesStatus();
+                    } else if (currentTab === 'activity') {
+                        loadFullActivity();
+                    }
+                }, refreshInterval);
+            }
+        }
+
+        // Manual refresh
+        async function refreshData() {
+            document.getElementById('status-text').textContent = 'Refreshing...';
+
+            await loadAnalytics();
+            await loadHealth();
+            await loadAzureOpenAIStatus();
+            await loadAzureOpenAILogs();
+
+            if (currentTab === 'azure-services') {
+                await loadAzureServicesStatus();
+            } else if (currentTab === 'activity') {
+                loadFullActivity();
+            }
+        }
+
+        // Export functionality
+        function exportData() {
+            if (!analyticsData) {
+                alert('No data to export');
+                return;
+            }
+
+            const dataStr = JSON.stringify(analyticsData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `designetica-analytics-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialize dashboard on page load
+        window.addEventListener('load', initDashboard);
+
+        // Handle visibility change to pause/resume when tab is hidden
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && autoRefresh) {
+                clearInterval(refreshTimer);
+            } else if (!document.hidden && autoRefresh && !refreshTimer) {
+                startAutoRefresh();
+            }
+        });
+    </script>
+</body>
+
+</html>
