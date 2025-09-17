@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Post-merge hook - Auto-deploy after pulling changes
+echo "📥 Post-merge: Checking if deployment is needed..."
+
+# Check if any deployment-relevant files changed
+CHANGED_FILES=$(git diff --name-only HEAD@{1} HEAD 2>/dev/null || echo "")
+
+# Files that trigger auto-deployment
+TRIGGER_PATTERNS=(
+    "backend/"
+    "src/"
+    "azure.yaml"
+    "package.json"
+    "*.config.*"
+)
+
+SHOULD_DEPLOY=false
+
+for pattern in "${TRIGGER_PATTERNS[@]}"; do
+    if echo "$CHANGED_FILES" | grep -q "$pattern"; then
+        SHOULD_DEPLOY=true
+        break
+    fi
+done
+
+if [ "$SHOULD_DEPLOY" = true ]; then
+    echo "🚀 Deployment-relevant changes detected:"
+    echo "$CHANGED_FILES" | grep -E "(backend/|src/|azure.yaml|package.json|\.config\.)"
+    
+    echo ""
+    echo "🤖 Auto-deploying in 5 seconds... (Ctrl+C to cancel)"
+    sleep 5
+    
+    # Run the deployment script
+    ./deploy.sh
+else
+    echo "ℹ️  No deployment needed"
+fi

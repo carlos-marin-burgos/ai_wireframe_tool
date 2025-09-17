@@ -84,10 +84,13 @@ module.exports = async function (context, req) {
             `https://${host}/api/figmaOAuthCallback`;
           console.log(`🔧 Using PRODUCTION redirect URI: ${redirectUri}`);
         } else {
-          // Development environment - use development URI
-          redirectUri =
-            process.env.FIGMA_REDIRECT_URI_DEV ||
-            "http://localhost:7071/api/figmaOAuthCallback";
+          // Development environment - require DEV environment variable
+          redirectUri = process.env.FIGMA_REDIRECT_URI_DEV;
+          if (!redirectUri) {
+            throw new Error(
+              "FIGMA_REDIRECT_URI_DEV must be set for development environment"
+            );
+          }
           console.log(`🔧 Using DEVELOPMENT redirect URI: ${redirectUri}`);
         }
       } else {

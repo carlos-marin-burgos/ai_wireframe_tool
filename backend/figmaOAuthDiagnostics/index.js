@@ -1,15 +1,33 @@
 module.exports = async function (context, req) {
   const now = new Date().toISOString();
-  const envSource = process.env.FIGMA_REDIRECT_URI
-    ? "FIGMA_REDIRECT_URI"
-    : process.env.FIGMA_REDIRECT_URI_DEV
-    ? "FIGMA_REDIRECT_URI_DEV"
-    : "default";
+  // Use the same environment detection logic as OAuth start/callback
+  let derivedRedirectUri = process.env.FIGMA_REDIRECT_URI;
+  let envSource = "FIGMA_REDIRECT_URI";
 
-  const derivedRedirectUri =
-    process.env.FIGMA_REDIRECT_URI ||
-    process.env.FIGMA_REDIRECT_URI_DEV ||
-    "http://localhost:7071/api/figmaOAuthCallback";
+  if (!derivedRedirectUri) {
+    const host = req.headers.host;
+    if (
+      host &&
+      (host.includes("azurewebsites.net") ||
+        host.includes("azurestaticapps.net"))
+    ) {
+      // Production environment
+      derivedRedirectUri =
+        process.env.FIGMA_REDIRECT_URI_PROD ||
+        `https://${host}/api/figmaOAuthCallback`;
+      envSource = "FIGMA_REDIRECT_URI_PROD";
+    } else {
+      // Development environment
+      derivedRedirectUri = process.env.FIGMA_REDIRECT_URI_DEV;
+      envSource = "FIGMA_REDIRECT_URI_DEV";
+      if (!derivedRedirectUri) {
+        // This will cause an error as intended (no localhost fallback)
+        derivedRedirectUri =
+          "ERROR: FIGMA_REDIRECT_URI_DEV required for development";
+        envSource = "error";
+      }
+    }
+  }
 
   const expectedCallbackPath = "/api/figmaOAuthCallback";
   const callbackMatches = derivedRedirectUri.endsWith(expectedCallbackPath);

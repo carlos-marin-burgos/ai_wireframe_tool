@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Pre-push hook - Validates environment before pushing
+echo "🔍 Pre-push validation..."
+
+# Run environment check
+./check-env.sh
+
+# If check-env fails, prevent push
+if [ $? -ne 0 ]; then
+    echo "❌ Environment validation failed. Push cancelled."
+    echo "💡 Fix environment issues before pushing"
+    exit 1
+fi
+
+echo "✅ Pre-push validation passed"

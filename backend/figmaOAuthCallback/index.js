@@ -1,23 +1,36 @@
 const axios = require("axios");
 
 // Exchange authorization code for access token
-async function exchangeCodeForToken(code) {
+async function exchangeCodeForToken(code, req) {
   try {
-    // Get environment-appropriate redirect URI
-    // Use the same selection logic as figmaOAuthStart: prefer explicit FIGMA_REDIRECT_URI,
-    // then environment-specific values, then default to localhost callback.
+    // Get environment-appropriate redirect URI using the same logic as figmaOAuthStart
     let redirectUri = process.env.FIGMA_REDIRECT_URI;
+
     if (!redirectUri) {
-      if (process.env.NODE_ENV === "production") {
-        redirectUri = process.env.FIGMA_REDIRECT_URI_PROD;
+      const host = req.headers.host;
+      if (
+        host &&
+        (host.includes("azurewebsites.net") ||
+          host.includes("azurestaticapps.net"))
+      ) {
+        // Production environment - use production URI
+        redirectUri =
+          process.env.FIGMA_REDIRECT_URI_PROD ||
+          `https://${host}/api/figmaOAuthCallback`;
+        console.log(`🔧 Using PRODUCTION redirect URI: ${redirectUri}`);
       } else {
+        // Development environment - require DEV environment variable
         redirectUri = process.env.FIGMA_REDIRECT_URI_DEV;
+        if (!redirectUri) {
+          throw new Error(
+            "FIGMA_REDIRECT_URI_DEV must be set for development environment"
+          );
+        }
+        console.log(`🔧 Using DEVELOPMENT redirect URI: ${redirectUri}`);
       }
+    } else {
+      console.log(`🔧 Using configured redirect URI: ${redirectUri}`);
     }
-    // Fallback default for local development
-    redirectUri =
-      (redirectUri && redirectUri.trim()) ||
-      "http://localhost:7071/api/figmaOAuthCallback";
 
     // Build a small set of candidate redirect URIs to tolerate tiny registration mismatches
     const candidates = [];
@@ -59,7 +72,7 @@ async function exchangeCodeForToken(code) {
         console.log("📤 Trying token exchange with redirect_uri:", candidate);
 
         const response = await axios.post(
-          "https://www.figma.com/api/oauth/token",
+          "https://www.figma.com/oauth/token",
           params,
           {
             headers: {
@@ -164,7 +177,7 @@ module.exports = async function (context, req) {
     );
 
     // Exchange code for tokens with proper environment handling
-    const tokenResult = await exchangeCodeForToken(code);
+    const tokenResult = await exchangeCodeForToken(code, req);
 
     if (tokenResult.success) {
       console.log("✅ OAuth2 authorization successful!");

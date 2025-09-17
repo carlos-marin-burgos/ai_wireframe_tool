@@ -29,6 +29,20 @@ This document outlines the proper deployment workflow for the Designetica AI Wir
    - Git
    - Azure CLI (optional, for manual operations)
 
+## 🤖 Automation Options
+
+For automatic deployment instead of manual runs, see **[AUTOMATION_GUIDE.md](./AUTOMATION_GUIDE.md)**
+
+### Quick Automation Setup
+
+```bash
+# Git hooks for team consistency
+./setup-hooks.sh
+
+# File watcher for active development
+./watch-deploy.sh
+```
+
 ## 🚀 Deployment Process
 
 ### Option 1: Safe Deployment Script (Recommended)
