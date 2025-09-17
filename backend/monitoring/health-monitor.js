@@ -6,11 +6,11 @@ const path = require("path");
 class HealthMonitor {
   constructor() {
     this.apiEndpoint =
-      "https://func-designetica-prod-xabnur6oyusju.azurewebsites.net/api/generate-html-wireframe";
+      "https://func-original-app-pgno4orkguix6.azurewebsites.net/api/generate-html-wireframe";
     this.healthEndpoint =
-      "https://func-designetica-prod-xabnur6oyusju.azurewebsites.net/api/health";
+      "https://func-original-app-pgno4orkguix6.azurewebsites.net/api/health";
     this.websiteEndpoint =
-      "https://white-flower-006d2370f.1.azurestaticapps.net";
+      "https://lemon-field-08a1a0b0f.1.azurestaticapps.net";
     this.logFile = path.join(__dirname, "health-log.json");
     this.alertsFile = path.join(__dirname, "alerts.json");
     this.lastStatus = null;
@@ -182,7 +182,7 @@ class HealthMonitor {
       const startTime = Date.now();
 
       dns.lookup(
-        "white-flower-006d2370f.1.azurestaticapps.net",
+        "lemon-field-08a1a0b0f.1.azurestaticapps.net",
         (err, address) => {
           const responseTime = Date.now() - startTime;
 
@@ -211,7 +211,7 @@ class HealthMonitor {
 
       const socket = tls.connect(
         443,
-        "white-flower-006d2370f.1.azurestaticapps.net",
+        "lemon-field-08a1a0b0f.1.azurestaticapps.net",
         () => {
           const cert = socket.getPeerCertificate();
           const responseTime = Date.now() - startTime;

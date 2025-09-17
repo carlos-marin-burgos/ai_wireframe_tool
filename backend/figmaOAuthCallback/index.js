@@ -72,7 +72,7 @@ async function exchangeCodeForToken(code, req) {
         console.log("📤 Trying token exchange with redirect_uri:", candidate);
 
         const response = await axios.post(
-          "https://www.figma.com/oauth/token",
+          "https://api.figma.com/v1/oauth/token",
           params,
           {
             headers: {
@@ -182,11 +182,24 @@ module.exports = async function (context, req) {
     if (tokenResult.success) {
       console.log("✅ OAuth2 authorization successful!");
 
-      // Store the access token (you might want to store this in a database or session)
+      // Store the access token for future use
       console.log(
         "🔑 Access token received:",
         tokenResult.data.access_token.substring(0, 20) + "..."
       );
+
+      // Save tokens to persistent storage
+      try {
+        const { saveTokens } = require("../figmaOAuthStatus/index.js");
+        const saved = saveTokens(tokenResult.data);
+        if (saved) {
+          console.log("💾 OAuth tokens saved successfully");
+        } else {
+          console.warn("⚠️ Failed to save OAuth tokens");
+        }
+      } catch (error) {
+        console.error("❌ Error saving OAuth tokens:", error);
+      }
 
       // Return success page
       const successPage = `<!DOCTYPE html>
@@ -274,8 +287,28 @@ module.exports = async function (context, req) {
         <button class="close-btn" onclick="window.close()">Close Window</button>
         
         <script>
+          // Auto-close and notify parent window
           setTimeout(() => {
-            try { window.close(); } catch (e) { console.log('Auto-close not available'); }
+            try {
+              // Notify parent window of successful authorization with token info
+              if (window.opener) {
+                window.opener.postMessage({
+                  type: 'FIGMA_OAUTH_SUCCESS',
+                  data: {
+                    status: 'success',
+                    message: 'Successfully connected to Figma',
+                    tokenInfo: {
+                      scope: '${tokenResult.data.scope || "file_read"}',
+                      expires_in: ${tokenResult.data.expires_in || 3600},
+                      connected: true
+                    }
+                  }
+                }, '*');
+              }
+              window.close();
+            } catch (e) { 
+              console.log('Auto-close not available'); 
+            }
           }, 3000);
         </script>
     </div>

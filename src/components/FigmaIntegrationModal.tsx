@@ -58,17 +58,55 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
     const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null);
     const [conversionProgress, setConversionProgress] = useState(0);
 
-    // Check OAuth status on component mount
-    useEffect(() => {
-        if (isOpen) {
-            checkOAuthStatus();
+    // Utility function to get the current access token (OAuth or manual)
+    const getCurrentAccessToken = (): string | null => {
+        // First check for locally stored OAuth tokens
+        const storedTokens = localStorage.getItem('figma_oauth_tokens');
+        if (storedTokens) {
+            try {
+                const tokenData = JSON.parse(storedTokens);
+                return tokenData.access_token;
+            } catch (error) {
+                console.error('Error parsing stored OAuth tokens:', error);
+                localStorage.removeItem('figma_oauth_tokens');
+                localStorage.removeItem('figma_oauth_timestamp');
+            }
         }
-    }, [isOpen]);
+
+        // Fallback to manual token input
+        return accessToken;
+    };
 
     // Check existing OAuth connection status
     const checkOAuthStatus = useCallback(async () => {
         try {
-            const response = await fetch(getApiUrl('/api/figmaOAuthStart?format=json'), {
+            // First check for locally stored tokens
+            const storedTokens = localStorage.getItem('figma_oauth_tokens');
+            const storedTimestamp = localStorage.getItem('figma_oauth_timestamp');
+
+            if (storedTokens && storedTimestamp) {
+                // Check if tokens are still valid (within 24 hours for safety)
+                const tokenAge = Date.now() - parseInt(storedTimestamp);
+                const maxAge = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+                if (tokenAge < maxAge) {
+                    console.log('🔐 Found valid locally stored OAuth tokens');
+                    setAuthStatus({
+                        status: 'already_authorized',
+                        message: 'Connected via locally stored OAuth tokens',
+                        connected: true
+                    });
+                    setIsConnected(true);
+                    return;
+                } else {
+                    console.log('⏰ Locally stored tokens expired, removing...');
+                    localStorage.removeItem('figma_oauth_tokens');
+                    localStorage.removeItem('figma_oauth_timestamp');
+                }
+            }
+
+            // Fallback to server-side token check
+            const response = await fetch(getApiUrl('/api/figmaOAuthStatus'), {
                 headers: { 'Accept': 'application/json' }
             });
 
@@ -97,13 +135,16 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 
             if (isJson) {
                 const data = await response.json();
+                console.log('🔍 OAuth Status Response:', data); // Debug log
                 setAuthStatus(data);
 
-                if (data.status === 'already_authorized') {
+                if (data.status === 'already_authorized' && data.connected) {
+                    console.log('✅ Setting connected state to TRUE'); // Debug log
                     setIsConnected(true);
-                    setSuccess(`🔗 Already connected to Figma! Welcome back, ${data.user?.email || 'User'}`);
+                    setSuccess(`🔗 Already connected to Figma! Welcome back, ${data.user?.email || data.user?.handle || 'User'}`);
                     setActiveTab('connect');
                 } else {
+                    console.log('❌ Setting connected state to FALSE', data); // Debug log
                     setIsConnected(false);
                     setActiveTab('connect');
                 }
@@ -123,7 +164,52 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
             setIsConnected(false);
             setActiveTab('connect');
         }
-    }, []);    // Start OAuth flow
+    }, []);
+
+    // Check OAuth status on component mount
+    useEffect(() => {
+        if (isOpen) {
+            checkOAuthStatus();
+        }
+    }, [isOpen, checkOAuthStatus]);
+
+    // Listen for OAuth success messages from popup window
+    useEffect(() => {
+        const handleMessage = (event: MessageEvent) => {
+            if (event.data?.type === 'FIGMA_OAUTH_SUCCESS') {
+                console.log('✅ Received OAuth success message', event.data);
+
+                // Store tokens locally if provided in the message
+                if (event.data.tokenInfo) {
+                    localStorage.setItem('figma_oauth_tokens', JSON.stringify(event.data.tokenInfo));
+                    localStorage.setItem('figma_oauth_timestamp', Date.now().toString());
+                    console.log('💾 Stored OAuth tokens locally');
+                }
+
+                // Update auth status AND connection state immediately
+                setAuthStatus({
+                    status: 'already_authorized',
+                    message: 'Successfully connected via OAuth',
+                    connected: true
+                });
+
+                // CRITICAL: Update the connection state
+                setIsConnected(true);
+
+                setSuccess('🎉 Successfully connected to Figma!');
+
+                // Re-check OAuth status to get user info from backend
+                setTimeout(() => {
+                    checkOAuthStatus();
+                }, 500);
+            }
+        };
+
+        window.addEventListener('message', handleMessage);
+        return () => window.removeEventListener('message', handleMessage);
+    }, [checkOAuthStatus]);
+
+    // Start OAuth flow
     const handleOAuthConnect = useCallback(async () => {
         setIsLoading(true);
         setError(null);
@@ -296,6 +382,14 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
         setConversionProgress(0);
 
         try {
+            const currentToken = getCurrentAccessToken();
+            if (!currentToken) {
+                setError('Please connect to Figma first (OAuth or manual token)');
+                return;
+            }
+
+            figmaApi.setAccessToken(currentToken);
+
             const fileKey = figmaApi.parseFileUrl(url);
             if (fileKey) {
                 // Figma URL handling
@@ -361,7 +455,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
             setIsLoading(false);
             setConversionProgress(0);
         }
-    }, [onImport, onTokensExtracted, onClose]);
+    }, [onImport, onTokensExtracted, onClose, getCurrentAccessToken]);
 
     const handleConnect = useCallback(async () => {
         if (!accessToken.trim()) {
@@ -408,6 +502,14 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
         setFrames([]);
 
         try {
+            const currentToken = getCurrentAccessToken();
+            if (!currentToken) {
+                setError('Please connect to Figma first (OAuth or manual token)');
+                return;
+            }
+
+            figmaApi.setAccessToken(currentToken);
+
             const fileKey = figmaApi.parseFileUrl(figmaUrl);
             if (!fileKey) {
                 setError('Invalid Figma URL. Please use a valid Figma file URL.');
@@ -424,7 +526,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
         } finally {
             setIsLoading(false);
         }
-    }, [figmaUrl]);
+    }, [figmaUrl, getCurrentAccessToken]);
 
     const handleFrameSelect = useCallback((frameId: string) => {
         setSelectedFrames(prev =>
@@ -445,6 +547,14 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
         setConversionProgress(0);
 
         try {
+            const currentToken = getCurrentAccessToken();
+            if (!currentToken) {
+                setError('Please connect to Figma first (OAuth or manual token)');
+                return;
+            }
+
+            figmaApi.setAccessToken(currentToken);
+
             const fileKey = figmaApi.parseFileUrl(figmaUrl);
             if (!fileKey) {
                 setError('Invalid Figma URL');
@@ -473,7 +583,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
             setIsLoading(false);
             setConversionProgress(0);
         }
-    }, [selectedFrames, frames, figmaUrl, onImport, onClose, extractedTokens]);
+    }, [selectedFrames, frames, figmaUrl, onImport, onClose, extractedTokens, getCurrentAccessToken]);
 
     const handleExport = useCallback(() => {
         onExport?.(exportFormat);
@@ -496,6 +606,11 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
             setFigmaUrl('');
             setAuthStatus(null);
             figmaApi.setAccessToken('');
+
+            // Clear locally stored OAuth tokens
+            localStorage.removeItem('figma_oauth_tokens');
+            localStorage.removeItem('figma_oauth_timestamp');
+            console.log('🗑️ Cleared locally stored OAuth tokens');
 
             setSuccess('🔓 Disconnected from Figma. Your local session has been cleared.');
             setActiveTab('connect');

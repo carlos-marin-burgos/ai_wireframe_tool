@@ -6,8 +6,8 @@
 set -e
 
 # Configuration
-API_ENDPOINT="https://func-designetica-prod-xabnur6oyusju.azurewebsites.net/api/generate-html-wireframe"
-HEALTH_ENDPOINT="https://func-designetica-prod-xabnur6oyusju.azurewebsites.net/api/health"
+API_ENDPOINT="https://func-original-app-pgno4orkguix6.azurewebsites.net/api/generate-html-wireframe"
+HEALTH_ENDPOINT="https://func-original-app-pgno4orkguix6.azurewebsites.net/api/health"
 WEBSITE_ENDPOINT="https://designetica.carlosmarin.net"
 TIMEOUT=60
 MAX_RETRIES=3
