@@ -633,3 +633,108 @@
 .dragula-container [contenteditable="true"] {
   cursor: text !important;
 }
+
+/* ===== FORMATTING TOOLBAR ===== */
+
+.formatting-toolbar {
+  position: absolute;
+  z-index: 1000;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  gap: 2px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.format-btn {
+  border: none;
+  background: transparent;
+  padding: 6px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--color-text);
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+}
+
+.format-btn:hover,
+.format-btn.hover {
+  background-color: var(--color-background-light);
+}
+
+.format-btn:active {
+  background-color: var(--color-background-medium);
+}
+
+.format-bold {
+  font-weight: bold;
+}
+
+.format-italic {
+  font-style: italic;
+}
+
+.format-underline {
+  text-decoration: underline;
+}
+
+.format-clear {
+  font-size: 10px;
+  color: var(--color-primary-medium-dark);
+}
+
+.format-divider {
+  width: 1px;
+  background-color: var(--color-border);
+  margin: 2px 4px;
+}
+
+/* Formatting toolbar animations */
+.formatting-toolbar {
+  animation: formatToolbarSlideIn 0.2s ease-out;
+}
+
+@keyframes formatToolbarSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hide toolbar when dragging */
+.dragula-container.drag-enabled .formatting-toolbar {
+  display: none !important;
+}
+
+/* ===== MODE TRANSITION ANIMATIONS ===== */
+
+/* Smooth fade transition when switching between drag/edit modes */
+.dragula-container {
+  transition: opacity 0.15s ease-in-out;
+}
+
+/* Fade out during mode transition */
+.dragula-container.mode-transitioning {
+  opacity: 0.3;
+}
+
+/* Enhanced button transition for mode switching */
+.drag-toggle-btn {
+  transition: all 0.15s ease-in-out;
+}
+
+.drag-toggle-btn:active {
+  transform: scale(0.95);
+}

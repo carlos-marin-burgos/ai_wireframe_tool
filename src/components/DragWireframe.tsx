@@ -14,7 +14,7 @@
  * />
  */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import dragula from 'dragula';
 import 'dragula/dist/dragula.css';
 import './DragWireframe.css';
@@ -130,7 +130,7 @@ function sanitizeHTML(html: string): string {
     }
 }
 
-const DragWireframe: React.FC<DragWireframeProps> = ({
+const DragWireframe: React.FC<DragWireframeProps> = React.memo(({
     htmlContent,
     onUpdateContent,
     onOrderingChange
@@ -144,11 +144,20 @@ const DragWireframe: React.FC<DragWireframeProps> = ({
     const augmentedRef = useRef<boolean>(false);
     const editableTaggedRef = useRef<boolean>(false);
     const insertionMarkerRef = useRef<HTMLDivElement | null>(null);
+    const formattingToolbarRef = useRef<HTMLDivElement | null>(null);
+    const [showFormattingToolbar, setShowFormattingToolbar] = useState(false);
+    const [toolbarPosition, setToolbarPosition] = useState({ top: 0, left: 0 });
     const activeDragElementRef = useRef<HTMLElement | null>(null);
     const mouseMoveHandlerRef = useRef<((e: MouseEvent) => void) | null>(null);
     const cleanupMarkerRef = useRef<(() => void) | null>(null);
     const simpleModeRef = useRef<boolean>(false); // fallback simple direct-children mode
     const reinitRequestedRef = useRef<boolean>(false);
+    const previousContentRef = useRef<string>(''); // Track previous content to prevent unnecessary re-renders
+    const onUpdateContentRef = useRef<((content: string) => void) | undefined>();
+    const [isTransitioning, setIsTransitioning] = useState(false); // Animation state for mode switching
+
+    // Keep callback ref updated
+    onUpdateContentRef.current = onUpdateContent;
 
     // Create (once) the insertion marker element
     const getInsertionMarker = () => {
@@ -322,8 +331,12 @@ const DragWireframe: React.FC<DragWireframeProps> = ({
     };
 
     // Finish editing helper
-    const finishEditing = (el: HTMLElement | null, save: boolean = true) => {
+    const finishEditing = useCallback((el: HTMLElement | null, save: boolean = true) => {
         if (!el) return;
+
+        // Prevent multiple calls to finishEditing for the same element
+        if (el.getAttribute('data-editing') !== 'true') return;
+
         if (el.contentEditable === 'true') {
             el.contentEditable = 'false';
         }
@@ -331,13 +344,64 @@ const DragWireframe: React.FC<DragWireframeProps> = ({
         el.style.backgroundColor = '';
         el.style.border = '';
         el.removeAttribute('data-editing');
-        if (save && containerRef.current && onUpdateContent) {
-            onUpdateContent(containerRef.current.innerHTML);
+        setShowFormattingToolbar(false);
+
+        // Only call onUpdateContent if content actually changed and we have a valid container
+        if (save && containerRef.current && onUpdateContentRef.current) {
+            console.log('[DEBUG] finishEditing - calling onUpdateContent with setTimeout');
+            // Use setTimeout to prevent immediate re-render loops
+            setTimeout(() => {
+                if (containerRef.current && onUpdateContentRef.current) {
+                    console.log('[DEBUG] finishEditing - executing onUpdateContent');
+                    onUpdateContentRef.current(containerRef.current.innerHTML);
+                }
+            }, 0);
         }
+
         currentEditingRef.current = null;
+    }, []); // Removed onUpdateContent dependency - using ref instead
+
+    // Formatting toolbar functions
+    const executeFormatCommand = (command: string, value?: string) => {
+        document.execCommand(command, false, value);
+        if (currentEditingRef.current) {
+            currentEditingRef.current.focus();
+        }
     };
 
-    // Function to update ordering metadata
+    const positionFormattingToolbar = (element: HTMLElement) => {
+        const rect = element.getBoundingClientRect();
+        const containerRect = containerRef.current?.getBoundingClientRect();
+
+        if (containerRect) {
+            // Since toolbar is now inside the container, calculate relative position
+            const containerScrollTop = containerRef.current?.scrollTop || 0;
+            const containerScrollLeft = containerRef.current?.scrollLeft || 0;
+
+            let top = (rect.top - containerRect.top) + containerScrollTop - 45;
+            let left = (rect.left - containerRect.left) + containerScrollLeft;
+
+            // Ensure toolbar doesn't go off-screen within the container
+            const toolbarWidth = 140; // Estimated toolbar width
+            const toolbarHeight = 32; // Estimated toolbar height
+
+            // Adjust horizontal position if too far right
+            if (left + toolbarWidth > containerRect.width - 20) {
+                left = containerRect.width - toolbarWidth - 20;
+            }
+
+            // Adjust vertical position if too close to top
+            if (top < 10) {
+                top = (rect.bottom - containerRect.top) + containerScrollTop + 5; // Position below element
+            }
+
+            // Ensure minimum margins within container
+            left = Math.max(10, left);
+            top = Math.max(10, top);
+
+            setToolbarPosition({ top, left });
+        }
+    };    // Function to update ordering metadata
     const updateOrderingMetadata = () => {
         if (!containerRef.current || !onOrderingChange) return;
 
@@ -347,11 +411,22 @@ const DragWireframe: React.FC<DragWireframeProps> = ({
         onOrderingChange(metadata);
     };
 
-    // Function to toggle drag mode
+    // Function to toggle drag mode with fade animation
     const toggleDragMode = () => {
-        const next = !isDragEnabledRef.current;
-        isDragEnabledRef.current = next; // update ref first so immediate drags see correct state
-        setIsDragEnabled(next);
+        // Start fade animation
+        setIsTransitioning(true);
+
+        // Brief fade out
+        setTimeout(() => {
+            const next = !isDragEnabledRef.current;
+            isDragEnabledRef.current = next; // update ref first so immediate drags see correct state
+            setIsDragEnabled(next);
+
+            // Fade back in
+            setTimeout(() => {
+                setIsTransitioning(false);
+            }, 150); // Fade in duration
+        }, 150); // Fade out duration
     };
 
     // Heuristic to decide if an element is eligible for inline editing
@@ -442,6 +517,9 @@ const DragWireframe: React.FC<DragWireframeProps> = ({
         }
         if (!el || el === stopNode) return;
 
+        // Prevent starting editing if already editing this element
+        if (el.getAttribute('data-editing') === 'true') return;
+
         // If clicking same editing element -> reselect
         if (currentEditingRef.current === el && el.contentEditable === 'true') {
             const range = document.createRange();
@@ -452,10 +530,22 @@ const DragWireframe: React.FC<DragWireframeProps> = ({
             return;
         }
 
-        // Finish previous element
+        // Finish previous element with a small delay to prevent race conditions
         if (currentEditingRef.current && currentEditingRef.current !== el) {
             finishEditing(currentEditingRef.current);
+            // Small delay to prevent immediate re-editing
+            setTimeout(() => {
+                startEditing(el as HTMLElement);
+            }, 10);
+            return;
         }
+
+        startEditing(el);
+    };
+
+    // Separate function to start editing to avoid code duplication
+    const startEditing = (el: HTMLElement) => {
+        if (!el || el.getAttribute('data-editing') === 'true') return;
 
         // Start editing new element
         el.contentEditable = 'true';
@@ -464,6 +554,11 @@ const DragWireframe: React.FC<DragWireframeProps> = ({
         el.style.outline = '2px solid var(--color-primary-medium-dark)';
         el.focus();
         currentEditingRef.current = el;
+
+        // Show formatting toolbar
+        positionFormattingToolbar(el);
+        setShowFormattingToolbar(true);
+
         // Remove generic editable tag while actively editing (avoid double styles)
         el.removeAttribute('data-editable');
         const range = document.createRange();
@@ -479,8 +574,27 @@ const DragWireframe: React.FC<DragWireframeProps> = ({
             } else if (kev.key === 'Escape') {
                 kev.preventDefault();
                 finishEditing(el); // treat same as commit for simplicity
+            } else if (kev.ctrlKey || kev.metaKey) {
+                // Keyboard shortcuts for formatting
+                switch (kev.key.toLowerCase()) {
+                    case 'b':
+                        kev.preventDefault();
+                        executeFormatCommand('bold');
+                        break;
+                    case 'i':
+                        kev.preventDefault();
+                        executeFormatCommand('italic');
+                        break;
+                    case 'u':
+                        kev.preventDefault();
+                        executeFormatCommand('underline');
+                        break;
+                    default:
+                        break;
+                }
             }
         };
+
         const handleBlur = () => {
             setTimeout(() => {
                 if (currentEditingRef.current === el) finishEditing(el);
@@ -488,6 +602,7 @@ const DragWireframe: React.FC<DragWireframeProps> = ({
                 el.removeEventListener('blur', handleBlur);
             }, 40);
         };
+
         el.addEventListener('keydown', handleKeyDown);
         el.addEventListener('blur', handleBlur);
     };
@@ -601,10 +716,11 @@ const DragWireframe: React.FC<DragWireframeProps> = ({
             // eslint-disable-next-line no-console
             console.log('[Wireframe Drag] drop');
             cleanupMarker();
-            if (containerRef.current && onUpdateContent) {
+            if (containerRef.current && onUpdateContentRef.current) {
                 try {
+                    console.log('[DEBUG] drag-drop - calling onUpdateContent');
                     const newContent = containerRef.current.innerHTML;
-                    onUpdateContent(newContent);
+                    onUpdateContentRef.current(newContent);
                     updateOrderingMetadata();
                     // Re-run augmentation in case structure changed
                     augmentedRef.current = false;
@@ -633,7 +749,24 @@ const DragWireframe: React.FC<DragWireframeProps> = ({
 
     // Primary effect: parse HTML and build containers when content changes OR when reinit requested
     useEffect(() => {
+        console.log('[DEBUG] DragWireframe useEffect triggered:', {
+            hasContainer: !!containerRef.current,
+            reinitRequested: reinitRequestedRef.current,
+            htmlContentLength: htmlContent.length,
+            previousContentLength: previousContentRef.current.length,
+            contentChanged: htmlContent !== previousContentRef.current
+        });
+
         if (!containerRef.current) return;
+
+        // Content stability check - skip if content hasn't actually changed
+        if (!reinitRequestedRef.current && htmlContent === previousContentRef.current) {
+            console.log('[DEBUG] Skipping re-render - content unchanged');
+            return;
+        }
+        console.log('[DEBUG] Content changed - proceeding with re-render');
+        previousContentRef.current = htmlContent;
+
         // If a manual re-init (simple/normal toggle) requested, skip reparsing HTML
         if (reinitRequestedRef.current) {
             reinitRequestedRef.current = false;
@@ -741,7 +874,7 @@ const DragWireframe: React.FC<DragWireframeProps> = ({
             })();
         setDragContainers(containers);
         initDragula(containers);
-    }, [htmlContent, onUpdateContent, onOrderingChange]);
+    }, [htmlContent]); // Removed onUpdateContent dependency - using ref instead
 
     // Hotkeys: Alt+1 simple mode, Alt+2 normal mode
     useEffect(() => {
@@ -784,7 +917,7 @@ const DragWireframe: React.FC<DragWireframeProps> = ({
         };
         window.addEventListener('keydown', handler);
         return () => window.removeEventListener('keydown', handler);
-    }, [dragContainers]);
+    }, []); // Removed dragContainers dependency to prevent circular re-renders
 
     // Update cursor styles and event listeners when drag mode changes
     useEffect(() => {
@@ -827,6 +960,7 @@ const DragWireframe: React.FC<DragWireframeProps> = ({
             }
         };
         document.addEventListener('mousedown', handleDoc);
+
         // Initial tagging after listeners attach
         markEditableElements();
         return () => {
@@ -834,6 +968,22 @@ const DragWireframe: React.FC<DragWireframeProps> = ({
             document.removeEventListener('mousedown', handleDoc);
         };
     }, []);
+
+    // Separate useEffect for formatting toolbar event listener
+    useEffect(() => {
+        if (!showFormattingToolbar || !formattingToolbarRef.current) return;
+
+        const toolbar = formattingToolbarRef.current;
+        const handleToolbarClick = (e: MouseEvent) => {
+            e.stopPropagation();
+        };
+
+        toolbar.addEventListener('mousedown', handleToolbarClick);
+
+        return () => {
+            toolbar.removeEventListener('mousedown', handleToolbarClick);
+        };
+    }, [showFormattingToolbar]);
 
     return (
         <div className="drag-wireframe">
@@ -860,12 +1010,62 @@ const DragWireframe: React.FC<DragWireframeProps> = ({
             {/* Main wireframe container */}
             <div
                 ref={containerRef}
-                className={`dragula-container ${isDragEnabled ? 'drag-enabled' : 'drag-disabled'}`}
-            ></div>
+                className={`dragula-container ${isDragEnabled ? 'drag-enabled' : 'drag-disabled'} ${isTransitioning ? 'mode-transitioning' : ''}`}
+            >
+                {/* Formatting Toolbar */}
+                {showFormattingToolbar && (
+                    <div
+                        ref={formattingToolbarRef}
+                        className="formatting-toolbar"
+                        style={{
+                            top: toolbarPosition.top,
+                            left: toolbarPosition.left
+                        }}
+                    >
+                        <button
+                            className="format-btn format-bold"
+                            title="Bold"
+                            onClick={() => executeFormatCommand('bold')}
+                            onMouseEnter={(e) => (e.target as HTMLButtonElement).classList.add('hover')}
+                            onMouseLeave={(e) => (e.target as HTMLButtonElement).classList.remove('hover')}
+                        >
+                            B
+                        </button>
+                        <button
+                            className="format-btn format-italic"
+                            title="Italic"
+                            onClick={() => executeFormatCommand('italic')}
+                            onMouseEnter={(e) => (e.target as HTMLButtonElement).classList.add('hover')}
+                            onMouseLeave={(e) => (e.target as HTMLButtonElement).classList.remove('hover')}
+                        >
+                            I
+                        </button>
+                        <button
+                            className="format-btn format-underline"
+                            title="Underline"
+                            onClick={() => executeFormatCommand('underline')}
+                            onMouseEnter={(e) => (e.target as HTMLButtonElement).classList.add('hover')}
+                            onMouseLeave={(e) => (e.target as HTMLButtonElement).classList.remove('hover')}
+                        >
+                            U
+                        </button>
+                        <div className="format-divider"></div>
+                        <button
+                            className="format-btn format-clear"
+                            title="Remove Formatting"
+                            onClick={() => executeFormatCommand('removeFormat')}
+                            onMouseEnter={(e) => (e.target as HTMLButtonElement).classList.add('hover')}
+                            onMouseLeave={(e) => (e.target as HTMLButtonElement).classList.remove('hover')}
+                        >
+                            ✕
+                        </button>
+                    </div>
+                )}
+            </div>
 
             {/* Cross-container info bar removed per user request */}
         </div>
     );
-};
+});
 
 export default DragWireframe;

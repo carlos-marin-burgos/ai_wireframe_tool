@@ -219,6 +219,15 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   // Track if wireframe has been added to recents to avoid duplicates
   const [addedToRecents, setAddedToRecents] = useState<boolean>(false);
 
+  // Stable callback for updating wireframe content to prevent infinite re-renders
+  const handleUpdateContent = useCallback((newContent: string) => {
+    if (currentPageId) {
+      setPageContents(prev => ({ ...prev, [currentPageId]: newContent }));
+    } else {
+      setHtmlWireframe(newContent);
+    }
+  }, [currentPageId, setPageContents, setHtmlWireframe]);
+
   // Function to validate chat input - check if it's only numbers
   const validateChatInput = (input: string): boolean => {
     const trimmedInput = input.trim();
@@ -1251,13 +1260,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                   // Show HTML wireframe
                   <DragWireframe
                     htmlContent={currentPageId ? (pageContents[currentPageId] || htmlWireframe) : htmlWireframe}
-                    onUpdateContent={(newContent) => {
-                      if (currentPageId) {
-                        setPageContents(prev => ({ ...prev, [currentPageId]: newContent }));
-                      } else {
-                        setHtmlWireframe(newContent);
-                      }
-                    }}
+                    onUpdateContent={handleUpdateContent}
                   />
                 )}
               </div>
