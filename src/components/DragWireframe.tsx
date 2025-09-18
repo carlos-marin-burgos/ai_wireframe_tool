@@ -53,12 +53,13 @@ function findDragContainers(rootElement: HTMLElement): HTMLElement[] {
     const containers = [rootElement]; // Always include the root
 
     // More conservative approach - only add containers that make sense for drag operations
+    // NOTE: 'article' removed from selectors to prevent individual components inside cards from being draggable
     const selectors = [
         '.row', '.col', '.column',
         '.container', '.container-fluid', '.section', '.grid',
         '[data-droppable="true"]',
         '.card-body', '.panel-body',
-        'main', 'section', 'article', // Removed header, footer, nav, aside as they're usually not drop targets
+        'main', 'section', // Removed 'article' - articles should be draggable items, not containers
         '.hero', '.hero-section', '.hero-banner',
         'form', '.form-section', '.form-group'
     ];

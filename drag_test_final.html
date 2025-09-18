@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+        }
+        main {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+        article {
+            background-color: #fff;
+            border: 1px solid #d1dbe4;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 100%;
+            box-sizing: border-box;
+            cursor: grab;
+        }
+        h2 {
+            font-size: 18px;
+            color: #194a7a;
+            margin: 0 0 16px;
+        }
+        .button-primary {
+            display: inline-block;
+            background-color: #194a7a;
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .button-primary:hover {
+            background-color: #163d67;
+        }
+    
+        .button:hover, button:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(25, 74, 122, 0.3);
+        }
+        .button:active, button:active {
+          transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+<main>
+    <article draggable="true">
+        <h2>User Stats</h2>
+        <p>Details about user statistics will be displayed here.</p>
+        <a href="#" class="button-primary">View More</a>
+    </article>
+    <article draggable="true">
+        <h2>Revenue</h2>
+        <p>Details about revenue will be displayed here.</p>
+        <a href="#" class="button-primary">View More</a>
+    </article>
+    <article draggable="true">
+        <h2>Analytics</h2>
+        <p>Details about analytics will be displayed here.</p>
+        <a href="#" class="button-primary">View More</a>
+    </article>
+    <article draggable="true">
+        <h2>Settings</h2>
+        <p>Settings options will be displayed here.</p>
+        <a href="#" class="button-primary">View More</a>
+    </article>
+</main>
+
+</body>
+</html>

@@ -9,7 +9,7 @@ const isLocalhost =
 // Centralized port configuration to avoid conflicts
 const PORTS = {
   development: {
-    primary: 7071, // Azure Functions backend (correct port!)
+    primary: 7073, // Azure Functions backend (updated to current port)
     fallback: 5001, // Clean Express server with NO Microsoft Learn content
     frontend: 5173, // Frontend dev server
   },

@@ -1484,7 +1484,11 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         isOpen={isDownloadModalOpen}
         onClose={() => setIsDownloadModalOpen(false)}
         onDownload={handleDownloadModalDownload}
-        wireframeTitle={description || 'Wireframe'}
+        wireframeTitle={
+          description && !description.startsWith('Create a') && !description.startsWith('create a')
+            ? description
+            : 'Interactive Wireframe'
+        }
       />
 
       {/* Dev Playbooks Library */}

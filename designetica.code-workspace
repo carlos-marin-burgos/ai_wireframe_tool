@@ -1,0 +1,30 @@
+{
+  "folders": [
+    {
+      "name": "Designetica",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "task.autoDetect": "on"
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "type": "shell",
+        "label": "🌟 Auto-Start Development Environment",
+        "command": "./.vscode/auto-start.sh",
+        "runOptions": {
+          "runOn": "folderOpen"
+        },
+        "isBackground": true,
+        "presentation": {
+          "reveal": "silent",
+          "panel": "shared",
+          "showReuseMessage": false
+        }
+      }
+    ]
+  }
+}

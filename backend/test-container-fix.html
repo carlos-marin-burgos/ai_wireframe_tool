@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Login page with Getting Started and Documentation cards.">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        main {
+            width: 100%;
+            max-width: 800px;
+            box-sizing: border-box;
+            padding: 16px;
+        }
+        .login-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        article {
+            background-color: #ffffff;
+            border: 1px solid #d1dbe4;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 16px;
+            box-sizing: border-box;
+            max-width: 100%;
+        }
+        h2 {
+            color: #194a7a;
+            font-size: 1.5em;
+            margin-bottom: 16px;
+        }
+        p {
+            color: #333333;
+            font-size: 1em;
+            margin-bottom: 16px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        .primary-button {
+            background-color: #194a7a;
+            color: #ffffff;
+            border: none;
+        }
+        .primary-button:hover {
+            background-color: #143a5a;
+        }
+        .secondary-button {
+            background-color: #ffffff;
+            color: #194a7a;
+            border: 2px solid #194a7a;
+        }
+        .secondary-button:hover {
+            background-color: #e9ecef;
+        }
+    
+        .button:hover, button:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(25, 74, 122, 0.3);
+        }
+        .button:active, button:active {
+          transform: translateY(0);
+        }
+    
+        @media (max-width: 768px) {
+            .cards, .grid, .layout {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+            }
+            .card {
+                margin-bottom: 16px !important;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+    <main>
+        <section class="login-container">
+            <article>
+                <h2>Getting Started</h2>
+                <p>Learn how to set up your new account and start using our services quickly and easily.</p>
+                <a href="#" class="button primary-button">Learn More</a>
+            </article>
+            <article>
+                <h2>Documentation</h2>
+                <p>Access detailed documentation to make the most out of our platform's features and capabilities.</p>
+                <a href="#" class="button secondary-button">View Docs</a>
+            </article>
+        </section>
+    </main>
+</body>
+</html>

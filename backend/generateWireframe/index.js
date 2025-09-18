@@ -7,6 +7,7 @@ const { WIREFRAME_COLORS, ColorUtils } = require("../config/colors");
 const {
   AccessibilityValidationMiddleware,
 } = require("../accessibility/validation-middleware");
+const { fixContainerNesting } = require("../utils/containerNestingFix");
 
 // Fluent UI Playbook imports and utilities
 const fluentPlaybook = {
@@ -345,7 +346,7 @@ async function generateWithAI(description, options = {}) {
   const colorScheme = options.colorScheme || "blue";
   const fastMode = options.fastMode !== false;
 
-  const prompt = `Create a complete, modern HTML wireframe for: ${description}\n\nRequirements:\n- Use modern CSS with flexbox/grid\n- Include semantic HTML structure\n- ${theme} theme with ${colorScheme} color scheme\n- Mobile-responsive design\n- Include proper meta tags and DOCTYPE\n- Use inline CSS for complete standalone file\n- Focus ONLY on the requested component/feature\n- NO navigation bars, headers, footers, or branding unless specifically requested\n- Keep designs clean and minimal\n\n🎨 CRITICAL ACCESSIBILITY & READABILITY RULES:\n- BUTTONS: Use high-contrast combinations only:\n  • Primary buttons: background: #194a7a (dark blue) + color: #ffffff (white text)\n  • Secondary buttons: background: #ffffff (white) + color: #194a7a (dark blue) + border: 2px solid #194a7a\n  • Danger buttons: background: #d13438 (red) + color: #ffffff (white text)\n  • Success buttons: background: #107c10 (green) + color: #ffffff (white text)\n- TEXT CONTRAST: ALWAYS use dark text (#333 or #194a7a) on light backgrounds (#fff, ${
+  const prompt = `Create a complete, modern HTML wireframe for: ${description}\n\nRequirements:\n- Use modern CSS with flexbox/grid\n- Include semantic HTML structure\n- ${theme} theme with ${colorScheme} color scheme\n- Mobile-responsive design\n- Include proper meta tags and DOCTYPE\n- Use inline CSS for complete standalone file\n- Focus ONLY on the requested component/feature\n- NO navigation bars, headers, footers, or branding unless specifically requested\n- Keep designs clean and minimal\n- DO NOT include the description text anywhere in the visible wireframe content\n- DO NOT add "Create a..." or similar instruction text in the HTML\n- Generate ONLY the actual UI components requested, not meta-descriptions about them\n\n🚨 CRITICAL CONTAINER RULES FOR DRAG-AND-DROP:\n- AVOID excessive div nesting - maximum 2-3 levels deep\n- Use semantic HTML tags (main, section, article) instead of generic divs\n- Cards should be direct children of grid/flex containers\n- DO NOT wrap single components in multiple container divs\n- Use CSS Grid for card layouts: display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;\n- Each card must have: max-width: 100%; box-sizing: border-box; for proper rearrangement\n- Cards MUST be <article> or <div class="card"> elements for drag system compatibility\n- Container MUST be <main> or <section> for proper drag container detection\n- Add cursor: grab; to draggable cards for better UX\n\n🎨 CRITICAL ACCESSIBILITY & READABILITY RULES:\n- BUTTONS: Use high-contrast combinations only:\n  • Primary buttons: background: #194a7a (dark blue) + color: #ffffff (white text)\n  • Secondary buttons: background: #ffffff (white) + color: #194a7a (dark blue) + border: 2px solid #194a7a\n  • Danger buttons: background: #d13438 (red) + color: #ffffff (white text)\n  • Success buttons: background: #107c10 (green) + color: #ffffff (white text)\n- TEXT CONTRAST: ALWAYS use dark text (#333 or #194a7a) on light backgrounds (#fff, ${
     WIREFRAME_COLORS.surface
   }, #E9ECEF)\n- NEVER use opacity below 1.0 for button text or important content\n- NEVER use light text on light backgrounds or dark text on dark backgrounds\n- Button hover states: darken background by 15% while maintaining white text\n- Minimum button padding: 12px 24px for adequate click targets\n- All buttons must have border-radius: 4px for consistency\n${
     fastMode
@@ -360,7 +361,7 @@ async function generateWithAI(description, options = {}) {
       {
         role: "system",
         content:
-          "You are a professional web developer who creates clean, minimal wireframes with PERFECT ACCESSIBILITY. CRITICAL: All buttons must have high contrast (dark blue #194a7a background with white text, or white background with dark blue text and border). NEVER use light colors on light backgrounds or dark colors on dark backgrounds. DO NOT include navigation bars, headers, footers, or branding unless specifically requested. Focus ONLY on the requested component with readable, accessible design.",
+          "You are a professional web developer who creates clean, minimal wireframes with PERFECT ACCESSIBILITY and OPTIMAL CONTAINER STRUCTURE. CRITICAL: All buttons must have high contrast (dark blue #194a7a background with white text, or white background with dark blue text and border). NEVER use light colors on light backgrounds or dark colors on dark backgrounds. AVOID excessive div nesting - use maximum 2-3 container levels. Cards must be direct children of grid containers for proper rearrangement. Use semantic HTML (main, section, article) instead of generic divs. DO NOT include navigation bars, headers, footers, or branding unless specifically requested. Focus ONLY on the requested component with readable, accessible design and clean container structure. NEVER include the user's description text or instruction phrases like 'Create a...' in the visible HTML content - generate only actual UI components.",
       },
       { role: "user", content: prompt },
     ],
@@ -561,6 +562,9 @@ module.exports = async function (context, req) {
     // 🎯 ALWAYS apply button readability fixes
     html = fixButtonReadability(html);
 
+    // 🔧 Fix container nesting issues that prevent rearrangement
+    html = fixContainerNesting(html);
+
     // 🛡️ Apply comprehensive accessibility validation
     const accessibilityMiddleware = new AccessibilityValidationMiddleware();
     const accessibilityResult = accessibilityMiddleware.validateAndFixWireframe(
@@ -571,10 +575,10 @@ module.exports = async function (context, req) {
       }
     );
 
-    if (accessibilityResult.fixedHtml !== html) {
-      html = accessibilityResult.fixedHtml;
+    if (accessibilityResult.content !== html) {
+      html = accessibilityResult.content;
       console.log(
-        `🔧 Applied ${accessibilityResult.report.issuesFixed} accessibility fixes`
+        `🔧 Applied accessibility fixes - was fixed: ${accessibilityResult.wasFixed}`
       );
     }
 
