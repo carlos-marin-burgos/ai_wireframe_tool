@@ -1,8 +1,7 @@
 // Runtime safety layer to prevent accidental localhost calls in production
 // Injected early in app startup (import in main.tsx) to sanitize fetch targets.
 
-const PROD_BACKEND =
-  "https://func-designetica-5gwyjxbwvr4s6.azurewebsites.net";
+const PROD_BACKEND = "https://func-designetica-5gwyjxbwvr4s6.azurewebsites.net";
 
 function isLocalhostHost(hostname: string) {
   return (
