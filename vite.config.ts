@@ -12,7 +12,7 @@ export default defineConfig({
     port: 5173, // Explicit port for frontend
     proxy: {
       "/api": {
-        target: "http://localhost:7073", // Point to Azure Functions backend
+        target: "http://localhost:7071", // Point to Azure Functions backend
         changeOrigin: true,
         secure: false,
       },

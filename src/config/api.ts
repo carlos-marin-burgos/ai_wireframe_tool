@@ -9,7 +9,7 @@ const isLocalhost =
 // Centralized port configuration to avoid conflicts
 const PORTS = {
   development: {
-    primary: 7073, // Azure Functions backend (updated to current port)
+    primary: 7071, // Azure Functions backend (current running port)
     fallback: 5001, // Clean Express server with NO Microsoft Learn content
     frontend: 5173, // Frontend dev server
   },
@@ -65,6 +65,7 @@ export const API_CONFIG = {
     FLUENT_COMPONENTS: "/api/fluent-components",
     FLUENT_COMPONENTS_SEARCH: "/api/fluent-components/search",
     HEALTH: "/api/health",
+    WEBSITE_ANALYZER: "/api/websiteanalyzer", // NEW: Website analysis endpoint
   },
 
   // Port configuration

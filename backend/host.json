@@ -25,6 +25,9 @@
     "openai-health",
     "testFigma",
     "updateThemeColors",
+    "websiteAnalyzer",
+    "websiteAnalyzerTest",
+    "websiteAnalyzerDebug",
     "wireframeAnalyze"
   ],
   "logging": {

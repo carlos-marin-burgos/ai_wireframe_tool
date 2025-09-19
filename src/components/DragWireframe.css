@@ -674,7 +674,7 @@
 .dragula-container.drag-disabled [data-editable="true"]:hover {
   outline: 2px solid var(--color-border) !important;
   outline-offset: 2px;
-  background: rgba(117, 147, 175, 0.15) !important;
+  /*background: rgba(117, 147, 175, 0.15) !important;*/
   cursor: text !important;
   box-shadow: 0 0 8px rgba(117, 147, 175, 0.3) !important;
   transform: scale(1.01);

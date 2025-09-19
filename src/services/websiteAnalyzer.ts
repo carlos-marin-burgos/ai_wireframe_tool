@@ -89,31 +89,19 @@ class WebsiteAnalyzer {
         throw new Error("URL must use HTTP or HTTPS protocol");
       }
 
-      const response = await fetch(`${this.baseUrl}/websiteAnalyzer`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          url,
-          options: {
-            timeout: options.timeout || 30000,
-            viewport: options.viewport || { width: 1200, height: 800 },
-            fullPageScreenshot: options.fullPageScreenshot !== false,
+      const response = await fetch(
+        getApiUrl(API_CONFIG.ENDPOINTS.WEBSITE_ANALYZER),
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        }),
-      });
+          body: JSON.stringify({ url }),
+        }
+      );
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({
-          success: false,
-          error: `HTTP ${response.status}: ${response.statusText}`,
-        }));
-
-        throw new Error(
-          errorData.error || `Analysis failed with status ${response.status}`
-        );
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
