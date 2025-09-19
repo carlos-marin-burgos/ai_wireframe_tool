@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure AI Services</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #E9ECEF;
+            color: #333;
+        }
+
+        main {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+            max-width: 100%;
+            box-sizing: border-box;
+            cursor: grab;
+        }
+
+        .card button {
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .primary-button {
+            background-color: #194a7a;
+            color: #ffffff;
+            border: none;
+        }
+
+        .primary-button:hover {
+            background-color: #163f63;
+        }
+
+        .secondary-button {
+            background-color: #ffffff;
+            color: #194a7a;
+            border: 2px solid #194a7a;
+        }
+
+        .secondary-button:hover {
+            background-color: #e0e8f0;
+        }
+
+        .danger-button {
+            background-color: #d13438;
+            color: #ffffff;
+            border: none;
+        }
+
+        .danger-button:hover {
+            background-color: #b82d2f;
+        }
+
+        .success-button {
+            background-color: #107c10;
+            color: #ffffff;
+            border: none;
+        }
+
+        .success-button:hover {
+            background-color: #0e6c0e;
+        }
+
+        @media (max-width: 768px) {
+
+            .cards,
+            .grid,
+            .layout {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+            }
+
+            .card {
+                margin-bottom: 16px !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <article class="card">
+            <h2>AI Service 1</h2>
+            <p>Description of AI Service 1. This service provides...</p>
+            <button class="primary-button">Explore</button>
+        </article>
+        <article class="card">
+            <h2>AI Service 2</h2>
+            <p>Description of AI Service 2. This service offers...</p>
+            <button class="secondary-button">Learn More</button>
+        </article>
+        <article class="card">
+            <h2>AI Service 3</h2>
+            <p>Description of AI Service 3. Utilize this service to...</p>
+            <button class="danger-button">Delete</button>
+        </article>
+        <article class="card">
+            <h2>AI Service 4</h2>
+            <p>Description of AI Service 4. Enhance your work with...</p>
+            <button class="success-button">Activate</button>
+        </article>
+    </main>
+</body>
+
+</html>

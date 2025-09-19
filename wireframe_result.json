@@ -1,0 +1,18 @@
+{
+  "success": true,
+  "html": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Azure AI Services</title>\n    <style>\n        body {\n            font-family: Arial, sans-serif;\n            margin: 0;\n            padding: 0;\n            background-color: #E9ECEF;\n            color: #333;\n        }\n        main {\n            display: grid;\n            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));\n            gap: 24px;\n            padding: 24px;\n            box-sizing: border-box;\n        }\n        .card {\n            background-color: #ffffff;\n            border-radius: 4px;\n            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n            padding: 16px;\n            max-width: 100%;\n            box-sizing: border-box;\n            cursor: grab;\n        }\n        .card button {\n            padding: 12px 24px;\n            border-radius: 4px;\n            font-weight: bold;\n            cursor: pointer;\n        }\n        .primary-button {\n            background-color: #194a7a;\n            color: #ffffff;\n            border: none;\n        }\n        .primary-button:hover {\n            background-color: #163f63;\n        }\n        .secondary-button {\n            background-color: #ffffff;\n            color: #194a7a;\n            border: 2px solid #194a7a;\n        }\n        .secondary-button:hover {\n            background-color: #e0e8f0;\n        }\n        .danger-button {\n            background-color: #d13438;\n            color: #ffffff;\n            border: none;\n        }\n        .danger-button:hover {\n            background-color: #b82d2f;\n        }\n        .success-button {\n            background-color: #107c10;\n            color: #ffffff;\n            border: none;\n        }\n        .success-button:hover {\n            background-color: #0e6c0e;\n        }\n    \n        @media (max-width: 768px) {\n            .cards, .grid, .layout {\n                grid-template-columns: 1fr !important;\n                gap: 16px !important;\n            }\n            .card {\n                margin-bottom: 16px !important;\n            }\n        }\n        \n    </style>\n</head>\n<body>\n    <main>\n        <article class=\"card\">\n            <h2>AI Service 1</h2>\n            <p>Description of AI Service 1. This service provides...</p>\n            <button class=\"primary-button\">Explore</button>\n        </article>\n        <article class=\"card\">\n            <h2>AI Service 2</h2>\n            <p>Description of AI Service 2. This service offers...</p>\n            <button class=\"secondary-button\">Learn More</button>\n        </article>\n        <article class=\"card\">\n            <h2>AI Service 3</h2>\n            <p>Description of AI Service 3. Utilize this service to...</p>\n            <button class=\"danger-button\">Delete</button>\n        </article>\n        <article class=\"card\">\n            <h2>AI Service 4</h2>\n            <p>Description of AI Service 4. Enhance your work with...</p>\n            <button class=\"success-button\">Activate</button>\n        </article>\n    </main>\n</body>\n</html>",
+  "metadata": {
+    "theme": "professional",
+    "colorScheme": "blue",
+    "fastMode": true,
+    "includeAtlas": false,
+    "atlasComponents": {
+      "hero": 0,
+      "modules": 0,
+      "learningPaths": 0
+    },
+    "generatedAt": "2025-09-19T17:57:08.335Z",
+    "processingTimeMs": 5147,
+    "descriptionPreview": "Create a wireframe based on https://int.ai.azure.com/doc/ using a card-based layout for Azure AI services"
+  }
+}

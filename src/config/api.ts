@@ -65,7 +65,7 @@ export const API_CONFIG = {
     FLUENT_COMPONENTS: "/api/fluent-components",
     FLUENT_COMPONENTS_SEARCH: "/api/fluent-components/search",
     HEALTH: "/api/health",
-    WEBSITE_ANALYZER: "/api/websiteanalyzer", // NEW: Website analysis endpoint
+    WEBSITE_ANALYZER: "/api/websiteAnalyzer", // NEW: Website analysis endpoint (matches Azure Function name)
   },
 
   // Port configuration

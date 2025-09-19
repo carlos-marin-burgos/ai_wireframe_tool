@@ -818,6 +818,66 @@ app.post("/api/search-templates", async (req, res) => {
   }
 });
 
+// Frontend-compatible wireframe generation endpoint
+app.post("/api/generate-wireframe", async (req, res) => {
+  const {
+    description = "",
+    theme = "modern",
+    colorScheme = "primary",
+    url = "",
+    template = "cards",
+    analysis = null,
+  } = req.body;
+
+  if (!description && !url) {
+    return res.status(400).json({
+      success: false,
+      error: "Either description or URL is required",
+    });
+  }
+
+  console.log("🎯 Frontend wireframe generation request:");
+  console.log(`📝 Description: "${description}"`);
+  console.log(`🌐 URL: "${url}"`);
+  console.log(`🎨 Theme: ${theme}, Template: ${template}`);
+
+  try {
+    let finalDescription = description;
+
+    // If URL is provided, enhance description with analysis
+    if (url && analysis) {
+      finalDescription += ` Based on website analysis: ${JSON.stringify(
+        analysis
+      )}`;
+    }
+
+    // Use the existing wireframe generation logic
+    const aiGeneratedHtml = await generateWireframeWithAI(
+      finalDescription,
+      theme,
+      colorScheme,
+      null // customColors
+    );
+
+    res.json({
+      success: true,
+      html: aiGeneratedHtml,
+      metadata: {
+        url,
+        template,
+        theme,
+        generatedAt: new Date().toISOString(),
+      },
+    });
+  } catch (error) {
+    console.error("❌ Error generating wireframe:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message || "Failed to generate wireframe",
+    });
+  }
+});
+
 // MAIN WIREFRAME GENERATION ENDPOINT - PURE AI-FIRST APPROACH
 app.post("/api/generate-html-wireframe", async (req, res) => {
   const {
