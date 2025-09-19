@@ -6,7 +6,7 @@ Your Designetica app now uses **ONE** simple production environment. No more con
 
 ### 🌐 Production URLs
 
-- **Frontend**: https://brave-island-04ba9f70f.2.azurestaticapps.net
+- **Frontend**: https://lemon-field-08a1a0b0f.1.azurestaticapps.net
 - **Backend**: https://func-designetica-vdlmicyosd4ua.azurewebsites.net
 
 ### 📦 Quick Commands

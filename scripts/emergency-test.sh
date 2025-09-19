@@ -47,8 +47,8 @@ fi
 
 echo ""
 echo "4. Production Site Test:"
-echo "   Frontend: https://brave-island-04ba9f70f.2.azurestaticapps.net"
-timeout 10s curl -s -w "Status: %{http_code}\n" "https://brave-island-04ba9f70f.2.azurestaticapps.net" > /dev/null
+echo "   Frontend: https://lemon-field-08a1a0b0f.1.azurestaticapps.net"
+timeout 10s curl -s -w "Status: %{http_code}\n" "https://lemon-field-08a1a0b0f.1.azurestaticapps.net" > /dev/null
 if [ $? -eq 0 ]; then
     echo "   ✅ Frontend accessible"
 else

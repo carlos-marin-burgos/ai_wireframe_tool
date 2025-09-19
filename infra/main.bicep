@@ -50,7 +50,6 @@ var storageAccountName = take('${abbreviations.storageAccount}${replace(environm
 var logAnalyticsName = take('${abbreviations.logAnalyticsWorkspace}-${environmentName}-${uniqueSuffix}', 63)
 var applicationInsightsName = '${abbreviations.applicationInsights}-${environmentName}-${uniqueSuffix}'
 var userAssignedIdentityName = '${abbreviations.userAssignedIdentity}-${environmentName}-${uniqueSuffix}'
-var staticWebAppName = '${abbreviations.staticWebApp}-${environmentName}-${uniqueSuffix}'
 var keyVaultName = take('${abbreviations.keyVault}-${environmentName}-${uniqueSuffix}', 24)
 var functionAppName = '${abbreviations.functionApp}-${environmentName}-${uniqueSuffix}'
 var appServicePlanName = '${abbreviations.appServicePlan}-${environmentName}-${uniqueSuffix}'
@@ -62,11 +61,6 @@ var tags = {
   project: 'designetica'
   purpose: 'ai-wireframe-generator'
 }
-
-// Frontend service specific tags
-var frontendTags = union(tags, {
-  'azd-service-name': 'frontend'
-})
 
 // Create user-assigned managed identity
 resource userAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
@@ -429,38 +423,12 @@ resource keyVaultSecretsUserRoleAssignment 'Microsoft.Authorization/roleAssignme
 // For now, focusing on Function App deployment for OAuth integration
 
 // ========================================
-// Static Web App for Frontend
+// Static Web App Configuration
 // ========================================
-resource staticWebApp 'Microsoft.Web/staticSites@2023-12-01' = {
-  name: staticWebAppName
-  location: 'eastus2'
-  tags: frontendTags
-  sku: {
-    name: 'Free'
-    tier: 'Free'
-  }
-  properties: {
-    repositoryUrl: 'https://github.com/carlos-marin-burgos/ai_wireframe_tool'
-    branch: 'main'
-    buildProperties: {
-      appLocation: '/'
-      outputLocation: 'dist'
-    }
-  }
-}
-
-// Configure Static Web App application settings
-resource staticWebAppConfig 'Microsoft.Web/staticSites/config@2024-04-01' = {
-  parent: staticWebApp
-  name: 'appsettings'
-  properties: {
-    AZURE_OPENAI_ENDPOINT: openAiAccount.properties.endpoint
-    AZURE_OPENAI_API_VERSION: '2024-08-01-preview'
-    AZURE_CLIENT_ID: userAssignedIdentity.properties.clientId
-    APPLICATIONINSIGHTS_CONNECTION_STRING: applicationInsights.properties.ConnectionString
-    FUNCTIONS_ENDPOINT: 'https://${functionApp.properties.defaultHostName}'
-  }
-}
+// Note: Using existing Static Web App 'lemon-field-08a1a0b0f'
+// The existing Static Web App is deployed via GitHub Actions workflow
+// and configured to use the Function App endpoint
+// No Bicep deployment needed - referencing existing resource in outputs only
 
 // Output values
 output AZURE_LOCATION string = location
@@ -487,7 +455,7 @@ output AZURE_FUNCTION_APP_HOSTNAME string = functionApp.properties.defaultHostNa
 output AZURE_KEY_VAULT_NAME string = keyVault.name
 output AZURE_KEY_VAULT_URL string = keyVault.properties.vaultUri
 
-// Static Web App outputs
-output AZURE_STATIC_WEB_APP_NAME string = staticWebApp.name
-output AZURE_STATIC_WEB_APP_URL string = 'https://${staticWebApp.properties.defaultHostname}'
-output AZURE_STATIC_WEB_APP_HOSTNAME string = staticWebApp.properties.defaultHostname
+// Static Web App outputs (referencing existing resource)
+output AZURE_STATIC_WEB_APP_NAME string = 'lemon-field-08a1a0b0f'
+output AZURE_STATIC_WEB_APP_URL string = 'https://lemon-field-08a1a0b0f.1.azurestaticapps.net'
+output AZURE_STATIC_WEB_APP_HOSTNAME string = 'lemon-field-08a1a0b0f.1.azurestaticapps.net'

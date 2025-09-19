@@ -7,7 +7,7 @@ echo "🧪 Testing Production Deployment..."
 echo "================================="
 
 BACKEND_URL="https://func-designetica-vdlmicyosd4ua.azurewebsites.net"
-FRONTEND_URL="https://brave-island-04ba9f70f.2.azurestaticapps.net"
+FRONTEND_URL="https://lemon-field-08a1a0b0f.1.azurestaticapps.net"
 
 # Colors for output
 GREEN='\033[0;32m'

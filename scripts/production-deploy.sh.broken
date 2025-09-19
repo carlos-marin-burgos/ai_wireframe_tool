@@ -1,6 +1,18 @@
 #!/bin/bash
 
-# Designetica - Simple Single Environment Deployment
+# Design    echo -e "${GREEN}🌟 PRODUCTION URLs:${NC}"
+    echo ""
+    
+    echo -e "${GREEN}🌟 PRODUCTION URLs:${NC}"
+    echo "  Frontend: https://lemon-field-08a1a0b0f.1.azurestaticapps.net"
+    echo "  Backend:  https://func-designetica-prod-xabnur6oyusju.azurewebsites.net"
+    echo ""
+    
+    echo -e "${YELLOW}🧪 Testing Production Health:${NC}"
+    
+    # Test frontend
+    echo -n "  Frontend status: "
+    if curl -s -w "%{http_code}" -o /dev/null https://lemon-field-08a1a0b0f.1.azurestaticapps.net | grep -q "200"; thene Single Environment Deployment
 # This script manages your ONE production environment
 
 set -e
