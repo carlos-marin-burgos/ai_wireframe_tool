@@ -118,16 +118,6 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         >
                             <FiPackage /></button>
 
-                        <button
-                            className="toolbar-btn"
-                            onClick={onAddToFavorites}
-                            onMouseEnter={(e) => showTooltip(e, "Add to favorites")}
-                            onMouseLeave={hideTooltip}
-                            aria-label="Add to Favorites"
-                        >
-                            <FiStar />
-                        </button>
-
                         {/* AI Design Assistant buttons */}
                         <div className="ai-assistant-group">
                             <button
@@ -152,6 +142,16 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                                 <HiLightBulb />
                             </button>
                         </div>
+
+                        <button
+                            className="toolbar-btn"
+                            onClick={onAddToFavorites}
+                            onMouseEnter={(e) => showTooltip(e, "Add to favorites")}
+                            onMouseLeave={hideTooltip}
+                            aria-label="Add to Favorites"
+                        >
+                            <FiStar />
+                        </button>
 
                         <button
                             className="toolbar-btn"
@@ -232,16 +232,6 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         <FiImage />
                     </button>
 
-                    <button
-                        className="toolbar-btn"
-                        onClick={onAddToFavorites}
-                        onMouseEnter={(e) => showTooltip(e, "Add to favorites")}
-                        onMouseLeave={hideTooltip}
-                        aria-label="Add to Favorites"
-                    >
-                        <FiStar />
-                    </button>
-
                     {/* AI Design Assistant buttons */}
                     <div className="ai-assistant-group">
                         <button
@@ -266,6 +256,16 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                             <HiLightBulb />
                         </button>
                     </div>
+
+                    <button
+                        className="toolbar-btn"
+                        onClick={onAddToFavorites}
+                        onMouseEnter={(e) => showTooltip(e, "Add to favorites")}
+                        onMouseLeave={hideTooltip}
+                        aria-label="Add to Favorites"
+                    >
+                        <FiStar />
+                    </button>
 
                     <button
                         className="toolbar-btn"

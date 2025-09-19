@@ -668,7 +668,6 @@
   /* Add subtle visual indicator that this element is editable */
   outline: 1px dashed rgba(117, 147, 175, 0.4) !important;
   outline-offset: 1px;
-  background: rgba(117, 147, 175, 0.05) !important;
   border-radius: 2px;
 }
 

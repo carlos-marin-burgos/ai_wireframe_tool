@@ -23,6 +23,7 @@ import AIDesignModal from "./AIDesignModal";
 import { generateShareUrl } from "../utils/powerpointExport";
 import { generateWireframeName } from "../utils/wireframeNaming";
 import { designConsultant } from "../services/designConsultant";
+import { WebsiteAnalyzer, WebsiteAnalysis } from "../services/websiteAnalyzer";
 import {
   FiSend,
   FiStopCircle,
@@ -224,6 +225,10 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   // Track if wireframe has been added to recents to avoid duplicates
   const [addedToRecents, setAddedToRecents] = useState<boolean>(false);
+
+  // Website analysis state
+  const [websiteAnalysis, setWebsiteAnalysis] = useState<WebsiteAnalysis | null>(null);
+  const [isAnalyzingWebsite, setIsAnalyzingWebsite] = useState<boolean>(false);
 
   // Stable callback for updating wireframe content to prevent infinite re-renders
   const handleUpdateContent = useCallback((newContent: string) => {
@@ -925,10 +930,10 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     }
   }, [onEnhancedSave, enhancedOnSave]);
 
-  // Direct AI generation with Microsoft components - no modal
-  const enhancedHandleSubmit = useCallback((e: React.FormEvent) => {
+  // Direct AI generation with Microsoft components - enhanced with website analysis
+  const enhancedHandleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('🚀 Direct AI generation called!', { description: description.trim(), loading });
+    console.log('🚀 Enhanced AI generation called!', { description: description.trim(), loading });
 
     // Validate the input before proceeding
     if (!validateChatInput(description)) {
@@ -941,17 +946,65 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         setShowImageUpload(false);
       }
 
-      // Direct AI approach: Skip modal, go straight to AI generation with Microsoft components
-      console.log('🤖 Direct AI approach: Calling handleSubmit for immediate AI generation');
+      // Check if description contains a URL
+      const containsUrl = WebsiteAnalyzer.isUrlPresent(description);
+      let enhancedDescription = description;
+      let websiteData: WebsiteAnalysis | null = null;
 
-      // Only add a message if it's coming from the form input (not initial description)
-      // Check our ref to make sure this isn't the first message from landing page
-      if (initialMessageAddedRef.current || conversationHistory.length > 0) {
+      if (containsUrl) {
+        const urls = WebsiteAnalyzer.extractUrls(description);
+        const primaryUrl = urls[0]; // Use the first URL found
+
+        console.log(`🔍 URL detected: ${primaryUrl} - Starting website analysis`);
+        setIsAnalyzingWebsite(true);
+
+        // Add analysis message to chat
         addMessage('user', description);
-        addMessage('ai', '✨ Generating wireframe with Microsoft components...');
+        addMessage('ai', `🔍 **Website Analysis Started**\n\nI found a URL in your request: ${primaryUrl}\n\nAnalyzing the website structure, layout, and components to create an accurate wireframe...`);
+
+        try {
+          const analyzer = new WebsiteAnalyzer();
+          websiteData = await analyzer.analyzeWebsite(primaryUrl);
+
+          console.log('✅ Website analysis completed:', {
+            title: websiteData.pageInfo.title,
+            sections: websiteData.layout.sections.length,
+            components: websiteData.styling.components.length
+          });
+
+          // Store analysis data
+          setWebsiteAnalysis(websiteData);
+
+          // Generate enhanced prompt with analysis data
+          enhancedDescription = WebsiteAnalyzer.generateEnhancedPrompt(description, websiteData);
+
+          // Update chat with analysis results
+          addMessage('ai', `✅ **Website Analysis Complete**\n\n📋 **Found:**\n- Page: ${websiteData.pageInfo.title}\n- ${websiteData.layout.sections.length} content sections\n- ${websiteData.styling.components.length} UI components\n- Layout type: ${websiteData.styling.layout}\n\nNow generating a matching wireframe...`);
+
+        } catch (analysisError) {
+          console.error('❌ Website analysis failed:', analysisError);
+          addMessage('ai', `⚠️ **Website Analysis Failed**\n\nCouldn't analyze the website: ${analysisError instanceof Error ? analysisError.message : 'Unknown error'}\n\nProceeding with standard wireframe generation...`);
+
+          // Continue with standard generation even if analysis fails
+          websiteData = null;
+        } finally {
+          setIsAnalyzingWebsite(false);
+        }
+      } else {
+        // Standard flow for non-URL descriptions
+        if (initialMessageAddedRef.current || conversationHistory.length > 0) {
+          addMessage('user', description);
+          addMessage('ai', '✨ Generating wireframe with Microsoft components...');
+        }
       }
 
-      // Call the original handleSubmit for direct AI generation
+      // Update the description to use enhanced version if we have website analysis
+      if (websiteData && enhancedDescription !== description) {
+        console.log('📝 Using enhanced description with website analysis');
+        setDescription(enhancedDescription);
+      }
+
+      // Call the original handleSubmit for AI generation
       handleSubmit(e);
     } else {
       console.log('❌ enhancedHandleSubmit: Conditions not met', {
@@ -960,7 +1013,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         loading
       });
     }
-  }, [description, loading, conversationHistory.length, showImageUpload, setShowImageUpload, addMessage, validateChatInput, handleSubmit]);
+  }, [description, loading, conversationHistory.length, showImageUpload, setShowImageUpload, addMessage, validateChatInput, handleSubmit, setDescription, websiteAnalysis]);
 
   // Scroll to bottom of chat
   const scrollToBottom = () => {
@@ -1302,8 +1355,23 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
             />
 
             <div className="wireframe-container">
+              {/* Website Analysis Loading Overlay */}
+              {isAnalyzingWebsite && (
+                <div className="wireframe-loading-overlay">
+                  <div className="wireframe-spinner-container">
+                    <LoadingSpinner size="large" color="blue" />
+                    <div className="wireframe-loading-text">
+                      <div className="wireframe-loading-title">Analyzing Website</div>
+                      <div className="wireframe-loading-stage">
+                        Extracting layout, components, and styling...
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Wireframe Generation Spinner Overlay */}
-              {loading && (
+              {loading && !isAnalyzingWebsite && (
                 <div className="wireframe-loading-overlay">
                   <div className="wireframe-spinner-container">
                     <LoadingSpinner size="large" color="blue" />
@@ -1311,6 +1379,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                       <div className="wireframe-loading-title">Generating Wireframe</div>
                       <div className="wireframe-loading-stage">
                         {loadingStage || "Creating your design..."}
+                        {websiteAnalysis ? " (Using website analysis)" : ""}
                       </div>
                     </div>
                   </div>
