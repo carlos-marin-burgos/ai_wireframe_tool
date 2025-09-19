@@ -1,7 +1,7 @@
-// API configuration - PRODUCTION HOTFIX: hardcoded for reliability
-const PRODUCTION_DOMAIN = "lemon-field-08a1a0b0f.1.azurestaticapps.net";
+// API configuration - PRODUCTION HOTFIX: hardcoded for reliability  
+const PRODUCTION_DOMAIN = "thankful-moss-0fd85620f.2.azurestaticapps.net";
 const FUNCTION_APP_URL =
-  "https://func-original-app-pgno4orkguix6.azurewebsites.net";
+  "https://func-designetica-5gwyjxbwvr4s6.azurewebsites.net";
 
 const isDevelopment = import.meta.env.DEV;
 const isLocalhost =
