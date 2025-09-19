@@ -23,6 +23,7 @@ This directory contains all project documentation organized by category.
 - [Compact Toolbar Guide](COMPACT_TOOLBAR_GUIDE.md) - Toolbar features
 - [Fluent UI Button Standardization](FLUENT_UI_BUTTON_STANDARDIZATION.md) - UI standards
 - [Fluent UI Modal Integration Guide](FLUENT_UI_MODAL_INTEGRATION_GUIDE.md) - Modal components
+- [Strict Mode & Prompt v2](STRICT_MODE_AND_PROMPT_V2.md) - Deterministic scaffolding & structured AI prompt
 
 ## 🚨 Emergency & Recovery
 

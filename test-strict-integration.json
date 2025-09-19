@@ -1,0 +1,52 @@
+{
+  "prompt": "[strict] Create a modern dashboard layout",
+  "websiteAnalysis": {
+    "url": "https://microsoft.com",
+    "pageInfo": {
+      "title": "Microsoft – AI, Cloud, Productivity, Computing, Gaming & Apps",
+      "description": "Microsoft homepage with products and services",
+      "language": "en"
+    },
+    "layout": {
+      "sections": [
+        {
+          "tag": "header",
+          "role": "banner",
+          "content": "Microsoft navigation and logo",
+          "children": 3,
+          "attributes": { "class": "site-header" }
+        },
+        {
+          "tag": "main",
+          "role": "main",
+          "content": "Main content with product highlights",
+          "children": 5,
+          "attributes": { "class": "main-content" }
+        },
+        {
+          "tag": "footer",
+          "role": "contentinfo",
+          "content": "Footer with links and information",
+          "children": 2,
+          "attributes": { "class": "site-footer" }
+        }
+      ],
+      "navigation": [
+        { "text": "Microsoft 365", "href": "/microsoft-365" },
+        { "text": "Teams", "href": "/teams" },
+        { "text": "Windows", "href": "/windows" },
+        { "text": "Surface", "href": "/surface" },
+        { "text": "Xbox", "href": "/xbox" }
+      ]
+    },
+    "styling": {
+      "components": ["hero-banner", "product-grid", "navigation-menu"],
+      "colorScheme": {
+        "primary": "#0078d4",
+        "secondary": "#ffffff",
+        "accent": "#f3f2f1"
+      }
+    },
+    "wireframePrompt": "Create a Microsoft-style layout with header navigation, hero section, and product showcase."
+  }
+}

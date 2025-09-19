@@ -1,14 +1,5 @@
-import React from "react";
-
-const GenerateWireframe = () => {
-  return <div></div>;
-};
-
-export default GenerateWireframe;
 const { app } = require("@azure/functions");
-const {
-  generateWireframeFromDescription,
-} = require("../../generateWireframe/index");
+const wireframeGenerator = require("../../generateWireframe/index");
 
 app.http("generateWireframe", {
   methods: ["GET", "POST"],
@@ -22,10 +13,10 @@ app.http("generateWireframe", {
       if (request.method === "GET") {
         // Handle GET request with query parameters
         const url = request.query.get("url");
+        const description =
+          request.query.get("description") ||
+          `Generate a wireframe for the website: ${url}`;
         const template = request.query.get("template") || "cards";
-        const analysis = request.query.get("analysis")
-          ? JSON.parse(request.query.get("analysis"))
-          : null;
 
         if (!url) {
           return {
@@ -38,7 +29,7 @@ app.http("generateWireframe", {
           };
         }
 
-        requestBody = { url, template, analysis };
+        requestBody = { description, url, template };
       } else {
         // Handle POST request with JSON body
         const requestText = await request.text();
@@ -69,63 +60,44 @@ app.http("generateWireframe", {
         }
       }
 
-      const { url, template = "cards", analysis } = requestBody;
+      // Extract parameters and create a proper context object for the wireframe generator
+      const { description, url, template = "cards" } = requestBody;
 
-      if (!url) {
+      if (!description && !url) {
         return {
           status: 400,
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             success: false,
-            error: "Missing required parameter: url",
+            error: "Missing required parameter: description or url",
           }),
         };
       }
 
       context.log(
-        `Generating wireframe for URL: ${url}, template: ${template}`
+        `Generating wireframe: ${
+          description || `for URL: ${url}`
+        }, template: ${template}`
       );
 
-      // Use the main wireframe generation function
-      let prompt = `Generate a wireframe for the website: ${url}`;
-      if (template) {
-        prompt += ` using the ${template} template style`;
-      }
-      if (analysis) {
-        prompt += `. Based on analysis: ${JSON.stringify(analysis)}`;
-      }
-
-      const result = await generateWireframeFromDescription({
-        prompt,
-        url,
-        template,
-        analysis,
-        options: {
-          includeAccessibility: true,
-          optimizeForMobile: true,
-          includeInteractivity: true,
+      // Create a proper request object for the wireframe generator
+      const wireframeRequest = {
+        method: "POST",
+        body: {
+          description:
+            description || `Generate a wireframe for the website: ${url}`,
+          theme: "professional",
+          colorScheme: "blue",
+          fastMode: true,
+          includeAtlas: false,
         },
-      });
-
-      return {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type, Authorization",
-        },
-        body: JSON.stringify({
-          success: true,
-          html: result.html,
-          metadata: {
-            url,
-            template,
-            generatedAt: new Date().toISOString(),
-            processingTime: result.processingTime || 0,
-          },
-        }),
       };
+
+      // Call the wireframe generator function
+      await wireframeGenerator(context, wireframeRequest);
+
+      // The wireframe generator modifies context.res, so we return that
+      return context.res;
     } catch (error) {
       context.log("Error in generateWireframe:", error);
 

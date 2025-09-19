@@ -11,30 +11,9 @@ export default defineConfig({
     host: "0.0.0.0", // Listen on all network interfaces
     port: 5173, // Explicit port for frontend
     proxy: {
-      // Route wireframe generation to simple-server
-      "/api/generate-wireframe": {
-        target: "http://localhost:5001", // Simple server with wireframe capabilities
-        changeOrigin: true,
-        secure: false,
-      },
-      "/api/generate-html-wireframe": {
-        target: "http://localhost:5001", // Simple server
-        changeOrigin: true,
-        secure: false,
-      },
-      "/api/generate-react-wireframe": {
-        target: "http://localhost:5001", // Simple server
-        changeOrigin: true,
-        secure: false,
-      },
-      "/api/generate-enhanced-wireframe": {
-        target: "http://localhost:5001", // Simple server
-        changeOrigin: true,
-        secure: false,
-      },
-      // All other API calls go to Azure Functions
+      // All API calls go to Azure Functions (which has OpenAI configured)
       "/api": {
-        target: "http://localhost:7071", // Point to Azure Functions backend
+        target: "http://localhost:7071", // Point to Azure Functions backend with OpenAI
         changeOrigin: true,
         secure: false,
       },

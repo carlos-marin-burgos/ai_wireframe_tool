@@ -312,9 +312,10 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     setForceUpdateKey(Date.now()); // Always force update
   };
 
-  const handleSubmit = async (e: React.FormEvent, overrideDescription?: string) => {
+  const handleSubmit = async (e: React.FormEvent, overrideDescription?: string, websiteAnalysis?: any) => {
     const actualDescription = overrideDescription || description;
     console.log("🚀 handleSubmit called with description:", actualDescription);
+    console.log("🔍 Website analysis data received:", !!websiteAnalysis, websiteAnalysis?.url);
     e.preventDefault();
 
     if (!actualDescription || actualDescription.trim().length === 0) {
@@ -332,7 +333,10 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
       const result = await generateWireframe(
         actualDescription,
         designTheme,
-        colorScheme
+        colorScheme,
+        false, // skipCache
+        false, // fastMode
+        websiteAnalysis
       );
 
       if (result && result.html) {

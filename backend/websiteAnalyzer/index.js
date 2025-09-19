@@ -142,6 +142,7 @@ module.exports = async function (context, req) {
         typography: extractTypography($),
         components: extractComponents($),
       },
+      wireframePrompt: generateWireframePrompt($, title, url),
     };
 
     await browser.close();
@@ -416,4 +417,90 @@ function extractComponents($) {
   if (imageCount > 0) components.push({ type: "image", count: imageCount });
 
   return components;
+}
+
+function generateWireframePrompt($, title, url) {
+  const sections = [];
+  const components = [];
+
+  // Analyze main content areas
+  const mainContent = $("main, .main, .content, #content").first();
+  const hasMainContent = mainContent.length > 0;
+
+  // Check for navigation
+  const navigation = $('nav, .nav, .navigation, [role="navigation"]');
+  const navLinks = navigation.find("a").length;
+
+  // Check for header
+  const header = $("header, .header");
+  const headerText = header.text().trim().substring(0, 100);
+
+  // Check for sections and content blocks
+  $("section, .section, article, .article").each((i, el) => {
+    const $el = $(el);
+    const hasHeading = $el.find("h1, h2, h3, h4, h5, h6").length > 0;
+    const hasImages = $el.find("img").length > 0;
+    const hasButtons = $el.find("button, .btn, .button").length > 0;
+    const hasLinks = $el.find("a").length > 0;
+
+    sections.push({
+      type: "content-block",
+      heading: $el
+        .find("h1, h2, h3, h4, h5, h6")
+        .first()
+        .text()
+        .trim()
+        .substring(0, 50),
+      text: $el.text().trim().substring(0, 100),
+      hasImages,
+      hasButtons,
+      hasLinks,
+    });
+  });
+
+  // Identify component types
+  const buttonCount = $(
+    'button, .btn, input[type="button"], input[type="submit"]'
+  ).length;
+  const formCount = $("form").length;
+  const imageCount = $("img").length;
+  const cardCount = $(".card, .tile, .item").length;
+
+  if (buttonCount > 0) components.push(`${buttonCount} buttons`);
+  if (formCount > 0) components.push(`${formCount} forms`);
+  if (imageCount > 0) components.push(`${imageCount} images`);
+  if (cardCount > 0) components.push(`${cardCount} cards/tiles`);
+
+  // Generate descriptive prompt
+  let prompt = `Website "${title}" (${url}) analysis:\n\n`;
+
+  if (headerText) {
+    prompt += `Header: ${headerText}\n`;
+  }
+
+  if (navLinks > 0) {
+    prompt += `Navigation: ${navLinks} navigation links\n`;
+  }
+
+  if (hasMainContent) {
+    prompt += `Main content area: Present with structured content\n`;
+  }
+
+  if (sections.length > 0) {
+    prompt += `\nContent sections (${sections.length}):\n`;
+    sections.slice(0, 5).forEach((section, i) => {
+      prompt += `${i + 1}. ${section.heading || "Untitled section"}: ${
+        section.text
+      }\n`;
+      if (section.hasImages) prompt += "   - Contains images\n";
+      if (section.hasButtons) prompt += "   - Contains buttons\n";
+      if (section.hasLinks) prompt += "   - Contains links\n";
+    });
+  }
+
+  if (components.length > 0) {
+    prompt += `\nComponents found: ${components.join(", ")}\n`;
+  }
+
+  return prompt;
 }

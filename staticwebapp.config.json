@@ -30,10 +30,7 @@
         "content-type": "text/html"
       }
     },
-    {
-      "route": "/api/*",
-      "allowedRoles": ["anonymous"]
-    },
+
     {
       "route": "/.auth/*",
       "allowedRoles": ["anonymous"]

@@ -345,14 +345,79 @@ async function generateWithAI(description, options = {}) {
   const theme = options.theme || "professional";
   const colorScheme = options.colorScheme || "blue";
   const fastMode = options.fastMode !== false;
+  const websiteAnalysis = options.websiteAnalysis || null;
+  const strictMode = options.strictMode === true; // new flag
 
-  const prompt = `Create a complete, modern HTML wireframe for: ${description}\n\nRequirements:\n- Use modern CSS with flexbox/grid\n- Include semantic HTML structure\n- ${theme} theme with ${colorScheme} color scheme\n- Mobile-responsive design\n- Include proper meta tags and DOCTYPE\n- Use inline CSS for complete standalone file\n- Focus ONLY on the requested component/feature\n- NO navigation bars, headers, footers, or branding unless specifically requested\n- Keep designs clean and minimal\n- DO NOT include the description text anywhere in the visible wireframe content\n- DO NOT add "Create a..." or similar instruction text in the HTML\n- Generate ONLY the actual UI components requested, not meta-descriptions about them\n\n🚨 CRITICAL CONTAINER RULES FOR DRAG-AND-DROP:\n- AVOID excessive div nesting - maximum 2-3 levels deep\n- Use semantic HTML tags (main, section, article) instead of generic divs\n- Cards should be direct children of grid/flex containers\n- DO NOT wrap single components in multiple container divs\n- Use CSS Grid for card layouts: display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;\n- Each card must have: max-width: 100%; box-sizing: border-box; for proper rearrangement\n- Cards MUST be <article> or <div class="card"> elements for drag system compatibility\n- Container MUST be <main> or <section> for proper drag container detection\n- Add cursor: grab; to draggable cards for better UX\n\n🎨 CRITICAL ACCESSIBILITY & READABILITY RULES:\n- BUTTONS: Use high-contrast combinations only:\n  • Primary buttons: background: #194a7a (dark blue) + color: #ffffff (white text)\n  • Secondary buttons: background: #ffffff (white) + color: #194a7a (dark blue) + border: 2px solid #194a7a\n  • Danger buttons: background: #d13438 (red) + color: #ffffff (white text)\n  • Success buttons: background: #107c10 (green) + color: #ffffff (white text)\n- TEXT CONTRAST: ALWAYS use dark text (#333 or #194a7a) on light backgrounds (#fff, ${
-    WIREFRAME_COLORS.surface
-  }, #E9ECEF)\n- NEVER use opacity below 1.0 for button text or important content\n- NEVER use light text on light backgrounds or dark text on dark backgrounds\n- Button hover states: darken background by 15% while maintaining white text\n- Minimum button padding: 12px 24px for adequate click targets\n- All buttons must have border-radius: 4px for consistency\n${
-    fastMode
-      ? "- Keep it simple and fast to load"
-      : "- Include rich interactions and detailed styling"
-  }\n\nReturn only the complete HTML code, no explanations.`;
+  // Base prompt for wireframe generation
+  let basePrompt = `Create a complete, modern HTML wireframe for: ${description}\n\nRequirements:\n- Use modern CSS with flexbox/grid\n- Include semantic HTML structure\n- ${theme} theme with ${colorScheme} color scheme\n- Mobile-responsive design\n- Include proper meta tags and DOCTYPE\n- Use inline CSS for complete standalone file\n- Focus ONLY on the requested component/feature\n- NO navigation bars, headers, footers, or branding unless specifically requested\n- Keep designs clean and minimal\n- DO NOT include the description text anywhere in the visible wireframe content\n- DO NOT add "Create a..." or similar instruction text in the HTML\n- Generate ONLY the actual UI components requested, not meta-descriptions about them`;
+
+  // Enhanced prompt with website analysis data
+  if (websiteAnalysis) {
+    console.log(
+      "🎯 Using website analysis data for enhanced wireframe generation"
+    );
+
+    basePrompt += `\n\n=== WEBSITE STRUCTURE ANALYSIS ===\n`;
+    basePrompt += `Based on analysis of: ${websiteAnalysis.url}\n`;
+    basePrompt += `Page Title: ${websiteAnalysis.pageInfo.title}\n\n`;
+
+    if (websiteAnalysis.layout?.sections?.length > 0) {
+      basePrompt += `SECTIONS TO INCLUDE (${websiteAnalysis.layout.sections.length} found):\n`;
+      websiteAnalysis.layout.sections.slice(0, 10).forEach((section, index) => {
+        basePrompt += `${index + 1}. ${section.type}: ${
+          section.heading || "Content section"
+        }\n`;
+      });
+      basePrompt += `\n`;
+    }
+
+    if (websiteAnalysis.layout?.navigation?.links?.length > 0) {
+      const navLinks = websiteAnalysis.layout.navigation.links.slice(0, 8);
+      basePrompt += `NAVIGATION STRUCTURE (${navLinks.length} main links):\n`;
+      navLinks.forEach((link, index) => {
+        basePrompt += `${index + 1}. ${link.text}\n`;
+      });
+      basePrompt += `\n`;
+    }
+
+    if (websiteAnalysis.styling?.components) {
+      basePrompt += `UI COMPONENTS TO INCLUDE:\n`;
+      if (websiteAnalysis.styling.components.buttons?.length > 0) {
+        basePrompt += `- ${websiteAnalysis.styling.components.buttons.length} buttons\n`;
+      }
+      if (websiteAnalysis.styling.components.forms?.length > 0) {
+        basePrompt += `- ${websiteAnalysis.styling.components.forms.length} forms\n`;
+      }
+      if (websiteAnalysis.styling.components.images?.length > 0) {
+        basePrompt += `- ${websiteAnalysis.styling.components.images.length} images/media\n`;
+      }
+      basePrompt += `\n`;
+    }
+
+    basePrompt += `LAYOUT REQUIREMENTS:\n`;
+    basePrompt += `- Match the exact section structure and hierarchy from the analyzed website\n`;
+    basePrompt += `- Recreate the navigation pattern and content organization\n`;
+    basePrompt += `- Use similar component layouts and spacing\n`;
+    basePrompt += `- Apply Microsoft Design System colors while preserving the original structure\n`;
+    basePrompt += `- Ensure the wireframe reflects the actual website's information architecture\n`;
+    basePrompt += `- EACH SECTION MUST have data-section-index=\"<index>\" and data-section-type=\"<type>\" attributes\n`;
+    basePrompt += `- The <main> element MUST include data-sections=\"${
+      websiteAnalysis.layout?.sections?.length || 0
+    }\"\n`;
+    basePrompt += `- If cards or repeated feature blocks appear: wrap them in a grid container with class=\"card-grid\" and each card as <article class=\\"card\\" data-card-index=\\"n\\">\n`;
+    basePrompt += `- Keep nesting shallow (max 3 levels) and avoid redundant wrappers\n\n`;
+  }
+
+  // Replace original prompt block
+  const prompt =
+    basePrompt +
+    `\n\n🚨 CRITICAL CONTAINER & INDEXING RULES FOR DRAG-AND-DROP:\n- AVOID excessive div nesting - maximum 2-3 levels deep\n- Use semantic HTML tags (main, section, article) instead of generic divs\n- EVERY <section> MUST include data-section-index and data-section-type when websiteAnalysis provided\n- The <main> MUST have data-sections with the total number\n- Cards should be direct children of grid/flex containers\n- Card containers: display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;\n- Each card must be <article class=\"card\" data-card-index=\"n\" style=\"cursor:grab;\"> with accessible structure\n- DO NOT wrap single components in multiple container divs\n- Keep hierarchy shallow for rearrangement\n\n🎨 CRITICAL ACCESSIBILITY & READABILITY RULES:\n- BUTTONS: Use high-contrast combinations only:\n  • Primary: background: #194a7a; color: #ffffff;\n  • Secondary: background: #ffffff; color: #194a7a; border: 2px solid #194a7a;\n  • Danger: background: #d13438; color: #ffffff;\n  • Success: background: #107c10; color: #ffffff;\n- TEXT CONTRAST: Always dark text on light backgrounds (#fff, ${
+      WIREFRAME_COLORS.surface
+    }, #E9ECEF)\n- NEVER use opacity below 1.0 for important text\n- NEVER use light on light or dark on dark\n- Button hover: darken background ~15% maintain white text\n- Button padding: >= 12px 24px; border-radius: 4px\n${
+      fastMode
+        ? "- Keep it simple and fast to load"
+        : "- Include rich interactions and detailed styling"
+    }\n\nReturn only the complete HTML code, no explanations.`;
 
   const deployment = process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o";
 
@@ -361,7 +426,7 @@ async function generateWithAI(description, options = {}) {
       {
         role: "system",
         content:
-          "You are a professional web developer who creates clean, minimal wireframes with PERFECT ACCESSIBILITY and OPTIMAL CONTAINER STRUCTURE. CRITICAL: All buttons must have high contrast (dark blue #194a7a background with white text, or white background with dark blue text and border). NEVER use light colors on light backgrounds or dark colors on dark backgrounds. AVOID excessive div nesting - use maximum 2-3 container levels. Cards must be direct children of grid containers for proper rearrangement. Use semantic HTML (main, section, article) instead of generic divs. DO NOT include navigation bars, headers, footers, or branding unless specifically requested. Focus ONLY on the requested component with readable, accessible design and clean container structure. NEVER include the user's description text or instruction phrases like 'Create a...' in the visible HTML content - generate only actual UI components.",
+          "You are a professional web developer who creates clean, minimal wireframes with PERFECT ACCESSIBILITY and OPTIMAL CONTAINER STRUCTURE. When provided with website analysis data, you MUST recreate the exact structure, sections, navigation, and component layout of the analyzed website while applying Microsoft Design System styling. CRITICAL: All buttons must have high contrast (dark blue #194a7a background with white text, or white background with dark blue text and border). NEVER use light colors on light backgrounds or dark colors on dark backgrounds. AVOID excessive div nesting - use maximum 2-3 container levels. Cards must be direct children of grid containers for proper rearrangement. Use semantic HTML (main, section, article) instead of generic divs. DO NOT include navigation bars, headers, footers, or branding unless specifically requested or found in the website analysis. Focus ONLY on the requested component with readable, accessible design and clean container structure. NEVER include the user's description text or instruction phrases like 'Create a...' in the visible HTML content - generate only actual UI components that match the analyzed website structure.",
       },
       { role: "user", content: prompt },
     ],
@@ -390,6 +455,121 @@ async function generateWithAI(description, options = {}) {
   );
 
   return cleanedHtml;
+}
+
+// --- Deterministic Strict Scaffold Builder ---
+function buildStrictScaffold(
+  websiteAnalysis,
+  { theme = "professional", colorScheme = "blue" } = {}
+) {
+  if (!websiteAnalysis || typeof websiteAnalysis !== "object") return null;
+  try {
+    const title =
+      (websiteAnalysis.pageInfo && websiteAnalysis.pageInfo.title) ||
+      websiteAnalysis.url ||
+      "Analyzed Site";
+    const sections =
+      (websiteAnalysis.layout && websiteAnalysis.layout.sections) || [];
+    const navLinks =
+      (websiteAnalysis.layout &&
+        websiteAnalysis.layout.navigation &&
+        websiteAnalysis.layout.navigation.links) ||
+      [];
+
+    // Limit to a reasonable number to keep scaffold light
+    const limitedSections = sections.slice(0, 12);
+    const limitedNav = navLinks.slice(0, 10);
+
+    const colorSurface = WIREFRAME_COLORS.surface || "#FFFFFF";
+    const colorPrimary = ColorUtils.primary || "#194a7a";
+
+    // Navigation (if any)
+    const navHTML = limitedNav.length
+      ? `<nav data-ia-role="navigation" style="background:${colorPrimary}; padding:16px;">
+        <ul style="list-style:none; margin:0; padding:0; display:flex; gap:24px; flex-wrap:wrap;">
+          ${limitedNav
+            .map(
+              (l, i) =>
+                `<li data-nav-index="${i}"><a href="${
+                  l.href || "#"
+                }" style="color:#fff; text-decoration:none; font-weight:600;">${
+                  l.text || l.href || "Link"
+                }</a></li>`
+            )
+            .join("\n")} 
+        </ul>
+      </nav>`
+      : "";
+
+    const sectionHTML = limitedSections
+      .map((s, i) => {
+        const tag = "section";
+        const type = s.type || "section";
+        const heading = s.heading || `${type} ${i + 1}`;
+        const hasCards = /card|grid|list|feature|module/i.test(type);
+        const cards = hasCards
+          ? `<div class="card-grid" data-section-cards style="display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:24px; margin-top:24px;">
+              ${Array.from({
+                length: Math.min((s.cards && s.cards.length) || 3, 6),
+              })
+                .map(
+                  (
+                    _,
+                    ci
+                  ) => `<article class="card" data-card-index="${ci}" style="background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:16px; box-shadow:0 2px 4px rgba(0,0,0,0.05); display:flex; flex-direction:column; gap:8px; cursor:grab;">
+                  <h3 style="margin:0; font-size:16px;">${heading} Item ${
+                    ci + 1
+                  }</h3>
+                  <p style="margin:0; font-size:14px; color:#475569;">Placeholder content derived from analysis for ${heading}.</p>
+                  <button style="align-self:flex-start; background:#194a7a; color:#fff; border:none; padding:8px 16px; border-radius:4px; font-size:14px; cursor:pointer;">Action</button>
+                </article>`
+                )
+                .join("\n")}
+            </div>`
+          : "";
+        return `<${tag} data-section-index="${i}" data-section-type="${type}" style="padding:60px 20px; background:${
+          i % 2 === 0 ? colorSurface : "#F8FAFC"
+        };">
+            <div class="container" style="max-width:1200px; margin:0 auto;">
+              <h2 style="margin-top:0; font-size:clamp(20px,4vw,32px);">${heading}</h2>
+              <p style="max-width:760px; line-height:1.5; font-size:16px; color:#475569;">Structural placeholder generated in strict mode to mirror analyzed site section “${heading}”.</p>
+              ${cards}
+            </div>
+          </${tag}>`;
+      })
+      .join("\n\n");
+
+    const html = `<!DOCTYPE html>
+<html lang="en" data-generated="strict-scaffold">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>${title} – Structural Scaffold</title>
+  <style>
+    body { margin:0; font-family: 'Segoe UI', system-ui, sans-serif; background:${colorSurface}; color:#1e293b; }
+    main { display:block; width:100%; }
+    nav ul li a:hover { text-decoration:underline; }
+    .card-grid .card:hover { box-shadow:0 4px 12px rgba(0,0,0,0.08); transform:translateY(-2px); }
+    .card { transition: box-shadow .2s ease, transform .2s ease; }
+    button { font-weight:600; }
+    @media (max-width: 640px) { nav ul { gap:12px; } }
+  </style>
+</head>
+<body>
+  ${navHTML}
+  <main data-sections="${limitedSections.length}">
+    ${
+      sectionHTML ||
+      '<section data-section-index="0" data-section-type="generic" style="padding:60px 20px;"><div class="container" style="max-width:1200px; margin:0 auto;"><h2>Content</h2><p>Placeholder section generated because the analyzer returned no explicit sections.</p></div></section>'
+    }
+  </main>
+</body>
+</html>`;
+    return html;
+  } catch (e) {
+    console.warn("⚠️ Failed to build strict scaffold:", e.message);
+    return null;
+  }
 }
 
 // --- Button Readability Fixer ---
@@ -507,19 +687,32 @@ module.exports = async function (context, req) {
       return;
     }
 
-    const {
+    let {
       description,
+      prompt, // legacy/alternate name
       theme,
       colorScheme,
       fastMode,
       includeAtlas = false,
+      websiteAnalysis = null,
+      strictMode = false,
     } = req.body || {};
 
-    if (!description) {
+    // Backwards compatibility: allow `prompt` if `description` absent
+    if (!description && typeof prompt === "string" && prompt.trim().length) {
+      description = prompt;
+      console.log(
+        "⚠️ Using legacy 'prompt' field as description (will be deprecated)."
+      );
+    }
+
+    if (!description || !description.trim()) {
       context.res.status = 400;
       context.res.body = JSON.stringify({ error: "Description is required" });
       return;
     }
+
+    console.log("🔍 Request contains website analysis:", !!websiteAnalysis);
 
     // Ensure OpenAI client
     if (!openai) {
@@ -535,11 +728,139 @@ module.exports = async function (context, req) {
       }
     }
 
-    // Generate base wireframe
+    // STRICT MODE: deterministic scaffold bypassing AI creativity
+    if (strictMode && websiteAnalysis) {
+      console.log(
+        "🚧 Strict mode active: building deterministic scaffold from analysis"
+      );
+      const scaffold = buildStrictScaffold(websiteAnalysis, {
+        theme,
+        colorScheme,
+      });
+      if (scaffold) {
+        const processingTime = Date.now() - startTime;
+        context.res.status = 200;
+        context.res.body = {
+          success: true,
+          html: scaffold,
+          metadata: {
+            strictMode: true,
+            deterministic: true,
+            sections:
+              (websiteAnalysis.layout &&
+                websiteAnalysis.layout.sections &&
+                websiteAnalysis.layout.sections.length) ||
+              0,
+            theme: theme || "professional",
+            colorScheme: colorScheme || "blue",
+            generatedAt: new Date().toISOString(),
+            processingTimeMs: processingTime,
+            descriptionPreview: description.substring(0, 200),
+            promptVersion: "v2",
+          },
+        };
+        return; // early return
+      } else {
+        console.log(
+          "⚠️ Strict mode scaffold failed, falling back to AI generation"
+        );
+      }
+    }
+
+    // Generate base wireframe with website analysis if available (non-strict or fallback)
+
+    // --- Prompt v2 Construction (tighter constraints) ---
+    // We build a structured instruction block to reduce hallucinations and enforce layout fidelity.
+    const promptVersion = "v2";
+
+    // Normalize theme & colorScheme early for consistent interpolation
+    const resolvedTheme = theme || "professional";
+    const resolvedScheme = colorScheme || "blue";
+
+    // Base deterministic instruction preamble
+    const SYSTEM_PREAMBLE = `You are an expert UX wireframe generator. Produce a SINGLE, COMPLETE, SELF-CONTAINED HTML5 document (<!DOCTYPE html> ... </html>) with inline <style>. Do NOT include explanatory text before or after the HTML.`;
+
+    // Hard constraints list (kept compact to control tokens)
+    const HARD_RULES = [
+      "Single full HTML document only",
+      "Inline CSS only (no external fetches)",
+      "No external scripts unless explicitly required",
+      "Semantic HTML5 tags",
+      "Accessible landmarks: header / nav / main / footer where appropriate",
+      "Meaningful aria-* only when needed (avoid redundancy)",
+      "Mobile-first responsive CSS (use flex or grid)",
+      "Keep placeholder text concise (no large lorem blocks)",
+      "No mock analytics / tracking code",
+      "No base64 mega images (simple shapes / divs / short SVG only)",
+      "Do not fabricate data beyond minimal illustrative placeholders",
+      "If tables are used, provide <thead> and scope attributes",
+      "Color palette must align with requested theme & scheme",
+      "Avoid duplicate IDs",
+      "All interactive elements must have discernible text",
+      "Prefer CSS variables for key brand colors",
+    ];
+
+    // Build analysis-derived structural contract (safe guards)
+    let analysisContract = "";
+    if (websiteAnalysis && typeof websiteAnalysis === "object") {
+      try {
+        const sections = Array.isArray(websiteAnalysis?.layout?.sections)
+          ? websiteAnalysis.layout.sections
+          : [];
+        const navLinks = Array.isArray(websiteAnalysis?.layout?.navigation)
+          ? websiteAnalysis.layout.navigation
+          : [];
+        analysisContract += `\nSTRUCTURAL CONTRACT:\n`;
+        if (sections.length) {
+          analysisContract += `Sections (${sections.length}):\n`;
+          sections.slice(0, 18).forEach((s, i) => {
+            const tag = s.tag || s.type || "section";
+            const label = (s.role || s.content || s.type || tag || "")
+              .toString()
+              .trim()
+              .substring(0, 80);
+            analysisContract += `${i + 1}. <${tag}> - ${label}\n`;
+          });
+        }
+        if (navLinks.length) {
+          analysisContract += `Navigation (${navLinks.length}):\n`;
+          navLinks.slice(0, 12).forEach((l, i) => {
+            const txt = (l.text || l.label || "link")
+              .toString()
+              .trim()
+              .substring(0, 60);
+            analysisContract += `- ${i + 1}. ${txt}\n`;
+          });
+        }
+        if (!sections.length && !navLinks.length) {
+          analysisContract += `No structural elements extracted; generate a logical, minimal hierarchy.\n`;
+        }
+      } catch (e) {
+        console.log("⚠️ Failed to build analysis contract:", e.message);
+      }
+    }
+
+    // Compose final prompt to model
+    const FINAL_PROMPT = [
+      SYSTEM_PREAMBLE,
+      `PURPOSE: ${description.trim().substring(0, 500)}`,
+      `THEME: ${resolvedTheme} | COLOR SCHEME: ${resolvedScheme}`,
+      HARD_RULES.length ? `HARD RULES:\n- ${HARD_RULES.join("\n- ")}` : "",
+      analysisContract,
+      "OUTPUT FORMAT: Return ONLY the HTML document without backticks.",
+    ]
+      .filter(Boolean)
+      .join("\n\n");
+
+    // We replace the old basePrompt variable usage below by referencing FINAL_PROMPT.
+    // (To minimize invasive refactor, we keep variable name basePrompt where referenced further down if needed.)
+    let basePrompt = FINAL_PROMPT;
     let html = await generateWithAI(description, {
       theme,
       colorScheme,
       fastMode,
+      websiteAnalysis,
+      strictMode: false,
     });
 
     if (!html || !html.includes("<!DOCTYPE html>") || html.length < 500) {
@@ -575,10 +896,16 @@ module.exports = async function (context, req) {
       }
     );
 
-    if (accessibilityResult.content !== html) {
+    if (
+      accessibilityResult &&
+      accessibilityResult.content &&
+      accessibilityResult.content !== html
+    ) {
       html = accessibilityResult.content;
       console.log(
-        `🔧 Applied accessibility fixes - was fixed: ${accessibilityResult.wasFixed}`
+        `🔧 Applied accessibility fixes - was fixed: ${
+          accessibilityResult.wasFixed || false
+        }`
       );
     }
 
@@ -605,6 +932,8 @@ module.exports = async function (context, req) {
         generatedAt: new Date().toISOString(),
         processingTimeMs: processingTime,
         descriptionPreview: description.substring(0, 200),
+        strictMode: false,
+        promptVersion: "v2",
       },
     };
   } catch (error) {

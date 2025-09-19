@@ -209,7 +209,8 @@ export const useWireframeGeneration = () => {
       theme: string = "microsoft",
       colorScheme: string = "primary",
       skipCache: boolean = false,
-      fastMode: boolean = false
+      fastMode: boolean = false,
+      websiteAnalysis?: any
     ) => {
       // Cancel any ongoing request
       cancelGeneration();
@@ -273,11 +274,56 @@ export const useWireframeGeneration = () => {
           }
         );
 
+        // Detect and strip [strict] token (case-insensitive) from description
+        let strictMode = false;
+        let cleanedDescription = description;
+        if (/\[strict\]/i.test(description)) {
+          strictMode = true;
+          cleanedDescription = description.replace(/\[strict\]/gi, "").trim();
+          console.log(
+            "🧱 Strict mode token detected. Cleaned description:",
+            cleanedDescription
+          );
+        }
+
+        // Sanitize websiteAnalysis to remove control characters from textual fields
+        const sanitizeValue = (val: any) => {
+          if (typeof val === "string") {
+            return val
+              .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, " ")
+              .replace(/\s+/g, " ")
+              .trim();
+          }
+          return val;
+        };
+        const deepSanitize = (obj: any): any => {
+          if (!obj || typeof obj !== "object") return obj;
+          if (Array.isArray(obj)) return obj.map(deepSanitize);
+          const out: any = {};
+          for (const k of Object.keys(obj)) {
+            const v = obj[k];
+            if (v && typeof v === "object") {
+              out[k] = deepSanitize(v);
+            } else {
+              out[k] = sanitizeValue(v);
+            }
+          }
+          return out;
+        };
+        const sanitizedAnalysis = websiteAnalysis
+          ? deepSanitize(websiteAnalysis)
+          : undefined;
+        if (websiteAnalysis && sanitizedAnalysis) {
+          console.log("🧼 Sanitized websiteAnalysis payload");
+        }
+
         const requestPayload = {
-          description,
+          description: cleanedDescription,
           theme,
           colorScheme,
           fastMode: false,
+          ...(sanitizedAnalysis && { websiteAnalysis: sanitizedAnalysis }),
+          ...(strictMode && { strictMode: true }),
         };
         console.log(
           `📡 [${requestId}] Detailed request payload:`,
@@ -371,6 +417,15 @@ export const useWireframeGeneration = () => {
 
         // Make sure html is a string (from normalized htmlRaw)
         const htmlContent = ensureString(htmlRaw);
+
+        // If strictMode metadata returned, log confirmation
+        if ((data as any)?.metadata?.strictMode) {
+          console.log(
+            `🧱 Strict scaffold received (sections: ${
+              (data as any).metadata.sections || "n/a"
+            })`
+          );
+        }
 
         if (!htmlContent) {
           throw new Error("No HTML content received from Azure Functions");

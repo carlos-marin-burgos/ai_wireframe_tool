@@ -40,7 +40,7 @@ import { TbBoxModel2 } from 'react-icons/tb'; // Fluent UI style icon for compon
 interface SplitLayoutProps {
   description: string;
   setDescription: (desc: string) => void;
-  handleSubmit: (e: React.FormEvent) => void;
+  handleSubmit: (e: React.FormEvent, overrideDescription?: string, websiteAnalysis?: any) => void;
   loading: boolean;
   loadingStage?: string; // Enhanced loading stage message
   fallback?: boolean; // Whether using fallback mode
@@ -1004,8 +1004,12 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         setDescription(enhancedDescription);
       }
 
-      // Call the original handleSubmit for AI generation
-      handleSubmit(e);
+      // Call the original handleSubmit for AI generation with website analysis data
+      if (websiteData) {
+        handleSubmit(e, enhancedDescription, websiteData);
+      } else {
+        handleSubmit(e);
+      }
     } else {
       console.log('❌ enhancedHandleSubmit: Conditions not met', {
         descriptionTrimmed: description.trim(),
@@ -1124,7 +1128,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               message={{
                 id: 'welcome',
                 type: 'ai',
-                content: '👋 Hello! I\'m your AI wireframe assistant. Describe what you\'d like to create and I\'ll generate a wireframe for you.',
+                content: '👋 Hello! I\'m your AI wireframe assistant. Describe what you\'d like to create and I\'ll generate a wireframe for you. Add [strict] to force an exact structural scaffold from an analyzed URL.',
                 timestamp: new Date(),
                 status: 'sent'
               }}
@@ -1444,38 +1448,49 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
             {/* Main input area */}
             <div className="ai-assistant-input-container">
-              <textarea
-                ref={textareaRef}
-                value={description}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setDescription(value);
+              <div className="input-wrapper">
+                <textarea
+                  ref={textareaRef}
+                  value={description}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setDescription(value);
 
-                  // Hide suggestions when content becomes too short
-                  if (value.length <= 2) {
-                    setShowAiSuggestions(false);
-                  }
-                }}
-                onClick={() => {
-                  // Generate AI suggestions when textarea is clicked
-                  if (description.length > 2) {
-                    if (onGenerateAiSuggestions) {
-                      onGenerateAiSuggestions(description);
+                    // Hide suggestions when content becomes too short
+                    if (value.length <= 2) {
+                      setShowAiSuggestions(false);
                     }
-                    setShowAiSuggestions(true);
-                  }
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    if (description.trim() && !loading) {
-                      enhancedHandleSubmit(e);
+                  }}
+                  onClick={() => {
+                    // Generate AI suggestions when textarea is clicked
+                    if (description.length > 2) {
+                      if (onGenerateAiSuggestions) {
+                        onGenerateAiSuggestions(description);
+                      }
+                      setShowAiSuggestions(true);
                     }
-                  }
-                }}
-                placeholder="Describe your wireframe idea... (e.g., 'Create a modern login form with email, password, and social login options')"
-                className="ai-assistant-input"
-              />
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      if (description.trim() && !loading) {
+                        enhancedHandleSubmit(e);
+                      }
+                    }
+                  }}
+                  placeholder="Describe your wireframe idea... (e.g., 'Create a modern login form with email, password, and social login options')"
+                  className="ai-assistant-input"
+                />
+                <button
+                  type="button"
+                  className="input-icon-button"
+                  onClick={toggleImageUpload}
+                  title="Upload an image to generate wireframe"
+                  aria-label="Upload image"
+                >
+                  <FiImage />
+                </button>
+              </div>
             </div>
 
             {/* Submit button */}

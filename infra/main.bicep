@@ -445,7 +445,6 @@ resource staticWebApp 'Microsoft.Web/staticSites@2023-12-01' = {
     buildProperties: {
       appLocation: '/'
       outputLocation: 'dist'
-      apiLocation: 'backend'
     }
   }
 }
