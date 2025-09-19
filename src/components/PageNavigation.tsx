@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { FiPlus, FiPackage, FiSave, FiStar, FiImage, FiCode, FiLayers, FiGithub } from 'react-icons/fi';
+import { FiPlus, FiPackage, FiSave, FiStar, FiImage, FiCode, FiLayers, FiGithub, FiZap } from 'react-icons/fi';
+import { HiLightBulb } from 'react-icons/hi';
 import { SiFigma } from 'react-icons/si';
 import '../styles/PageNavigation.css';
 
@@ -21,6 +22,8 @@ interface PageNavigationProps {
     onSave?: () => void;
     onAddToFavorites?: () => void;
     onImageUpload?: () => void;
+    onOpenAnalyzeDesignModal?: () => void;
+    onOpenQuickTipsModal?: () => void;
 }
 
 const PageNavigation: React.FC<PageNavigationProps> = ({
@@ -33,7 +36,9 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
     onOpenFigmaComponents,
     onSave,
     onAddToFavorites,
-    onImageUpload
+    onImageUpload,
+    onOpenAnalyzeDesignModal,
+    onOpenQuickTipsModal
 }) => {
     const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
 
@@ -123,6 +128,31 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                             <FiStar />
                         </button>
 
+                        {/* AI Design Assistant buttons */}
+                        <div className="ai-assistant-group">
+                            <button
+                                className="toolbar-btn ai-btn"
+                                onClick={onOpenAnalyzeDesignModal}
+                                onMouseEnter={(e) => showTooltip(e, "Analyze Design")}
+                                onMouseLeave={hideTooltip}
+                                aria-label="Analyze Design"
+                                title="AI Design Analysis"
+                            >
+                                <FiZap />
+                            </button>
+
+                            <button
+                                className="toolbar-btn ai-btn"
+                                onClick={onOpenQuickTipsModal}
+                                onMouseEnter={(e) => showTooltip(e, "Quick Tips")}
+                                onMouseLeave={hideTooltip}
+                                aria-label="Quick Tips"
+                                title="AI Design Tips"
+                            >
+                                <HiLightBulb />
+                            </button>
+                        </div>
+
                         <button
                             className="toolbar-btn"
                             onClick={onSave}
@@ -211,6 +241,31 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                     >
                         <FiStar />
                     </button>
+
+                    {/* AI Design Assistant buttons */}
+                    <div className="ai-assistant-group">
+                        <button
+                            className="toolbar-btn ai-btn"
+                            onClick={onOpenAnalyzeDesignModal}
+                            onMouseEnter={(e) => showTooltip(e, "Analyze Design")}
+                            onMouseLeave={hideTooltip}
+                            aria-label="Analyze Design"
+                            title="AI Design Analysis"
+                        >
+                            <FiZap />
+                        </button>
+
+                        <button
+                            className="toolbar-btn ai-btn"
+                            onClick={onOpenQuickTipsModal}
+                            onMouseEnter={(e) => showTooltip(e, "Quick Tips")}
+                            onMouseLeave={hideTooltip}
+                            aria-label="Quick Tips"
+                            title="AI Design Tips"
+                        >
+                            <HiLightBulb />
+                        </button>
+                    </div>
 
                     <button
                         className="toolbar-btn"

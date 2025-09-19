@@ -1004,7 +1004,6 @@ const DragWireframe: React.FC<DragWireframeProps> = React.memo(({
                         </>
                     )}
                 </button>
-
             </div>
 
             {/* Main wireframe container */}

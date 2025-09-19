@@ -91,12 +91,15 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 
                 if (tokenAge < maxAge) {
                     console.log('🔐 Found valid locally stored OAuth tokens');
+                    console.log('🔗 Setting isConnected to TRUE from stored tokens');
+                    setIsConnected(true);
                     setAuthStatus({
                         status: 'already_authorized',
                         message: 'Connected via locally stored OAuth tokens',
-                        connected: true
+                        connected: true,
+                        user: { email: 'OAuth User (Stored)' }
                     });
-                    setIsConnected(true);
+                    setSuccess('🔗 Already connected to Figma via stored OAuth tokens!');
                     return;
                 } else {
                     console.log('⏰ Locally stored tokens expired, removing...');
@@ -123,6 +126,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                             message: 'OAuth2 not configured - using manual token mode',
                             error: errorData.message
                         });
+                        console.log('❌ OAuth not configured, setting isConnected to FALSE');
                         setIsConnected(false);
                         setActiveTab('connect');
                         return;
@@ -139,18 +143,19 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 setAuthStatus(data);
 
                 if (data.status === 'already_authorized' && data.connected) {
-                    console.log('✅ Setting connected state to TRUE'); // Debug log
+                    console.log('✅ Server confirms OAuth connection - setting connected state to TRUE');
                     setIsConnected(true);
                     setSuccess(`🔗 Already connected to Figma! Welcome back, ${data.user?.email || data.user?.handle || 'User'}`);
                     setActiveTab('connect');
                 } else {
-                    console.log('❌ Setting connected state to FALSE', data); // Debug log
+                    console.log('❌ Server indicates not connected - setting connected state to FALSE', data);
                     setIsConnected(false);
                     setActiveTab('connect');
                 }
             } else {
                 // Fallback: Received HTML (likely interactive auth page); treat as not yet authorized
                 setAuthStatus({ status: 'authorization_required', message: 'Authorization required (interactive page returned)' });
+                console.log('❌ HTML response received - setting isConnected to FALSE');
                 setIsConnected(false);
                 setActiveTab('connect');
             }
@@ -161,6 +166,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 message: 'OAuth connection unavailable - using manual token mode',
                 error: error instanceof Error ? error.message : String(error)
             });
+            console.log('❌ OAuth error - setting isConnected to FALSE');
             setIsConnected(false);
             setActiveTab('connect');
         }
@@ -186,19 +192,22 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                     console.log('💾 Stored OAuth tokens locally');
                 }
 
-                // Update auth status AND connection state immediately
+                // CRITICAL: Update the connection state IMMEDIATELY
+                console.log('🔗 Setting isConnected to TRUE immediately');
+                setIsConnected(true);
+
+                // Update auth status
                 setAuthStatus({
                     status: 'already_authorized',
                     message: 'Successfully connected via OAuth',
-                    connected: true
+                    connected: true,
+                    user: event.data.userInfo || { email: 'OAuth User' }
                 });
 
-                // CRITICAL: Update the connection state
-                setIsConnected(true);
+                setSuccess('🎉 Successfully connected to Figma! You can now import designs.');
+                setError(null);
 
-                setSuccess('🎉 Successfully connected to Figma!');
-
-                // Re-check OAuth status to get user info from backend
+                // Re-check OAuth status to get additional user info from backend
                 setTimeout(() => {
                     checkOAuthStatus();
                 }, 500);
@@ -597,8 +606,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
         setError(null);
 
         try {
-            // In a full implementation, you'd call a backend endpoint to revoke tokens
-            // For now, we'll clear the local state and tokens
+            // Clear the local state first
             setIsConnected(false);
             setAccessToken('');
             setFrames([]);
@@ -612,14 +620,35 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
             localStorage.removeItem('figma_oauth_timestamp');
             console.log('🗑️ Cleared locally stored OAuth tokens');
 
+            // Try to call backend disconnect endpoint if available
+            try {
+                const response = await fetch(getApiUrl('/api/figmaOAuthDisconnect'), {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    console.log('✅ Backend OAuth session cleared');
+                }
+            } catch (backendError) {
+                console.log('⚠️ Backend disconnect not available, local cleanup only');
+            }
+
             setSuccess('🔓 Disconnected from Figma. Your local session has been cleared.');
             setActiveTab('connect');
+
+            // Force a fresh status check after disconnect
+            setTimeout(() => {
+                checkOAuthStatus();
+            }, 1000);
+
         } catch (error) {
-            setError(`Disconnect failed: ${error.message}`);
+            console.error('Disconnect error:', error);
+            setError(`Disconnect failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
         } finally {
             setIsLoading(false);
         }
-    }, []);
+    }, [checkOAuthStatus]);
 
     if (!isOpen) return null;
 

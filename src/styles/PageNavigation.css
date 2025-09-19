@@ -156,7 +156,7 @@
 
 /* Breadcrumb Style Navigation */
 .page-navigation.breadcrumb-style {
-  background: #E9ECEF;
+  background: #e9ecef;
   border-bottom: 1px solid #e1e5e9;
   padding: 8px 20px;
   min-height: 44px;
@@ -185,7 +185,7 @@
 .breadcrumb-item {
   background: transparent;
   border: none;
-  color: #8E9AAF;
+  color: #8e9aaf;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -198,11 +198,11 @@
 
 .breadcrumb-item:hover {
   background: #f3f9ff;
-  color: #68769C;
+  color: #68769c;
 }
 
 .breadcrumb-item.active {
-  color: #3C4858;
+  color: #3c4858;
   font-weight: 600;
   background: #e1e5e9;
   cursor: default;
@@ -323,28 +323,50 @@
 
 /* Save button special styling */
 .toolbar-btn.save-btn {
-  background: #8E9AAF;
-  border-color: #8E9AAF;
+  background: #8e9aaf;
+  border-color: #8e9aaf;
   color: #ffffff;
 }
 
 .toolbar-btn.save-btn:hover {
-  background: #68769C;
-  border-color: #68769C;
+  background: #68769c;
+  border-color: #68769c;
   color: #ffffff;
 }
 
 /* Edit mode toggle */
 .toolbar-btn.edit-toggle.active {
-  background: #8E9AAF;
-  border-color: #8E9AAF;
+  background: #8e9aaf;
+  border-color: #8e9aaf;
   color: #ffffff;
 }
 
 .toolbar-btn.edit-toggle.active:hover {
-  background: #68769C;
-  border-color: #68769C;
+  background: #68769c;
+  border-color: #68769c;
   color: #ffffff;
+}
+
+/* AI Assistant Button Group Alignment */
+.ai-assistant-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* AI button specific styling to ensure consistency */
+.toolbar-btn.ai-btn {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  color: #374151;
+}
+
+.toolbar-btn.ai-btn:hover {
+  background: #f0f9ff;
+  border-color: #0ea5e9;
+  color: #0284c7;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.2);
 }
 
 /* Responsive toolbar */
@@ -356,6 +378,10 @@
   }
 
   .page-toolbar {
+    gap: 2px;
+  }
+
+  .ai-assistant-group {
     gap: 2px;
   }
 }

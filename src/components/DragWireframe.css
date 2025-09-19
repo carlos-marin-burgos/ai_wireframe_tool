@@ -66,35 +66,42 @@
 }
 
 .drag-toggle-btn {
+  background: #8e9aaf;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 4px 12px;
-  border: none;
-  border-radius: 6px;
-  font-weight: 500;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: system-ui, -apple-system, sans-serif;
+  box-shadow: 0 1px 2px rgba(0, 120, 212, 0.3);
+  font-family: "Segoe UI", sans-serif;
 }
 
 .drag-toggle-btn.enabled {
-  background: var(--color-primary-dark);
+  background: #8e9aaf;
   color: white;
 }
 
 .drag-toggle-btn.enabled:hover {
-  background: var(--color-primary-medium-dark);
+  background: #68769c;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 120, 212, 0.4);
 }
 
 .drag-toggle-btn.disabled {
-  background: var(--color-primary-medium);
+  background: #8e9aaf;
   color: white;
 }
 
 .drag-toggle-btn.disabled:hover {
-  background: var(--color-primary-medium-dark);
+  background: #68769c;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 120, 212, 0.4);
 }
 
 .drag-mode-hint {
@@ -113,6 +120,69 @@
 .drag-info small {
   color: var(--color-primary-medium-dark);
   font-size: 12px;
+}
+
+/* ===== AI DESIGN CONSULTANT IN DRAG MODE ===== */
+
+.drag-mode-controls .design-consultant-container {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.drag-mode-controls .design-consultant-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
+}
+
+.drag-mode-controls .design-consultant-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
+.drag-mode-controls .design-consultant-btn:active {
+  transform: translateY(0);
+}
+
+.drag-mode-controls .design-consultant-btn svg {
+  font-size: 14px;
+}
+
+.drag-mode-controls .design-consultant-btn span {
+  white-space: nowrap;
+}
+
+/* Responsive adjustments for drag mode controls */
+@media (max-width: 768px) {
+  .drag-mode-controls {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .drag-mode-controls .design-consultant-container {
+    margin-left: 0;
+    justify-content: center;
+  }
+
+  .drag-mode-controls .design-consultant-btn span {
+    display: none;
+  }
+
+  .drag-mode-controls .design-consultant-btn {
+    padding: 8px;
+  }
 }
 
 /* ===== DRAG STATE STYLING ===== */

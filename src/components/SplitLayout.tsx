@@ -18,9 +18,11 @@ import LoadingSpinner from "./LoadingSpinner";
 import HtmlCodeViewer from "./HtmlCodeViewer";
 import PresentationMode from "./PresentationMode";
 import ComponentPreview from "./ComponentPreview";
+import AIDesignModal from "./AIDesignModal";
 
 import { generateShareUrl } from "../utils/powerpointExport";
 import { generateWireframeName } from "../utils/wireframeNaming";
+import { designConsultant } from "../services/designConsultant";
 import {
   FiSend,
   FiStopCircle,
@@ -209,6 +211,10 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   // Download Modal state
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+
+  // AI Design Assistant Modal states
+  const [isAnalyzeDesignModalOpen, setIsAnalyzeDesignModalOpen] = useState(false);
+  const [isQuickTipsModalOpen, setIsQuickTipsModalOpen] = useState(false);
 
   // Left panel collapse state
   const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);
@@ -975,6 +981,51 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     }
   }, []);
 
+  // Design Consultant Agent Handlers
+  const handleDesignAnalysis = useCallback(async (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+
+    const currentWireframe = currentPageId ? (pageContents[currentPageId] || htmlWireframe) : htmlWireframe;
+
+    if (!currentWireframe || currentWireframe.trim() === '') {
+      addMessage('ai', '🤖 Please generate a wireframe first, then I can provide design analysis!');
+      return;
+    }
+
+    // Add thinking message
+    addMessage('ai', '🎨 **Design Consultant** is analyzing your wireframe...\n\n*Powered by Azure AI Foundry*');
+
+    try {
+      const analysis = await designConsultant.analyzeWireframe(
+        currentWireframe,
+        `Page: ${currentPageId ? wireframePages.find(p => p.id === currentPageId)?.name : 'Main Wireframe'}`
+      );
+
+      const formattedMessage = designConsultant.formatAnalysisMessage(analysis);
+      addMessage('ai', formattedMessage);
+
+    } catch (error) {
+      console.error('Design Analysis Error:', error);
+      addMessage('ai', '🤖 I encountered an issue while analyzing your wireframe. Please try again!');
+    }
+  }, [currentPageId, pageContents, htmlWireframe, wireframePages, addMessage]);
+
+  const handleQuickTips = useCallback(async (e?: React.MouseEvent, wireframeType = 'landing page') => {
+    if (e) e.preventDefault();
+
+    // Add thinking message
+    addMessage('ai', `💡 **Design Consultant** is preparing quick tips for ${wireframeType} design...\n\n*Powered by Azure AI Foundry*`);
+
+    try {
+      const tips = await designConsultant.getQuickTips(wireframeType, 'desktop');
+      const formattedMessage = designConsultant.formatTipsMessage(tips);
+      addMessage('ai', formattedMessage);
+
+    } catch (error) {
+      console.error('Quick Tips Error:', error);
+      addMessage('ai', '🤖 I encountered an issue while generating design tips. Please try again!');
+    }
+  }, [addMessage]);
 
   // Handle wireframe completion
   useEffect(() => {
@@ -1151,72 +1202,74 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
             </div>
           </form>
 
-          {/* Template Shortcut Pills */}
-          <div className="template-pills-container">
-            <div className="template-pills-label">Quick Templates:</div>
-            <div className="template-pills">
-              <button
-                type="button"
-                className="template-pill"
-                onClick={() => {
-                  const description = "azure learning path with course cards";
-                  console.log("🎯 Azure Path pill clicked - Description:", description);
-                  setDescription(description);
-                  onAiSuggestionClick(description);
-                }}
-              >
-                Azure Path
-              </button>
-              <button
-                type="button"
-                className="template-pill"
-                onClick={() => {
-                  const description = "microsoft learning plan";
-                  console.log("🎯 Learning Plan pill clicked - Description:", description);
-                  setDescription(description);
-                  onAiSuggestionClick(description);
-                }}
-              >
-                Learning Plan
-              </button>
-              <button
-                type="button"
-                className="template-pill"
-                onClick={() => {
-                  const description = "certification progress tracker";
-                  console.log("🎯 Certification pill clicked - Description:", description);
-                  setDescription(description);
-                  onAiSuggestionClick(description);
-                }}
-              >
-                Certification
-              </button>
-              <button
-                type="button"
-                className="template-pill"
-                onClick={() => {
-                  const description = "microsoft docs";
-                  console.log("🎯 Docs pill clicked - Description:", description);
-                  setDescription(description);
-                  onAiSuggestionClick(description);
-                }}
-              >
-                Learn Docs
-              </button>
-              <button
-                type="button"
-                className="template-pill"
-                onClick={() => {
-                  const description = "learn home page";
-                  console.log("🎯 Learn Home pill clicked - Description:", description);
-                  setDescription(description);
-                  onAiSuggestionClick(description);
-                }}
-              >
-                Learn Home
-              </button>
+          {/* Template Shortcut Pills - Hidden for now */}
+          {false && (
+            <div className="template-pills-container">
+              <div className="template-pills-label">Quick Templates:</div>
+              <div className="template-pills">
+                <button
+                  type="button"
+                  className="template-pill"
+                  onClick={() => {
+                    const description = "azure learning path with course cards";
+                    console.log("🎯 Azure Path pill clicked - Description:", description);
+                    setDescription(description);
+                    onAiSuggestionClick(description);
+                  }}
+                >
+                  Azure Path
+                </button>
+                <button
+                  type="button"
+                  className="template-pill"
+                  onClick={() => {
+                    const description = "microsoft learning plan";
+                    console.log("🎯 Learning Plan pill clicked - Description:", description);
+                    setDescription(description);
+                    onAiSuggestionClick(description);
+                  }}
+                >
+                  Learning Plan
+                </button>
+                <button
+                  type="button"
+                  className="template-pill"
+                  onClick={() => {
+                    const description = "certification progress tracker";
+                    console.log("🎯 Certification pill clicked - Description:", description);
+                    setDescription(description);
+                    onAiSuggestionClick(description);
+                  }}
+                >
+                  Certification
+                </button>
+                <button
+                  type="button"
+                  className="template-pill"
+                  onClick={() => {
+                    const description = "microsoft docs";
+                    console.log("🎯 Docs pill clicked - Description:", description);
+                    setDescription(description);
+                    onAiSuggestionClick(description);
+                  }}
+                >
+                  Learn Docs
+                </button>
+                <button
+                  type="button"
+                  className="template-pill"
+                  onClick={() => {
+                    const description = "learn home page";
+                    console.log("🎯 Learn Home pill clicked - Description:", description);
+                    setDescription(description);
+                    onAiSuggestionClick(description);
+                  }}
+                >
+                  Learn Home
+                </button>
+              </div>
             </div>
-          </div>
+          )}
 
         </div>
       </div>
@@ -1244,9 +1297,26 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               onSave={enhancedOnSave}
               onAddToFavorites={handleAddToFavorites}
               onImageUpload={toggleImageUpload}
+              onOpenAnalyzeDesignModal={() => setIsAnalyzeDesignModalOpen(true)}
+              onOpenQuickTipsModal={() => setIsQuickTipsModalOpen(true)}
             />
 
             <div className="wireframe-container">
+              {/* Wireframe Generation Spinner Overlay */}
+              {loading && (
+                <div className="wireframe-loading-overlay">
+                  <div className="wireframe-spinner-container">
+                    <LoadingSpinner size="large" color="blue" />
+                    <div className="wireframe-loading-text">
+                      <div className="wireframe-loading-title">Generating Wireframe</div>
+                      <div className="wireframe-loading-stage">
+                        {loadingStage || "Creating your design..."}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <div className="wireframe-content">
                 {reactComponent ? (
                   // Show React component with visual preview
@@ -1591,6 +1661,21 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
           description: 'Primary wireframe content',
           content: htmlWireframe
         }] : []}
+      />
+
+      {/* AI Design Assistant Modals */}
+      <AIDesignModal
+        isOpen={isAnalyzeDesignModalOpen}
+        onClose={() => setIsAnalyzeDesignModalOpen(false)}
+        mode="analyze"
+        wireframeHtml={htmlWireframe}
+      />
+
+      <AIDesignModal
+        isOpen={isQuickTipsModalOpen}
+        onClose={() => setIsQuickTipsModalOpen(false)}
+        mode="tips"
+        wireframeHtml={htmlWireframe}
       />
 
     </div>
