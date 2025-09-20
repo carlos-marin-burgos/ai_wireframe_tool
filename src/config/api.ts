@@ -9,7 +9,7 @@ const isLocalhost =
 // PRODUCTION HOTFIX: Always use Function App for production domain
 const PRODUCTION_DOMAIN = "lemon-field-08a1a0b0f.1.azurestaticapps.net";
 const FUNCTION_APP_URL =
-  "https://func-designetica-5gwyjxbwvr4s6.azurewebsites.net";
+  "https://func-original-app-pgno4orkguix6.azurewebsites.net";
 
 const isProduction =
   typeof window !== "undefined" &&

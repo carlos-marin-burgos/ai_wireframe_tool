@@ -38,7 +38,7 @@ class DesignConsultantService {
   constructor() {
     // Use environment-specific endpoint
     this.baseUrl = import.meta.env.PROD
-      ? "https://func-designetica-5gwyjxbwvr4s6.azurewebsites.net/api"
+      ? "https://func-original-app-pgno4orkguix6.azurewebsites.net/api"
       : "http://localhost:7071/api";
 
     this.apiKey = import.meta.env.VITE_WIREFRAME_API_KEY || "dev-key-2025";
