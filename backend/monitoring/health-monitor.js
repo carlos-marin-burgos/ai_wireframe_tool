@@ -6,7 +6,7 @@ const path = require("path");
 class HealthMonitor {
   constructor() {
     this.apiEndpoint =
-      "https://func-original-app-pgno4orkguix6.azurewebsites.net/api/generate-html-wireframe";
+      "https://func-original-app-pgno4orkguix6.azurewebsites.net/api/generate-wireframe";
     this.healthEndpoint =
       "https://func-original-app-pgno4orkguix6.azurewebsites.net/api/health";
     this.websiteEndpoint =
@@ -154,9 +154,10 @@ class HealthMonitor {
 
   async checkApiEndpoint() {
     const testPayload = JSON.stringify({
-      context: "health check test",
-      requirements: "simple layout",
-      additionalContext: "automated monitoring",
+      description: "Health check test form with basic fields",
+      theme: "professional",
+      colorScheme: "blue",
+      fastMode: true,
     });
 
     const result = await this.checkEndpoint(

@@ -6,9 +6,9 @@
 set -e
 
 # Configuration
-API_ENDPOINT="https://func-original-app-pgno4orkguix6.azurewebsites.net/api/generate-html-wireframe"
+API_ENDPOINT="https://func-original-app-pgno4orkguix6.azurewebsites.net/api/generate-wireframe"
 HEALTH_ENDPOINT="https://func-original-app-pgno4orkguix6.azurewebsites.net/api/health"
-WEBSITE_ENDPOINT="https://designetica.carlosmarin.net"
+WEBSITE_ENDPOINT="https://lemon-field-08a1a0b0f.1.azurestaticapps.net"
 TIMEOUT=60
 MAX_RETRIES=3
 VALIDATION_WAIT=30
@@ -67,7 +67,7 @@ test_api() {
 validate_api_functionality() {
     log "Validating API functionality"
     
-    local test_payload='{"context": "deployment test", "requirements": "simple layout", "additionalContext": "validation test"}'
+    local test_payload='{"description": "Create a simple test form with name and email fields", "theme": "professional", "colorScheme": "blue", "fastMode": true}'
     
     for i in $(seq 1 $MAX_RETRIES); do
         log "Attempt $i/$MAX_RETRIES"
@@ -221,7 +221,7 @@ safe_deploy() {
     # Store current API status for rollback validation
     log "Checking current API status before deployment"
     local pre_deploy_status=0
-    test_api "$API_ENDPOINT" "POST" '{"context": "pre-deploy test", "requirements": "test", "additionalContext": "test"}' "200" || pre_deploy_status=1
+    test_api "$API_ENDPOINT" "POST" '{"description": "Pre-deployment test", "theme": "microsoft", "colorScheme": "primary", "fastMode": true}' "200" || pre_deploy_status=1
     
     # Deploy
     log "Deploying $component"

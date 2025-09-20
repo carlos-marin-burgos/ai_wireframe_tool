@@ -60,7 +60,7 @@ deploy_backend() {
         success "🎉 BACKEND DEPLOYMENT COMPLETED SUCCESSFULLY!"
         echo ""
         echo "Your API is now live and healthy at:"
-        echo "  https://func-original-app-pgno4orkguix6.azurewebsites.net/api/generate-html-wireframe"
+        echo "  https://func-original-app-pgno4orkguix6.azurewebsites.net/api/generate-wireframe"
         echo ""
         echo "Website: https://lemon-field-08a1a0b0f.1.azurestaticapps.net"
         return 0

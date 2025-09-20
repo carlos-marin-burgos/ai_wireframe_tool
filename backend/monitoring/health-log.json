@@ -4252,5 +4252,98 @@
         "ssl"
       ]
     }
+  },
+  {
+    "timestamp": "2025-09-20T00:19:11.079Z",
+    "checks": {
+      "healthEndpoint": {
+        "status": "HEALTHY",
+        "statusCode": 200,
+        "responseTime": 131,
+        "error": null,
+        "responseSize": 806
+      },
+      "apiEndpoint": {
+        "status": "UNHEALTHY",
+        "statusCode": 400,
+        "responseTime": 25,
+        "error": "HTTP 400",
+        "responseSize": 35,
+        "apiValidation": "FAILED"
+      },
+      "website": {
+        "status": "HEALTHY",
+        "statusCode": 200,
+        "responseTime": 78,
+        "error": null,
+        "responseSize": 712
+      },
+      "dns": {
+        "status": "HEALTHY",
+        "address": "20.99.163.40",
+        "responseTime": 2
+      },
+      "ssl": {
+        "status": "UNHEALTHY",
+        "error": "Hostname/IP does not match certificate's altnames: Host: lemon-field-08a1a0b0f.1.azurestaticapps.net. is not in the cert's altnames: DNS:*.msha-slice-1-wus2-0-ase.p.azurewebsites.net, DNS:*.scm.msha-slice-1-wus2-0-ase.p.azurewebsites.net, DNS:*.msha-slice-1-wus2-0-ase.p.azure-mobile.net, DNS:*.scm.msha-slice-1-wus2-0-ase.p.azure-mobile.net, DNS:msha-slice-1-wus2-0-ase.scm.p.azurewebsites.net",
+        "responseTime": 56
+      }
+    },
+    "overall": {
+      "status": "CRITICAL",
+      "message": "Critical service apiEndpoint is unhealthy",
+      "details": {
+        "status": "UNHEALTHY",
+        "statusCode": 400,
+        "responseTime": 25,
+        "error": "HTTP 400",
+        "responseSize": 35,
+        "apiValidation": "FAILED"
+      }
+    }
+  },
+  {
+    "timestamp": "2025-09-20T00:19:34.579Z",
+    "checks": {
+      "healthEndpoint": {
+        "status": "HEALTHY",
+        "statusCode": 200,
+        "responseTime": 134,
+        "error": null,
+        "responseSize": 806
+      },
+      "apiEndpoint": {
+        "status": "HEALTHY",
+        "statusCode": 200,
+        "responseTime": 4306,
+        "error": null,
+        "responseSize": 3122,
+        "apiValidation": "PASSED"
+      },
+      "website": {
+        "status": "HEALTHY",
+        "statusCode": 200,
+        "responseTime": 85,
+        "error": null,
+        "responseSize": 712
+      },
+      "dns": {
+        "status": "HEALTHY",
+        "address": "20.99.163.40",
+        "responseTime": 3
+      },
+      "ssl": {
+        "status": "UNHEALTHY",
+        "error": "Hostname/IP does not match certificate's altnames: Host: lemon-field-08a1a0b0f.1.azurestaticapps.net. is not in the cert's altnames: DNS:*.msha-slice-1-wus2-0-ase.p.azurewebsites.net, DNS:*.scm.msha-slice-1-wus2-0-ase.p.azurewebsites.net, DNS:*.msha-slice-1-wus2-0-ase.p.azure-mobile.net, DNS:*.scm.msha-slice-1-wus2-0-ase.p.azure-mobile.net, DNS:msha-slice-1-wus2-0-ase.scm.p.azurewebsites.net",
+        "responseTime": 74
+      }
+    },
+    "overall": {
+      "status": "WARNING",
+      "message": "Some services have issues: ssl",
+      "warnings": [
+        "ssl"
+      ]
+    }
   }
 ]
