@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { FiPlus, FiPackage, FiSave, FiStar, FiImage, FiCode, FiLayers, FiGithub, FiZap } from 'react-icons/fi';
+import { FiPlus, FiPackage, FiSave, FiStar, FiImage, FiCode, FiLayers, FiGithub, FiZap, FiEdit } from 'react-icons/fi';
 import { HiLightBulb } from 'react-icons/hi';
 import { SiFigma } from 'react-icons/si';
+import { ReOrder24Regular, ReOrderDotsVertical24Regular } from '@fluentui/react-icons';
 import '../styles/PageNavigation.css';
 
 interface Page {
@@ -24,6 +25,16 @@ interface PageNavigationProps {
     onImageUpload?: () => void;
     onOpenAnalyzeDesignModal?: () => void;
     onOpenQuickTipsModal?: () => void;
+    isEditMode?: boolean;
+    onToggleEditMode?: () => void;
+    // New props for formatting toolbar
+    showFormattingToolbar?: boolean;
+    onFormatBold?: () => void;
+    onFormatItalic?: () => void;
+    onFormatUnderline?: () => void;
+    onRemoveFormat?: () => void;
+    isDragEnabled?: boolean;
+    onToggleDragMode?: () => void;
 }
 
 const PageNavigation: React.FC<PageNavigationProps> = ({
@@ -38,7 +49,17 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
     onAddToFavorites,
     onImageUpload,
     onOpenAnalyzeDesignModal,
-    onOpenQuickTipsModal
+    onOpenQuickTipsModal,
+    isEditMode = false,
+    onToggleEditMode,
+    // New formatting toolbar props
+    showFormattingToolbar = false,
+    onFormatBold,
+    onFormatItalic,
+    onFormatUnderline,
+    onRemoveFormat,
+    isDragEnabled = false,
+    onToggleDragMode
 }) => {
     const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
 
@@ -116,7 +137,82 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                                 onOpenLibrary && onOpenLibrary();
                             }}
                         >
-                            <FiPackage /></button>
+                            <FiPackage />
+                        </button>
+
+                        {/* Edit Mode Toggle Button */}
+                        {onToggleEditMode && (
+                            <button
+                                className={`toolbar-btn ${isEditMode ? 'edit-mode-active' : ''}`}
+                                onClick={onToggleEditMode}
+                                onMouseEnter={(e) => showTooltip(e, isEditMode ? "Disable Edit Mode" : "Enable Edit Mode")}
+                                onMouseLeave={hideTooltip}
+                                aria-label={isEditMode ? "Disable wireframe editing" : "Enable wireframe editing"}
+                            >
+                                <FiEdit />
+                            </button>
+                        )}
+
+                        {/* Drag Mode Toggle Button */}
+                        {onToggleDragMode && (
+                            <button
+                                className={`toolbar-btn drag-mode-btn ${isDragEnabled ? 'drag-enabled' : 'drag-disabled'}`}
+                                onClick={onToggleDragMode}
+                                onMouseEnter={(e) => showTooltip(e, isDragEnabled ? "Disable Drag Mode" : "Enable Drag Mode")}
+                                onMouseLeave={hideTooltip}
+                                aria-label={isDragEnabled ? "Disable drag mode" : "Enable drag mode"}
+                                title={isDragEnabled ? "Click to disable drag mode" : "Click to enable drag mode"}
+                            >
+                                {isDragEnabled ? <ReOrder24Regular /> : <ReOrderDotsVertical24Regular />}
+                            </button>
+                        )}
+
+                        {/* Formatting Toolbar - Only show when editing text */}
+                        {showFormattingToolbar && (
+                            <div className="formatting-toolbar-group">
+                                <div className="toolbar-divider"></div>
+                                <button
+                                    className="toolbar-btn format-btn format-bold"
+                                    onClick={onFormatBold}
+                                    onMouseEnter={(e) => showTooltip(e, "Bold (Ctrl+B)")}
+                                    onMouseLeave={hideTooltip}
+                                    aria-label="Bold"
+                                    title="Bold"
+                                >
+                                    <strong>B</strong>
+                                </button>
+                                <button
+                                    className="toolbar-btn format-btn format-italic"
+                                    onClick={onFormatItalic}
+                                    onMouseEnter={(e) => showTooltip(e, "Italic (Ctrl+I)")}
+                                    onMouseLeave={hideTooltip}
+                                    aria-label="Italic"
+                                    title="Italic"
+                                >
+                                    <em>I</em>
+                                </button>
+                                <button
+                                    className="toolbar-btn format-btn format-underline"
+                                    onClick={onFormatUnderline}
+                                    onMouseEnter={(e) => showTooltip(e, "Underline (Ctrl+U)")}
+                                    onMouseLeave={hideTooltip}
+                                    aria-label="Underline"
+                                    title="Underline"
+                                >
+                                    <u>U</u>
+                                </button>
+                                <button
+                                    className="toolbar-btn format-btn format-clear"
+                                    onClick={onRemoveFormat}
+                                    onMouseEnter={(e) => showTooltip(e, "Remove Formatting")}
+                                    onMouseLeave={hideTooltip}
+                                    aria-label="Remove Formatting"
+                                    title="Remove Formatting"
+                                >
+                                    ×
+                                </button>
+                            </div>
+                        )}
 
                         {/* AI Design Assistant buttons */}
                         <div className="ai-assistant-group">
@@ -222,15 +318,79 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         <SiFigma />
                     </button>
 
-                    <button
-                        className="toolbar-btn"
-                        onClick={onImageUpload}
-                        onMouseEnter={(e) => showTooltip(e, "Upload Image")}
-                        onMouseLeave={hideTooltip}
-                        aria-label="Upload Image"
-                    >
-                        <FiImage />
-                    </button>
+                    {/* Edit Mode Toggle Button */}
+                    {onToggleEditMode && (
+                        <button
+                            className={`toolbar-btn ${isEditMode ? 'edit-mode-active' : ''}`}
+                            onClick={onToggleEditMode}
+                            onMouseEnter={(e) => showTooltip(e, isEditMode ? "Disable Edit Mode" : "Enable Edit Mode")}
+                            onMouseLeave={hideTooltip}
+                            aria-label={isEditMode ? "Disable wireframe editing" : "Enable wireframe editing"}
+                        >
+                            <FiEdit />
+                        </button>
+                    )}
+
+                    {/* Drag Mode Toggle Button */}
+                    {onToggleDragMode && (
+                        <button
+                            className={`toolbar-btn drag-mode-btn ${isDragEnabled ? 'drag-enabled' : 'drag-disabled'}`}
+                            onClick={onToggleDragMode}
+                            onMouseEnter={(e) => showTooltip(e, isDragEnabled ? "Disable Drag Mode" : "Enable Drag Mode")}
+                            onMouseLeave={hideTooltip}
+                            aria-label={isDragEnabled ? "Disable drag mode" : "Enable drag mode"}
+                            title={isDragEnabled ? "Click to disable drag mode" : "Click to enable drag mode"}
+                        >
+                            {isDragEnabled ? <ReOrder24Regular /> : <ReOrderDotsVertical24Regular />}
+                        </button>
+                    )}
+
+                    {/* Formatting Toolbar - Only show when editing text */}
+                    {showFormattingToolbar && (
+                        <div className="formatting-toolbar-group">
+                            <div className="toolbar-divider"></div>
+                            <button
+                                className="toolbar-btn format-btn format-bold"
+                                onClick={onFormatBold}
+                                onMouseEnter={(e) => showTooltip(e, "Bold (Ctrl+B)")}
+                                onMouseLeave={hideTooltip}
+                                aria-label="Bold"
+                                title="Bold"
+                            >
+                                <strong>B</strong>
+                            </button>
+                            <button
+                                className="toolbar-btn format-btn format-italic"
+                                onClick={onFormatItalic}
+                                onMouseEnter={(e) => showTooltip(e, "Italic (Ctrl+I)")}
+                                onMouseLeave={hideTooltip}
+                                aria-label="Italic"
+                                title="Italic"
+                            >
+                                <em>I</em>
+                            </button>
+                            <button
+                                className="toolbar-btn format-btn format-underline"
+                                onClick={onFormatUnderline}
+                                onMouseEnter={(e) => showTooltip(e, "Underline (Ctrl+U)")}
+                                onMouseLeave={hideTooltip}
+                                aria-label="Underline"
+                                title="Underline"
+                            >
+                                <u>U</u>
+                            </button>
+                            <button
+                                className="toolbar-btn format-btn format-clear"
+                                onClick={onRemoveFormat}
+                                onMouseEnter={(e) => showTooltip(e, "Remove Formatting")}
+                                onMouseLeave={hideTooltip}
+                                aria-label="Remove Formatting"
+                                title="Remove Formatting"
+                            >
+                                ×
+                            </button>
+                        </div>
+                    )}
 
                     {/* AI Design Assistant buttons */}
                     <div className="ai-assistant-group">

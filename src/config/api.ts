@@ -6,28 +6,22 @@ const isLocalhost =
     window.location.hostname === "127.0.0.1" ||
     window.location.hostname === "[::1]");
 
-// PRODUCTION HOTFIX: Always use Function App for production domain
-const PRODUCTION_DOMAIN = "lemon-field-08a1a0b0f.1.azurestaticapps.net";
-const FUNCTION_APP_URL =
-  "https://func-original-app-pgno4orkguix6.azurewebsites.net";
-
-const isProduction =
-  typeof window !== "undefined" &&
-  window.location.hostname === PRODUCTION_DOMAIN;
+// Environment detection - removed hardcoded production domain for flexibility
+const isProduction = !isDevelopment && !isLocalhost;
 
 console.log("🔍 API Configuration:", {
   isDevelopment,
   isLocalhost,
   isProduction,
   hostname: typeof window !== "undefined" ? window.location.hostname : "server",
-  willUseDirectFunctionApp: isProduction,
-  functionAppUrl: isProduction ? FUNCTION_APP_URL : "dev/fallback",
+  usingStaticWebAppRouting: isProduction,
+  apiBaseUrl: import.meta.env.VITE_API_BASE_URL || "auto-detect",
 });
 
 // Centralized port configuration to avoid conflicts
 const PORTS = {
   development: {
-    primary: 7071, // Azure Functions backend (current running port)
+    primary: 7072, // Azure Functions backend (current running port) - FIXED: Updated to match actual backend
     fallback: 5001, // Clean Express server with NO Microsoft Learn content
     frontend: 5173, // Frontend dev server
   },
@@ -89,13 +83,15 @@ export const API_CONFIG = {
   // Port configuration
   PORTS,
 
-  // Get BASE_URL - PRODUCTION HOTFIX: hardcoded for reliability
+  // FIXED: Use proper Static Web App API routing for production
+  // In production, Azure Static Web Apps automatically proxy /api/* to the Function App
+  // In development, use empty string to leverage Vite proxy
   BASE_URL: isProduction
-    ? FUNCTION_APP_URL // Direct to Function App for production
-    : import.meta.env.VITE_BACKEND_BASE_URL ||
+    ? "" // Use relative URLs - Static Web Apps will proxy to Function App automatically
+    : import.meta.env.VITE_API_BASE_URL ||
       (isDevelopment || isLocalhost
         ? "" // Use relative URLs in development to go through Vite proxy
-        : FUNCTION_APP_URL),
+        : ""), // Fallback to relative URLs
 };
 
 // Health check to verify backend has AI capabilities

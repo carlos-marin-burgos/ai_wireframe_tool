@@ -1,49 +1,5 @@
 [
   {
-    "timestamp": "2025-07-31T15:01:09.401Z",
-    "checks": {
-      "healthEndpoint": {
-        "status": "HEALTHY",
-        "statusCode": 200,
-        "responseTime": 4708,
-        "error": null,
-        "responseSize": 63
-      },
-      "apiEndpoint": {
-        "status": "HEALTHY",
-        "statusCode": 200,
-        "responseTime": 398,
-        "error": null,
-        "responseSize": 6308,
-        "apiValidation": "PASSED"
-      },
-      "website": {
-        "status": "HEALTHY",
-        "statusCode": 200,
-        "responseTime": 139,
-        "error": null,
-        "responseSize": 1085
-      },
-      "dns": {
-        "status": "HEALTHY",
-        "address": "20.80.156.48",
-        "responseTime": 1
-      },
-      "ssl": {
-        "status": "UNHEALTHY",
-        "error": "Hostname/IP does not match certificate's altnames: Host: designetica.carlosmarin.net. is not in the cert's altnames: DNS:*.msha-slice-1-wus2-1-ase.p.azurewebsites.net, DNS:*.scm.msha-slice-1-wus2-1-ase.p.azurewebsites.net, DNS:*.msha-slice-1-wus2-1-ase.p.azure-mobile.net, DNS:*.scm.msha-slice-1-wus2-1-ase.p.azure-mobile.net, DNS:msha-slice-1-wus2-1-ase.scm.p.azurewebsites.net",
-        "responseTime": 63
-      }
-    },
-    "overall": {
-      "status": "WARNING",
-      "message": "Some services have issues: ssl",
-      "warnings": [
-        "ssl"
-      ]
-    }
-  },
-  {
     "timestamp": "2025-07-31T15:01:34.937Z",
     "checks": {
       "healthEndpoint": {
@@ -4336,6 +4292,138 @@
         "status": "UNHEALTHY",
         "error": "Hostname/IP does not match certificate's altnames: Host: lemon-field-08a1a0b0f.1.azurestaticapps.net. is not in the cert's altnames: DNS:*.msha-slice-1-wus2-0-ase.p.azurewebsites.net, DNS:*.scm.msha-slice-1-wus2-0-ase.p.azurewebsites.net, DNS:*.msha-slice-1-wus2-0-ase.p.azure-mobile.net, DNS:*.scm.msha-slice-1-wus2-0-ase.p.azure-mobile.net, DNS:msha-slice-1-wus2-0-ase.scm.p.azurewebsites.net",
         "responseTime": 74
+      }
+    },
+    "overall": {
+      "status": "WARNING",
+      "message": "Some services have issues: ssl",
+      "warnings": [
+        "ssl"
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-09-20T00:21:44.434Z",
+    "checks": {
+      "healthEndpoint": {
+        "status": "HEALTHY",
+        "statusCode": 200,
+        "responseTime": 159,
+        "error": null,
+        "responseSize": 806
+      },
+      "apiEndpoint": {
+        "status": "HEALTHY",
+        "statusCode": 200,
+        "responseTime": 4709,
+        "error": null,
+        "responseSize": 3585,
+        "apiValidation": "PASSED"
+      },
+      "website": {
+        "status": "HEALTHY",
+        "statusCode": 200,
+        "responseTime": 94,
+        "error": null,
+        "responseSize": 712
+      },
+      "dns": {
+        "status": "HEALTHY",
+        "address": "20.99.163.40",
+        "responseTime": 3
+      },
+      "ssl": {
+        "status": "UNHEALTHY",
+        "error": "Hostname/IP does not match certificate's altnames: Host: lemon-field-08a1a0b0f.1.azurestaticapps.net. is not in the cert's altnames: DNS:*.msha-slice-1-wus2-0-ase.p.azurewebsites.net, DNS:*.scm.msha-slice-1-wus2-0-ase.p.azurewebsites.net, DNS:*.msha-slice-1-wus2-0-ase.p.azure-mobile.net, DNS:*.scm.msha-slice-1-wus2-0-ase.p.azure-mobile.net, DNS:msha-slice-1-wus2-0-ase.scm.p.azurewebsites.net",
+        "responseTime": 75
+      }
+    },
+    "overall": {
+      "status": "WARNING",
+      "message": "Some services have issues: ssl",
+      "warnings": [
+        "ssl"
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-09-20T00:21:49.563Z",
+    "checks": {
+      "healthEndpoint": {
+        "status": "HEALTHY",
+        "statusCode": 200,
+        "responseTime": 153,
+        "error": null,
+        "responseSize": 806
+      },
+      "apiEndpoint": {
+        "status": "HEALTHY",
+        "statusCode": 200,
+        "responseTime": 3511,
+        "error": null,
+        "responseSize": 2742,
+        "apiValidation": "PASSED"
+      },
+      "website": {
+        "status": "HEALTHY",
+        "statusCode": 200,
+        "responseTime": 88,
+        "error": null,
+        "responseSize": 712
+      },
+      "dns": {
+        "status": "HEALTHY",
+        "address": "20.99.163.40",
+        "responseTime": 2
+      },
+      "ssl": {
+        "status": "UNHEALTHY",
+        "error": "Hostname/IP does not match certificate's altnames: Host: lemon-field-08a1a0b0f.1.azurestaticapps.net. is not in the cert's altnames: DNS:*.msha-slice-1-wus2-0-ase.p.azurewebsites.net, DNS:*.scm.msha-slice-1-wus2-0-ase.p.azurewebsites.net, DNS:*.msha-slice-1-wus2-0-ase.p.azure-mobile.net, DNS:*.scm.msha-slice-1-wus2-0-ase.p.azure-mobile.net, DNS:msha-slice-1-wus2-0-ase.scm.p.azurewebsites.net",
+        "responseTime": 74
+      }
+    },
+    "overall": {
+      "status": "WARNING",
+      "message": "Some services have issues: ssl",
+      "warnings": [
+        "ssl"
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-09-20T00:23:05.293Z",
+    "checks": {
+      "healthEndpoint": {
+        "status": "HEALTHY",
+        "statusCode": 200,
+        "responseTime": 130,
+        "error": null,
+        "responseSize": 806
+      },
+      "apiEndpoint": {
+        "status": "HEALTHY",
+        "statusCode": 200,
+        "responseTime": 4289,
+        "error": null,
+        "responseSize": 3262,
+        "apiValidation": "PASSED"
+      },
+      "website": {
+        "status": "HEALTHY",
+        "statusCode": 200,
+        "responseTime": 87,
+        "error": null,
+        "responseSize": 712
+      },
+      "dns": {
+        "status": "HEALTHY",
+        "address": "20.80.156.48",
+        "responseTime": 2
+      },
+      "ssl": {
+        "status": "UNHEALTHY",
+        "error": "Hostname/IP does not match certificate's altnames: Host: lemon-field-08a1a0b0f.1.azurestaticapps.net. is not in the cert's altnames: DNS:*.msha-slice-1-wus2-1-ase.p.azurewebsites.net, DNS:*.scm.msha-slice-1-wus2-1-ase.p.azurewebsites.net, DNS:*.msha-slice-1-wus2-1-ase.p.azure-mobile.net, DNS:*.scm.msha-slice-1-wus2-1-ase.p.azure-mobile.net, DNS:msha-slice-1-wus2-1-ase.scm.p.azurewebsites.net",
+        "responseTime": 68
       }
     },
     "overall": {

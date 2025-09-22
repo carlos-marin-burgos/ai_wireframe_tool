@@ -34,6 +34,7 @@ import {
   FiChevronRight,
   FiCopy,
   FiX,
+  FiEdit,
 } from 'react-icons/fi';
 import { TbBoxModel2 } from 'react-icons/tb'; // Fluent UI style icon for component library
 
@@ -192,6 +193,12 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   // Component Library Modal removed - using direct AI generation instead
 
+  // Drag mode and formatting toolbar state
+  const [isDragEnabled, setIsDragEnabled] = useState(false);
+  const [showFormattingToolbar, setShowFormattingToolbar] = useState(false);
+  const [formattingToolbarPosition, setFormattingToolbarPosition] = useState({ top: 0, left: 0 });
+  const currentEditingElementRef = useRef<HTMLElement | null>(null);
+
   // Enhanced chat state
   const [messageReactions, setMessageReactions] = useState<Record<string, Array<{
     emoji: string;
@@ -201,6 +208,9 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   // HTML Code Viewer state
   const [isHtmlCodeViewerOpen, setIsHtmlCodeViewerOpen] = useState(false);
+
+  // Edit Mode state
+  const [isEditMode, setIsEditMode] = useState(false);
 
   // Presentation Mode state
   const [isPresentationModeOpen, setIsPresentationModeOpen] = useState(false);
@@ -677,6 +687,198 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   const toggleImageUpload = useCallback(() => {
     setShowImageUpload(prev => !prev);
   }, []);
+
+  // Edit Mode handler
+  const toggleEditMode = useCallback(() => {
+    setIsEditMode(prev => !prev);
+  }, []);
+
+  // Drag Mode handler
+  const toggleDragMode = useCallback(() => {
+    setIsDragEnabled(prev => !prev);
+  }, []);
+
+  // Formatting toolbar handlers
+  const handleShowFormattingToolbar = useCallback((show: boolean, position?: { top: number, left: number }) => {
+    setShowFormattingToolbar(show);
+    if (position) {
+      setFormattingToolbarPosition(position);
+    }
+  }, []);
+
+  const handleSetCurrentEditingElement = useCallback((element: HTMLElement | null) => {
+    currentEditingElementRef.current = element;
+  }, []);
+
+  const handleFormatCommand = useCallback((command: string, value?: string) => {
+    if (!currentEditingElementRef.current) {
+      console.warn('🎨 No element currently being edited');
+      return;
+    }
+
+    const element = currentEditingElementRef.current;
+
+    // Focus the editing element first to ensure selection is active
+    element.focus();
+
+    // Small delay to ensure focus is set
+    setTimeout(() => {
+      const selection = window.getSelection();
+
+      if (!selection) {
+        console.warn('🎨 No selection API available');
+        return;
+      }
+
+      let range: Range;
+
+      if (selection.rangeCount === 0) {
+        range = document.createRange();
+        range.selectNodeContents(element);
+        selection.addRange(range);
+      } else {
+        range = selection.getRangeAt(0);
+      }
+
+      const selectedText = range.toString();
+
+      // If no text is selected, select all text in the element
+      if (selectedText.length === 0) {
+        range.selectNodeContents(element);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+
+      try {
+        // Modern approach: wrap selection in appropriate tag
+        switch (command) {
+          case 'bold':
+            applyFormatting(range, 'strong', selection);
+            break;
+          case 'italic':
+            applyFormatting(range, 'em', selection);
+            break;
+          case 'underline':
+            applyFormatting(range, 'u', selection);
+            break;
+          case 'removeFormat':
+            removeFormatting(range, selection);
+            break;
+          default:
+            // Fallback to execCommand for other commands
+            document.execCommand(command, false, value);
+        }
+      } catch (error) {
+        console.error('🎨 Formatting error:', error);
+        // Fallback to execCommand if modern approach fails
+        try {
+          document.execCommand(command, false, value);
+        } catch (fallbackError) {
+          console.error('🎨 Fallback formatting also failed:', fallbackError);
+        }
+      }
+
+      // Restore focus to the editing element
+      if (element) {
+        element.focus();
+      }
+    }, 10);
+  }, []);
+
+  // Helper functions for formatting
+  const applyFormatting = (range: Range, tagName: string, selection: Selection) => {
+    const startContainer = range.startContainer;
+    const startOffset = range.startOffset;
+    const endContainer = range.endContainer;
+    const endOffset = range.endOffset;
+
+    const selectedContent = range.extractContents();
+
+    // Check if the selection is already wrapped in the target tag
+    const parentElement = startContainer.nodeType === Node.TEXT_NODE
+      ? startContainer.parentElement
+      : startContainer as Element;
+
+    const existingTag = parentElement?.closest(tagName) ||
+      (parentElement?.tagName?.toLowerCase() === tagName.toLowerCase() ? parentElement : null);
+
+    if (existingTag && currentEditingElementRef.current?.contains(existingTag)) {
+      // Remove formatting by unwrapping the tag
+      const textContent = existingTag.textContent || '';
+      const textNode = document.createTextNode(textContent);
+      existingTag.parentNode?.replaceChild(textNode, existingTag);
+
+      // Restore selection to the unwrapped text
+      try {
+        const newRange = document.createRange();
+        const textLength = textContent.length;
+        const newStartOffset = Math.min(startOffset, textLength);
+        const newEndOffset = Math.min(endOffset, textLength);
+
+        newRange.setStart(textNode, newStartOffset);
+        newRange.setEnd(textNode, newEndOffset);
+
+        selection.removeAllRanges();
+        selection.addRange(newRange);
+      } catch (error) {
+        console.warn('Could not restore selection after removing formatting:', error);
+        const fallbackRange = document.createRange();
+        fallbackRange.selectNodeContents(textNode);
+        selection.removeAllRanges();
+        selection.addRange(fallbackRange);
+      }
+    } else {
+      // Apply formatting by wrapping in the tag
+      const formattedElement = document.createElement(tagName);
+      formattedElement.appendChild(selectedContent);
+      range.insertNode(formattedElement);
+
+      // Restore selection to the formatted content
+      try {
+        const newRange = document.createRange();
+        newRange.selectNodeContents(formattedElement);
+        selection.removeAllRanges();
+        selection.addRange(newRange);
+      } catch (error) {
+        console.warn('Could not restore selection after formatting:', error);
+      }
+    }
+  };
+
+  const removeFormatting = (range: Range, selection: Selection) => {
+    const startOffset = range.startOffset;
+    const endOffset = range.endOffset;
+
+    const selectedContent = range.extractContents();
+    const textContent = selectedContent.textContent || '';
+
+    // Create clean text node
+    const cleanText = textContent.replace(/<[^>]*>/g, '');
+    const textNode = document.createTextNode(cleanText);
+
+    // Insert the clean content
+    range.insertNode(textNode);
+
+    // Restore selection to the clean text
+    try {
+      const newRange = document.createRange();
+      const textLength = cleanText.length;
+      const newStartOffset = Math.min(startOffset, textLength);
+      const newEndOffset = Math.min(endOffset, textLength);
+
+      newRange.setStart(textNode, newStartOffset);
+      newRange.setEnd(textNode, newEndOffset);
+
+      selection.removeAllRanges();
+      selection.addRange(newRange);
+    } catch (error) {
+      // Fallback: select all the clean text
+      const fallbackRange = document.createRange();
+      fallbackRange.selectNodeContents(textNode);
+      selection.removeAllRanges();
+      selection.addRange(fallbackRange);
+    }
+  };
 
   // Close image upload modal when analysis completes successfully
   useEffect(() => {
@@ -1227,6 +1429,17 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                 rows={3}
               />
 
+              {/* Image upload button */}
+              <button
+                type="button"
+                className="input-icon-button"
+                onClick={toggleImageUpload}
+                title="Upload an image to generate wireframe"
+                aria-label="Upload image"
+              >
+                <FiImage />
+              </button>
+
               {/* Send button */}
               <button
                 type="submit"
@@ -1356,6 +1569,16 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               onImageUpload={toggleImageUpload}
               onOpenAnalyzeDesignModal={() => setIsAnalyzeDesignModalOpen(true)}
               onOpenQuickTipsModal={() => setIsQuickTipsModalOpen(true)}
+              isEditMode={isEditMode}
+              onToggleEditMode={toggleEditMode}
+              // New formatting toolbar props
+              showFormattingToolbar={showFormattingToolbar}
+              onFormatBold={() => handleFormatCommand('bold')}
+              onFormatItalic={() => handleFormatCommand('italic')}
+              onFormatUnderline={() => handleFormatCommand('underline')}
+              onRemoveFormat={() => handleFormatCommand('removeFormat')}
+              isDragEnabled={isDragEnabled}
+              onToggleDragMode={toggleDragMode}
             />
 
             <div className="wireframe-container">
@@ -1404,6 +1627,11 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                   <DragWireframe
                     htmlContent={currentPageId ? (pageContents[currentPageId] || htmlWireframe) : htmlWireframe}
                     onUpdateContent={handleUpdateContent}
+                    isEditMode={isEditMode}
+                    isDragEnabled={isDragEnabled}
+                    onShowFormattingToolbar={handleShowFormattingToolbar}
+                    onFormatCommand={handleFormatCommand}
+                    onSetCurrentEditingElement={handleSetCurrentEditingElement}
                   />
                 )}
               </div>
@@ -1481,15 +1709,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                   placeholder="Describe your wireframe idea... (e.g., 'Create a modern login form with email, password, and social login options')"
                   className="ai-assistant-input"
                 />
-                <button
-                  type="button"
-                  className="input-icon-button"
-                  onClick={toggleImageUpload}
-                  title="Upload an image to generate wireframe"
-                  aria-label="Upload image"
-                >
-                  <FiImage />
-                </button>
               </div>
             </div>
 

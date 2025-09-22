@@ -362,10 +362,19 @@
   border: 2px dashed var(--color-border) !important;
   padding: 10px !important;
   margin: 10px !important;
-  cursor: move !important;
+  cursor: move !important; /* Only show move cursor when drag mode is enabled */
   border-radius: 10px !important;
   transition: border-color 0.15s ease, background-color 0.15s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Remove cursor styles when drag mode is disabled */
+.drag-disabled .draggable-block,
+.drag-disabled article,
+.drag-disabled section,
+.drag-disabled .widget,
+.drag-disabled .card {
+  cursor: auto !important; /* Default cursor when not in drag mode */
 }
 
 /* Override sticky/fixed positioning during drag mode to prevent conflicts */
@@ -680,6 +689,19 @@
   transform: scale(1.01);
 }
 
+/* Only show text cursor on editable elements when in edit mode AND hovering */
+.dragula-container:not(.drag-enabled) [data-editable="true"]:hover {
+  cursor: text !important;
+}
+
+/* Default cursor for all other elements when not in drag mode */
+.dragula-container.drag-disabled
+  *:not([data-editable="true"]):not(button):not(a):not(input):not(select):not(
+    textarea
+  ) {
+  cursor: auto !important;
+}
+
 /* Active editing state */
 [contenteditable="true"] {
   outline: 2px solid var(--color-accent) !important;
@@ -723,7 +745,7 @@
   background: transparent;
   padding: 6px 8px;
   border-radius: 3px;
-  cursor: pointer;
+  cursor: pointer !important;
   font-size: 12px;
   color: var(--color-text);
   transition: background-color 0.2s ease;
@@ -732,11 +754,18 @@
   justify-content: center;
   min-width: 24px;
   height: 24px;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
-.format-btn:hover,
-.format-btn.hover {
+.format-btn:hover {
   background-color: var(--color-background-light);
+  cursor: pointer !important;
+}
+
+.format-btn:hover {
+  background-color: var(--color-background-light);
+  cursor: pointer !important;
 }
 
 .format-btn:active {
