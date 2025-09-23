@@ -1079,7 +1079,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     if (!pendingComponent) return;
 
     console.log('🎯 Placing component at:', { x, y }, 'Target:', targetElement);
-    
+
     // Call the original onAddComponent with placement information
     if (onAddComponent) {
       onAddComponent({

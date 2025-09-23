@@ -44,7 +44,7 @@ const StaticWireframe: React.FC<StaticWireframeProps> = ({
 }) => {
     const [sanitizedContent, setSanitizedContent] = useState<string>('');
     const containerRef = useRef<HTMLDivElement | null>(null);
-    
+
     // Placement mode state
     const [mousePosition, setMousePosition] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
     const [hoveredDropZone, setHoveredDropZone] = useState<HTMLElement | null>(null);
@@ -263,7 +263,7 @@ const StaticWireframe: React.FC<StaticWireframeProps> = ({
                         </div>
                     </div>
                     {/* Placement cursor */}
-                    <div 
+                    <div
                         className="placement-cursor"
                         ref={(el) => {
                             if (el) {
@@ -276,7 +276,7 @@ const StaticWireframe: React.FC<StaticWireframeProps> = ({
                     </div>
                 </>
             )}
-            
+
             <div
                 ref={containerRef}
                 className={`wireframe-content ${isEditMode ? 'edit-mode' : ''} ${isPlacementMode ? 'placement-mode' : ''}`}
