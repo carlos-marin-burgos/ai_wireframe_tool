@@ -349,8 +349,7 @@
 .wireframe-container {
   flex: 1;
   overflow: visible; /* Allow content to expand */
-  padding: 15px;
-  padding-bottom: 15px; /* Reduced padding for more wireframe space */
+  padding: 0; /* Remove padding to use full space */
   height: 100%; /* Fill the available flex space completely */
   background: transparent;
   position: relative; /* For positioning the loading overlay */
@@ -406,13 +405,13 @@
   background-color: transparent;
   border: none;
   border-radius: 0;
-  padding: 15px;
+  padding: 0; /* Remove padding to use full space */
   box-shadow: none;
   overflow: auto;
 }
 
 .wireframe-panel {
-  height: calc(100% - 80px); /* Reduced from 100px for more wireframe space */
+  height: 100%; /* Use full height now that margins are removed */
   width: 100%; /* Use full width instead of calc(100% - 60px) */
   background: #ffffff;
   border-radius: 8px;
@@ -704,8 +703,8 @@
   border-radius: 16px;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.04);
   overflow: hidden;
-  margin: 0 2rem 2rem;
-  height: calc(100vh - 140px);
+  margin: 0; /* Remove margins to use full space */
+  height: 100vh; /* Use full height */
   border: 1px solid rgba(0, 0, 0, 0.03);
   position: relative;
   transition: all 0.3s ease;
@@ -1639,7 +1638,7 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   .wireframe-container {
     flex: 1;
     height: 100%;
-    padding: 10px;
+    padding: 0; /* Remove padding to use full space */
     position: relative;
     background: #fafafa;
   }

@@ -178,7 +178,7 @@ body {
 /* Landing page styles are now managed in LandingPage.css */
 
 .main-heading {
-  color: #3C4858;
+  color: #3c4858;
   font-size: 3.5rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
@@ -188,7 +188,7 @@ body {
 }
 
 .main-subtitle {
-  color: #68769C;
+  color: #68769c;
   font-size: 1.5rem;
   margin-bottom: 3rem;
   line-height: 1.4;
@@ -224,22 +224,22 @@ body {
   background: #ffffff;
   box-sizing: border-box;
   line-height: 1.5;
-  color: #3C4858;
+  color: #3c4858;
 }
 
 .app-textarea:focus {
   outline: none;
-  border-color: #8E9AAF;
-  box-shadow: 0 0 0 1px #8E9AAF;
+  border-color: #8e9aaf;
+  box-shadow: 0 0 0 1px #8e9aaf;
 }
 
 .app-textarea::placeholder {
-  color: #68769C;
+  color: #68769c;
   font-weight: 400;
 }
 
 .send-btn {
-  background: #8E9AAF;
+  background: #8e9aaf;
   border: none;
   border-radius: 4px;
   width: 48px;
@@ -258,7 +258,7 @@ body {
 }
 
 .send-btn:hover:not(:disabled) {
-  background: #68769C;
+  background: #68769c;
   transform: none;
   box-shadow: none;
 }
@@ -435,7 +435,7 @@ body {
   align-items: center;
   gap: 4px;
   background: #f3f2f1;
-  color: #3C4858;
+  color: #3c4858;
 }
 
 .wireframe-mode-toggle .mode-toggle-btn:hover {
@@ -444,14 +444,14 @@ body {
 }
 
 .wireframe-mode-toggle .mode-toggle-btn.active {
-  background: #8E9AAF;
+  background: #8e9aaf;
   color: white;
-  border-color: #8E9AAF;
+  border-color: #8e9aaf;
 }
 
 .wireframe-mode-toggle .mode-toggle-btn.active:hover {
-  background: #68769C;
-  border-color: #68769C;
+  background: #68769c;
+  border-color: #68769c;
 }
 
 .wireframe-mode-toggle .element-selection-indicator {
@@ -552,11 +552,11 @@ body {
 }
 
 .ai-suggestions-dynamic .ai-suggestions-label {
-  color: #3C4858 !important;
+  color: #3c4858 !important;
 }
 
 .ai-suggestions-dynamic .ai-icon {
-  color: #3C4858 !important;
+  color: #3c4858 !important;
 }
 
 .ai-suggestions-label {
@@ -566,11 +566,11 @@ body {
   margin-bottom: 1rem !important;
   font-size: 1rem !important;
   font-weight: 400 !important;
-  color: #3C4858 !important;
+  color: #3c4858 !important;
 }
 
 .ai-icon {
-  color: #3C4858;
+  color: #3c4858;
   font-size: 16px;
 }
 
@@ -587,7 +587,7 @@ body {
 .ai-suggestion-pill {
   background: #f3f2f1;
   border: 1px solid #e1dfdd;
-  color: #3C4858;
+  color: #3c4858;
   padding: 8px 8px 8px 12px;
   border-radius: 4px;
   cursor: pointer;
@@ -729,7 +729,7 @@ body {
 }
 
 .transparent-navbar .nav-link:hover {
-  color: #CBC2C2;
+  color: #cbc2c2;
 }
 
 .top-nav {
@@ -812,8 +812,9 @@ body {
   border-radius: 0; /* Less pronounced */
   overflow: hidden;
   box-shadow: none; /* Remove shadow for subtlety */
-  min-height: 500px;
-  margin-bottom: 0px; /* Add bottom margin to prevent cut-off */
+  height: 100%; /* Use available height instead of min-height */
+  margin: 0; /* Remove all margins to use full space */
+  padding: 0; /* Remove all padding to use full space */
   display: flex;
   flex-direction: column;
 }
@@ -882,7 +883,7 @@ body {
 }
 
 .mini-title {
-  background: #3C4858;
+  background: #3c4858;
   height: 16px;
   border-radius: 2px;
   width: 70%;
@@ -896,7 +897,7 @@ body {
 }
 
 .mini-button {
-  background: #8E9AAF;
+  background: #8e9aaf;
   height: 20px;
   border-radius: 4px;
   width: 50%;
@@ -920,7 +921,7 @@ body {
 .element-1 {
   width: 40px;
   height: 40px;
-  background: #8E9AAF;
+  background: #8e9aaf;
   top: 20px;
   left: 20px;
 }
