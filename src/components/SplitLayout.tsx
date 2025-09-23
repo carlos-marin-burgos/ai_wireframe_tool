@@ -9,7 +9,7 @@ import DownloadModal from "./DownloadModal";
 import DevPlaybooksLibrary from "./DevPlaybooksLibrary";
 import FigmaComponentsLibrary from "./FigmaComponentsLibrary";
 import EnhancedComponentLibrary from "./EnhancedComponentLibrary";
-import DragWireframe from "./DragWireframe";
+import StaticWireframe from "./StaticWireframe";
 import EnhancedMessage from "./EnhancedMessage";
 import ImageUploadZone from "./ImageUploadZone";
 import ImageUploadModal from "./ImageUploadModal";
@@ -193,8 +193,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   // Component Library Modal removed - using direct AI generation instead
 
-  // Drag mode and formatting toolbar state
-  const [isDragEnabled, setIsDragEnabled] = useState(false);
+  // Formatting toolbar state
   const [showFormattingToolbar, setShowFormattingToolbar] = useState(false);
   const [formattingToolbarPosition, setFormattingToolbarPosition] = useState({ top: 0, left: 0 });
   const currentEditingElementRef = useRef<HTMLElement | null>(null);
@@ -239,6 +238,11 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   // Website analysis state
   const [websiteAnalysis, setWebsiteAnalysis] = useState<WebsiteAnalysis | null>(null);
   const [isAnalyzingWebsite, setIsAnalyzingWebsite] = useState<boolean>(false);
+
+  // Component placement mode state
+  const [isPlacementMode, setIsPlacementMode] = useState<boolean>(false);
+  const [pendingComponent, setPendingComponent] = useState<any>(null);
+  const [placementCursor, setPlacementCursor] = useState<{ x: number, y: number } | null>(null);
 
   // Stable callback for updating wireframe content to prevent infinite re-renders
   const handleUpdateContent = useCallback((newContent: string) => {
@@ -693,11 +697,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     setIsEditMode(prev => !prev);
   }, []);
 
-  // Drag Mode handler
-  const toggleDragMode = useCallback(() => {
-    setIsDragEnabled(prev => !prev);
-  }, []);
-
   // Formatting toolbar handlers
   const handleShowFormattingToolbar = useCallback((show: boolean, position?: { top: number, left: number }) => {
     setShowFormattingToolbar(show);
@@ -1057,6 +1056,41 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   const handlePresentationMode = useCallback(() => {
     setIsPresentationModeOpen(true);
   }, []);
+
+  // Component placement mode handlers
+  const enterPlacementMode = useCallback((component: any) => {
+    console.log('🎯 Entering placement mode for component:', component.name);
+    setPendingComponent(component);
+    setIsPlacementMode(true);
+    // Close all modals
+    setIsDevPlaybooksOpen(false);
+    setIsFigmaComponentsOpen(false);
+    setIsComponentLibraryOpen(false);
+  }, []);
+
+  const cancelPlacementMode = useCallback(() => {
+    console.log('❌ Cancelling placement mode');
+    setIsPlacementMode(false);
+    setPendingComponent(null);
+    setPlacementCursor(null);
+  }, []);
+
+  const handleComponentPlacement = useCallback((x: number, y: number, targetElement: HTMLElement) => {
+    if (!pendingComponent) return;
+
+    console.log('🎯 Placing component at:', { x, y }, 'Target:', targetElement);
+    
+    // Call the original onAddComponent with placement information
+    if (onAddComponent) {
+      onAddComponent({
+        ...pendingComponent,
+        placementInfo: { x, y, targetElement }
+      });
+    }
+
+    // Exit placement mode
+    cancelPlacementMode();
+  }, [pendingComponent, onAddComponent, cancelPlacementMode]);
 
   // Set toolbar function refs for header toolbar access
   // Set up the Figma Integration ref
@@ -1577,8 +1611,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               onFormatItalic={() => handleFormatCommand('italic')}
               onFormatUnderline={() => handleFormatCommand('underline')}
               onRemoveFormat={() => handleFormatCommand('removeFormat')}
-              isDragEnabled={isDragEnabled}
-              onToggleDragMode={toggleDragMode}
             />
 
             <div className="wireframe-container">
@@ -1624,14 +1656,17 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
                   </div>
                 ) : (
                   // Show HTML wireframe
-                  <DragWireframe
-                    htmlContent={currentPageId ? (pageContents[currentPageId] || htmlWireframe) : htmlWireframe}
-                    onUpdateContent={handleUpdateContent}
+                  <StaticWireframe
+                    html={currentPageId ? (pageContents[currentPageId] || htmlWireframe) : htmlWireframe}
                     isEditMode={isEditMode}
-                    isDragEnabled={isDragEnabled}
+                    onUpdateContent={handleUpdateContent}
                     onShowFormattingToolbar={handleShowFormattingToolbar}
                     onFormatCommand={handleFormatCommand}
                     onSetCurrentEditingElement={handleSetCurrentEditingElement}
+                    isPlacementMode={isPlacementMode}
+                    pendingComponent={pendingComponent}
+                    onComponentPlacement={handleComponentPlacement}
+                    onCancelPlacementMode={cancelPlacementMode}
                   />
                 )}
               </div>
@@ -1874,10 +1909,8 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
           setIsDevPlaybooksOpen(false);
         }}
         onAddComponent={(component: any) => {
-          console.log('✨ Dev Playbook component added:', component.name);
-          if (onAddComponent) {
-            onAddComponent(component);
-          }
+          console.log('✨ Dev Playbook component selected for placement:', component.name);
+          enterPlacementMode(component);
         }}
         onGenerateWithAI={(description: string) => {
           console.log('🤖 AI generation requested for:', description);
@@ -1896,10 +1929,8 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
           setIsFigmaComponentsOpen(false);
         }}
         onAddComponent={(component: any) => {
-          console.log('✨ Figma component added:', component.name);
-          if (onAddComponent) {
-            onAddComponent(component);
-          }
+          console.log('✨ Figma component selected for placement:', component.name);
+          enterPlacementMode(component);
         }}
         onGenerateWithAI={(description: string) => {
           console.log('🤖 AI generation requested for:', description);
@@ -1918,10 +1949,8 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
           setIsComponentLibraryOpen(false);
         }}
         onAddComponent={(component: any) => {
-          console.log('✨ Component added:', component.name);
-          if (onAddComponent) {
-            onAddComponent(component);
-          }
+          console.log('✨ Component selected for placement:', component.name);
+          enterPlacementMode(component);
           // Removed toast notification to prevent components showing inside toasts
         }}
         onGenerateWithAI={(description: string) => {

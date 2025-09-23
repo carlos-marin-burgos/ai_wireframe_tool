@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { FiPlus, FiPackage, FiSave, FiStar, FiImage, FiCode, FiLayers, FiGithub, FiZap, FiEdit } from 'react-icons/fi';
 import { HiLightBulb } from 'react-icons/hi';
 import { SiFigma } from 'react-icons/si';
-import { ReOrder24Regular, ReOrderDotsVertical24Regular } from '@fluentui/react-icons';
 import '../styles/PageNavigation.css';
 
 interface Page {
@@ -33,8 +32,6 @@ interface PageNavigationProps {
     onFormatItalic?: () => void;
     onFormatUnderline?: () => void;
     onRemoveFormat?: () => void;
-    isDragEnabled?: boolean;
-    onToggleDragMode?: () => void;
 }
 
 const PageNavigation: React.FC<PageNavigationProps> = ({
@@ -57,9 +54,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
     onFormatBold,
     onFormatItalic,
     onFormatUnderline,
-    onRemoveFormat,
-    isDragEnabled = false,
-    onToggleDragMode
+    onRemoveFormat
 }) => {
     const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
 
@@ -150,20 +145,6 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                                 aria-label={isEditMode ? "Disable wireframe editing" : "Enable wireframe editing"}
                             >
                                 <FiEdit />
-                            </button>
-                        )}
-
-                        {/* Drag Mode Toggle Button */}
-                        {onToggleDragMode && (
-                            <button
-                                className={`toolbar-btn drag-mode-btn ${isDragEnabled ? 'drag-enabled' : 'drag-disabled'}`}
-                                onClick={onToggleDragMode}
-                                onMouseEnter={(e) => showTooltip(e, isDragEnabled ? "Disable Drag Mode" : "Enable Drag Mode")}
-                                onMouseLeave={hideTooltip}
-                                aria-label={isDragEnabled ? "Disable drag mode" : "Enable drag mode"}
-                                title={isDragEnabled ? "Click to disable drag mode" : "Click to enable drag mode"}
-                            >
-                                {isDragEnabled ? <ReOrder24Regular /> : <ReOrderDotsVertical24Regular />}
                             </button>
                         )}
 
@@ -328,20 +309,6 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                             aria-label={isEditMode ? "Disable wireframe editing" : "Enable wireframe editing"}
                         >
                             <FiEdit />
-                        </button>
-                    )}
-
-                    {/* Drag Mode Toggle Button */}
-                    {onToggleDragMode && (
-                        <button
-                            className={`toolbar-btn drag-mode-btn ${isDragEnabled ? 'drag-enabled' : 'drag-disabled'}`}
-                            onClick={onToggleDragMode}
-                            onMouseEnter={(e) => showTooltip(e, isDragEnabled ? "Disable Drag Mode" : "Enable Drag Mode")}
-                            onMouseLeave={hideTooltip}
-                            aria-label={isDragEnabled ? "Disable drag mode" : "Enable drag mode"}
-                            title={isDragEnabled ? "Click to disable drag mode" : "Click to enable drag mode"}
-                        >
-                            {isDragEnabled ? <ReOrder24Regular /> : <ReOrderDotsVertical24Regular />}
                         </button>
                     )}
 

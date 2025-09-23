@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Layout with Sidebar</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: #194a7a;
+        }
+        .main-container {
+            display: flex;
+            flex-direction: row;
+            min-height: 100vh;
+        }
+        .sidebar-left {
+            background-color: #194a7a;
+            color: #ffffff;
+            width: 250px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .sidebar-left a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+        .content-area {
+            flex: 1;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+        }
+        .top-nav {
+            background-color: #476f95;
+            color: #ffffff;
+            padding: 10px;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+            flex: 1;
+            overflow-x: auto;
+        }
+        .primary-button {
+            background-color: #194a7a;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        .secondary-button {
+            background-color: #476f95;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        .tertiary-button {
+            background-color: #d1dbe4;
+            color: #194a7a;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            .sidebar-left {
+                position: fixed;
+                left: -250px;
+                top: 0;
+                height: 100vh;
+                transition: left 0.3s ease;
+                z-index: 1000;
+            }
+            .sidebar-left.open {
+                left: 0;
+            }
+            .toggle-sidebar {
+                display: block;
+                background-color: #194a7a;
+                color: #ffffff;
+                padding: 10px;
+                text-align: center;
+                cursor: pointer;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <aside class="sidebar-left" id="sidebar">
+        <a href="#">Link 1</a>
+        <a href="#">Link 2</a>
+        <a href="#">Link 3</a>
+        <a href="#">Link 4</a>
+    </aside>
+    <main class="content-area">
+        <header class="top-nav">
+            <div class="toggle-sidebar" onclick="toggleSidebar()">☰ Menu</div>
+            <h1>Responsive Layout</h1>
+        </header>
+        <div class="content">
+            <p>Welcome to the main content area. This responsive layout adjusts based on the screen size.</p>
+            <button class="primary-button">Primary Action</button>
+            <button class="secondary-button">Secondary Action</button>
+            <button class="tertiary-button">Tertiary Action</button>
+        </div>
+    </main>
+</div>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('open');
+    }
+</script>
+
+</body>
+</html>
+This HTML wireframe includes a left sidebar navigation and a main content area with a responsive design. The sidebar can be toggled open and closed on mobile devices, ensuring a clean and modern user experience. The color scheme follows the specified monochromatic blue palette, and all text and background combinations adhere to the required contrast rules.

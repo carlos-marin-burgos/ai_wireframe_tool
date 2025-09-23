@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Management Dashboard</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: #194a7a;
+            background-color: #f5f5f5;
+        }
+        .main-container {
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+        }
+        .sidebar-left {
+            background-color: #194a7a;
+            color: #ffffff;
+            width: 250px;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            transition: all 0.3s ease-in-out;
+        }
+        .sidebar-left.collapsed {
+            width: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff;
+        }
+        .top-nav {
+            background-color: #476f95;
+            color: #ffffff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .top-nav input[type="search"] {
+            padding: 5px;
+            font-size: 16px;
+            border: 1px solid #7593af;
+            border-radius: 4px;
+        }
+        .content {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        .project-overview, .kanban-board, .analytics-charts {
+            margin-bottom: 20px;
+            border: 1px solid #a3b7ca;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #d1dbe4;
+        }
+        .project-overview h2, .kanban-board h2, .analytics-charts h2 {
+            margin-top: 0;
+        }
+        .hamburger {
+            display: none;
+            cursor: pointer;
+        }
+        .hamburger div {
+            width: 30px;
+            height: 3px;
+            background-color: #ffffff;
+            margin: 5px;
+            transition: 0.4s;
+        }
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            .sidebar-left {
+                position: absolute;
+                z-index: 1000;
+                height: 100%;
+                top: 0;
+                left: -250px;
+                width: 250px;
+            }
+            .sidebar-left.collapsed {
+                left: 0;
+            }
+            .hamburger {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <aside class="sidebar-left" id="sidebar">
+            <h2>Projects</h2>
+            <ul>
+                <li>Project Alpha</li>
+                <li>Project Beta</li>
+                <li>Project Gamma</li>
+            </ul>
+            <h2>Teams</h2>
+            <ul>
+                <li>Team 1</li>
+                <li>Team 2</li>
+                <li>Team 3</li>
+            </ul>
+            <h2>Settings</h2>
+        </aside>
+        <main class="content-area">
+            <header class="top-nav">
+                <div class="hamburger" id="hamburger">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <input type="search" placeholder="Search...">
+                <div>User Profile</div>
+            </header>
+            <div class="content">
+                <div class="project-overview">
+                    <h2>Project Overview</h2>
+                    <p>Details about the current project...</p>
+                </div>
+                <div class="kanban-board">
+                    <h2>Kanban Board</h2>
+                    <p>Task management and progress...</p>
+                </div>
+                <div class="analytics-charts">
+                    <h2>Analytics Charts</h2>
+                    <p>Visual data representation...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.getElementById('sidebar');
+
+        hamburger.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+        });
+    </script>
+</body>
+</html>
+
+This HTML wireframe follows the given requirements with a clean, responsive design utilizing a blue monochromatic color palette. The sidebar is collapsible and transforms into an overlay on smaller screens. The content area includes sections for project overview, task management, and analytics, with proper contrast and button styles adhering to the specifications.

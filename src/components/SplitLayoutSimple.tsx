@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import "./SplitLayout.css";
 import SuggestionSourceIndicator from "./SuggestionSourceIndicator";
 import LoadingOverlay from "./LoadingOverlay";
-import DragWireframe from "./DragWireframe";
+import StaticWireframe from "./StaticWireframe";
 import EnhancedMessage from "./EnhancedMessage";
 import ComponentPreview from "./ComponentPreview";
 import AddPagesModal from './AddPagesModal';
@@ -442,11 +442,8 @@ const SplitLayoutSimple: React.FC<SplitLayoutProps> = ({
                     />
                   </div>
                 ) : (
-                  <DragWireframe
-                    htmlContent={htmlWireframe}
-                    onUpdateContent={(newContent) => {
-                      setHtmlWireframe(newContent);
-                    }}
+                  <StaticWireframe
+                    html={htmlWireframe}
                   />
                 )}
               </div>

@@ -518,30 +518,6 @@
   background: rgba(255, 107, 107, 0.1);
 }
 
-/* Drag Mode Toggle Button Styles */
-.drag-mode-btn {
-  font-size: 14px;
-  padding: 4px 8px;
-  min-width: auto;
-}
-
-.drag-mode-btn.drag-enabled {
-  background: rgba(76, 175, 80, 0.2);
-  border-color: rgba(76, 175, 80, 0.5);
-  color: #4caf50;
-}
-
-.drag-mode-btn.drag-disabled {
-  background: #ffffff;
-  border-color: #d1d5db;
-  color: #6b7280;
-}
-
-.drag-mode-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
 /* Enhanced toolbar button animations */
 .toolbar-btn.edit-mode-active {
   background: rgba(33, 150, 243, 0.2);
@@ -566,11 +542,6 @@
     padding: 3px 4px;
     min-width: 20px;
     font-size: 10px;
-  }
-
-  .drag-mode-btn {
-    font-size: 12px;
-    padding: 3px 6px;
   }
 }
 

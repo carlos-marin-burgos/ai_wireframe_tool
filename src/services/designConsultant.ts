@@ -39,7 +39,7 @@ class DesignConsultantService {
     // Use environment-specific endpoint
     this.baseUrl = import.meta.env.PROD
       ? "https://func-original-app-pgno4orkguix6.azurewebsites.net/api"
-      : "http://localhost:7071/api";
+      : "http://localhost:7072/api";
 
     this.apiKey = import.meta.env.VITE_WIREFRAME_API_KEY || "dev-key-2025";
   }

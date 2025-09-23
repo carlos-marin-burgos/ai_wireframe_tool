@@ -1566,6 +1566,21 @@ async function generateWireframeWithAI(
     // CLEAN AI PROMPT - Let AI be naturally intelligent
     const prompt = `Create a modern, responsive HTML wireframe for: "${description}"
 
+CRITICAL LAYOUT STRUCTURE REQUIREMENTS (FOLLOW EXACTLY):
+- ALL CONTENT must be contained within a single main-container div
+- BODY STRUCTURE must be: <body><div class="main-container">ALL_CONTENT_HERE</div></body>
+- NEVER place any elements outside the main-container (no headers, nav, or any elements before/after it)
+- When creating sidebars (left or right), use proper HTML structure with a flex container
+- LEFT SIDEBAR pattern: <div class="main-container"><aside class="sidebar-left">...</aside><main class="content-area"><header class="top-nav">...</header>...</main></div>
+- RIGHT SIDEBAR pattern: <div class="main-container"><main class="content-area"><header class="top-nav">...</header>...</main><aside class="sidebar-right">...</aside></div>
+- Main container should use display: flex; flex-direction: row (for desktop)
+- Sidebars should have fixed width (e.g., 250px-300px) and main content should use flex: 1
+- CRITICAL: ALL navigation, headers, hamburger menus MUST be inside the content-area, NEVER outside main-container
+- CRITICAL: NEVER place any <header>, <nav>, or other elements as direct children of <body> - everything goes inside main-container
+- For collapsible sidebars, add JavaScript toggle functionality to show/hide sidebar
+- On mobile, sidebars should transform to overlay or hamburger menu patterns
+- HAMBURGER MENU must be positioned inside the content-area, NOT as a separate body element
+
 CRITICAL COLOR CONTRAST REQUIREMENTS:
 - Use ONLY these blue monochromatic colors: #194a7a (dark blue), #476f95 (medium-dark blue), #7593af (medium blue), #a3b7ca (light blue-gray), #d1dbe4 (lightest blue-gray), #ffffff (white)
 - NEVER use old colors like #007bff, #0078d4, #8E9AAF, #68769C, or any purple/violet colors
@@ -1627,7 +1642,7 @@ Generate the complete HTML now:`;
           {
             role: "system",
             content:
-              "You are a professional web designer specializing in responsive design and accessible color schemes. Create clean, modern HTML wireframes with inline CSS styling and JavaScript functionality. ALWAYS use the blue monochromatic color palette: #194a7a, #476f95, #7593af, #a3b7ca, #d1dbe4, #ffffff. CRITICAL BUTTON RULES: Primary buttons use background #194a7a + white text. Secondary buttons use background #476f95 + white text. Any button with light background (#d1dbe4, #a3b7ca) MUST use dark text (#194a7a). NEVER put white text on light backgrounds! NEVER use old colors like #007bff, #0078d4, #8E9AAF, or purple/violet colors. When mobile navigation is requested, always include a working hamburger menu with proper CSS animations and JavaScript toggle functionality. Use semantic HTML5 elements and modern CSS Grid/Flexbox layouts.",
+              "You are a professional web designer specializing in responsive design and accessible color schemes. Create clean, modern HTML wireframes with inline CSS styling and JavaScript functionality. CRITICAL STRUCTURE RULE: ALL content must be contained within a single <div class='main-container'> - NEVER place headers, navigation, or any elements outside this container. Body structure: <body><div class='main-container'>ALL_CONTENT_HERE</div></body>. ALWAYS use the blue monochromatic color palette: #194a7a, #476f95, #7593af, #a3b7ca, #d1dbe4, #ffffff. CRITICAL BUTTON RULES: Primary buttons use background #194a7a + white text. Secondary buttons use background #476f95 + white text. Any button with light background (#d1dbe4, #a3b7ca) MUST use dark text (#194a7a). NEVER put white text on light backgrounds! NEVER use old colors like #007bff, #0078d4, #8E9AAF, or purple/violet colors. When mobile navigation is requested, always include a working hamburger menu with proper CSS animations and JavaScript toggle functionality positioned INSIDE the content-area. Use semantic HTML5 elements and modern CSS Grid/Flexbox layouts.",
           },
           {
             role: "user",
