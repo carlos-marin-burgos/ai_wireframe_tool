@@ -1,0 +1,5 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="48" height="48" rx="4" fill="#FF6B35"/>
+  <circle cx="24" cy="24" r="16" fill="white"/>
+  <text x="24" y="28" text-anchor="middle" fill="#FF6B35" font-family="Segoe UI" font-size="8" font-weight="600">AI</text>
+</svg>
