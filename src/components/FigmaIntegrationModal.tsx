@@ -44,6 +44,23 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 }) => {
     const [activeTab, setActiveTab] = useState<'connect' | 'url' | 'upload' | 'live'>('connect');
     const [isConnected, setIsConnected] = useState(false);
+
+    // Helper function to check if we have valid localStorage tokens
+    const hasValidLocalTokens = useCallback(() => {
+        try {
+            const storedTokens = localStorage.getItem('figma_oauth_tokens');
+            const storedTimestamp = localStorage.getItem('figma_oauth_timestamp');
+
+            if (storedTokens && storedTimestamp) {
+                const tokenAge = Date.now() - parseInt(storedTimestamp);
+                const maxAge = 24 * 60 * 60 * 1000; // 24 hours
+                return tokenAge < maxAge;
+            }
+        } catch (error) {
+            console.error('Error checking local tokens:', error);
+        }
+        return false;
+    }, []);
     const [authStatus, setAuthStatus] = useState<any>(null);
     const [accessToken, setAccessToken] = useState('');
     const [figmaUrl, setFigmaUrl] = useState('');
@@ -100,6 +117,9 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                         user: { email: 'OAuth User (Stored)' }
                     });
                     setSuccess('🔗 Already connected to Figma via stored OAuth tokens!');
+
+                    // Skip backend check if we have valid local tokens - make localStorage authoritative
+                    console.log('✅ Using localStorage as authoritative source - skipping backend check');
                     return;
                 } else {
                     console.log('⏰ Locally stored tokens expired, removing...');
@@ -154,23 +174,21 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 }
             } else {
                 // Fallback: Received HTML (likely interactive auth page)
-                // Only override connection if we're not already connected via OAuth
-                const storedTokens = localStorage.getItem('figma_oauth_tokens');
-                if (!storedTokens) {
+                // Only override connection if we don't have valid local tokens
+                if (!hasValidLocalTokens()) {
                     setAuthStatus({ status: 'authorization_required', message: 'Authorization required (interactive page returned)' });
                     console.log('❌ HTML response received - setting isConnected to FALSE');
                     setIsConnected(false);
                     setActiveTab('connect');
                 } else {
-                    console.log('⚠️ HTML response received but OAuth tokens exist - keeping connection');
+                    console.log('⚠️ HTML response received but valid OAuth tokens exist - keeping connection TRUE');
                 }
             }
         } catch (error) {
             console.error('Error checking OAuth status:', error);
 
-            // Only override connection state if we don't have stored tokens
-            const storedTokens = localStorage.getItem('figma_oauth_tokens');
-            if (!storedTokens) {
+            // Only override connection state if we don't have valid local tokens
+            if (!hasValidLocalTokens()) {
                 setAuthStatus({
                     status: 'oauth_error',
                     message: 'OAuth connection unavailable - using manual token mode',
@@ -180,7 +198,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 setIsConnected(false);
                 setActiveTab('connect');
             } else {
-                console.log('⚠️ OAuth status check failed but tokens exist - keeping connection');
+                console.log('⚠️ OAuth status check failed but valid tokens exist - keeping connection TRUE');
                 setAuthStatus({
                     status: 'oauth_error_but_connected',
                     message: 'Status check failed but using stored OAuth tokens',

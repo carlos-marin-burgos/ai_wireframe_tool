@@ -6,20 +6,37 @@ let tokenStorage = null;
 
 function loadTokens() {
   try {
+    console.log("🔍 Attempting to load tokens...");
+    console.log(
+      "🔍 Environment FIGMA_STORED_TOKENS exists:",
+      !!process.env.FIGMA_STORED_TOKENS
+    );
+    console.log("🔍 In-memory tokenStorage exists:", !!tokenStorage);
+
     // Try to load from environment variable first (for persistence between function calls)
     if (process.env.FIGMA_STORED_TOKENS) {
       const tokens = JSON.parse(process.env.FIGMA_STORED_TOKENS);
-      console.log("📖 Loaded tokens from environment variable");
+      console.log("📖 Successfully loaded tokens from environment variable");
+      console.log(
+        "📖 Token expires at:",
+        new Date(tokens.expires_at).toISOString()
+      );
       return tokens;
     }
 
     // Fallback to in-memory storage
     if (tokenStorage) {
-      console.log("📖 Loaded tokens from in-memory storage");
+      console.log("📖 Successfully loaded tokens from in-memory storage");
+      console.log(
+        "📖 Token expires at:",
+        new Date(tokenStorage.expires_at).toISOString()
+      );
       return tokenStorage;
     }
+
+    console.log("❌ No tokens found in either storage location");
   } catch (error) {
-    console.error("Error loading tokens:", error);
+    console.error("❌ Error loading tokens:", error);
   }
   return null;
 }
