@@ -422,29 +422,62 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     console.log("🔧 App.tsx: handleAddComponent called with:", component);
     console.log("🔧 App.tsx: Current htmlWireframe length:", htmlWireframe?.length || 0);
 
+    // Check if component has placement information from visual placement mode
+    const hasPlacementInfo = component.placementInfo &&
+      component.placementInfo.x !== undefined &&
+      component.placementInfo.y !== undefined;
+
+    if (hasPlacementInfo) {
+      console.log("🎯 App.tsx: Placing component with coordinates:", component.placementInfo);
+    }
+
     // Create HTML for the component based on its type and properties
     const componentHtml = generateComponentHtml(component);
     console.log("🔧 App.tsx: Generated HTML:", componentHtml);
 
     if (htmlWireframe) {
       // Add component to existing wireframe
-      const updatedHtml = insertComponentIntoWireframe(htmlWireframe, componentHtml);
+      let updatedHtml;
+      if (hasPlacementInfo) {
+        // Use placement coordinates to insert at specific position
+        updatedHtml = insertComponentAtPosition(htmlWireframe, componentHtml, component.placementInfo);
+      } else {
+        // Use default insertion logic
+        updatedHtml = insertComponentIntoWireframe(htmlWireframe, componentHtml);
+      }
       console.log("🔧 App.tsx: Updating existing wireframe, new length:", updatedHtml.length);
       setHtmlWireframe(updatedHtml);
-      console.log("🔧 App.tsx: ✅ Component added as overlay in top-right!");
+      console.log("🔧 App.tsx: ✅ Component added successfully!");
     } else {
       // Create a new wireframe with just this component
       const newWireframe = createWireframeWithComponent(componentHtml);
       console.log("🔧 App.tsx: Creating new wireframe, length:", newWireframe.length);
       setHtmlWireframe(newWireframe);
-      console.log("🔧 App.tsx: ✅ Created new wireframe with component overlay!");
+      console.log("🔧 App.tsx: ✅ Created new wireframe with component!");
     }
 
     // Force a re-render to ensure the wireframe updates
     setForceUpdateKey(Date.now());
 
     // Show success notification
-    showToast("Component added successfully!", 'success');
+    const message = hasPlacementInfo ?
+      "Component placed at selected position!" :
+      "Component added successfully!";
+    showToast(message, 'success');
+  };
+
+  // Function to remove all placed components
+  const removeAllPlacedComponents = () => {
+    if (htmlWireframe) {
+      // Remove all placed components by filtering out elements with atlas-placed-component class
+      const updatedHtml = htmlWireframe.replace(
+        /<div class="atlas-placed-component"[^>]*>[\s\S]*?<\/div>/g,
+        ''
+      );
+      setHtmlWireframe(updatedHtml);
+      setForceUpdateKey(Date.now());
+      showToast("All placed components removed!", 'success');
+    }
   };
 
   // Handler for generating page content using AI
@@ -871,7 +904,98 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
     // Fallback: append to end
     return existingHtml + componentWrapper;
-  }; const createWireframeWithComponent = (componentHtml: string) => {
+  };
+
+  const insertComponentAtPosition = (existingHtml: string, componentHtml: string, placementInfo: any) => {
+    console.log("🎯 insertComponentAtPosition: Placing component at:", placementInfo);
+
+    const { x, y, targetElement } = placementInfo;
+
+    // Create a positioned wrapper for the component
+    const positionedWrapper = `
+      <div class="atlas-placed-component" data-user-added="true" data-placed="true" 
+           ondblclick="this.remove()" 
+           title="Double-click to remove this component"
+           style="
+        position: absolute;
+        left: ${x}px;
+        top: ${y}px;
+        z-index: 1000;
+        border: 1px solid rgba(0, 120, 212, 0.3);
+        border-radius: 4px;
+        padding: 8px;
+        animation: atlasPlaceIn 0.3s ease-out;
+        cursor: pointer;
+      ">
+        ${componentHtml}
+        <button class="remove-component-btn" onclick="this.parentElement.remove()" 
+                title="Remove component" 
+                style="
+          position: absolute;
+          top: -8px;
+          right: -8px;
+          width: 18px;
+          height: 18px;
+          border: none;
+          background: #dc3545;
+          color: white;
+          border-radius: 50%;
+          font-size: 12px;
+          line-height: 1;
+          cursor: pointer;
+          display: none;
+          align-items: center;
+          justify-content: center;
+        ">×</button>
+      </div>
+      
+      <style>
+        @keyframes atlasPlaceIn {
+          0% { opacity: 0; transform: translateY(-4px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        .atlas-placed-component:hover {
+          border-color: rgba(0, 120, 212, 0.5);
+        }
+        .atlas-placed-component:hover .remove-component-btn {
+          display: flex !important;
+        }
+        .remove-component-btn:hover {
+          background: #c82333 !important;
+          transform: scale(1.1);
+        }
+      </style>`;
+
+    // Find the wireframe content area to ensure positioning context
+    let updatedHtml = existingHtml;
+
+    // Make sure we have a positioning context
+    if (!existingHtml.includes('position: relative')) {
+      // Add relative positioning to the main content area
+      const bodyMatch = existingHtml.match(/<body[^>]*>/);
+      if (bodyMatch) {
+        const bodyTag = bodyMatch[0];
+        const newBodyTag = bodyTag.includes('style=')
+          ? bodyTag.replace(/style="([^"]*)"/, 'style="$1; position: relative;"')
+          : bodyTag.replace('>', ' style="position: relative;">');
+        updatedHtml = updatedHtml.replace(bodyTag, newBodyTag);
+      }
+    }
+
+    // Insert the positioned component before the closing body tag
+    const bodyCloseMatch = updatedHtml.match(/<\/body>/);
+    if (bodyCloseMatch) {
+      updatedHtml = updatedHtml.replace('</body>', positionedWrapper + '\n</body>');
+    } else {
+      // Fallback: append to end
+      updatedHtml += positionedWrapper;
+    }
+
+    console.log("🎯 Component placed at position:", { x, y });
+    return updatedHtml;
+  };
+
+  const createWireframeWithComponent = (componentHtml: string) => {
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1670,13 +1794,7 @@ function App() {
 
   if (loading) {
     return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        fontFamily: 'Segoe UI, sans-serif'
-      }}>
+      <div className="app-loading-container">
         <div>Loading...</div>
       </div>
     );

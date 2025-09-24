@@ -153,22 +153,40 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                     setActiveTab('connect');
                 }
             } else {
-                // Fallback: Received HTML (likely interactive auth page); treat as not yet authorized
-                setAuthStatus({ status: 'authorization_required', message: 'Authorization required (interactive page returned)' });
-                console.log('❌ HTML response received - setting isConnected to FALSE');
-                setIsConnected(false);
-                setActiveTab('connect');
+                // Fallback: Received HTML (likely interactive auth page)
+                // Only override connection if we're not already connected via OAuth
+                const storedTokens = localStorage.getItem('figma_oauth_tokens');
+                if (!storedTokens) {
+                    setAuthStatus({ status: 'authorization_required', message: 'Authorization required (interactive page returned)' });
+                    console.log('❌ HTML response received - setting isConnected to FALSE');
+                    setIsConnected(false);
+                    setActiveTab('connect');
+                } else {
+                    console.log('⚠️ HTML response received but OAuth tokens exist - keeping connection');
+                }
             }
         } catch (error) {
             console.error('Error checking OAuth status:', error);
-            setAuthStatus({
-                status: 'oauth_error',
-                message: 'OAuth connection unavailable - using manual token mode',
-                error: error instanceof Error ? error.message : String(error)
-            });
-            console.log('❌ OAuth error - setting isConnected to FALSE');
-            setIsConnected(false);
-            setActiveTab('connect');
+
+            // Only override connection state if we don't have stored tokens
+            const storedTokens = localStorage.getItem('figma_oauth_tokens');
+            if (!storedTokens) {
+                setAuthStatus({
+                    status: 'oauth_error',
+                    message: 'OAuth connection unavailable - using manual token mode',
+                    error: error instanceof Error ? error.message : String(error)
+                });
+                console.log('❌ OAuth error - setting isConnected to FALSE');
+                setIsConnected(false);
+                setActiveTab('connect');
+            } else {
+                console.log('⚠️ OAuth status check failed but tokens exist - keeping connection');
+                setAuthStatus({
+                    status: 'oauth_error_but_connected',
+                    message: 'Status check failed but using stored OAuth tokens',
+                    connected: true
+                });
+            }
         }
     }, []);
 
@@ -207,10 +225,12 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 setSuccess('🎉 Successfully connected to Figma! You can now import designs.');
                 setError(null);
 
-                // Re-check OAuth status to get additional user info from backend
+                // Don't immediately re-check status - let the connection stay true
+                // Only check again after a longer delay to avoid overriding the success
                 setTimeout(() => {
+                    console.log('🔍 Checking OAuth status after successful connection (delayed)');
                     checkOAuthStatus();
-                }, 500);
+                }, 3000);
             }
         };
 

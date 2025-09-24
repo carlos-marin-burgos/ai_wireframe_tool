@@ -5,6 +5,15 @@
   box-sizing: border-box;
 }
 
+/* App Loading Container */
+.app-loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: "Segoe UI", sans-serif;
+}
+
 /* Specific reset for navbar logo button */
 .navbar-logo-button,
 .navbar-logo-button * {
