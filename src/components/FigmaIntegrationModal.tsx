@@ -471,13 +471,23 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
             try {
                 const text = await response.text();
                 if (text.trim()) {
+                    // Check if response is HTML (common with auth challenges)
+                    if (text.trim().toLowerCase().startsWith('<!doctype') || text.trim().startsWith('<html')) {
+                        console.log('ℹ️ OAuth start returned HTML - likely auth challenge or redirect page');
+                        throw new Error('OAuth endpoint returned HTML instead of JSON - authentication may be required');
+                    }
                     data = JSON.parse(text);
                 } else {
-                    throw new Error('Empty response body');
+                    console.log('ℹ️ Empty OAuth start response - likely HTML auth challenge');
+                    throw new Error('OAuth endpoint returned empty response - authentication may be required');
                 }
             } catch (jsonError) {
-                console.error('Failed to parse OAuth start response as JSON:', jsonError);
-                throw new Error('Invalid response format from OAuth endpoint');
+                if (jsonError.message.includes('OAuth endpoint returned')) {
+                    // This is our controlled error, re-throw it
+                    throw jsonError;
+                }
+                console.log('ℹ️ OAuth start response not valid JSON - likely HTML auth challenge');
+                throw new Error('OAuth endpoint returned invalid format - authentication may be required');
             }
 
             if (data.auth_url) {
