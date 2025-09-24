@@ -435,7 +435,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
         try {
             // Get authorization URL from backend
             const response = await fetch(getApiUrl('/api/figmaOAuthStart'), {
-                method: 'POST'
+                method: 'GET'  // Changed from POST to GET since endpoint only accepts GET, HEAD, OPTIONS
             });
 
             if (!response.ok) {
