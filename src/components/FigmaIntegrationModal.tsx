@@ -645,13 +645,16 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 
     // Enhanced URL import handler  
     const handleUrlImport = useCallback(async (url: string) => {
+        console.log('🚀 handleUrlImport called with URL:', url);
         setIsLoading(true);
         setError(null);
         setConversionProgress(0);
 
         try {
             const currentToken = getCurrentAccessToken();
+            console.log('🔐 Current access token available:', !!currentToken);
             if (!currentToken) {
+                console.log('❌ No access token found, showing error');
                 setError('Please connect to Figma first (OAuth or manual token)');
                 return;
             }
@@ -659,10 +662,13 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
             figmaApi.setAccessToken(currentToken);
 
             const fileKey = figmaApi.parseFileUrl(url);
+            console.log('🔍 Parsed Figma file key:', fileKey);
             if (fileKey) {
+                console.log('✅ Detected Figma URL, processing...');
                 // Figma URL handling
                 setConversionProgress(25);
                 const fileData = await figmaApi.getFile(fileKey);
+                console.log('📄 Retrieved file data:', fileData ? 'success' : 'failed');
 
                 setConversionProgress(50);
                 const extractedFrames = figmaApi.extractFrames(fileData.document);
@@ -683,6 +689,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 setSuccess(`📋 Found ${extractedFrames.length} frames and extracted ${tokens.colors.length} color tokens, ${tokens.typography.length} typography tokens.`);
 
             } else {
+                console.log('🌐 Not a Figma URL, treating as regular URL');
                 // Regular URL handling (images, etc.)
                 setConversionProgress(50);
 
@@ -718,8 +725,10 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
             }
 
         } catch (err) {
+            console.error('❌ Error in handleUrlImport:', err);
             setError(err instanceof Error ? err.message : 'Failed to import from URL');
         } finally {
+            console.log('🏁 handleUrlImport finished');
             setIsLoading(false);
             setConversionProgress(0);
         }

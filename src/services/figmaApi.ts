@@ -347,7 +347,10 @@ class FigmaApiService {
    * Parse Figma file URL to extract file key
    */
   parseFileUrl(url: string): string | null {
-    const match = url.match(/figma\.com\/file\/([a-zA-Z0-9]+)/);
+    // Support both /file/ and /design/ patterns, with or without www
+    const match = url.match(
+      /(?:www\.)?figma\.com\/(?:file|design)\/([a-zA-Z0-9]+)/
+    );
     return match ? match[1] : null;
   }
 
