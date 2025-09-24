@@ -196,6 +196,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                     connected: true,
                     user: trustedSession.user || undefined
                 });
+                setIsCheckingStatus(false); // Reset the checking status
                 return; // STOP HERE - don't do any backend calls
             }
 
@@ -222,6 +223,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 
                     // Skip backend check if we have valid local tokens - make localStorage authoritative
                     console.log('✅ Using localStorage as authoritative source - skipping backend check');
+                    setIsCheckingStatus(false); // Reset the checking status
                     return;
                 } else {
                     console.log('⏰ Locally stored tokens expired, removing...');
@@ -358,12 +360,16 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 setSuccess('🎉 Successfully connected to Figma! You can now import designs.');
                 setError(null);
 
-                // Don't immediately re-check status - let the connection stay true
-                // Only check again after a longer delay to avoid overriding the success
-                setTimeout(() => {
-                    console.log('🔍 Checking OAuth status after successful connection (delayed)');
-                    checkOAuthStatus();
-                }, 3000);
+                // Close any OAuth popup windows
+                const openWindows = (window as any).figmaOAuthWindows || [];
+                openWindows.forEach((popup: Window) => {
+                    if (popup && !popup.closed) {
+                        popup.close();
+                    }
+                });
+
+                // NO delayed status check - trusted session should persist!
+                console.log('✅ OAuth complete - trusted session persisted, no further status checks needed');
             }
         };
 
