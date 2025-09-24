@@ -28,11 +28,17 @@ CURRENT_ENV=$(azd env list --output json 2>/dev/null | jq -r '.[] | select(.IsDe
 echo ""
 echo "🌍 Current Default Environment: $CURRENT_ENV"
 
-if [ "$CURRENT_ENV" != "original-app" ]; then
-    echo "⚠️  WARNING: Not using production environment!"
-    echo "💡 Run: azd env select original-app"
+# Check if we're using a valid production environment
+VALID_ENVS=("original-app" "designetica" "production")
+if [[ ! " ${VALID_ENVS[@]} " =~ " ${CURRENT_ENV} " ]]; then
+    echo "⚠️  WARNING: Not using a recognized production environment!"
+    echo "💡 Valid environments: ${VALID_ENVS[*]}"
+    echo "💡 Current: $CURRENT_ENV"
+    echo "💡 To fix: azd env select designetica"
     exit 1
 fi
+
+echo "✅ Using valid environment: $CURRENT_ENV"
 
 # Show environment variables
 echo ""
