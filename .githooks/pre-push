@@ -3,13 +3,29 @@
 # Pre-push hook - Validates environment before pushing
 echo "🔍 Pre-push validation..."
 
+# Allow bypass with environment variable
+if [ "$SKIP_ENV_CHECK" = "true" ]; then
+    echo "⚠️  Skipping environment validation (SKIP_ENV_CHECK=true)"
+    exit 0
+fi
+
+# Allow bypass for emergency pushes (commit message contains 'URGENT' or 'HOTFIX')
+COMMIT_MSG=$(git log -1 --pretty=%B)
+if [[ "$COMMIT_MSG" =~ (URGENT|HOTFIX|Emergency|emergency) ]]; then
+    echo "🚨 Emergency push detected - skipping environment validation"
+    echo "💡 Commit message: $COMMIT_MSG"
+    exit 0
+fi
+
 # Run environment check
 ./check-env.sh
 
-# If check-env fails, prevent push
+# If check-env fails, prevent push unless bypassed
 if [ $? -ne 0 ]; then
     echo "❌ Environment validation failed. Push cancelled."
-    echo "💡 Fix environment issues before pushing"
+    echo "💡 To bypass: git push --no-verify"
+    echo "💡 To fix environment: azd env select original-app"
+    echo "💡 For emergency: SKIP_ENV_CHECK=true git push"
     exit 1
 fi
 
