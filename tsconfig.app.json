@@ -6,7 +6,6 @@
     "module": "ESNext",
     "skipLibCheck": true,
 
-    /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
@@ -14,11 +13,9 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
-    /* Performance optimizations */
     "incremental": false,
     "assumeChangesOnlyAffectDirectDependencies": true,
 
-    /* Linting - reduced for performance */
     "strict": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,

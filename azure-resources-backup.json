@@ -1,2 +1,5 @@
-=== AZURE RESOURCES BACKUP Thu Aug  7 07:38:16 PDT 2025 ===
-Current working resources:
+{
+  "backup_date": "Thu Aug 7 07:38:16 PDT 2025",
+  "description": "Azure resources backup",
+  "resources": []
+}
