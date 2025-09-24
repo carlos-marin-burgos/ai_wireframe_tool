@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.37.4.10188",
-      "templateHash": "18028633790335727855"
+      "version": "0.36.1.42791",
+      "templateHash": "2408947317197173229"
     },
     "name": "Designetica AI Wireframe Generator",
     "description": "Complete Azure infrastructure for Designetica AI wireframe generation platform"
@@ -75,6 +75,17 @@
       "metadata": {
         "description": "Model deployments for Azure OpenAI"
       }
+    },
+    "staticWebAppSkuName": {
+      "type": "string",
+      "defaultValue": "Standard",
+      "allowedValues": [
+        "Free",
+        "Standard"
+      ],
+      "metadata": {
+        "description": "SKU used for the Static Web App service (Free or Standard)."
+      }
     }
   },
   "variables": {
@@ -100,6 +111,10 @@
     "keyVaultName": "[take(format('{0}-{1}-{2}', variables('abbreviations').keyVault, parameters('environmentName'), variables('uniqueSuffix')), 24)]",
     "functionAppName": "[format('{0}-{1}-{2}', variables('abbreviations').functionApp, parameters('environmentName'), variables('uniqueSuffix'))]",
     "appServicePlanName": "[format('{0}-{1}-{2}', variables('abbreviations').appServicePlan, parameters('environmentName'), variables('uniqueSuffix'))]",
+    "staticWebAppName": "[take(format('{0}-{1}-{2}', variables('abbreviations').staticWebApp, parameters('environmentName'), variables('uniqueSuffix')), 60)]",
+    "staticWebAppTagsBase": "[union(variables('tags'), createObject('azd-service-name', 'frontend'))]",
+    "staticWebAppTagsWithOwner": "[if(empty(parameters('gitHubUserName')), variables('staticWebAppTagsBase'), union(variables('staticWebAppTagsBase'), createObject('repo-owner', parameters('gitHubUserName'))))]",
+    "staticWebAppTags": "[if(empty(parameters('repositoryName')), variables('staticWebAppTagsWithOwner'), union(variables('staticWebAppTagsWithOwner'), createObject('repo-name', parameters('repositoryName'))))]",
     "tags": {
       "azd-env-name": "[parameters('environmentName')]",
       "environment": "[parameters('environmentName')]",
@@ -372,6 +387,22 @@
       ]
     },
     {
+      "type": "Microsoft.Web/staticSites",
+      "apiVersion": "2022-09-01",
+      "name": "[variables('staticWebAppName')]",
+      "location": "[parameters('location')]",
+      "kind": "StaticSite",
+      "tags": "[variables('staticWebAppTags')]",
+      "sku": {
+        "name": "[parameters('staticWebAppSkuName')]",
+        "tier": "[parameters('staticWebAppSkuName')]"
+      },
+      "properties": {
+        "allowConfigFileUpdates": true,
+        "stagingEnvironmentPolicy": "Enabled"
+      }
+    },
+    {
       "type": "Microsoft.Authorization/roleAssignments",
       "apiVersion": "2022-04-01",
       "scope": "[format('Microsoft.Storage/storageAccounts/{0}', variables('storageAccountName'))]",
@@ -544,15 +575,15 @@
     },
     "AZURE_STATIC_WEB_APP_NAME": {
       "type": "string",
-      "value": "lemon-field-08a1a0b0f"
+      "value": "[variables('staticWebAppName')]"
     },
     "AZURE_STATIC_WEB_APP_URL": {
       "type": "string",
-      "value": "https://lemon-field-08a1a0b0f.1.azurestaticapps.net"
+      "value": "[format('https://{0}', reference(resourceId('Microsoft.Web/staticSites', variables('staticWebAppName')), '2022-09-01').defaultHostname)]"
     },
     "AZURE_STATIC_WEB_APP_HOSTNAME": {
       "type": "string",
-      "value": "lemon-field-08a1a0b0f.1.azurestaticapps.net"
+      "value": "[reference(resourceId('Microsoft.Web/staticSites', variables('staticWebAppName')), '2022-09-01').defaultHostname]"
     }
   }
 }

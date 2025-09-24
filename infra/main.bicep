@@ -40,6 +40,13 @@ param openAiModelDeployments array = [
   }
 ]
 
+@description('SKU used for the Static Web App service (Free or Standard).')
+@allowed([
+  'Free'
+  'Standard'
+])
+param staticWebAppSkuName string = 'Standard'
+
 // Generate a unique token for resource naming
 var uniqueSuffix = uniqueString(subscription().id, resourceGroup().id, location, environmentName)
 var abbreviations = loadJsonContent('abbreviations.json')
@@ -53,6 +60,14 @@ var userAssignedIdentityName = '${abbreviations.userAssignedIdentity}-${environm
 var keyVaultName = take('${abbreviations.keyVault}-${environmentName}-${uniqueSuffix}', 24)
 var functionAppName = '${abbreviations.functionApp}-${environmentName}-${uniqueSuffix}'
 var appServicePlanName = '${abbreviations.appServicePlan}-${environmentName}-${uniqueSuffix}'
+var staticWebAppName = take('${abbreviations.staticWebApp}-${environmentName}-${uniqueSuffix}', 60)
+var staticWebAppTagsBase = union(tags, { 'azd-service-name': 'frontend' })
+var staticWebAppTagsWithOwner = empty(gitHubUserName)
+  ? staticWebAppTagsBase
+  : union(staticWebAppTagsBase, { 'repo-owner': gitHubUserName })
+var staticWebAppTags = empty(repositoryName)
+  ? staticWebAppTagsWithOwner
+  : union(staticWebAppTagsWithOwner, { 'repo-name': repositoryName })
 
 // Tags for all resources
 var tags = {
@@ -309,7 +324,22 @@ resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
 }
 
 // Note: Using separate Function App for backend services
-// Static Web App can be added later for frontend hosting if needed
+// Static Web App for frontend hosting
+
+resource staticWebApp 'Microsoft.Web/staticSites@2022-09-01' = {
+  name: staticWebAppName
+  location: location
+  kind: 'StaticSite'
+  tags: staticWebAppTags
+  sku: {
+    name: staticWebAppSkuName
+    tier: staticWebAppSkuName
+  }
+  properties: {
+    allowConfigFileUpdates: true
+    stagingEnvironmentPolicy: 'Enabled'
+  }
+}
 
 // Optimized role assignments (removed redundant ones)
 // Storage Blob Data Owner includes both Contributor and Reader permissions
@@ -412,24 +442,6 @@ resource keyVaultSecretsUserRoleAssignment 'Microsoft.Authorization/roleAssignme
   }
 }
 
-// Note: Static Web App settings must be configured separately 
-// since the existing Static Web App is in a different resource group (rg-Designetica)
-// Configure these settings manually or through a separate deployment:
-// - AZURE_OPENAI_ENDPOINT: {openAiAccount.properties.endpoint}
-// - AZURE_OPENAI_API_VERSION: '2024-08-01-preview'
-// - FUNCTIONS_ENDPOINT: 'https://{functionApp.properties.defaultHostName}'
-
-// Note: Static Web App can be added later for frontend hosting
-// For now, focusing on Function App deployment for OAuth integration
-
-// ========================================
-// Static Web App Configuration
-// ========================================
-// Note: Using existing Static Web App 'lemon-field-08a1a0b0f'
-// The existing Static Web App is deployed via GitHub Actions workflow
-// and configured to use the Function App endpoint
-// No Bicep deployment needed - referencing existing resource in outputs only
-
 // Output values
 output AZURE_LOCATION string = location
 output AZURE_TENANT_ID string = tenant().tenantId
@@ -456,6 +468,6 @@ output AZURE_KEY_VAULT_NAME string = keyVault.name
 output AZURE_KEY_VAULT_URL string = keyVault.properties.vaultUri
 
 // Static Web App outputs (referencing existing resource)
-output AZURE_STATIC_WEB_APP_NAME string = 'lemon-field-08a1a0b0f'
-output AZURE_STATIC_WEB_APP_URL string = 'https://lemon-field-08a1a0b0f.1.azurestaticapps.net'
-output AZURE_STATIC_WEB_APP_HOSTNAME string = 'lemon-field-08a1a0b0f.1.azurestaticapps.net'
+output AZURE_STATIC_WEB_APP_NAME string = staticWebApp.name
+output AZURE_STATIC_WEB_APP_URL string = 'https://${staticWebApp.properties.defaultHostname}'
+output AZURE_STATIC_WEB_APP_HOSTNAME string = staticWebApp.properties.defaultHostname
