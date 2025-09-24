@@ -653,15 +653,15 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
         try {
             const fileKey = figmaApi.parseFileUrl(url);
             console.log('🔍 Parsed Figma file key:', fileKey);
-            
+
             if (fileKey) {
                 console.log('✅ Detected Figma URL, checking authentication...');
                 // Only check for authentication if it's a Figma URL
                 const currentToken = getCurrentAccessToken();
                 console.log('🔐 Current access token available:', !!currentToken);
                 if (!currentToken) {
-                    console.log('❌ No access token found, showing error');
-                    setError('Please connect to Figma first (OAuth or manual token)');
+                    console.log('❌ No access token found for Figma URL, showing error');
+                    setError('This is a Figma URL - please connect to Figma first (OAuth or manual token)');
                     return;
                 }
 
