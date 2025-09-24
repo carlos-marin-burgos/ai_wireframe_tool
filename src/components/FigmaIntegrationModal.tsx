@@ -211,21 +211,48 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
         const requestToken = Symbol('figma-status-check');
         statusCheckTokenRef.current = requestToken;
         try {
-            // FIRST: Check trusted session - this is AUTHORITATIVE
+            // FIRST: Check trusted session - but also verify OAuth tokens exist
             const trustedSession = readTrustedSession();
             if (trustedSession) {
-                console.log('🔐 Using trusted local Figma session - SKIPPING ALL BACKEND CHECKS');
-                setIsConnected(true);
+                console.log('🔐 Found trusted session, verifying OAuth tokens...');
+
+                // Check if OAuth tokens actually exist for this trusted session
+                const storedTokens = localStorage.getItem('figma_oauth_tokens');
+                if (storedTokens) {
+                    try {
+                        const tokenData = JSON.parse(storedTokens);
+                        if (tokenData.access_token) {
+                            console.log('🔐 Using trusted local Figma session with valid OAuth tokens');
+                            setIsConnected(true);
+                            setAuthStatus({
+                                status: 'trusted_local_session',
+                                message: 'Using locally trusted Figma connection',
+                                connected: true,
+                                user: trustedSession.user || undefined
+                            });
+                            hasAuthoritativeConnectionRef.current = true;
+                            statusCheckTokenRef.current = null;
+                            isCheckingStatusRef.current = false;
+                            return; // STOP HERE - trusted session with valid tokens
+                        }
+                    } catch (error) {
+                        console.error('Error parsing OAuth tokens for trusted session:', error);
+                    }
+                }
+
+                // Trusted session exists but no valid OAuth tokens - need to reconnect
+                console.log('⚠️ Trusted session found but OAuth tokens missing - need to reconnect');
                 setAuthStatus({
-                    status: 'trusted_local_session',
-                    message: 'Using locally trusted Figma connection',
-                    connected: true,
-                    user: trustedSession.user || undefined
+                    status: 'trusted_session_needs_reconnect',
+                    message: 'Figma session found but authentication expired. Please reconnect.',
+                    connected: false,
+                    needsReconnect: true
                 });
-                hasAuthoritativeConnectionRef.current = true;
+                setIsConnected(false);
+                hasAuthoritativeConnectionRef.current = false;
                 statusCheckTokenRef.current = null;
-                isCheckingStatusRef.current = false; // Reset the checking status
-                return; // STOP HERE - don't do any backend calls
+                isCheckingStatusRef.current = false;
+                return;
             }
             hasAuthoritativeConnectionRef.current = false;
 
