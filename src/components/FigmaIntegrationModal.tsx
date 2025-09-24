@@ -272,7 +272,21 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
             }
 
             if (isJson) {
-                const data = await response.json();
+                let data;
+                try {
+                    const text = await response.text();
+                    if (text.trim()) {
+                        data = JSON.parse(text);
+                    } else {
+                        console.log('ℹ️ Empty response body - likely HTML auth challenge, ignoring');
+                        return;
+                    }
+                } catch (jsonError) {
+                    console.error('Failed to parse OAuth status response as JSON:', jsonError);
+                    console.log('ℹ️ HTML auth challenge detected - likely stale status check, ignoring');
+                    return; // Skip this response as it's likely HTML from authentication challenge
+                }
+
                 console.log('🔍 OAuth Status Response:', data); // Debug log
 
                 if (statusCheckTokenRef.current !== requestToken) {
@@ -425,7 +439,23 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
             });
 
             if (!response.ok) {
-                const errorData = await response.json();
+                let errorData;
+                try {
+                    const text = await response.text();
+                    if (text.trim()) {
+                        errorData = JSON.parse(text);
+                    } else {
+                        console.log('ℹ️ Empty OAuth start error response - likely HTML auth challenge, graceful fallback');
+                        throw new Error(`OAuth start failed with status ${response.status}: ${response.statusText}`);
+                    }
+                } catch (jsonError) {
+                    if (jsonError.message.includes('Empty response body') || jsonError.message.includes('OAuth start failed with status')) {
+                        // This is our controlled error, re-throw it
+                        throw jsonError;
+                    }
+                    console.log('ℹ️ OAuth start error response not JSON - likely HTML auth challenge');
+                    throw new Error(`OAuth start failed with status ${response.status}: ${response.statusText}`);
+                }
 
                 if (errorData.status === 'oauth_not_configured') {
                     setError('⚠️ OAuth is not configured. Please use the Manual Token section below to connect to Figma.');
@@ -437,7 +467,20 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 throw new Error(errorData.error || 'Failed to get authorization URL');
             }
 
-            const data = await response.json(); if (data.auth_url) {
+            let data;
+            try {
+                const text = await response.text();
+                if (text.trim()) {
+                    data = JSON.parse(text);
+                } else {
+                    throw new Error('Empty response body');
+                }
+            } catch (jsonError) {
+                console.error('Failed to parse OAuth start response as JSON:', jsonError);
+                throw new Error('Invalid response format from OAuth endpoint');
+            }
+
+            if (data.auth_url) {
                 // Open OAuth window
                 const authWindow = window.open(
                     data.auth_url,
