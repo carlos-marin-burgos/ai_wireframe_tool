@@ -160,11 +160,14 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 
     // Utility function to get the current access token (OAuth or manual)
     const getCurrentAccessToken = (): string | null => {
+        console.log('🔍 getCurrentAccessToken called');
         // First check for locally stored OAuth tokens
         const storedTokens = localStorage.getItem('figma_oauth_tokens');
+        console.log('🔍 Stored OAuth tokens:', storedTokens ? 'found' : 'not found');
         if (storedTokens) {
             try {
                 const tokenData = JSON.parse(storedTokens);
+                console.log('🔍 Parsed token data:', { hasAccessToken: !!tokenData.access_token, tokenPreview: tokenData.access_token ? tokenData.access_token.substring(0, 8) + '...' : 'none' });
                 return tokenData.access_token;
             } catch (error) {
                 console.error('Error parsing stored OAuth tokens:', error);
@@ -174,6 +177,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
         }
 
         // Fallback to manual token input
+        console.log('🔍 Fallback to manual token:', accessToken ? accessToken.substring(0, 8) + '...' : 'not set');
         return accessToken;
     };
 
