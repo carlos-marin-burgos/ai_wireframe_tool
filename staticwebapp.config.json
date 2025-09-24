@@ -70,6 +70,7 @@
       "/production-analytics.html",
       "/simple-analytics.html",
       "/monitor-analytics.html",
+      "/api/*",
       "/*.png",
       "/*.jpg",
       "/*.ico",

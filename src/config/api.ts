@@ -9,13 +9,29 @@ const isLocalhost =
 // Environment detection - removed hardcoded production domain for flexibility
 const isProduction = !isDevelopment && !isLocalhost;
 
+// Always use Function App for production when on Static Web App hostname
+const productionHostFallback =
+  typeof window !== "undefined" &&
+  window.location.hostname === "lemon-field-08a1a0b0f.1.azurestaticapps.net"
+    ? "https://func-original-app-pgno4orkguix6.azurewebsites.net"
+    : undefined;
+
+// Get the actual base URL that will be used
+const getActualBaseUrl = () => {
+  if (productionHostFallback) return productionHostFallback;
+  if (import.meta.env.VITE_API_BASE_URL) return import.meta.env.VITE_API_BASE_URL;
+  if (isDevelopment || isLocalhost) return ""; // Relative URLs for dev
+  return ""; // Fallback to relative URLs
+};
+
 console.log("🔍 API Configuration:", {
   isDevelopment,
   isLocalhost,
   isProduction,
   hostname: typeof window !== "undefined" ? window.location.hostname : "server",
-  usingStaticWebAppRouting: isProduction,
-  apiBaseUrl: import.meta.env.VITE_API_BASE_URL || "auto-detect",
+  actualBaseUrl: getActualBaseUrl(),
+  hasProductionFallback: Boolean(productionHostFallback),
+  willUseDirectFunctionApp: Boolean(productionHostFallback),
 });
 
 // Centralized port configuration to avoid conflicts
@@ -86,12 +102,10 @@ export const API_CONFIG = {
   // FIXED: Use proper Static Web App API routing for production
   // In production, Azure Static Web Apps automatically proxy /api/* to the Function App
   // In development, use empty string to leverage Vite proxy
-  BASE_URL: isProduction
-    ? "" // Use relative URLs - Static Web Apps will proxy to Function App automatically
-    : import.meta.env.VITE_API_BASE_URL ||
-      (isDevelopment || isLocalhost
-        ? "" // Use relative URLs in development to go through Vite proxy
-        : ""), // Fallback to relative URLs
+  BASE_URL:
+    productionHostFallback ||
+    import.meta.env.VITE_API_BASE_URL ||
+    (isDevelopment || isLocalhost ? "" : ""), // Use production fallback first, then env var, then relative URLs
 };
 
 // Health check to verify backend has AI capabilities
