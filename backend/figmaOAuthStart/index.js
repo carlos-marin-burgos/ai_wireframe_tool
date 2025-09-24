@@ -100,7 +100,6 @@ module.exports = async function (context, req) {
       const params = new URLSearchParams({
         client_id: process.env.FIGMA_CLIENT_ID,
         redirect_uri: redirectUri,
-        scope: "file_read",
         response_type: "code",
       });
 
