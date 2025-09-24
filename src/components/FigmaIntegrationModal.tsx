@@ -161,7 +161,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
     // Utility function to get the current access token (OAuth or manual)
     const getCurrentAccessToken = (): string | null => {
         console.log('🔍 getCurrentAccessToken called');
-        
+
         // FIRST: Check trusted session
         const trustedSession = readTrustedSession();
         if (trustedSession) {
@@ -178,7 +178,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 }
             }
         }
-        
+
         // SECOND: Check for locally stored OAuth tokens (fallback)
         const storedTokens = localStorage.getItem('figma_oauth_tokens');
         console.log('🔍 Stored OAuth tokens:', storedTokens ? 'found' : 'not found');
