@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
     FiX,
     FiUpload,
@@ -119,7 +119,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 }) => {
     const [activeTab, setActiveTab] = useState<'connect' | 'url' | 'upload' | 'live'>('connect');
     const [isConnected, setIsConnected] = useState(false);
-    const [isCheckingStatus, setIsCheckingStatus] = useState(false);
+    const isCheckingStatusRef = useRef(false);
 
     // Helper function to check if we have valid localStorage tokens
     const hasValidLocalTokens = useCallback(() => {
@@ -178,12 +178,12 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
     // Check existing OAuth connection status
     const checkOAuthStatus = useCallback(async () => {
         // Prevent multiple concurrent status checks
-        if (isCheckingStatus) {
+        if (isCheckingStatusRef.current) {
             console.log('⏸️ Status check already in progress, skipping...');
             return;
         }
 
-        setIsCheckingStatus(true);
+        isCheckingStatusRef.current = true;
         try {
             // FIRST: Check trusted session - this is AUTHORITATIVE
             const trustedSession = readTrustedSession();
@@ -196,7 +196,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                     connected: true,
                     user: trustedSession.user || undefined
                 });
-                setIsCheckingStatus(false); // Reset the checking status
+                isCheckingStatusRef.current = false; // Reset the checking status
                 return; // STOP HERE - don't do any backend calls
             }
 
@@ -223,7 +223,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 
                     // Skip backend check if we have valid local tokens - make localStorage authoritative
                     console.log('✅ Using localStorage as authoritative source - skipping backend check');
-                    setIsCheckingStatus(false); // Reset the checking status
+                    isCheckingStatusRef.current = false; // Reset the checking status
                     return;
                 } else {
                     console.log('⏰ Locally stored tokens expired, removing...');
@@ -310,16 +310,16 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 });
             }
         } finally {
-            setIsCheckingStatus(false);
+            isCheckingStatusRef.current = false;
         }
-    }, [isCheckingStatus]);
+    }, []); // No dependencies needed - all refs and state setters are stable
 
     // Check OAuth status on component mount
     useEffect(() => {
         if (isOpen) {
             checkOAuthStatus();
         }
-    }, [isOpen, checkOAuthStatus]);
+    }, [isOpen]); // Only re-run when modal opens/closes
 
     // Listen for OAuth success messages from popup window
     useEffect(() => {
@@ -375,7 +375,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 
         window.addEventListener('message', handleMessage);
         return () => window.removeEventListener('message', handleMessage);
-    }, [checkOAuthStatus]);
+    }, []); // No dependencies needed - this is a stable event listener
 
     // Start OAuth flow
     const handleOAuthConnect = useCallback(async () => {
@@ -413,10 +413,8 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 const pollTimer = setInterval(() => {
                     if (authWindow?.closed) {
                         clearInterval(pollTimer);
-                        // Re-check status after OAuth window closes
-                        setTimeout(() => {
-                            checkOAuthStatus();
-                        }, 1000);
+                        // No status check needed - OAuth success message handler is authoritative
+                        console.log('🚪 OAuth window closed - relying on message handler for status');
                     }
                 }, 1000);
 
@@ -429,7 +427,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
         } finally {
             setIsLoading(false);
         }
-    }, [checkOAuthStatus]);
+    }, []); // No dependencies needed - function uses only stable APIs
 
     // Clear messages after 5 seconds
     useEffect(() => {
@@ -805,10 +803,8 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
             setSuccess('🔓 Disconnected from Figma. Your local session has been cleared.');
             setActiveTab('connect');
 
-            // Force a fresh status check after disconnect
-            setTimeout(() => {
-                checkOAuthStatus();
-            }, 1000);
+            // No status check needed after disconnect - state is already cleared
+            console.log('🔓 Disconnect complete - no further status checks needed');
 
         } catch (error) {
             console.error('Disconnect error:', error);
@@ -816,7 +812,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
         } finally {
             setIsLoading(false);
         }
-    }, [checkOAuthStatus]);
+    }, []); // No dependencies needed - function uses only stable APIs
 
     if (!isOpen) return null;
 
