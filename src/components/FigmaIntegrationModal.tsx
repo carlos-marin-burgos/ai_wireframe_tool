@@ -120,6 +120,8 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
     const [activeTab, setActiveTab] = useState<'connect' | 'url' | 'upload' | 'live'>('connect');
     const [isConnected, setIsConnected] = useState(false);
     const isCheckingStatusRef = useRef(false);
+    const statusCheckTokenRef = useRef<symbol | null>(null);
+    const hasAuthoritativeConnectionRef = useRef(false);
 
     // Helper function to check if we have valid localStorage tokens
     const hasValidLocalTokens = useCallback(() => {
@@ -184,6 +186,8 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
         }
 
         isCheckingStatusRef.current = true;
+        const requestToken = Symbol('figma-status-check');
+        statusCheckTokenRef.current = requestToken;
         try {
             // FIRST: Check trusted session - this is AUTHORITATIVE
             const trustedSession = readTrustedSession();
@@ -196,9 +200,12 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                     connected: true,
                     user: trustedSession.user || undefined
                 });
+                hasAuthoritativeConnectionRef.current = true;
+                statusCheckTokenRef.current = null;
                 isCheckingStatusRef.current = false; // Reset the checking status
                 return; // STOP HERE - don't do any backend calls
             }
+            hasAuthoritativeConnectionRef.current = false;
 
             // SECOND: Check for locally stored OAuth tokens
             const storedTokens = localStorage.getItem('figma_oauth_tokens');
@@ -223,12 +230,15 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 
                     // Skip backend check if we have valid local tokens - make localStorage authoritative
                     console.log('✅ Using localStorage as authoritative source - skipping backend check');
+                    hasAuthoritativeConnectionRef.current = true;
+                    statusCheckTokenRef.current = null;
                     isCheckingStatusRef.current = false; // Reset the checking status
                     return;
                 } else {
                     console.log('⏰ Locally stored tokens expired, removing...');
                     localStorage.removeItem('figma_oauth_tokens');
                     localStorage.removeItem('figma_oauth_timestamp');
+                    hasAuthoritativeConnectionRef.current = false;
                 }
             }
 
@@ -264,35 +274,55 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
             if (isJson) {
                 const data = await response.json();
                 console.log('🔍 OAuth Status Response:', data); // Debug log
-                setAuthStatus(data);
 
-                if (data.status === 'already_authorized' && data.connected) {
-                    console.log('✅ Server confirms OAuth connection - setting connected state to TRUE');
-                    setIsConnected(true);
-                    setSuccess(`🔗 Already connected to Figma! Welcome back, ${data.user?.email || data.user?.handle || 'User'}`);
-                    setActiveTab('connect');
+                if (statusCheckTokenRef.current !== requestToken) {
+                    console.log('⏭️ Ignoring stale OAuth status response (JSON)');
                 } else {
-                    console.log('❌ Server indicates not connected - setting connected state to FALSE', data);
-                    setIsConnected(false);
-                    setActiveTab('connect');
+                    setAuthStatus(data);
+
+                    if (data.status === 'already_authorized' && data.connected) {
+                        console.log('✅ Server confirms OAuth connection - setting connected state to TRUE');
+                        setIsConnected(true);
+                        hasAuthoritativeConnectionRef.current = true;
+                        setSuccess(`🔗 Already connected to Figma! Welcome back, ${data.user?.email || data.user?.handle || 'User'}`);
+                        setActiveTab('connect');
+                    } else {
+                        const hasLocalTokens = hasValidLocalTokens();
+                        const hasTrustedSessionNow = Boolean(readTrustedSession());
+                        if (!hasLocalTokens && !hasTrustedSessionNow && !hasAuthoritativeConnectionRef.current) {
+                            console.log('❌ Server indicates not connected - setting connected state to FALSE', data);
+                            setIsConnected(false);
+                            setActiveTab('connect');
+                        } else {
+                            console.log('⚠️ Server indicates disconnect but local trusted state exists - keeping connection TRUE');
+                        }
+                    }
                 }
             } else {
                 // Fallback: Received HTML (likely interactive auth page)
-                // Only override connection if we don't have valid local tokens
-                if (!hasValidLocalTokens()) {
+                const hasLocalTokens = hasValidLocalTokens();
+                const hasTrustedSessionNow = Boolean(readTrustedSession());
+
+                if (statusCheckTokenRef.current !== requestToken) {
+                    console.log('⏭️ Ignoring stale HTML OAuth status response');
+                } else if (!hasLocalTokens && !hasTrustedSessionNow && !hasAuthoritativeConnectionRef.current) {
                     setAuthStatus({ status: 'authorization_required', message: 'Authorization required (interactive page returned)' });
                     console.log('❌ HTML response received - setting isConnected to FALSE');
                     setIsConnected(false);
                     setActiveTab('connect');
                 } else {
-                    console.log('⚠️ HTML response received but valid OAuth tokens exist - keeping connection TRUE');
+                    console.log('⚠️ HTML response received but valid session exists - keeping connection TRUE');
                 }
             }
         } catch (error) {
             console.error('Error checking OAuth status:', error);
 
-            // Only override connection state if we don't have valid local tokens
-            if (!hasValidLocalTokens()) {
+            const hasLocalTokens = hasValidLocalTokens();
+            const hasTrustedSessionNow = Boolean(readTrustedSession());
+
+            if (statusCheckTokenRef.current !== requestToken) {
+                console.log('⏭️ Ignoring stale OAuth status error');
+            } else if (!hasLocalTokens && !hasTrustedSessionNow && !hasAuthoritativeConnectionRef.current) {
                 setAuthStatus({
                     status: 'oauth_error',
                     message: 'OAuth connection unavailable - using manual token mode',
@@ -302,7 +332,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 setIsConnected(false);
                 setActiveTab('connect');
             } else {
-                console.log('⚠️ OAuth status check failed but valid tokens exist - keeping connection TRUE');
+                console.log('⚠️ OAuth status check failed but valid session exists - keeping connection TRUE');
                 setAuthStatus({
                     status: 'oauth_error_but_connected',
                     message: 'Status check failed but using stored OAuth tokens',
@@ -310,7 +340,10 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 });
             }
         } finally {
-            isCheckingStatusRef.current = false;
+            if (statusCheckTokenRef.current === requestToken) {
+                isCheckingStatusRef.current = false;
+                statusCheckTokenRef.current = null;
+            }
         }
     }, []); // No dependencies needed - all refs and state setters are stable
 
@@ -348,6 +381,9 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 // CRITICAL: Update the connection state IMMEDIATELY
                 console.log('🔗 Setting isConnected to TRUE immediately');
                 setIsConnected(true);
+                hasAuthoritativeConnectionRef.current = true;
+                statusCheckTokenRef.current = null;
+                isCheckingStatusRef.current = false;
 
                 // Update auth status
                 setAuthStatus({
@@ -651,6 +687,9 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                     user: { email: 'Personal Access Token' },
                     tokenPreview: `${accessToken.slice(0, 4)}…${accessToken.slice(-4)}`
                 });
+                hasAuthoritativeConnectionRef.current = true;
+                statusCheckTokenRef.current = null;
+                isCheckingStatusRef.current = false;
                 setSuccess('🔗 Successfully connected to Figma! You can now import designs.');
 
                 // Open Figma in a new tab to show it's working
@@ -805,6 +844,9 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 
             // No status check needed after disconnect - state is already cleared
             console.log('🔓 Disconnect complete - no further status checks needed');
+            hasAuthoritativeConnectionRef.current = false;
+            statusCheckTokenRef.current = null;
+            isCheckingStatusRef.current = false;
 
         } catch (error) {
             console.error('Disconnect error:', error);
