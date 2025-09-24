@@ -119,6 +119,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 }) => {
     const [activeTab, setActiveTab] = useState<'connect' | 'url' | 'upload' | 'live'>('connect');
     const [isConnected, setIsConnected] = useState(false);
+    const [isCheckingStatus, setIsCheckingStatus] = useState(false);
 
     // Helper function to check if we have valid localStorage tokens
     const hasValidLocalTokens = useCallback(() => {
@@ -176,8 +177,29 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 
     // Check existing OAuth connection status
     const checkOAuthStatus = useCallback(async () => {
+        // Prevent multiple concurrent status checks
+        if (isCheckingStatus) {
+            console.log('⏸️ Status check already in progress, skipping...');
+            return;
+        }
+
+        setIsCheckingStatus(true);
         try {
-            // First check for locally stored tokens
+            // FIRST: Check trusted session - this is AUTHORITATIVE
+            const trustedSession = readTrustedSession();
+            if (trustedSession) {
+                console.log('🔐 Using trusted local Figma session - SKIPPING ALL BACKEND CHECKS');
+                setIsConnected(true);
+                setAuthStatus({
+                    status: 'trusted_local_session',
+                    message: 'Using locally trusted Figma connection',
+                    connected: true,
+                    user: trustedSession.user || undefined
+                });
+                return; // STOP HERE - don't do any backend calls
+            }
+
+            // SECOND: Check for locally stored OAuth tokens
             const storedTokens = localStorage.getItem('figma_oauth_tokens');
             const storedTimestamp = localStorage.getItem('figma_oauth_timestamp');
 
@@ -208,20 +230,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 }
             }
 
-            const trustedSession = readTrustedSession();
-            if (trustedSession) {
-                console.log('🔐 Using trusted local Figma session');
-                setIsConnected(true);
-                setAuthStatus({
-                    status: 'trusted_local_session',
-                    message: 'Using locally trusted Figma connection',
-                    connected: true,
-                    user: trustedSession.user || undefined
-                });
-                return;
-            }
-
-            // Fallback to server-side token check
+            // THIRD: Only if no trusted session AND no valid OAuth tokens, check backend
             const response = await fetch(getApiUrl('/api/figmaOAuthStatus'), {
                 headers: { 'Accept': 'application/json' }
             });
@@ -298,8 +307,10 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                     connected: true
                 });
             }
+        } finally {
+            setIsCheckingStatus(false);
         }
-    }, []);
+    }, [isCheckingStatus]);
 
     // Check OAuth status on component mount
     useEffect(() => {
