@@ -1,0 +1,6 @@
+{
+  "defaultTemplate": "standard",
+  "supportedFormats": ["json", "xml"],
+  "generateThumbnails": true,
+  "maxFileSize": "10MB"
+}
