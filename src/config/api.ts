@@ -13,7 +13,7 @@ const isProduction = !isDevelopment && !isLocalhost;
 const productionHostFallback =
   typeof window !== "undefined" &&
   window.location.hostname === "lemon-field-08a1a0b0f.1.azurestaticapps.net"
-    ? "https://func-original-app-pgno4orkguix6.azurewebsites.net"
+    ? "https://func-designetica-5gwyjxbwvr4s6.azurewebsites.net"
     : undefined;
 
 // Get the actual base URL that will be used
@@ -198,7 +198,7 @@ export const getApiUrl = (endpoint: string, customBaseUrl?: string) => {
         typeof window !== "undefined" &&
         window.location.hostname ===
           "lemon-field-08a1a0b0f.1.azurestaticapps.net"
-          ? "https://func-original-app-pgno4orkguix6.azurewebsites.net"
+          ? "https://func-designetica-5gwyjxbwvr4s6.azurewebsites.net"
           : undefined,
     });
   }

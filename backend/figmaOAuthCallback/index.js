@@ -294,24 +294,22 @@ module.exports = async function (context, req) {
               if (window.opener) {
                 window.opener.postMessage({
                   type: 'FIGMA_OAUTH_SUCCESS',
-                  tokenInfo: {
-                    access_token: '${tokenResult.data.access_token}',
-                    scope: '${tokenResult.data.scope || "file_read"}',
-                    expires_in: ${tokenResult.data.expires_in || 3600},
-                    refresh_token: '${tokenResult.data.refresh_token || ""}',
-                    connected: true
-                  },
-                  userInfo: {
-                    email: 'OAuth User'
+                  data: {
+                    status: 'success',
+                    message: 'Successfully connected to Figma',
+                    tokenInfo: {
+                      scope: '${tokenResult.data.scope || "file_read"}',
+                      expires_in: ${tokenResult.data.expires_in || 3600},
+                      connected: true
+                    }
                   }
                 }, '*');
-                console.log('✅ Sent OAuth success message to parent window');
               }
               window.close();
             } catch (e) { 
-              console.log('Auto-close not available:', e); 
+              console.log('Auto-close not available'); 
             }
-          }, 2000);
+          }, 3000);
         </script>
     </div>
 </body>
