@@ -33,8 +33,8 @@ async function runContextAwareTest() {
     ];
 
     const sessionId = 'test_session_' + Date.now();
-    let conversationHistory = [];
-    let results = [];
+    const conversationHistory = [];
+    const results = [];
 
     for (let i = 0; i < testSequence.length; i++) {
         const test = testSequence[i];

@@ -36,7 +36,7 @@ module.exports = async function (context, req) {
     );
     context.log(`📁 Atlas Design Library ID: ${atlasFileId || "not found"}`);
 
-    let components = [];
+    const components = [];
 
     // Load custom components (added via admin script) first
     const customComponents = await loadCustomComponents(context);

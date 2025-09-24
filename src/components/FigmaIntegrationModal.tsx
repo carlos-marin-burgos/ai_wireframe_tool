@@ -11,8 +11,6 @@ import {
     FiLayers,
     FiSettings,
     FiExternalLink,
-    FiRotateCw,
-    FiCpu,
     FiClock,
     FiInfo,
     FiPause,
@@ -23,7 +21,84 @@ import { figmaApi, FigmaFile as ApiFigmaFile, FigmaFrame } from '../services/fig
 import { tokenExtractor, DesignTokenCollection } from '../services/figmaTokenExtractor';
 import FigmaFileUpload from './FigmaFileUpload';
 
-import { API_CONFIG, getApiUrl } from '../config/api';
+import { getApiUrl } from '../config/api';
+
+const FIGMA_TRUSTED_SESSION_KEY = 'figma_oauth_session';
+const FIGMA_SESSION_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+type TrustedFigmaSession = {
+    source: 'oauth' | 'manual';
+    connectedAt: number;
+    expiresAt: number;
+    user?: { email?: string; handle?: string } | null;
+    tokenPreview?: string;
+};
+
+const readTrustedSession = (): TrustedFigmaSession | null => {
+    if (typeof window === 'undefined') return null;
+
+    try {
+        const raw = window.localStorage.getItem(FIGMA_TRUSTED_SESSION_KEY);
+        if (!raw) return null;
+
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== 'object') {
+            window.localStorage.removeItem(FIGMA_TRUSTED_SESSION_KEY);
+            return null;
+        }
+
+        const connectedAt = typeof parsed.connectedAt === 'number' ? parsed.connectedAt : Date.now();
+        const expiresAt = typeof parsed.expiresAt === 'number'
+            ? parsed.expiresAt
+            : connectedAt + FIGMA_SESSION_TTL_MS;
+
+        if (Date.now() >= expiresAt) {
+            window.localStorage.removeItem(FIGMA_TRUSTED_SESSION_KEY);
+            return null;
+        }
+
+        return {
+            source: parsed.source === 'manual' ? 'manual' : 'oauth',
+            connectedAt,
+            expiresAt,
+            user: parsed.user ?? null,
+            tokenPreview: parsed.tokenPreview
+        };
+    } catch (error) {
+        console.error('Error reading trusted Figma session:', error);
+        try {
+            window.localStorage.removeItem(FIGMA_TRUSTED_SESSION_KEY);
+        } catch {
+            /* noop */
+        }
+        return null;
+    }
+};
+
+const persistTrustedSession = (session: Omit<TrustedFigmaSession, 'expiresAt'> & { expiresAt?: number }) => {
+    if (typeof window === 'undefined') return;
+
+    const payload: TrustedFigmaSession = {
+        ...session,
+        expiresAt: session.expiresAt ?? session.connectedAt + FIGMA_SESSION_TTL_MS,
+    };
+
+    try {
+        window.localStorage.setItem(FIGMA_TRUSTED_SESSION_KEY, JSON.stringify(payload));
+    } catch (error) {
+        console.error('Error persisting trusted Figma session:', error);
+    }
+};
+
+const clearTrustedSession = () => {
+    if (typeof window === 'undefined') return;
+
+    try {
+        window.localStorage.removeItem(FIGMA_TRUSTED_SESSION_KEY);
+    } catch (error) {
+        console.error('Error clearing trusted Figma session:', error);
+    }
+};
 
 interface FigmaIntegrationModalProps {
     isOpen: boolean;
@@ -55,6 +130,11 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 const tokenAge = Date.now() - parseInt(storedTimestamp);
                 const maxAge = 24 * 60 * 60 * 1000; // 24 hours
                 return tokenAge < maxAge;
+            }
+
+            const trustedSession = readTrustedSession();
+            if (trustedSession) {
+                return true;
             }
         } catch (error) {
             console.error('Error checking local tokens:', error);
@@ -126,6 +206,19 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                     localStorage.removeItem('figma_oauth_tokens');
                     localStorage.removeItem('figma_oauth_timestamp');
                 }
+            }
+
+            const trustedSession = readTrustedSession();
+            if (trustedSession) {
+                console.log('🔐 Using trusted local Figma session');
+                setIsConnected(true);
+                setAuthStatus({
+                    status: 'trusted_local_session',
+                    message: 'Using locally trusted Figma connection',
+                    connected: true,
+                    user: trustedSession.user || undefined
+                });
+                return;
             }
 
             // Fallback to server-side token check
@@ -227,6 +320,17 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                     localStorage.setItem('figma_oauth_timestamp', Date.now().toString());
                     console.log('💾 Stored OAuth tokens locally');
                 }
+
+                const connectedAt = Date.now();
+                persistTrustedSession({
+                    source: 'oauth',
+                    connectedAt,
+                    expiresAt: connectedAt + FIGMA_SESSION_TTL_MS,
+                    user: event.data.userInfo || null,
+                    tokenPreview: event.data.tokenInfo?.access_token
+                        ? `${event.data.tokenInfo.access_token.slice(0, 4)}…${event.data.tokenInfo.access_token.slice(-4)}`
+                        : undefined
+                });
 
                 // CRITICAL: Update the connection state IMMEDIATELY
                 console.log('🔗 Setting isConnected to TRUE immediately');
@@ -524,6 +628,14 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
             if (accessToken.toLowerCase().includes('figd_') || accessToken.length > 10) {
                 figmaApi.setAccessToken(accessToken);
                 setIsConnected(true);
+                const connectedAt = Date.now();
+                persistTrustedSession({
+                    source: 'manual',
+                    connectedAt,
+                    expiresAt: connectedAt + FIGMA_SESSION_TTL_MS,
+                    user: { email: 'Personal Access Token' },
+                    tokenPreview: `${accessToken.slice(0, 4)}…${accessToken.slice(-4)}`
+                });
                 setSuccess('🔗 Successfully connected to Figma! You can now import designs.');
 
                 // Open Figma in a new tab to show it's working
@@ -657,6 +769,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
             localStorage.removeItem('figma_oauth_tokens');
             localStorage.removeItem('figma_oauth_timestamp');
             console.log('🗑️ Cleared locally stored OAuth tokens');
+            clearTrustedSession();
 
             // Try to call backend disconnect endpoint if available
             try {

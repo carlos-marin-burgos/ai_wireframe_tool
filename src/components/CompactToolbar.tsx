@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     FiSave,
     FiPlus,
@@ -7,8 +7,7 @@ import {
     FiShare2,
     FiMonitor,
     FiFigma,
-    FiUpload,
-    FiGrid
+    FiUpload
 } from 'react-icons/fi';
 import { TbBoxModel2 } from 'react-icons/tb';
 import './CompactToolbar.css';

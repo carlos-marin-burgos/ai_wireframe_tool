@@ -1138,7 +1138,7 @@ module.exports = async function (context, req) {
         }
 
         // Apply options to modify the component code
-        let htmlCode = component.htmlCode;
+        const htmlCode = component.htmlCode;
         let cssCode = component.cssCode;
 
         // Apply design system preferences

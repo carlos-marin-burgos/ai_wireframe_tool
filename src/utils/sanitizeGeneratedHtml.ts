@@ -79,10 +79,10 @@ export function sanitizeGeneratedHtml(
   returnObject?: boolean
 ): any {
   if (!input) return returnObject ? { html: "", styles: "", links: [] } : "";
-  let original = String(input);
+  const original = String(input);
   let html = original;
-  let collectedStyles: string[] = [];
-  let collectedLinks: string[] = [];
+  const collectedStyles: string[] = [];
+  const collectedLinks: string[] = [];
 
   // 1. Pre-capture ALL <style> blocks anywhere (head or body) before any slicing
   try {
@@ -195,7 +195,7 @@ export function sanitizeGeneratedHtml(
     }
 
     // Deduplicate styles (exact matches) to reduce iframe weight
-    let uniqueStyles = Array.from(new Set(collectedStyles));
+    const uniqueStyles = Array.from(new Set(collectedStyles));
     const uniqueLinks = Array.from(new Set(collectedLinks));
 
     // Post-process combined styles for common AI issues (namespacing + malformed tokens)

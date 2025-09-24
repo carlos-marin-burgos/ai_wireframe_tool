@@ -113,7 +113,7 @@ function sanitizeHTML(html: string): string {
             // Extract body content
             const bodyMatch = cleanHtml.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
             if (bodyMatch) {
-                let bodyContent = bodyMatch[1];
+                const bodyContent = bodyMatch[1];
 
                 // CRITICAL FIX: Preserve main layout containers for sidebar positioning
                 // If body contains main-container or similar layout wrapper, keep the entire structure
@@ -348,7 +348,7 @@ const DragWireframe: React.FC<DragWireframeProps> = React.memo(({
             });
         }
 
-        // eslint-disable-next-line no-console
+         
         console.log('[Wireframe Drag] Draggable blocks marked:', markedCount);
         augmentedRef.current = true;
     };
@@ -527,8 +527,8 @@ const DragWireframe: React.FC<DragWireframeProps> = React.memo(({
                 const containerScrollTop = containerRef.current?.scrollTop || 0;
                 const containerScrollLeft = containerRef.current?.scrollLeft || 0;
 
-                let top = (rect.top - containerRect.top) + containerScrollTop - 45;
-                let left = (rect.left - containerRect.left) + containerScrollLeft;
+                const top = (rect.top - containerRect.top) + containerScrollTop - 45;
+                const left = (rect.left - containerRect.left) + containerScrollLeft;
 
                 // Call the external callback to show toolbar
                 onShowFormattingToolbar(true, { top, left });
@@ -755,7 +755,7 @@ const DragWireframe: React.FC<DragWireframeProps> = React.memo(({
             !container.classList.contains('insertion-gap-marker')
         );
 
-        // eslint-disable-next-line no-console
+         
         console.log('[Wireframe Drag] Initializing dragula. Container count:', validContainers.length, 'Simple mode:', simpleModeRef.current);
 
         dragulaRef.current = dragula(validContainers, {
@@ -818,7 +818,7 @@ const DragWireframe: React.FC<DragWireframeProps> = React.memo(({
         dragulaRef.current.on('drag', (el: Element) => {
             if (containerRef.current) containerRef.current.classList.add('dragging-active');
             activeDragElementRef.current = el as HTMLElement;
-            // eslint-disable-next-line no-console
+             
             console.log('[Wireframe Drag] drag start ->', (el as HTMLElement).tagName, el.className);
             const marker = getInsertionMarker();
             marker.style.display = 'block';
@@ -841,13 +841,13 @@ const DragWireframe: React.FC<DragWireframeProps> = React.memo(({
         cleanupMarkerRef.current = cleanupMarker;
         dragulaRef.current.on('cancel', () => {
             if (containerRef.current) containerRef.current.classList.remove('dragging-active');
-            // eslint-disable-next-line no-console
+             
             console.log('[Wireframe Drag] drag cancel');
             cleanupMarker();
         });
         dragulaRef.current.on('drop', () => {
             if (containerRef.current) containerRef.current.classList.remove('dragging-active');
-            // eslint-disable-next-line no-console
+             
             console.log('[Wireframe Drag] drop');
             cleanupMarker();
             if (containerRef.current && onUpdateContentRef.current) {
@@ -866,15 +866,15 @@ const DragWireframe: React.FC<DragWireframeProps> = React.memo(({
             }
         });
         dragulaRef.current.on('shadow', (el: Element, container: Element) => {
-            // eslint-disable-next-line no-console
+             
             console.log('[Wireframe Drag] shadow placeholder in', container === containerRef.current ? 'ROOT' : (container as HTMLElement).className);
         });
         dragulaRef.current.on('over', (el: Element, container: Element) => {
-            // eslint-disable-next-line no-console
+             
             console.log('[Wireframe Drag] over container', container === containerRef.current ? 'ROOT' : (container as HTMLElement).className);
         });
         dragulaRef.current.on('out', (el: Element, container: Element) => {
-            // eslint-disable-next-line no-console
+             
             console.log('[Wireframe Drag] out container', container === containerRef.current ? 'ROOT' : (container as HTMLElement).className);
         });
 
@@ -1018,9 +1018,9 @@ const DragWireframe: React.FC<DragWireframeProps> = React.memo(({
             if (e.altKey && (e.key === 'd' || e.key === 'D')) {
                 if (!containerRef.current) return;
                 const firstLevel = Array.from(containerRef.current.children).map(el => (el as HTMLElement).tagName + '.' + (el as HTMLElement).className);
-                // eslint-disable-next-line no-console
+                 
                 console.log('[Wireframe Debug] Containers:', dragContainers.map(c => c.tagName + '.' + c.className));
-                // eslint-disable-next-line no-console
+                 
                 console.log('[Wireframe Debug] First-level children:', firstLevel);
             }
         };

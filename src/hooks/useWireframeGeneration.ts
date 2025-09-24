@@ -93,7 +93,7 @@ const ensureString = (value: unknown): string => {
     // 1. Try to find complete HTML document
     let htmlStart = cleaned.indexOf("<!DOCTYPE html>");
     if (htmlStart !== -1) {
-      let htmlEnd = cleaned.lastIndexOf("</html>");
+      const htmlEnd = cleaned.lastIndexOf("</html>");
       if (htmlEnd !== -1) {
         cleaned = cleaned.substring(htmlStart, htmlEnd + 7);
       }
@@ -101,7 +101,7 @@ const ensureString = (value: unknown): string => {
       // 2. Try to find HTML tag
       htmlStart = cleaned.indexOf("<html");
       if (htmlStart !== -1) {
-        let htmlEnd = cleaned.lastIndexOf("</html>");
+        const htmlEnd = cleaned.lastIndexOf("</html>");
         if (htmlEnd !== -1) {
           cleaned = cleaned.substring(htmlStart, htmlEnd + 7);
         }
@@ -124,14 +124,14 @@ const ensureString = (value: unknown): string => {
     // ROBUST HTML EXTRACTION for non-string values
     let htmlStart = stringValue.indexOf("<!DOCTYPE html>");
     if (htmlStart !== -1) {
-      let htmlEnd = stringValue.lastIndexOf("</html>");
+      const htmlEnd = stringValue.lastIndexOf("</html>");
       if (htmlEnd !== -1) {
         stringValue = stringValue.substring(htmlStart, htmlEnd + 7);
       }
     } else {
       htmlStart = stringValue.indexOf("<html");
       if (htmlStart !== -1) {
-        let htmlEnd = stringValue.lastIndexOf("</html>");
+        const htmlEnd = stringValue.lastIndexOf("</html>");
         if (htmlEnd !== -1) {
           stringValue = stringValue.substring(htmlStart, htmlEnd + 7);
         }

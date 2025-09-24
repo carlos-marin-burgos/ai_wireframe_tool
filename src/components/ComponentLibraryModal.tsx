@@ -27,14 +27,17 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
     onGenerateWithAI,
     currentDescription
 }) => {
-    if (!isOpen) return null;
+    // State for category filtering - MUST be called before any early returns
+    const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
     // Debug: Check if AI button should show
     console.log('🔍 ComponentLibraryModal debug:', {
         onGenerateWithAI: !!onGenerateWithAI,
         currentDescription,
         shouldShowAIButton: !!(onGenerateWithAI && currentDescription)
-    }); const components: Component[] = [
+    });
+
+    const components: Component[] = [
         // Microsoft Learn Site Headers
         {
             id: 'ms-learn-header-basic',
@@ -1722,27 +1725,27 @@ const ComponentLibraryModal: React.FC<ComponentLibraryModalProps> = ({
         }
     ];
 
-    const handleComponentClick = (component: Component) => {
-        console.log('🚀 Component clicked:', component.name);
-        onAddComponent(component);
-        onClose();
-    };
-
-    // State for category filtering
-    const [selectedCategory, setSelectedCategory] = useState<string>('All');
-
-    // Get unique categories
+    // Get unique categories - must be after components array definition
     const categories = useMemo(() => {
         const allCategories = Array.from(new Set(components.map(c => c.category)));
         return ['All', ...allCategories.sort()];
-    }, []);
+    }, [components]);
 
     // Filter components based on selected category
     const filteredComponents = useMemo(() => {
         return selectedCategory === 'All'
             ? components
             : components.filter(c => c.category === selectedCategory);
-    }, [selectedCategory]);
+    }, [selectedCategory, components]);
+
+    // Early return AFTER all hooks are called
+    if (!isOpen) return null;
+
+    const handleComponentClick = (component: Component) => {
+        console.log('🚀 Component clicked:', component.name);
+        onAddComponent(component);
+        onClose();
+    };
 
     return (
         <div className="component-library-modal-overlay">

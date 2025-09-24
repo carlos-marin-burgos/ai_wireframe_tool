@@ -106,7 +106,7 @@ async function testPureAISystem() {
   );
 
   let successCount = 0;
-  let totalTests = challengingCases.length;
+  const totalTests = challengingCases.length;
 
   for (let i = 0; i < Math.min(5, totalTests); i++) {
     // Test first 5 for demo

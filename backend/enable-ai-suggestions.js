@@ -18,7 +18,7 @@ console.log('====================================================');
 const generateSuggestionsPath = path.join(__dirname, 'generateSuggestions', 'index.js');
 
 // Read the current file
-let content = fs.readFileSync(generateSuggestionsPath, 'utf8');
+const content = fs.readFileSync(generateSuggestionsPath, 'utf8');
 
 // Check if AI is already enabled
 if (!content.includes('Always use fallback suggestions for now to avoid JSON parsing issues')) {

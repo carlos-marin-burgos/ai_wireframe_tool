@@ -17,7 +17,7 @@ function isLocalhostHost(hostname: string) {
   const originalFetch = window.fetch.bind(window);
   window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
     try {
-      let url =
+      const url =
         typeof input === "string"
           ? input
           : input instanceof URL

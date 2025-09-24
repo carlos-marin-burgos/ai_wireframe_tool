@@ -854,7 +854,7 @@ module.exports = async function (context, req) {
 
     // We replace the old basePrompt variable usage below by referencing FINAL_PROMPT.
     // (To minimize invasive refactor, we keep variable name basePrompt where referenced further down if needed.)
-    let basePrompt = FINAL_PROMPT;
+    const basePrompt = FINAL_PROMPT;
     let html = await generateWithAI(description, {
       theme,
       colorScheme,
