@@ -19,7 +19,8 @@ const productionHostFallback =
 // Get the actual base URL that will be used
 const getActualBaseUrl = () => {
   if (productionHostFallback) return productionHostFallback;
-  if (import.meta.env.VITE_API_BASE_URL) return import.meta.env.VITE_API_BASE_URL;
+  if (import.meta.env.VITE_API_BASE_URL)
+    return import.meta.env.VITE_API_BASE_URL;
   if (isDevelopment || isLocalhost) return ""; // Relative URLs for dev
   return ""; // Fallback to relative URLs
 };
@@ -32,6 +33,10 @@ console.log("🔍 API Configuration:", {
   actualBaseUrl: getActualBaseUrl(),
   hasProductionFallback: Boolean(productionHostFallback),
   willUseDirectFunctionApp: Boolean(productionHostFallback),
+  finalBaseURL:
+    productionHostFallback ||
+    import.meta.env.VITE_API_BASE_URL ||
+    (isDevelopment || isLocalhost ? "" : ""),
 });
 
 // Centralized port configuration to avoid conflicts
@@ -179,7 +184,26 @@ export const detectWorkingBackend = async (): Promise<string> => {
 // Helper function to get full API URL
 export const getApiUrl = (endpoint: string, customBaseUrl?: string) => {
   const baseUrl = customBaseUrl || API_CONFIG.BASE_URL;
-  return `${baseUrl}${endpoint}`;
+  const finalUrl = `${baseUrl}${endpoint}`;
+
+  // Debug logging for Figma endpoints
+  if (endpoint.includes("figma")) {
+    console.log(`🔍 getApiUrl Debug:`, {
+      endpoint,
+      customBaseUrl,
+      baseUrl,
+      API_CONFIG_BASE_URL: API_CONFIG.BASE_URL,
+      finalUrl,
+      productionHostFallback:
+        typeof window !== "undefined" &&
+        window.location.hostname ===
+          "lemon-field-08a1a0b0f.1.azurestaticapps.net"
+          ? "https://func-original-app-pgno4orkguix6.azurewebsites.net"
+          : undefined,
+    });
+  }
+
+  return finalUrl;
 };
 
 export const apiRequest = async (

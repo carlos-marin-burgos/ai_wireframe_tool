@@ -471,12 +471,25 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
             try {
                 const text = await response.text();
                 if (text.trim()) {
-                    // Check if response is HTML (common with auth challenges)
+                    // Check if response is HTML (expected for OAuth authorization page)
                     if (text.trim().toLowerCase().startsWith('<!doctype') || text.trim().startsWith('<html')) {
-                        console.log('ℹ️ OAuth start returned HTML - likely auth challenge or redirect page');
-                        throw new Error('OAuth endpoint returned HTML instead of JSON - authentication may be required');
+                        console.log('✅ OAuth start returned HTML authorization page - this is correct!');
+                        // For HTML responses, we need to open the authorization URL in a popup
+                        // Extract the authorization URL from the HTML response
+                        const urlMatch = text.match(/href="([^"]*figma\.com\/oauth[^"]*)"/);
+                        if (urlMatch && urlMatch[1]) {
+                            const authUrl = urlMatch[1];
+                            console.log('🔗 Extracted auth URL from HTML:', authUrl);
+                            // Continue with popup opening logic using the expected property name
+                            data = { auth_url: authUrl };
+                        } else {
+                            console.log('⚠️ Could not extract auth URL from HTML response');
+                            throw new Error('Could not extract authorization URL from response');
+                        }
+                    } else {
+                        // Try to parse as JSON (fallback)
+                        data = JSON.parse(text);
                     }
-                    data = JSON.parse(text);
                 } else {
                     console.log('ℹ️ Empty OAuth start response - likely HTML auth challenge');
                     throw new Error('OAuth endpoint returned empty response - authentication may be required');
