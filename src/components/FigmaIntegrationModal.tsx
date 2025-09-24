@@ -276,7 +276,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 console.log('🔍 OAuth Status Response:', data); // Debug log
 
                 if (statusCheckTokenRef.current !== requestToken) {
-                    console.log('⏭️ Ignoring stale OAuth status response (JSON)');
+                    console.log('⏭️ Ignoring stale OAuth status response (JSON) [token already rotated]');
                 } else {
                     setAuthStatus(data);
 
@@ -290,7 +290,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                         const hasLocalTokens = hasValidLocalTokens();
                         const hasTrustedSessionNow = Boolean(readTrustedSession());
                         if (!hasLocalTokens && !hasTrustedSessionNow && !hasAuthoritativeConnectionRef.current) {
-                            console.log('❌ Server indicates not connected - setting connected state to FALSE', data);
+                            console.log('❌ Server indicates not connected (no local/trusted session) - leaving connection FALSE', data);
                             setIsConnected(false);
                             setActiveTab('connect');
                         } else {
@@ -304,10 +304,10 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 const hasTrustedSessionNow = Boolean(readTrustedSession());
 
                 if (statusCheckTokenRef.current !== requestToken) {
-                    console.log('⏭️ Ignoring stale HTML OAuth status response');
+                    console.log('⏭️ Ignoring stale HTML OAuth status response [token already rotated]');
                 } else if (!hasLocalTokens && !hasTrustedSessionNow && !hasAuthoritativeConnectionRef.current) {
-                    setAuthStatus({ status: 'authorization_required', message: 'Authorization required (interactive page returned)' });
-                    console.log('❌ HTML response received - setting isConnected to FALSE');
+                    setAuthStatus({ status: 'authorization_required', message: 'Authorization required (interactive auth page detected)' });
+                    console.log('ℹ️ HTML auth challenge detected (no local session yet) - awaiting OAuth completion');
                     setIsConnected(false);
                     setActiveTab('connect');
                 } else {
@@ -321,14 +321,14 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
             const hasTrustedSessionNow = Boolean(readTrustedSession());
 
             if (statusCheckTokenRef.current !== requestToken) {
-                console.log('⏭️ Ignoring stale OAuth status error');
+                console.log('⏭️ Ignoring stale OAuth status error [token already rotated]');
             } else if (!hasLocalTokens && !hasTrustedSessionNow && !hasAuthoritativeConnectionRef.current) {
                 setAuthStatus({
                     status: 'oauth_error',
                     message: 'OAuth connection unavailable - using manual token mode',
                     error: error instanceof Error ? error.message : String(error)
                 });
-                console.log('❌ OAuth error - setting isConnected to FALSE');
+                console.log('❌ OAuth status request failed (no local/trusted session) - leaving connection FALSE');
                 setIsConnected(false);
                 setActiveTab('connect');
             } else {
