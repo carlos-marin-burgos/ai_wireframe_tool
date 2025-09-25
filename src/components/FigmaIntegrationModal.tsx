@@ -242,6 +242,13 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 
                 // Trusted session exists but no valid OAuth tokens - need to reconnect
                 console.log('⚠️ Trusted session found but OAuth tokens missing - need to reconnect');
+                try {
+                    localStorage.removeItem('figma_oauth_tokens');
+                    localStorage.removeItem('figma_oauth_timestamp');
+                } catch (tokenCleanupError) {
+                    console.warn('Failed to remove stale OAuth tokens:', tokenCleanupError);
+                }
+                clearTrustedSession();
                 setAuthStatus({
                     status: 'trusted_session_needs_reconnect',
                     message: 'Figma session found but authentication expired. Please reconnect.',
@@ -292,7 +299,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
             }
 
             // THIRD: Only if no trusted session AND no valid OAuth tokens, check backend
-            const response = await fetch(getApiUrl('/api/figmaOAuthStatus'), {
+            const response = await fetch(getApiUrl('/api/figmaoauthstatus'), {
                 headers: { 'Accept': 'application/json' }
             });
 
@@ -483,7 +490,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 
         try {
             // Get authorization URL from backend
-            const response = await fetch(getApiUrl('/api/figmaOAuthStart'), {
+            const response = await fetch(getApiUrl('/api/figmaoauthstart'), {
                 method: 'GET'  // Changed from POST to GET since endpoint only accepts GET, HEAD, OPTIONS
             });
 
@@ -813,6 +820,12 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                     user: { email: 'Personal Access Token' },
                     tokenPreview: `${accessToken.slice(0, 4)}…${accessToken.slice(-4)}`
                 });
+                try {
+                    localStorage.setItem('figma_oauth_tokens', JSON.stringify({ access_token: accessToken }));
+                    localStorage.setItem('figma_oauth_timestamp', Date.now().toString());
+                } catch (tokenPersistError) {
+                    console.warn('Failed to persist manual OAuth token:', tokenPersistError);
+                }
                 hasAuthoritativeConnectionRef.current = true;
                 statusCheckTokenRef.current = null;
                 isCheckingStatusRef.current = false;

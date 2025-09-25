@@ -1,35 +1,6 @@
 {
   "version": "2.0",
   "functionTimeout": "00:05:00",
-  "functions": [
-    "addFigmaComponent",
-    "analyzeImage",
-    "analyzeUIImage",
-    "atlasComponents",
-    "designConsultant",
-    "directImageToWireframe",
-    "figmaComponents",
-    "figmaImport",
-    "figmaNodeImporter",
-    "figmaOAuthCallback",
-    "figmaOAuthStart",
-    "figmaOAuthStatus",
-    "figmaOAuthDiagnostics",
-    "generateSuggestions",
-    "generateWireframe",
-    "generateWireframeEnhanced",
-    "get-template",
-    "githubAuthCallback",
-    "githubAuthStart",
-    "health",
-    "openai-health",
-    "testFigma",
-    "updateThemeColors",
-    "websiteAnalyzer",
-    "websiteAnalyzerTest",
-    "websiteAnalyzerDebug",
-    "wireframeAnalyze"
-  ],
   "logging": {
     "applicationInsights": {
       "samplingSettings": {
@@ -46,6 +17,5 @@
   "extensionBundle": {
     "id": "Microsoft.Azure.Functions.ExtensionBundle",
     "version": "[4.*, 5.0.0)"
-  },
-  "watchDirectories": ["Shared"]
+  }
 }

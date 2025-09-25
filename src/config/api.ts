@@ -10,18 +10,36 @@ const isLocalhost =
 const isProduction = !isDevelopment && !isLocalhost;
 
 // Always use Function App for production when on Static Web App hostname
+const STATIC_WEB_APP_HOSTS = new Set([
+  "delightful-pond-064d9a91e.1.azurestaticapps.net",
+]);
+
 const productionHostFallback =
   typeof window !== "undefined" &&
-  window.location.hostname === "lemon-field-08a1a0b0f.1.azurestaticapps.net"
+  STATIC_WEB_APP_HOSTS.has(window.location.hostname)
     ? "https://func-designetica-5gwyjxbwvr4s6.azurewebsites.net"
     : undefined;
+
+// Centralized port configuration to avoid conflicts
+const PORTS = {
+  development: {
+    primary: 7071, // Azure Functions backend (current running port) - FIXED: Updated to match actual backend
+    fallback: 5001, // Clean Express server with NO Microsoft Learn content
+    frontend: 5173, // Frontend dev server
+  },
+  production: {
+    primary: 443,
+    frontend: 443,
+  },
+};
 
 // Get the actual base URL that will be used
 const getActualBaseUrl = () => {
   if (productionHostFallback) return productionHostFallback;
   if (import.meta.env.VITE_API_BASE_URL)
     return import.meta.env.VITE_API_BASE_URL;
-  if (isDevelopment || isLocalhost) return ""; // Relative URLs for dev
+  if (isDevelopment || isLocalhost)
+    return `http://localhost:${PORTS.development.primary}`; // Use local functions in dev
   return ""; // Fallback to relative URLs
 };
 
@@ -33,24 +51,8 @@ console.log("🔍 API Configuration:", {
   actualBaseUrl: getActualBaseUrl(),
   hasProductionFallback: Boolean(productionHostFallback),
   willUseDirectFunctionApp: Boolean(productionHostFallback),
-  finalBaseURL:
-    productionHostFallback ||
-    import.meta.env.VITE_API_BASE_URL ||
-    (isDevelopment || isLocalhost ? "" : ""),
+  finalBaseURL: getActualBaseUrl(),
 });
-
-// Centralized port configuration to avoid conflicts
-const PORTS = {
-  development: {
-    primary: 7072, // Azure Functions backend (current running port) - FIXED: Updated to match actual backend
-    fallback: 5001, // Clean Express server with NO Microsoft Learn content
-    frontend: 5173, // Frontend dev server
-  },
-  production: {
-    primary: 443,
-    frontend: 443,
-  },
-};
 
 export const API_CONFIG = {
   // Static configuration - Enhanced Microsoft ecosystem suggestions
@@ -99,18 +101,21 @@ export const API_CONFIG = {
     FLUENT_COMPONENTS_SEARCH: "/api/fluent-components/search",
     HEALTH: "/api/health",
     WEBSITE_ANALYZER: "/api/websiteAnalyzer", // NEW: Website analysis endpoint (matches Azure Function name)
+
+    // 🔐 OAuth endpoints (using correct lowercase URLs from Azure)
+    FIGMA_OAUTH_START: "/api/figmaoauthstart",
+    FIGMA_OAUTH_CALLBACK: "/api/figmaoauthcallback",
+    FIGMA_OAUTH_DIAGNOSTICS: "/api/figmaoauthdiagnostics",
+    FIGMA_COMPONENTS: "/api/figma/components",
   },
 
   // Port configuration
   PORTS,
 
-  // FIXED: Use proper Static Web App API routing for production
+  // FIXED: Use proper URL for different environments
   // In production, Azure Static Web Apps automatically proxy /api/* to the Function App
-  // In development, use empty string to leverage Vite proxy
-  BASE_URL:
-    productionHostFallback ||
-    import.meta.env.VITE_API_BASE_URL ||
-    (isDevelopment || isLocalhost ? "" : ""), // Use production fallback first, then env var, then relative URLs
+  // In development, use local Azure Functions port
+  BASE_URL: getActualBaseUrl(),
 };
 
 // Health check to verify backend has AI capabilities
@@ -196,8 +201,7 @@ export const getApiUrl = (endpoint: string, customBaseUrl?: string) => {
       finalUrl,
       productionHostFallback:
         typeof window !== "undefined" &&
-        window.location.hostname ===
-          "lemon-field-08a1a0b0f.1.azurestaticapps.net"
+        STATIC_WEB_APP_HOSTS.has(window.location.hostname)
           ? "https://func-designetica-5gwyjxbwvr4s6.azurewebsites.net"
           : undefined,
     });

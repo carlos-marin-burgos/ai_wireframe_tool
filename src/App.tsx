@@ -1746,7 +1746,9 @@ function App() {
     // Check if we're running in local development
     const isLocalDev = window.location.hostname === 'localhost' ||
       window.location.hostname === '127.0.0.1' ||
-      window.location.port !== '';
+      window.location.hostname === '[::1]' ||
+      window.location.port !== '' ||
+      import.meta.env.DEV;
 
     if (isLocalDev) {
       // In local development, bypass authentication for testing
@@ -1781,7 +1783,9 @@ function App() {
     // Check if we're in production before attempting logout
     const isLocalDev = window.location.hostname === 'localhost' ||
       window.location.hostname === '127.0.0.1' ||
-      window.location.port !== '';
+      window.location.hostname === '[::1]' ||
+      window.location.port !== '' ||
+      import.meta.env.DEV;
 
     if (isLocalDev) {
       // In local development, just reload the page

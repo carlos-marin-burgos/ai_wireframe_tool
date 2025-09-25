@@ -54,7 +54,7 @@ src/
 src.disabled/
 
 # Development dependencies and configs
-package-lock.json
+# package-lock.json - KEEP THIS FOR DEPLOYMENT
 azure-openai-verify.js
 env-config.js
 
