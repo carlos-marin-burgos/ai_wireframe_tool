@@ -7,6 +7,9 @@ const axios = require("axios");
 const fs = require("fs").promises;
 const path = require("path");
 
+// Import OAuth token management
+const { loadTokens } = require("../figmaOAuthStatus/index");
+
 module.exports = async function (context, req) {
   try {
     context.log("🎯 Figma Node Importer - Direct URL Processing");
@@ -53,9 +56,22 @@ module.exports = async function (context, req) {
     context.log(`🎯 Node ID: ${urlInfo.nodeId}`);
 
     // Get Figma credentials
-    const figmaToken = process.env.FIGMA_ACCESS_TOKEN;
+    // Get OAuth token (prioritize OAuth over personal access token)
+    let figmaToken = null;
+    const oauthTokens = loadTokens();
+
+    if (oauthTokens && oauthTokens.access_token) {
+      figmaToken = oauthTokens.access_token;
+      context.log("🔐 Using OAuth token for Microsoft Figma access");
+    } else {
+      figmaToken = process.env.FIGMA_ACCESS_TOKEN;
+      context.log("🔐 Using personal access token as fallback");
+    }
+
     if (!figmaToken) {
-      throw new Error("Figma access token not configured");
+      throw new Error(
+        "No Figma access token available - please complete OAuth setup"
+      );
     }
 
     // Fetch the specific node data
@@ -148,24 +164,47 @@ async function fetchFigmaNode(token, fileId, nodeId, context) {
       process.env.FIGMA_API_BASE || "https://api.figma.com/v1";
     context.log(`🌐 Using Figma API: ${figmaApiBase}`);
 
-    // Get the specific node
-    const nodeResponse = await axios.get(
-      `${figmaApiBase}/files/${fileId}/nodes?ids=${nodeId}`,
+    // Use components endpoint which works with Microsoft Figma
+    context.log(`� Fetching components to locate node ${nodeId}`);
+    const componentsResponse = await axios.get(
+      `${figmaApiBase}/files/${fileId}/components`,
       {
         headers: {
           "X-Figma-Token": token,
         },
-        timeout: 10000,
+        timeout: 15000,
       }
     );
 
-    const nodeData = nodeResponse.data.nodes[nodeId];
-    if (!nodeData || !nodeData.document) {
-      throw new Error(`Node ${nodeId} not found`);
+    // Find the specific component by node ID
+    const components = componentsResponse.data.meta.components || {};
+    let targetComponent = null;
+
+    for (const [componentId, componentData] of Object.entries(components)) {
+      if (componentData.node_id === nodeId) {
+        targetComponent = {
+          id: componentId,
+          node_id: componentData.node_id,
+          name: componentData.name,
+          description: componentData.description || "",
+          type: "COMPONENT",
+          // Add basic properties that the rest of the code expects
+          fills: [],
+          effects: [],
+          constraints: { horizontal: "LEFT", vertical: "TOP" },
+          absoluteBoundingBox: { x: 0, y: 0, width: 100, height: 100 },
+        };
+        break;
+      }
     }
 
-    const node = nodeData.document;
-    context.log(`✅ Found node: ${node.name} (${node.type})`);
+    if (!targetComponent) {
+      throw new Error(
+        `Component with node ID ${nodeId} not found in components list`
+      );
+    }
+
+    context.log(`✅ Found component: ${targetComponent.name}`);
 
     // Get component image for reference
     let imageUrl = null;
@@ -190,7 +229,7 @@ async function fetchFigmaNode(token, fileId, nodeId, context) {
     }
 
     return {
-      ...node,
+      ...targetComponent,
       imageUrl,
       figmaFileId: fileId,
       figmaNodeId: nodeId,
