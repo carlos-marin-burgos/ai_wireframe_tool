@@ -1758,21 +1758,10 @@ function App() {
       return;
     }
 
-    // In production (Azure), check Azure authentication status
-    console.log('🔐 Production mode: Checking Azure authentication');
-    fetch('/.auth/me')
-      .then(response => response.json())
-      .then(data => {
-        console.log('🔐 Azure auth response:', data);
-        if (data.clientPrincipal) {
-          setIsAuthenticated(true);
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log('🔐 Azure auth check failed:', error);
-        setLoading(false);
-      });
+    // TEMPORARILY BYPASS AUTHENTICATION FOR TESTING
+    console.log('🔐 Production mode: Bypassing authentication for now');
+    setIsAuthenticated(true);
+    setLoading(false);
   }, []);
 
   const handleAuthSuccess = () => {

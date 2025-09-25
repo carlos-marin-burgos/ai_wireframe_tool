@@ -1,4 +1,62 @@
 const axios = require("axios");
+const { BlobServiceClient } = require("@azure/storage-blob");
+
+// Azure Storage configuration
+const CONTAINER_NAME = "figma-tokens";
+const BLOB_NAME = "oauth-tokens.json";
+
+// Initialize Azure Storage client using the existing AzureWebJobsStorage connection
+const getBlobServiceClient = () => {
+  const connectionString = process.env.AzureWebJobsStorage;
+  if (!connectionString) {
+    throw new Error("AzureWebJobsStorage connection string not found");
+  }
+  return BlobServiceClient.fromConnectionString(connectionString);
+};
+
+async function saveTokens(tokens) {
+  try {
+    const tokenData = {
+      access_token: tokens.access_token,
+      refresh_token: tokens.refresh_token,
+      expires_at: tokens.expires_at || Date.now() + tokens.expires_in * 1000,
+      scope: tokens.scope,
+      created_at: Date.now(),
+    };
+
+    console.log("💾 Saving tokens to Azure Storage...");
+
+    const blobServiceClient = getBlobServiceClient();
+    const containerClient =
+      blobServiceClient.getContainerClient(CONTAINER_NAME);
+
+    // Ensure container exists
+    await containerClient.createIfNotExists();
+
+    const blockBlobClient = containerClient.getBlockBlobClient(BLOB_NAME);
+    const tokenJson = JSON.stringify(tokenData, null, 2);
+
+    // Upload the token data
+    await blockBlobClient.upload(tokenJson, tokenJson.length, {
+      overwrite: true,
+      metadata: {
+        created: new Date().toISOString(),
+        scope: tokenData.scope || "default",
+      },
+    });
+
+    console.log("💾 Tokens saved successfully to Azure Storage");
+    console.log(
+      "🔑 Token expires at:",
+      new Date(tokenData.expires_at).toISOString()
+    );
+
+    return true;
+  } catch (error) {
+    console.error("❌ Error saving tokens to Azure Storage:", error.message);
+    return false;
+  }
+}
 
 // Exchange authorization code for access token
 async function exchangeCodeForToken(code, req) {
@@ -190,12 +248,46 @@ module.exports = async function (context, req) {
 
       // Save tokens to persistent storage
       try {
-        const { saveTokens } = require("../figmaOAuthStatus/index.js");
-        const saved = saveTokens(tokenResult.data);
+        const saved = await saveTokens(tokenResult.data);
         if (saved) {
           console.log("💾 OAuth tokens saved successfully");
+          console.log(
+            "🔑 Token preview:",
+            tokenResult.data.access_token?.substring(0, 20) + "..."
+          );
+          console.log("🕐 Expires in:", tokenResult.data.expires_in, "seconds");
         } else {
           console.warn("⚠️ Failed to save OAuth tokens");
+        }
+
+        // ALSO try to save to the status function directly via HTTP POST
+        try {
+          const axios = require("axios");
+          const host = req.headers.host;
+          const baseUrl = host?.includes("localhost")
+            ? "http://localhost:7071"
+            : "https://" + host;
+
+          const saveResponse = await axios.post(
+            // Use canonical casing matching function route
+            `${baseUrl}/api/figmaOAuthStatus`,
+            tokenResult.data,
+            {
+              headers: { "Content-Type": "application/json" },
+              timeout: 10000,
+            }
+          );
+
+          console.log(
+            "📤 Also tried to save via HTTP POST:",
+            saveResponse.status
+          );
+        } catch (httpError) {
+          console.warn("⚠️ HTTP POST save failed:", httpError.message);
+          if (httpError.response) {
+            console.warn("Status:", httpError.response.status);
+            console.warn("Data:", httpError.response.data);
+          }
         }
       } catch (error) {
         console.error("❌ Error saving OAuth tokens:", error);

@@ -143,9 +143,14 @@ async function fetchFigmaNode(token, fileId, nodeId, context) {
   try {
     context.log(`🔍 Fetching node ${nodeId} from file ${fileId}`);
 
+    // Determine API base URL - Microsoft private Figma vs public Figma
+    const figmaApiBase =
+      process.env.FIGMA_API_BASE || "https://api.figma.com/v1";
+    context.log(`🌐 Using Figma API: ${figmaApiBase}`);
+
     // Get the specific node
     const nodeResponse = await axios.get(
-      `https://api.figma.com/v1/files/${fileId}/nodes?ids=${nodeId}`,
+      `${figmaApiBase}/files/${fileId}/nodes?ids=${nodeId}`,
       {
         headers: {
           "X-Figma-Token": token,
@@ -166,7 +171,7 @@ async function fetchFigmaNode(token, fileId, nodeId, context) {
     let imageUrl = null;
     try {
       const imageResponse = await axios.get(
-        `https://api.figma.com/v1/images/${fileId}`,
+        `${figmaApiBase}/images/${fileId}`,
         {
           headers: {
             "X-Figma-Token": token,

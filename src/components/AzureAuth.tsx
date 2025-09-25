@@ -20,16 +20,31 @@ const AzureAuth: React.FC<AzureAuthProps> = ({ onAuthSuccess }) => {
         // Always use Azure Static Web Apps authentication for Microsoft employees
         console.log('🔐 Checking Azure Static Web Apps authentication for Microsoft employees');
         fetch('/.auth/me')
-            .then(response => response.json())
-            .then(data => {
-                console.log('🔐 Azure auth data:', data);
-                const clientPrincipal = data.clientPrincipal;
-                if (clientPrincipal) {
-                    setUser(clientPrincipal);
-                    onAuthSuccess();
-                } else {
-                    // Auto-redirect to Microsoft login for internal employees
-                    console.log('🔐 No authentication found, redirecting to Microsoft login...');
+            .then(response => {
+                console.log('🔐 Auth response status:', response.status);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                return response.text(); // Get as text first
+            })
+            .then(text => {
+                console.log('🔐 Raw auth response:', text);
+                try {
+                    const data = JSON.parse(text);
+                    console.log('🔐 Parsed auth data:', data);
+                    const clientPrincipal = data.clientPrincipal;
+                    if (clientPrincipal) {
+                        setUser(clientPrincipal);
+                        onAuthSuccess();
+                    } else {
+                        // Auto-redirect to Microsoft login for internal employees
+                        console.log('🔐 No authentication found, redirecting to Microsoft login...');
+                        window.location.href = '/.auth/login/aad';
+                    }
+                } catch (parseError) {
+                    console.log('🔐 Failed to parse auth response as JSON:', parseError);
+                    // If we get HTML, it means we need to authenticate
+                    console.log('🔐 Redirecting to Microsoft login...');
                     window.location.href = '/.auth/login/aad';
                 }
                 setLoading(false);

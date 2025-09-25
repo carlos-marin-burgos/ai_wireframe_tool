@@ -75,7 +75,11 @@ function saveTokens(tokens) {
 
 async function validateToken(accessToken) {
   try {
-    const response = await axios.get("https://api.figma.com/v1/me", {
+    const figmaApiBase =
+      process.env.FIGMA_API_BASE || "https://api.figma.com/v1";
+    console.log(`🌐 Using Figma API: ${figmaApiBase}`);
+
+    const response = await axios.get(`${figmaApiBase}/me`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

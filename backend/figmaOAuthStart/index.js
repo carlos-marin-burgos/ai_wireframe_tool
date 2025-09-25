@@ -66,25 +66,21 @@ module.exports = async function (context, req) {
 
     // Only try to import and use OAuth setup if credentials are available
     // Note: Temporarily skip the setup import to avoid ES module issues
-    const generateAuthUrl = (state) => {
-      // Determine redirect URI based on environment
+    const resolveRedirectUri = () => {
       let redirectUri = process.env.FIGMA_REDIRECT_URI;
 
       if (!redirectUri) {
-        // Auto-detect based on request headers
         const host = req.headers.host;
         if (
           host &&
           (host.includes("azurewebsites.net") ||
             host.includes("azurestaticapps.net"))
         ) {
-          // Production environment - use production URI
           redirectUri =
             process.env.FIGMA_REDIRECT_URI_PROD ||
             `https://${host}/api/figmaOAuthCallback`;
           console.log(`🔧 Using PRODUCTION redirect URI: ${redirectUri}`);
         } else {
-          // Development environment - require DEV environment variable
           redirectUri = process.env.FIGMA_REDIRECT_URI_DEV;
           if (!redirectUri) {
             throw new Error(
@@ -97,11 +93,19 @@ module.exports = async function (context, req) {
         console.log(`🔧 Using configured redirect URI: ${redirectUri}`);
       }
 
+      return redirectUri;
+    };
+
+    const buildAuthUrl = ({ scope, redirectUri, state }) => {
       const params = new URLSearchParams({
         client_id: process.env.FIGMA_CLIENT_ID,
         redirect_uri: redirectUri,
         response_type: "code",
       });
+
+      if (scope && scope.length > 0) {
+        params.append("scope", scope);
+      }
 
       if (state) {
         params.append("state", state);
@@ -109,6 +113,79 @@ module.exports = async function (context, req) {
 
       return `https://www.figma.com/oauth?${params.toString()}`;
     };
+
+    const generateScopeOptions = (redirectUri, state) => {
+      const configuredScope = process.env.FIGMA_OAUTH_SCOPE;
+      const scopedQuery = (req.query.scope || "").trim();
+
+      const options = [
+        {
+          label: "Configured scope (FIGMA_OAUTH_SCOPE)",
+          scope: configuredScope || null,
+          source: "environment",
+        },
+        {
+          label: "files:read (default for REST API)",
+          scope: "files:read",
+          source: "default",
+        },
+        {
+          label: "file_read (legacy apps)",
+          scope: "file_read",
+          source: "legacy",
+        },
+        {
+          label: "No scope (very old apps)",
+          scope: "",
+          source: "no-scope",
+        },
+      ];
+
+      if (scopedQuery) {
+        options.unshift({
+          label: `Requested scope (${scopedQuery})`,
+          scope: scopedQuery,
+          source: "query",
+        });
+      }
+
+      const unique = [];
+      const seen = new Set();
+      for (const option of options) {
+        if (option.scope === undefined) {
+          continue;
+        }
+        const key = option.scope ?? "<null>";
+        if (seen.has(key)) {
+          continue;
+        }
+        seen.add(key);
+        unique.push(option);
+      }
+
+      return unique.map((option) => ({
+        ...option,
+        authUrl: buildAuthUrl({
+          scope: option.scope,
+          redirectUri,
+          state,
+        }),
+      }));
+    };
+
+    const redirectUri = resolveRedirectUri();
+    const oauthState = Math.random().toString(36).substring(2, 15);
+    const scopeOptions = generateScopeOptions(redirectUri, oauthState);
+    const primaryOption =
+      scopeOptions.find((opt) => opt.scope) || scopeOptions[0];
+    const authUrl = primaryOption?.authUrl;
+    const activeScope = primaryOption?.scope ?? "";
+
+    console.log("🔗 Generated OAuth2 authorization URL", {
+      redirectUri,
+      activeScope,
+      optionSource: primaryOption?.source,
+    });
 
     // Check if we already have valid tokens (simplified for now)
     const existingTokens = null; // TODO: Implement token loading
@@ -131,12 +208,6 @@ module.exports = async function (context, req) {
       }
     }
 
-    // Generate new authorization URL
-    const state = Math.random().toString(36).substring(2, 15);
-    const authUrl = generateAuthUrl(state);
-
-    console.log("🔗 Generated OAuth2 authorization URL");
-
     if (req.method === "GET") {
       // Content negotiation: if the caller explicitly requests JSON (Accept header or format param), return JSON status instead of HTML page
       const acceptHeader = (req.headers["accept"] || "").toLowerCase();
@@ -151,6 +222,15 @@ module.exports = async function (context, req) {
         context.res.body = {
           status: "authorization_required",
           auth_url: authUrl,
+          active_scope: activeScope,
+          alternate_auth_urls: scopeOptions
+            .filter((opt) => opt.authUrl !== authUrl)
+            .map((opt) => ({
+              label: opt.label,
+              scope: opt.scope,
+              source: opt.source,
+              auth_url: opt.authUrl,
+            })),
           mode: "json",
           message:
             "Open auth_url in a browser window to authorize Figma access",
@@ -262,17 +342,33 @@ module.exports = async function (context, req) {
             </ul>
         </div>
         
-        <a href="${authUrl}" class="auth-btn">
-            🚀 Authorize with Figma
-        </a>
+        <div class="scope-options">
+          <h3>🔀 Choose a scope that matches your Figma app configuration</h3>
+          <p style="color:#495057;">If one option fails with “Invalid scopes for app”, return here and try the next option.</p>
+          <div style="display:flex; flex-direction:column; gap:12px; margin-top:16px;">
+            ${scopeOptions
+              .map(
+                (option) => `
+                  <a href="${
+                    option.authUrl
+                  }" class="auth-btn" style="display:block;">
+                    ${option.scope ? option.scope : "No scope"} • ${
+                  option.label
+                }
+                  </a>
+                `
+              )
+              .join("")}
+          </div>
+        </div>
         
         <div class="security-note">
             <strong>🛡️ Security:</strong> We only request read access to your files. We never modify your designs or access personal information beyond what's necessary for the wireframe tool.
         </div>
         
-        <p style="font-size: 14px; color: #8a8a8a; margin-top: 30px;">
-            After authorization, you'll be redirected back to continue using the wireframe tool.
-        </p>
+    <p style="font-size: 14px; color: #8a8a8a; margin-top: 30px;">
+      Make sure your app in <a href="https://www.figma.com/developers/apps" target="_blank" rel="noopener">Figma Developer Settings</a> has the chosen scope enabled. Update the scope list there if necessary.
+    </p>
     </div>
 </body>
 </html>`;

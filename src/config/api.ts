@@ -17,7 +17,7 @@ const STATIC_WEB_APP_HOSTS = new Set([
 const productionHostFallback =
   typeof window !== "undefined" &&
   STATIC_WEB_APP_HOSTS.has(window.location.hostname)
-    ? "https://func-designetica-5gwyjxbwvr4s6.azurewebsites.net"
+    ? "https://func-designetica-prod-working.azurewebsites.net"
     : undefined;
 
 // Centralized port configuration to avoid conflicts

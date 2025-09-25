@@ -278,7 +278,7 @@ let openai = null;
 function initializeOpenAI() {
   try {
     // Try to load local.settings.json for development if env not set
-    if (!process.env.AZURE_OPENAI_KEY) {
+    if (!process.env.AZURE_OPENAI_API_KEY) {
       const fs = require("fs");
       const path = require("path");
       try {
@@ -303,17 +303,17 @@ function initializeOpenAI() {
       }
     }
 
-    if (process.env.AZURE_OPENAI_KEY && process.env.AZURE_OPENAI_ENDPOINT) {
+    if (process.env.AZURE_OPENAI_API_KEY && process.env.AZURE_OPENAI_ENDPOINT) {
       const endpoint = process.env.AZURE_OPENAI_ENDPOINT.replace(/\/$/, "");
       const deployment = process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o";
       const apiVersion =
         process.env.AZURE_OPENAI_API_VERSION || "2024-08-01-preview";
 
       openai = new OpenAI({
-        apiKey: process.env.AZURE_OPENAI_KEY,
+        apiKey: process.env.AZURE_OPENAI_API_KEY,
         baseURL: `${endpoint}/openai/deployments/${deployment}`,
         defaultQuery: { "api-version": apiVersion },
-        defaultHeaders: { "api-key": process.env.AZURE_OPENAI_KEY },
+        defaultHeaders: { "api-key": process.env.AZURE_OPENAI_API_KEY },
       });
 
       console.log(

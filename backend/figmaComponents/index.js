@@ -220,16 +220,18 @@ async function fetchRealFigmaComponents(token, fileId, libraryName, context) {
   try {
     context.log(`🔍 Connecting to Figma API for ${libraryName}...`);
 
+    // Determine API base URL - Microsoft private Figma vs public Figma
+    const figmaApiBase =
+      process.env.FIGMA_API_BASE || "https://api.figma.com/v1";
+    context.log(`🌐 Using Figma API: ${figmaApiBase}`);
+
     // Step 1: Get file structure from the Figma library
-    const fileResponse = await axios.get(
-      `https://api.figma.com/v1/files/${fileId}`,
-      {
-        headers: {
-          "X-Figma-Token": token,
-        },
-        timeout: 10000, // 10 second timeout
-      }
-    );
+    const fileResponse = await axios.get(`${figmaApiBase}/files/${fileId}`, {
+      headers: {
+        "X-Figma-Token": token,
+      },
+      timeout: 10000, // 10 second timeout
+    });
 
     const document = fileResponse.data.document;
     context.log(
@@ -269,7 +271,7 @@ async function fetchRealFigmaComponents(token, fileId, libraryName, context) {
     if (nodeIds.length > 0) {
       try {
         const imageResponse = await axios.get(
-          `https://api.figma.com/v1/images/${fileId}`,
+          `${figmaApiBase}/images/${fileId}`,
           {
             headers: {
               "X-Figma-Token": token,
