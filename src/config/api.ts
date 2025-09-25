@@ -12,12 +12,13 @@ const isProduction = !isDevelopment && !isLocalhost;
 // Always use Function App for production when on Static Web App hostname
 const STATIC_WEB_APP_HOSTS = new Set([
   "delightful-pond-064d9a91e.1.azurestaticapps.net",
+  "lemon-field-08a1a0b0f.1.azurestaticapps.net",
 ]);
 
 const productionHostFallback =
   typeof window !== "undefined" &&
   STATIC_WEB_APP_HOSTS.has(window.location.hostname)
-    ? "https://func-designetica-prod-working.azurewebsites.net"
+    ? "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net"
     : undefined;
 
 // Centralized port configuration to avoid conflicts
