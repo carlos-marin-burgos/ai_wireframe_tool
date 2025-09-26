@@ -133,7 +133,8 @@ function enhanceHTMLQuality(html) {
   return enhanced;
 }
 
-// Direct image-to-HTML converter that actually works
+// Direct image-to-HTML converter with intelligent color extraction
+// Prioritizes actual image colors over theme colors for pixel-perfect accuracy
 async function generateDirectWireframeFromImage(
   imageDataUrl,
   correlationId,

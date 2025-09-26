@@ -94,7 +94,7 @@ module.exports = async function (context, req) {
     const colorScheme = body?.colorScheme || "light";
 
     context.log(
-      `[${correlationId}] Using design theme: ${designTheme}, color scheme: ${colorScheme}`
+      `[${correlationId}] Using design theme: ${designTheme}, color scheme: ${colorScheme} (with image color extraction)`
     );
 
     // Generate HTML directly from image with design system context
