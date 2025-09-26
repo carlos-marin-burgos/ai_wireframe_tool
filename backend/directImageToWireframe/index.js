@@ -90,15 +90,20 @@ module.exports = async function (context, req) {
     );
 
     // Extract design theme and color scheme from request
-    const designTheme = body?.designTheme || 'microsoftlearn';
-    const colorScheme = body?.colorScheme || 'light';
+    const designTheme = body?.designTheme || "microsoftlearn";
+    const colorScheme = body?.colorScheme || "light";
 
     context.log(
       `[${correlationId}] Using design theme: ${designTheme}, color scheme: ${colorScheme}`
     );
 
     // Generate HTML directly from image with design system context
-    const result = await generateDirectWireframeFromImage(image, correlationId, designTheme, colorScheme);
+    const result = await generateDirectWireframeFromImage(
+      image,
+      correlationId,
+      designTheme,
+      colorScheme
+    );
     const processingTime = Date.now() - startTime;
 
     context.res.status = 200;

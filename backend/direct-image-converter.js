@@ -7,59 +7,75 @@ function validateGeneratedHTML(html) {
   let score = 100;
 
   // Check for basic HTML structure
-  if (!html.includes('<!DOCTYPE html>')) {
-    issues.push('Missing DOCTYPE declaration');
+  if (!html.includes("<!DOCTYPE html>")) {
+    issues.push("Missing DOCTYPE declaration");
     score -= 10;
   }
 
-  if (!html.includes('<html')) {
-    issues.push('Missing html element');
+  if (!html.includes("<html")) {
+    issues.push("Missing html element");
     score -= 15;
   }
 
-  if (!html.includes('<head>') || !html.includes('</head>')) {
-    issues.push('Missing or malformed head section');
+  if (!html.includes("<head>") || !html.includes("</head>")) {
+    issues.push("Missing or malformed head section");
     score -= 10;
   }
 
-  if (!html.includes('<body>') || !html.includes('</body>')) {
-    issues.push('Missing or malformed body section');
+  if (!html.includes("<body>") || !html.includes("</body>")) {
+    issues.push("Missing or malformed body section");
     score -= 15;
   }
 
   // Check for viewport meta tag (responsive design)
-  if (!html.includes('viewport')) {
-    issues.push('Missing viewport meta tag for mobile responsiveness');
-    suggestions.push('Add <meta name="viewport" content="width=device-width, initial-scale=1.0">');
+  if (!html.includes("viewport")) {
+    issues.push("Missing viewport meta tag for mobile responsiveness");
+    suggestions.push(
+      'Add <meta name="viewport" content="width=device-width, initial-scale=1.0">'
+    );
     score -= 5;
   }
 
   // Check for semantic HTML elements
-  const semanticElements = ['header', 'nav', 'main', 'section', 'article', 'aside', 'footer'];
-  const foundSemanticElements = semanticElements.filter(element => 
-    html.includes(`<${element}`) || html.includes(`<${element} `)
+  const semanticElements = [
+    "header",
+    "nav",
+    "main",
+    "section",
+    "article",
+    "aside",
+    "footer",
+  ];
+  const foundSemanticElements = semanticElements.filter(
+    (element) => html.includes(`<${element}`) || html.includes(`<${element} `)
   );
-  
+
   if (foundSemanticElements.length === 0) {
-    issues.push('No semantic HTML elements found');
-    suggestions.push('Use semantic elements like <header>, <nav>, <main>, <section> for better structure');
+    issues.push("No semantic HTML elements found");
+    suggestions.push(
+      "Use semantic elements like <header>, <nav>, <main>, <section> for better structure"
+    );
     score -= 10;
   }
 
   // Check for accessibility attributes
-  if (html.includes('<img') && !html.includes('alt=')) {
-    issues.push('Images missing alt attributes');
-    suggestions.push('Add alt attributes to all images for accessibility');
+  if (html.includes("<img") && !html.includes("alt=")) {
+    issues.push("Images missing alt attributes");
+    suggestions.push("Add alt attributes to all images for accessibility");
     score -= 8;
   }
 
   // Check for proper heading hierarchy
   const headingMatches = html.match(/<h[1-6]/g);
   if (headingMatches && headingMatches.length > 0) {
-    const headingLevels = headingMatches.map(h => parseInt(h.charAt(2))).sort();
+    const headingLevels = headingMatches
+      .map((h) => parseInt(h.charAt(2)))
+      .sort();
     if (headingLevels[0] !== 1) {
-      issues.push('Heading hierarchy doesn\'t start with h1');
-      suggestions.push('Start heading hierarchy with h1 for proper document structure');
+      issues.push("Heading hierarchy doesn't start with h1");
+      suggestions.push(
+        "Start heading hierarchy with h1 for proper document structure"
+      );
       score -= 5;
     }
   }
@@ -67,13 +83,13 @@ function validateGeneratedHTML(html) {
   // Check for inline styles vs. external (we want inline for wireframes)
   const styleCount = (html.match(/style\s*=/g) || []).length;
   if (styleCount === 0) {
-    issues.push('No inline styles found - wireframe may not render correctly');
+    issues.push("No inline styles found - wireframe may not render correctly");
     score -= 20;
   }
 
   // Check for minimum content length (avoid empty generations)
   if (html.length < 500) {
-    issues.push('Generated HTML appears too short/incomplete');
+    issues.push("Generated HTML appears too short/incomplete");
     score -= 25;
   }
 
@@ -84,7 +100,8 @@ function validateGeneratedHTML(html) {
     isValid: score >= 70, // Consider valid if score >= 70
     hasSemanticElements: foundSemanticElements.length > 0,
     hasInlineStyles: styleCount > 0,
-    estimatedComplexity: styleCount > 20 ? 'high' : styleCount > 10 ? 'medium' : 'low'
+    estimatedComplexity:
+      styleCount > 20 ? "high" : styleCount > 10 ? "medium" : "low",
   };
 }
 
@@ -93,26 +110,23 @@ function enhanceHTMLQuality(html) {
   let enhanced = html;
 
   // Add viewport if missing
-  if (!enhanced.includes('viewport')) {
+  if (!enhanced.includes("viewport")) {
     enhanced = enhanced.replace(
-      '<head>',
+      "<head>",
       '<head>\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">'
     );
   }
 
   // Add basic charset if missing
-  if (!enhanced.includes('charset')) {
-    enhanced = enhanced.replace(
-      '<head>',
-      '<head>\n    <meta charset="UTF-8">'
-    );
+  if (!enhanced.includes("charset")) {
+    enhanced = enhanced.replace("<head>", '<head>\n    <meta charset="UTF-8">');
   }
 
   // Add title if missing
-  if (!enhanced.includes('<title>')) {
+  if (!enhanced.includes("<title>")) {
     enhanced = enhanced.replace(
-      '</head>',
-      '    <title>Generated Wireframe</title>\n</head>'
+      "</head>",
+      "    <title>Generated Wireframe</title>\n</head>"
     );
   }
 
@@ -120,7 +134,12 @@ function enhanceHTMLQuality(html) {
 }
 
 // Direct image-to-HTML converter that actually works
-async function generateDirectWireframeFromImage(imageDataUrl, correlationId, designTheme = 'microsoftlearn', colorScheme = 'light') {
+async function generateDirectWireframeFromImage(
+  imageDataUrl,
+  correlationId,
+  designTheme = "microsoftlearn",
+  colorScheme = "light"
+) {
   const endpoint = process.env.AZURE_OPENAI_ENDPOINT;
   const deployment = process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o";
   const apiKey = process.env.AZURE_OPENAI_KEY;
@@ -141,78 +160,56 @@ async function generateDirectWireframeFromImage(imageDataUrl, correlationId, des
   // Design system color mappings for different themes
   const designSystemColors = {
     microsoftlearn: {
-      primary: '#0078D4',
-      primaryDark: '#106EBE',
-      text: '#323130',
-      textSecondary: '#605E5C',
-      textLight: '#8A8886',
-      background: '#FFFFFF',
-      backgroundWarm: '#FAF9F8',
-      backgroundNeutral: '#F3F2F1',
-      border: '#EDEBE9',
-      borderLight: '#E1DFDD',
-      buttonSecondary: '#8E9AAF',
-      buttonSecondaryHover: '#68769C',
-      success: '#107C10',
-      warning: '#FFB900',
-      error: '#D13438',
-      info: '#0078D4'
+      primary: "#0078D4",
+      primaryDark: "#106EBE",
+      text: "#323130",
+      textSecondary: "#605E5C",
+      textLight: "#8A8886",
+      background: "#FFFFFF",
+      backgroundWarm: "#FAF9F8",
+      backgroundNeutral: "#F3F2F1",
+      border: "#EDEBE9",
+      borderLight: "#E1DFDD",
+      buttonSecondary: "#8E9AAF",
+      buttonSecondaryHover: "#68769C",
+      success: "#107C10",
+      warning: "#FFB900",
+      error: "#D13438",
+      info: "#0078D4",
     },
     fluent: {
-      primary: '#0078D4',
-      text: '#323130',
-      textSecondary: '#605E5C',
-      background: '#FFFFFF',
-      backgroundNeutral: '#F3F2F1',
-      border: '#EDEBE9',
-      success: '#107C10',
-      warning: '#FFB900',
-      error: '#D13438'
+      primary: "#0078D4",
+      text: "#323130",
+      textSecondary: "#605E5C",
+      background: "#FFFFFF",
+      backgroundNeutral: "#F3F2F1",
+      border: "#EDEBE9",
+      success: "#107C10",
+      warning: "#FFB900",
+      error: "#D13438",
     },
     wireframe: {
-      primary: '#8E9AAF',
-      text: '#3C4858',
-      textSecondary: '#68769C',
-      background: '#FFFFFF',
-      backgroundNeutral: '#F8F9FA',
-      border: '#E9ECEF',
-      borderLight: '#CBC2C2'
-    }
+      primary: "#8E9AAF",
+      text: "#3C4858",
+      textSecondary: "#68769C",
+      background: "#FFFFFF",
+      backgroundNeutral: "#F8F9FA",
+      border: "#E9ECEF",
+      borderLight: "#CBC2C2",
+    },
   };
 
-  // Get color palette for the specified theme
-  const colorPalette = designSystemColors[designTheme] || designSystemColors.microsoftlearn;
-  
-  // Build dynamic color guidance based on theme
-  const colorGuidance = Object.entries(colorPalette)
-    .map(([name, color]) => `  * ${name.charAt(0).toUpperCase() + name.slice(1)}: ${color}`)
-    .join('\n');
+  // Get color palette for the specified theme (as fallback only)
+  const colorPalette =
+    designSystemColors[designTheme] || designSystemColors.microsoftlearn;
 
-  // Fallback prompts for retry mechanism
-  const fallbackPrompt = `You are an experienced web developer. Convert this UI screenshot into clean, semantic HTML.
-
-REQUIREMENTS:
-1. Extract ALL visible text exactly as shown
-2. Use semantic HTML5 elements (header, nav, main, section, etc.)
-3. Apply inline CSS with the ${designTheme} color palette:
-${colorGuidance}
-4. Recreate the exact layout and spacing
-5. Include proper accessibility attributes
-
-Return complete HTML document from <!DOCTYPE html> to </html>. No explanations.`;
-
-  const basicPrompt = `Convert this UI screenshot to HTML. Extract all text exactly. Use inline CSS. Include complete HTML document with DOCTYPE.
-
-Colors to use:
-${colorGuidance}
-
-Return only HTML code, no explanations.`;
-
-  const prompts = [
-    { name: 'enhanced', content: directPrompt, temperature: 0.05, maxTokens: 6000 },
-    { name: 'fallback', content: fallbackPrompt, temperature: 0.1, maxTokens: 4000 },
-    { name: 'basic', content: basicPrompt, temperature: 0.15, maxTokens: 3000 }
-  ];
+  // Build fallback color guidance for cases where image colors can't be determined
+  const fallbackColorGuidance = Object.entries(colorPalette)
+    .map(
+      ([name, color]) =>
+        `  * ${name.charAt(0).toUpperCase() + name.slice(1)}: ${color}`
+    )
+    .join("\n");
 
   // Enhanced multi-phase analysis prompt for superior accuracy
   const directPrompt = `You are an expert UI/UX developer specializing in pixel-perfect wireframe recreation from screenshots.
@@ -238,18 +235,28 @@ ANALYSIS PHASE 3: COMPREHENSIVE CONTENT EXTRACTION
 - Identify any icons or symbolic elements and their context
 - Preserve text formatting (bold, italic, underlined)
 
-ANALYSIS PHASE 4: VISUAL DESIGN & COLOR MAPPING
-- Apply the ${designTheme.toUpperCase()} design system colors for consistency:
-${colorGuidance}
-- If other branded colors are clearly present in the image, match them precisely while maintaining good contrast
-- For wireframes/mockups without specific branding, use the provided color palette
-- Ensure proper color contrast ratios for accessibility (4.5:1 minimum for normal text)
-- Use semantic color meanings (success=green, warning=amber, error=red, info=blue)
+ANALYSIS PHASE 4: VISUAL DESIGN & COLOR EXTRACTION
+- PRIMARY STRATEGY: Extract and preserve the ACTUAL colors from the uploaded image
+  * Identify the dominant background color(s) used in the image
+  * Extract text colors (headings, body text, labels) exactly as they appear
+  * Preserve button colors, accent colors, and brand colors from the original
+  * Maintain the exact color relationships and contrast ratios from the image
+  * Use hex color codes that match the image colors as closely as possible
+  
+- SECONDARY STRATEGY: If the image appears to be a wireframe/mockup with neutral colors, use the ${designTheme.toUpperCase()} fallback palette:
+${fallbackColorGuidance}
+
+- COLOR ACCURACY PRINCIPLES:
+  * Branded interfaces: Match colors exactly to preserve brand identity
+  * Mockups/wireframes: Use clean, professional colors from fallback palette
+  * Mixed content: Prioritize actual colors but ensure good contrast (4.5:1 minimum)
+  * Color naming: Use descriptive names in CSS (--primary-blue, --text-dark, etc.)
+  * Consistency: Apply the same color palette throughout the entire document
 
 IMPLEMENTATION REQUIREMENTS:
 1. Generate complete HTML5 document with proper DOCTYPE and semantic structure
 2. Use semantic HTML elements (header, nav, main, section, article, aside, footer)
-3. Apply inline CSS for precise styling and positioning
+3. Apply inline CSS for precise styling and positioning with EXACT COLOR MATCHING from the image
 4. Ensure responsive viewport meta tag for mobile compatibility
 5. Include ALL visible text content exactly as shown
 6. Implement proper accessibility attributes (alt text, ARIA labels, semantic roles)
@@ -257,16 +264,59 @@ IMPLEMENTATION REQUIREMENTS:
 8. Maintain exact visual hierarchy and component relationships
 9. Ensure interactive elements have proper hover/focus states
 10. Generate clean, production-ready code structure
+11. CRITICAL: Use hex colors that precisely match the image colors, not theme defaults
 
 QUALITY STANDARDS:
-- The rendered HTML must be visually IDENTICAL to the source image
+- The rendered HTML must be visually IDENTICAL to the source image, including all colors
+- All colors must precisely match the image - no arbitrary theme color substitutions
 - All text must be searchable and selectable (no text-as-images)
 - Layout must maintain proportions and spacing relationships
 - Code must be clean, semantic, and accessible
-- Styling must be consistent with design system principles
+- Color contrast ratios must meet accessibility standards (preserve original if good, improve if poor)
+- Styling must preserve the original design aesthetic and brand identity
 
 Return ONLY the complete, valid HTML code starting with <!DOCTYPE html> and ending with </html>.
 NO explanations, NO markdown formatting, NO code blocks - just the raw HTML document.`;
+
+  // Fallback prompts for retry mechanism
+  const fallbackPrompt = `You are an experienced web developer. Convert this UI screenshot into clean, semantic HTML.
+
+REQUIREMENTS:
+1. Extract ALL visible text exactly as shown
+2. Use semantic HTML5 elements (header, nav, main, section, etc.)
+3. IMPORTANT: Extract and use the ACTUAL colors from the image - do not use theme colors unless the image appears to be a basic wireframe
+4. If image has branded/specific colors, match them exactly using hex codes
+5. Only use ${designTheme} fallback colors if the image is clearly a neutral wireframe:
+${fallbackColorGuidance}
+6. Recreate the exact layout and spacing
+7. Include proper accessibility attributes
+
+Return complete HTML document from <!DOCTYPE html> to </html>. No explanations.`;
+
+  const basicPrompt = `Convert this UI screenshot to HTML. Extract all text exactly. Use inline CSS. 
+
+CRITICAL: Use the actual colors from the image, not theme colors. Match the image colors precisely.
+
+Only use these fallback colors if the image is clearly a neutral wireframe:
+${fallbackColorGuidance}
+
+Return only HTML code, no explanations.`;
+
+  const prompts = [
+    {
+      name: "enhanced",
+      content: directPrompt,
+      temperature: 0.05,
+      maxTokens: 6000,
+    },
+    {
+      name: "fallback",
+      content: fallbackPrompt,
+      temperature: 0.1,
+      maxTokens: 4000,
+    },
+    { name: "basic", content: basicPrompt, temperature: 0.15, maxTokens: 3000 },
+  ];
 
   // Retry logic - try enhanced prompt first, fallback if quality is poor
   let lastError;
@@ -274,10 +324,14 @@ NO explanations, NO markdown formatting, NO code blocks - just the raw HTML docu
 
   for (let attempt = 0; attempt < prompts.length; attempt++) {
     const promptConfig = prompts[attempt];
-    
+
     try {
-      console.log(`[${correlationId}] Attempt ${attempt + 1}: Using ${promptConfig.name} prompt`);
-      
+      console.log(
+        `[${correlationId}] Attempt ${attempt + 1}: Using ${
+          promptConfig.name
+        } prompt`
+      );
+
       const response = await client.chat.completions.create({
         model: deployment,
         temperature: promptConfig.temperature,
@@ -307,19 +361,24 @@ NO explanations, NO markdown formatting, NO code blocks - just the raw HTML docu
       if (htmlContent && htmlContent.includes("<!DOCTYPE html>")) {
         // Validate and enhance the generated HTML
         const validation = validateGeneratedHTML(htmlContent);
-        
-        console.log(`[${correlationId}] ${promptConfig.name} prompt - Quality score: ${validation.score}%`);
-        
+
+        console.log(
+          `[${correlationId}] ${promptConfig.name} prompt - Quality score: ${validation.score}%`
+        );
+
         if (validation.issues.length > 0) {
-          console.log(`[${correlationId}] Quality issues found:`, validation.issues.slice(0, 3)); // Log first 3 issues
+          console.log(
+            `[${correlationId}] Quality issues found:`,
+            validation.issues.slice(0, 3)
+          ); // Log first 3 issues
         }
 
         // Enhance HTML with missing essential elements
         const enhancedHTML = enhanceHTMLQuality(htmlContent);
-        
+
         // Re-validate after enhancements
         const finalValidation = validateGeneratedHTML(enhancedHTML);
-        
+
         const result = {
           html: enhancedHTML,
           source: `direct-vision-${promptConfig.name}`,
@@ -330,15 +389,17 @@ NO explanations, NO markdown formatting, NO code blocks - just the raw HTML docu
             suggestions: finalValidation.suggestions,
             complexity: finalValidation.estimatedComplexity,
             hasSemanticElements: finalValidation.hasSemanticElements,
-            hasInlineStyles: finalValidation.hasInlineStyles
+            hasInlineStyles: finalValidation.hasInlineStyles,
           },
           promptUsed: promptConfig.name,
-          attempt: attempt + 1
+          attempt: attempt + 1,
         };
 
         // If quality is good enough (score >= 80) or this is our last attempt, return result
         if (finalValidation.score >= 80 || attempt === prompts.length - 1) {
-          console.log(`[${correlationId}] Accepting result from ${promptConfig.name} prompt (score: ${finalValidation.score}%)`);
+          console.log(
+            `[${correlationId}] Accepting result from ${promptConfig.name} prompt (score: ${finalValidation.score}%)`
+          );
           return result;
         }
 
@@ -346,17 +407,22 @@ NO explanations, NO markdown formatting, NO code blocks - just the raw HTML docu
         if (!bestResult || finalValidation.score > bestResult.quality.score) {
           bestResult = result;
         }
-        
-        console.log(`[${correlationId}] Score ${finalValidation.score}% below threshold (80%), trying next prompt...`);
 
+        console.log(
+          `[${correlationId}] Score ${finalValidation.score}% below threshold (80%), trying next prompt...`
+        );
       } else {
-        throw new Error(`${promptConfig.name} prompt generated invalid HTML structure`);
+        throw new Error(
+          `${promptConfig.name} prompt generated invalid HTML structure`
+        );
       }
-
     } catch (error) {
-      console.error(`[${correlationId}] ${promptConfig.name} prompt failed:`, error.message);
+      console.error(
+        `[${correlationId}] ${promptConfig.name} prompt failed:`,
+        error.message
+      );
       lastError = error;
-      
+
       // If this is our last attempt and we have no good result, we'll throw
       if (attempt === prompts.length - 1 && !bestResult) {
         throw error;
@@ -366,7 +432,9 @@ NO explanations, NO markdown formatting, NO code blocks - just the raw HTML docu
 
   // If we get here, return the best result we found
   if (bestResult) {
-    console.log(`[${correlationId}] Returning best result found (score: ${bestResult.quality.score}%)`);
+    console.log(
+      `[${correlationId}] Returning best result found (score: ${bestResult.quality.score}%)`
+    );
     return bestResult;
   }
 
