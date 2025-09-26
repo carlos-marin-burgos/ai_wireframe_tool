@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { FiX, FiImage, FiUpload, FiStar } from 'react-icons/fi';
 import ImageUploadZone from './ImageUploadZone';
 import DemoImageGallery from './DemoImageGallery';
@@ -8,7 +8,7 @@ interface ImageUploadModalProps {
     isOpen: boolean;
     onClose: () => void;
     onImageUpload: (file: File) => void;
-    onAnalyzeImage: (imageUrl: string, fileName: string) => void;
+    onAnalyzeImage: (imageUrl: string, fileName: string) => Promise<any> | void;
     isAnalyzing?: boolean;
     demoMode?: boolean; // Add demo mode prop
 }
@@ -23,6 +23,8 @@ const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
 }) => {
     const [uploadMode, setUploadMode] = useState<'upload' | 'demo'>('upload');
     const [selectedDemo, setSelectedDemo] = useState<string | null>(null);
+
+
 
     const handleDemoSelect = useCallback((demoImage: any) => {
         setSelectedDemo(demoImage.id);

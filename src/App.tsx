@@ -19,6 +19,7 @@ import WireframeGenerator from "./pages/WireframeGenerator";
 import { API_CONFIG, getApiUrl } from "./config/api";
 // All API calls are now handled by the wireframe generation hook
 import { useWireframeGeneration } from './hooks/useWireframeGeneration';
+import { useImageUpload } from './hooks/useImageUpload';
 import { PerformanceTracker } from "./utils/performance";
 import { generateHeroHTML } from "./components/HeroGenerator";
 import { processWireframeForProduction } from './utils/wireframeProcessor';
@@ -57,7 +58,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   const [colorScheme, setColorScheme] = useState("primary");
   const [forceUpdateKey, setForceUpdateKey] = useState<number>(Date.now());
   const [showLandingPage, setShowLandingPage] = useState(true);
-  const [isAnalyzingImage, setIsAnalyzingImage] = useState(false);
+  // Note: isAnalyzingImage now comes from useImageUpload hook as hookIsAnalyzingImage
   const [toasts, setToasts] = useState<ToastData[]>([]);
   const [fastMode, setFastMode] = useState(false);
   const [showFigmaIntegration, setShowFigmaIntegration] = useState(false);
@@ -200,6 +201,30 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   const removeToast = (id: number) => {
     setToasts(prev => prev.filter(toast => toast.id !== id));
   };
+
+  // Initialize unified image upload hook
+  const {
+    handleImageUpload,
+    handleAnalyzeImage,
+    isAnalyzing: hookIsAnalyzingImage
+  } = useImageUpload(
+    designTheme,
+    colorScheme,
+    // onSuccess callback
+    (html: string, description: string) => {
+      setDescription(description);
+      handleWireframeGenerated(html, description);
+      setShowLandingPage(false);
+      setForceUpdateKey(Date.now());
+      showToast(`Successfully generated wireframe from image!`, 'success');
+    },
+    // onError callback
+    (error: string) => {
+      showToast(error, 'error');
+    }
+  );
+
+
 
   const loadSavedWireframes = () => {
     const saved = localStorage.getItem("snapframe_saved");
@@ -1250,114 +1275,11 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     console.log("Multi-step feature clicked");
   };
 
-  // Image upload handlers
-  const handleImageUpload = (file: File) => {
-    console.log('Image uploaded:', file.name, file.size);
-    // The file is handled by the ImageUploadZone component for preview
-    // Actual wireframe generation happens in handleAnalyzeImage
-  };
-
   const handleBackToLanding = () => {
     setHtmlWireframe("");
     setReactComponent(""); // Clear React component when going back
     setShowLandingPage(true);
     setDescription("");
-  };
-
-  const handleAnalyzeImage = async (imageUrl: string, fileName: string) => {
-    console.log('🔍 Starting direct image-to-wireframe conversion:', fileName, 'Size:', imageUrl.length, 'bytes');
-    setIsAnalyzingImage(true);
-
-    try {
-      // Use the direct image-to-wireframe conversion endpoint that preserves exact colors and text
-      const directResponse = await fetch('/api/direct-image-to-wireframe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          image: imageUrl, // Base64 image data
-          designTheme: designTheme,
-          colorScheme: colorScheme,
-        }),
-      });
-
-      if (!directResponse.ok) {
-        throw new Error(`Direct conversion failed: ${directResponse.status}`);
-      }
-
-      const directResult = await directResponse.json();
-
-      if (!directResult.success) {
-        throw new Error(directResult.error || 'Direct conversion failed');
-      }
-
-      console.log('✅ Direct image-to-wireframe conversion completed successfully');
-
-      // Set description to indicate this is from image analysis
-      const imageDescription = `Pixel-perfect wireframe generated from uploaded image: ${fileName}. Preserves exact colors, text, and layout from the original design.`;
-      setDescription(imageDescription);
-
-      // Use the generated HTML directly - no need for additional processing
-      if (directResult.html) {
-        handleWireframeGenerated(directResult.html, imageDescription);
-      }
-    } catch (error) {
-      console.error('❌ Direct conversion failed, trying fallback:', error);
-
-      // Fallback to enhanced analysis if direct conversion fails
-      try {
-        const analysisResponse = await fetch('/api/analyzeUIImage', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            image: imageUrl,
-            prompt: 'Extract EXACT text content and EXACT hex colors from this image. Be pixel-perfect in color matching.',
-          }),
-        });
-
-        if (analysisResponse.ok) {
-          const analysisResult = await analysisResponse.json();
-
-          if (analysisResult.success) {
-            const fallbackDescription = `Recreate this UI design from image: ${fileName}. Use exact colors and text from analysis.`;
-            setDescription(fallbackDescription);
-
-            const result = await generateWireframe(
-              fallbackDescription,
-              designTheme,
-              colorScheme,
-              analysisResult // Pass the analysis result for better context
-            );
-
-            if (result && result.html) {
-              handleWireframeGenerated(result.html, fallbackDescription);
-              return;
-            }
-          }
-        }
-      } catch (fallbackError) {
-        console.error('❌ Fallback analysis also failed:', fallbackError);
-      }
-
-      // Final fallback to basic text-based generation
-      const basicDescription = `Generate a wireframe based on the uploaded image: ${fileName}. Analyze the layout, components, and structure shown in the image.`;
-      setDescription(basicDescription);
-
-      const result = await generateWireframe(
-        basicDescription,
-        designTheme,
-        colorScheme
-      );
-
-      if (result && result.html) {
-        handleWireframeGenerated(result.html, basicDescription);
-      }
-    } finally {
-      setIsAnalyzingImage(false);
-    }
   };
 
   // Figma integration handlers
@@ -1600,7 +1522,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           onGenerateAiSuggestions={handleGenerateAiSuggestions}
           onImageUpload={handleImageUpload}
           onAnalyzeImage={handleAnalyzeImage}
-          isAnalyzingImage={isAnalyzingImage}
+          isAnalyzingImage={hookIsAnalyzingImage}
           onFigmaImport={handleFigmaImport}
           onFigmaExport={handleFigmaExport}
           onOpenWireframe={openWireframe}
@@ -1642,7 +1564,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           onGeneratePageContent={handleGeneratePageContent}
           onImageUpload={handleImageUpload}
           onAnalyzeImage={handleAnalyzeImage}
-          isAnalyzingImage={isAnalyzingImage}
+          isAnalyzingImage={hookIsAnalyzingImage}
           onFigmaExport={handleFigmaExport}
           onFigmaIntegration={figmaIntegrationRef}
           onComponentLibrary={componentLibraryRef}

@@ -1,8 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import { FiX } from 'react-icons/fi';
 import "./LandingPage.css";
 import Footer from './Footer';
-import ImageUploadZone from './ImageUploadZone';
+import ImageUploadModal from './ImageUploadModal';
 import ColorThemeSelector from './ColorThemeSelector';
 import { figmaApi, FigmaFile as ApiFigmaFile, FigmaFrame } from '../services/figmaApi';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
@@ -24,7 +23,7 @@ interface LandingPageProps {
   onAiSuggestionClick: (suggestion: string) => void;
   onGenerateAiSuggestions?: (currentValue: string) => void;
   onImageUpload?: (file: File) => void;
-  onAnalyzeImage?: (imageUrl: string, fileName: string) => void;
+  onAnalyzeImage?: (imageUrl: string, fileName: string) => Promise<any> | void;
   isAnalyzingImage?: boolean;
   onFigmaImport?: (html: string, fileName: string) => void;
   onFigmaExport?: (format: 'figma-file' | 'figma-components') => void;
@@ -44,7 +43,6 @@ import {
   FiZap,
   FiGithub,
   FiTrash,
-  FiUpload,
   FiDownload,
   FiRefreshCw,
   FiCheck,
@@ -399,6 +397,26 @@ function LandingPage({
     setShowImageUpload(prev => !prev);
   };
 
+  // Wrapper handlers to close modal after successful image analysis
+  const handleImageUploadWithModalClose = useCallback((file: File) => {
+    if (onImageUpload) {
+      onImageUpload(file);
+    }
+  }, [onImageUpload]);
+
+  const handleAnalyzeImageWithModalClose = useCallback(async (imageUrl: string, fileName: string) => {
+    if (onAnalyzeImage) {
+      try {
+        await onAnalyzeImage(imageUrl, fileName);
+        // Close modal on successful analysis
+        setShowImageUpload(false);
+      } catch (error) {
+        // Keep modal open on error so user can try again
+        console.error('Image analysis failed:', error);
+      }
+    }
+  }, [onAnalyzeImage]);
+
   // Simple Figma Integration handlers - Enhanced modal handles the rest
   const handleFigmaImport = (html: string, fileName: string) => {
     if (onFigmaImport) {
@@ -702,41 +720,15 @@ function LandingPage({
             </div>
           </form>
 
-          {/* Image Upload Zone */}
-          {showImageUpload && onImageUpload && onAnalyzeImage && (
-            <div className="modal-overlay" onClick={() => setShowImageUpload(false)}>
-              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                {/* Modal Header */}
-                <div className="modal-header">
-                  <div className="modal-title">
-                    <FiUpload className="modal-icon" />
-                    <h2>Upload Image to Wireframe</h2>
-                  </div>
-                  <button className="modal-close-btn" onClick={() => setShowImageUpload(false)} title="Close modal">
-                    <FiX />
-                  </button>
-                </div>
-
-                {/* Modal Body */}
-                <div className="modal-body">
-                  <div className="upload-content">
-                    <p className="modal-description">
-                      Upload an image of a UI design, wireframe, or website screenshot to generate a wireframe based on its layout.
-                    </p>
-
-                    <div className="upload-zone-container">
-                      <ImageUploadZone
-                        onImageUpload={onImageUpload}
-                        onAnalyzeImage={onAnalyzeImage}
-                        isAnalyzing={isAnalyzingImage}
-                        className="upload-zone"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+          {/* Image Upload Modal - Unified Component */}
+          <ImageUploadModal
+            isOpen={showImageUpload}
+            onClose={() => setShowImageUpload(false)}
+            onImageUpload={handleImageUploadWithModalClose}
+            onAnalyzeImage={handleAnalyzeImageWithModalClose}
+            isAnalyzing={isAnalyzingImage}
+            demoMode={false} // No demo mode in landing page
+          />
 
         </div>
       </div>

@@ -4,7 +4,7 @@ import './ImageUploadZone.css';
 
 interface ImageUploadZoneProps {
     onImageUpload: (file: File) => void;
-    onAnalyzeImage?: (imageUrl: string, fileName: string) => void;
+    onAnalyzeImage?: (imageUrl: string, fileName: string) => Promise<any> | void;
     isAnalyzing?: boolean;
     className?: string;
 }
@@ -59,9 +59,13 @@ const ImageUploadZone: React.FC<ImageUploadZoneProps> = ({
         reader.readAsDataURL(file);
     }, [onImageUpload]);
 
-    const handleAnalyze = useCallback(() => {
+    const handleAnalyze = useCallback(async () => {
         if (preview && fileName && onAnalyzeImage) {
-            onAnalyzeImage(preview, fileName);
+            try {
+                await onAnalyzeImage(preview, fileName);
+            } catch (error) {
+                console.error("Image analysis failed:", error);
+            }
         }
     }, [preview, fileName, onAnalyzeImage]);
 

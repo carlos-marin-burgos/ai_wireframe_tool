@@ -85,7 +85,7 @@ interface SplitLayoutProps {
   onGeneratePageContent?: (description: string, pageType: string) => Promise<string>;
   // Image upload handlers (same as LandingPage)
   onImageUpload?: (file: File) => void;
-  onAnalyzeImage?: (imageUrl: string, fileName: string) => void;
+  onAnalyzeImage?: (imageUrl: string, fileName: string) => Promise<any> | void;
   isAnalyzingImage?: boolean;
   // Figma export handler
   onFigmaExport?: (format: 'figma-file' | 'figma-components') => void;
