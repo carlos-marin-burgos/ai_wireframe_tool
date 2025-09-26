@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Image Upload</title>
+</head>
+
+<body>
+    <h1>Test Image Upload - CORS Fix Verification</h1>
+
+    <div>
+        <h2>Test with Static Web App Proxy (Relative URL)</h2>
+        <button onclick="testRelativeAPI()">Test /api/direct-image-to-wireframe</button>
+        <div id="relative-result"></div>
+    </div>
+
+    <div>
+        <h2>Test with Direct Function App URL</h2>
+        <button onclick="testDirectAPI()">Test Direct Function App</button>
+        <div id="direct-result"></div>
+    </div>
+
+    <script>
+        async function testRelativeAPI() {
+            const resultDiv = document.getElementById('relative-result');
+            resultDiv.innerHTML = 'Testing relative URL (Static Web App proxy)...';
+
+            try {
+                const response = await fetch('/api/direct-image-to-wireframe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        test: true
+                    })
+                });
+
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <strong>Success!</strong><br>
+                    Status: ${response.status}<br>
+                    Response: ${JSON.stringify(data, null, 2)}
+                `;
+                resultDiv.style.color = 'green';
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <strong>Error:</strong><br>
+                    ${error.message}
+                `;
+                resultDiv.style.color = 'red';
+                console.error('Relative API Error:', error);
+            }
+        }
+
+        async function testDirectAPI() {
+            const resultDiv = document.getElementById('direct-result');
+            resultDiv.innerHTML = 'Testing direct Function App URL...';
+
+            try {
+                const response = await fetch('https://func-designetica-prod-working.azurewebsites.net/api/direct-image-to-wireframe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        test: true
+                    })
+                });
+
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <strong>Success!</strong><br>
+                    Status: ${response.status}<br>
+                    Response: ${JSON.stringify(data, null, 2)}
+                `;
+                resultDiv.style.color = 'green';
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <strong>Error:</strong><br>
+                    ${error.message}
+                `;
+                resultDiv.style.color = 'red';
+                console.error('Direct API Error:', error);
+            }
+        }
+    </script>
+</body>
+
+</html>

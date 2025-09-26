@@ -9,7 +9,7 @@ const isLocalhost =
 // Environment detection - removed hardcoded production domain for flexibility
 const isProduction = !isDevelopment && !isLocalhost;
 
-// Always use Function App for production when on Static Web App hostname
+// Always use Static Web App proxy for production when on Static Web App hostname
 const STATIC_WEB_APP_HOSTS = new Set([
   "delightful-pond-064d9a91e.1.azurestaticapps.net",
 ]);
@@ -17,7 +17,7 @@ const STATIC_WEB_APP_HOSTS = new Set([
 const productionHostFallback =
   typeof window !== "undefined" &&
   STATIC_WEB_APP_HOSTS.has(window.location.hostname)
-    ? "https://func-designetica-prod-working.azurewebsites.net"
+    ? "" // Use relative URLs for Static Web App proxy
     : undefined;
 
 // Centralized port configuration to avoid conflicts
