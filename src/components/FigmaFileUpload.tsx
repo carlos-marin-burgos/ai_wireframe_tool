@@ -387,19 +387,20 @@ const FigmaFileUpload: React.FC<FigmaFileUploadProps> = ({
 
                         {uploadMethod === 'figma-link' && (
                             <div className="figma-help">
-                                <h5>How to get your Figma URL:</h5>
+                                <h5>How to get your Microsoft Figma URL:</h5>
                                 <ol>
-                                    <li>Open your Figma file</li>
+                                    <li>Open your Microsoft Figma file</li>
                                     <li>Click "Share" in the top-right corner</li>
-                                    <li>Set permissions to "Anyone with the link can view"</li>
+                                    <li>Set permissions appropriately for Microsoft internal sharing</li>
                                     <li>Copy the file URL and paste it above</li>
                                 </ol>
-                                
+
                                 <div className="figma-url-formats">
-                                    <h6>📋 Supported formats:</h6>
+                                    <h6>📋 Microsoft Figma formats:</h6>
                                     <ul>
                                         <li><strong>Entire file:</strong> <code>figma.com/design/FILE_ID/Title</code></li>
                                         <li><strong>Specific component:</strong> Right-click component → "Copy link"</li>
+                                        <li><strong>Microsoft Design System:</strong> Works with internal design components</li>
                                     </ul>
                                 </div>
                             </div>

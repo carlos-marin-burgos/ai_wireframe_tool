@@ -44,6 +44,8 @@ module.exports = async function (context, req) {
       return;
     }
 
+    context.log(`🏢 Processing Microsoft Figma URL: ${figmaUrl}`);
+
     // Extract file ID and node ID from Figma URL
     const urlInfo = extractFigmaUrlInfo(figmaUrl);
     if (!urlInfo) {
