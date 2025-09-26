@@ -23,7 +23,7 @@ show_status() {
     echo ""
     
     echo -e "${GREEN}🌟 PRODUCTION URLs:${NC}"
-    echo "  Frontend: https://lemon-field-08a1a0b0f.1.azurestaticapps.net"
+    echo "  Frontend: https://delightful-pond-064d9a91e.1.azurestaticapps.net"
     echo "  Backend:  https://func-designetica-prod-xabnur6oyusju.azurewebsites.net"
     echo ""
     
@@ -31,7 +31,7 @@ show_status() {
     
     # Test frontend
     echo -n "  Frontend status: "
-    if curl -s -w "%{http_code}" -o /dev/null https://lemon-field-08a1a0b0f.1.azurestaticapps.net | grep -q "200"; then
+    if curl -s -w "%{http_code}" -o /dev/null https://delightful-pond-064d9a91e.1.azurestaticapps.net | grep -q "200"; then
         echo -e "${GREEN}✅ Online${NC}"
     else
         echo -e "${RED}❌ Offline${NC}"
@@ -70,7 +70,7 @@ deploy_production() {
     echo -e "${GREEN}✅ Deployment completed!${NC}"
     echo ""
     echo -e "${BLUE}🌐 Your application is live at:${NC}"
-    echo "   https://lemon-field-08a1a0b0f.1.azurestaticapps.net"
+    echo "   https://delightful-pond-064d9a91e.1.azurestaticapps.net"
 }
 
 # Function to quick deploy (just code, no infrastructure)
