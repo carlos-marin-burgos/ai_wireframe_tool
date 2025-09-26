@@ -62,7 +62,7 @@ deploy_backend() {
         echo "Your API is now live and healthy at:"
         echo "  https://func-original-app-pgno4orkguix6.azurewebsites.net/api/generate-wireframe"
         echo ""
-        echo "Website: https://lemon-field-08a1a0b0f.1.azurestaticapps.net"
+        echo "Website: https://delightful-pond-064d9a91e.1.azurestaticapps.net"
         return 0
     else
         error "Final health check failed"
@@ -83,9 +83,9 @@ deploy_frontend() {
         
         # Test website accessibility
         log "Testing website accessibility"
-        if curl -s "https://lemon-field-08a1a0b0f.1.azurestaticapps.net" > /dev/null; then
+        if curl -s "https://delightful-pond-064d9a91e.1.azurestaticapps.net" > /dev/null; then
             success "🎉 FRONTEND DEPLOYMENT COMPLETED SUCCESSFULLY!"
-            echo "Website: https://lemon-field-08a1a0b0f.1.azurestaticapps.net"
+            echo "Website: https://delightful-pond-064d9a91e.1.azurestaticapps.net"
             return 0
         else
             error "Website accessibility test failed"
@@ -116,7 +116,7 @@ deploy_all() {
             echo ""
             echo "🌟 Your Designetica application is fully deployed and operational!"
             echo "   API: https://func-original-app-pgno4orkguix6.azurewebsites.net/"
-            echo "   Website: https://lemon-field-08a1a0b0f.1.azurestaticapps.net"
+            echo "   Website: https://delightful-pond-064d9a91e.1.azurestaticapps.net"
             echo ""
             return 0
         else

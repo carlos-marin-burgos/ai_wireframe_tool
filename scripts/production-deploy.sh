@@ -82,8 +82,8 @@ quick_deploy() {
     echo -e "${YELLOW}📦 Building frontend...${NC}"
     npm run build
     
-    # Deploy via GitHub Actions (ONLY way to update lemon-field)
-    echo -e "${YELLOW}☁️  Deploying to lemon-field via GitHub Actions...${NC}"
+    # Deploy via GitHub Actions (ONLY way to update delightful-pond)
+    echo -e "${YELLOW}☁️  Deploying to delightful-pond via GitHub Actions...${NC}"
     echo "Committing and pushing changes to trigger GitHub Actions deployment..."
     
     # Check if there are changes to commit
@@ -91,19 +91,19 @@ quick_deploy() {
         git add .
         git commit -m "Deploy: Update frontend build $(date)"
         git push
-        echo "✅ Changes pushed! GitHub Actions will deploy to lemon-field."
+        echo "✅ Changes pushed! GitHub Actions will deploy to delightful-pond."
     else
         echo "⚠️  No changes detected. Triggering empty commit..."
         git commit --allow-empty -m "Deploy: Force update $(date)"
         git push
-        echo "✅ Empty commit pushed! GitHub Actions will redeploy lemon-field."
+        echo "✅ Empty commit pushed! GitHub Actions will redeploy delightful-pond."
     fi
     
     echo ""
     echo -e "${GREEN}✅ Deployment initiated via GitHub Actions!${NC}"
     echo ""
     echo -e "${BLUE}🌐 Your application will be live at:${NC}"
-    echo "   https://lemon-field-08a1a0b0f.1.azurestaticapps.net"
+    echo "   https://delightful-pond-064d9a91e.1.azurestaticapps.net"
     echo ""
     echo -e "${YELLOW}📈 Monitor deployment progress:${NC}"
     echo "   https://github.com/carlos-marin-burgos/ai_wireframe_tool/actions"
@@ -115,7 +115,7 @@ test_production() {
     echo ""
     
     echo "Opening production site in browser..."
-    open "https://lemon-field-08a1a0b0f.1.azurestaticapps.net"
+    open "https://delightful-pond-064d9a91e.1.azurestaticapps.net"
     
     echo ""
     echo -e "${YELLOW}🔍 Manual Test Checklist:${NC}"
@@ -156,7 +156,7 @@ show_help() {
     echo "  $0 quick        # Quick code deployment"
     echo "  $0 test         # Test production site"
     echo ""
-    echo -e "${GREEN}🌐 Production URL: https://lemon-field-08a1a0b0f.1.azurestaticapps.net${NC}"
+    echo -e "${GREEN}🌐 Production URL: https://delightful-pond-064d9a91e.1.azurestaticapps.net${NC}"
 }
 
 # Main logic
