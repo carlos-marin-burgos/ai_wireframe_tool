@@ -90,11 +90,36 @@ const persistTrustedSession = (session: Omit<TrustedFigmaSession, 'expiresAt'> &
     }
 };
 
+// Enhanced session management with auto-refresh
+const extendTrustedSession = () => {
+    if (typeof window === 'undefined') return;
+    
+    const session = readTrustedSession();
+    if (session) {
+        // Extend the session by another 7 days when accessed
+        const extendedSession = {
+            ...session,
+            expiresAt: Date.now() + FIGMA_SESSION_TTL_MS
+        };
+        
+        try {
+            window.localStorage.setItem(FIGMA_TRUSTED_SESSION_KEY, JSON.stringify(extendedSession));
+            console.log('🔄 Figma session extended for 7 more days');
+        } catch (error) {
+            console.error('Error extending Figma session:', error);
+        }
+    }
+};
+
 const clearTrustedSession = () => {
     if (typeof window === 'undefined') return;
 
     try {
         window.localStorage.removeItem(FIGMA_TRUSTED_SESSION_KEY);
+        // Also clear legacy token storage to prevent conflicts
+        window.localStorage.removeItem('figma_oauth_tokens');
+        window.localStorage.removeItem('figma_oauth_timestamp');
+        console.log('🗑️ All Figma session data cleared');
     } catch (error) {
         console.error('Error clearing trusted Figma session:', error);
     }
@@ -166,6 +191,10 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
         const trustedSession = readTrustedSession();
         if (trustedSession) {
             console.log('🔍 Found trusted session, checking for stored OAuth tokens...');
+            
+            // Extend session when accessed to maintain long-term connectivity
+            extendTrustedSession();
+            
             // If we have a trusted session, the OAuth tokens should still be stored separately
             const storedTokens = localStorage.getItem('figma_oauth_tokens');
             if (storedTokens) {
@@ -420,6 +449,15 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
     // Check OAuth status on component mount
     useEffect(() => {
         if (isOpen) {
+            // Restore session state when modal opens
+            const trustedSession = readTrustedSession();
+            if (trustedSession) {
+                setIsConnected(true);
+                setActiveTab('url'); // Switch to URL import tab if already connected
+                extendTrustedSession(); // Extend session on modal open
+                console.log('🔄 Restored Figma session on modal open');
+            }
+            
             checkOAuthStatus();
         }
     }, [isOpen]); // Only re-run when modal opens/closes
