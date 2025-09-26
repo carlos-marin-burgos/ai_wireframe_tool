@@ -71,6 +71,53 @@
   line-height: 1.5;
 }
 
+/* URL Help Section */
+.figma-url-help {
+  margin-top: 16px;
+  padding: 12px;
+  background: #f1f5f9;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.figma-url-help h4 {
+  margin: 0 0 8px 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.url-examples {
+  margin-bottom: 8px;
+}
+
+.url-format {
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.url-format strong {
+  color: #374151;
+  font-weight: 600;
+}
+
+.url-format code {
+  background: #e5e7eb;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'Monaco', 'Consolas', monospace;
+  font-size: 0.8rem;
+  color: #374151;
+}
+
+.help-tip {
+  margin: 8px 0 0 0 !important;
+  font-size: 0.8rem;
+  color: #059669;
+  font-style: italic;
+}
+
 .figma-modal-close {
   background: none;
   border: none;

@@ -394,6 +394,14 @@ const FigmaFileUpload: React.FC<FigmaFileUploadProps> = ({
                                     <li>Set permissions to "Anyone with the link can view"</li>
                                     <li>Copy the file URL and paste it above</li>
                                 </ol>
+                                
+                                <div className="figma-url-formats">
+                                    <h6>📋 Supported formats:</h6>
+                                    <ul>
+                                        <li><strong>Entire file:</strong> <code>figma.com/design/FILE_ID/Title</code></li>
+                                        <li><strong>Specific component:</strong> Right-click component → "Copy link"</li>
+                                    </ul>
+                                </div>
                             </div>
                         )}
                     </div>

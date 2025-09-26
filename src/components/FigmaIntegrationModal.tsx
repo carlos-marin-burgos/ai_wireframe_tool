@@ -1292,6 +1292,19 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                             <div className="tab-description">
                                 <h3>📥 Import from URL</h3>
                                 <p>Import from Figma URLs or any image URL. Design tokens will be automatically extracted from Figma files.</p>
+                                
+                                <div className="figma-url-help">
+                                    <h4>🔗 Supported Figma URL Formats:</h4>
+                                    <div className="url-examples">
+                                        <div className="url-format">
+                                            <strong>Entire File:</strong> <code>figma.com/design/FILE_ID/Title</code>
+                                        </div>
+                                        <div className="url-format">
+                                            <strong>Specific Component:</strong> <code>figma.com/design/FILE_ID/Title?node-id=1-2</code>
+                                        </div>
+                                    </div>
+                                    <p className="help-tip">💡 Right-click any Figma component → "Copy link" to get the component URL</p>
+                                </div>
                             </div>
 
                             <div className="figma-input-group">
@@ -1299,7 +1312,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                                 <input
                                     id="figma-url"
                                     type="url"
-                                    placeholder="https://www.figma.com/file/... or image URL"
+                                    placeholder="https://www.figma.com/design/ABC123/MyFile or https://www.figma.com/design/ABC123/MyFile?node-id=1-2"
                                     value={figmaUrl}
                                     onChange={(e) => setFigmaUrl(e.target.value)}
                                     className="figma-input"

@@ -449,6 +449,45 @@
   margin-bottom: 4px;
 }
 
+.figma-url-formats {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #d1d5db;
+}
+
+.figma-url-formats h6 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #3C4858;
+  margin: 0 0 6px 0;
+}
+
+.figma-url-formats ul {
+  margin: 0;
+  padding-left: 16px;
+  color: #68769C;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.figma-url-formats li {
+  margin-bottom: 3px;
+}
+
+.figma-url-formats strong {
+  color: #374151;
+  font-weight: 600;
+}
+
+.figma-url-formats code {
+  background: #f3f4f6;
+  padding: 1px 4px;
+  border-radius: 2px;
+  font-family: 'Monaco', 'Consolas', monospace;
+  font-size: 11px;
+  color: #374151;
+}
+
 /* Import Options */
 .import-options {
   background: #E9ECEF;
