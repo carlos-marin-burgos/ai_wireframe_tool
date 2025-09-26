@@ -21,7 +21,7 @@ import { figmaApi, FigmaFile as ApiFigmaFile, FigmaFrame } from '../services/fig
 import { tokenExtractor, DesignTokenCollection } from '../services/figmaTokenExtractor';
 import FigmaFileUpload from './FigmaFileUpload';
 
-import { getApiUrl } from '../config/api';
+import { API_CONFIG, getApiUrl } from '../config/api';
 
 const FIGMA_TRUSTED_SESSION_KEY = 'figma_oauth_session';
 const FIGMA_SESSION_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
@@ -299,7 +299,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
             }
 
             // THIRD: Only if no trusted session AND no valid OAuth tokens, check backend
-            const response = await fetch(getApiUrl('/api/figmaoauthstatus'), {
+            const response = await fetch(getApiUrl(API_CONFIG.ENDPOINTS.FIGMA_OAUTH_STATUS), {
                 headers: { 'Accept': 'application/json' }
             });
 
@@ -490,7 +490,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 
         try {
             // Get authorization URL from backend
-            const response = await fetch(getApiUrl('/api/figmaoauthstart'), {
+            const response = await fetch(getApiUrl(API_CONFIG.ENDPOINTS.FIGMA_OAUTH_START), {
                 method: 'GET'  // Changed from POST to GET since endpoint only accepts GET, HEAD, OPTIONS
             });
 

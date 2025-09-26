@@ -5,8 +5,14 @@ console.log("🧪 Testing getApiUrl function");
 console.log("==============================");
 
 console.log("API_CONFIG.BASE_URL:", API_CONFIG.BASE_URL);
-console.log("OAuth Status URL:", getApiUrl("/api/figmaoauthstatus"));
-console.log("OAuth Start URL:", getApiUrl("/api/figmaoauthstart"));
+console.log(
+  "OAuth Status URL:",
+  getApiUrl(API_CONFIG.ENDPOINTS.FIGMA_OAUTH_STATUS)
+);
+console.log(
+  "OAuth Start URL:",
+  getApiUrl(API_CONFIG.ENDPOINTS.FIGMA_OAUTH_START)
+);
 
 // Test environment detection
 console.log("\n🔍 Environment Detection:");

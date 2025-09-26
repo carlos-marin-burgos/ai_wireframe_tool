@@ -18,7 +18,7 @@ const STATIC_WEB_APP_HOSTS = new Set([
 const productionHostFallback =
   typeof window !== "undefined" &&
   STATIC_WEB_APP_HOSTS.has(window.location.hostname)
-    ? "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net"
+    ? "https://func-designetica-prod-working.azurewebsites.net"
     : undefined;
 
 // Centralized port configuration to avoid conflicts
@@ -103,7 +103,8 @@ export const API_CONFIG = {
     HEALTH: "/api/health",
     WEBSITE_ANALYZER: "/api/websiteAnalyzer", // NEW: Website analysis endpoint (matches Azure Function name)
 
-    // 🔐 OAuth endpoints (using correct lowercase URLs from Azure)
+    // 🔐 OAuth endpoints (align with Azure Function routes which are lowercase)
+    FIGMA_OAUTH_STATUS: "/api/figmaoauthstatus",
     FIGMA_OAUTH_START: "/api/figmaoauthstart",
     FIGMA_OAUTH_CALLBACK: "/api/figmaoauthcallback",
     FIGMA_OAUTH_DIAGNOSTICS: "/api/figmaoauthdiagnostics",

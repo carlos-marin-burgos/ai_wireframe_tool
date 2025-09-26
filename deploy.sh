@@ -30,13 +30,13 @@ CURRENT_ENV=$(azd env list --output json 2>/dev/null | jq -r '.[] | select(.IsDe
 echo "🌍 Current environment: $CURRENT_ENV"
 
 # Ensure we're using the production environment
-if [ "$CURRENT_ENV" != "original-app" ]; then
-    echo "⚠️  Current environment is not 'original-app'"
-    echo "🔄 Switching to production environment..."
-    azd env select original-app
-    echo "✅ Switched to original-app environment"
+if [ "$CURRENT_ENV" != "designetica" ]; then
+    echo "⚠️  Current environment is not 'designetica'"
+    echo "🔄 Switching to designetica environment..."
+    azd env select designetica
+    echo "✅ Switched to designetica environment"
 else
-    echo "✅ Already using production environment: original-app"
+    echo "✅ Already using production environment: designetica"
 fi
 
 # Show deployment target

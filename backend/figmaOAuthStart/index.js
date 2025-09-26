@@ -115,7 +115,9 @@ module.exports = async function (context, req) {
     };
 
     const generateScopeOptions = (redirectUri, state) => {
-      const configuredScope = process.env.FIGMA_OAUTH_SCOPE;
+      const configuredScope =
+        process.env.FIGMA_OAUTH_SCOPE ||
+        "file_comments:read,file_comments:write,file_content:read,file_metadata:read,file_versions:read";
       const scopedQuery = (req.query.scope || "").trim();
 
       const options = [
@@ -177,7 +179,9 @@ module.exports = async function (context, req) {
     const oauthState = Math.random().toString(36).substring(2, 15);
     const scopeOptions = generateScopeOptions(redirectUri, oauthState);
     const primaryOption =
-      scopeOptions.find((opt) => opt.scope) || scopeOptions[0];
+      scopeOptions.find((opt) => opt.source === "environment") || // Use configured scope first
+      scopeOptions.find((opt) => opt.scope) || // Then any scope
+      scopeOptions[0]; // Fallback to first option
     const authUrl = primaryOption?.authUrl;
     const activeScope = primaryOption?.scope ?? "";
 

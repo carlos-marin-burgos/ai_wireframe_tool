@@ -29,7 +29,7 @@ echo ""
 echo "🌍 Current Default Environment: $CURRENT_ENV"
 
 # Check if we're using a valid production environment
-VALID_ENVS=("original-app" "designetica" "production")
+VALID_ENVS=("designetica" "production")
 if [[ ! " ${VALID_ENVS[@]} " =~ " ${CURRENT_ENV} " ]]; then
     echo "⚠️  WARNING: Not using a recognized production environment!"
     echo "💡 Valid environments: ${VALID_ENVS[*]}"

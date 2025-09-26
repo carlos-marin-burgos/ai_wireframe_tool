@@ -29,7 +29,7 @@ class ApiDiscoveryService {
     "/api/generate-component",
     "/api/generate-layout",
     "/api/process-design",
-    "/api/figmaOAuthCallback",
+    "/api/figmaoauthcallback",
     "/api/figmaToken",
     "/api/health",
     "/api/status",
