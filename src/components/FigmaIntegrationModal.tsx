@@ -24,7 +24,7 @@ import FigmaFileUpload from './FigmaFileUpload';
 import { API_CONFIG, getApiUrl } from '../config/api';
 
 const FIGMA_TRUSTED_SESSION_KEY = 'figma_oauth_session';
-const FIGMA_SESSION_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+const FIGMA_SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days (extended from 24 hours)
 
 type TrustedFigmaSession = {
     source: 'oauth' | 'manual';
