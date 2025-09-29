@@ -29,12 +29,12 @@ echo ""
 echo "🌍 Current Default Environment: $CURRENT_ENV"
 
 # Check if we're using a valid production environment
-VALID_ENVS=("designetica" "production")
+VALID_ENVS=("designetica" "designetica-prod" "production")
 if [[ ! " ${VALID_ENVS[@]} " =~ " ${CURRENT_ENV} " ]]; then
     echo "⚠️  WARNING: Not using a recognized production environment!"
     echo "💡 Valid environments: ${VALID_ENVS[*]}"
     echo "💡 Current: $CURRENT_ENV"
-    echo "💡 To fix: azd env select designetica"
+    echo "💡 To fix: azd env select designetica-prod"
     exit 1
 fi
 
