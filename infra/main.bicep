@@ -18,12 +18,6 @@ param openAiLocation string = 'eastus2'
 @description('SKU name for the OpenAI service')
 param openAiSkuName string = 'S0'
 
-@description('GitHub username or organization for the repository')
-param gitHubUserName string = ''
-
-@description('Name of the GitHub repository')
-param repositoryName string = 'designetica'
-
 @description('Model deployments for Azure OpenAI')
 param openAiModelDeployments array = [
   {
@@ -40,13 +34,6 @@ param openAiModelDeployments array = [
   }
 ]
 
-@description('SKU used for the Static Web App service (Free or Standard).')
-@allowed([
-  'Free'
-  'Standard'
-])
-param staticWebAppSkuName string = 'Standard'
-
 // Generate a unique token for resource naming
 var uniqueSuffix = uniqueString(subscription().id, resourceGroup().id, location, environmentName)
 var abbreviations = loadJsonContent('abbreviations.json')
@@ -60,14 +47,6 @@ var userAssignedIdentityName = '${abbreviations.userAssignedIdentity}-${environm
 var keyVaultName = take('${abbreviations.keyVault}-${environmentName}-${uniqueSuffix}', 24)
 var functionAppName = '${abbreviations.functionApp}-${environmentName}-${uniqueSuffix}'
 var appServicePlanName = '${abbreviations.appServicePlan}-${environmentName}-${uniqueSuffix}'
-var staticWebAppName = take('${abbreviations.staticWebApp}-${environmentName}-${uniqueSuffix}', 60)
-var staticWebAppTagsBase = union(tags, { 'azd-service-name': 'frontend' })
-var staticWebAppTagsWithOwner = empty(gitHubUserName)
-  ? staticWebAppTagsBase
-  : union(staticWebAppTagsBase, { 'repo-owner': gitHubUserName })
-var staticWebAppTags = empty(repositoryName)
-  ? staticWebAppTagsWithOwner
-  : union(staticWebAppTagsWithOwner, { 'repo-name': repositoryName })
 
 // Tags for all resources
 var tags = {
@@ -239,8 +218,10 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2023-12-01' = {
   }
 }
 
-// Azure Functions App for AI Builder Integration
-resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
+// Reference existing Function App instead of creating new one
+resource functionApp 'Microsoft.Web/sites@2023-12-01' existing = {
+  name: 'func-designetica-prod-vmlmp4vej4ckc'
+}
   name: functionAppName
   location: location
   tags: union(tags, { 'azd-service-name': 'backend' })
@@ -336,19 +317,9 @@ resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
 // Note: Using separate Function App for backend services
 // Static Web App for frontend hosting
 
-resource staticWebApp 'Microsoft.Web/staticSites@2022-09-01' = {
-  name: staticWebAppName
-  location: location
-  kind: 'StaticSite'
-  tags: staticWebAppTags
-  sku: {
-    name: staticWebAppSkuName
-    tier: staticWebAppSkuName
-  }
-  properties: {
-    allowConfigFileUpdates: true
-    stagingEnvironmentPolicy: 'Enabled'
-  }
+// Reference existing Static Web App instead of creating new one
+resource staticWebApp 'Microsoft.Web/staticSites@2022-09-01' existing = {
+  name: useExistingResources ? existingStaticWebAppName : 'swa-designetica-5gwyjxbwvr4s6'
 }
 
 // Optimized role assignments (removed redundant ones)
@@ -468,17 +439,16 @@ output AZURE_STORAGE_ACCOUNT_NAME string = storageAccount.name
 output AZURE_APPLICATION_INSIGHTS_NAME string = applicationInsights.name
 output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = logAnalyticsWorkspace.name
 
-// Function App outputs
-output AZURE_FUNCTION_APP_NAME string = functionApp.name
-output AZURE_FUNCTION_APP_URL string = 'https://${functionApp.properties.defaultHostName}'
-output AZURE_FUNCTION_APP_HOSTNAME string = functionApp.properties.defaultHostName
+// Function App outputs - use existing resource values when useExistingResources is true
+output AZURE_FUNCTION_APP_NAME string = useExistingResources ? existingFunctionAppName : functionApp.name
+output AZURE_FUNCTION_APP_URL string = useExistingResources ? 'https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net' : 'https://${functionApp.properties.defaultHostName}'
+output AZURE_FUNCTION_APP_HOSTNAME string = useExistingResources ? 'func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net' : functionApp.properties.defaultHostName
 
 // Key Vault outputs
 output AZURE_KEY_VAULT_NAME string = keyVault.name
 output AZURE_KEY_VAULT_URL string = keyVault.properties.vaultUri
 
-// Static Web App outputs (referencing existing resource)
-// Static Web App outputs (referencing existing resource)
-output AZURE_STATIC_WEB_APP_NAME string = 'lemon-field-08a1a0b0f'
-output AZURE_STATIC_WEB_APP_URL string = 'https://lemon-field-08a1a0b0f.1.azurestaticapps.net'
-output AZURE_STATIC_WEB_APP_HOSTNAME string = 'lemon-field-08a1a0b0f.1.azurestaticapps.net'
+// Static Web App outputs (referencing actual resource)
+output AZURE_STATIC_WEB_APP_NAME string = staticWebApp.name
+output AZURE_STATIC_WEB_APP_URL string = 'https://${staticWebApp.properties.defaultHostname}'
+output AZURE_STATIC_WEB_APP_HOSTNAME string = staticWebApp.properties.defaultHostname
