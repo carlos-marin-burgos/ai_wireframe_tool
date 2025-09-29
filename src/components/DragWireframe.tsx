@@ -18,6 +18,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import dragula from 'dragula';
 import 'dragula/dist/dragula.css';
 import './DragWireframe.css';
+import { processWireframeForProduction } from '../utils/wireframeProcessor';
 
 interface OrderingMetadata {
     id: string;
@@ -348,7 +349,7 @@ const DragWireframe: React.FC<DragWireframeProps> = React.memo(({
             });
         }
 
-         
+
         console.log('[Wireframe Drag] Draggable blocks marked:', markedCount);
         augmentedRef.current = true;
     };
@@ -755,7 +756,7 @@ const DragWireframe: React.FC<DragWireframeProps> = React.memo(({
             !container.classList.contains('insertion-gap-marker')
         );
 
-         
+
         console.log('[Wireframe Drag] Initializing dragula. Container count:', validContainers.length, 'Simple mode:', simpleModeRef.current);
 
         dragulaRef.current = dragula(validContainers, {
@@ -818,7 +819,7 @@ const DragWireframe: React.FC<DragWireframeProps> = React.memo(({
         dragulaRef.current.on('drag', (el: Element) => {
             if (containerRef.current) containerRef.current.classList.add('dragging-active');
             activeDragElementRef.current = el as HTMLElement;
-             
+
             console.log('[Wireframe Drag] drag start ->', (el as HTMLElement).tagName, el.className);
             const marker = getInsertionMarker();
             marker.style.display = 'block';
@@ -841,13 +842,13 @@ const DragWireframe: React.FC<DragWireframeProps> = React.memo(({
         cleanupMarkerRef.current = cleanupMarker;
         dragulaRef.current.on('cancel', () => {
             if (containerRef.current) containerRef.current.classList.remove('dragging-active');
-             
+
             console.log('[Wireframe Drag] drag cancel');
             cleanupMarker();
         });
         dragulaRef.current.on('drop', () => {
             if (containerRef.current) containerRef.current.classList.remove('dragging-active');
-             
+
             console.log('[Wireframe Drag] drop');
             cleanupMarker();
             if (containerRef.current && onUpdateContentRef.current) {
@@ -866,15 +867,15 @@ const DragWireframe: React.FC<DragWireframeProps> = React.memo(({
             }
         });
         dragulaRef.current.on('shadow', (el: Element, container: Element) => {
-             
+
             console.log('[Wireframe Drag] shadow placeholder in', container === containerRef.current ? 'ROOT' : (container as HTMLElement).className);
         });
         dragulaRef.current.on('over', (el: Element, container: Element) => {
-             
+
             console.log('[Wireframe Drag] over container', container === containerRef.current ? 'ROOT' : (container as HTMLElement).className);
         });
         dragulaRef.current.on('out', (el: Element, container: Element) => {
-             
+
             console.log('[Wireframe Drag] out container', container === containerRef.current ? 'ROOT' : (container as HTMLElement).className);
         });
 
@@ -941,8 +942,10 @@ const DragWireframe: React.FC<DragWireframeProps> = React.memo(({
             try { dragulaRef.current.destroy(); } catch { }
         }
         const sanitizedHTML = sanitizeHTML(htmlContent);
+        // Process images and other wireframe fixes
+        const processedHTML = processWireframeForProduction(sanitizedHTML);
         try {
-            containerRef.current.innerHTML = sanitizedHTML;
+            containerRef.current.innerHTML = processedHTML;
             const elementChildren = Array.from(containerRef.current.children).filter(c => !(c.tagName === 'STYLE' || c.tagName === 'SCRIPT')) as HTMLElement[];
             if (!simpleModeRef.current) {
                 if (elementChildren.length === 1) {
@@ -1018,9 +1021,9 @@ const DragWireframe: React.FC<DragWireframeProps> = React.memo(({
             if (e.altKey && (e.key === 'd' || e.key === 'D')) {
                 if (!containerRef.current) return;
                 const firstLevel = Array.from(containerRef.current.children).map(el => (el as HTMLElement).tagName + '.' + (el as HTMLElement).className);
-                 
+
                 console.log('[Wireframe Debug] Containers:', dragContainers.map(c => c.tagName + '.' + c.className));
-                 
+
                 console.log('[Wireframe Debug] First-level children:', firstLevel);
             }
         };

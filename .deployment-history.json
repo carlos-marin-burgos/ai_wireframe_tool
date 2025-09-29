@@ -65,6 +65,18 @@
       "timestamp": "2025-09-29T16:13:17Z",
       "status": "validated",
       "validation_passed": true
+    },
+    {
+      "url": "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net",
+      "timestamp": "2025-09-29T17:50:39Z",
+      "status": "validated",
+      "validation_passed": true
+    },
+    {
+      "url": "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net",
+      "timestamp": "2025-09-29T17:55:57Z",
+      "status": "validated",
+      "validation_passed": true
     }
   ]
 }

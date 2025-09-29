@@ -13,7 +13,7 @@ export default defineConfig({
     proxy: {
       // All API calls go to Azure Functions (which has OpenAI configured)
       "/api": {
-        target: "http://localhost:7072", // Point to Azure Functions backend with OpenAI
+        target: "http://localhost:7071", // Point to Azure Functions backend with OpenAI
         changeOrigin: true,
         secure: false,
       },

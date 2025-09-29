@@ -222,104 +222,13 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2023-12-01' = {
 resource functionApp 'Microsoft.Web/sites@2023-12-01' existing = {
   name: 'func-designetica-prod-vmlmp4vej4ckc'
 }
-  name: functionAppName
-  location: location
-  tags: union(tags, { 'azd-service-name': 'backend' })
-  kind: 'functionapp,linux'
-  identity: {
-    type: 'UserAssigned'
-    userAssignedIdentities: {
-      '${userAssignedIdentity.id}': {}
-    }
-  }
-  properties: {
-    serverFarmId: appServicePlan.id
-    reserved: true
-    siteConfig: {
-      appSettings: [
-        {
-          name: 'AzureWebJobsStorage__accountName'
-          value: storageAccount.name
-        }
-        {
-          name: 'FUNCTIONS_EXTENSION_VERSION'
-          value: '~4'
-        }
-        {
-          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-          value: applicationInsights.properties.ConnectionString
-        }
-        {
-          name: 'AZURE_CLIENT_ID'
-          value: userAssignedIdentity.properties.clientId
-        }
-        {
-          name: 'AZURE_OPENAI_ENDPOINT'
-          value: openAiAccount.properties.endpoint
-        }
-        {
-          name: 'AZURE_OPENAI_API_VERSION'
-          value: '2024-08-01-preview'
-        }
-        {
-          name: 'AZURE_OPENAI_DEPLOYMENT'
-          value: 'gpt-4o'
-        }
-        {
-          name: 'NODE_ENV'
-          value: 'production'
-        }
-        {
-          name: 'AI_BUILDER_ENVIRONMENT'
-          value: 'production'
-        }
-        {
-          name: 'POWER_PLATFORM_ENVIRONMENT'
-          value: 'production'
-        }
-      ]
-      cors: {
-        allowedOrigins: [
-          'https://make.powerapps.com'
-          'https://make.powerautomate.com'
-          'https://flow.microsoft.com'
-          'https://powerapps.microsoft.com'
-          'https://api.designetica.com'
-        ]
-        supportCredentials: false
-      }
-    }
-    httpsOnly: true
-    keyVaultReferenceIdentity: userAssignedIdentity.id
-    functionAppConfig: {
-      deployment: {
-        storage: {
-          type: 'blobContainer'
-          value: '${storageAccount.properties.primaryEndpoints.blob}deployments'
-          authentication: {
-            type: 'UserAssignedIdentity'
-            userAssignedIdentityResourceId: userAssignedIdentity.id
-          }
-        }
-      }
-      scaleAndConcurrency: {
-        maximumInstanceCount: 100
-        instanceMemoryMB: 2048
-      }
-      runtime: {
-        name: 'node'
-        version: '20'
-      }
-    }
-  }
-}
 
 // Note: Using separate Function App for backend services
 // Static Web App for frontend hosting
 
 // Reference existing Static Web App instead of creating new one
 resource staticWebApp 'Microsoft.Web/staticSites@2022-09-01' existing = {
-  name: useExistingResources ? existingStaticWebAppName : 'swa-designetica-5gwyjxbwvr4s6'
+  name: 'swa-designetica-5gwyjxbwvr4s6'
 }
 
 // Optimized role assignments (removed redundant ones)
@@ -439,10 +348,10 @@ output AZURE_STORAGE_ACCOUNT_NAME string = storageAccount.name
 output AZURE_APPLICATION_INSIGHTS_NAME string = applicationInsights.name
 output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = logAnalyticsWorkspace.name
 
-// Function App outputs - use existing resource values when useExistingResources is true
-output AZURE_FUNCTION_APP_NAME string = useExistingResources ? existingFunctionAppName : functionApp.name
-output AZURE_FUNCTION_APP_URL string = useExistingResources ? 'https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net' : 'https://${functionApp.properties.defaultHostName}'
-output AZURE_FUNCTION_APP_HOSTNAME string = useExistingResources ? 'func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net' : functionApp.properties.defaultHostName
+// Function App outputs - use existing resource values
+output AZURE_FUNCTION_APP_NAME string = functionApp.name
+output AZURE_FUNCTION_APP_URL string = 'https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net'
+output AZURE_FUNCTION_APP_HOSTNAME string = 'func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net'
 
 // Key Vault outputs
 output AZURE_KEY_VAULT_NAME string = keyVault.name

@@ -21,6 +21,18 @@ export function fixMicrosoftLogoReferences(html: string): string {
     'src="/windowsLogo.png"'
   );
 
+  // Replace generic logo.png references (common in AI-generated content)
+  processedHtml = processedHtml.replace(
+    /src=["']logo\.png["']/gi,
+    'src="/windowsLogo.png"'
+  );
+
+  // Replace any src="logo" or src="/logo" references
+  processedHtml = processedHtml.replace(
+    /src=["']\/?logo["']/gi,
+    'src="/windowsLogo.png"'
+  );
+
   // Replace docs-header-brand placeholders
   processedHtml = processedHtml.replace(
     /<div[^>]*class=["'][^"']*docs-header-brand[^"']*["'][^>]*>[\s\S]*?<\/div>/gi,
@@ -129,6 +141,24 @@ export function validateWireframeHTML(html: string): {
   if (brokenImages) {
     issues.push(
       `Found ${brokenImages.length} potentially broken placeholder images`
+    );
+    fixedHtml = enhanceWireframeContent(fixedHtml);
+  }
+
+  // Check for logo.png references that need fixing
+  const logoReferences = html.match(/src=["'][^"']*logo\.png["']/gi);
+  if (logoReferences) {
+    issues.push(
+      `Found ${logoReferences.length} logo.png references that need conversion`
+    );
+    fixedHtml = enhanceWireframeContent(fixedHtml);
+  }
+
+  // Check for generic logo references that might need fixing
+  const genericLogos = html.match(/src=["']\/?logo["']/gi);
+  if (genericLogos) {
+    issues.push(
+      `Found ${genericLogos.length} generic logo references that need conversion`
     );
     fixedHtml = enhanceWireframeContent(fixedHtml);
   }

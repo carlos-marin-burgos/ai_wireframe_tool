@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './StaticWireframe.css';
+import { processWireframeForProduction } from '../utils/wireframeProcessor';
 
 interface StaticWireframeProps {
     html: string;
@@ -51,8 +52,9 @@ const StaticWireframe: React.FC<StaticWireframeProps> = ({
 
     useEffect(() => {
         if (html) {
-            // Clean and prepare the HTML for display
-            const cleanedHtml = sanitizeAndPrepareHTML(html);
+            // Process the HTML to fix images and other issues, then prepare for display
+            const processedHtml = processWireframeForProduction(html);
+            const cleanedHtml = sanitizeAndPrepareHTML(processedHtml);
             setSanitizedContent(cleanedHtml);
         }
     }, [html]);

@@ -149,7 +149,10 @@ export function generatePlaceholderUrl(
     alt.toLowerCase().includes("microsoft logo") ||
     alt.toLowerCase().includes("windows logo") ||
     src.toLowerCase().includes("microsoft") ||
-    src.toLowerCase().includes("windows")
+    src.toLowerCase().includes("windows") ||
+    src.toLowerCase().includes("logo.png") ||
+    (src.toLowerCase().includes("logo") &&
+      alt.toLowerCase().includes("microsoft"))
   ) {
     return MS_LEARN_PLACEHOLDERS.microsoftLogo();
   }

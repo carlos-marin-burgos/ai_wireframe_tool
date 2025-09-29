@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import './RearrangeableWireframe.css';
 import dragula, { Drake } from 'dragula';
 import 'dragula/dist/dragula.css';
+import { processWireframeForProduction } from '../utils/wireframeProcessor';
 
 interface RearrangeableWireframeProps {
     htmlContent: string;
@@ -136,7 +137,9 @@ const RearrangeableWireframe: React.FC<RearrangeableWireframeProps> = ({
 
     const parseHtmlToItems = (html: string): DraggableItem[] => {
         const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = html;
+        // Process images and other wireframe fixes before parsing
+        const processedHtml = processWireframeForProduction(html);
+        tempDiv.innerHTML = processedHtml;
 
         const items: DraggableItem[] = [];
         let itemId = 0;
