@@ -1683,6 +1683,160 @@ Generate the complete HTML now:`;
   }
 }
 
+// URL TO WIREFRAME ENDPOINT - Analyzes websites and generates wireframes
+app.post("/api/generate-wireframe-from-url", async (req, res) => {
+  const { url, designTheme = "modern", colorScheme = "primary" } = req.body;
+
+  if (!url || !url.trim()) {
+    return res.status(400).json({ error: "URL is required" });
+  }
+
+  console.log("🌐 URL to wireframe generation request:");
+  console.log(`🔗 URL: ${url}`);
+  console.log(`🎨 Theme: ${designTheme}, Color Scheme: ${colorScheme}`);
+
+  try {
+    // Step 1: Analyze the website
+    console.log("🔍 Analyzing website structure...");
+
+    // Import the website analyzer function
+    const websiteAnalyzer = require("./websiteAnalyzer/index.js");
+
+    // Create a mock context for the Azure Function
+    const mockContext = {
+      log: console.log,
+      res: null,
+    };
+
+    const mockReq = {
+      method: "POST",
+      body: { url: url },
+    };
+
+    // Call the website analyzer
+    await websiteAnalyzer(mockContext, mockReq);
+
+    if (!mockContext.res || mockContext.res.status !== 200) {
+      throw new Error("Website analysis failed");
+    }
+
+    const analysisResult = JSON.parse(mockContext.res.body);
+
+    if (!analysisResult.success || !analysisResult.analysis) {
+      throw new Error("No analysis data received");
+    }
+
+    const analysis = analysisResult.analysis;
+    console.log("✅ Website analysis completed");
+
+    // Step 2: Generate wireframe description from analysis
+    const wireframeDescription = `Create a wireframe based on this website analysis:
+    
+Website: ${analysis.title || url}
+Layout: ${analysis.layout?.type || "standard"} with ${
+      analysis.layout?.sections?.length || 0
+    } main sections
+Navigation: ${analysis.navigation?.links?.length || 0} navigation links
+Content Areas: ${analysis.content?.sections?.length || 0} content sections
+Components: ${
+      analysis.styling?.components
+        ?.map((c) => `${c.count} ${c.type}s`)
+        .join(", ") || "basic components"
+    }
+
+Key Features:
+${
+  analysis.content?.sections
+    ?.map((s) => `- ${s.type}: ${s.heading || "Content section"}`)
+    .join("\n") || "- Standard website layout"
+}
+
+Color Scheme: Use colors similar to ${
+      analysis.styling?.colors?.primary || "#0078D4"
+    }
+Typography: ${analysis.styling?.typography?.primary || "Clean, modern fonts"}
+
+Generate a clean, professional wireframe that captures the structure and functionality of this website.`;
+
+    console.log("📝 Generated description for wireframe:");
+    console.log(wireframeDescription.substring(0, 200) + "...");
+
+    // Step 3: Generate wireframe using AI
+    console.log("🧠 Generating wireframe from website analysis...");
+    const aiGeneratedHtml = await generateWireframeWithAI(
+      wireframeDescription,
+      designTheme,
+      colorScheme,
+      null
+    );
+
+    if (!aiGeneratedHtml) {
+      throw new Error("Failed to generate wireframe from website analysis");
+    }
+
+    console.log("✅ Successfully generated wireframe from URL!");
+
+    // Step 4: Apply accessibility validation
+    console.log("🔍 Running accessibility validation...");
+    const contrastValidation =
+      accessibilityValidator.validateHtmlColors(aiGeneratedHtml);
+
+    let finalHtml = aiGeneratedHtml;
+    let accessibilityStatus = "passed";
+    let fixes = [];
+
+    if (!contrastValidation.isValid) {
+      console.log(
+        "⚠️ Accessibility issues detected:",
+        contrastValidation.issues.length
+      );
+      const fixResult =
+        accessibilityValidator.fixContrastIssues(aiGeneratedHtml);
+      if (fixResult.hasChanges) {
+        finalHtml = fixResult.fixedContent;
+        fixes = fixResult.fixes;
+        accessibilityStatus = "fixed";
+        console.log(`✅ Applied ${fixes.length} accessibility fixes`);
+      } else {
+        accessibilityStatus = "issues_detected";
+      }
+    }
+
+    return res.json({
+      html: finalHtml,
+      fallback: false,
+      cached: false,
+      theme: designTheme,
+      colorScheme: colorScheme,
+      generatedBy: "URL-Analysis-AI",
+      timestamp: new Date().toISOString(),
+      sourceUrl: url,
+      analysis: {
+        title: analysis.title,
+        sections: analysis.layout?.sections?.length || 0,
+        components: analysis.styling?.components?.length || 0,
+        colors: analysis.styling?.colors,
+        wireframePrompt: analysis.wireframePrompt,
+      },
+      accessibility: {
+        status: accessibilityStatus,
+        validationResults: contrastValidation,
+        appliedFixes: fixes,
+      },
+    });
+  } catch (error) {
+    console.error("❌ URL wireframe generation failed:", error);
+
+    return res.status(500).json({
+      error: "Failed to generate wireframe from URL",
+      message:
+        "Could not analyze the website or generate a wireframe. Please check if the URL is accessible and try again.",
+      details: error.message,
+      timestamp: new Date().toISOString(),
+    });
+  }
+});
+
 // Suggestions endpoint - DISABLED
 app.post("/api/generate-suggestions", async (req, res) => {
   res.json({

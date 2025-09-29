@@ -786,38 +786,75 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 
             } else {
                 console.log('🌐 Not a Figma URL, treating as regular URL');
-                // Regular URL handling (images, etc.)
-                setConversionProgress(50);
+                // Regular URL handling - call our advanced wireframe generation endpoint
+                setConversionProgress(25);
 
-                const htmlContent = `
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Imported from URL</title>
-                    <style>
-                        body { margin: 0; padding: 20px; font-family: 'Segoe UI', sans-serif; }
-                        .container { max-width: 1200px; margin: 0 auto; }
-                        .imported-content { text-align: center; padding: 40px; }
-                        .url-preview { max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-                    </style>
-                </head>
-                <body>
-                    <div class="container">
-                        <div class="imported-content">
-                            <h1>🌐 Imported from URL</h1>
-                            <p>Content imported from: ${url}</p>
-                            <img src="${url}" alt="Imported content" class="url-preview" onerror="this.style.display='none'" />
+                try {
+                    console.log('📡 Calling wireframe generation endpoint for URL:', url);
+                    const response = await fetch(getApiUrl('/api/generate-wireframe-from-url'), {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            url: url,
+                            designSystem: 'microsoft', // Default to Microsoft design system
+                            includeResponsive: true,
+                            includeAccessibility: true
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Failed to generate wireframe: ${response.statusText}`);
+                    }
+
+                    setConversionProgress(75);
+                    const result = await response.json();
+                    console.log('🎉 Wireframe generation successful:', result);
+
+                    if (result.success && result.html) {
+                        const htmlContent = result.html;
+                        setConversionProgress(100);
+                        onImport(htmlContent, `Wireframe from ${result.analysis?.title || 'Website'}`);
+                        setSuccess(`🎉 Successfully generated wireframe from ${result.analysis?.title || 'website'}!`);
+                        setTimeout(() => onClose(), 2000);
+                    } else {
+                        throw new Error(result.error || 'Failed to generate wireframe from URL');
+                    }
+                } catch (wireframeError) {
+                    console.warn('Advanced wireframe generation failed, falling back to simple import:', wireframeError);
+
+                    // Fallback to simple image/content import
+                    const htmlContent = `
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Imported from URL</title>
+                        <style>
+                            body { margin: 0; padding: 20px; font-family: 'Segoe UI', sans-serif; }
+                            .container { max-width: 1200px; margin: 0 auto; }
+                            .imported-content { text-align: center; padding: 40px; }
+                            .url-preview { max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <div class="imported-content">
+                                <h1>🌐 Imported from URL</h1>
+                                <p>Content imported from: ${url}</p>
+                                <img src="${url}" alt="Imported content" class="url-preview" onerror="this.style.display='none'" />
+                            </div>
                         </div>
-                    </div>
-                </body>
-                </html>`;
+                    </body>
+                    </html>`;
 
-                setConversionProgress(100);
-                onImport(htmlContent, 'URL Import');
-                setSuccess('🎉 Successfully imported content from URL!');
-                setTimeout(() => onClose(), 2000);
+                    setConversionProgress(100);
+                    onImport(htmlContent, 'URL Import');
+                    setSuccess('🎉 Successfully imported content from URL!');
+                    setTimeout(() => onClose(), 2000);
+                }
             }
 
         } catch (err) {

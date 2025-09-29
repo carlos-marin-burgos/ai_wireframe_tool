@@ -200,7 +200,7 @@ const FigmaFileUpload: React.FC<FigmaFileUploadProps> = ({
         }
     }, [onFileSelect]);
 
-    const handleUrlImport = useCallback(() => {
+    const handleUrlImport = useCallback(async () => {
         setError(null);
 
         if (uploadMethod === 'figma-link') {
@@ -211,12 +211,21 @@ const FigmaFileUpload: React.FC<FigmaFileUploadProps> = ({
             }
         }
 
-        setSuccess('Importing from URL...');
-        onUrlImport(figmaUrl);
+        // Check if it's a general URL (not Figma)
+        if (uploadMethod === 'url' || (!figmaUrl.includes('figma.com') && uploadMethod !== 'figma-link')) {
+            setSuccess('Processing URL...');
+
+            // Simply pass the URL to the parent for processing
+            onUrlImport(figmaUrl);
+        } else {
+            // Handle Figma URLs with existing logic
+            setSuccess('Importing from Figma URL...');
+            onUrlImport(figmaUrl);
+        }
 
         // Clear form
         setFigmaUrl('');
-        setTimeout(() => setSuccess(null), 3000);
+        setTimeout(() => setSuccess(null), 5000);
     }, [uploadMethod, figmaUrl, validateFigmaUrl, onUrlImport]);
 
     const clearFile = useCallback(() => {

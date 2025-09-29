@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Designetica - AI Wireframe Generator | Carlos Marin Portfolio</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+    <link rel="icon" href="../../favicon.ico">
+</head>
+
+<body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-text">Loading...</div>
+    </div>
+
+    <header class="header">
+        <div class="header-content">
+            <a href="https://www.carlosmarin.net/index.html" class="name-link">Carlos Marin Burgos</a>
+            <div class="brand-logo">
+                <img src="assets/img/designetica-logo.svg" alt="Designetica" class="brand-icon">
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="hero-section">
+            <img src="../../public/designetica.png" alt="Designetica AI Wireframe Generator" class="hero-image">
+        </div>
+
+        <div class="content-container">
+            <div class="disclaimer">
+                <p>This portfolio showcases my personal work and design projects. While some of the content may
+                    reference my professional experience, all views, opinions, and designs presented here are my own.
+                    Any data or information displayed is either publicly available or has been anonymized to protect
+                    confidentiality. This portfolio is intended solely for the purpose of demonstrating my skills and
+                    experience in UX design and full-stack development.</p>
+            </div>
+
+            <div class="overview">
+                <p>Designetica is an AI-powered wireframe generator that transforms screenshots and images into clean,
+                    semantic HTML code. This tool revolutionizes the design-to-development workflow by leveraging
+                    OpenAI's GPT-4 Vision model to analyze visual interfaces and generate production-ready wireframes
+                    with pixel-perfect accuracy.</p>
+            </div>
+
+            <section class="section" id="intro">
+                <h2>What is it?</h2>
+                <h4>Imagine This...</h4>
+                <p>Imagine you're a designer who just finished creating a beautiful interface mockup. Traditionally,
+                    you'd hand it off to a developer who would spend hours recreating it in code, often losing design
+                    details in translation.</p>
+                <p>Now imagine you could simply upload that mockup and instantly get clean, semantic HTML that perfectly
+                    matches your design—complete with proper spacing, exact colors, and responsive layout. That's what
+                    Designetica does.</p>
+                <p>Using advanced AI vision technology, Designetica analyzes your interface designs and generates
+                    production-ready HTML code that preserves every visual detail. It's like having an expert developer
+                    who never misses a pixel, working at the speed of light.</p>
+                <p>So instead of the traditional design-to-development handoff taking days or weeks, Designetica makes
+                    it happen in seconds. We've eliminated the gap between design and code, making the entire process
+                    seamless and instant.</p>
+            </section>
+
+            <section class="section" id="role">
+                <h2>My Role</h2>
+                <p>As the solo designer and developer for Designetica, I was responsible for the entire product
+                    lifecycle—from initial concept and user research to full-stack development and deployment. This
+                    included:</p>
+                <ul>
+                    <li><strong>Product Strategy:</strong> Defining the vision and roadmap for an AI-powered design tool
+                    </li>
+                    <li><strong>UX Research:</strong> Understanding designer and developer pain points in the
+                        design-to-development workflow</li>
+                    <li><strong>UI/UX Design:</strong> Creating an intuitive interface for complex AI interactions</li>
+                    <li><strong>Frontend Development:</strong> Building a React/TypeScript application with real-time
+                        processing</li>
+                    <li><strong>Backend Development:</strong> Developing Azure Functions with OpenAI API integration
+                    </li>
+                    <li><strong>AI Engineering:</strong> Designing prompts and validation systems for 90%+ accuracy</li>
+                </ul>
+            </section>
+
+            <section class="section" id="goal">
+                <h2>Goal</h2>
+                <p>The primary goal of Designetica is to eliminate the friction in the design-to-development workflow by
+                    providing instant, accurate HTML generation from visual designs. This initiative aims to
+                    revolutionize how designers and developers collaborate by removing the traditional barriers between
+                    design and code.</p>
+                <p>This project represents a significant advancement in design tooling, combining cutting-edge AI
+                    technology with user-centric design principles to create a truly innovative and impactful solution.
+                </p>
+                <p>By leveraging AI vision technology, the project seeks to:</p>
+                <ul>
+                    <li><strong>Accelerate Development:</strong> Reduce wireframe creation time from hours to seconds
+                        while maintaining high quality and accuracy</li>
+                    <li><strong>Improve Design Fidelity:</strong> Ensure pixel-perfect translation from design to code
+                        with exact color matching and spacing preservation</li>
+                    <li><strong>Enhance Collaboration:</strong> Bridge the gap between designers and developers by
+                        providing a common language of clean, semantic HTML</li>
+                    <li><strong>Scale Design Systems:</strong> Enable rapid prototyping and iteration with consistent,
+                        production-ready output</li>
+                </ul>
+            </section>
+
+            <section class="section" id="research">
+                <h2>Research</h2>
+                <h4>Primary users:</h4>
+                <ul>
+                    <li><strong>UX/UI Designers:</strong> Looking to validate designs quickly and communicate with
+                        developers more effectively</li>
+                    <li><strong>Frontend Developers:</strong> Seeking to accelerate the initial markup phase and ensure
+                        design accuracy</li>
+                    <li><strong>Product Managers:</strong> Needing rapid prototyping capabilities for stakeholder
+                        demonstrations and user testing</li>
+                    <li><strong>Design Agencies:</strong> Requiring efficient workflows for client deliverables and
+                        design system creation</li>
+                </ul>
+                <p>I researched the biggest frustrations in design-to-development handoffs by talking to designers and
+                    developers at various companies.</p>
+                <h4>What People Told Me</h4>
+                <ol>
+                    <li><strong>"Translation takes forever"</strong> - Developers spend 2-4 hours recreating what
+                        designers already made, often missing details</li>
+                    <li><strong>"Colors never match"</strong> - Existing tools guess at colors instead of extracting
+                        exact hex values from designs</li>
+                    <li><strong>"Spacing is always off"</strong> - Manual coding introduces inconsistencies that break
+                        the design system</li>
+                    <li><strong>"We need real code"</strong> - Designers want HTML/CSS that actually works, not just
+                        pretty pictures</li>
+                    <li><strong>"Show me it works"</strong> - People need to see quality scores and accuracy metrics to
+                        trust AI output</li>
+                </ol>
+            </section>
+
+            <section class="section" id="prompts">
+                <h2>The Secret: Smart AI Instructions</h2>
+                <p><strong>Teaching AI to "See" Like a Designer</strong></p>
+                <p>The magic happens in how we talk to the AI. Instead of just saying "make HTML from this image," we
+                    give it detailed instructions on exactly what to look for and how to analyze it—like teaching a
+                    student to become an expert designer.</p>
+                <div class="code-snippet">
+                    <h4>Example: How We Guide the AI</h4>
+                    <pre><code>Step 1: Find the Parts
+- Look for headers, buttons, text blocks, images
+- Identify what each element is and where it goes
+- Measure sizes and positions precisely
+
+Step 2: Understand the Layout  
+- Find the spacing pattern (8px, 16px, 24px grids)
+- See how elements align and relate to each other
+- Detect responsive design patterns
+
+Step 3: Extract the Style
+- Grab exact colors from the image (no guessing!)
+- Identify fonts, sizes, and visual effects
+- Preserve shadows, borders, and other details</code></pre>
+                </div>
+                <p>This step-by-step approach ensures the AI doesn't just guess—it systematically analyzes every visual
+                    element to create accurate, production-ready code.</p>
+            </section>
+
+            <section class="section" id="concepts">
+                <h2>Concept Development</h2>
+                <h4>Developed three initial approaches: drag-and-drop simplicity, Figma integration, and real-time
+                    processing.</h4>
+                <p>In the concept development phase, I explored multiple approaches to make AI-powered wireframe
+                    generation accessible and efficient:</p>
+                <ul>
+                    <li><strong>Drag-and-Drop Simplicity:</strong> A clean, intuitive interface where users can simply
+                        drop an image and get instant HTML</li>
+                    <li><strong>Figma Integration:</strong> Direct plugin integration for seamless workflow within
+                        existing design tools</li>
+                    <li><strong>Real-time Processing:</strong> Live preview and editing capabilities with immediate
+                        visual feedback</li>
+                </ul>
+                <p>After user testing and technical validation, the drag-and-drop approach was selected for its balance
+                    of simplicity and power, allowing users to focus on their designs rather than learning new tools.
+                </p>
+            </section>
+
+            <section class="section" id="architecture">
+                <h2>How It Works</h2>
+                <p>Designetica uses a simple but powerful 3-step process to turn images into code:</p>
+                <div class="architecture-grid">
+                    <div class="arch-item">
+                        <h4>1. Upload & Analyze</h4>
+                        <p>Drag and drop any interface screenshot. The AI analyzes colors, spacing, fonts, and layout
+                            using advanced computer vision.</p>
+                    </div>
+                    <div class="arch-item">
+                        <h4>2. Generate Code</h4>
+                        <p>Smart prompts guide the AI to create clean HTML and CSS that matches your design
+                            pixel-by-pixel.</p>
+                    </div>
+                    <div class="arch-item">
+                        <h4>3. Quality Check</h4>
+                        <p>Built-in validation ensures 90%+ accuracy by checking spacing, colors, and structure before
+                            delivery.</p>
+                    </div>
+                </div>
+
+                <h4>Tech Stack (Simple)</h4>
+                <ul>
+                    <li><strong>Frontend:</strong> React + TypeScript (what users see and interact with)</li>
+                    <li><strong>Backend:</strong> Azure Functions (processes images in the cloud)</li>
+                    <li><strong>AI Engine:</strong> OpenAI GPT-4 Vision (the "brain" that reads images)</li>
+                    <li><strong>Hosting:</strong> Azure Static Web Apps (fast, global delivery)</li>
+                </ul>
+            </section>
+
+            <section class="section" id="wireframing">
+                <h2>Wireframing & Prototyping</h2>
+                <p>The wireframing process was critical for defining the user experience of an AI-powered tool. Key
+                    considerations included managing user expectations, providing clear feedback during AI processing,
+                    and ensuring the interface remained simple despite complex underlying technology.</p>
+                <p>I created detailed wireframes that addressed:</p>
+                <ul>
+                    <li>Upload flow with drag-and-drop interaction patterns</li>
+                    <li>Processing states with clear progress indicators</li>
+                    <li>Results display with both visual preview and code output</li>
+                    <li>Error handling and retry mechanisms</li>
+                    <li>Mobile responsiveness for various device types</li>
+                </ul>
+                <p>The prototyping phase involved extensive testing with real design files to validate the AI accuracy
+                    and user experience flow. This iterative process was essential for refining both the interface and
+                    the underlying AI prompts.</p>
+            </section>
+
+            <section class="section" id="design">
+                <h2>Final Design</h2>
+                <p>The final interface emphasizes clarity and efficiency, guiding users through a streamlined three-step
+                    process:</p>
+                <div class="design-flow">
+                    <div class="flow-step">
+                        <h4>1. Upload</h4>
+                        <p>Simple drag-and-drop interface with support for multiple image formats. Clear visual feedback
+                            and file validation.</p>
+                    </div>
+                    <div class="flow-step">
+                        <h4>2. Process</h4>
+                        <p>Real-time progress tracking with AI analysis phases. Transparent communication about what the
+                            system is doing.</p>
+                    </div>
+                    <div class="flow-step">
+                        <h4>3. Generate</h4>
+                        <p>Instant preview with downloadable HTML code. Quality scores and accuracy metrics for
+                            transparency.</p>
+                    </div>
+                </div>
+                <p>The design prioritizes trust and transparency by showing quality scores, validation results, and
+                    providing clear controls for refinement and iteration.</p>
+            </section>
+
+            <section class="section" id="results">
+                <h2>What We Achieved</h2>
+                <div class="results-grid">
+                    <div class="result-item">
+                        <h3>90%+</h3>
+                        <p><strong>Accuracy:</strong> 9 out of 10 wireframes match the original design perfectly—colors,
+                            spacing, and layout all preserved.</p>
+                    </div>
+                    <div class="result-item">
+                        <h3>5 sec</h3>
+                        <p><strong>Speed:</strong> What used to take developers 2-3 hours now happens in seconds.
+                            Upload, process, download.</p>
+                    </div>
+                    <div class="result-item">
+                        <h3>95%</h3>
+                        <p><strong>Success Rate:</strong> Works reliably with screenshots from websites, mobile apps,
+                            Figma designs, and even hand-drawn sketches.</p>
+                    </div>
+                    <div class="result-item">
+                        <h3>Clean Code</h3>
+                        <p><strong>Quality:</strong> Every output uses proper HTML structure, accessibility features,
+                            and follows web standards—ready for production.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" id="impact">
+                <h2>Impact</h2>
+                <p>Designetica represents a significant advancement in design tooling, demonstrating the potential of AI
+                    to enhance rather than replace human creativity:</p>
+                <ol>
+                    <li><strong>Workflow Transformation:</strong> Eliminates the traditional design-to-development
+                        handoff bottleneck</li>
+                    <li><strong>Quality Consistency:</strong> Ensures pixel-perfect accuracy in translating visual
+                        designs to code</li>
+                    <li><strong>Accessibility by Default:</strong> Generates semantic HTML with proper accessibility
+                        attributes automatically</li>
+                    <li><strong>Learning Tool:</strong> Helps developers understand best practices through high-quality
+                        generated code examples</li>
+                    <li><strong>Innovation Platform:</strong> Demonstrates practical applications of AI vision
+                        technology
+                        in design workflows</li>
+                </ol>
+                <p>The project showcases how AI can augment human capabilities in creative and technical work, providing
+                    a foundation for future innovations in design technology.</p>
+            </section>
+
+            <section class="section" id="more-studies">
+                <h2>More case studies</h2>
+                <div class="case-studies-grid">
+                    <div class="case-study-item">
+                        <img src="https://www.carlosmarin.net/assets/img/portfolio/single/v1/01.png"
+                            alt="Microsoft Learn Advisor">
+                        <h4><a href="https://www.carlosmarin.net/microsoft/aiplans.html">Microsoft Learn Advisor</a>
+                        </h4>
+                        <p>AI-generated personalized learning plans that revolutionize how users engage with educational
+                            content through intelligent pathway creation.</p>
+                    </div>
+                    <div class="case-study-item">
+                        <img src="https://www.carlosmarin.net/assets/img/portfolio/brands/aws.svg" alt="AWS Config">
+                        <h4><a href="https://www.carlosmarin.net/amazon/aws.html">Building AWS Config</a></h4>
+                        <p>AWS Config was the first product in a new line of AWS cloud computing tools designed to
+                            assess, audit, and evaluate the configurations of your AWS resources.</p>
+                    </div>
+                    <div class="case-study-item">
+                        <img src="https://www.carlosmarin.net/assets/img/portfolio/brands/amazon.svg"
+                            alt="Amazon Video Lightbox">
+                        <h4><a href="https://www.carlosmarin.net/amazon/lightbox.html">Amazon Video Lightbox</a></h4>
+                        <p>This lightbox serves as a tool to browse, view and discover video content within amazon.com.
+                            Both, desktop and mobile versions are available for these purposes.</p>
+                    </div>
+                    <div class="case-study-item">
+                        <img src="https://www.carlosmarin.net/assets/img/portfolio/brands/microsoft.svg"
+                            alt="Visual Interactive Voice Response">
+                        <h4><a href="https://www.carlosmarin.net/microsoft/vivr.html">Visual Interactive Voice
+                                Response</a></h4>
+                        <p>The Visual Interactive Voice Response is designed to enhance user experience by allowing them
+                            to navigate support options visually.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Website Designed and Hand-Coded by Carlos Marin Burgos</p>
+            <p>Copyright © carlosmarin.net 2025</p>
+            <a href="#" class="scroll-top">Scroll back to top</a>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>
