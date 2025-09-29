@@ -90,12 +90,13 @@ export const useImageUpload = (
             body: JSON.stringify({
               imageBase64: base64Image,
               fileName: fileName,
-              designTheme: designTheme || "microsoftlearn",
+              designTheme: "neutral", // Use neutral theme to avoid bias toward any specific brand
               colorScheme: colorScheme || "light",
               options: {
                 extractColors: true,
                 generateResponsive: true,
                 preserveLayout: true,
+                prioritizeImageColors: true, // New flag to emphasize color extraction
               },
             }),
           }

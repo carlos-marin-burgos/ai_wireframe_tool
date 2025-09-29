@@ -158,62 +158,32 @@ async function generateDirectWireframeFromImage(
     defaultHeaders: { "api-key": apiKey },
   });
 
-  // Design system color mappings for different themes
-  const designSystemColors = {
-    microsoftlearn: {
-      primary: "#0078D4",
-      primaryDark: "#106EBE",
-      text: "#323130",
-      textSecondary: "#605E5C",
-      textLight: "#8A8886",
-      background: "#FFFFFF",
-      backgroundWarm: "#FAF9F8",
-      backgroundNeutral: "#F3F2F1",
-      border: "#EDEBE9",
-      borderLight: "#E1DFDD",
-      buttonSecondary: "#8E9AAF",
-      buttonSecondaryHover: "#68769C",
-      success: "#107C10",
-      warning: "#FFB900",
-      error: "#D13438",
-      info: "#0078D4",
-    },
-    fluent: {
-      primary: "#0078D4",
-      text: "#323130",
-      textSecondary: "#605E5C",
-      background: "#FFFFFF",
-      backgroundNeutral: "#F3F2F1",
-      border: "#EDEBE9",
-      success: "#107C10",
-      warning: "#FFB900",
-      error: "#D13438",
-    },
-    wireframe: {
-      primary: "#8E9AAF",
-      text: "#3C4858",
-      textSecondary: "#68769C",
-      background: "#FFFFFF",
-      backgroundNeutral: "#F8F9FA",
-      border: "#E9ECEF",
-      borderLight: "#CBC2C2",
-    },
+  // Neutral fallback colors for pure wireframes only
+  const neutralColors = {
+    primary: "#0078D4",
+    text: "#323130",
+    textSecondary: "#605E5C",
+    background: "#FFFFFF",
+    backgroundNeutral: "#F3F2F1",
+    border: "#E1DFDD",
+    success: "#107C10",
+    warning: "#FFB900",
+    error: "#D13438",
   };
 
-  // Get color palette for the specified theme (as fallback only)
-  const colorPalette =
-    designSystemColors[designTheme] || designSystemColors.microsoftlearn;
-
-  // Build fallback color guidance for cases where image colors can't be determined
-  const fallbackColorGuidance = Object.entries(colorPalette)
-    .map(
-      ([name, color]) =>
-        `  * ${name.charAt(0).toUpperCase() + name.slice(1)}: ${color}`
-    )
-    .join("\n");
+  // Build minimal fallback color guidance for pure wireframes only
+  const fallbackColorGuidance = `
+  * Background: #FFFFFF (white)
+  * Text: #323130 (dark gray for readability)
+  * Primary: #0078D4 (neutral blue for buttons/links)
+  * Secondary: #605E5C (medium gray for secondary text)
+  * Borders: #E1DFDD (light gray for dividers)
+  * NOTE: Only use these if no specific colors are visible in the image`;
 
   // Enhanced multi-phase analysis prompt for superior accuracy
   const directPrompt = `You are an expert UI/UX developer specializing in pixel-perfect wireframe recreation from screenshots.
+
+🎨 CRITICAL INSTRUCTION: Your PRIMARY goal is to extract and preserve the EXACT colors from the uploaded image. Do not impose any brand assumptions or theme restrictions. If the image has specific colors (blue headers, red buttons, green accents, etc.), use those exact colors in your HTML output.
 
 ANALYSIS PHASE 1: COMPONENT DETECTION & CLASSIFICATION
 - Systematically scan the image from top to bottom, left to right
@@ -238,21 +208,32 @@ ANALYSIS PHASE 3: COMPREHENSIVE CONTENT EXTRACTION
 
 ANALYSIS PHASE 4: VISUAL DESIGN & COLOR EXTRACTION
 - PRIMARY STRATEGY: Extract and preserve the ACTUAL colors from the uploaded image
-  * Identify the dominant background color(s) used in the image
-  * Extract text colors (headings, body text, labels) exactly as they appear
-  * Preserve button colors, accent colors, and brand colors from the original
-  * Maintain the exact color relationships and contrast ratios from the image
+  * CRITICAL: Look closely at the image to identify exact colors from ANY interface or design:
+    - Header/navigation background colors (blue, purple, red, green, or any branded colors)
+    - Primary button colors and accent colors
+    - Text colors on different backgrounds
+    - Card backgrounds and borders
+    - Any brand-specific colors present in the interface
+  * Extract dominant colors by sampling from large areas (headers, backgrounds, primary buttons)
+  * Preserve the exact color relationships and contrast ratios from the image
   * Use hex color codes that match the image colors as closely as possible
+  * Test all extracted colors for accessibility (4.5:1 contrast minimum)
+  * DO NOT impose any theme restrictions - extract colors from ANY design system or brand
   
-- SECONDARY STRATEGY: If the image appears to be a wireframe/mockup with neutral colors, use the ${designTheme.toUpperCase()} fallback palette:
-${fallbackColorGuidance}
+- FALLBACK STRATEGY: Only if the image appears to be a pure wireframe/mockup with no specific colors, use neutral colors:
+  * Background: #FFFFFF (white)
+  * Text: #323130 (dark gray)
+  * Primary: #0078D4 (neutral blue)
+  * Borders: #E1DFDD (light gray)
 
 - COLOR ACCURACY PRINCIPLES:
-  * Branded interfaces: Match colors exactly to preserve brand identity
-  * Mockups/wireframes: Use clean, professional colors from fallback palette
+  * ANY branded interface: Match colors exactly to preserve the original design identity
+  * Custom designs: Extract and preserve the exact color palette used
+  * Wireframes: Use clean, neutral colors only if no specific colors are visible
   * Mixed content: Prioritize actual colors but ensure good contrast (4.5:1 minimum)
-  * Color naming: Use descriptive names in CSS (--primary-blue, --text-dark, etc.)
-  * Consistency: Apply the same color palette throughout the entire document
+  * Color naming: Use descriptive names in CSS (--primary-color, --header-bg, --text-color, etc.)
+  * Consistency: Apply the same extracted color palette throughout the entire document
+  * VALIDATION: After color extraction, verify that interactive elements are visually distinct
 
 IMPLEMENTATION REQUIREMENTS:
 1. Generate complete HTML5 document with proper DOCTYPE and semantic structure
@@ -270,11 +251,12 @@ IMPLEMENTATION REQUIREMENTS:
 QUALITY STANDARDS:
 - The rendered HTML must be visually IDENTICAL to the source image, including all colors
 - All colors must precisely match the image - no arbitrary theme color substitutions
+- CRITICAL: Extract colors from ANY design system, brand, or interface - do not favor any specific brand
 - All text must be searchable and selectable (no text-as-images)
 - Layout must maintain proportions and spacing relationships
 - Code must be clean, semantic, and accessible
 - Color contrast ratios must meet accessibility standards (preserve original if good, improve if poor)
-- Styling must preserve the original design aesthetic and brand identity
+- Styling must preserve the original design aesthetic and brand identity regardless of the source
 
 Return ONLY the complete, valid HTML code starting with <!DOCTYPE html> and ending with </html>.
 NO explanations, NO markdown formatting, NO code blocks - just the raw HTML document.`;
@@ -285,9 +267,9 @@ NO explanations, NO markdown formatting, NO code blocks - just the raw HTML docu
 REQUIREMENTS:
 1. Extract ALL visible text exactly as shown
 2. Use semantic HTML5 elements (header, nav, main, section, etc.)
-3. IMPORTANT: Extract and use the ACTUAL colors from the image - do not use theme colors unless the image appears to be a basic wireframe
-4. If image has branded/specific colors, match them exactly using hex codes
-5. Only use ${designTheme} fallback colors if the image is clearly a neutral wireframe:
+3. CRITICAL: Extract and use the ACTUAL colors from the image - analyze the image carefully for any brand colors, interface colors, or design-specific colors
+4. Match colors exactly using hex codes - do not impose any theme or brand assumptions
+5. Only use neutral fallback colors if the image appears to be a pure wireframe with no specific colors:
 ${fallbackColorGuidance}
 6. Recreate the exact layout and spacing
 7. Include proper accessibility attributes
