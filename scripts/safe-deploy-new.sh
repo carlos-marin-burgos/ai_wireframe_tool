@@ -146,6 +146,28 @@ safe_deploy() {
     log_success "Environment validation passed: $current_env"
     log_success "Expected function app: $expected_url"
     
+    # Step 1.5: Subscription validation
+    log_info "🔐 Step 1.5: BAMI subscription validation"
+    EXPECTED_SUBSCRIPTION_ID="330eaa36-e19f-4d4c-8dea-37c2332f754d"
+    CURRENT_SUBSCRIPTION_ID=$(az account show --query id --output tsv 2>/dev/null || echo "unknown")
+    
+    if [ "$CURRENT_SUBSCRIPTION_ID" != "$EXPECTED_SUBSCRIPTION_ID" ]; then
+        log_error "Wrong Azure subscription!"
+        log_error "Current: $CURRENT_SUBSCRIPTION_ID"
+        log_error "Expected: $EXPECTED_SUBSCRIPTION_ID (BAMI)"
+        log_info "Setting correct subscription..."
+        az account set --subscription "$EXPECTED_SUBSCRIPTION_ID"
+        CURRENT_SUBSCRIPTION_ID=$(az account show --query id --output tsv)
+        if [ "$CURRENT_SUBSCRIPTION_ID" = "$EXPECTED_SUBSCRIPTION_ID" ]; then
+            log_success "Switched to correct BAMI subscription"
+        else
+            log_error "Failed to switch to BAMI subscription"
+            exit 1
+        fi
+    else
+        log_success "Using correct BAMI subscription: $CURRENT_SUBSCRIPTION_ID"
+    fi
+    
     # Step 2: Create backup
     log_info "💾 Step 2: Creating configuration backup"
     backup_dir=$(backup_config)

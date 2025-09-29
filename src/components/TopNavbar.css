@@ -53,7 +53,7 @@
   height: 36px;
   background: #ffffff;
   border: 1px solid #e1dfdd;
-  color: #68769C;
+  color: #68769c;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -64,7 +64,7 @@
 .navbar-toolbar-btn:hover {
   background: #f3f2f1;
   border-color: #d1d1d1;
-  color: #3C4858;
+  color: #3c4858;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -76,14 +76,14 @@
 
 /* Save button special styling */
 .navbar-toolbar-btn.save-btn {
-  background: #8E9AAF;
-  border-color: #8E9AAF;
+  background: #8e9aaf;
+  border-color: #8e9aaf;
   color: #ffffff;
 }
 
 .navbar-toolbar-btn.save-btn:hover {
-  background: #68769C;
-  border-color: #68769C;
+  background: #68769c;
+  border-color: #68769c;
   color: #ffffff;
 }
 
@@ -91,13 +91,13 @@
 .navbar-toolbar-btn.logout-btn {
   background: transparent;
   border-color: #e1dfdd;
-  color: #68769C;
+  color: #68769c;
 }
 
 .navbar-toolbar-btn.logout-btn:hover {
   background: #f3f2f1;
   border-color: #d1d1d1;
-  color: #3C4858;
+  color: #3c4858;
 }
 
 .navbar-cxs-logo {
@@ -140,7 +140,7 @@
 .navbar-logo-text {
   font-size: 26px;
   font-weight: 600;
-  color: #3C4858;
+  color: #3c4858;
   font-family: "Orbitron", "Segoe UI Variable Display", "Segoe UI", system-ui,
     sans-serif;
   letter-spacing: -0.01em;

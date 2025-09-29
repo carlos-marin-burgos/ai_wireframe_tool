@@ -108,19 +108,66 @@ const StaticWireframe: React.FC<StaticWireframeProps> = ({
 
             // Focus the element
             target.focus();
+        } else {
+            // Clicked on non-editable element - hide formatting toolbar
+            if (onShowFormattingToolbar) {
+                onShowFormattingToolbar(false);
+            }
+
+            // Clear current editing element
+            if (onSetCurrentEditingElement) {
+                onSetCurrentEditingElement(null);
+            }
         }
     }, [isEditMode, onSetCurrentEditingElement, onShowFormattingToolbar]);
 
-    // Handle content changes
+    // Handle content changes without interfering with typing flow
     const handleInput = useCallback((e: React.FormEvent) => {
-        if (!isEditMode || !onUpdateContent || !containerRef.current) return;
+        if (!isEditMode || !containerRef.current) return;
 
-        // Get the updated HTML content
-        const updatedContent = containerRef.current.innerHTML;
-        onUpdateContent(updatedContent);
-    }, [isEditMode, onUpdateContent]);
+        // Don't update parent state during typing - this prevents re-renders
+        // Content will be saved when user stops editing (blur event)
+        console.log('Text input detected, allowing natural typing flow');
+    }, [isEditMode]);
 
-    // Handle component placement
+    // Handle when user finishes editing (blur or enter key)
+    const handleEditComplete = useCallback((e: React.FocusEvent | React.KeyboardEvent) => {
+        if (!isEditMode || !containerRef.current) return;
+
+        if (e.type === 'keydown') {
+            const keyEvent = e as React.KeyboardEvent;
+            if (keyEvent.key !== 'Enter') return;
+            keyEvent.preventDefault();
+            (e.target as HTMLElement).blur();
+            return; // Don't process further on Enter, let blur handle it
+        }
+
+        // Clear editing state
+        const target = e.target as HTMLElement;
+        if (target && target.contentEditable === 'true') {
+            target.contentEditable = 'false';
+            target.style.outline = '';
+            target.style.backgroundColor = '';
+        }
+
+        // Clear current editing element
+        if (onSetCurrentEditingElement) {
+            onSetCurrentEditingElement(null);
+        }
+
+        // Hide formatting toolbar
+        if (onShowFormattingToolbar) {
+            onShowFormattingToolbar(false);
+        }
+
+        // Update parent state only when editing is complete
+        if (onUpdateContent) {
+            const updatedContent = containerRef.current.innerHTML;
+            onUpdateContent(updatedContent);
+        }
+
+        console.log('Text editing completed, content saved, toolbar hidden');
+    }, [isEditMode, onUpdateContent, onSetCurrentEditingElement, onShowFormattingToolbar]);    // Handle component placement
     const handlePlacementClick = useCallback((e: React.MouseEvent) => {
         if (!isPlacementMode || !onComponentPlacement) return;
 
@@ -130,11 +177,15 @@ const StaticWireframe: React.FC<StaticWireframeProps> = ({
         const rect = containerRef.current?.getBoundingClientRect();
         if (!rect) return;
 
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        // Include scroll offset for accurate absolute positioning within content
+        const scrollTop = containerRef.current?.scrollTop || 0;
+        const scrollLeft = containerRef.current?.scrollLeft || 0;
+
+        const x = (e.clientX - rect.left) + scrollLeft;
+        const y = (e.clientY - rect.top) + scrollTop;
         const targetElement = e.target as HTMLElement;
 
-        console.log('🎯 Component placement clicked at:', { x, y }, 'Target:', targetElement);
+        console.log('🎯 Component placement clicked at:', { x, y, scrollTop, scrollLeft }, 'Target element:', targetElement.tagName, targetElement.className);
         onComponentPlacement(x, y, targetElement);
     }, [isPlacementMode, onComponentPlacement]);
 
@@ -145,6 +196,7 @@ const StaticWireframe: React.FC<StaticWireframeProps> = ({
         const rect = containerRef.current?.getBoundingClientRect();
         if (!rect) return;
 
+        // For cursor positioning, use viewport coordinates (without scroll offset)
         setMousePosition({
             x: e.clientX - rect.left,
             y: e.clientY - rect.top
@@ -159,19 +211,39 @@ const StaticWireframe: React.FC<StaticWireframeProps> = ({
         }
     }, [isPlacementMode]);
 
-    // Handle escape key to cancel placement mode
+
+
+    // Handle escape key to cancel placement mode or hide formatting toolbar
     useEffect(() => {
         const handleEscapeKey = (e: KeyboardEvent) => {
-            if (e.key === 'Escape' && isPlacementMode && onCancelPlacementMode) {
-                onCancelPlacementMode();
+            if (e.key === 'Escape') {
+                if (isPlacementMode && onCancelPlacementMode) {
+                    onCancelPlacementMode();
+                } else if (isEditMode && onShowFormattingToolbar) {
+                    // Hide formatting toolbar and clear editing state
+                    onShowFormattingToolbar(false);
+                    if (onSetCurrentEditingElement) {
+                        onSetCurrentEditingElement(null);
+                    }
+
+                    // Remove contentEditable from any currently editing elements
+                    const editingElements = containerRef.current?.querySelectorAll('[contenteditable="true"]');
+                    editingElements?.forEach(el => {
+                        if (el instanceof HTMLElement) {
+                            el.contentEditable = 'false';
+                            el.style.outline = '';
+                            el.style.backgroundColor = '';
+                        }
+                    });
+                }
             }
         };
 
-        if (isPlacementMode) {
+        if (isPlacementMode || isEditMode) {
             document.addEventListener('keydown', handleEscapeKey);
             return () => document.removeEventListener('keydown', handleEscapeKey);
         }
-    }, [isPlacementMode, onCancelPlacementMode]);
+    }, [isPlacementMode, onCancelPlacementMode, isEditMode, onShowFormattingToolbar, onSetCurrentEditingElement]);
 
     /**
      * Sanitize and prepare HTML for safe display
@@ -286,6 +358,8 @@ const StaticWireframe: React.FC<StaticWireframeProps> = ({
                 onClick={isPlacementMode ? handlePlacementClick : handleClick}
                 onMouseMove={isPlacementMode ? handleMouseMove : undefined}
                 onInput={handleInput}
+                onBlur={handleEditComplete}
+                onKeyDown={handleEditComplete}
             />
         </div>
     );

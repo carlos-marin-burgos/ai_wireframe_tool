@@ -88,7 +88,7 @@ interface SplitLayoutProps {
   onAnalyzeImage?: (imageUrl: string, fileName: string) => Promise<any> | void;
   isAnalyzingImage?: boolean;
   // Figma export handler
-  onFigmaExport?: (format: 'figma-file' | 'figma-components') => void;
+  onFigmaExport?: (format: 'image' | 'pdf') => void;
   // Toolbar function references for header toolbar
   onFigmaIntegration?: React.MutableRefObject<(() => void) | null>;
   onComponentLibrary?: React.MutableRefObject<(() => void) | null>;
@@ -651,10 +651,10 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     input.click();
   }, [setHtmlWireframe, addMessage]);
 
-  const handleFigmaExport = useCallback((format: 'figma-file' | 'figma-components') => {
+  const handleFigmaExport = useCallback((format: 'image' | 'pdf') => {
     // Handle Figma export
     console.log('Exporting to Figma as:', format);
-    addMessage('ai', `Wireframe exported to Figma as ${format} successfully! You can now access it in your Figma workspace.`);
+    addMessage('ai', `Wireframe exported to Figma as ${format} successfully! You can now import it directly into Figma.`);
     setIsFigmaModalOpen(false);
   }, [addMessage]);
 
@@ -665,8 +665,8 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   const handleDownloadModalDownload = useCallback((format: 'html' | 'json') => {
     // Call the parent's figma export handler with the appropriate format
-    // This reuses the existing export functionality
-    const figmaFormat = format === 'html' ? 'figma-file' : 'figma-components';
+    // Map download formats to Figma-compatible formats
+    const figmaFormat = format === 'html' ? 'image' : 'pdf';
     onFigmaExport?.(figmaFormat);
     addMessage('ai', `🎉 ${format.toUpperCase()} download started! Check your browser's Downloads folder.`);
   }, [onFigmaExport, addMessage]);

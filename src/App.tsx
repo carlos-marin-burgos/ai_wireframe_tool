@@ -15,6 +15,7 @@ import Toast from "./components/Toast";
 import AzureAuth from "./components/AzureAuth";
 import FigmaIntegration from "./components/FigmaIntegration";
 import FigmaIntegrationModal from "./components/FigmaIntegrationModal";
+import FigmaExportModal from "./components/FigmaExportModal";
 import WireframeGenerator from "./pages/WireframeGenerator";
 import { API_CONFIG, getApiUrl } from "./config/api";
 // All API calls are now handled by the wireframe generation hook
@@ -63,6 +64,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   const [fastMode, setFastMode] = useState(false);
   const [showFigmaIntegration, setShowFigmaIntegration] = useState(false);
   const [showTopToolbarFigmaImport, setShowTopToolbarFigmaImport] = useState(false);
+  const [showFigmaExportModal, setShowFigmaExportModal] = useState(false);
 
   // Editing mode state
   const [editingMode, setEditingMode] = useState<'drag' | 'edit'>('drag');
@@ -133,6 +135,11 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     } else {
       console.log('Presentation mode function not available');
     }
+  };
+
+  const handleToolbarFigmaExport = () => {
+    console.log('📤 EXPORT TO FIGMA BUTTON CLICKED - Opening Figma export modal...');
+    setShowFigmaExportModal(true);
   };
 
   const handleEnhancedSave = () => {
@@ -951,6 +958,9 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
         padding: 8px;
         animation: atlasPlaceIn 0.3s ease-out;
         cursor: pointer;
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        pointer-events: auto;
       ">
         ${componentHtml}
         <button class="remove-component-btn" onclick="this.parentElement.remove()" 
@@ -991,32 +1001,65 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
         }
       </style>`;
 
-    // Find the wireframe content area to ensure positioning context
+    // Use absolute positioning within the wireframe content area
     let updatedHtml = existingHtml;
 
-    // Make sure we have a positioning context
-    if (!existingHtml.includes('position: relative')) {
-      // Add relative positioning to the main content area
-      const bodyMatch = existingHtml.match(/<body[^>]*>/);
-      if (bodyMatch) {
-        const bodyTag = bodyMatch[0];
-        const newBodyTag = bodyTag.includes('style=')
-          ? bodyTag.replace(/style="([^"]*)"/, 'style="$1; position: relative;"')
-          : bodyTag.replace('>', ' style="position: relative;">');
-        updatedHtml = updatedHtml.replace(bodyTag, newBodyTag);
+    // Add positioning context to the wireframe content container
+    // Look for common content containers and add position: relative if needed
+    const containerPatterns = [
+      { regex: /<body([^>]*)>/i, element: 'body' },
+      { regex: /<main([^>]*)>/i, element: 'main' },
+      { regex: /<div([^>]*class[^>]*content[^>]*)>/i, element: 'content div' },
+      { regex: /<div([^>]*class[^>]*wireframe[^>]*)>/i, element: 'wireframe div' }
+    ];
+
+    let positioningContextAdded = false;
+
+    for (const pattern of containerPatterns) {
+      const match = updatedHtml.match(pattern.regex);
+      if (match && !positioningContextAdded) {
+        const fullTag = match[0];
+        let newTag;
+
+        if (fullTag.includes('style=')) {
+          // Add to existing style
+          newTag = fullTag.replace(/style="([^"]*)"/, (styleMatch, styles) => {
+            if (!styles.includes('position:') && !styles.includes('position ')) {
+              return `style="${styles}; position: relative;"`;
+            }
+            return styleMatch;
+          });
+        } else {
+          // Add new style attribute
+          newTag = fullTag.replace('>', ' style="position: relative;">');
+        }
+
+        if (newTag !== fullTag) {
+          updatedHtml = updatedHtml.replace(fullTag, newTag);
+          positioningContextAdded = true;
+          console.log(`🎯 Added positioning context to ${pattern.element}`);
+          break;
+        }
       }
     }
 
-    // Insert the positioned component before the closing body tag
-    const bodyCloseMatch = updatedHtml.match(/<\/body>/);
-    if (bodyCloseMatch) {
-      updatedHtml = updatedHtml.replace('</body>', positionedWrapper + '\n</body>');
-    } else {
-      // Fallback: append to end
-      updatedHtml += positionedWrapper;
+    // Insert the positioned component at the end of the content area
+    const insertionPatterns = [
+      /<\/main>/i,
+      /<\/body>/i
+    ];
+
+    for (const pattern of insertionPatterns) {
+      if (pattern.test(updatedHtml)) {
+        updatedHtml = updatedHtml.replace(pattern, (match) => positionedWrapper + '\n' + match);
+        console.log("🎯 Component inserted with absolute positioning at:", { x, y });
+        return updatedHtml;
+      }
     }
 
-    console.log("🎯 Component placed at position:", { x, y });
+    // Fallback: append to end
+    updatedHtml += positionedWrapper;
+    console.log("🎯 Component appended with absolute positioning");
     return updatedHtml;
   };
 
@@ -1395,8 +1438,8 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     showToast(`Figma design imported: ${fileName}`, 'success');
   };
 
-  const handleFigmaExport = async (format: 'figma-file' | 'figma-components') => {
-    console.log('Exporting wireframe:', format);
+  const handleFigmaExport = async (format: 'image' | 'pdf') => {
+    console.log('Exporting wireframe for Figma:', format);
 
     if (!htmlWireframe || htmlWireframe.trim() === '') {
       showToast('No wireframe to export. Please create a wireframe first.', 'error');
@@ -1404,40 +1447,102 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     }
 
     try {
-      // Import the export service
-      const { wireframeExportService } = await import('./services/wireframeExport');
-
       let result;
 
-      if (format === 'figma-file') {
-        // Export as standalone HTML file
-        result = await wireframeExportService.exportAsHTML(htmlWireframe, {
-          format: 'html',
-          filename: wireframeExportService.generateFilename('wireframe', 'html'),
-          includeStyles: true,
-          includeInteractivity: true
-        });
-      } else if (format === 'figma-components') {
-        // Export as JSON data for component library
-        result = await wireframeExportService.exportAsJSON(htmlWireframe, {
-          description: description,
-          theme: designTheme,
-          colorScheme: colorScheme,
-          exportedAt: new Date().toISOString()
-        }, {
-          format: 'figma-components',
-          filename: wireframeExportService.generateFilename('wireframe-components', 'json')
-        });
-      }
+      if (format === 'image') {
+        // Export as PNG image using html2canvas
+        const html2canvas = await import('html2canvas');
 
-      if (result?.success) {
-        showToast(
-          `✅ Wireframe exported successfully as ${result.filename}! 
-          ${result.size ? `(${Math.round(result.size / 1024)} KB)` : ''}`,
-          'success'
-        );
-      } else {
-        showToast(`❌ Export failed: ${result?.error || 'Unknown error'}`, 'error');
+        // Create a temporary container with the wireframe
+        const tempContainer = document.createElement('div');
+        tempContainer.innerHTML = htmlWireframe;
+        tempContainer.style.position = 'absolute';
+        tempContainer.style.left = '-9999px';
+        tempContainer.style.width = '1200px';
+        tempContainer.style.backgroundColor = 'white';
+        document.body.appendChild(tempContainer);
+
+        try {
+          const canvas = await html2canvas.default(tempContainer, {
+            width: 1200,
+            height: Math.max(800, tempContainer.scrollHeight),
+            scale: 2,
+            backgroundColor: '#ffffff',
+            useCORS: true
+          });
+
+          // Convert to blob and download
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.href = url;
+              link.download = `wireframe-${Date.now()}.png`;
+              link.click();
+              URL.revokeObjectURL(url);
+
+              showToast('🖼️ PNG image exported successfully! Import this image directly into Figma.', 'success');
+            }
+          }, 'image/png');
+        } finally {
+          document.body.removeChild(tempContainer);
+        }
+        return;
+
+      } else if (format === 'pdf') {
+        // Export as PDF using jsPDF and html2canvas
+        const [html2canvas, jsPDF] = await Promise.all([
+          import('html2canvas'),
+          import('jspdf')
+        ]);
+
+        // Create a temporary container with the wireframe
+        const tempContainer = document.createElement('div');
+        tempContainer.innerHTML = htmlWireframe;
+        tempContainer.style.position = 'absolute';
+        tempContainer.style.left = '-9999px';
+        tempContainer.style.width = '1200px';
+        tempContainer.style.backgroundColor = 'white';
+        document.body.appendChild(tempContainer);
+
+        try {
+          const canvas = await html2canvas.default(tempContainer, {
+            width: 1200,
+            height: Math.max(800, tempContainer.scrollHeight),
+            scale: 2,
+            backgroundColor: '#ffffff',
+            useCORS: true
+          });
+
+          const imgData = canvas.toDataURL('image/png');
+          const pdf = new jsPDF.jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4'
+          });
+
+          const imgWidth = 210;
+          const pageHeight = 295;
+          const imgHeight = (canvas.height * imgWidth) / canvas.width;
+          let heightLeft = imgHeight;
+          let position = 0;
+
+          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+
+          while (heightLeft >= 0) {
+            position = heightLeft - imgHeight;
+            pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+          }
+
+          pdf.save(`wireframe-${Date.now()}.pdf`);
+          showToast('📄 PDF document exported successfully! Import this PDF directly into Figma.', 'success');
+        } finally {
+          document.body.removeChild(tempContainer);
+        }
+        return;
       }
     } catch (error) {
       console.error('Export error:', error);
@@ -1491,6 +1596,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           onLogoClick={handleBackToLanding}
           onLogout={onLogout}
           onFigmaIntegration={handleToolbarFigma}
+          onExportToFigma={handleToolbarFigmaExport}
           onViewHtmlCode={handleToolbarHtmlCode}
           onPresentationMode={handleToolbarPresentation}
           onDownloadWireframe={handleToolbarDownload}
@@ -1652,6 +1758,15 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
             console.log('File processed:', file.name, data);
             // Handle file processing
           }}
+        />
+      )}
+
+      {showFigmaExportModal && (
+        <FigmaExportModal
+          isOpen={showFigmaExportModal}
+          onClose={() => setShowFigmaExportModal(false)}
+          onExport={handleFigmaExport}
+          wireframeTitle={description || 'Wireframe'}
         />
       )}
 

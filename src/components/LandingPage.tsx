@@ -26,7 +26,7 @@ interface LandingPageProps {
   onAnalyzeImage?: (imageUrl: string, fileName: string) => Promise<any> | void;
   isAnalyzingImage?: boolean;
   onFigmaImport?: (html: string, fileName: string) => void;
-  onFigmaExport?: (format: 'figma-file' | 'figma-components') => void;
+  onFigmaExport?: (format: 'image' | 'pdf') => void;
   onOpenWireframe?: (html: string, description: string) => void;
   onFigmaModalOpen?: () => void;
 }
@@ -425,7 +425,7 @@ function LandingPage({
     setIsFigmaModalOpen(false);
   };
 
-  const handleFigmaExport = (format: 'figma-file' | 'figma-components') => {
+  const handleFigmaExport = (format: 'image' | 'pdf') => {
     if (onFigmaExport) {
       onFigmaExport(format);
     }

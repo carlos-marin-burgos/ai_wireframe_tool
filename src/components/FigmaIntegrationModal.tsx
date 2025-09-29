@@ -129,7 +129,7 @@ interface FigmaIntegrationModalProps {
     isOpen: boolean;
     onClose: () => void;
     onImport?: (htmlContent: string, fileName: string, tokens?: DesignTokenCollection) => void;
-    onExport?: (format: 'figma-file' | 'figma-components') => void;
+    onExport?: (format: 'image' | 'pdf') => void;
     onTokensExtracted?: (tokens: DesignTokenCollection) => void;
     onFileProcessed?: (file: File | ApiFigmaFile, data?: any) => void;
 }
@@ -177,7 +177,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
     const [success, setSuccess] = useState<string | null>(null);
     const [frames, setFrames] = useState<FigmaFrame[]>([]);
     const [selectedFrames, setSelectedFrames] = useState<string[]>([]);
-    const [exportFormat, setExportFormat] = useState<'figma-file' | 'figma-components'>('figma-file');
+    const [exportFormat, setExportFormat] = useState<'image' | 'pdf'>('image');
     const [extractedTokens, setExtractedTokens] = useState<DesignTokenCollection | null>(null);
     const [liveSyncEnabled, setLiveSyncEnabled] = useState(false);
     const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null);
@@ -1014,7 +1014,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 
     const handleExport = useCallback(() => {
         onExport?.(exportFormat);
-        const fileType = exportFormat === 'figma-file' ? 'HTML file' : 'JSON data file';
+        const fileType = exportFormat === 'image' ? 'PNG image' : 'PDF document';
         setSuccess(`🎉 ${fileType} download started! Check your browser's Downloads folder.`);
         setTimeout(() => onClose(), 2000);
     }, [exportFormat, onExport, onClose]);

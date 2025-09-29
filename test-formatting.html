@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formatting Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .test-area {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 100px;
+        }
+
+        .editable-text {
+            background: #f9f9f9;
+            padding: 10px;
+            border: 1px dashed #ddd;
+            margin: 10px 0;
+        }
+
+        .toolbar {
+            margin: 10px 0;
+        }
+
+        .toolbar button {
+            margin: 5px;
+            padding: 5px 10px;
+            background: #007cba;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .toolbar button:hover {
+            background: #005a82;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🎨 Formatting Feature Test</h1>
+
+    <p>This test page verifies that the formatting functionality works correctly.</p>
+
+    <div class="toolbar">
+        <button onclick="applyFormat('bold')"><strong>Bold</strong></button>
+        <button onclick="applyFormat('italic')"><em>Italic</em></button>
+        <button onclick="applyFormat('underline')"><u>Underline</u></button>
+        <button onclick="removeFormat()">Remove Format</button>
+    </div>
+
+    <div class="test-area">
+        <h3>Test Area</h3>
+        <div class="editable-text" contenteditable="true" id="testElement">
+            Select this text and click the formatting buttons above to test bold, italic, and underline formatting.
+        </div>
+    </div>
+
+    <div class="test-area">
+        <h3>Instructions</h3>
+        <ol>
+            <li>Select some text in the editable area above</li>
+            <li>Click the Bold, Italic, or Underline buttons</li>
+            <li>Verify the formatting is applied correctly</li>
+            <li>Test the Remove Format button to clear formatting</li>
+        </ol>
+    </div>
+
+    <script>
+        // Test the same formatting logic that's used in the wireframe app
+        function applyFormat(command) {
+            const element = document.getElementById('testElement');
+            element.focus();
+
+            setTimeout(() => {
+                const selection = window.getSelection();
+
+                if (!selection || selection.rangeCount === 0) {
+                    alert('Please select some text first');
+                    return;
+                }
+
+                const range = selection.getRangeAt(0);
+                const selectedText = range.toString();
+
+                if (selectedText.length === 0) {
+                    alert('Please select some text first');
+                    return;
+                }
+
+                try {
+                    switch (command) {
+                        case 'bold':
+                            applyFormatting(range, 'strong', selection);
+                            break;
+                        case 'italic':
+                            applyFormatting(range, 'em', selection);
+                            break;
+                        case 'underline':
+                            applyFormatting(range, 'u', selection);
+                            break;
+                    }
+                } catch (error) {
+                    console.error('Formatting error:', error);
+                    // Fallback to execCommand
+                    document.execCommand(command, false);
+                }
+
+                element.focus();
+            }, 10);
+        }
+
+        function applyFormatting(range, tagName, selection) {
+            const selectedContent = range.extractContents();
+
+            // Check if already formatted
+            const parentElement = range.startContainer.nodeType === Node.TEXT_NODE
+                ? range.startContainer.parentElement
+                : range.startContainer;
+
+            if (parentElement && parentElement.tagName && parentElement.tagName.toLowerCase() === tagName.toLowerCase()) {
+                // Remove formatting
+                const parent = parentElement.parentElement;
+                if (parent) {
+                    parent.insertBefore(selectedContent, parentElement);
+                    parent.removeChild(parentElement);
+                }
+            } else {
+                // Apply formatting
+                const newElement = document.createElement(tagName);
+                newElement.appendChild(selectedContent);
+                range.insertNode(newElement);
+            }
+
+            // Update selection
+            selection.removeAllRanges();
+            const newRange = document.createRange();
+            newRange.selectNodeContents(range.commonAncestorContainer);
+            selection.addRange(newRange);
+        }
+
+        function removeFormat() {
+            const element = document.getElementById('testElement');
+            element.focus();
+
+            setTimeout(() => {
+                const selection = window.getSelection();
+
+                if (!selection || selection.rangeCount === 0) {
+                    alert('Please select some text first');
+                    return;
+                }
+
+                const range = selection.getRangeAt(0);
+                removeFormatting(range, selection);
+                element.focus();
+            }, 10);
+        }
+
+        function removeFormatting(range, selection) {
+            const selectedContent = range.extractContents();
+
+            // Remove all formatting tags from the selected content
+            const tempDiv = document.createElement('div');
+            tempDiv.appendChild(selectedContent);
+
+            // Strip formatting tags but keep text content
+            const textContent = tempDiv.textContent || tempDiv.innerText || '';
+            const textNode = document.createTextNode(textContent);
+
+            range.insertNode(textNode);
+
+            // Update selection
+            selection.removeAllRanges();
+            const newRange = document.createRange();
+            newRange.selectNodeContents(textNode);
+            selection.addRange(newRange);
+        }
+    </script>
+</body>
+
+</html>

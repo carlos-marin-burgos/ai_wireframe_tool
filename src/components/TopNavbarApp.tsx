@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiFigma, FiCode, FiMonitor, FiDownload, FiLogOut } from 'react-icons/fi';
+import { FiFigma, FiCode, FiMonitor, FiDownload, FiLogOut, FiUpload } from 'react-icons/fi';
 import './TopNavbarApp.css';
 
 interface TopNavbarAppProps {
@@ -7,6 +7,7 @@ interface TopNavbarAppProps {
     onLogout?: () => void;
     // Toolbar actions
     onFigmaIntegration?: () => void;
+    onExportToFigma?: () => void;
     onViewHtmlCode?: () => void;
     onPresentationMode?: () => void;
     onDownloadWireframe?: () => void;
@@ -16,6 +17,7 @@ const TopNavbarApp: React.FC<TopNavbarAppProps> = ({
     onLogoClick,
     onLogout,
     onFigmaIntegration,
+    onExportToFigma,
     onViewHtmlCode,
     onPresentationMode,
     onDownloadWireframe
@@ -66,6 +68,15 @@ const TopNavbarApp: React.FC<TopNavbarAppProps> = ({
                             aria-label="Figma Integration"
                         >
                             <FiFigma />
+                        </button>
+                        <button
+                            className="navbar-toolbar-btn"
+                            onClick={onExportToFigma}
+                            onMouseEnter={(e) => showTooltip(e, "Export to Figma")}
+                            onMouseLeave={hideTooltip}
+                            aria-label="Export to Figma"
+                        >
+                            <FiUpload />
                         </button>
                         <button
                             className="navbar-toolbar-btn"
