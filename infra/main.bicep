@@ -222,17 +222,16 @@ resource openAiModelDeployment 'Microsoft.CognitiveServices/accounts/deployments
   }
 ]
 
-// App Service Plan for Azure Functions (Consumption)
+// App Service Plan for Azure Functions (Flex Consumption)
 resource appServicePlan 'Microsoft.Web/serverfarms@2023-12-01' = {
   name: appServicePlanName
   location: location
   tags: tags
   sku: {
-    name: 'Y1'
-    tier: 'Dynamic'
-    size: 'Y1'
-    family: 'Y'
-    capacity: 0
+    name: 'FC1'
+    tier: 'FlexConsumption'
+    size: 'FC1'
+    family: 'FC'
   }
   kind: 'functionapp'
   properties: {
@@ -256,7 +255,6 @@ resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
     serverFarmId: appServicePlan.id
     reserved: true
     siteConfig: {
-      linuxFxVersion: 'NODE|20'
       appSettings: [
         {
           name: 'AzureWebJobsStorage__accountName'
@@ -265,14 +263,6 @@ resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
           value: '~4'
-        }
-        {
-          name: 'FUNCTIONS_WORKER_RUNTIME'
-          value: 'node'
-        }
-        {
-          name: 'WEBSITE_NODE_DEFAULT_VERSION'
-          value: '~20'
         }
         {
           name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
@@ -320,6 +310,26 @@ resource functionApp 'Microsoft.Web/sites@2023-12-01' = {
     }
     httpsOnly: true
     keyVaultReferenceIdentity: userAssignedIdentity.id
+    functionAppConfig: {
+      deployment: {
+        storage: {
+          type: 'blobContainer'
+          value: '${storageAccount.properties.primaryEndpoints.blob}deployments'
+          authentication: {
+            type: 'UserAssignedIdentity'
+            userAssignedIdentityResourceId: userAssignedIdentity.id
+          }
+        }
+      }
+      scaleAndConcurrency: {
+        maximumInstanceCount: 100
+        instanceMemoryMB: 2048
+      }
+      runtime: {
+        name: 'node'
+        version: '20'
+      }
+    }
   }
 }
 

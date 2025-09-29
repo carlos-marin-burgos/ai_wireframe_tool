@@ -4,7 +4,7 @@ const axios = require("axios");
 
 const BASE_URL =
   process.env.BASE_URL ||
-  "https://func-designetica-prod-working.azurewebsites.net";
+  "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net";
 
 console.log("🧪 Testing OAuth Flow with Persistent Storage");
 console.log("🔗 Base URL:", BASE_URL);

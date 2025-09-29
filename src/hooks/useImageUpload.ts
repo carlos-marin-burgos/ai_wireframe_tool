@@ -1,20 +1,11 @@
 /**
  * Unified Image Upload Hook
- * Centra  // Handle file upload (just logging, actual processing in handleAnalyzeImage)
-  const handleImageUpload = useCallback(
-    (file: File) => {
-      console.log("📁 Image uploaded:", file.name, "Size:", file.size);
-      clearState();
-      // File processing happens in ImageUploadZone for preview
-      // Actual wireframe generation happens in handleAnalyzeImage
-    },
-    [clearState]
-  );oad logic and state management for consistent behavior
+ * Centralized logic and state management for consistent behavior
  * across all components (LandingPage, SplitLayout, etc.)
  */
 
 import { useState, useCallback } from "react";
-import { getApiUrl } from "../config/api";
+import { getApiUrl, API_CONFIG } from "../config/api";
 
 interface ImageUploadState {
   isAnalyzing: boolean;
@@ -52,12 +43,7 @@ export const useImageUpload = (
   // Handle file upload (just logging, actual processing in handleAnalyzeImage)
   const handleImageUpload = useCallback(
     (file: File) => {
-      console.log(
-        "� [DEBUG] Unified hook handleImageUpload called:",
-        file.name,
-        "Size:",
-        file.size
-      );
+      console.log("📁 Image uploaded:", file.name, "Size:", file.size);
       clearState();
       // File processing happens in ImageUploadZone for preview
       // Actual wireframe generation happens in handleAnalyzeImage
@@ -69,7 +55,7 @@ export const useImageUpload = (
   const handleAnalyzeImage = useCallback(
     async (imageUrl: string, fileName: string) => {
       console.log(
-        "🔍 Starting unified image-to-wireframe conversion:",
+        "🔍 Starting enhanced image-to-wireframe conversion:",
         fileName,
         "Size:",
         imageUrl.length,
@@ -80,22 +66,37 @@ export const useImageUpload = (
         ...prev,
         isAnalyzing: true,
         error: null,
-        success: null,
       }));
 
       try {
-        // Use the unified direct image-to-wireframe conversion endpoint
+        // Convert data URL to base64 (remove data:image/...;base64, prefix)
+        const base64Match = imageUrl.match(/^data:image\/[^;]+;base64,(.+)$/);
+        if (!base64Match) {
+          throw new Error(
+            "Invalid image format. Please upload a valid image file."
+          );
+        }
+
+        const base64Image = base64Match[1];
+
+        // Use the enhanced direct image-to-wireframe conversion endpoint
         const response = await fetch(
-          getApiUrl("/api/direct-image-to-wireframe"),
+          getApiUrl(API_CONFIG.ENDPOINTS.DIRECT_IMAGE_TO_WIREFRAME),
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              image: imageUrl, // Base64 image data
+              imageBase64: base64Image,
+              fileName: fileName,
               designTheme: designTheme || "microsoftlearn",
               colorScheme: colorScheme || "light",
+              options: {
+                extractColors: true,
+                generateResponsive: true,
+                preserveLayout: true,
+              },
             }),
           }
         );
@@ -103,45 +104,55 @@ export const useImageUpload = (
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
           throw new Error(
-            errorData.error || `Image analysis failed: ${response.status}`
+            errorData.message ||
+              errorData.error ||
+              `Image analysis failed: ${response.status}`
           );
         }
 
         const result = await response.json();
 
         if (!result.success) {
-          throw new Error(result.error || "Image analysis failed");
+          throw new Error(
+            result.message || result.error || "Image analysis failed"
+          );
         }
 
         console.log(
-          "✅ Unified image-to-wireframe conversion completed successfully"
+          "✅ Enhanced image-to-wireframe conversion completed successfully"
         );
-
-        const description =
-          result.description ||
-          `Pixel-perfect wireframe generated from uploaded image: ${fileName}. Preserves exact colors, text, and layout from the original design.`;
 
         setState((prev) => ({
           ...prev,
           isAnalyzing: false,
-          success: `Successfully generated wireframe from ${fileName}!`,
+          success: "Image successfully converted to wireframe!",
         }));
 
-        // Call success callback
-        const html = result.data?.html;
-        if (onSuccess && html) {
+        // Extract HTML from the response (handle both direct html and data.html)
+        const html = result.data?.html || result.html;
+        if (!html) {
+          throw new Error("No HTML wireframe was generated from the image");
+        }
+
+        // Call success callback with the generated HTML and description
+        const description = `Wireframe generated from ${fileName} - Colors and layout preserved from original image`;
+        if (onSuccess) {
           onSuccess(html, description);
         }
 
-        return { success: true, html, description };
+        return {
+          success: true,
+          html: html,
+          description: description,
+        };
       } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : "Failed to analyze image";
-
         console.error(
-          "❌ Unified image-to-wireframe conversion failed:",
-          errorMessage
+          "❌ Enhanced image-to-wireframe conversion failed:",
+          error
         );
+
+        const errorMessage =
+          error instanceof Error ? error.message : "Image analysis failed";
 
         setState((prev) => ({
           ...prev,
@@ -149,7 +160,6 @@ export const useImageUpload = (
           error: errorMessage,
         }));
 
-        // Call error callback
         if (onError) {
           onError(errorMessage);
         }
@@ -163,10 +173,7 @@ export const useImageUpload = (
   // Test if image analysis API is available
   const testImageAnalysisAPI = useCallback(async (): Promise<boolean> => {
     try {
-      const response = await fetch(getApiUrl("/api/health"), {
-        method: "GET",
-      });
-
+      const response = await fetch(getApiUrl(API_CONFIG.ENDPOINTS.HEALTH));
       return response.ok;
     } catch (error) {
       console.warn("Image analysis API health check failed:", error);
@@ -175,12 +182,10 @@ export const useImageUpload = (
   }, []);
 
   return {
-    // State
+    ...state,
     isAnalyzing: state.isAnalyzing,
     error: state.error,
     success: state.success,
-
-    // Actions
     handleImageUpload,
     handleAnalyzeImage,
     clearState,

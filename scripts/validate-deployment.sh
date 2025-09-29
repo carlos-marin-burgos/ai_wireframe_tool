@@ -42,7 +42,7 @@ log_separator() {
 # Validate input
 if [ -z "$FUNCTION_APP_URL" ]; then
     log_error "Usage: $0 <function-app-url>"
-    log_info "Example: $0 https://func-designetica-prod-working.azurewebsites.net"
+    log_info "Example: $0 https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net"
     exit 1
 fi
 
@@ -179,11 +179,11 @@ rm -f /tmp/test-payload.json
 log_info "🔧 Step 4: Validating configuration"
 
 # Check if this is the expected function app
-if echo "$FUNCTION_APP_URL" | grep -q "func-designetica-prod-working"; then
-    log_success "Using approved function app: func-designetica-prod-working"
-elif echo "$FUNCTION_APP_URL" | grep -q "func-designetica-prod-vmlmp4vej4ckc"; then
-    log_warning "Using potentially problematic function app: func-designetica-prod-vmlmp4vej4ckc"
-    log_warning "Consider switching to func-designetica-prod-working if issues arise"
+if echo "$FUNCTION_APP_URL" | grep -q "func-designetica-prod-vmlmp4vej4ckc"; then
+    log_success "Using new Flex Consumption function app: func-designetica-prod-vmlmp4vej4ckc"
+elif echo "$FUNCTION_APP_URL" | grep -q "func-designetica-prod-working"; then
+    log_warning "Using legacy Consumption function app: func-designetica-prod-working"
+    log_warning "Consider migrating to func-designetica-prod-vmlmp4vej4ckc for better performance"
 else
     log_warning "Using unrecognized function app URL"
 fi

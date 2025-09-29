@@ -33,7 +33,7 @@ npm run deploy:quick        # OLD - bypasses validation
 
 ### 2. **Smart Function App Management**
 
-- ✅ **Always uses**: `func-designetica-prod-working.azurewebsites.net`
+- ✅ **Always uses**: `func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net` (Flex Consumption)
 - ❌ **Never uses**: `func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net` (broken)
 - ✅ Automatically fixes API configuration mismatches
 
@@ -61,7 +61,7 @@ npm run deploy:quick        # OLD - bypasses validation
                   ▼
 ┌─────────────────────────────────────────────────────────────┐
 │  ✅ WORKING Function App (Always Use This)                 │
-│  https://func-designetica-prod-working.azurewebsites.net    │
+│  https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net    │
 │  • Health endpoint: /api/health                            │
 │  • Main API: /api/direct-image-to-wireframe                │
 │  • Enhanced Phase 1 system with color extraction           │
@@ -175,7 +175,7 @@ Every successful deployment is logged in `.deployment-history.json`:
 {
   "deployments": [
     {
-      "url": "https://func-designetica-prod-working.azurewebsites.net",
+      "url": "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net",
       "timestamp": "2025-09-26T17:30:00Z",
       "status": "validated",
       "validation_passed": true

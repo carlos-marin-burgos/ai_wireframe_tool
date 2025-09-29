@@ -74,7 +74,8 @@ log_separator() {
 # Function to get current environment
 get_current_env() {
     cd "$PROJECT_ROOT"
-    azd env list | grep '\[Current\]' | awk '{print $1}' || echo "unknown"
+    # Get the default environment (marked with 'true' in DEFAULT column)
+    azd env list | awk '$2 == "true" {print $1}' | head -1 || echo "unknown"
 }
 
 # Function to get expected function app URL for environment
@@ -82,10 +83,10 @@ get_expected_function_app_url() {
     local env="$1"
     case "$env" in
         "designetica-prod")
-            echo "https://func-designetica-prod-working.azurewebsites.net"
+            echo "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net"
             ;;
         "production")
-            echo "https://func-designetica-prod-working.azurewebsites.net"
+            echo "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net"
             ;;
         *)
             echo "unknown"

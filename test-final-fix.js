@@ -9,7 +9,7 @@ async function testFinalFix() {
 
   try {
     const response = await fetch(
-      "https://func-designetica-5gwyjxbwvr4s6.azurewebsites.net/api/generate-wireframe",
+      "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net/api/generate-wireframe",
       {
         method: "POST",
         headers: {

@@ -24,7 +24,7 @@
     "deploy:safe": "./scripts/safe-deploy-new.sh all",
     "deploy:backend": "./scripts/safe-deploy-new.sh backend",
     "deploy:frontend": "./scripts/safe-deploy-new.sh frontend",
-    "deploy:validate": "./scripts/validate-deployment.sh https://func-designetica-prod-working.azurewebsites.net",
+    "deploy:validate": "./scripts/validate-deployment.sh https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net",
     "production:status": "./scripts/production-deploy.sh status",
     "production:test": "./scripts/production-deploy.sh test",
     "lint": "eslint .",

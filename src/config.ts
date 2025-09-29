@@ -1,7 +1,7 @@
 // API configuration - PRODUCTION HOTFIX: hardcoded for reliability
 const PRODUCTION_DOMAIN = "delightful-pond-064d9a91e.1.azurestaticapps.net";
 const FUNCTION_APP_URL =
-  "https://func-designetica-5gwyjxbwvr4s6.azurewebsites.net";
+  "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net";
 
 const isDevelopment = import.meta.env.DEV;
 const isLocalhost =

@@ -1,0 +1,74 @@
+{
+  "migration": {
+    "date": "2025-09-29",
+    "subscriptionId": "330eaa36-e19f-4d4c-8dea-37c2332f754d",
+    "migrationType": "Azure Functions: Consumption (Y1) → Flex Consumption (FC1)",
+    "description": "Migration from Linux Consumption plan to Flex Consumption plan"
+  },
+  "originalConfiguration": {
+    "appServicePlan": {
+      "sku": {
+        "name": "Y1",
+        "tier": "Dynamic",
+        "size": "Y1",
+        "family": "Y",
+        "capacity": 0
+      },
+      "kind": "functionapp",
+      "properties": {
+        "reserved": true
+      }
+    },
+    "functionApp": {
+      "kind": "functionapp,linux",
+      "properties": {
+        "reserved": true,
+        "siteConfig": {
+          "linuxFxVersion": "NODE|20"
+        }
+      }
+    }
+  },
+  "newConfiguration": {
+    "appServicePlan": {
+      "sku": {
+        "name": "FC1",
+        "tier": "FlexConsumption",
+        "size": "FC1",
+        "family": "FC"
+      },
+      "kind": "functionapp",
+      "properties": {
+        "reserved": true
+      }
+    },
+    "functionApp": {
+      "kind": "functionapp,linux",
+      "properties": {
+        "reserved": true,
+        "functionAppConfig": {
+          "deployment": {
+            "storage": {
+              "type": "blobContainer",
+              "authentication": {
+                "type": "UserAssignedManagedIdentity"
+              }
+            }
+          },
+          "scaleAndConcurrency": {
+            "maximumInstanceCount": 100,
+            "instanceMemoryMB": 2048
+          },
+          "runtime": {
+            "name": "node",
+            "version": "20"
+          }
+        }
+      }
+    }
+  },
+  "rollbackInstructions": {
+    "note": "To rollback, revert the main.bicep changes and redeploy",
+    "commands": ["git checkout HEAD~1 -- infra/main.bicep", "azd deploy"]
+  }
+}
