@@ -113,6 +113,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                             <FiCode />
                         </button>
 
+                        {/* Temporarily hidden
                         <button
                             className="icon-btn"
                             title="Figma Components"
@@ -123,6 +124,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         >
                             <FiLayers />
                         </button>
+                        */}
 
                         <button
                             className="icon-btn"
@@ -289,6 +291,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         <FiGithub />
                     </button>
 
+                    {/* Temporarily hidden
                     <button
                         className="toolbar-btn"
                         onClick={onOpenFigmaComponents}
@@ -298,6 +301,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                     >
                         <SiFigma />
                     </button>
+                    */}
 
                     {/* Edit Mode Toggle Button */}
                     {onToggleEditMode && (
