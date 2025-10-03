@@ -270,22 +270,26 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                 }
 
                 // Trusted session exists but no valid OAuth tokens - need to reconnect
-                console.log('⚠️ Trusted session found but OAuth tokens missing - need to reconnect');
+                console.log('⚠️ Trusted session found but OAuth tokens missing - keeping session, need to reconnect');
                 try {
                     localStorage.removeItem('figma_oauth_tokens');
                     localStorage.removeItem('figma_oauth_timestamp');
                 } catch (tokenCleanupError) {
                     console.warn('Failed to remove stale OAuth tokens:', tokenCleanupError);
                 }
-                clearTrustedSession();
+                // DON'T clear the trusted session - just mark as needing reconnection
+                // clearTrustedSession(); // REMOVED - keep the session alive
+
+                // Keep the connection active but indicate it needs refresh
+                setIsConnected(true); // CHANGED from false - keep connected state
                 setAuthStatus({
-                    status: 'trusted_session_needs_reconnect',
-                    message: 'Figma session found but authentication expired. Please reconnect.',
-                    connected: false,
-                    needsReconnect: true
+                    status: 'trusted_session_active',
+                    message: 'Figma session active. You may need to reconnect for token refresh.',
+                    connected: true, // CHANGED from false
+                    needsReconnect: false, // CHANGED - don't force reconnect, just warn
+                    user: trustedSession.user || undefined
                 });
-                setIsConnected(false);
-                hasAuthoritativeConnectionRef.current = false;
+                hasAuthoritativeConnectionRef.current = true; // CHANGED - mark as authoritative
                 statusCheckTokenRef.current = null;
                 isCheckingStatusRef.current = false;
                 return;

@@ -322,6 +322,23 @@ ANALYSIS PHASE 4: VISUAL DESIGN & DETAIL EXTRACTION
   * Consistency: Apply the same extracted color palette throughout the entire document
   * VALIDATION: After color extraction, verify that interactive elements are visually distinct
 
+- TEXT CONTRAST REQUIREMENTS (CRITICAL FOR READABILITY):
+  * NEVER use dark text (#000000 or black) on dark backgrounds (#333333 or darker grays)
+  * ALWAYS ensure text contrast ratio meets WCAG AA standards (4.5:1 minimum for normal text, 3:1 for large text)
+  * FOR DARK BACKGROUNDS (gray, charcoal, black):
+    - Use white or light text: #FFFFFF, #F5F5F5, #E0E0E0
+    - Headings on dark backgrounds: color: #FFFFFF or rgba(255,255,255,0.95)
+    - Body text on dark backgrounds: color: #E8E8E8 or rgba(255,255,255,0.87)
+  * FOR LIGHT BACKGROUNDS (white, light gray):
+    - Use dark text: #1F1F1F, #333333, #2C2C2C
+    - Headings on light backgrounds: color: #1F1F1F or #000000
+    - Body text on light backgrounds: color: #333333 or #424242
+  * AUTOMATIC CONTRAST ADJUSTMENT:
+    - Calculate background luminance before setting text color
+    - If background is dark (luminance < 0.5): use light text
+    - If background is light (luminance >= 0.5): use dark text
+  * VERIFICATION: After generating HTML, verify every text element has sufficient contrast with its background
+
 IMPLEMENTATION REQUIREMENTS:
 1. Generate complete HTML5 document with proper DOCTYPE and semantic structure
 2. Use semantic HTML elements (header, nav, main, section, article, aside, footer)
@@ -356,14 +373,25 @@ REQUIREMENTS:
 2. Use semantic HTML5 elements (header, nav, main, section, etc.)
 3. CRITICAL: Extract and use the ACTUAL colors from the image - analyze the image carefully for any brand colors, interface colors, or design-specific colors
 4. Match colors exactly using hex codes - do not impose any theme or brand assumptions
-5. Only use neutral fallback colors if the image appears to be a pure wireframe with no specific colors:
+5. TEXT CONTRAST CRITICAL: 
+   - NEVER use black text on dark backgrounds
+   - Dark backgrounds (#333, #444, gray, charcoal) MUST use white/light text (#FFF, #E8E8E8)
+   - Light backgrounds (#FFF, light gray) MUST use dark text (#1F1F1F, #333)
+   - Ensure 4.5:1 minimum contrast ratio for all text
+6. Only use neutral fallback colors if the image appears to be a pure wireframe with no specific colors:
 ${fallbackColorGuidance}
-6. Recreate the exact layout and spacing
-7. Include proper accessibility attributes
+7. Recreate the exact layout and spacing
+8. Include proper accessibility attributes
 
 Return complete HTML document from <!DOCTYPE html> to </html>. No explanations.`;
 
   const basicPrompt = `Convert this UI screenshot to HTML. Extract all text exactly. Use inline CSS. 
+
+CRITICAL TEXT CONTRAST RULES:
+- Dark backgrounds → white/light text (#FFFFFF, #E8E8E8)
+- Light backgrounds → dark text (#1F1F1F, #333333)
+- NEVER black text on dark gray backgrounds
+- Minimum 4.5:1 contrast ratio required
 
 CRITICAL: Use the actual colors from the image, not theme colors. Match the image colors precisely.
 
