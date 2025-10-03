@@ -119,6 +119,36 @@
       "timestamp": "2025-09-29T23:24:55Z",
       "status": "validated",
       "validation_passed": true
+    },
+    {
+      "url": "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net",
+      "timestamp": "2025-10-03T15:55:46Z",
+      "status": "validated",
+      "validation_passed": true
+    },
+    {
+      "url": "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net",
+      "timestamp": "2025-10-03T15:58:13Z",
+      "status": "validated",
+      "validation_passed": true
+    },
+    {
+      "url": "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net",
+      "timestamp": "2025-10-03T16:00:37Z",
+      "status": "validated",
+      "validation_passed": true
+    },
+    {
+      "url": "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net",
+      "timestamp": "2025-10-03T16:03:23Z",
+      "status": "validated",
+      "validation_passed": true
+    },
+    {
+      "url": "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net",
+      "timestamp": "2025-10-03T17:31:25Z",
+      "status": "validated",
+      "validation_passed": true
     }
   ]
 }

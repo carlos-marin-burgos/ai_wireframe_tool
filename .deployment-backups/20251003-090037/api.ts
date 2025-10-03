@@ -15,7 +15,14 @@ const STATIC_WEB_APP_HOSTS = new Set([
 ]);
 
 const productionHostFallback =
-  typeof window !== "undefined" &&
+  typeof window !=      recovery: async () => {
+        return this.showRecoveryNotification({
+          title: '🚀 Backend Services Down',
+          message: 'Backend services need to be restarted',
+          command: './auto-recovery.sh fix-backend',
+          type: 'backend'
+        });
+      }ined" &&
   STATIC_WEB_APP_HOSTS.has(window.location.hostname)
     ? "" // Use relative URLs for Static Web App proxy
     : undefined;
@@ -807,30 +814,30 @@ class AutoRecoverySystem {
     try {
       // Map recovery types to auto-recovery actions
       const actionMap: Record<string, string> = {
-        backend: "fix-backend",
-        ai: "fix-ai",
-        port: "fix-ports",
-        memory: "fix-memory",
-        dependencies: "fix-dependencies",
-        cleanup: "auto",
+        'backend': 'fix-backend',
+        'ai': 'fix-ai', 
+        'port': 'fix-ports',
+        'memory': 'fix-memory',
+        'dependencies': 'fix-dependencies',
+        'cleanup': 'auto'
       };
 
-      const action = actionMap[type] || "auto";
-
+      const action = actionMap[type] || 'auto';
+      
       console.log(`🔧 Attempting automatic recovery: ${action}`);
-
+      
       // Try to execute auto-recovery through backend endpoint
       const workingBackend = await detectWorkingBackend();
       const response = await fetch(`${workingBackend}/api/auto-recovery`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           action: action,
-          scenario: type,
+          scenario: type
         }),
-        signal: AbortSignal.timeout(30000), // 30 second timeout
+        signal: AbortSignal.timeout(30000) // 30 second timeout
       });
 
       if (response.ok) {
@@ -862,7 +869,7 @@ class AutoRecoverySystem {
 
       // First, attempt automatic recovery
       console.log(`🤖 Attempting automatic recovery for: ${config.type}`);
-
+      
       // Show initial "attempting recovery" notification
       const initialNotification = document.createElement("div");
       initialNotification.style.cssText = `
@@ -880,7 +887,7 @@ class AutoRecoverySystem {
         max-width: 320px;
         transition: all 0.3s ease;
       `;
-
+      
       initialNotification.innerHTML = `
         <div style="display: flex; align-items: center;">
           <div style="margin-right: 12px;">🔧</div>
@@ -890,12 +897,12 @@ class AutoRecoverySystem {
           </div>
         </div>
       `;
-
+      
       document.body.appendChild(initialNotification);
 
       try {
         const autoRecoverySuccess = await this.attemptAutoRecovery(config.type);
-
+        
         // Remove initial notification
         if (initialNotification.parentElement) {
           document.body.removeChild(initialNotification);
@@ -919,7 +926,7 @@ class AutoRecoverySystem {
             max-width: 320px;
             transition: all 0.3s ease;
           `;
-
+          
           successNotification.innerHTML = `
             <div style="display: flex; align-items: center;">
               <div style="margin-right: 12px;">✅</div>
@@ -929,26 +936,23 @@ class AutoRecoverySystem {
               </div>
             </div>
           `;
-
+          
           document.body.appendChild(successNotification);
-
+          
           setTimeout(() => {
             if (successNotification.parentElement) {
-              successNotification.style.opacity = "0";
-              successNotification.style.transform = "translateY(-20px)";
-              setTimeout(
-                () => document.body.removeChild(successNotification),
-                300
-              );
+              successNotification.style.opacity = '0';
+              successNotification.style.transform = 'translateY(-20px)';
+              setTimeout(() => document.body.removeChild(successNotification), 300);
             }
           }, 4000);
-
+          
           resolve(true);
           return;
         }
       } catch (error) {
         console.warn("Auto-recovery attempt failed:", error);
-
+        
         // Remove initial notification
         if (initialNotification.parentElement) {
           document.body.removeChild(initialNotification);

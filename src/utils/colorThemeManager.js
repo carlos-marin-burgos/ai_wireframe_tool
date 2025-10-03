@@ -84,32 +84,48 @@ export async function applyColorTheme(themeName) {
     return false;
   }
 
-  // Apply theme to document root
-  const root = document.documentElement;
+  // Apply theme ONLY to wireframe containers, not the entire document
+  // This prevents wireframe colors from affecting the navbar and other UI elements
+  const wireframeContainers = document.querySelectorAll(
+    "#wireframe-container, .wireframe-container, .wireframe-content"
+  );
 
-  // Set CSS custom properties
-  root.style.setProperty("--color-primary", theme.colors.primary);
-  root.style.setProperty("--color-secondary", theme.colors.secondary);
-  root.style.setProperty("--color-accent", theme.colors.accent);
-  root.style.setProperty("--color-light", theme.colors.light);
-  root.style.setProperty("--color-medium", theme.colors.medium);
+  // If no wireframe containers exist yet, store the theme for later application
+  if (wireframeContainers.length === 0) {
+    console.log(
+      `Theme "${themeName}" will be applied when wireframe is rendered`
+    );
+  }
 
-  // Update derived colors
-  root.style.setProperty("--color-text", theme.colors.accent);
-  root.style.setProperty("--color-text-secondary", theme.colors.primary);
-  root.style.setProperty("--color-text-light", theme.colors.secondary);
-  root.style.setProperty("--color-surface", theme.colors.light);
-  root.style.setProperty("--color-border", theme.colors.medium);
+  // Apply to all wireframe containers
+  wireframeContainers.forEach((container) => {
+    // Set CSS custom properties
+    container.style.setProperty("--color-primary", theme.colors.primary);
+    container.style.setProperty("--color-secondary", theme.colors.secondary);
+    container.style.setProperty("--color-accent", theme.colors.accent);
+    container.style.setProperty("--color-light", theme.colors.light);
+    container.style.setProperty("--color-medium", theme.colors.medium);
 
-  // Update button colors
-  root.style.setProperty("--color-button-primary", theme.colors.primary);
-  root.style.setProperty("--color-button-secondary", theme.colors.secondary);
+    // Update derived colors
+    container.style.setProperty("--color-text", theme.colors.accent);
+    container.style.setProperty("--color-text-secondary", theme.colors.primary);
+    container.style.setProperty("--color-text-light", theme.colors.secondary);
+    container.style.setProperty("--color-surface", theme.colors.light);
+    container.style.setProperty("--color-border", theme.colors.medium);
 
-  // Update interactive states
-  root.style.setProperty("--color-hover", theme.colors.secondary);
-  root.style.setProperty("--color-active", theme.colors.accent);
-  root.style.setProperty("--color-focus", theme.colors.primary);
-  root.style.setProperty("--color-disabled", theme.colors.medium);
+    // Update button colors
+    container.style.setProperty("--color-button-primary", theme.colors.primary);
+    container.style.setProperty(
+      "--color-button-secondary",
+      theme.colors.secondary
+    );
+
+    // Update interactive states
+    container.style.setProperty("--color-hover", theme.colors.secondary);
+    container.style.setProperty("--color-active", theme.colors.accent);
+    container.style.setProperty("--color-focus", theme.colors.primary);
+    container.style.setProperty("--color-disabled", theme.colors.medium);
+  });
 
   // Store the selected theme
   localStorage.setItem("designetica_color_theme", themeName);

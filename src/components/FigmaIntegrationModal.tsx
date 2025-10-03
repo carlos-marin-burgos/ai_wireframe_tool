@@ -460,6 +460,9 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 
             checkOAuthStatus();
         }
+        // IMPORTANT: When modal closes, DO NOT clear the connection
+        // The session should persist across modal open/close cycles
+        // Only clear session when user explicitly clicks "Disconnect"
     }, [isOpen]); // Only re-run when modal opens/closes
 
     // Listen for OAuth success messages from popup window
@@ -1070,6 +1073,22 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
         }
     }, []); // No dependencies needed - function uses only stable APIs
 
+    // Handle modal close - ensure session persists
+    const handleClose = useCallback(() => {
+        // IMPORTANT: Do NOT clear the Figma session when closing the modal
+        // The session should persist so users stay connected across modal open/close cycles
+        // Only the explicit "Disconnect" button should clear the session
+        console.log('🚪 Closing Figma modal - preserving connection state');
+
+        // Extend the session on close to maintain connectivity
+        if (isConnected) {
+            extendTrustedSession();
+            console.log('🔄 Extended Figma session on modal close');
+        }
+
+        onClose();
+    }, [isConnected, onClose]);
+
     if (!isOpen) return null;
 
     return (
@@ -1080,7 +1099,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
                         <FiLink className="figma-icon" />
                         <h2>Figma Integration Hub</h2>
                     </div>
-                    <button className="figma-modal-close" onClick={onClose} aria-label="Close Figma integration modal">
+                    <button className="figma-modal-close" onClick={handleClose} aria-label="Close Figma integration modal">
                         <FiX />
                     </button>
                 </div>

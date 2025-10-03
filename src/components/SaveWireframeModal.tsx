@@ -179,7 +179,16 @@ const SaveWireframeModal: React.FC<SaveWireframeModalProps> = ({
                     <div className="success-content">
                         <FiCheck className="success-icon" />
                         <h3>Wireframe Saved Successfully!</h3>
-                        <p>"{wireframeName}" has been saved to your library.</p>
+                        <p className="success-message">"{wireframeName}" has been saved to your browser.</p>
+                        <div className="access-info">
+                            <p className="access-instruction">
+                                <strong>To access it later:</strong><br />
+                                Return to the landing page and click <strong>"Load Previous Work"</strong>
+                            </p>
+                            <p className="download-hint">
+                                💡 Want to save to your computer? Use the <strong>Download button</strong> (💾) in the top toolbar.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -204,6 +213,17 @@ const SaveWireframeModal: React.FC<SaveWireframeModalProps> = ({
                 </div>
 
                 <div className="modal-body">
+                    {/* Storage Info Banner */}
+                    <div className="storage-info-banner">
+                        <div className="storage-info-content">
+                            <FiSave className="storage-icon" />
+                            <div className="storage-text">
+                                <strong>💾 Saved to browser storage</strong>
+                                <p>Access your wireframes anytime from "Load Previous Work" on the landing page. To save to your computer, use the Download button (💾) in the top toolbar.</p>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* Basic Information */}
                     <div className="form-section">
                         <label htmlFor="wireframe-name" className="form-label">
