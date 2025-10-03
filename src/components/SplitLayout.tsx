@@ -4,6 +4,7 @@ import SuggestionSourceIndicator from "./SuggestionSourceIndicator";
 import LoadingOverlay from "./LoadingOverlay";
 import AddPagesModal from "./AddPagesModal";
 import FluentSaveWireframeModal, { SavedWireframe } from "./FluentSaveWireframeModal";
+import AddToFavoritesModal from "./AddToFavoritesModal";
 import FigmaIntegrationModal from "./FigmaIntegrationModal";
 import DownloadModal from "./DownloadModal";
 import DevPlaybooksLibrary from "./DevPlaybooksLibrary";
@@ -19,6 +20,7 @@ import HtmlCodeViewer from "./HtmlCodeViewer";
 import PresentationMode from "./PresentationMode";
 import ComponentPreview from "./ComponentPreview";
 import AIDesignModal from "./AIDesignModal";
+import Toast from "./Toast";
 
 import { generateShareUrl } from "../utils/powerpointExport";
 import { generateWireframeName } from "../utils/wireframeNaming";
@@ -188,6 +190,9 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   const [isUpdatingWireframe, setIsUpdatingWireframe] = useState(false);
   const [wireframeToUpdate, setWireframeToUpdate] = useState<SavedWireframe | undefined>();
 
+  // Favorites Modal state
+  const [isFavoritesModalOpen, setIsFavoritesModalOpen] = useState(false);
+
   // Validation state for chat input
   const [chatValidationError, setChatValidationError] = useState<string | null>(null);
 
@@ -238,6 +243,10 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   // Website analysis state
   const [websiteAnalysis, setWebsiteAnalysis] = useState<WebsiteAnalysis | null>(null);
   const [isAnalyzingWebsite, setIsAnalyzingWebsite] = useState<boolean>(false);
+
+  // Toast notification state
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [toastType, setToastType] = useState<'success' | 'info' | 'warning' | 'error'>('success');
 
   // Component placement mode state
   const [isPlacementMode, setIsPlacementMode] = useState<boolean>(false);
@@ -540,6 +549,15 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
   const handleAddToFavorites = useCallback(() => {
     if (!currentPageId) return;
+    const currentPage = wireframePages.find(p => p.id === currentPageId);
+    if (!currentPage) return;
+
+    // Open the favorites modal instead of saving directly
+    setIsFavoritesModalOpen(true);
+  }, [currentPageId, wireframePages]);
+
+  const handleSaveFavorite = useCallback((name: string, description?: string) => {
+    if (!currentPageId) return;
 
     const currentPage = wireframePages.find(p => p.id === currentPageId);
     if (!currentPage) return;
@@ -547,10 +565,11 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     // Get current content for the page
     const currentContent = pageContents[currentPageId] || htmlWireframe;
 
-    // Create favorite item
+    // Create favorite item with user-provided name and description
     const favoriteItem = {
       id: `favorite-${Date.now()}`,
-      name: currentPage.name,
+      name: name,
+      description: description || '',
       htmlContent: currentContent,
       type: currentPage.type,
       createdAt: new Date().toISOString()
@@ -561,8 +580,18 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     existingFavorites.push(favoriteItem);
     localStorage.setItem('designetica_favorites', JSON.stringify(existingFavorites));
 
+    // Dispatch custom event to notify landing page of the change
+    window.dispatchEvent(new CustomEvent('favoritesUpdated'));
+
+    // Close modal
+    setIsFavoritesModalOpen(false);
+
+    // Show toast notification
+    setToastMessage(`⭐ "${name}" saved to favorites!`);
+    setToastType('success');
+
     // Show confirmation message
-    addMessage('ai', `⭐ Added "${currentPage.name}" to favorites! You can find it in the favorites tab on the landing page.`);
+    addMessage('ai', `⭐ Added "${name}" to favorites! You can find it in the favorites tab on the landing page.`);
   }, [currentPageId, wireframePages, pageContents, htmlWireframe, addMessage]);
 
   // Enhanced chat handlers
@@ -1598,7 +1627,6 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               onOpenLibrary={handleOpenLibrary}
               onOpenDevPlaybooks={handleOpenDevPlaybooks}
               onOpenFigmaComponents={handleOpenFigmaComponents}
-              onSave={enhancedOnSave}
               onAddToFavorites={handleAddToFavorites}
               onImageUpload={toggleImageUpload}
               onOpenAnalyzeDesignModal={() => setIsAnalyzeDesignModalOpen(true)}
@@ -1872,6 +1900,14 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         existingWireframe={wireframeToUpdate}
       />
 
+      {/* Add to Favorites Modal */}
+      <AddToFavoritesModal
+        isOpen={isFavoritesModalOpen}
+        onClose={() => setIsFavoritesModalOpen(false)}
+        onSave={handleSaveFavorite}
+        initialName={wireframePages.find(p => p.id === currentPageId)?.name || 'My Wireframe'}
+      />
+
       {/* Image Upload Modal with Demo Mode */}
       <ImageUploadModal
         isOpen={showImageUpload}
@@ -2009,6 +2045,16 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         mode="tips"
         wireframeHtml={htmlWireframe}
       />
+
+      {/* Toast Notification */}
+      {toastMessage && (
+        <Toast
+          message={toastMessage}
+          type={toastType}
+          duration={3000}
+          onClose={() => setToastMessage(null)}
+        />
+      )}
 
     </div>
   );

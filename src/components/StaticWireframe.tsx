@@ -266,6 +266,30 @@ const StaticWireframe: React.FC<StaticWireframeProps> = ({
                 // Note: We skip external stylesheets for security
             });
 
+            // Scope all extracted styles to the wireframe container
+            const scopedStyles = extractedStyles
+                .split('\n')
+                .filter(line => line.trim())
+                .map(line => {
+                    // Check if line is a CSS rule (contains {)
+                    if (line.includes('{') && !line.trim().startsWith('@')) {
+                        // Get the selector part (before {)
+                        const parts = line.split('{');
+                        const selectors = parts[0].trim();
+                        const rest = parts.slice(1).join('{');
+
+                        // Scope each selector
+                        const scopedSelectors = selectors
+                            .split(',')
+                            .map(sel => `.static-wireframe-content ${sel.trim()}`)
+                            .join(', ');
+
+                        return `${scopedSelectors} { ${rest}`;
+                    }
+                    return line;
+                })
+                .join('\n');
+
             // Extract the body content
             const bodyContent = doc.body?.innerHTML || rawHtml;
 
@@ -277,8 +301,8 @@ const StaticWireframe: React.FC<StaticWireframeProps> = ({
             box-sizing: border-box;
           }
           
-          /* Preserve AI-generated styles */
-          ${extractedStyles}
+          /* Preserve AI-generated styles (scoped to wireframe only) */
+          ${scopedStyles}
           
           /* Override any conflicting styles */
           .static-wireframe-content .main-container {

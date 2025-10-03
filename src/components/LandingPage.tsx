@@ -130,8 +130,18 @@ function LandingPage({
       loadRecents();
     };
 
+    // Listen for custom events (same-tab updates)
+    const handleFavoritesUpdated = () => {
+      loadFavorites();
+    };
+
     window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    window.addEventListener('favoritesUpdated', handleFavoritesUpdated as EventListener);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('favoritesUpdated', handleFavoritesUpdated as EventListener);
+    };
   }, []);
 
   // Delete favorite function
@@ -690,6 +700,9 @@ function LandingPage({
                           </div>
                           <div className="project-details">
                             <div className="project-name">{favorite.name}</div>
+                            {favorite.description && (
+                              <div className="project-description">{favorite.description}</div>
+                            )}
                             <div className="project-meta">{`Added ${new Date(favorite.createdAt).toLocaleDateString()}`}</div>
                           </div>
                           <div className="project-actions" onClick={(e) => e.stopPropagation()}>

@@ -6,8 +6,8 @@ import "./styles/themes.css";
 import App from "./App";
 // Production safety layer: prevent accidental localhost calls in deployed builds
 import "./runtime/productionSafety";
-// Automatic backend startup for development
-import { autoStartBackendIfNeeded, autoRecoverySystem } from "./config/api";
+// Automatic backend startup for development - DISABLED (using START.sh instead)
+// import { autoStartBackendIfNeeded, autoRecoverySystem } from "./config/api";
 
 // Expose React globally for dynamic code execution
 declare global {
@@ -19,7 +19,9 @@ window.React = React;
 
 // Navigation initialization removed - Microsoft Learn navigation should only appear within wireframe content, not at application level
 
-// Enhanced automatic system health check and recovery (development only)
+// Enhanced automatic system health check and recovery - DISABLED
+// Using manual START.sh script instead for simpler, more reliable development
+/*
 if (import.meta.env.DEV) {
   const runComprehensiveStartup = async () => {
     try {
@@ -193,6 +195,8 @@ if (import.meta.env.DEV) {
   // Run comprehensive startup
   runComprehensiveStartup();
 }
+*/
+console.log("🚀 Development mode - using manual START.sh for backend management");
 
 // Get the root element
 const rootElement = document.getElementById("root");

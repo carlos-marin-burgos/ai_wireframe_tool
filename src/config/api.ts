@@ -211,78 +211,10 @@ export const detectWorkingBackend = async (): Promise<string> => {
     return API_CONFIG.BASE_URL;
   }
 
-  // Check cache first
-  const cachedPort = getBackendPortFromState();
-  if (cachedPort) {
-    const testUrl = `http://localhost:${cachedPort}`;
-    try {
-      const healthResponse = await fetch(`${testUrl}/api/health`, {
-        method: "GET",
-        signal: AbortSignal.timeout(2000),
-      });
-
-      if (healthResponse.ok) {
-        console.log(`✅ Using cached backend port: ${cachedPort}`);
-        return testUrl;
-      } else {
-        // Cache is stale, clear it
-        localStorage.removeItem("designetica_backend_port");
-        localStorage.removeItem("designetica_backend_port_time");
-      }
-    } catch (error) {
-      console.log(
-        `❌ Cached port ${cachedPort} no longer available, detecting...`
-      );
-      localStorage.removeItem("designetica_backend_port");
-      localStorage.removeItem("designetica_backend_port_time");
-    }
-  }
-
-  // Detect available ports
-  const portsToTest = [PORTS.development.primary, PORTS.development.fallback];
-
-  // Add some common Azure Functions ports
-  const additionalPorts = [7072, 7073, 7074, 7075];
-  portsToTest.push(...additionalPorts);
-
-  for (const port of portsToTest) {
-    const testUrl = `http://localhost:${port}`;
-    try {
-      // Test health endpoint first
-      const healthResponse = await fetch(`${testUrl}/api/health`, {
-        method: "GET",
-        signal: AbortSignal.timeout(2000),
-      });
-
-      if (healthResponse.ok) {
-        // Test AI capabilities
-        const hasAI = await verifyBackendAI(testUrl);
-        if (hasAI) {
-          console.log(`✅ AI-enabled backend detected on port ${port}`);
-          cacheBackendPort(port);
-
-          // Update Vite proxy if needed (for dev environment)
-          if (port !== PORTS.development.primary) {
-            console.log(
-              `🔄 Backend running on port ${port}, different from default ${PORTS.development.primary}`
-            );
-            console.log(
-              `💡 Consider restarting frontend dev server or using: npm run dev`
-            );
-          }
-
-          return testUrl;
-        } else {
-          console.log(`⚠️ Backend on port ${port} has no AI capabilities`);
-        }
-      }
-    } catch (error) {
-      console.log(`❌ Port ${port} not available:`, error.message);
-    }
-  }
-
-  console.warn("⚠️ No AI-enabled backend detected, using primary port");
-  return `http://localhost:${PORTS.development.primary}`;
+  // IMPORTANT: In development, ALWAYS use relative URLs to go through Vite proxy
+  // This avoids CORS issues completely!
+  console.log("✅ Using Vite proxy - no direct backend connection needed");
+  return ""; // Empty string = relative URLs = uses Vite proxy
 };
 
 // Automatic backend startup for development
@@ -1126,15 +1058,18 @@ class AutoRecoverySystem {
 }
 
 // ================================================================================
-// 🚀 INITIALIZE AUTO-RECOVERY SYSTEM
+// 🚀 INITIALIZE AUTO-RECOVERY SYSTEM (DISABLED - using manual START.sh)
 // ================================================================================
 
 export const autoRecoverySystem = AutoRecoverySystem.getInstance();
 
-// Start monitoring automatically in development
+// Auto-monitoring DISABLED - using simple START.sh script instead
+// This prevents annoying popup notifications on every page load
+/*
 if (isDevelopment && typeof window !== "undefined") {
   // Start monitoring after a short delay to allow app initialization
   setTimeout(() => {
     autoRecoverySystem.startMonitoring();
   }, 5000);
 }
+*/

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiPlus, FiPackage, FiSave, FiStar, FiImage, FiCode, FiLayers, FiGithub, FiZap, FiEdit } from 'react-icons/fi';
+import { FiPlus, FiPackage, FiStar, FiImage, FiCode, FiLayers, FiGithub, FiZap, FiEdit } from 'react-icons/fi';
 import { HiLightBulb } from 'react-icons/hi';
 import { SiFigma } from 'react-icons/si';
 import '../styles/PageNavigation.css';
@@ -19,7 +19,6 @@ interface PageNavigationProps {
     onOpenLibrary?: () => void;
     onOpenDevPlaybooks?: () => void;
     onOpenFigmaComponents?: () => void;
-    onSave?: () => void;
     onAddToFavorites?: () => void;
     onImageUpload?: () => void;
     onOpenAnalyzeDesignModal?: () => void;
@@ -42,7 +41,6 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
     onOpenLibrary,
     onOpenDevPlaybooks,
     onOpenFigmaComponents,
-    onSave,
     onAddToFavorites,
     onImageUpload,
     onOpenAnalyzeDesignModal,
@@ -231,16 +229,6 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         >
                             <FiStar />
                         </button>
-
-                        <button
-                            className="toolbar-btn"
-                            onClick={onSave}
-                            onMouseEnter={(e) => showTooltip(e, "Save wireframe")}
-                            onMouseLeave={hideTooltip}
-                            aria-label="Save"
-                        >
-                            <FiSave />
-                        </button>
                     </div>
                 </div>
             </div>
@@ -396,16 +384,6 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         aria-label="Add to Favorites"
                     >
                         <FiStar />
-                    </button>
-
-                    <button
-                        className="toolbar-btn"
-                        onClick={onSave}
-                        onMouseEnter={(e) => showTooltip(e, "Save wireframe")}
-                        onMouseLeave={hideTooltip}
-                        aria-label="Save"
-                    >
-                        <FiSave />
                     </button>
                 </div>
             </div>

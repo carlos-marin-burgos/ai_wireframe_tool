@@ -205,6 +205,21 @@ const FluentSaveWireframeModal: React.FC<FluentSaveWireframeModalProps> = ({
 
                 {/* Dialog Body */}
                 <div className="fluent-dialog-body">
+                    {/* Storage Info Banner */}
+                    <div className="storage-info-banner">
+                        <FiSave />
+                        <div>
+                            <strong>💾 Save Wireframe to Browser</strong>
+                            <p>
+                                This saves your <strong>editable wireframe</strong> (HTML + CSS) to browser storage.
+                                Access it anytime from <strong>"Load Previous Work"</strong> on the landing page.
+                            </p>
+                            <p className="export-hint">
+                                💡 <strong>To export:</strong> Use the <strong>Download button (💾)</strong> in the top toolbar to save as HTML, React, or Figma files to your computer.
+                            </p>
+                        </div>
+                    </div>
+
                     {/* Basic Information Section */}
                     <div className="fluent-field-group">
                         <div className="fluent-field">
@@ -286,100 +301,7 @@ const FluentSaveWireframeModal: React.FC<FluentSaveWireframeModalProps> = ({
                         </div>
                     </div>
 
-                    {/* Save Options Section */}
-                    <div className="fluent-field-group">
-                        <h3 className="fluent-section-title">Save Options</h3>
-
-                        <div className="fluent-field">
-                            <label className="fluent-label">
-                                <FiCode className="fluent-icon" />
-                                Export Format
-                            </label>
-                            <div className="fluent-radio-group">
-                                <label className="fluent-radio-option">
-                                    <input
-                                        type="radio"
-                                        name="format"
-                                        value="html"
-                                        checked={saveOptions.format === 'html'}
-                                        onChange={(e) => setSaveOptions(prev => ({ ...prev, format: e.target.value as 'html' }))}
-                                        className="fluent-radio"
-                                    />
-                                    <span className="fluent-radio-indicator"></span>
-                                    <span className="fluent-radio-label">HTML + CSS</span>
-                                </label>
-                                <label className="fluent-radio-option">
-                                    <input
-                                        type="radio"
-                                        name="format"
-                                        value="react"
-                                        checked={saveOptions.format === 'react'}
-                                        onChange={(e) => setSaveOptions(prev => ({ ...prev, format: e.target.value as 'react' }))}
-                                        className="fluent-radio"
-                                    />
-                                    <span className="fluent-radio-indicator"></span>
-                                    <span className="fluent-radio-label">React Components</span>
-                                </label>
-                                <label className="fluent-radio-option">
-                                    <input
-                                        type="radio"
-                                        name="format"
-                                        value="figma"
-                                        checked={saveOptions.format === 'figma'}
-                                        onChange={(e) => setSaveOptions(prev => ({ ...prev, format: e.target.value as 'figma' }))}
-                                        className="fluent-radio"
-                                    />
-                                    <span className="fluent-radio-indicator"></span>
-                                    <span className="fluent-radio-label">Figma Export</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div className="fluent-field">
-                            <div className="fluent-checkbox-group">
-                                <label className="fluent-checkbox-option">
-                                    <input
-                                        type="checkbox"
-                                        checked={saveOptions.includeCSS}
-                                        onChange={(e) => setSaveOptions(prev => ({ ...prev, includeCSS: e.target.checked }))}
-                                        className="fluent-checkbox"
-                                    />
-                                    <span className="fluent-checkbox-indicator">
-                                        <FiCheck className="fluent-checkbox-check" />
-                                    </span>
-                                    <span className="fluent-checkbox-label">Include CSS styles</span>
-                                </label>
-                                <label className="fluent-checkbox-option">
-                                    <input
-                                        type="checkbox"
-                                        checked={saveOptions.minifyCode}
-                                        onChange={(e) => setSaveOptions(prev => ({ ...prev, minifyCode: e.target.checked }))}
-                                        className="fluent-checkbox"
-                                    />
-                                    <span className="fluent-checkbox-indicator">
-                                        <FiCheck className="fluent-checkbox-check" />
-                                    </span>
-                                    <span className="fluent-checkbox-label">Minify code for production</span>
-                                </label>
-                                <label className="fluent-checkbox-option">
-                                    <input
-                                        type="checkbox"
-                                        checked={saveOptions.generateThumbnail}
-                                        onChange={(e) => setSaveOptions(prev => ({ ...prev, generateThumbnail: e.target.checked }))}
-                                        className="fluent-checkbox"
-                                    />
-                                    <span className="fluent-checkbox-indicator">
-                                        <FiCheck className="fluent-checkbox-check" />
-                                    </span>
-                                    <span className="fluent-checkbox-label">
-                                        <FiImage className="fluent-icon" />
-                                        Generate preview thumbnail
-                                    </span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
+                    {/* Wireframe Preview Info */}
                     {/* Wireframe Preview Info */}
                     <div className="fluent-field-group">
                         <h3 className="fluent-section-title">Wireframe Info</h3>
