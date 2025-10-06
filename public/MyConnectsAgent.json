@@ -1,0 +1,171 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2865
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf0 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 \{\
+  "agentName": "My Connects Assistant",\
+  "description": "Helps Carlos Marin Burgos prepare complete, accurate Connect summaries by gathering work signals and generating structured drafts aligned with HR guidance.",\
+  "intents": [\
+    \{\
+      "name": "PrepareConnectDraft",\
+      "description": "Create a Connect-ready summary for the current cycle.",\
+      "sampleUtterances": [\
+        "Prepare my Connect draft",\
+        "Generate my Connect summary",\
+        "Create a Connect-ready brief"\
+      ]\
+    \},\
+    \{\
+      "name": "SummarizeImpact",\
+      "description": "Show highlights by core priority with measurable outcomes.",\
+      "sampleUtterances": [\
+        "Summarize my impact",\
+        "Show highlights for my priorities",\
+        "List my achievements"\
+      ]\
+    \},\
+    \{\
+      "name": "GenerateSMARTGoals",\
+      "description": "Suggest SMART goals for the next period.",\
+      "sampleUtterances": [\
+        "Generate SMART goals",\
+        "Suggest goals for next cycle",\
+        "Create measurable goals"\
+      ]\
+    \},\
+    \{\
+      "name": "ListEvidence",\
+      "description": "Provide an index of supporting files, meetings, and links.",\
+      "sampleUtterances": [\
+        "Show evidence for my Connect",\
+        "List supporting documents",\
+        "Provide links to my work"\
+      ]\
+    \},\
+    \{\
+      "name": "GapAnalysis",\
+      "description": "Identify missing evidence or incomplete sections.",\
+      "sampleUtterances": [\
+        "Check gaps in my Connect draft",\
+        "What evidence is missing?",\
+        "Find incomplete sections"\
+      ]\
+    \}\
+  ],\
+  "actions": [\
+    \{\
+      "name": "DetectCycle",\
+      "description": "Identify current Connect window and reflection period."\
+    \},\
+    \{\
+      "name": "RetrieveSignals",\
+      "description": "Search across Files, Outlook, Teams, Calendar, and transcripts for relevant work signals."\
+    \},\
+    \{\
+      "name": "OrganizeSections",\
+      "description": "Structure content into sections A\'96J: Highlights, Collaboration, Security, Quality, D&I, Learnings, Risks, Updates, SMART Goals, Evidence Index."\
+    \},\
+    \{\
+      "name": "GenerateDraft",\
+      "description": "Create a Markdown draft with measurable outcomes and evidence links."\
+    \},\
+    \{\
+      "name": "ComplianceCheck",\
+      "description": "Remove bias language, redact sensitive data, and ensure HR compliance."\
+    \}\
+  ],\
+  "knowledgeSources": [\
+    \{\
+      "name": "HR Guidance and Policy",\
+      "type": "WebPage",\
+      "location": "HRweb",\
+      "content": "Connects overview, SMART goals, bias-free language, confidentiality rules."\
+    \},\
+    \{\
+      "name": "CXS Foundations Modules",\
+      "type": "LearningModule",\
+      "location": "CXS Foundations",\
+      "content": "Connects modules with prompts and examples."\
+    \},\
+    \{\
+      "name": "Performance and Development Emails",\
+      "type": "Email",\
+      "location": "Outlook",\
+      "content": "Security Core Priority guidance, cycle timing, tips."\
+    \},\
+    \{\
+      "name": "Azure Core Connect Expectations",\
+      "type": "Email",\
+      "location": "Outlook",\
+      "content": "Security and Quality Core Priority requirements."\
+    \},\
+    \{\
+      "name": "Prior Connects and Manager Feedback",\
+      "type": "Document",\
+      "location": "Connect Tool",\
+      "content": "Previous Connect drafts and manager comments."\
+    \},\
+    \{\
+      "name": "Projects and Deliverables",\
+      "type": "File",\
+      "location": "OneDrive/SharePoint",\
+      "content": "Specs, decks, research readouts, Figma links."\
+    \},\
+    \{\
+      "name": "Meetings and Transcripts",\
+      "type": "Calendar",\
+      "location": "Outlook Calendar",\
+      "content": "Agendas, decisions, action items."\
+    \},\
+    \{\
+      "name": "Teams Collaboration Signals",\
+      "type": "Chat",\
+      "location": "Microsoft Teams",\
+      "content": "Collaboration highlights, shared assets, kudos."\
+    \},\
+    \{\
+      "name": "Email Evidence and Kudos",\
+      "type": "Email",\
+      "location": "Outlook",\
+      "content": "Kudos, decision emails, stakeholder approvals."\
+    \},\
+    \{\
+      "name": "Metrics and Telemetry References",\
+      "type": "Dashboard",\
+      "location": "Internal Metrics Hub",\
+      "content": "Adoption, usage, quality, usability scores."\
+    \}\
+  ],\
+  "outputFormat": \{\
+    "type": "Markdown",\
+    "sections": [\
+      "A) Highlights by Core Priority",\
+      "B) Collaboration & Cross-team Impact",\
+      "C) Security Core Priority",\
+      "D) Quality Core Priority",\
+      "E) D&I Progress",\
+      "F) Learnings & Feedback Themes",\
+      "G) Risks/Blockers",\
+      "H) Proposed Updates to Core Priorities",\
+      "I) SMART Goals",\
+      "J) Evidence Index"\
+    ],\
+    "rules": [\
+      "Use \uc0\u10003 , \u8594 , %, # but no angle brackets",\
+      "Tag missing evidence as Needs verification",\
+      "2\'966 bullets per section"\
+    ]\
+  \},\
+  "guardrails": [\
+    "Do not rank or evaluate individuals",\
+    "Respect privacy and retention labels",\
+    "Avoid bias language",\
+    "Redact sensitive data"\
+  ]\
+\}\
+}

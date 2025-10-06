@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiPlus, FiPackage, FiStar, FiImage, FiCode, FiLayers, FiGithub, FiZap, FiEdit } from 'react-icons/fi';
+import { FiPlus, FiPackage, FiSave, FiImage, FiCode, FiLayers, FiGithub, FiZap, FiEdit } from 'react-icons/fi';
 import { HiLightBulb } from 'react-icons/hi';
 import { SiFigma } from 'react-icons/si';
 import '../styles/PageNavigation.css';
@@ -19,7 +19,7 @@ interface PageNavigationProps {
     onOpenLibrary?: () => void;
     onOpenDevPlaybooks?: () => void;
     onOpenFigmaComponents?: () => void;
-    onAddToFavorites?: () => void;
+    onSaveWireframe?: () => void;
     onImageUpload?: () => void;
     onOpenAnalyzeDesignModal?: () => void;
     onOpenQuickTipsModal?: () => void;
@@ -41,7 +41,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
     onOpenLibrary,
     onOpenDevPlaybooks,
     onOpenFigmaComponents,
-    onAddToFavorites,
+    onSaveWireframe,
     onImageUpload,
     onOpenAnalyzeDesignModal,
     onOpenQuickTipsModal,
@@ -222,12 +222,12 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
 
                         <button
                             className="toolbar-btn"
-                            onClick={onAddToFavorites}
-                            onMouseEnter={(e) => showTooltip(e, "Add to favorites")}
+                            onClick={onSaveWireframe}
+                            onMouseEnter={(e) => showTooltip(e, "Save wireframe")}
                             onMouseLeave={hideTooltip}
-                            aria-label="Add to Favorites"
+                            aria-label="Save Wireframe"
                         >
-                            <FiStar />
+                            <FiSave />
                         </button>
                     </div>
                 </div>
@@ -378,12 +378,12 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
 
                     <button
                         className="toolbar-btn"
-                        onClick={onAddToFavorites}
-                        onMouseEnter={(e) => showTooltip(e, "Add to favorites")}
+                        onClick={onSaveWireframe}
+                        onMouseEnter={(e) => showTooltip(e, "Save wireframe")}
                         onMouseLeave={hideTooltip}
-                        aria-label="Add to Favorites"
+                        aria-label="Save Wireframe"
                     >
-                        <FiStar />
+                        <FiSave />
                     </button>
                 </div>
             </div>

@@ -8,7 +8,7 @@ interface DeleteConfirmationModalProps {
     onClose: () => void;
     onConfirm: () => void;
     itemName: string;
-    itemType: 'favorite' | 'recent';
+    itemType: 'saved' | 'recent';
 }
 
 const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
@@ -47,7 +47,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
                 <div className="modal-header">
                     <h2>
                         <FiAlertTriangle size={20} className="warning-icon" />
-                        Delete {itemType === 'favorite' ? 'Favorite' : 'Recent Project'}
+                        Delete {itemType === 'saved' ? 'Saved Wireframe' : 'Recent Project'}
                     </h2>
                     <button
                         className="close-button"
@@ -61,7 +61,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
 
                 <div className="modal-body">
                     <p>
-                        Are you sure you want to delete <strong>"{itemName}"</strong> from your {itemType === 'favorite' ? 'favorites' : 'recent projects'}?
+                        Are you sure you want to delete <strong>"{itemName}"</strong> from your {itemType === 'saved' ? 'saved wireframes' : 'recent projects'}?
                     </p>
                     <p className="delete-warning">
                         This action cannot be undone.

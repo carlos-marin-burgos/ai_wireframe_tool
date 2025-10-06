@@ -109,8 +109,8 @@
 
 /* Left sidebar - Microsoft Fluent Design */
 .left-pane {
-  width: 300px;
-  min-width: 280px;
+  width: 350px;
+  min-width: 320px;
   background: #f9fbfb;
   border-right: 1px solid #e1e1e1;
   display: flex;
@@ -278,12 +278,12 @@
 /* Main content area */
 .right-pane {
   flex: 1;
-  margin-left: 300px;
+  margin-left: 350px;
   padding: 0;
   padding-top: 0px;
   padding-bottom: 40px;
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  width: calc(100% - 300px);
+  width: calc(100% - 350px);
   height: 100vh;
   overflow-y: auto;
   scroll-behavior: smooth;
@@ -293,7 +293,7 @@
 .panel-toggle-btn {
   position: fixed;
   top: 50%;
-  left: 300px;
+  left: 350px;
   transform: translateY(-50%);
   z-index: 1000;
   background: #ffffff;
@@ -346,125 +346,7 @@
   transition: all 0.3s cubic-bezier(0.2, 0, 0.2, 1);
 }
 
-/* Wireframe container styles */
-.wireframe-container {
-  flex: 1;
-  overflow: visible; /* Allow content to expand */
-  padding: 0; /* Remove padding to use full space */
-  height: 100%; /* Fill the available flex space completely */
-  background: transparent;
-  position: relative; /* For positioning the loading overlay */
-}
-
-/* Wireframe Loading Overlay */
-.wireframe-loading-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.95);
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  border-radius: 8px;
-}
-
-.wireframe-spinner-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  text-align: center;
-}
-
-.wireframe-loading-text {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.wireframe-loading-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1f2937;
-  font-family: "Segoe UI", system-ui, sans-serif;
-}
-
-.wireframe-loading-stage {
-  font-size: 14px;
-  color: #6b7280;
-  font-family: "Segoe UI", system-ui, sans-serif;
-}
-
-.wireframe-content {
-  width: 100%;
-  height: 100%;
-  background-color: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 0 0 20px 0; /* Add bottom padding for breathing room */
-  box-shadow: none;
-  overflow: auto;
-}
-
-.wireframe-panel {
-  height: 100%; /* Use full height now that margins are removed */
-  width: 100%; /* Use full width instead of calc(100% - 60px) */
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  overflow: auto; /* Changed from hidden to auto to prevent cut-off */
-  display: flex;
-  flex-direction: column;
-  margin: 0; /* Removed all margins to use full space */
-}
-
-/* Wireframe Name Header */
-.wireframe-name-header {
-  padding: 12px 16px 8px;
-  border-bottom: 1px solid #e9ecef;
-  background: linear-gradient(135deg, #e9ecef 0%, #ffffff 100%);
-  border-radius: 8px 8px 0 0;
-}
-
-.wireframe-title {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: #000000;
-  text-align: center;
-  letter-spacing: 1.2px;
-  font-family: "Courier New", "Monaco", "Consolas", "SF Mono", "Roboto Mono",
-    "Source Code Pro", monospace;
-  text-transform: uppercase;
-  background: none;
-  -webkit-background-clip: unset;
-  -webkit-text-fill-color: unset;
-  background-clip: unset;
-  text-shadow: none;
-}
-
-/* Dark mode support for wireframe name */
-[data-theme="dark"] .wireframe-name-header {
-  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
-  border-bottom-color: #4a5568;
-}
-
-[data-theme="dark"] .wireframe-title {
-  color: #ffffff;
-  font-family: "Courier New", "Monaco", "Consolas", "SF Mono", "Roboto Mono",
-    "Source Code Pro", monospace;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  background: none;
-  -webkit-background-clip: unset;
-  -webkit-text-fill-color: unset;
-  background-clip: unset;
-}
+/* Wireframe styles moved to src/styles/GeneratedWireframe.css */
 
 /* AI Assistant main container - Microsoft Learn style */
 .ai-assistant-container {
@@ -632,7 +514,8 @@
 
 /* Keyboard navigation focus indicators */
 .tab-btn:focus-visible,
-.wireframe-action-btn:focus-visible,
+/* Focus indicators for non-wireframe buttons */
+.tab-btn:focus-visible,
 .header-btn:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4), 0 0 0 1px #3b82f6;
@@ -640,7 +523,6 @@
 }
 
 .tab-btn:focus-visible::before,
-.wireframe-action-btn:focus-visible::before,
 .header-btn:focus-visible::before {
   content: "";
   position: absolute;
@@ -666,44 +548,14 @@
   }
 }
 
-/* Wireframe Actions */
-.wireframe-actions {
-  display: flex;
-  gap: 0.75rem;
-}
-
-.wireframe-action-btn {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 0.625rem 1rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.2s ease;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #64748b;
-}
-
-.wireframe-action-btn:hover:not(:disabled) {
-  border-color: #cbd5e1;
-  color: #334155;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.wireframe-action-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+/* Wireframe action buttons moved to src/styles/GeneratedWireframe.css */
 
 /* Enhanced Tab Content */
 .tab-content {
   background: #ffffff;
   border-radius: 16px;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.04);
-  overflow: hidden;
+  overflow: auto; /* Allow scrolling at tab level */
   margin: 0; /* Remove margins to use full space */
   height: 100vh; /* Use full height */
   border: 1px solid rgba(0, 0, 0, 0.03);
@@ -1005,11 +857,7 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 }
 
 /* Wireframe Form */
-.wireframe-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
+/* Wireframe form styles moved to src/styles/GeneratedWireframe.css */
 
 /* Loading overlay for better UX during API calls */
 .loading-overlay {
@@ -1380,127 +1228,7 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   z-index: 5;
 }
 
-.wireframe-container:hover .scroll-top-btn {
-  opacity: 0.7;
-  transform: translateY(0);
-}
-
-.scroll-top-btn:hover {
-  opacity: 1;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
-}
-
-.scroll-top-btn:active {
-  transform: translateY(-1px);
-}
-
-/* Interactive elements in the wireframe */
-.wireframe-preview button,
-.wireframe-preview .button,
-.wireframe-preview [role="button"] {
-  transition: border-color 0.2s ease;
-  border: 2px dashed rgba(156, 163, 175, 0.4);
-}
-
-.wireframe-preview button:hover,
-.wireframe-preview .button:hover,
-.wireframe-preview [role="button"]:hover {
-  border-color: rgba(75, 85, 99, 0.8);
-}
-
-.wireframe-preview input,
-.wireframe-preview select,
-.wireframe-preview textarea {
-  transition: all 0.2s ease;
-}
-
-.wireframe-preview input:focus,
-.wireframe-preview select:focus,
-.wireframe-preview textarea:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-}
-
-/* Visual indicator for interactive areas */
-.wireframe-preview button,
-.wireframe-preview a,
-.wireframe-preview input,
-.wireframe-preview select,
-.wireframe-preview textarea,
-.wireframe-preview [role="button"] {
-  position: relative;
-  border: 2px dashed rgba(156, 163, 175, 0.4);
-  transition: border-color 0.2s ease;
-}
-
-.wireframe-preview button:hover,
-.wireframe-preview a:hover,
-.wireframe-preview [role="button"]:hover {
-  border-color: rgba(75, 85, 99, 0.8);
-}
-
-/* Wireframe info panel */
-.wireframe-info-panel {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  background: rgba(255, 255, 255, 0.95);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-  padding: 12px 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  max-width: 250px;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 5;
-}
-
-.tab-content:hover .wireframe-info-panel {
-  opacity: 0.9;
-  transform: translateY(0);
-}
-
-.wireframe-info-panel:hover {
-  opacity: 1;
-}
-
-.wireframe-info-title {
-  font-size: 12px;
-  font-weight: 600;
-  color: #334155;
-  margin: 0 0 5px 0;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.wireframe-info-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  color: #64748b;
-  margin-top: 5px;
-}
-
-.wireframe-info-item svg {
-  color: #3b82f6;
-  font-size: 14px;
-}
-
-.wireframe-info-badge {
-  display: inline-block;
-  padding: 2px 6px;
-  border-radius: 4px;
-  background: rgba(59, 130, 246, 0.1);
-  color: #6b7280;
-  font-size: 10px;
-  font-weight: 600;
-  margin-right: 5px;
-}
+/* Wireframe interaction styles moved to src/styles/GeneratedWireframe.css */
 
 /* Accessibility enhancements */
 .visually-hidden {
@@ -1554,13 +1282,9 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
     left: 260px;
   }
 
-  .wireframe-panel {
-    margin: 0; /* Remove margins for full space usage */
-    width: 100%;
-  }
+  /* Responsive wireframe styles moved to src/styles/GeneratedWireframe.css */
 
-  .tab-btn,
-  .wireframe-action-btn {
+  .tab-btn {
     padding: 6px 8px;
     font-size: 0.8rem;
   }
@@ -1578,10 +1302,7 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
     width: calc(100% - 280px);
   }
 
-  .wireframe-panel {
-    margin: 0; /* Remove margins for full space usage */
-    width: 100%;
-  }
+  /* Responsive wireframe styles moved to src/styles/GeneratedWireframe.css */
 
   .ai-suggestions-buttons {
     gap: 0.4rem;
@@ -1625,25 +1346,12 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
     padding-bottom: 40px;
   }
 
-  .wireframe-panel {
-    position: relative;
-    overflow: visible;
-    margin: 0;
-  }
-
   /* Hide toggle button on mobile since panels stack */
   .panel-toggle-btn {
     display: none;
   }
 
-  /* Ensure wireframe container takes full width */
-  .wireframe-container {
-    flex: 1;
-    height: 100%;
-    padding: 0; /* Remove padding to use full space */
-    position: relative;
-    background: #fafafa;
-  }
+  /* Mobile wireframe styles moved to src/styles/GeneratedWireframe.css */
 
   .tab-content {
     height: 70vh;
@@ -1675,17 +1383,7 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
     font-size: 0.85rem;
   }
 
-  .wireframe-actions {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .wireframe-action-btn {
-    flex: 1;
-    justify-content: center;
-    padding: 8px 10px;
-    font-size: 0.85rem;
-  }
+  /* Mobile wireframe action styles moved to src/styles/GeneratedWireframe.css */
 
   .tab-content {
     margin: 0 1rem 1rem;
@@ -1731,14 +1429,9 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
     display: none;
   }
 
-  .wireframe-panel {
-    margin: 0; /* Remove margins for full space usage */
-    width: 100%;
-    height: auto;
-  }
+  /* Mobile wireframe panel styles moved to src/styles/GeneratedWireframe.css */
 
-  .tab-btn,
-  .wireframe-action-btn {
+  .tab-btn {
     font-size: 0.75rem;
     padding: 5px 6px;
   }
@@ -1808,14 +1501,12 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
     font-size: 1.1rem;
   }
 
-  .tab-btn,
-  .wireframe-action-btn {
+  .tab-btn {
     font-size: 0.8rem;
     padding: 6px 8px;
   }
 
-  .tab-btn svg,
-  .wireframe-action-btn svg {
+  .tab-btn svg {
     display: none;
   }
 }
@@ -2299,14 +1990,12 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 }
 
 /* Disabled state for forms when offline */
-.offline-mode .wireframe-form,
 .offline-mode .chat-form {
   pointer-events: none;
   opacity: 0.6;
   position: relative;
 }
 
-.offline-mode .wireframe-form::after,
 .offline-mode .chat-form::after {
   content: "🔌 Offline - Reconnecting...";
   position: absolute;
@@ -2518,27 +2207,7 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 }
 
 /* Enhanced Wireframe Status Bar */
-.wireframe-status-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 16px;
-  border-bottom: 1px solid #e1dfdd;
-  background: linear-gradient(90deg, #e9ecef 0%, #ffffff 100%);
-  font-size: 13px;
-  font-weight: 500;
-  min-height: 36px;
-}
-
-.wireframe-status-bar.fallback-mode {
-  background: linear-gradient(90deg, #fff4ce 0%, #fffbee 100%);
-  border-bottom-color: #ffb900;
-}
-
-.wireframe-status-bar.api-mode {
-  background: linear-gradient(90deg, #e6f7ff 0%, #f0fcff 100%);
-  border-bottom-color: #8e9aaf;
-}
+/* Wireframe status bar styles moved to src/styles/GeneratedWireframe.css */
 
 .status-indicator {
   display: flex;
@@ -3499,6 +3168,8 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   background: #f3f2f1; /* Light background on hover */
   color: #68769c;
 }
+
+/* SmartSidebar Integration Styles moved to src/styles/GeneratedWireframe.css */
 
 .chat-input-wrapper .input-icon-button:active {
   transform: scale(0.95);

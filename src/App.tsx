@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
 import "./wireframe-styles.css";
+import "./styles/GeneratedWireframe.css"; // Consolidated wireframe styles
 import "./styles/microsoftlearn-card.css";
 import "./styles/suggestion-indicator.css";
 import "./styles/suggestion-performance.css";

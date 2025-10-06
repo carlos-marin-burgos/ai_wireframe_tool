@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import './WireframeRenderer.css';
+import '../styles/GeneratedWireframe.css'; // Consolidated wireframe styles
 
 interface WireframeRendererProps {
   htmlContent: string;

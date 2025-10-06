@@ -91,29 +91,44 @@ function LandingPage({
   const [isGitHubModalOpen, setIsGitHubModalOpen] = useState(false);
   const [githubStatus, setGithubStatus] = useState<{ connected: boolean; login?: string; error?: string }>({ connected: false });
 
-  // Recent/Favorites tab state
-  const [activeTab, setActiveTab] = useState<'recent' | 'favorites'>('recent');
-  const [favorites, setFavorites] = useState<any[]>([]);
+  // Recent/Saved tab state
+  const [activeTab, setActiveTab] = useState<'recent' | 'saved'>('recent');
+  const [savedWireframes, setSavedWireframes] = useState<any[]>([]);
   const [recents, setRecents] = useState<any[]>([]);
 
   // Delete modal state
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
     itemName: string;
-    itemType: 'favorite' | 'recent';
+    itemType: 'saved' | 'recent';
     onConfirm: () => void;
   }>({
     isOpen: false,
     itemName: '',
-    itemType: 'favorite',
+    itemType: 'saved',
     onConfirm: () => { }
   });
 
-  // Load favorites and recents from localStorage
+  // Load saved wireframes and recents from localStorage
   useEffect(() => {
-    const loadFavorites = () => {
-      const savedFavorites = JSON.parse(localStorage.getItem('designetica_favorites') || '[]');
-      setFavorites(savedFavorites);
+    // ONE-TIME MIGRATION: Move data from old key to new key
+    const migrateOldFavorites = () => {
+      const oldFavorites = localStorage.getItem('designetica_favorites');
+      const newSaved = localStorage.getItem('designetica-saved-wireframes');
+
+      // Only migrate if old data exists and new key is empty
+      if (oldFavorites && !newSaved) {
+        console.log('Migrating favorites to saved wireframes...');
+        localStorage.setItem('designetica-saved-wireframes', oldFavorites);
+        // Keep old data for safety, users can manually clean it up later
+      }
+    };
+
+    migrateOldFavorites();
+
+    const loadSavedWireframes = () => {
+      const saved = JSON.parse(localStorage.getItem('designetica-saved-wireframes') || '[]');
+      setSavedWireframes(saved);
     };
 
     const loadRecents = () => {
@@ -121,42 +136,42 @@ function LandingPage({
       setRecents(savedRecents);
     };
 
-    loadFavorites();
+    loadSavedWireframes();
     loadRecents();
 
-    // Listen for favorites and recents updates
+    // Listen for saved wireframes and recents updates
     const handleStorageChange = () => {
-      loadFavorites();
+      loadSavedWireframes();
       loadRecents();
     };
 
     // Listen for custom events (same-tab updates)
-    const handleFavoritesUpdated = () => {
-      loadFavorites();
+    const handleSavedWireframesUpdated = () => {
+      loadSavedWireframes();
     };
 
     window.addEventListener('storage', handleStorageChange);
-    window.addEventListener('favoritesUpdated', handleFavoritesUpdated as EventListener);
+    window.addEventListener('savedWireframesUpdated', handleSavedWireframesUpdated as EventListener);
 
     return () => {
       window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('favoritesUpdated', handleFavoritesUpdated as EventListener);
+      window.removeEventListener('savedWireframesUpdated', handleSavedWireframesUpdated as EventListener);
     };
   }, []);
 
-  // Delete favorite function
-  const handleDeleteFavorite = (favoriteId: string) => {
-    const favoriteToDelete = favorites.find(fav => fav.id === favoriteId);
-    const favoriteName = favoriteToDelete?.name || 'this favorite';
+  // Delete saved wireframe function
+  const handleDeleteSaved = (savedId: string) => {
+    const savedToDelete = savedWireframes.find(item => item.id === savedId);
+    const savedName = savedToDelete?.name || 'this wireframe';
 
     setDeleteModal({
       isOpen: true,
-      itemName: favoriteName,
-      itemType: 'favorite',
+      itemName: savedName,
+      itemType: 'saved',
       onConfirm: () => {
-        const updatedFavorites = favorites.filter(fav => fav.id !== favoriteId);
-        setFavorites(updatedFavorites);
-        localStorage.setItem('designetica_favorites', JSON.stringify(updatedFavorites));
+        const updatedSaved = savedWireframes.filter(item => item.id !== savedId);
+        setSavedWireframes(updatedSaved);
+        localStorage.setItem('designetica-saved-wireframes', JSON.stringify(updatedSaved));
       }
     });
   };
@@ -185,23 +200,26 @@ function LandingPage({
     } else {
       console.warn('Cannot open wireframe: missing HTML content or onOpenWireframe handler');
     }
-  };  // Add to favorites from recent section
-  const handleAddRecentToFavorites = (projectName: string, projectMeta: string, htmlContent?: string) => {
-    const newFavorite = {
+  };
+
+  // Save wireframe from recent section
+  const handleSaveRecentWireframe = (projectName: string, projectMeta: string, htmlContent?: string) => {
+    const newSaved = {
       id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       name: projectName,
+      description: projectMeta,
       htmlContent: htmlContent || '',
       type: 'recent',
       createdAt: new Date().toISOString()
     };
 
-    const currentFavorites = JSON.parse(localStorage.getItem('designetica_favorites') || '[]');
-    const updatedFavorites = [...currentFavorites, newFavorite];
+    const currentSaved = JSON.parse(localStorage.getItem('designetica-saved-wireframes') || '[]');
+    const updatedSaved = [...currentSaved, newSaved];
 
-    setFavorites(updatedFavorites);
-    localStorage.setItem('designetica_favorites', JSON.stringify(updatedFavorites));
+    setSavedWireframes(updatedSaved);
+    localStorage.setItem('designetica-saved-wireframes', JSON.stringify(updatedSaved));
 
-    alert(`"${projectName}" has been added to your favorites!`);
+    alert(`"${projectName}" has been saved!`);
   };
 
   // Add to recents utility function (can be called from parent)
@@ -366,7 +384,7 @@ function LandingPage({
       container.removeEventListener('scroll', updateScrollIndicator);
       observer.disconnect();
     };
-  }, [favorites, recents, activeTab]);
+  }, [savedWireframes, recents, activeTab]);
 
   // Debounced AI suggestion trigger
   useEffect(() => {
@@ -634,13 +652,13 @@ function LandingPage({
                     Recent
                   </button>
                   <button
-                    className={`tab-btn github-tab ${activeTab === 'favorites' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('favorites')}
+                    className={`tab-btn github-tab ${activeTab === 'saved' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('saved')}
                   >
                     <svg className="tab-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                      <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
+                      <path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"></path>
                     </svg>
-                    Favorites
+                    Saved
                   </button>
                 </div>
                 <div className="projects-container github-container" ref={projectsContainerRef}>
@@ -660,12 +678,12 @@ function LandingPage({
                           <div className="project-actions" onClick={(e) => e.stopPropagation()}>
                             <button
                               className="action-btn star-btn"
-                              aria-label="Favorite this"
-                              title="Favorite this"
-                              onClick={() => handleAddRecentToFavorites(recent.name, recent.description || `Created ${new Date(recent.createdAt).toLocaleDateString()}`, recent.htmlContent)}
+                              aria-label="Save this"
+                              title="Save this"
+                              onClick={() => handleSaveRecentWireframe(recent.name, recent.description || `Created ${new Date(recent.createdAt).toLocaleDateString()}`, recent.htmlContent)}
                             >
                               <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                                <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
+                                <path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"></path>
                               </svg>
                             </button>
                             <button
@@ -690,26 +708,26 @@ function LandingPage({
                       </div>
                     )
                   ) : (
-                    favorites.length > 0 ? (
-                      favorites.map((favorite) => (
-                        <div key={favorite.id} className="project-item github-item" onClick={() => handleOpenWireframe(favorite)}>
-                          <div className="project-icon favorite">
+                    savedWireframes.length > 0 ? (
+                      savedWireframes.map((saved) => (
+                        <div key={saved.id} className="project-item github-item" onClick={() => handleOpenWireframe(saved)}>
+                          <div className="project-icon saved">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                              <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
+                              <path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"></path>
                             </svg>
                           </div>
                           <div className="project-details">
-                            <div className="project-name">{favorite.name}</div>
-                            {favorite.description && (
-                              <div className="project-description">{favorite.description}</div>
+                            <div className="project-name">{saved.name}</div>
+                            {saved.description && (
+                              <div className="project-description">{saved.description}</div>
                             )}
-                            <div className="project-meta">{`Added ${new Date(favorite.createdAt).toLocaleDateString()}`}</div>
+                            <div className="project-meta">{`Saved ${new Date(saved.createdAt).toLocaleDateString()}`}</div>
                           </div>
                           <div className="project-actions" onClick={(e) => e.stopPropagation()}>
                             <button
                               className="action-btn delete-btn"
-                              aria-label="Delete favorite"
-                              onClick={() => handleDeleteFavorite(favorite.id)}
+                              aria-label="Delete saved wireframe"
+                              onClick={() => handleDeleteSaved(saved.id)}
                             >
                               <FiTrash size={16} />
                             </button>
@@ -720,10 +738,10 @@ function LandingPage({
                       <div className="empty-state">
                         <div className="empty-state-content">
                           <svg className="empty-icon" width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
-                            <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
+                            <path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"></path>
                           </svg>
-                          <p className="empty-message">No favorites</p>
-                          <p className="empty-description">Star projects to add them to your favorites</p>
+                          <p className="empty-message">No saved wireframes</p>
+                          <p className="empty-description">Click the save button in the editor to save your wireframes</p>
                         </div>
                       </div>
                     )

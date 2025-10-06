@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { FiStar, FiX, FiEdit3, FiFileText } from 'react-icons/fi';
+import { FiSave, FiX, FiEdit3, FiFileText } from 'react-icons/fi';
 import './AddToFavoritesModal.css';
 
 interface AddToFavoritesModalProps {
@@ -40,8 +40,8 @@ const AddToFavoritesModal: React.FC<AddToFavoritesModalProps> = ({
             <div className="favorites-modal">
                 <div className="modal-header">
                     <h2>
-                        <FiStar className="modal-icon" />
-                        Add to Favorites
+                        <FiSave className="modal-icon" />
+                        Save Wireframe
                     </h2>
                     <button
                         className="close-btn"
@@ -55,12 +55,12 @@ const AddToFavoritesModal: React.FC<AddToFavoritesModalProps> = ({
                 <form onSubmit={handleSubmit}>
                     <div className="modal-body">
                         <div className="form-field">
-                            <label htmlFor="favorite-name" className="form-label">
+                            <label htmlFor="wireframe-name" className="form-label">
                                 <FiEdit3 className="label-icon" />
                                 Wireframe Name
                             </label>
                             <input
-                                id="favorite-name"
+                                id="wireframe-name"
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
@@ -72,18 +72,21 @@ const AddToFavoritesModal: React.FC<AddToFavoritesModalProps> = ({
                         </div>
 
                         <div className="form-field">
-                            <label htmlFor="favorite-description" className="form-label">
+                            <label htmlFor="wireframe-description" className="form-label">
                                 <FiFileText className="label-icon" />
                                 Description (Optional)
                             </label>
                             <textarea
-                                id="favorite-description"
+                                id="wireframe-description"
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 placeholder="Describe your wireframe design and purpose"
                                 className="form-textarea"
                                 rows={3}
                             />
+                            <p className="input-hint">
+                                💡 Saved wireframes appear in the "Saved" tab on the home page
+                            </p>
                         </div>
                     </div>
 
@@ -100,8 +103,8 @@ const AddToFavoritesModal: React.FC<AddToFavoritesModalProps> = ({
                             className="btn btn-primary"
                             disabled={!name.trim()}
                         >
-                            <FiStar />
-                            Add to Favorites
+                            <FiSave />
+                            Save Wireframe
                         </button>
                     </div>
                 </form>

@@ -422,69 +422,7 @@ body {
   text-align: center;
 }
 
-/* Wireframe Mode Toggle */
-.wireframe-mode-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin-bottom: 12px;
-  gap: 8px;
-  padding: 0 4px;
-}
-
-.wireframe-mode-toggle .mode-toggle-btn {
-  padding: 6px 12px;
-  border: 1px solid #e1dfdd;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  background: #f3f2f1;
-  color: #3c4858;
-}
-
-.wireframe-mode-toggle .mode-toggle-btn:hover {
-  border-color: #c8c6c4;
-  background: #edebe9;
-}
-
-.wireframe-mode-toggle .mode-toggle-btn.active {
-  background: #8e9aaf;
-  color: white;
-  border-color: #8e9aaf;
-}
-
-.wireframe-mode-toggle .mode-toggle-btn.active:hover {
-  background: #68769c;
-  border-color: #68769c;
-}
-
-.wireframe-mode-toggle .element-selection-indicator {
-  padding: 6px 12px;
-  background: #fff3cd;
-  border: 1px solid #ffeaa7;
-  border-radius: 4px;
-  font-size: 14px;
-  color: #856404;
-  font-weight: 500;
-}
-
-/* Mobile responsive */
-@media (max-width: 768px) {
-  .wireframe-mode-toggle {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 4px;
-  }
-
-  .wireframe-mode-toggle .mode-toggle-btn {
-    justify-content: center;
-  }
-}
+/* Wireframe mode toggle styles moved to src/styles/GeneratedWireframe.css */
 
 /* Quick Ideas */
 .quick-ideas {
@@ -814,19 +752,7 @@ body {
   color: #00bfff;
 }
 
-/* Wireframe Container Styles */
-.wireframe-container {
-  width: 100%;
-  background: transparent; /* More subtle */
-  border-radius: 0; /* Less pronounced */
-  overflow: hidden;
-  box-shadow: none; /* Remove shadow for subtlety */
-  height: 100%; /* Use available height instead of min-height */
-  margin: 0; /* Remove all margins to use full space */
-  padding: 0; /* Remove all padding to use full space */
-  display: flex;
-  flex-direction: column;
-}
+/* Wireframe container styles moved to src/styles/GeneratedWireframe.css */
 
 /* Tab Content */
 .tab-content {
@@ -866,17 +792,7 @@ body {
   justify-content: center;
 }
 
-.wireframe-preview-mini {
-  background: #ffffff;
-  border: 2px solid #e1dfdd;
-  border-radius: 8px;
-  width: 200px;
-  height: 140px;
-  padding: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  position: relative;
-  z-index: 2;
-}
+/* Wireframe preview mini styles moved to src/styles/GeneratedWireframe.css */
 
 .mini-header {
   background: #f3f2f1;

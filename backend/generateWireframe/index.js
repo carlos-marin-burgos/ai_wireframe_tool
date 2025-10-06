@@ -349,7 +349,77 @@ async function generateWithAI(description, options = {}) {
   const strictMode = options.strictMode === true; // new flag
 
   // Base prompt for wireframe generation
-  let basePrompt = `Create a complete, modern HTML wireframe for: ${description}\n\nRequirements:\n- Use modern CSS with flexbox/grid\n- Include semantic HTML structure\n- ${theme} theme with ${colorScheme} color scheme\n- Mobile-responsive design\n- Include proper meta tags and DOCTYPE\n- Use inline CSS for complete standalone file\n- Focus ONLY on the requested component/feature\n- NO navigation bars, headers, footers, or branding unless specifically requested\n- Keep designs clean and minimal\n- DO NOT include the description text anywhere in the visible wireframe content\n- DO NOT add "Create a..." or similar instruction text in the HTML\n- Generate ONLY the actual UI components requested, not meta-descriptions about them\n\nSPECIAL HANDLING FOR WIDGETS:\n- When user asks for "widgets", generate them as direct <div class="widget"> elements, NOT nested section > article\n- Widgets should be siblings in a grid/flex container, not wrapped in sections\n- Each widget should be: <div class="widget" data-widget-index="n"> with title and content\n- For left navigation layouts: use CSS flexbox with nav (fixed width) + main (flex: 1) structure\n- Add responsive design: @media (max-width: 768px) { body { flex-direction: column; } nav { width: 100%; } }`;
+  let basePrompt = `Create a complete, modern HTML wireframe for: ${description}
+
+REQUIREMENTS:
+- Use modern CSS with flexbox/grid
+- Include semantic HTML structure
+- ${theme} theme with ${colorScheme} color scheme
+- **FULLY RESPONSIVE mobile-first design (MANDATORY)**
+- Include proper meta tags and DOCTYPE
+- Use inline CSS for complete standalone file
+- Focus ONLY on the requested component/feature
+- NO navigation bars, headers, footers, or branding unless specifically requested
+- Keep designs clean and minimal
+- DO NOT include the description text anywhere in the visible wireframe content
+- DO NOT add "Create a..." or similar instruction text in the HTML
+- Generate ONLY the actual UI components requested, not meta-descriptions about them
+
+🔥 CRITICAL RESPONSIVE DESIGN REQUIREMENTS (MANDATORY):
+1. Mobile-First Approach:
+   - Base styles for mobile (320px+)
+   - Scale up for tablets and desktops
+   - Use relative units (%, rem, em) instead of fixed pixels
+
+2. Required Media Queries (MUST INCLUDE ALL):
+   @media (max-width: 768px) {
+     /* Tablet and mobile adjustments */
+     - Single column layouts
+     - Reduced font sizes
+     - Full-width buttons
+     - Simplified navigation
+     - Stack flex/grid items vertically
+   }
+   
+   @media (max-width: 480px) {
+     /* Small mobile phones */
+     - Smaller padding/margins
+     - Larger tap targets (min 44px)
+     - Hide/collapse non-essential elements
+     - Simplified forms
+   }
+
+3. Flexible Containers:
+   - Use max-width instead of fixed width
+   - Add width: 100% for mobile
+   - Use padding: 20px for breathing room
+   - Box-sizing: border-box on all elements
+
+4. Grid/Flex Responsive Patterns:
+   - Grid: grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))
+   - Flex: flex-wrap: wrap with appropriate breakpoints
+   - Cards/widgets: full width on mobile, grid on desktop
+
+5. Typography:
+   - Responsive font sizes: clamp(1rem, 2.5vw, 1.5rem)
+   - Line height 1.5+ for readability
+   - Adjust heading sizes for mobile
+
+6. Images & Media:
+   - max-width: 100%; height: auto;
+   - object-fit: cover for backgrounds
+
+7. Forms:
+   - Full width inputs on mobile
+   - Stack labels above inputs
+   - Large touch-friendly buttons
+
+SPECIAL HANDLING FOR WIDGETS:
+- When user asks for "widgets", generate them as direct <div class="widget"> elements, NOT nested section > article
+- Widgets should be siblings in a grid/flex container, not wrapped in sections
+- Each widget should be: <div class="widget" data-widget-index="n"> with title and content
+- For left navigation layouts: use CSS flexbox with nav (fixed width) + main (flex: 1) structure
+- Add responsive: @media (max-width: 768px) { body { flex-direction: column; } nav { width: 100%; position: relative; } main { width: 100%; } }`;
 
   // Enhanced prompt with website analysis data
   if (websiteAnalysis) {
@@ -408,16 +478,110 @@ async function generateWithAI(description, options = {}) {
     basePrompt += `- Keep nesting shallow (max 3 levels) and avoid redundant wrappers\n\n`;
   }
 
+  // LOVABLE-INSPIRED UNIVERSAL APPROACH (C.L.E.A.R. Framework)
+  let lovablePrompt = basePrompt;
+
+  // Semantic analysis of user PURPOSE and FUNCTIONALITY (like Lovable's C.L.E.A.R.)
+  const requestAnalysis = {
+    // Determine the primary interface type
+    primaryType:
+      /dashboard|analytics|admin|control panel|reporting|metrics|KPI|chart|graph/i.test(
+        description
+      )
+        ? "dashboard"
+        : /form|login|signup|register|contact|submit|input|field/i.test(
+            description
+          )
+        ? "form"
+        : /landing|homepage|marketing|hero|cta|feature|about/i.test(description)
+        ? "landing"
+        : /profile|account|settings|user|personal/i.test(description)
+        ? "profile"
+        : /list|table|grid|catalog|directory|browse|search/i.test(description)
+        ? "listing"
+        : /card|widget|component|module|section/i.test(description)
+        ? "component"
+        : /blog|article|content|news|post/i.test(description)
+        ? "content"
+        : "general",
+
+    // Analyze complexity and functional needs
+    complexity:
+      description.length > 300
+        ? "high"
+        : description.length > 150
+        ? "medium"
+        : "simple",
+
+    functionalNeeds: {
+      navigation: /nav|menu|sidebar|header|breadcrumb|link/i.test(description),
+      data: /data|table|list|api|database|fetch|load|content/i.test(
+        description
+      ),
+      interaction:
+        /button|click|drag|drop|hover|interactive|action|submit/i.test(
+          description
+        ),
+      visual: /chart|graph|image|video|media|visualization/i.test(description),
+      ecommerce: /shop|store|product|cart|checkout|payment|order/i.test(
+        description
+      ),
+      responsive: /mobile|responsive|device|tablet|phone/i.test(description),
+    },
+  };
+
+  // ADAPTIVE CONTEXT GENERATION (Lovable's adaptive approach)
+  lovablePrompt += `\n\n🎯 LOVABLE-STYLE ANALYSIS:\n`;
+  lovablePrompt += `Interface Type: ${requestAnalysis.primaryType.toUpperCase()}\n`;
+  lovablePrompt += `Complexity Level: ${requestAnalysis.complexity}\n`;
+  lovablePrompt += `Primary Goal: Understand what the user is trying to accomplish and create the most appropriate interface.\n\n`;
+
+  // Add TYPE-SPECIFIC guidance (not rigid templates, but intelligent adaptation)
+  switch (requestAnalysis.primaryType) {
+    case "dashboard":
+      lovablePrompt += `💼 DASHBOARD INTELLIGENCE: Create comprehensive data interfaces with navigation, metrics display, and interactive controls based on the specific business context.\n`;
+      break;
+    case "form":
+      lovablePrompt += `📝 FORM INTELLIGENCE: Focus on clear user flow, proper validation, accessibility, and conversion optimization.\n`;
+      break;
+    case "landing":
+      lovablePrompt += `🚀 LANDING INTELLIGENCE: Emphasize value proposition, visual hierarchy, social proof, and clear call-to-action flow.\n`;
+      break;
+    case "component":
+      lovablePrompt += `🧩 COMPONENT INTELLIGENCE: Create focused, reusable elements that serve specific functions within larger interfaces.\n`;
+      break;
+    case "listing":
+      lovablePrompt += `📋 LISTING INTELLIGENCE: Design for browsing, filtering, searching, and organizing content or data efficiently.\n`;
+      break;
+    default:
+      lovablePrompt += `🎨 GENERAL INTELLIGENCE: Analyze the functional requirements and create the most appropriate interface pattern.\n`;
+  }
+
+  // Add FUNCTIONAL REQUIREMENTS based on detected needs
+  if (Object.values(requestAnalysis.functionalNeeds).some((need) => need)) {
+    lovablePrompt += `\nDetected Functional Needs:\n`;
+    if (requestAnalysis.functionalNeeds.navigation)
+      lovablePrompt += `- Navigation: Include appropriate navigation patterns\n`;
+    if (requestAnalysis.functionalNeeds.data)
+      lovablePrompt += `- Data Display: Create proper data presentation and organization\n`;
+    if (requestAnalysis.functionalNeeds.interaction)
+      lovablePrompt += `- Interactions: Include meaningful interactive elements\n`;
+    if (requestAnalysis.functionalNeeds.visual)
+      lovablePrompt += `- Visual Elements: Incorporate charts, media, or visual content\n`;
+    if (requestAnalysis.functionalNeeds.ecommerce)
+      lovablePrompt += `- E-commerce: Include shopping and transaction functionality\n`;
+  }
+
+  lovablePrompt += `\n`;
+
   // Replace original prompt block
   const prompt =
-    basePrompt +
-    `\n\n🚨 CRITICAL CONTAINER & INDEXING RULES FOR DRAG-AND-DROP:\n- AVOID excessive div nesting - maximum 2-3 levels deep\n- Use semantic HTML tags (main, section, article) instead of generic divs\n- EVERY <section> MUST include data-section-index and data-section-type when websiteAnalysis provided\n- The <main> MUST have data-sections with the total number\n- For widgets: use <div class="widget" data-widget-index="n"> directly, NOT section > article\n- Cards should be direct children of grid/flex containers\n- Card containers: display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;\n- Each card must be <article class="card" data-card-index="n"> with accessible structure\n- DO NOT add cursor:grab or cursor:pointer styles - let the app handle interaction styles\n- DO NOT wrap single components in multiple container divs\n- Keep hierarchy shallow for rearrangement\n\n🎨 CRITICAL ACCESSIBILITY & READABILITY RULES:\n- BUTTONS: Use high-contrast combinations only:\n  • Primary: background: #194a7a; color: #ffffff;\n  • Secondary: background: #ffffff; color: #194a7a; border: 2px solid #194a7a;\n  • Danger: background: #d13438; color: #ffffff;\n  • Success: background: #107c10; color: #ffffff;\n- TEXT CONTRAST: Always dark text on light backgrounds (#fff, ${
-      WIREFRAME_COLORS.surface
-    }, #E9ECEF)\n- NEVER use opacity below 1.0 for important text\n- NEVER use light on light or dark on dark\n- Button hover: darken background ~15% maintain white text\n- Button padding: >= 12px 24px; border-radius: 4px\n${
+    lovablePrompt +
+    `\n\n🧠 INTELLIGENT WIREFRAME GENERATION:\n- ANALYZE the user's request to understand the underlying PURPOSE and GOALS\n- THINK about what components and layout would best serve those goals\n- GENERATE appropriate HTML structure based on functional requirements, not templates\n- CONSIDER user experience and information architecture principles\n- CREATE realistic, professional layouts that make functional sense\n- INCLUDE necessary navigation, controls, and content areas based on the specific use case\n- APPLY proper visual hierarchy and spacing for the type of interface requested\n\n🚨 CRITICAL LAYOUT CONSTRAINTS:\n- ALL content MUST fit within the wireframe container boundaries - NO overflow outside main area\n- Use ONLY these CSS classes for dashboard layouts: .dashboard-layout, .dashboard-header, .dashboard-sidebar, .dashboard-main\n- For KPI cards: Use .kpi-grid container with .kpi-card children\n- For charts: Use .chart-container with .chart-placeholder inside\n- For data tables: Use .data-table-container with .data-table inside\n- Navigation: Use .sidebar-nav with proper <a> tags containing VISIBLE TEXT LABELS\n- NO custom CSS - only use the predefined classes from the styling system\n- Container hierarchy: wireframe-container > dashboard-layout > (header/sidebar/main)\n- NEVER create scrolling conflicts - only .dashboard-main should scroll if needed\n\n🎨 STYLING REQUIREMENTS:\n- Use Microsoft Design System principles with professional spacing and typography\n- High contrast accessibility: #194a7a buttons with white text, proper color contrast\n- Semantic HTML structure: header, nav, main, aside, section, article\n- ALL buttons MUST have visible text labels - NO icon-only buttons\n- Navigation links MUST have text content, not just icons\n- Use .sidebar-icon class for nav icons ALONGSIDE text labels\n- Clean container hierarchy: maximum 2-3 nesting levels\n- Professional spacing: 16px, 24px, 32px grid system\n\n${
       fastMode
-        ? "- Keep it simple and fast to load"
-        : "- Include rich interactions and detailed styling"
-    }\n\nReturn only the complete HTML code, no explanations.`;
+        ? "- Focus on core functionality with clean, simple design"
+        : "- Include rich interactions and sophisticated layout patterns"
+    }\n\nIMPORTANT: Generate HTML that uses ONLY the CSS classes provided in the styling system. Do NOT create custom styles or classes. Return only the complete HTML code that will render properly within the wireframe container.`;
 
   const deployment = process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o";
 
@@ -426,12 +590,17 @@ async function generateWithAI(description, options = {}) {
       {
         role: "system",
         content:
-          "You are a professional web developer who creates clean, minimal wireframes with PERFECT ACCESSIBILITY and OPTIMAL CONTAINER STRUCTURE. When provided with website analysis data, you MUST recreate the exact structure, sections, navigation, and component layout of the analyzed website while applying Microsoft Design System styling. CRITICAL: All buttons must have high contrast (dark blue #194a7a background with white text, or white background with dark blue text and border). NEVER use light colors on light backgrounds or dark colors on dark backgrounds. AVOID excessive div nesting - use maximum 2-3 container levels. Cards must be direct children of grid containers for proper rearrangement. Use semantic HTML (main, section, article) instead of generic divs. When users ask for 'widgets', create them as direct <div class=\"widget\"> elements, NOT nested section > article structures. DO NOT add cursor styles - let the app control interactions. DO NOT include navigation bars, headers, footers, or branding unless specifically requested or found in the website analysis. Focus ONLY on the requested component with readable, accessible design and clean container structure. NEVER include the user's description text or instruction phrases like 'Create a...' in the visible HTML content - generate only actual UI components that match the analyzed website structure.",
+          'You are an expert UX/UI designer who creates wireframes that work perfectly within the Designetica wireframe system. You must follow specific constraints to ensure proper rendering.\n\n🚨 CRITICAL CONSTRAINTS:\n- ALL content MUST be contained within the existing wireframe container - NO elements should extend outside\n- Use ONLY the predefined CSS classes - do not create custom styles or classes\n- For dashboards: Start with <div class="dashboard-layout"> as the root container\n- Navigation text MUST be visible - every nav link needs readable text, not just icons\n- Buttons MUST have text labels - no icon-only buttons allowed\n- Container hierarchy: dashboard-layout > (dashboard-header + dashboard-sidebar + dashboard-main)\n- Only .dashboard-main should scroll - never create double scrollbars\n\n🏗️ REQUIRED DASHBOARD STRUCTURE:\n- Use .dashboard-layout as the main container\n- Header: .dashboard-header with logo, search, and user actions\n- Sidebar: .dashboard-sidebar with .sidebar-nav containing <a> links with text\n- Main: .dashboard-main with all content (KPI cards, charts, tables)\n- KPI Cards: .kpi-grid container with .kpi-card children\n- Charts: .chart-container with .chart-header and .chart-placeholder\n- Tables: .data-table-container with .data-table inside\n- Buttons: Use .action-btn class with visible text content\n\n🎨 STYLING RULES:\n- Use only predefined classes: .dashboard-*, .kpi-*, .chart-*, .data-table-*, .action-btn, etc.\n- All navigation links must have text content alongside any icons\n- Buttons must have descriptive text labels\n- Use semantic HTML: header, nav, main, aside, section, article\n- Apply accessibility principles with proper heading hierarchy\n\n💡 INTELLIGENT DESIGN:\n- Analyze the user\'s functional requirements\n- Create layouts that serve the actual user needs\n- Include appropriate components based on the request context\n- Apply professional UX patterns intelligently\n- Generate realistic, functional content\n\nGenerate clean HTML that uses ONLY the existing CSS classes and renders properly within the wireframe container boundaries.',
       },
       { role: "user", content: prompt },
     ],
     model: deployment,
-    max_tokens: 4000,
+    max_tokens:
+      requestAnalysis.complexity === "high"
+        ? 6000
+        : requestAnalysis.complexity === "medium"
+        ? 5000
+        : 4000,
     temperature: 0.7,
   });
 

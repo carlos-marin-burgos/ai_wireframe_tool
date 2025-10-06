@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import "./SplitLayout.css";
+import "../styles/GeneratedWireframe.css"; // Consolidated wireframe styles
 import SuggestionSourceIndicator from "./SuggestionSourceIndicator";
 import LoadingOverlay from "./LoadingOverlay";
 import AddPagesModal from "./AddPagesModal";
@@ -190,8 +191,8 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   const [isUpdatingWireframe, setIsUpdatingWireframe] = useState(false);
   const [wireframeToUpdate, setWireframeToUpdate] = useState<SavedWireframe | undefined>();
 
-  // Favorites Modal state
-  const [isFavoritesModalOpen, setIsFavoritesModalOpen] = useState(false);
+  // Save Modal state
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
 
   // Validation state for chat input
   const [chatValidationError, setChatValidationError] = useState<string | null>(null);
@@ -547,16 +548,16 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     setIsAddPagesModalOpen(true);
   }, []);
 
-  const handleAddToFavorites = useCallback(() => {
+  const handleOpenSaveModal = useCallback(() => {
     if (!currentPageId) return;
     const currentPage = wireframePages.find(p => p.id === currentPageId);
     if (!currentPage) return;
 
-    // Open the favorites modal instead of saving directly
-    setIsFavoritesModalOpen(true);
+    // Open the save modal
+    setIsSaveModalOpen(true);
   }, [currentPageId, wireframePages]);
 
-  const handleSaveFavorite = useCallback((name: string, description?: string) => {
+  const handleQuickSave = useCallback((name: string, description?: string) => {
     if (!currentPageId) return;
 
     const currentPage = wireframePages.find(p => p.id === currentPageId);
@@ -565,9 +566,9 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     // Get current content for the page
     const currentContent = pageContents[currentPageId] || htmlWireframe;
 
-    // Create favorite item with user-provided name and description
-    const favoriteItem = {
-      id: `favorite-${Date.now()}`,
+    // Create saved wireframe item with user-provided name and description
+    const savedItem = {
+      id: `saved-${Date.now()}`,
       name: name,
       description: description || '',
       htmlContent: currentContent,
@@ -576,18 +577,18 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     };
 
     // Save to localStorage
-    const existingFavorites = JSON.parse(localStorage.getItem('designetica_favorites') || '[]');
-    existingFavorites.push(favoriteItem);
-    localStorage.setItem('designetica_favorites', JSON.stringify(existingFavorites));
+    const existingSaved = JSON.parse(localStorage.getItem('designetica-saved-wireframes') || '[]');
+    existingSaved.push(savedItem);
+    localStorage.setItem('designetica-saved-wireframes', JSON.stringify(existingSaved));
 
     // Dispatch custom event to notify landing page of the change
-    window.dispatchEvent(new CustomEvent('favoritesUpdated'));
+    window.dispatchEvent(new CustomEvent('savedWireframesUpdated'));
 
     // Close modal
-    setIsFavoritesModalOpen(false);
+    setIsSaveModalOpen(false);
 
     // Show toast notification
-    setToastMessage(`⭐ "${name}" saved to favorites!`);
+    setToastMessage(`💾 "${name}" saved successfully!`);
     setToastType('success');
 
     // Show confirmation message
@@ -1229,6 +1230,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
 
         try {
           const analyzer = new WebsiteAnalyzer();
+          // Use website analysis
           websiteData = await analyzer.analyzeWebsite(primaryUrl);
 
           console.log('✅ Website analysis completed:', {
@@ -1244,7 +1246,11 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
           enhancedDescription = WebsiteAnalyzer.generateEnhancedPrompt(description, websiteData);
 
           // Update chat with analysis results
-          addMessage('ai', `✅ **Website Analysis Complete**\n\n📋 **Found:**\n- Page: ${websiteData.pageInfo.title}\n- ${websiteData.layout.sections.length} content sections\n- ${websiteData.styling.components.length} UI components\n- Layout type: ${websiteData.styling.layout}\n\nNow generating a matching wireframe...`);
+          let analysisMessage = `✅ **Website Analysis Complete**\n\n📋 **Found:**\n- Page: ${websiteData.pageInfo.title}\n- ${websiteData.layout.sections.length} content sections\n- ${websiteData.styling.components.length} UI components\n- Layout type: ${websiteData.styling.layout}`;
+
+          analysisMessage += `\n\nNow generating a matching wireframe...`;
+
+          addMessage('ai', analysisMessage);
 
         } catch (analysisError) {
           console.error('❌ Website analysis failed:', analysisError);
@@ -1336,16 +1342,16 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     if (e) e.preventDefault();
 
     // Add thinking message
-    addMessage('ai', `💡 **Design Consultant** is preparing quick tips for ${wireframeType} design...\n\n*Powered by Azure AI Foundry*`);
+    addMessage('ai', `💡 **Design Quick Tips** for your ${wireframeType}...\n\n*Powered by Azure AI Foundry*`);
 
     try {
-      const tips = await designConsultant.getQuickTips(wireframeType, 'desktop');
+      const tips = await designConsultant.getQuickTips(wireframeType);
       const formattedMessage = designConsultant.formatTipsMessage(tips);
       addMessage('ai', formattedMessage);
 
     } catch (error) {
       console.error('Quick Tips Error:', error);
-      addMessage('ai', '🤖 I encountered an issue while generating design tips. Please try again!');
+      addMessage('ai', '🤖 I encountered an issue while getting tips. Please try again!');
     }
   }, [addMessage]);
 
@@ -1627,7 +1633,7 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
               onOpenLibrary={handleOpenLibrary}
               onOpenDevPlaybooks={handleOpenDevPlaybooks}
               onOpenFigmaComponents={handleOpenFigmaComponents}
-              onAddToFavorites={handleAddToFavorites}
+              onSaveWireframe={handleOpenSaveModal}
               onImageUpload={toggleImageUpload}
               onOpenAnalyzeDesignModal={() => setIsAnalyzeDesignModalOpen(true)}
               onOpenQuickTipsModal={() => setIsQuickTipsModalOpen(true)}
@@ -1900,11 +1906,11 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         existingWireframe={wireframeToUpdate}
       />
 
-      {/* Add to Favorites Modal */}
+      {/* Save Wireframe Modal */}
       <AddToFavoritesModal
-        isOpen={isFavoritesModalOpen}
-        onClose={() => setIsFavoritesModalOpen(false)}
-        onSave={handleSaveFavorite}
+        isOpen={isSaveModalOpen}
+        onClose={() => setIsSaveModalOpen(false)}
+        onSave={handleQuickSave}
         initialName={wireframePages.find(p => p.id === currentPageId)?.name || 'My Wireframe'}
       />
 
