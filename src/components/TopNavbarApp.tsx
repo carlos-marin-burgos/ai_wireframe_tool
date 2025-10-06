@@ -41,9 +41,10 @@ const TopNavbarApp: React.FC<TopNavbarAppProps> = ({
             <nav className="top-nav-app">
                 <div className="navbar-left">
                     <button
+                        type="button"
                         onClick={onLogoClick}
                         className="navbar-logo-button"
-                        title="Designetica"
+                        title="Designetica - Back to home"
                     >
                         <svg width="20" height="20" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M11.5216 0.5H0V11.9067H11.5216V0.5Z" fill="#F26522" />

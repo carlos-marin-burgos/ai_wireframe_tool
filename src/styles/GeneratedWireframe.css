@@ -18,36 +18,34 @@
 }
 
 /* ============================================
-   WIREFRAME MAIN CONTAINER - SIMPLE
+   WIREFRAME MAIN CONTAINER - CLEAN REBUILD
    ============================================ */
 
-/* Main wireframe container - keep it simple */
+/* Main wireframe container - simple wrapper */
 .wireframe-container {
   width: 100%;
-  height: 100%;
+  /* No height restrictions - let content determine height */
   padding: 20px;
   box-sizing: border-box;
   background: transparent;
   position: relative;
 }
 
-/* Wireframe content wrapper - no complex overflow */
+/* Wireframe content wrapper - natural height */
 .wireframe-content {
   width: 100%;
-  height: 100%;
+  /* No height restrictions - let content determine height */
   box-sizing: border-box;
   background: transparent;
 }
 
-/* Wireframe panel - single scrolling container */
+/* Wireframe panel - match right-pane background */
 .wireframe-panel {
   width: 100%;
-  height: 100%;
-  background: var(--wireframe-bg);
+  /* No height restrictions - let content determine height */
+  background: transparent;
   border-radius: 8px;
-  box-shadow: 0 2px 10px var(--wireframe-shadow);
-  overflow-y: auto;
-  overflow-x: hidden;
+  box-shadow: none;
   padding: 20px;
   box-sizing: border-box;
 }
@@ -198,7 +196,7 @@
   border-bottom: 1px solid var(--wireframe-border);
   background: #f8f9fa;
   border-radius: 8px 8px 0 0;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 
 .wireframe-title {
@@ -276,18 +274,7 @@
   box-sizing: border-box;
 }
 
-/* Make sure there are no competing overflow styles */
-.wireframe-container,
-.wireframe-content,
-.wireframe-panel {
-  overflow: visible;
-}
-
-/* Only the panel should scroll */
-.wireframe-panel {
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-}
+/* OLD DUPLICATE OVERFLOW RULES REMOVED - Clean version at top handles this properly */
 
 /* ============================================
    CSS VARIABLES
@@ -328,37 +315,14 @@
   z-index: 1; /* Ensure proper stacking context */
 }
 
-/* Wireframe content wrapper */
-.wireframe-content {
-  width: 100%;
-  max-width: 1400px; /* Limit content width for better readability */
-  height: auto; /* Allow content to determine height */
-  min-height: 100%; /* Ensure it fills the container */
-  background-color: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 0 20px 60px 20px; /* Add more bottom padding for breathing room */
-  box-sizing: border-box;
-  box-shadow: none;
-  overflow: hidden; /* Contain content within bounds */
-  position: relative;
-  z-index: 2; /* Above container but below overlays */
-}
+/* DUPLICATE .wireframe-content REMOVED - Using the clean version at line 38 instead */
+
+/* ============================================
+   AI-GENERATED CONTENT SECTIONS
+   ============================================ */
 
 /* Wireframe panel - the main display area */
-.wireframe-panel {
-  height: 100%; /* Use full height now that margins are removed */
-  width: 100%; /* Use full width instead of calc(100% - 60px) */
-  background: var(--wireframe-bg);
-  border-radius: 8px;
-  box-shadow: 0 2px 10px var(--wireframe-shadow);
-  overflow: auto; /* Main scrolling happens here */
-  display: flex;
-  flex-direction: column;
-  margin: 0; /* Removed all margins to use full space */
-  position: relative;
-  z-index: 3; /* Above content wrapper */
-}
+/* DUPLICATE .wireframe-panel REMOVED - Using the clean version at line 49 instead */
 
 /* ============================================
    WIREFRAME LOADING STATES
@@ -1534,15 +1498,19 @@
     position: relative;
     overflow: visible;
     margin: 0;
+    min-height: 100vh; /* Ensure full viewport height */
+    height: auto; /* Allow natural height */
   }
 
-  /* Ensure wireframe container takes full width */
+  /* Ensure wireframe container takes full width and allows scrolling */
   .wireframe-container {
     flex: 1;
-    height: 100%;
-    padding: 0; /* Remove padding to use full space */
+    height: auto; /* Changed from 100% to auto */
+    min-height: 100vh; /* Ensure minimum viewport height */
+    padding: 10px; /* Small padding instead of 0 */
     position: relative;
-    background: #fafafa;
+    background: transparent; /* Match parent background */
+    overflow: visible; /* Allow content to flow */
   }
 
   .wireframe-mode-toggle {
@@ -1560,8 +1528,14 @@
 @media (max-width: 576px) {
   .wireframe-panel {
     margin: 0; /* Remove margins for full space usage */
+    padding: 10px; /* Small padding for breathing room */
     width: 100%;
-    height: auto;
+    height: auto; /* Allow natural height */
+    min-height: 100vh; /* Ensure minimum viewport height */
+  }
+
+  .wireframe-container {
+    padding: 5px; /* Minimal padding on small screens */
   }
 }
 

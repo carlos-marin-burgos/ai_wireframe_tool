@@ -100,7 +100,7 @@
   display: flex;
   height: calc(100vh - 40px); /* Account for fixed header */
   width: 100%;
-  overflow: hidden;
+  overflow: visible; /* Allow child panes to scroll independently */
   position: relative;
   margin-top: 0; /* Remove margin since we have padding-top on app-content */
   font-family: "Segoe UI", "Inter", -apple-system, BlinkMacSystemFont, Roboto,
@@ -285,8 +285,11 @@
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   width: calc(100% - 350px);
   height: 100vh;
-  overflow-y: auto;
+  overflow-y: auto; /* This is the ONLY scrolling container */
+  overflow-x: hidden; /* Prevent horizontal scroll */
   scroll-behavior: smooth;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Panel Toggle Button */
@@ -557,7 +560,7 @@
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.04);
   overflow: auto; /* Allow scrolling at tab level */
   margin: 0; /* Remove margins to use full space */
-  height: 100vh; /* Use full height */
+  height: calc(100vh - 120px); /* Account for header, tabs, and padding */
   border: 1px solid rgba(0, 0, 0, 0.03);
   position: relative;
   transition: all 0.3s ease;
@@ -571,7 +574,7 @@
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  overflow: visible; /* Allow scrolling in child panes */
 }
 
 .tab-pane {
@@ -584,6 +587,8 @@
   transform: translateX(20px);
   transition: all 0.4s ease;
   pointer-events: none;
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
 .tab-pane.active {
@@ -1339,11 +1344,14 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   .right-pane {
     margin-left: 0;
     width: 100%;
-    height: auto;
-    min-height: 60vh;
+    height: auto; /* Allow natural height on mobile */
+    min-height: 100vh; /* Changed from 60vh - ensure full viewport coverage */
+    max-height: none; /* No max height restriction */
     position: relative;
     z-index: 1;
     padding-bottom: 40px;
+    overflow-y: auto; /* Ensure scrolling works on mobile */
+    overflow-x: hidden; /* Prevent horizontal scroll */
   }
 
   /* Hide toggle button on mobile since panels stack */
@@ -1354,7 +1362,9 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
   /* Mobile wireframe styles moved to src/styles/GeneratedWireframe.css */
 
   .tab-content {
-    height: 70vh;
+    height: auto; /* Changed from 70vh - allow content to determine height */
+    min-height: 70vh; /* Minimum height for better UX */
+    max-height: none; /* No restriction on max height */
   }
 
   .sticky-header {
@@ -1387,7 +1397,9 @@ pre.jsx-output::-webkit-scrollbar-thumb:hover {
 
   .tab-content {
     margin: 0 1rem 1rem;
-    height: calc(100vh - 120px);
+    height: auto; /* Changed from calc(100vh - 120px) - allow natural height */
+    min-height: calc(100vh - 120px); /* Minimum height */
+    max-height: none; /* No max height restriction */
   }
 
   .ai-suggestions-buttons {

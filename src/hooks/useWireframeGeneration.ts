@@ -346,11 +346,11 @@ export const useWireframeGeneration = () => {
               },
             }
           ),
-          // Timeout after 60 seconds to allow AI generation to complete
+          // Timeout: 120 seconds for website analysis (more data), 60 seconds for normal generation
           new Promise<never>((_, reject) =>
             setTimeout(
               () => reject(new Error("Azure Functions timeout")),
-              60000
+              websiteAnalysis ? 120000 : 60000
             )
           ),
         ]);
