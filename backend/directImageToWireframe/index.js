@@ -1,6 +1,7 @@
 const {
   generateDirectWireframeFromImage,
 } = require("../direct-image-converter");
+const { fixWireframeImages } = require("../utils/imagePlaceholders");
 
 function generateCorrelationId() {
   return `direct-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
@@ -109,11 +110,15 @@ module.exports = async function (context, req) {
     );
     const processingTime = Date.now() - startTime;
 
+    // 🖼️ Apply image processing to fix broken image references
+    const processedHtml = fixWireframeImages(result.html);
+    context.log("🖼️ Applied image placeholder processing");
+
     context.res.status = 200;
     context.res.body = JSON.stringify({
       success: true,
       data: {
-        html: result.html,
+        html: processedHtml,
         source: result.source,
         confidence: result.confidence,
         framework: "html",

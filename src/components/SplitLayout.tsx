@@ -27,6 +27,7 @@ import { generateShareUrl } from "../utils/powerpointExport";
 import { generateWireframeName } from "../utils/wireframeNaming";
 import { designConsultant } from "../services/designConsultant";
 import { WebsiteAnalyzer, WebsiteAnalysis } from "../services/websiteAnalyzer";
+import { getApiUrl } from "../config/api";
 import {
   FiSend,
   FiStopCircle,
@@ -1221,42 +1222,58 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         const urls = WebsiteAnalyzer.extractUrls(description);
         const primaryUrl = urls[0]; // Use the first URL found
 
-        console.log(`🔍 URL detected: ${primaryUrl} - Starting website analysis`);
+        console.log(`🔍 URL detected: ${primaryUrl} - Using improved generateWireframeFromUrl endpoint`);
         setIsAnalyzingWebsite(true);
 
         // Add analysis message to chat
         addMessage('user', description);
-        addMessage('ai', `🔍 **Website Analysis Started**\n\nI found a URL in your request: ${primaryUrl}\n\nAnalyzing the website structure, layout, and components to create an accurate wireframe...`);
+        addMessage('ai', `🔍 **Website Analysis Started**\n\nI found a URL in your request: ${primaryUrl}\n\nUsing advanced AI to analyze the website and generate a highly accurate wireframe...`);
 
         try {
-          const analyzer = new WebsiteAnalyzer();
-          // Use website analysis
-          websiteData = await analyzer.analyzeWebsite(primaryUrl);
-
-          console.log('✅ Website analysis completed:', {
-            title: websiteData.pageInfo.title,
-            sections: websiteData.layout.sections.length,
-            components: websiteData.styling.components.length
+          // Use the improved generateWireframeFromUrl endpoint directly
+          const response = await fetch(getApiUrl('/api/generateWireframeFromUrl'), {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              url: primaryUrl,
+              designSystem: 'microsoft',
+              includeResponsive: true,
+              includeAccessibility: true
+            })
           });
 
-          // Store analysis data
-          setWebsiteAnalysis(websiteData);
+          if (!response.ok) {
+            throw new Error(`Failed to generate wireframe: ${response.statusText}`);
+          }
 
-          // Generate enhanced prompt with analysis data
-          enhancedDescription = WebsiteAnalyzer.generateEnhancedPrompt(description, websiteData);
+          const result = await response.json();
+          console.log('✅ Wireframe generation completed:', result);
 
-          // Update chat with analysis results
-          let analysisMessage = `✅ **Website Analysis Complete**\n\n📋 **Found:**\n- Page: ${websiteData.pageInfo.title}\n- ${websiteData.layout.sections.length} content sections\n- ${websiteData.styling.components.length} UI components\n- Layout type: ${websiteData.styling.layout}`;
+          if (result.success && result.html) {
+            // Update chat with success message
+            const analysisInfo = result.analysis || {};
+            let successMessage = `✅ **Wireframe Generated Successfully!**\n\n📋 **Analysis:**\n- Page: ${analysisInfo.title || 'Website'}\n- Sections detected: ${analysisInfo.sections || 0}\n- Components found: ${analysisInfo.components || 0}\n- Colors extracted: ${analysisInfo.colorPalette?.length || 0}`;
 
-          analysisMessage += `\n\nNow generating a matching wireframe...`;
+            if (analysisInfo.typography) {
+              successMessage += `\n- Typography system: ${analysisInfo.typography.fonts?.length || 0} fonts`;
+            }
 
-          addMessage('ai', analysisMessage);
+            addMessage('ai', successMessage);
+
+            // Set the generated HTML directly as the wireframe
+            setHtmlWireframe(result.html);
+            setIsAnalyzingWebsite(false);
+            return; // Exit early - we don't need to call handleSubmit
+          } else {
+            throw new Error(result.error || 'Failed to generate wireframe from URL');
+          }
 
         } catch (analysisError) {
-          console.error('❌ Website analysis failed:', analysisError);
-          addMessage('ai', `⚠️ **Website Analysis Failed**\n\nCouldn't analyze the website: ${analysisError instanceof Error ? analysisError.message : 'Unknown error'}\n\nProceeding with standard wireframe generation...`);
+          console.error('❌ Wireframe generation failed:', analysisError);
+          addMessage('ai', `⚠️ **Wireframe Generation Failed**\n\nCouldn't generate wireframe from URL: ${analysisError instanceof Error ? analysisError.message : 'Unknown error'}\n\nPlease check:\n- The URL is accessible\n- The website loads properly\n- Try a simpler URL first`);
 
-          // Continue with standard generation even if analysis fails
           websiteData = null;
         } finally {
           setIsAnalyzingWebsite(false);
@@ -1295,6 +1312,14 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
     if (chatMessagesRef.current) {
       chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
     }
+  };
+
+  // Scroll to top of page
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   };
 
   // Auto-scroll when new messages are added
@@ -1362,6 +1387,10 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
       const lastMessage = conversationHistory[conversationHistory.length - 1];
       if (lastMessage && lastMessage.type === 'user') {
         addMessage('ai', '✅ Wireframe created successfully! Check the preview on the right.');
+        // Scroll to top when wireframe is loaded after user request
+        setTimeout(() => {
+          scrollToTop();
+        }, 100);
       }
     }
   }, [htmlWireframe, loading, conversationHistory, addMessage]);

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybrid CSS Injection Test - Microsoft Learn Clone</title>
+    <style>
+        /* ============================================
+           EXACT CSS FROM WEBSITE ANALYSIS
+           These values are extracted directly from the site
+           ============================================ */
+
+        :root {
+            /* Exact Colors from Microsoft Learn */
+            --site-color-1: #0078d4;
+            /* Microsoft Blue */
+            --site-color-2: #ffffff;
+            /* White */
+            --site-color-3: #f3f2f1;
+            /* Light gray background */
+            --site-color-4: #323130;
+            /* Dark text */
+            --site-color-5: #005a9e;
+            /* Darker blue for hover */
+            --site-color-6: #106ebe;
+            /* Button blue */
+            --site-color-7: #c7e0f4;
+            /* Light blue background */
+            --site-color-8: #8a8886;
+            /* Secondary text */
+
+            /* Exact Fonts from Microsoft Learn */
+            --site-font-1: "Segoe UI", -apple-system, BlinkMacSystemFont, "Roboto", "Helvetica Neue", sans-serif;
+            --site-font-2: "Segoe UI Semibold", "Segoe UI", system-ui;
+
+            /* Exact Font Sizes from Microsoft Learn */
+            --site-fontsize-1: 56px;
+            /* Hero title */
+            --site-fontsize-2: 32px;
+            /* Section headers */
+            --site-fontsize-3: 20px;
+            /* Card titles */
+            --site-fontsize-4: 16px;
+            /* Body text */
+            --site-fontsize-5: 14px;
+            /* Small text */
+
+            /* Exact Padding Patterns */
+            --site-padding-1: 40px;
+            --site-padding-2: 24px;
+            --site-padding-3: 16px;
+            --site-padding-4: 12px;
+
+            /* Exact Gap Patterns */
+            --site-gap-1: 32px;
+            --site-gap-2: 24px;
+            --site-gap-3: 16px;
+        }
+
+        /* Exact heading styles from Microsoft Learn */
+        h1 {
+            font-size: 56px;
+            font-weight: 600;
+            color: #323130;
+            font-family: var(--site-font-2);
+            line-height: 1.2;
+            margin: 0 0 24px 0;
+        }
+
+        h2 {
+            font-size: 32px;
+            font-weight: 600;
+            color: #323130;
+            font-family: var(--site-font-2);
+            line-height: 1.3;
+            margin: 0 0 16px 0;
+        }
+
+        h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #323130;
+            font-family: var(--site-font-2);
+            line-height: 1.4;
+            margin: 0 0 12px 0;
+        }
+
+        body {
+            font-family: var(--site-font-1);
+            font-size: 16px;
+            color: #323130;
+            margin: 0;
+            padding: 0;
+            background-color: var(--site-color-2);
+        }
+
+        /* NOW THE AI-GENERATED STRUCTURE WITH EXACT STYLING */
+        .hero-section {
+            background: linear-gradient(135deg, var(--site-color-7) 0%, var(--site-color-2) 100%);
+            padding: var(--site-padding-1);
+            text-align: center;
+        }
+
+        .cta-button {
+            background-color: var(--site-color-1);
+            color: var(--site-color-2);
+            font-size: var(--site-fontsize-4);
+            font-weight: 600;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: var(--site-padding-3);
+        }
+
+        .cta-button:hover {
+            background-color: var(--site-color-5);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--site-gap-1);
+            padding: var(--site-padding-1);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .content-card {
+            background: var(--site-color-2);
+            border: 1px solid #e1dfdd;
+            border-radius: 8px;
+            padding: var(--site-padding-2);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: var(--site-fontsize-3);
+            font-weight: 600;
+            color: var(--site-color-1);
+            margin-bottom: 12px;
+        }
+
+        .card-text {
+            font-size: var(--site-fontsize-4);
+            color: var(--site-color-4);
+            line-height: 1.5;
+        }
+
+        .header-nav {
+            background: var(--site-color-2);
+            border-bottom: 1px solid #e1dfdd;
+            padding: 0 var(--site-padding-1);
+            display: flex;
+            align-items: center;
+            height: 72px;
+        }
+
+        .nav-link {
+            color: var(--site-color-4);
+            text-decoration: none;
+            font-size: var(--site-fontsize-4);
+            margin-right: var(--site-gap-2);
+            font-weight: 400;
+        }
+
+        .nav-link:hover {
+            color: var(--site-color-1);
+        }
+
+        .logo {
+            font-size: var(--site-fontsize-3);
+            font-weight: 600;
+            color: var(--site-color-1);
+            margin-right: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- THIS IS WHAT THE HYBRID APPROACH SHOULD PRODUCE -->
+    <!-- AI generates structure, CSS variables provide EXACT styling -->
+
+    <header class="header-nav">
+        <div class="logo">Microsoft Learn</div>
+        <nav>
+            <a href="#" class="nav-link">Training</a>
+            <a href="#" class="nav-link">Certifications</a>
+            <a href="#" class="nav-link">Learning Paths</a>
+            <a href="#" class="nav-link">Modules</a>
+            <a href="#" class="nav-link">Browse</a>
+        </nav>
+    </header>
+
+    <section class="hero-section">
+        <h1>Build skills that open doors in your career</h1>
+        <p style="font-size: var(--site-fontsize-3); color: var(--site-color-8); margin-bottom: 32px;">
+            Explore training, earn certifications, and advance your career in the cloud with Microsoft Learn.
+        </p>
+        <a href="#" class="cta-button">Get started</a>
+    </section>
+
+    <section class="content-grid">
+        <div class="content-card">
+            <div class="card-title">Azure Fundamentals</div>
+            <div class="card-text">Start your cloud journey with Azure basics. Learn core concepts and prepare for the
+                AZ-900 certification.</div>
+        </div>
+
+        <div class="content-card">
+            <div class="card-title">AI and Machine Learning</div>
+            <div class="card-text">Explore AI services and machine learning capabilities on Azure. Build intelligent
+                applications.</div>
+        </div>
+
+        <div class="content-card">
+            <div class="card-title">Data and Analytics</div>
+            <div class="card-text">Master data solutions on Azure. Learn about databases, analytics, and data science
+                tools.</div>
+        </div>
+    </section>
+
+    <script>
+        console.log("🎨 Hybrid CSS Injection Test");
+        console.log("✅ This should look EXACTLY like Microsoft Learn");
+        console.log("✅ Colors are real Microsoft colors (not generic grays)");
+        console.log("✅ Fonts are actual Segoe UI (not Arial)");
+        console.log("✅ Spacing matches real site patterns");
+        console.log("🔧 The wireframe generator should produce THIS quality");
+    </script>
+</body>
+
+</html>

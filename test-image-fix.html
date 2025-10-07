@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Fix Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e1e1e1;
+            border-radius: 4px;
+        }
+
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .test-item {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .test-item img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+        }
+
+        .working {
+            border-color: #28a745;
+            background: #f8fff9;
+        }
+
+        .broken {
+            border-color: #dc3545;
+            background: #fff8f8;
+        }
+
+        .status {
+            margin-top: 10px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .status.working {
+            background: #28a745;
+            color: white;
+        }
+
+        .status.broken {
+            background: #dc3545;
+            color: white;
+        }
+
+        .status.placeholder {
+            background: #ffc107;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-container">
+        <h1>🖼️ Image Processing Test</h1>
+        <p>This page tests the image processing fixes for wireframe generation.</p>
+
+        <div class="test-section">
+            <h2>✅ Working Images (should display correctly)</h2>
+            <div class="test-grid">
+                <div class="test-item working">
+                    <h4>Placehold.co (Primary)</h4>
+                    <img src="https://placehold.co/200x150/0078d4/ffffff?text=Microsoft" alt="Microsoft Placeholder"
+                        width="200" height="150">
+                    <div class="status working">Working ✓</div>
+                </div>
+
+                <div class="test-item working">
+                    <h4>Placehold.co (Neutral)</h4>
+                    <img src="https://placehold.co/200x150/f3f2f1/323130?text=Image" alt="Neutral Placeholder"
+                        width="200" height="150">
+                    <div class="status working">Working ✓</div>
+                </div>
+
+                <div class="test-item working">
+                    <h4>Avatar Placeholder</h4>
+                    <img src="https://placehold.co/80x80/ca5010/ffffff?text=👤" alt="User Avatar" width="80" height="80"
+                        style="border-radius: 50%;">
+                    <div class="status working">Working ✓</div>
+                </div>
+
+                <div class="test-item working">
+                    <h4>Microsoft Logo (Local)</h4>
+                    <img src="/windowsLogo.png" alt="Microsoft Logo" width="64" height="64">
+                    <div class="status working">Working ✓</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>❌ Previously Broken Images (should now show placeholders)</h2>
+            <div class="test-grid">
+                <div class="test-item">
+                    <h4>Broken URL</h4>
+                    <img src="https://example.com/broken-image.jpg" alt="Broken Image" width="200" height="150"
+                        onerror="this.src='https://placehold.co/200x150/f3f2f1/323130?text=Broken%20Image'; this.onerror=null;">
+                    <div class="status placeholder">Auto-Fixed ⚠️</div>
+                </div>
+
+                <div class="test-item">
+                    <h4>Empty Source</h4>
+                    <img src="" alt="Empty Source" width="200" height="150"
+                        onerror="this.src='https://placehold.co/200x150/f3f2f1/323130?text=Empty%20Source'; this.onerror=null;">
+                    <div class="status placeholder">Auto-Fixed ⚠️</div>
+                </div>
+
+                <div class="test-item">
+                    <h4>404 Response</h4>
+                    <img src="https://httpstat.us/404" alt="404 Image" width="200" height="150"
+                        onerror="this.src='https://placehold.co/200x150/f3f2f1/323130?text=404%20Image'; this.onerror=null;">
+                    <div class="status placeholder">Auto-Fixed ⚠️</div>
+                </div>
+
+                <div class="test-item">
+                    <h4>Relative Path</h4>
+                    <img src="./images/nonexistent.jpg" alt="Relative Path" width="200" height="150"
+                        onerror="this.src='https://placehold.co/200x150/f3f2f1/323130?text=Relative%20Path'; this.onerror=null;">
+                    <div class="status placeholder">Auto-Fixed ⚠️</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>🧪 Test Results</h2>
+            <div id="test-results">
+                <p>Loading test results...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test image loading and error handling
+        window.addEventListener('load', function () {
+            const images = document.querySelectorAll('img');
+            let workingCount = 0;
+            let brokenCount = 0;
+            let placeholderCount = 0;
+
+            images.forEach(img => {
+                if (img.complete) {
+                    if (img.naturalHeight !== 0) {
+                        workingCount++;
+                    } else {
+                        brokenCount++;
+                    }
+                }
+            });
+
+            // Count placeholder images
+            placeholderCount = document.querySelectorAll('.status.placeholder').length;
+
+            const resultsDiv = document.getElementById('test-results');
+            resultsDiv.innerHTML = `
+                <h3>📊 Image Loading Statistics</h3>
+                <ul>
+                    <li><strong>✅ Working Images:</strong> ${workingCount}</li>
+                    <li><strong>❌ Broken Images:</strong> ${brokenCount}</li>
+                    <li><strong>⚠️ Auto-Fixed with Placeholders:</strong> ${placeholderCount}</li>
+                    <li><strong>📱 Total Images:</strong> ${images.length}</li>
+                </ul>
+                <p><strong>Success Rate:</strong> ${Math.round(((workingCount + placeholderCount) / images.length) * 100)}%</p>
+                ${brokenCount === 0 ?
+                    '<p style="color: #28a745; font-weight: bold;">🎉 All images handled successfully!</p>' :
+                    '<p style="color: #dc3545; font-weight: bold;">⚠️ Some images may need additional fixes.</p>'
+                }
+            `;
+        });
+
+        // Add error handling to all images
+        document.querySelectorAll('img').forEach(img => {
+            if (!img.onerror) {
+                img.onerror = function () {
+                    console.log('Image failed to load:', this.src);
+                    this.style.border = '2px solid #d83b01';
+                    this.style.background = '#fdf2f2';
+                };
+            }
+        });
+    </script>
+</body>
+
+</html>

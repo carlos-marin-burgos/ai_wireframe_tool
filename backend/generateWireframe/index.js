@@ -10,6 +10,7 @@ const {
   AccessibilityValidationMiddleware,
 } = require("../accessibility/validation-middleware");
 const { fixContainerNesting } = require("../utils/containerNestingFix");
+const { fixWireframeImages } = require("../utils/imagePlaceholders");
 
 // Fluent UI Playbook imports and utilities
 const fluentPlaybook = {
@@ -1151,6 +1152,10 @@ module.exports = async function (context, req) {
         }`
       );
     }
+
+    // 🖼️ Apply image processing to fix broken image references
+    html = fixWireframeImages(html);
+    console.log("🖼️ Applied image placeholder processing");
 
     const processingTime = Date.now() - startTime;
 
