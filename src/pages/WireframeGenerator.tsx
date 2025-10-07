@@ -23,21 +23,45 @@ const WireframeGenerator: React.FC<WireframeGeneratorProps> = ({ onGenerate }) =
         setError(null);
 
         try {
-            // Use validated API call that automatically checks endpoint availability
-            const response = await makeValidatedApiCall(
-                VALIDATED_API_ENDPOINTS.AI_GENERATION.GENERATE_WIREFRAME,
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        description,
-                        theme: mode === 'wireframe' ? 'wireframe' : 'modern',
-                        colorScheme: 'blue',
-                        fastMode: true,
-                        includeAtlas: false
-                    })
-                }
-            );
+            // Check if description contains a URL
+            const urlPattern = /https?:\/\/[^\s]+/i;
+            const urlMatch = description.match(urlPattern);
+
+            let response;
+
+            if (urlMatch) {
+                // Use website-to-wireframe endpoint for URLs
+                console.log('🌐 Detected URL, using website analyzer:', urlMatch[0]);
+                response = await makeValidatedApiCall(
+                    VALIDATED_API_ENDPOINTS.AI_GENERATION.GENERATE_WIREFRAME_FROM_URL,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            url: urlMatch[0],
+                            designSystem: 'microsoft',
+                            includeResponsive: true,
+                            includeAccessibility: true
+                        })
+                    }
+                );
+            } else {
+                // Use regular wireframe generation for descriptions
+                response = await makeValidatedApiCall(
+                    VALIDATED_API_ENDPOINTS.AI_GENERATION.GENERATE_WIREFRAME,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            description,
+                            theme: mode === 'wireframe' ? 'wireframe' : 'modern',
+                            colorScheme: 'blue',
+                            fastMode: true,
+                            includeAtlas: false
+                        })
+                    }
+                );
+            }
 
             const data = await response.json();
 

@@ -1,7 +1,9 @@
 // Unified Intelligent Wireframe Generator
-// Purpose: Generate HTML wireframes via OpenAI with maximum intelligence and optional component integration
+// Purpose: Generate HTML wireframes via Azure OpenAI GPT-4o (Lovable-style approach)
+// Optimized with component library and simplified prompts
 
 const { OpenAI } = require("openai");
+const { getComponentList } = require("../lib/componentLibrary");
 // Import centralized color configuration
 const { WIREFRAME_COLORS, ColorUtils } = require("../config/colors");
 const {
@@ -338,15 +340,25 @@ function initializeOpenAI() {
 // Initialize on module load
 initializeOpenAI();
 
-// --- AI wireframe generation using OpenAI ---
+// --- AI wireframe generation using Azure OpenAI GPT-4o (Lovable-style optimized) ---
 async function generateWithAI(description, options = {}) {
-  if (!openai) throw new Error("OpenAI not initialized");
-
   const theme = options.theme || "professional";
   const colorScheme = options.colorScheme || "blue";
-  const fastMode = options.fastMode !== false;
   const websiteAnalysis = options.websiteAnalysis || null;
-  const strictMode = options.strictMode === true; // new flag
+  const strictMode = options.strictMode === true;
+  const fastMode = options.fastMode !== false; // Default to true if not specified
+
+  // Use Azure OpenAI GPT-4o (you already have this configured!)
+  if (!openai) {
+    const initialized = initializeOpenAI();
+    if (!initialized) {
+      throw new Error(
+        "Azure OpenAI is not initialized - check your configuration"
+      );
+    }
+  }
+
+  console.log("🚀 Using Azure OpenAI GPT-4o (Lovable-optimized approach)...");
 
   // Base prompt for wireframe generation
   let basePrompt = `Create a complete, modern HTML wireframe for: ${description}
@@ -431,14 +443,73 @@ SPECIAL HANDLING FOR WIDGETS:
     basePrompt += `Based on analysis of: ${websiteAnalysis.url}\n`;
     basePrompt += `Page Title: ${websiteAnalysis.pageInfo.title}\n\n`;
 
-    if (websiteAnalysis.layout?.sections?.length > 0) {
-      basePrompt += `SECTIONS TO INCLUDE (${websiteAnalysis.layout.sections.length} found):\n`;
-      websiteAnalysis.layout.sections.slice(0, 10).forEach((section, index) => {
-        basePrompt += `${index + 1}. ${section.type}: ${
-          section.heading || "Content section"
-        }\n`;
-      });
+    // Include visual hierarchy information if available
+    if (websiteAnalysis.layout?.visualHierarchy) {
+      const vh = websiteAnalysis.layout.visualHierarchy;
+      basePrompt += `VISUAL LAYOUT:\n`;
+      basePrompt += `- Layout Type: ${vh.layout}\n`;
+      basePrompt += `- Has Hero Section: ${vh.hasHero ? "Yes" : "No"}\n`;
+      basePrompt += `- Has Sidebar: ${vh.hasSidebar ? "Yes" : "No"}\n`;
+      if (vh.headerHeight > 0) {
+        basePrompt += `- Header Height: ${vh.headerHeight}px\n`;
+      }
       basePrompt += `\n`;
+    }
+
+    if (websiteAnalysis.layout?.sections?.length > 0) {
+      basePrompt += `SECTIONS TO RECREATE (${websiteAnalysis.layout.sections.length} found):\n\n`;
+      websiteAnalysis.layout.sections.slice(0, 12).forEach((section, index) => {
+        // Use enhanced section data
+        const sectionType = section.type
+          ? section.type.toUpperCase()
+          : "SECTION";
+        const heading = section.heading || "Untitled Section";
+
+        basePrompt += `${index + 1}. ${sectionType} - "${heading}"\n`;
+
+        // Add the actual text content from the section
+        if (section.text && section.text.trim().length > 0) {
+          const cleanedText = section.text
+            .replace(/\s+/g, " ")
+            .trim()
+            .substring(0, 200);
+          basePrompt += `   Content: "${cleanedText}${
+            section.text.length > 200 ? "..." : ""
+          }"\n`;
+        }
+
+        // Add subheadings if available
+        if (section.subheadings && section.subheadings.length > 0) {
+          basePrompt += `   Subheadings: ${section.subheadings
+            .slice(0, 3)
+            .join(", ")}\n`;
+        }
+
+        // Add component information
+        const components = [];
+        if (section.counts?.buttons > 0)
+          components.push(`${section.counts.buttons} buttons`);
+        if (section.counts?.images > 0)
+          components.push(`${section.counts.images} images`);
+        if (section.counts?.links > 0)
+          components.push(`${section.counts.links} links`);
+        if (section.counts?.forms > 0)
+          components.push(`${section.counts.forms} forms`);
+
+        if (components.length > 0) {
+          basePrompt += `   Elements: ${components.join(", ")}\n`;
+        }
+
+        // Add CTAs if present with EXACT button HTML
+        if (section.ctas && section.ctas.length > 0) {
+          basePrompt += `   Buttons to create:\n`;
+          section.ctas.forEach((cta) => {
+            basePrompt += `   <button style="padding: 12px 24px; border: 2px solid #999; background: #fff; color: #333; border-radius: 4px; font-size: 16px; cursor: pointer;">${cta}</button>\n`;
+          });
+        }
+
+        basePrompt += `\n`;
+      });
     }
 
     if (websiteAnalysis.layout?.navigation?.links?.length > 0) {
@@ -450,38 +521,41 @@ SPECIAL HANDLING FOR WIDGETS:
       basePrompt += `\n`;
     }
 
-    if (websiteAnalysis.styling?.components) {
-      basePrompt += `UI COMPONENTS TO INCLUDE:\n`;
-      if (websiteAnalysis.styling.components.buttons?.length > 0) {
-        basePrompt += `- ${websiteAnalysis.styling.components.buttons.length} buttons\n`;
-      }
-      if (websiteAnalysis.styling.components.forms?.length > 0) {
-        basePrompt += `- ${websiteAnalysis.styling.components.forms.length} forms\n`;
-      }
-      if (websiteAnalysis.styling.components.images?.length > 0) {
-        basePrompt += `- ${websiteAnalysis.styling.components.images.length} images/media\n`;
-      }
-      basePrompt += `\n`;
-    }
-
     basePrompt += `LAYOUT REQUIREMENTS:\n`;
-    basePrompt += `- Match the exact section structure and hierarchy from the analyzed website\n`;
-    basePrompt += `- Recreate the navigation pattern and content organization\n`;
-    basePrompt += `- Use similar component layouts and spacing\n`;
-    basePrompt += `- Apply Microsoft Design System colors while preserving the original structure\n`;
-    basePrompt += `- Ensure the wireframe reflects the actual website's information architecture\n`;
-    basePrompt += `- EACH SECTION MUST have data-section-index=\"<index>\" and data-section-type=\"<type>\" attributes\n`;
-    basePrompt += `- The <main> element MUST include data-sections=\"${
-      websiteAnalysis.layout?.sections?.length || 0
-    }\"\n`;
-    basePrompt += `- If cards or repeated feature blocks appear: wrap them in a grid container with class=\"card-grid\" and each card as <article class=\\"card\\" data-card-index=\\"n\\">\n`;
-    basePrompt += `- Keep nesting shallow (max 3 levels) and avoid redundant wrappers\n\n`;
+    basePrompt += `- Create EXACTLY ${websiteAnalysis.layout.sections.length} sections, one for each section listed above\n`;
+    basePrompt += `- Use the ACTUAL content text provided for each section - don't make up placeholder text\n`;
+    basePrompt += `- Use the ACTUAL button text from "Button Text" field - these are the real CTAs from the site\n`;
+    basePrompt += `- Match the section TYPE (hero = large banner, features = cards/grid, content = text block)\n\n`;
+
+    basePrompt += `🔴 CRITICAL HTML STRUCTURE - COPY THIS EXACTLY:\n`;
+    basePrompt += `<style>\n`;
+    basePrompt += `  * { margin: 0; padding: 0; box-sizing: border-box; }\n`;
+    basePrompt += `  body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }\n`;
+    basePrompt += `  section { padding: 40px 20px; border-bottom: 1px solid #e0e0e0; }\n`;
+    basePrompt += `  .hero { background: #f5f5f5; min-height: 300px; padding: 60px 20px; }\n`;
+    basePrompt += `  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; padding: 40px 20px; }\n`;
+    basePrompt += `  .card { border: 1px solid #e0e0e0; padding: 24px; background: #fafafa; border-radius: 4px; }\n`;
+    basePrompt += `  button, .btn { padding: 12px 24px; border: 2px solid #999; background: #fff; color: #333; border-radius: 4px; font-size: 16px; cursor: pointer; text-decoration: none; display: inline-block; }\n`;
+    basePrompt += `  button:hover, .btn:hover { background: #f5f5f5; }\n`;
+    basePrompt += `  h1 { font-size: 32px; margin-bottom: 16px; }\n`;
+    basePrompt += `  h2 { font-size: 24px; margin-bottom: 12px; }\n`;
+    basePrompt += `  p { margin-bottom: 16px; color: #666; }\n`;
+    basePrompt += `</style>\n\n`;
+    basePrompt += `Use this CSS in a <style> tag at the top. All sections MUST use these classes.\n`;
+    basePrompt += `For feature cards, wrap them in: <div class="features"><div class="card">...</div></div>\n\n`;
+
+    basePrompt += `🚨 BUTTONS - COPY THE EXACT HTML PROVIDED ABOVE:\n`;
+    basePrompt += `I have provided the EXACT <button> HTML for each section above.\n`;
+    basePrompt += `DO NOT create your own button HTML. COPY the <button> tags I provided character-for-character.\n`;
+    basePrompt += `Each button already has all the inline styles needed. Just copy and paste them.\n\n`;
+
+    basePrompt += `⚠️ VALIDATION: Generate exactly ${websiteAnalysis.layout.sections.length} sections with indexes 1 to ${websiteAnalysis.layout.sections.length}.\n\n`;
   }
 
-  // LOVABLE-INSPIRED UNIVERSAL APPROACH (C.L.E.A.R. Framework)
+  // DESIGNETICA-INSPIRED UNIVERSAL APPROACH (C.L.E.A.R. Framework)
   let lovablePrompt = basePrompt;
 
-  // Semantic analysis of user PURPOSE and FUNCTIONALITY (like Lovable's C.L.E.A.R.)
+  // Semantic analysis of user PURPOSE and FUNCTIONALITY (like Designetica's C.L.E.A.R.)
   const requestAnalysis = {
     // Determine the primary interface type
     primaryType:
@@ -530,8 +604,8 @@ SPECIAL HANDLING FOR WIDGETS:
     },
   };
 
-  // ADAPTIVE CONTEXT GENERATION (Lovable's adaptive approach)
-  lovablePrompt += `\n\n🎯 LOVABLE-STYLE ANALYSIS:\n`;
+  // ADAPTIVE CONTEXT GENERATION (Designetica's adaptive approach)
+  lovablePrompt += `\n\n🎯 DESIGNETICA-STYLE ANALYSIS:\n`;
   lovablePrompt += `Interface Type: ${requestAnalysis.primaryType.toUpperCase()}\n`;
   lovablePrompt += `Complexity Level: ${requestAnalysis.complexity}\n`;
   lovablePrompt += `Primary Goal: Understand what the user is trying to accomplish and create the most appropriate interface.\n\n`;

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Testing Microsoft Learn Wireframe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        #output {
+            margin-top: 20px;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+
+        iframe {
+            width: 100%;
+            height: 800px;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Test Microsoft Learn Wireframe Generation</h1>
+    <button onclick="testGeneration()">Generate Wireframe</button>
+    <div id="output"></div>
+
+    <script>
+        async function testGeneration() {
+            const output = document.getElementById('output');
+            output.innerHTML = '<p>⏳ Analyzing website...</p>';
+
+            try {
+                // Step 1: Analyze website
+                const analysisResponse = await fetch('http://localhost:7071/api/websiteAnalyzer', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: 'https://learn.microsoft.com' })
+                });
+
+                const analysisData = await analysisResponse.json();
+                console.log('Analysis:', analysisData);
+
+                output.innerHTML += '<p class="success">✅ Analysis complete: ' + analysisData.analysis.layout.sections.length + ' sections found</p>';
+                output.innerHTML += '<p>⏳ Generating wireframe...</p>';
+
+                // Step 2: Generate wireframe
+                const wireframeResponse = await fetch('http://localhost:7071/api/generateWireframe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        description: 'Create a wireframe based on https://learn.microsoft.com',
+                        websiteAnalysis: analysisData.analysis
+                    })
+                });
+
+                const wireframeData = await wireframeResponse.json();
+                console.log('Wireframe:', wireframeData);
+
+                output.innerHTML += '<p class="success">✅ Wireframe generated (' + wireframeData.html.length + ' chars)</p>';
+
+                // Display the wireframe
+                const iframe = document.createElement('iframe');
+                iframe.srcdoc = wireframeData.html;
+                output.appendChild(iframe);
+
+            } catch (error) {
+                output.innerHTML += '<p class="error">❌ Error: ' + error.message + '</p>';
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+
+</html>

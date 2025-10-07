@@ -48,3 +48,7 @@ tmp/
 
 # Transfer preparation
 .transfer-prep/
+
+# Development logs
+logs/
+*.pid

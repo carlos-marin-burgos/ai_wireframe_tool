@@ -21,6 +21,7 @@ import { DISCOVERED_ENDPOINTS } from "../../discovered-api-types";
 // This should match the actual function.json files in the backend
 const ACTUAL_AZURE_FUNCTIONS = [
   "/api/generate-wireframe",
+  "/api/generateWireframeFromUrl",
   "/api/generate-suggestions",
   "/api/figmaoauthcallback",
   "/api/figmaoauthstart",
@@ -38,6 +39,7 @@ type ValidatedEndpoint = (typeof ACTUAL_AZURE_FUNCTIONS)[number];
 interface EndpointCategories {
   AI_GENERATION: {
     GENERATE_WIREFRAME: ValidatedEndpoint;
+    GENERATE_WIREFRAME_FROM_URL: ValidatedEndpoint;
     GENERATE_SUGGESTIONS: ValidatedEndpoint;
   };
   AUTHENTICATION: {
@@ -56,6 +58,7 @@ interface EndpointCategories {
 export const VALIDATED_API_ENDPOINTS: EndpointCategories = {
   AI_GENERATION: {
     GENERATE_WIREFRAME: "/api/generate-wireframe",
+    GENERATE_WIREFRAME_FROM_URL: "/api/generateWireframeFromUrl",
     GENERATE_SUGGESTIONS: "/api/generate-suggestions",
   },
   AUTHENTICATION: {

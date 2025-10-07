@@ -339,10 +339,12 @@
   -webkit-backdrop-filter: blur(2px);
   backdrop-filter: blur(2px);
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* Changed from center to flex-start for better visibility in small viewports */
   justify-content: center;
+  padding-top: 100px; /* Add top padding to keep message visible */
   z-index: 1000; /* Very high z-index to appear above everything */
   border-radius: 8px;
+  overflow-y: auto; /* Allow scrolling if needed in very small viewports */
 }
 
 .wireframe-spinner-container {
@@ -1537,6 +1539,11 @@
   .wireframe-container {
     padding: 5px; /* Minimal padding on small screens */
   }
+
+  /* Reduce loading overlay padding on small screens */
+  .wireframe-loading-overlay {
+    padding-top: 60px; /* Less padding for small viewports */
+  }
 }
 
 /* ============================================
@@ -1576,8 +1583,24 @@
   .wireframe-preview,
   .wireframe-action-btn,
   .scroll-top-btn,
+  .wireframe-loading-overlay,
   .wireframe-info-panel {
-    animation: none;
     transition: none;
+    animation: none;
+  }
+}
+
+/* Extra small viewports - further reduce loading overlay padding */
+@media (max-width: 400px) {
+  .wireframe-loading-overlay {
+    padding-top: 40px; /* Minimal padding for very small screens */
+  }
+
+  .wireframe-loading-title {
+    font-size: 16px; /* Slightly smaller font for small screens */
+  }
+
+  .wireframe-loading-stage {
+    font-size: 13px; /* Slightly smaller font for small screens */
   }
 }

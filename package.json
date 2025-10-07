@@ -45,6 +45,7 @@
     "emergency:rollback": "./safe-deploy.sh emergency"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.65.0",
     "@azure/cosmos": "^4.5.0",
     "@azure/openai": "^2.0.0",
     "@azure/storage-blob": "^12.28.0",

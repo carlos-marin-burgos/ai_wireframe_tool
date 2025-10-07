@@ -798,7 +798,7 @@ const FigmaIntegrationModal: React.FC<FigmaIntegrationModalProps> = ({
 
                 try {
                     console.log('📡 Calling wireframe generation endpoint for URL:', url);
-                    const response = await fetch(getApiUrl('/api/generate-wireframe-from-url'), {
+                    const response = await fetch(getApiUrl('/api/generateWireframeFromUrl'), {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

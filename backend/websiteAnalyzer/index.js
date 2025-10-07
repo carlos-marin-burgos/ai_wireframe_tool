@@ -297,6 +297,9 @@ module.exports = async function (context, req) {
     const formIntelligence = await extractFormIntelligence(page, context);
     const loadingStates = await extractLoadingStates(page, context);
 
+    // Phase 3.5: Visual Hierarchy Analysis (before closing page)
+    const visualHierarchy = await extractVisualHierarchy(page, context);
+
     // Parse HTML (skipping screenshot for better performance)
     const $ = cheerio.load(content);
 
@@ -316,6 +319,7 @@ module.exports = async function (context, req) {
         footer: extractFooter($),
         sections: extractSections($),
         measurements: extractedLayout, // Phase 2: Add layout measurements
+        visualHierarchy: visualHierarchy, // Phase 3.5: Visual prominence and layout
       },
       styling: {
         colors: extractedColors,
@@ -1226,6 +1230,180 @@ async function extractLoadingStates(page, context) {
       progressBars: [],
       loadingIndicators: [],
       hasLoadingStates: false,
+    };
+  }
+}
+
+// ==========================================
+// PHASE 3.5: VISUAL HIERARCHY EXTRACTION
+// Extract visual layout information from rendered page
+// ==========================================
+
+async function extractVisualHierarchy(page, context) {
+  try {
+    context.log("👁️ Extracting visual hierarchy and layout...");
+
+    const hierarchy = await page.evaluate(() => {
+      const results = {
+        layout: "unknown",
+        prominentSections: [],
+        viewportSections: [],
+        hasHero: false,
+        hasSidebar: false,
+        headerHeight: 0,
+        mainContentWidth: 0,
+      };
+
+      // Detect overall layout pattern
+      const body = document.body;
+      const bodyStyle = window.getComputedStyle(body);
+      const bodyDisplay = bodyStyle.display;
+
+      if (bodyDisplay === "grid" || bodyStyle.gridTemplateColumns !== "none") {
+        results.layout = "grid";
+      } else if (bodyDisplay === "flex" || bodyStyle.display === "flex") {
+        results.layout = "flex";
+      } else {
+        results.layout = "block";
+      }
+
+      // Get viewport dimensions
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+
+      // Detect header height
+      const header = document.querySelector(
+        'header, [role="banner"], .header, nav'
+      );
+      if (header) {
+        const headerRect = header.getBoundingClientRect();
+        results.headerHeight = headerRect.height;
+      }
+
+      // Detect sidebar
+      const sidebar = document.querySelector(
+        'aside, [role="complementary"], .sidebar, nav.sidebar'
+      );
+      if (sidebar) {
+        const sidebarRect = sidebar.getBoundingClientRect();
+        if (
+          sidebarRect.width > 150 &&
+          sidebarRect.height > viewportHeight * 0.5
+        ) {
+          results.hasSidebar = true;
+        }
+      }
+
+      // Find all major content sections
+      const sectionSelectors = [
+        "section",
+        "article",
+        '[class*="section"]',
+        '[id*="section"]',
+        "main > div",
+        '[role="region"]',
+      ];
+
+      const seenElements = new Set();
+      const prominentSections = [];
+
+      sectionSelectors.forEach((selector) => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach((el, index) => {
+          if (seenElements.has(el)) return;
+          seenElements.add(el);
+
+          const rect = el.getBoundingClientRect();
+          const styles = window.getComputedStyle(el);
+
+          // Skip invisible or tiny elements
+          if (rect.height < 50 || rect.width < 100) return;
+          if (styles.display === "none" || styles.visibility === "hidden")
+            return;
+
+          // Calculate visual prominence score
+          const areaScore =
+            (rect.width * rect.height) / (viewportWidth * viewportHeight);
+          const positionScore = rect.top < viewportHeight ? 1.0 : 0.5;
+          const prominenceScore = areaScore * positionScore;
+
+          // Check if in viewport
+          const inViewport = rect.top < viewportHeight && rect.bottom > 0;
+
+          const sectionInfo = {
+            selector: selector,
+            index: index,
+            position: {
+              top: Math.round(rect.top),
+              left: Math.round(rect.left),
+              width: Math.round(rect.width),
+              height: Math.round(rect.height),
+            },
+            inViewport: inViewport,
+            prominenceScore: Math.round(prominenceScore * 100) / 100,
+            className: el.className || "",
+            id: el.id || "",
+            tagName: el.tagName.toLowerCase(),
+          };
+
+          // Check for hero characteristics
+          if (
+            rect.height > viewportHeight * 0.4 &&
+            rect.top < 200 &&
+            (el.querySelector("h1") || el.querySelector('[class*="hero"]'))
+          ) {
+            results.hasHero = true;
+            sectionInfo.isHero = true;
+          }
+
+          if (prominenceScore > 0.1 || inViewport) {
+            prominentSections.push(sectionInfo);
+          }
+        });
+      });
+
+      // Sort by prominence and limit
+      prominentSections.sort((a, b) => b.prominenceScore - a.prominenceScore);
+      results.prominentSections = prominentSections.slice(0, 10);
+
+      // Get sections in initial viewport
+      results.viewportSections = prominentSections
+        .filter((s) => s.inViewport)
+        .slice(0, 5);
+
+      // Get main content area width
+      const main = document.querySelector(
+        'main, [role="main"], .main, .content'
+      );
+      if (main) {
+        const mainRect = main.getBoundingClientRect();
+        results.mainContentWidth = mainRect.width;
+      } else {
+        results.mainContentWidth = viewportWidth;
+      }
+
+      return results;
+    });
+
+    context.log("✅ Visual hierarchy extracted:", {
+      layout: hierarchy.layout,
+      prominentSectionCount: hierarchy.prominentSections.length,
+      viewportSectionCount: hierarchy.viewportSections.length,
+      hasHero: hierarchy.hasHero,
+      hasSidebar: hierarchy.hasSidebar,
+    });
+
+    return hierarchy;
+  } catch (error) {
+    context.log("⚠️ Error extracting visual hierarchy:", error.message);
+    return {
+      layout: "unknown",
+      prominentSections: [],
+      viewportSections: [],
+      hasHero: false,
+      hasSidebar: false,
+      headerHeight: 0,
+      mainContentWidth: 0,
     };
   }
 }
@@ -2446,54 +2624,254 @@ function extractFooter($) {
 
 function extractSections($) {
   const sections = [];
+  const seenContent = new Set(); // Avoid duplicate sections
 
-  // Look for semantic sections
-  $("section, .section, article, .article, .card, .panel, .box").each(
-    (i, el) => {
-      if (sections.length < 10) {
-        const $el = $(el);
-        const text = $el.text().trim();
-        const heading = $el
-          .find("h1, h2, h3, h4, h5, h6")
-          .first()
-          .text()
-          .trim();
+  // Helper function to detect section type based on content and structure
+  function detectSectionType($el, text, heading) {
+    const lowerText = text.toLowerCase();
+    const lowerHeading = heading.toLowerCase();
+    const classList = $el.attr("class") || "";
+    const id = $el.attr("id") || "";
+    const combined =
+      `${classList} ${id} ${lowerText} ${lowerHeading}`.toLowerCase();
 
-        if (text && text.length > 20) {
-          sections.push({
-            type: el.name || "section",
-            heading: heading || "",
-            text: text.substring(0, 200),
-            hasImages: $el.find("img").length > 0,
-            hasButtons: $el.find('button, .btn, [role="button"]').length > 0,
-            hasLinks: $el.find("a").length > 0,
-          });
-        }
-      }
+    // Hero section detection (large heading, CTA buttons, typically first section)
+    if (
+      heading &&
+      heading.length > 0 &&
+      heading.length < 100 &&
+      ($el.find('button, .btn, .cta, [class*="button"]').length > 0 ||
+        $el.find('a[class*="button"], a[class*="cta"]').length > 0) &&
+      (combined.includes("hero") ||
+        combined.includes("banner") ||
+        combined.includes("jumbotron") ||
+        $el.find("h1").length > 0)
+    ) {
+      return "hero";
     }
-  );
 
-  // If no sections found, look for divs with substantial content
+    // Features section (multiple cards/items with icons or images)
+    const featureItems = $el.find(
+      '.card, .feature, .item, [class*="feature"], [class*="card"]'
+    ).length;
+    if (
+      featureItems >= 2 ||
+      (combined.includes("feature") &&
+        $el.find('img, svg, i[class*="icon"]').length >= 2)
+    ) {
+      return "features";
+    }
+
+    // CTA section (prominent call-to-action)
+    if (
+      $el.find('button, .btn, [class*="cta"]').length > 0 &&
+      text.length < 500 &&
+      (combined.includes("cta") ||
+        combined.includes("call-to-action") ||
+        combined.includes("signup") ||
+        combined.includes("get started"))
+    ) {
+      return "cta";
+    }
+
+    // Testimonial/review section
+    if (
+      combined.includes("testimonial") ||
+      combined.includes("review") ||
+      combined.includes("quote") ||
+      $el.find("blockquote").length > 0
+    ) {
+      return "testimonials";
+    }
+
+    // Pricing section
+    if (
+      combined.includes("pricing") ||
+      combined.includes("plan") ||
+      $el.find('[class*="price"], [class*="plan"]').length >= 2
+    ) {
+      return "pricing";
+    }
+
+    // Team/about section
+    if (
+      combined.includes("team") ||
+      combined.includes("about") ||
+      combined.includes("who we are")
+    ) {
+      return "team";
+    }
+
+    // Gallery/media section
+    if (
+      $el.find("img").length >= 3 &&
+      (combined.includes("gallery") || combined.includes("showcase"))
+    ) {
+      return "gallery";
+    }
+
+    // Form section
+    if (
+      $el.find("form").length > 0 ||
+      $el.find("input, textarea").length >= 2
+    ) {
+      return "form";
+    }
+
+    // Stats/metrics section
+    if (
+      $el.find('[class*="stat"], [class*="metric"], [class*="number"]')
+        .length >= 2 ||
+      /\d+[+%]/.test(text) // Contains numbers with + or %
+    ) {
+      return "stats";
+    }
+
+    // Navigation/menu section
+    if (
+      $el.find('nav, [role="navigation"]').length > 0 ||
+      $el.find("a").length >= 5
+    ) {
+      return "navigation";
+    }
+
+    // Blog/article list
+    if (
+      $el.find("article, .post, .blog-item").length >= 2 ||
+      combined.includes("blog") ||
+      combined.includes("news") ||
+      combined.includes("article")
+    ) {
+      return "blog-list";
+    }
+
+    // Content section (default for substantial text content)
+    if (text.length > 200 && heading) {
+      return "content";
+    }
+
+    return "section";
+  }
+
+  // Extract prominent sections with semantic understanding
+  $(
+    "section, article, .section, [class*='section'], [role='region'], main > div, [id*='section']"
+  ).each((i, el) => {
+    if (sections.length < 15) {
+      // Increased limit for better coverage
+      const $el = $(el);
+      const text = $el.text().trim();
+      const heading = $el.find("h1, h2, h3, h4, h5, h6").first().text().trim();
+
+      // Skip if too short or duplicate content
+      if (text.length < 30) return;
+      const contentKey = text.substring(0, 100);
+      if (seenContent.has(contentKey)) return;
+      seenContent.add(contentKey);
+
+      // Detect section type
+      const sectionType = detectSectionType($el, text, heading);
+
+      // Extract meaningful data
+      const buttons = $el.find(
+        'button, .btn, [class*="button"], [role="button"]'
+      ).length;
+      const links = $el.find("a").length;
+      const images = $el.find("img").length;
+      const videos = $el.find(
+        "video, iframe[src*='youtube'], iframe[src*='vimeo']"
+      ).length;
+      const forms = $el.find("form").length;
+
+      // Extract subheadings for richer context
+      const subheadings = [];
+      $el.find("h2, h3, h4").each((idx, subEl) => {
+        if (subheadings.length < 3) {
+          const subText = $(subEl).text().trim();
+          if (subText && subText !== heading) {
+            subheadings.push(subText);
+          }
+        }
+      });
+
+      // Extract CTAs
+      const ctas = [];
+      $el
+        .find('button, .btn, a[class*="button"], a[class*="cta"]')
+        .each((idx, btnEl) => {
+          if (ctas.length < 3) {
+            const btnText = $(btnEl).text().trim();
+            if (btnText) ctas.push(btnText);
+          }
+        });
+
+      sections.push({
+        type: sectionType,
+        heading: heading || "",
+        subheadings: subheadings,
+        text: text.substring(0, 300), // Increased for better context
+        summary: text.substring(0, 150), // Short summary
+        hasImages: images > 0,
+        hasButtons: buttons > 0,
+        hasLinks: links > 0,
+        hasVideos: videos > 0,
+        hasForms: forms > 0,
+        counts: {
+          buttons,
+          links,
+          images,
+          videos,
+          forms,
+        },
+        ctas: ctas,
+        className: $el.attr("class") || "",
+        id: $el.attr("id") || "",
+      });
+    }
+  });
+
+  // If still no sections found, look for major content blocks
   if (sections.length === 0) {
-    $("div").each((i, el) => {
-      if (sections.length < 5) {
+    $(
+      "main > *, body > div[class*='content'], body > div[class*='container'], body > div[class*='wrapper']"
+    ).each((i, el) => {
+      if (sections.length < 8) {
         const $el = $(el);
         const text = $el.text().trim();
 
-        // Only consider divs with meaningful content
-        if (text.length > 100 && text.length < 1000) {
+        if (text.length > 100 && text.length < 2000) {
           const heading = $el
             .find("h1, h2, h3, h4, h5, h6")
             .first()
             .text()
             .trim();
+
+          const sectionType = detectSectionType($el, text, heading);
+          const contentKey = text.substring(0, 100);
+          if (seenContent.has(contentKey)) return;
+          seenContent.add(contentKey);
+
           sections.push({
-            type: "content-block",
+            type: sectionType,
             heading: heading || "",
-            text: text.substring(0, 200),
+            subheadings: [],
+            text: text.substring(0, 300),
+            summary: text.substring(0, 150),
             hasImages: $el.find("img").length > 0,
             hasButtons: $el.find('button, .btn, [role="button"]').length > 0,
             hasLinks: $el.find("a").length > 0,
+            hasVideos: $el.find("video, iframe").length > 0,
+            hasForms: $el.find("form").length > 0,
+            counts: {
+              buttons: $el.find("button, .btn").length,
+              links: $el.find("a").length,
+              images: $el.find("img").length,
+              videos: $el.find("video, iframe").length,
+              forms: $el.find("form").length,
+            },
+            ctas: [],
+            className: $el.attr("class") || "",
+            id: $el.attr("id") || "",
           });
         }
       }
@@ -2527,87 +2905,139 @@ function extractComponents($) {
 }
 
 function generateWireframePrompt($, title, url) {
-  const sections = [];
-  const components = [];
+  console.log("🎯 Generating enhanced wireframe prompt from analysis...");
 
-  // Analyze main content areas
-  const mainContent = $("main, .main, .content, #content").first();
-  const hasMainContent = mainContent.length > 0;
+  // Get enriched section data
+  const sections = extractSections($);
+  const navigation = extractNavigation($);
+  const header = extractHeader($);
+  const footer = extractFooter($);
 
-  // Check for navigation
-  const navigation = $('nav, .nav, .navigation, [role="navigation"]');
-  const navLinks = navigation.find("a").length;
+  // Build a comprehensive, structured prompt
+  let prompt = `# Website Analysis for: "${title}"\n`;
+  prompt += `URL: ${url}\n\n`;
 
-  // Check for header
-  const header = $("header, .header");
-  const headerText = header.text().trim().substring(0, 100);
+  // Describe overall structure
+  prompt += `## Overall Structure\n`;
 
-  // Check for sections and content blocks
-  $("section, .section, article, .article").each((i, el) => {
-    const $el = $(el);
-    const hasHeading = $el.find("h1, h2, h3, h4, h5, h6").length > 0;
-    const hasImages = $el.find("img").length > 0;
-    const hasButtons = $el.find("button, .btn, .button").length > 0;
-    const hasLinks = $el.find("a").length > 0;
-
-    sections.push({
-      type: "content-block",
-      heading: $el
-        .find("h1, h2, h3, h4, h5, h6")
-        .first()
-        .text()
-        .trim()
-        .substring(0, 50),
-      text: $el.text().trim().substring(0, 100),
-      hasImages,
-      hasButtons,
-      hasLinks,
-    });
-  });
-
-  // Identify component types
-  const buttonCount = $(
-    'button, .btn, input[type="button"], input[type="submit"]'
-  ).length;
-  const formCount = $("form").length;
-  const imageCount = $("img").length;
-  const cardCount = $(".card, .tile, .item").length;
-
-  if (buttonCount > 0) components.push(`${buttonCount} buttons`);
-  if (formCount > 0) components.push(`${formCount} forms`);
-  if (imageCount > 0) components.push(`${imageCount} images`);
-  if (cardCount > 0) components.push(`${cardCount} cards/tiles`);
-
-  // Generate descriptive prompt
-  let prompt = `Website "${title}" (${url}) analysis:\n\n`;
-
-  if (headerText) {
-    prompt += `Header: ${headerText}\n`;
+  if (header && header.text) {
+    prompt += `- **Header**: ${header.text.substring(0, 100)}\n`;
   }
 
-  if (navLinks > 0) {
-    prompt += `Navigation: ${navLinks} navigation links\n`;
+  if (navigation && navigation.links && navigation.links.length > 0) {
+    const navLinks = navigation.links
+      .slice(0, 8)
+      .map((l) => l.text)
+      .filter((t) => t)
+      .join(", ");
+    prompt += `- **Navigation** (${navigation.links.length} links): ${navLinks}\n`;
   }
 
-  if (hasMainContent) {
-    prompt += `Main content area: Present with structured content\n`;
+  prompt += `- **Main Content**: ${sections.length} distinct sections\n`;
+
+  if (footer && footer.text) {
+    prompt += `- **Footer**: Present with links and information\n`;
   }
 
+  prompt += `\n`;
+
+  // Describe sections with semantic meaning
   if (sections.length > 0) {
-    prompt += `\nContent sections (${sections.length}):\n`;
-    sections.slice(0, 5).forEach((section, i) => {
-      prompt += `${i + 1}. ${section.heading || "Untitled section"}: ${
-        section.text
-      }\n`;
-      if (section.hasImages) prompt += "   - Contains images\n";
-      if (section.hasButtons) prompt += "   - Contains buttons\n";
-      if (section.hasLinks) prompt += "   - Contains links\n";
+    prompt += `## Content Sections (${sections.length} identified)\n\n`;
+
+    sections.forEach((section, index) => {
+      prompt += `### ${index + 1}. ${section.type.toUpperCase()}`;
+      if (section.heading) {
+        prompt += ` - "${section.heading}"`;
+      }
+      prompt += `\n`;
+
+      // Add section purpose/description
+      switch (section.type) {
+        case "hero":
+          prompt += `**Purpose**: Primary landing section with main value proposition\n`;
+          break;
+        case "features":
+          prompt += `**Purpose**: Showcase key features or benefits\n`;
+          break;
+        case "cta":
+          prompt += `**Purpose**: Call-to-action to drive user engagement\n`;
+          break;
+        case "testimonials":
+          prompt += `**Purpose**: Social proof through customer testimonials\n`;
+          break;
+        case "pricing":
+          prompt += `**Purpose**: Pricing plans or product tiers\n`;
+          break;
+        case "team":
+          prompt += `**Purpose**: Team members or company information\n`;
+          break;
+        case "gallery":
+          prompt += `**Purpose**: Visual showcase of products or work\n`;
+          break;
+        case "form":
+          prompt += `**Purpose**: User input or data collection\n`;
+          break;
+        case "stats":
+          prompt += `**Purpose**: Key metrics or statistics\n`;
+          break;
+        case "blog-list":
+          prompt += `**Purpose**: List of articles or blog posts\n`;
+          break;
+        case "content":
+          prompt += `**Purpose**: Informational content\n`;
+          break;
+        default:
+          prompt += `**Purpose**: General content section\n`;
+      }
+
+      // Add content summary
+      if (section.summary) {
+        prompt += `**Content**: ${section.summary}\n`;
+      }
+
+      // Add subheadings if present
+      if (section.subheadings && section.subheadings.length > 0) {
+        prompt += `**Subheadings**: ${section.subheadings.join(" | ")}\n`;
+      }
+
+      // Add component counts
+      const components = [];
+      if (section.counts.images > 0)
+        components.push(`${section.counts.images} images`);
+      if (section.counts.buttons > 0)
+        components.push(`${section.counts.buttons} buttons`);
+      if (section.counts.forms > 0)
+        components.push(`${section.counts.forms} forms`);
+      if (section.counts.links > 0)
+        components.push(`${section.counts.links} links`);
+      if (section.counts.videos > 0)
+        components.push(`${section.counts.videos} videos`);
+
+      if (components.length > 0) {
+        prompt += `**Components**: ${components.join(", ")}\n`;
+      }
+
+      // Add CTAs if present
+      if (section.ctas && section.ctas.length > 0) {
+        prompt += `**Call-to-Actions**: "${section.ctas.join('", "')}"\n`;
+      }
+
+      prompt += `\n`;
     });
   }
 
-  if (components.length > 0) {
-    prompt += `\nComponents found: ${components.join(", ")}\n`;
-  }
+  // Add wireframe generation instructions
+  prompt += `\n## Wireframe Generation Instructions\n`;
+  prompt += `Create a wireframe that accurately represents this website's structure:\n`;
+  prompt += `1. Preserve the exact section order and hierarchy shown above\n`;
+  prompt += `2. Use appropriate layouts for each section type (hero, features, etc.)\n`;
+  prompt += `3. Include all navigation elements mentioned\n`;
+  prompt += `4. Represent the visual prominence of sections (hero sections should be larger)\n`;
+  prompt += `5. Include realistic content placeholders based on the summaries provided\n`;
+  prompt += `6. Use appropriate UI components (buttons, forms, cards) as indicated\n`;
+  prompt += `7. Maintain professional spacing and Microsoft Design System styling\n`;
+  prompt += `8. Ensure the wireframe reflects the actual information architecture of the site\n`;
 
   return prompt;
 }

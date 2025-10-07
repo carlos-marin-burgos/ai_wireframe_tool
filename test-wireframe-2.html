@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft Learn Wireframe</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        main {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        section {
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .hero {
+            background-color: #e1f5fe;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: clamp(1.5rem, 2.5vw, 2rem);
+        }
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+        }
+        .hero .action-btn {
+            display: inline-block;
+            margin: 8px;
+            padding: 10px 20px;
+            background-color: #194a7a;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .features {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .features h2 {
+            font-size: clamp(1.25rem, 2vw, 1.5rem);
+        }
+        .features p {
+            font-size: clamp(0.875rem, 1.5vw, 1rem);
+        }
+        .features .action-btn {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #194a7a;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        @media (max-width: 768px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 480px) {
+            section {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main data-sections="15">
+        <section data-section-index="1" data-section-type="hero" class="hero">
+            <h1>Microsoft Ignite</h1>
+            <p>November 17–21, 2025</p>
+            <p>Session catalog is live—personalize your event experience across AI, cloud, and more.</p>
+            <a href="#" class="action-btn">Register now</a>
+            <a href="#" class="action-btn">Dismiss alert</a>
+        </section>
+        <section data-section-index="2" data-section-type="features" class="features">
+            <h2>Free to join. Request to attend.</h2>
+            <p>Microsoft AI Tour</p>
+            <p>Take your business to the AI frontier.</p>
+        </section>
+        <section data-section-index="3" data-section-type="features" class="features">
+            <h2>Artificial intelligence</h2>
+            <p>Learning hub to build AI skills</p>
+        </section>
+        <section data-section-index="4" data-section-type="features" class="features">
+            <h2>Compliance</h2>
+            <p>Compliance resources you need to get started with your business</p>
+        </section>
+        <section data-section-index="5" data-section-type="features" class="features">
+            <h2>DevOps</h2>
+            <p>DevOps practices, Git version control, and Agile methods</p>
+        </section>
+        <section data-section-index="6" data-section-type="features" class="features">
+            <h2>Learn for Organizations</h2>
+            <p>Curated offerings from Microsoft to boost your team’s technical skills</p>
+        </section>
+        <section data-section-index="7" data-section-type="features" class="features">
+            <h2>Platform engineering</h2>
+            <p>Tools from Microsoft and others to build personalized developer experiences</p>
+        </section>
+        <section data-section-index="8" data-section-type="features" class="features">
+            <h2>Security</h2>
+            <p>Guidance to help you tackle security challenges</p>
+        </section>
+        <section data-section-index="9" data-section-type="features" class="features">
+            <h2>Assessments</h2>
+            <p>Interactive guidance with custom recommendations</p>
+        </section>
+        <section data-section-index="10" data-section-type="features" class="features">
+            <h2>Student hub</h2>
+            <p>Self-paced and interactive training for students</p>
+        </section>
+        <section data-section-index="11" data-section-type="features" class="features">
+            <h2>Educator center</h2>
+            <p>Resources for educators to bring technical innovation in their classroom</p>
+        </section>
+        <section data-section-index="12" data-section-type="hero" class="hero">
+            <h1>What can we help you build today?</h1>
+            <p>Explore Microsoft product documentation, training, credentials, Q&A, code references, and shows.</p>
+            <a href="#" class="action-btn">Search</a>
+            <a href="#" class="action-btn">Create plan with AI</a>
+        </section>
+        <!-- Placeholder sections to complete the 15 required sections -->
+        <section data-section-index="13" data-section-type="placeholder"></section>
+        <section data-section-index="14" data-section-type="placeholder"></section>
+        <section data-section-index="15" data-section-type="placeholder"></section>
+    </main>
+</body>
+</html>

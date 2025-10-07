@@ -29,6 +29,7 @@ import { sanitizeGeneratedHtml } from './utils/sanitizeGeneratedHtml';
 import { PerformanceMonitor, usePerformanceMonitor } from "./components/PerformanceMonitor";
 import { getInstantSuggestions, shouldUseAI } from "./utils/fastSuggestions";
 import { getCachedSuggestions, cacheSuggestions } from "./utils/suggestionCache";
+import { WebsiteAnalyzer } from "./services/websiteAnalyzer";
 
 interface SavedWireframe {
   id: string;
@@ -61,6 +62,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   const [forceUpdateKey, setForceUpdateKey] = useState<number>(Date.now());
   const [showLandingPage, setShowLandingPage] = useState(true);
   // Note: isAnalyzingImage now comes from useImageUpload hook as hookIsAnalyzingImage
+  const [isAnalyzingWebsite, setIsAnalyzingWebsite] = useState(false);
   const [toasts, setToasts] = useState<ToastData[]>([]);
   const [fastMode, setFastMode] = useState(false);
   const [showFigmaIntegration, setShowFigmaIntegration] = useState(false);
@@ -362,14 +364,39 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     try {
       console.log('🚀 Generating wireframe with description:', actualDescription);
 
+      // Check if description contains a URL and we don't already have analysis
+      let finalWebsiteAnalysis = websiteAnalysis;
+      if (!finalWebsiteAnalysis && WebsiteAnalyzer.isUrlPresent(actualDescription)) {
+        const urls = WebsiteAnalyzer.extractUrls(actualDescription);
+        const primaryUrl = urls[0];
+
+        console.log(`🔍 URL detected in landing page: ${primaryUrl} - Starting website analysis`);
+        setIsAnalyzingWebsite(true);
+
+        try {
+          const analyzer = new WebsiteAnalyzer();
+          finalWebsiteAnalysis = await analyzer.analyzeWebsite(primaryUrl);
+
+          console.log('✅ Website analysis completed:', {
+            title: finalWebsiteAnalysis.pageInfo.title,
+            sections: finalWebsiteAnalysis.layout.sections.length
+          });
+
+        } catch (analysisError) {
+          console.error('❌ Website analysis failed:', analysisError);
+        } finally {
+          setIsAnalyzingWebsite(false);
+        }
+      }
+
       // Use the generateWireframe hook which properly manages loading state
       const result = await generateWireframe(
         actualDescription,
         designTheme,
         colorScheme,
         false, // skipCache
-        false, // fastMode
-        websiteAnalysis
+        false, // fastMode,
+        finalWebsiteAnalysis
       );
 
       if (result && result.html) {
@@ -1620,7 +1647,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
             }
           }}
           onSubmit={handleSubmit}
-          loading={loading}
+          loading={loading || isAnalyzingWebsite}
           handleStop={handleStop}
           showAiSuggestions={showAiSuggestions}
           aiSuggestions={aiSuggestions}

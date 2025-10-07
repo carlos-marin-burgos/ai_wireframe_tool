@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft Learn: Build skills that open doors in your career</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        main {
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-gap: 24px;
+        }
+
+        section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero {
+            grid-column: span 2;
+            text-align: center;
+        }
+
+        .hero h2 {
+            margin: 0;
+            font-size: clamp(1.5rem, 2.5vw, 2rem);
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+        }
+
+        .hero .action-btn {
+            background-color: #194a7a;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                grid-column: span 1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            section {
+                padding: 10px;
+            }
+
+            .action-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main data-sections="15">
+        <section data-section-index="1" data-section-type="hero" class="hero">
+            <h2>Microsoft Ignite</h2>
+            <p>November 17–21, 2025</p>
+            <p>Session catalog is live—personalize your event experience across AI, cloud, and more.</p>
+            <button class="action-btn">Register now</button>
+            <button class="action-btn">Dismiss alert</button>
+        </section>
+
+        <section data-section-index="2" data-section-type="features">
+            <h3>Free to join. Request to attend.</h3>
+            <p>Microsoft AI Tour</p>
+            <p>Take your business to the AI frontier.</p>
+        </section>
+
+        <section data-section-index="3" data-section-type="features">
+            <h3>Artificial intelligence</h3>
+            <p>Learning hub to build AI skills</p>
+        </section>
+
+        <section data-section-index="4" data-section-type="features">
+            <h3>Compliance</h3>
+            <p>Compliance resources you need to get started with your business</p>
+        </section>
+
+        <section data-section-index="5" data-section-type="features">
+            <h3>DevOps</h3>
+            <p>DevOps practices, Git version control and Agile methods</p>
+        </section>
+
+        <section data-section-index="6" data-section-type="features">
+            <h3>Learn for Organizations</h3>
+            <p>Curated offerings from Microsoft to boost your team’s technical skills</p>
+        </section>
+
+        <section data-section-index="7" data-section-type="features">
+            <h3>Platform engineering</h3>
+            <p>Tools from Microsoft and others to build personalized developer experiences</p>
+        </section>
+
+        <section data-section-index="8" data-section-type="features">
+            <h3>Security</h3>
+            <p>Guidance to help you tackle security challenges</p>
+        </section>
+
+        <section data-section-index="9" data-section-type="features">
+            <h3>Assessments</h3>
+            <p>Interactive guidance with custom recommendations</p>
+        </section>
+
+        <section data-section-index="10" data-section-type="features">
+            <h3>Student hub</h3>
+            <p>Self-paced and interactive training for students</p>
+        </section>
+
+        <section data-section-index="11" data-section-type="features">
+            <h3>Educator center</h3>
+            <p>Resources for educators to bring technical innovation in their classroom</p>
+        </section>
+
+        <section data-section-index="12" data-section-type="hero" class="hero">
+            <h2>What can we help you build today?</h2>
+            <p>Explore Microsoft product documentation, training, credentials, Q&A, code references, and shows.</p>
+            <button class="action-btn">Search</button>
+            <button class="action-btn">Create plan with AI</button>
+        </section>
+
+        <section data-section-index="13" data-section-type="features">
+            <h3>Popular technical resources and training</h3>
+            <p>Discover AI, Azure, and Copilot essentials</p>
+        </section>
+
+        <section data-section-index="14" data-section-type="features">
+            <h3>Take in-demand training</h3>
+            <p>Get started with our training modules</p>
+        </section>
+
+        <section data-section-index="15" data-section-type="features">
+            <h3>Gallery of Images</h3>
+            <p>Visual grid of images to explore our offerings</p>
+        </section>
+    </main>
+</body>
+</html>
