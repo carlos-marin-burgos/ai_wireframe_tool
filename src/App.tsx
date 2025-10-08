@@ -31,6 +31,7 @@ import { PerformanceMonitor, usePerformanceMonitor } from "./components/Performa
 import { getInstantSuggestions, shouldUseAI } from "./utils/fastSuggestions";
 import { getCachedSuggestions, cacheSuggestions } from "./utils/suggestionCache";
 import { WebsiteAnalyzer } from "./services/websiteAnalyzer";
+import { analyticsService } from "./services/analyticsService";
 
 interface SavedWireframe {
   id: string;
@@ -87,6 +88,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   // Toolbar handler functions for header
   const handleToolbarFigma = () => {
     console.log('🎨 TOP TOOLBAR FIGMA BUTTON CLICKED - Opening Figma import (like landing page)...');
+    analyticsService.trackFeatureUsage('Figma Integration');
     setShowTopToolbarFigmaImport(true);
   };
 
@@ -100,6 +102,11 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
         console.warn('Component Library function not available');
       }
     };
+  }, []);
+
+  // Track session start on component mount
+  useEffect(() => {
+    analyticsService.trackSessionStart();
   }, []);
 
   // Set up the dev playbooks ref for toolbar
@@ -119,6 +126,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   }, []);
 
   const handleToolbarHtmlCode = () => {
+    analyticsService.trackFeatureUsage('View HTML Code');
     if (viewHtmlCodeRef.current) {
       viewHtmlCodeRef.current();
     } else {
@@ -127,6 +135,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   };
 
   const handleToolbarDownload = () => {
+    analyticsService.trackFeatureUsage('Download Wireframe');
     if (downloadWireframeRef.current) {
       downloadWireframeRef.current();
     } else {
@@ -135,6 +144,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   };
 
   const handleToolbarPresentation = () => {
+    analyticsService.trackFeatureUsage('Presentation Mode');
     if (presentationModeRef.current) {
       presentationModeRef.current();
     } else {
@@ -144,6 +154,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
 
   const handleToolbarFigmaExport = () => {
     console.log('📤 EXPORT TO FIGMA BUTTON CLICKED - Opening Figma export modal...');
+    analyticsService.trackFeatureUsage('Export to Figma');
     setShowFigmaExportModal(true);
   };
 
@@ -259,6 +270,9 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
     const updated = [...savedWireframes, newWireframe];
     setSavedWireframes(updated);
     localStorage.setItem("snapframe_saved", JSON.stringify(updated));
+
+    // Track wireframe save
+    analyticsService.trackWireframeSaved(saveTitle.trim());
 
     setShowSaveDialog(false);
     setSaveTitle("");
@@ -406,6 +420,9 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           handleWireframeGenerated(result.html, actualDescription);
           setReactComponent("");  // Clear React component
           setShowLandingPage(false);
+
+          // Track wireframe creation
+          analyticsService.trackWireframeCreated(actualDescription);
 
           // Close AI suggestions panel after successful generation
           setShowAiSuggestions(false);
