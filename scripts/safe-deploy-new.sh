@@ -82,6 +82,9 @@ get_current_env() {
 get_expected_function_app_url() {
     local env="$1"
     case "$env" in
+        "designetica")
+            echo "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net"
+            ;;
         "designetica-prod")
             echo "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net"
             ;;
@@ -139,7 +142,7 @@ safe_deploy() {
     
     if [ "$expected_url" = "unknown" ]; then
         log_error "Unknown environment: $current_env"
-        log_info "Known environments: designetica-prod, production"
+        log_info "Known environments: designetica, designetica-prod, production"
         exit 1
     fi
     

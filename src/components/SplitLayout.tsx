@@ -741,174 +741,77 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   }, []);
 
   const handleFormatCommand = useCallback((command: string, value?: string) => {
+    console.log('🎨 handleFormatCommand called with:', command);
+
     if (!currentEditingElementRef.current) {
       console.warn('🎨 No element currently being edited');
       return;
     }
 
     const element = currentEditingElementRef.current;
+    console.log('🎨 Editing element:', element.tagName, element.textContent?.substring(0, 50));
 
-    // Focus the editing element first to ensure selection is active
+    // Make sure element is focused and contentEditable
+    if (!element.isContentEditable) {
+      element.contentEditable = 'true';
+      console.log('🎨 Set contentEditable to true');
+    }
     element.focus();
 
-    // Small delay to ensure focus is set
-    setTimeout(() => {
-      const selection = window.getSelection();
-
-      if (!selection) {
-        console.warn('🎨 No selection API available');
-        return;
-      }
-
-      let range: Range;
-
-      if (selection.rangeCount === 0) {
-        range = document.createRange();
-        range.selectNodeContents(element);
-        selection.addRange(range);
-      } else {
-        range = selection.getRangeAt(0);
-      }
-
-      const selectedText = range.toString();
-
-      // If no text is selected, select all text in the element
-      if (selectedText.length === 0) {
-        range.selectNodeContents(element);
-        selection.removeAllRanges();
-        selection.addRange(range);
-      }
-
-      try {
-        // Modern approach: wrap selection in appropriate tag
-        switch (command) {
-          case 'bold':
-            applyFormatting(range, 'strong', selection);
-            break;
-          case 'italic':
-            applyFormatting(range, 'em', selection);
-            break;
-          case 'underline':
-            applyFormatting(range, 'u', selection);
-            break;
-          case 'removeFormat':
-            removeFormatting(range, selection);
-            break;
-          default:
-            // Fallback to execCommand for other commands
-            document.execCommand(command, false, value);
-        }
-      } catch (error) {
-        console.error('🎨 Formatting error:', error);
-        // Fallback to execCommand if modern approach fails
-        try {
-          document.execCommand(command, false, value);
-        } catch (fallbackError) {
-          console.error('🎨 Fallback formatting also failed:', fallbackError);
-        }
-      }
-
-      // Restore focus to the editing element
-      if (element) {
-        element.focus();
-      }
-    }, 10);
-  }, []);
-
-  // Helper functions for formatting
-  const applyFormatting = (range: Range, tagName: string, selection: Selection) => {
-    const startContainer = range.startContainer;
-    const startOffset = range.startOffset;
-    const endContainer = range.endContainer;
-    const endOffset = range.endOffset;
-
-    const selectedContent = range.extractContents();
-
-    // Check if the selection is already wrapped in the target tag
-    const parentElement = startContainer.nodeType === Node.TEXT_NODE
-      ? startContainer.parentElement
-      : startContainer as Element;
-
-    const existingTag = parentElement?.closest(tagName) ||
-      (parentElement?.tagName?.toLowerCase() === tagName.toLowerCase() ? parentElement : null);
-
-    if (existingTag && currentEditingElementRef.current?.contains(existingTag)) {
-      // Remove formatting by unwrapping the tag
-      const textContent = existingTag.textContent || '';
-      const textNode = document.createTextNode(textContent);
-      existingTag.parentNode?.replaceChild(textNode, existingTag);
-
-      // Restore selection to the unwrapped text
-      try {
-        const newRange = document.createRange();
-        const textLength = textContent.length;
-        const newStartOffset = Math.min(startOffset, textLength);
-        const newEndOffset = Math.min(endOffset, textLength);
-
-        newRange.setStart(textNode, newStartOffset);
-        newRange.setEnd(textNode, newEndOffset);
-
-        selection.removeAllRanges();
-        selection.addRange(newRange);
-      } catch (error) {
-        console.warn('Could not restore selection after removing formatting:', error);
-        const fallbackRange = document.createRange();
-        fallbackRange.selectNodeContents(textNode);
-        selection.removeAllRanges();
-        selection.addRange(fallbackRange);
-      }
-    } else {
-      // Apply formatting by wrapping in the tag
-      const formattedElement = document.createElement(tagName);
-      formattedElement.appendChild(selectedContent);
-      range.insertNode(formattedElement);
-
-      // Restore selection to the formatted content
-      try {
-        const newRange = document.createRange();
-        newRange.selectNodeContents(formattedElement);
-        selection.removeAllRanges();
-        selection.addRange(newRange);
-      } catch (error) {
-        console.warn('Could not restore selection after formatting:', error);
-      }
+    const selection = window.getSelection();
+    if (!selection) {
+      console.warn('🎨 No selection API available');
+      return;
     }
-  };
 
-  const removeFormatting = (range: Range, selection: Selection) => {
-    const startOffset = range.startOffset;
-    const endOffset = range.endOffset;
+    console.log('🎨 Selection range count:', selection.rangeCount);
+    console.log('🎨 Selected text:', selection.toString());
 
-    const selectedContent = range.extractContents();
-    const textContent = selectedContent.textContent || '';
+    // If no selection, select all content in the element
+    if (selection.rangeCount === 0 || selection.toString().length === 0) {
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      console.log('🎨 Selected all content in element');
+    }
 
-    // Create clean text node
-    const cleanText = textContent.replace(/<[^>]*>/g, '');
-    const textNode = document.createTextNode(cleanText);
-
-    // Insert the clean content
-    range.insertNode(textNode);
-
-    // Restore selection to the clean text
     try {
-      const newRange = document.createRange();
-      const textLength = cleanText.length;
-      const newStartOffset = Math.min(startOffset, textLength);
-      const newEndOffset = Math.min(endOffset, textLength);
+      // Use execCommand - it's deprecated but still the most reliable
+      let success = false;
 
-      newRange.setStart(textNode, newStartOffset);
-      newRange.setEnd(textNode, newEndOffset);
+      switch (command) {
+        case 'bold':
+          success = document.execCommand('bold', false);
+          break;
+        case 'italic':
+          success = document.execCommand('italic', false);
+          break;
+        case 'underline':
+          success = document.execCommand('underline', false);
+          break;
+        case 'removeFormat':
+          success = document.execCommand('removeFormat', false);
+          break;
+        default:
+          success = document.execCommand(command, false, value);
+      }
 
-      selection.removeAllRanges();
-      selection.addRange(newRange);
+      if (success) {
+        console.log('✅ Formatting applied successfully:', command);
+        console.log('🎨 New HTML:', element.innerHTML);
+
+        // Content will be saved on blur event
+      } else {
+        console.warn('⚠️ Formatting command returned false:', command);
+      }
     } catch (error) {
-      // Fallback: select all the clean text
-      const fallbackRange = document.createRange();
-      fallbackRange.selectNodeContents(textNode);
-      selection.removeAllRanges();
-      selection.addRange(fallbackRange);
+      console.error('🎨 Formatting error:', error);
     }
-  };
+
+    // Keep focus on the editing element
+    element.focus();
+  }, []);
 
   // Close image upload modal when analysis completes successfully
   useEffect(() => {

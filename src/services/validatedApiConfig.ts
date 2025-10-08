@@ -26,8 +26,6 @@ const ACTUAL_AZURE_FUNCTIONS = [
   "/api/figmaoauthcallback",
   "/api/figmaoauthstart",
   "/api/figmaoauthdiagnostics",
-  "/api/githubAuthCallback",
-  "/api/githubAuthStart",
   "/api/health",
   // Add more as needed based on your backend/function.json files
 ] as const;
@@ -46,8 +44,6 @@ interface EndpointCategories {
     FIGMA_OAUTH_START: ValidatedEndpoint;
     FIGMA_OAUTH_CALLBACK: ValidatedEndpoint;
     FIGMA_OAUTH_DIAGNOSTICS: ValidatedEndpoint;
-    GITHUB_AUTH_START: ValidatedEndpoint;
-    GITHUB_AUTH_CALLBACK: ValidatedEndpoint;
   };
   SYSTEM: {
     HEALTH: ValidatedEndpoint;
@@ -65,8 +61,6 @@ export const VALIDATED_API_ENDPOINTS: EndpointCategories = {
     FIGMA_OAUTH_START: "/api/figmaoauthstart",
     FIGMA_OAUTH_CALLBACK: "/api/figmaoauthcallback",
     FIGMA_OAUTH_DIAGNOSTICS: "/api/figmaoauthdiagnostics",
-    GITHUB_AUTH_START: "/api/githubAuthStart",
-    GITHUB_AUTH_CALLBACK: "/api/githubAuthCallback",
   },
   SYSTEM: {
     HEALTH: "/api/health",

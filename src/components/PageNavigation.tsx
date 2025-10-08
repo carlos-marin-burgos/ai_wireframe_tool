@@ -154,7 +154,15 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                                 <div className="toolbar-divider"></div>
                                 <button
                                     className="toolbar-btn format-btn format-bold"
-                                    onClick={onFormatBold}
+                                    onMouseDown={(e) => {
+                                        e.preventDefault(); // Prevent focus loss
+                                        e.stopPropagation();
+                                    }}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        onFormatBold?.();
+                                    }}
                                     onMouseEnter={(e) => showTooltip(e, "Bold (Ctrl+B)")}
                                     onMouseLeave={hideTooltip}
                                     aria-label="Bold"
@@ -164,7 +172,15 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                                 </button>
                                 <button
                                     className="toolbar-btn format-btn format-italic"
-                                    onClick={onFormatItalic}
+                                    onMouseDown={(e) => {
+                                        e.preventDefault(); // Prevent focus loss
+                                        e.stopPropagation();
+                                    }}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        onFormatItalic?.();
+                                    }}
                                     onMouseEnter={(e) => showTooltip(e, "Italic (Ctrl+I)")}
                                     onMouseLeave={hideTooltip}
                                     aria-label="Italic"
@@ -174,7 +190,15 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                                 </button>
                                 <button
                                     className="toolbar-btn format-btn format-underline"
-                                    onClick={onFormatUnderline}
+                                    onMouseDown={(e) => {
+                                        e.preventDefault(); // Prevent focus loss
+                                        e.stopPropagation();
+                                    }}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        onFormatUnderline?.();
+                                    }}
                                     onMouseEnter={(e) => showTooltip(e, "Underline (Ctrl+U)")}
                                     onMouseLeave={hideTooltip}
                                     aria-label="Underline"
@@ -184,7 +208,15 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                                 </button>
                                 <button
                                     className="toolbar-btn format-btn format-clear"
-                                    onClick={onRemoveFormat}
+                                    onMouseDown={(e) => {
+                                        e.preventDefault(); // Prevent focus loss
+                                        e.stopPropagation();
+                                    }}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        onRemoveFormat?.();
+                                    }}
                                     onMouseEnter={(e) => showTooltip(e, "Remove Formatting")}
                                     onMouseLeave={hideTooltip}
                                     aria-label="Remove Formatting"
@@ -269,6 +301,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                         <FiPlus />
                     </button>
 
+                    {/* Temporarily hidden
                     <button
                         className="toolbar-btn"
                         onClick={onOpenDevPlaybooks}
@@ -278,6 +311,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                     >
                         <FiGithub />
                     </button>
+                    */}
 
                     {/* Temporarily hidden
                     <button
