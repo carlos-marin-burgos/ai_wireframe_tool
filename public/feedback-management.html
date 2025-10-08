@@ -397,9 +397,27 @@
 
         // Get the function key for authenticated requests
         const getFunctionKey = () => {
-            return new URLSearchParams(window.location.search).get('key') ||
-                localStorage.getItem('azure_function_key') ||
-                'z3Pl1LCRYagsCG-fr6x92mmH6BKNW4ZHlM0vRwdDpnUCAzFu-nBxfg==';
+            const urlKey = new URLSearchParams(window.location.search).get('key');
+            const storedKey = localStorage.getItem('azure_function_key');
+            
+            if (urlKey) {
+                // Store key from URL for future use
+                localStorage.setItem('azure_function_key', urlKey);
+                return urlKey;
+            }
+            
+            if (storedKey) {
+                return storedKey;
+            }
+            
+            // Prompt user for key if not found
+            const key = prompt('Please enter the Azure Function key for authenticated access:');
+            if (key) {
+                localStorage.setItem('azure_function_key', key);
+                return key;
+            }
+            
+            return null;
         };
 
         async function loadFeedback(page = 0) {
