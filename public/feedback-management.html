@@ -399,24 +399,24 @@
         const getFunctionKey = () => {
             const urlKey = new URLSearchParams(window.location.search).get('key');
             const storedKey = localStorage.getItem('azure_function_key');
-            
+
             if (urlKey) {
                 // Store key from URL for future use
                 localStorage.setItem('azure_function_key', urlKey);
                 return urlKey;
             }
-            
+
             if (storedKey) {
                 return storedKey;
             }
-            
+
             // Prompt user for key if not found
             const key = prompt('Please enter the Azure Function key for authenticated access:');
             if (key) {
                 localStorage.setItem('azure_function_key', key);
                 return key;
             }
-            
+
             return null;
         };
 
