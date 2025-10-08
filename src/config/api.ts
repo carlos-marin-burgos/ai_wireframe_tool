@@ -400,6 +400,29 @@ export const getApiUrl = (endpoint: string, customBaseUrl?: string) => {
   const baseUrl = customBaseUrl || API_CONFIG.BASE_URL;
   const finalUrl = `${baseUrl}${endpoint}`;
 
+  // Add function key for production security (Azure Functions require authentication)
+  if (!import.meta.env.DEV && import.meta.env.VITE_AZURE_FUNCTION_KEY) {
+    const separator = finalUrl.includes("?") ? "&" : "?";
+    const secureUrl = `${finalUrl}${separator}code=${
+      import.meta.env.VITE_AZURE_FUNCTION_KEY
+    }`;
+
+    // Debug logging for Figma endpoints
+    if (endpoint.includes("figma")) {
+      console.log(`🔍 getApiUrl Debug (with security):`, {
+        endpoint,
+        customBaseUrl,
+        baseUrl,
+        API_CONFIG_BASE_URL: API_CONFIG.BASE_URL,
+        finalUrl,
+        secureUrl: secureUrl.replace(/code=[^&]+/, "code=***"),
+        hasFunctionKey: true,
+      });
+    }
+
+    return secureUrl;
+  }
+
   // Debug logging for Figma endpoints
   if (endpoint.includes("figma")) {
     console.log(`🔍 getApiUrl Debug:`, {

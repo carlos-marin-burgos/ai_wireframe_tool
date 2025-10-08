@@ -204,8 +204,25 @@ export async function apiRequest<T>(
         ...options,
       };
 
+      // Add function key for Azure Functions authentication
+      const functionKey = import.meta.env.VITE_AZURE_FUNCTION_KEY;
+      let finalUrl = url;
+
+      // Add function key as query parameter if available (production security)
+      if (functionKey && !import.meta.env.DEV) {
+        const separator = url.includes("?") ? "&" : "?";
+        finalUrl = `${url}${separator}code=${functionKey}`;
+        console.log(
+          `🔐 Added function key authentication to production API call`
+        );
+      }
+
       try {
-        const response = await fetchWithRetry(url, mergedOptions, retryConfig);
+        const response = await fetchWithRetry(
+          finalUrl,
+          mergedOptions,
+          retryConfig
+        );
 
         // Handle 503 Service Unavailable responses specially
         if (response.status === 503) {

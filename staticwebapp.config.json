@@ -3,38 +3,67 @@
     "identityProviders": {
       "azureActiveDirectory": {
         "registration": {
-          "openIdIssuer": "https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/v2.0",
+          "openIdIssuer": "https://login.microsoftonline.com/54ad0b60-7fda-456b-b965-230c533f1418/v2.0",
           "clientIdSettingName": "AZURE_CLIENT_ID",
           "clientSecretSettingName": "AZURE_CLIENT_SECRET"
         },
-        "userDetailsClaim": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+        "userDetailsClaim": "preferred_username"
       }
-    }
+    },
+    "rolesSource": "/api/GetRoles"
   },
   "routes": [
     {
-      "route": "/",
-      "headers": {
-        "cache-control": "no-cache, no-store, must-revalidate",
-        "pragma": "no-cache",
-        "expires": "0"
-      }
+      "route": "/.auth/*",
+      "allowedRoles": ["anonymous"]
     },
     {
-      "route": "/index.html",
-      "headers": {
-        "cache-control": "no-cache, no-store, must-revalidate",
-        "pragma": "no-cache",
-        "expires": "0"
-      }
+      "route": "/assets/*",
+      "allowedRoles": ["anonymous"]
     },
     {
-      "route": "/*.html",
-      "headers": {
-        "cache-control": "no-cache, no-store, must-revalidate",
-        "pragma": "no-cache",
-        "expires": "0"
-      }
+      "route": "/*.js",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/*.css",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/*.png",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/*.jpg",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/*.jpeg",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/*.svg",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/*.ico",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/*.json",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/*.woff",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/*.woff2",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/*.ttf",
+      "allowedRoles": ["anonymous"]
     },
     {
       "route": "/production-analytics.html",
@@ -54,14 +83,31 @@
         "content-type": "text/html"
       }
     },
-
     {
-      "route": "/.auth/*",
-      "allowedRoles": ["anonymous"]
+      "route": "/analytics.html",
+      "allowedRoles": ["authenticated"]
+    },
+    {
+      "route": "/index.html",
+      "allowedRoles": ["authenticated"],
+      "headers": {
+        "cache-control": "no-cache, no-store, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0"
+      }
+    },
+    {
+      "route": "/",
+      "allowedRoles": ["authenticated"],
+      "headers": {
+        "cache-control": "no-cache, no-store, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0"
+      }
     },
     {
       "route": "/*",
-      "allowedRoles": ["anonymous"]
+      "allowedRoles": ["authenticated"]
     }
   ],
   "navigationFallback": {
@@ -80,5 +126,14 @@
       "/*.json"
     ]
   },
-  "responseOverrides": {}
+  "responseOverrides": {
+    "401": {
+      "redirect": "/.auth/login/aad?post_login_redirect_uri=.referrer",
+      "statusCode": 302
+    },
+    "403": {
+      "redirect": "/.auth/login/aad?post_login_redirect_uri=.referrer",
+      "statusCode": 302
+    }
+  }
 }
