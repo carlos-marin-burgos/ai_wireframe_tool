@@ -88,6 +88,10 @@
       "allowedRoles": ["authenticated"]
     },
     {
+      "route": "/feedback-management.html",
+      "allowedRoles": ["authenticated"]
+    },
+    {
       "route": "/index.html",
       "allowedRoles": ["authenticated"],
       "headers": {
