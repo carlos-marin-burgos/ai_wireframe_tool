@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: designetica
+metadata:
+  template: designetica-ai-wireframe-generator@0.0.1-beta
+
+services:
+  frontend:
+    project: .
+    language: js
+    host: staticwebapp
+    dist: dist
+  backend:
+    project: backend
+    language: js
+    host: function
+
+infra:
+  provider: bicep
+  path: infra
+  module: main
+
+pipeline:
+  provider: github

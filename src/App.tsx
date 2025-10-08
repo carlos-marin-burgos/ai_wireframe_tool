@@ -17,6 +17,7 @@ import AzureAuth from "./components/AzureAuth";
 import FigmaIntegration from "./components/FigmaIntegration";
 import FigmaIntegrationModal from "./components/FigmaIntegrationModal";
 import FigmaExportModal from "./components/FigmaExportModal";
+import FeedbackModal from "./components/FeedbackModal";
 import WireframeGenerator from "./pages/WireframeGenerator";
 import { API_CONFIG, getApiUrl } from "./config/api";
 // All API calls are now handled by the wireframe generation hook
@@ -68,6 +69,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
   const [showFigmaIntegration, setShowFigmaIntegration] = useState(false);
   const [showTopToolbarFigmaImport, setShowTopToolbarFigmaImport] = useState(false);
   const [showFigmaExportModal, setShowFigmaExportModal] = useState(false);
+  const [showLandingFeedbackModal, setShowLandingFeedbackModal] = useState(false);
 
   // Editing mode state
   const [editingMode, setEditingMode] = useState<'drag' | 'edit'>('drag');
@@ -1618,6 +1620,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
         <TopNavbarLanding
           onLogoClick={handleBackToLanding}
           onLogout={onLogout}
+          onOpenFeedback={() => setShowLandingFeedbackModal(true)}
         />
       ) : (
         <TopNavbarApp
@@ -1628,6 +1631,7 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           onViewHtmlCode={handleToolbarHtmlCode}
           onPresentationMode={handleToolbarPresentation}
           onDownloadWireframe={handleToolbarDownload}
+          onOpenFeedback={() => setShowLandingFeedbackModal(true)}
         />
       )}
 
@@ -1797,6 +1801,12 @@ function AppContent({ onLogout }: { onLogout?: () => void }) {
           wireframeTitle={description || 'Wireframe'}
         />
       )}
+
+      {/* Feedback Modal for Landing Page */}
+      <FeedbackModal
+        isOpen={showLandingFeedbackModal}
+        onClose={() => setShowLandingFeedbackModal(false)}
+      />
 
     </div>
   );

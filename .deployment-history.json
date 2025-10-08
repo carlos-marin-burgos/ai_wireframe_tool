@@ -191,6 +191,54 @@
       "timestamp": "2025-10-07T21:40:18Z",
       "status": "validated",
       "validation_passed": true
+    },
+    {
+      "url": "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net",
+      "timestamp": "2025-10-08T16:16:39Z",
+      "status": "validated",
+      "validation_passed": true
+    },
+    {
+      "url": "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net",
+      "timestamp": "2025-10-08T16:18:25Z",
+      "status": "validated",
+      "validation_passed": true
+    },
+    {
+      "url": "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net",
+      "timestamp": "2025-10-08T16:20:59Z",
+      "status": "validated",
+      "validation_passed": true
+    },
+    {
+      "url": "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net",
+      "timestamp": "2025-10-08T16:23:43Z",
+      "status": "validated",
+      "validation_passed": true
+    },
+    {
+      "url": "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net",
+      "timestamp": "2025-10-08T16:56:51Z",
+      "status": "validated",
+      "validation_passed": true
+    },
+    {
+      "url": "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net",
+      "timestamp": "2025-10-08T17:01:19Z",
+      "status": "validated",
+      "validation_passed": true
+    },
+    {
+      "url": "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net",
+      "timestamp": "2025-10-08T17:03:26Z",
+      "status": "validated",
+      "validation_passed": true
+    },
+    {
+      "url": "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net",
+      "timestamp": "2025-10-08T17:16:52Z",
+      "status": "validated",
+      "validation_passed": true
     }
   ]
 }

@@ -11,6 +11,7 @@ import DownloadModal from "./DownloadModal";
 import DevPlaybooksLibrary from "./DevPlaybooksLibrary";
 import FigmaComponentsLibrary from "./FigmaComponentsLibrary";
 import EnhancedComponentLibrary from "./EnhancedComponentLibrary";
+import FeedbackModal from "./FeedbackModal";
 import StaticWireframe from "./StaticWireframe";
 import EnhancedMessage from "./EnhancedMessage";
 import ImageUploadZone from "./ImageUploadZone";
@@ -232,6 +233,9 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
   // AI Design Assistant Modal states
   const [isAnalyzeDesignModalOpen, setIsAnalyzeDesignModalOpen] = useState(false);
   const [isQuickTipsModalOpen, setIsQuickTipsModalOpen] = useState(false);
+
+  // Feedback Modal state
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 
   // Left panel collapse state
   const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);
@@ -1982,6 +1986,12 @@ const SplitLayout: React.FC<SplitLayoutProps> = ({
         onClose={() => setIsQuickTipsModalOpen(false)}
         mode="tips"
         wireframeHtml={htmlWireframe}
+      />
+
+      {/* Feedback Modal */}
+      <FeedbackModal
+        isOpen={isFeedbackModalOpen}
+        onClose={() => setIsFeedbackModalOpen(false)}
       />
 
       {/* Toast Notification */}

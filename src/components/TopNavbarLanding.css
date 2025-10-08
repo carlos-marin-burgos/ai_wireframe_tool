@@ -69,10 +69,45 @@
   gap: 16px;
 }
 
+.navbar-feedback-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #3c4858;
+  padding: 8px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: "Segoe UI", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.navbar-feedback-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+  color: #000000;
+}
+
+.navbar-feedback-btn:active {
+  transform: translateY(0);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.navbar-feedback-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
 .navbar-logout-btn {
   background: rgba(255, 255, 255, 0.2);
   border: 0px solid rgba(0, 0, 0, 0.2);
-  color: #3C4858;
+  color: #3c4858;
   padding: 10px 20px;
   border-radius: 12px;
   cursor: pointer;

@@ -7,10 +7,10 @@
   align-items: center;
   padding: 8px 24px;
   gap: 21px;
-  
+
   width: 1360px;
   height: 54px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 0;
@@ -25,11 +25,11 @@
   align-items: center;
   padding: 0px;
   gap: 16px;
-  
+
   margin: 0 auto;
   width: 1228px;
   height: 54px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 0;
@@ -44,10 +44,10 @@
   align-items: center;
   padding: 0px;
   gap: 13px;
-  
+
   width: 102.96px;
   height: 44.72px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 0;
@@ -62,10 +62,10 @@
   align-items: center;
   padding: 10px 0px;
   gap: 7px;
-  
+
   width: 24.96px;
   height: 44.72px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 0;
@@ -76,7 +76,7 @@
 .microsoft-logo {
   width: 24.96px;
   height: 24.72px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 0;
@@ -90,8 +90,8 @@
   right: 52%;
   top: 22.36%;
   bottom: 51.12%;
-  
-  background: #F26522;
+
+  background: #f26522;
 }
 
 /* Vector - Green */
@@ -101,8 +101,8 @@
   right: 0%;
   top: 22.36%;
   bottom: 51.12%;
-  
-  background: #8DC63F;
+
+  background: #8dc63f;
 }
 
 /* Vector - Blue */
@@ -112,8 +112,8 @@
   right: 52%;
   top: 51.12%;
   bottom: 22.36%;
-  
-  background: #00AEEF;
+
+  background: #00aeef;
 }
 
 /* Vector - Yellow */
@@ -123,8 +123,8 @@
   right: 0%;
   top: 51.12%;
   bottom: 22.36%;
-  
-  background: #FFC20E;
+
+  background: #ffc20e;
 }
 
 /* Vector - Microsoft Text (Hidden) */
@@ -132,9 +132,9 @@
   display: none;
   width: 82.17px;
   height: 15.72px;
-  
+
   background: #505050;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 1;
@@ -145,7 +145,7 @@
 .brand-separator {
   width: 2px;
   height: 24px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 1;
@@ -159,8 +159,8 @@
   right: 0%;
   top: 0%;
   bottom: 0%;
-  
-  background: #2F2F2F;
+
+  background: #2f2f2f;
 }
 
 /* Primary Navigation - Site Title */
@@ -172,10 +172,10 @@
   align-items: center;
   padding: 0px;
   gap: 10px;
-  
+
   width: 50px;
   height: 23px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 2;
@@ -186,9 +186,9 @@
 .site-title {
   width: 50px;
   height: 23px;
-  
+
   /* Header 5 (20) - 🌞 Atlas text style */
-  font-family: 'Segoe UI';
+  font-family: "Segoe UI";
   font-style: normal;
   font-weight: 600;
   font-size: 20px;
@@ -196,9 +196,9 @@
   /* identical to box height, or 115% */
   display: flex;
   align-items: center;
-  
+
   color: #171717;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 0;
@@ -213,10 +213,10 @@
   align-items: flex-start;
   padding: 10px 0px;
   gap: 8px;
-  
+
   width: 558px;
   height: 52px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 1;
@@ -231,13 +231,13 @@
   align-items: center;
   padding: 6px 0px;
   gap: 10px;
-  
+
   display: none;
   width: 31px;
   height: 31px;
-  
-  background: #FFFFFF;
-  
+
+  background: #ffffff;
+
   /* Inside auto layout */
   flex: none;
   order: 0;
@@ -252,10 +252,10 @@
   align-items: center;
   padding: 6px 0px;
   gap: 4px;
-  
+
   width: 89px;
   height: 32px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 1;
@@ -270,10 +270,10 @@
   align-items: center;
   padding: 0px 8px;
   gap: 4px;
-  
+
   width: 89px;
   height: 20px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 0;
@@ -284,9 +284,9 @@
 .nav-item:nth-child(1) .nav-text {
   width: 53px;
   height: 20px;
-  
+
   /* Small Copy (14) - 🌞 Atlas text style */
-  font-family: 'Segoe UI';
+  font-family: "Segoe UI";
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -295,9 +295,9 @@
   display: flex;
   align-items: flex-end;
   text-align: center;
-  
+
   color: #171717;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 0;
@@ -308,7 +308,7 @@
 .nav-item:nth-child(1) .chevron-icon {
   width: 16px;
   height: 16px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 1;
@@ -320,9 +320,9 @@
   position: absolute;
   width: 8px;
   height: 4.5px;
-  left: calc(50% - 8px/2);
-  top: calc(50% - 4.5px/2 + 0.75px);
-  
+  left: calc(50% - 8px / 2);
+  top: calc(50% - 4.5px / 2 + 0.75px);
+
   background: #171717;
 }
 
@@ -334,10 +334,10 @@
   align-items: center;
   padding: 6px 0px;
   gap: 4px;
-  
+
   width: 183px;
   height: 32px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 2;
@@ -352,10 +352,10 @@
   align-items: center;
   padding: 0px 8px;
   gap: 4px;
-  
+
   width: 183px;
   height: 20px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 0;
@@ -366,9 +366,9 @@
 .nav-item:nth-child(2) .nav-text {
   width: 147px;
   height: 20px;
-  
+
   /* Small Copy (14) - 🌞 Atlas text style */
-  font-family: 'Segoe UI';
+  font-family: "Segoe UI";
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -377,9 +377,9 @@
   display: flex;
   align-items: flex-end;
   text-align: center;
-  
+
   color: #171717;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 0;
@@ -390,7 +390,7 @@
 .nav-item:nth-child(2) .chevron-icon {
   width: 16px;
   height: 16px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 1;
@@ -402,9 +402,9 @@
   position: absolute;
   width: 8px;
   height: 4.5px;
-  left: calc(50% - 8px/2);
-  top: calc(50% - 4.5px/2 + 0.75px);
-  
+  left: calc(50% - 8px / 2);
+  top: calc(50% - 4.5px / 2 + 0.75px);
+
   background: #171717;
 }
 
@@ -416,10 +416,10 @@
   align-items: center;
   padding: 6px 0px;
   gap: 4px;
-  
+
   width: 187px;
   height: 32px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 3;
@@ -434,10 +434,10 @@
   align-items: center;
   padding: 0px 8px;
   gap: 4px;
-  
+
   width: 187px;
   height: 20px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 0;
@@ -448,9 +448,9 @@
 .nav-item:nth-child(3) .nav-text {
   width: 151px;
   height: 20px;
-  
+
   /* Small Copy (14) - 🌞 Atlas text style */
-  font-family: 'Segoe UI';
+  font-family: "Segoe UI";
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -459,9 +459,9 @@
   display: flex;
   align-items: flex-end;
   text-align: center;
-  
+
   color: #171717;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 0;
@@ -472,7 +472,7 @@
 .nav-item:nth-child(3) .chevron-icon {
   width: 16px;
   height: 16px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 1;
@@ -484,9 +484,9 @@
   position: absolute;
   width: 8px;
   height: 4.5px;
-  left: calc(50% - 8px/2);
-  top: calc(50% - 4.5px/2 + 0.75px);
-  
+  left: calc(50% - 8px / 2);
+  top: calc(50% - 4.5px / 2 + 0.75px);
+
   background: #171717;
 }
 
@@ -498,10 +498,10 @@
   align-items: center;
   padding: 6px 0px;
   gap: 4px;
-  
+
   width: 75px;
   height: 32px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 4;
@@ -516,10 +516,10 @@
   align-items: center;
   padding: 0px 8px;
   gap: 4px;
-  
+
   width: 75px;
   height: 20px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 0;
@@ -530,9 +530,9 @@
 .nav-item:nth-child(4) .nav-text {
   width: 39px;
   height: 20px;
-  
+
   /* Small Copy (14) - 🌞 Atlas text style */
-  font-family: 'Segoe UI';
+  font-family: "Segoe UI";
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -541,9 +541,9 @@
   display: flex;
   align-items: flex-end;
   text-align: center;
-  
+
   color: #171717;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 0;
@@ -554,7 +554,7 @@
 .nav-item:nth-child(4) .chevron-icon {
   width: 16px;
   height: 16px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 1;
@@ -566,9 +566,9 @@
   position: absolute;
   width: 8px;
   height: 4.5px;
-  left: calc(50% - 8px/2);
-  top: calc(50% - 4.5px/2 + 0.75px);
-  
+  left: calc(50% - 8px / 2);
+  top: calc(50% - 4.5px / 2 + 0.75px);
+
   background: #171717;
 }
 
@@ -580,11 +580,11 @@
   align-items: center;
   padding: 6px 0px;
   gap: 4px;
-  
+
   display: none;
   width: 85px;
   height: 31px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 5;
@@ -599,15 +599,74 @@
   align-items: center;
   padding: 0px;
   gap: 8px;
-  
+
   margin: 0 auto;
   width: 84px;
   height: 36px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 1;
   flex-grow: 0;
+}
+
+/* Feedback Button */
+.feedback-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  height: 32px;
+
+  background: transparent;
+  border: 1px solid #8e9aaf;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  font-family: "Segoe UI", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #3c4858;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.feedback-button:hover {
+  background: #8e9aaf;
+  color: white;
+  border-color: #8e9aaf;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(142, 154, 175, 0.3);
+}
+
+.feedback-button:active {
+  transform: translateY(0);
+}
+
+.feedback-button svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.feedback-text {
+  white-space: nowrap;
+}
+
+/* Hide feedback text on smaller screens */
+@media (max-width: 768px) {
+  .feedback-text {
+    display: none;
+  }
+
+  .feedback-button {
+    padding: 6px 8px;
+  }
 }
 
 /* Frame 2028433568 - Search Container */
@@ -619,10 +678,10 @@
   align-items: center;
   padding: 0px 3px;
   gap: 10px;
-  
+
   width: 40px;
   height: 36px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 0;
@@ -633,7 +692,7 @@
 .search-icon {
   width: 16px;
   height: 16px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 0;
@@ -645,9 +704,9 @@
   position: absolute;
   width: 12px;
   height: 12px;
-  left: calc(50% - 12px/2);
-  top: calc(50% - 12px/2);
-  
+  left: calc(50% - 12px / 2);
+  top: calc(50% - 12px / 2);
+
   background: #171717;
 }
 
@@ -655,7 +714,7 @@
 .avatar-container {
   width: 36px;
   height: 36px;
-  
+
   /* Inside auto layout */
   flex: none;
   order: 1;
@@ -669,11 +728,11 @@
   height: 36px;
   left: 0px;
   top: 0px;
-  
+
   /* Person/Mona Kane - Use mina.png */
-  background: url('../../public/mina.png') center/cover;
+  background: url("../../public/mina.png") center/cover;
   border-radius: 50%;
-  border: 2px solid #8E9AAF;
+  border: 2px solid #8e9aaf;
 }
 
 /* Image background */
@@ -683,9 +742,9 @@
   height: 36px;
   left: 0px;
   top: 0px;
-  
+
   /* Light/Background/Background 1 - BG 1 - Light theme - Primary surface - White #FFFFFF */
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: 36px;
 }
 
@@ -697,8 +756,8 @@
   height: 12px;
   left: 25px;
   top: 25px;
-  
-  background: #D9D9D9;
+
+  background: #d9d9d9;
 }
 
 /* Presence Badge - Hidden */
@@ -708,16 +767,16 @@
   flex-direction: row;
   align-items: flex-start;
   padding: 0px;
-  
+
   position: absolute;
   visibility: hidden;
   left: 72.22%;
   right: 0%;
   top: 72.22%;
   bottom: 0%;
-  
+
   /* Light/Background/Background 1 - BG 1 - Light theme - Primary surface - White #FFFFFF */
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: 9999px;
 }
 
@@ -729,23 +788,23 @@
   height: 44px;
   left: -4px;
   top: -4px;
-  
+
   /* Light/Stroke/Compound Brand Stroke 1 - Compound BSK 1 - Light theme - Comm 80 #0F6CBD */
-  background: #0F6CBD;
+  background: #0f6cbd;
 }
 
 /* Ring background - Hidden */
 .ring-background {
   box-sizing: border-box;
-  
+
   position: absolute;
   width: 44px;
   height: 44px;
   left: -4px;
   top: -4px;
-  
+
   /* Light/Stroke/Compound Brand Stroke 1 - Compound BSK 1 - Light theme - Comm 80 #0F6CBD */
-  border: 2px solid #0F6CBD;
+  border: 2px solid #0f6cbd;
 }
 
 /* Mask layer 2 - Hidden */
@@ -756,6 +815,6 @@
   height: 12px;
   left: 25px;
   top: 25px;
-  
-  background: #D9D9D9;
+
+  background: #d9d9d9;
 }

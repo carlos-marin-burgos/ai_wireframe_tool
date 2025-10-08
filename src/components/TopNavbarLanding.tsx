@@ -1,14 +1,17 @@
 import React from 'react';
+import { FiMessageSquare } from 'react-icons/fi';
 import './TopNavbarLanding.css';
 
 interface TopNavbarLandingProps {
     onLogoClick?: () => void;
     onLogout?: () => void;
+    onOpenFeedback?: () => void;
 }
 
 const TopNavbarLanding: React.FC<TopNavbarLandingProps> = ({
     onLogoClick,
-    onLogout
+    onLogout,
+    onOpenFeedback
 }) => {
     return (
         <nav className="top-nav-landing">
@@ -28,6 +31,19 @@ const TopNavbarLanding: React.FC<TopNavbarLandingProps> = ({
                 </button>
                 <div className="separator-bar"></div>
                 <img src="/cxsLogo.png" alt="CXS" className="navbar-cxs-logo" />
+            </div>
+            <div className="navbar-right">
+                {onOpenFeedback && (
+                    <button
+                        className="navbar-feedback-btn"
+                        onClick={onOpenFeedback}
+                        aria-label="Send Feedback"
+                        title="Send us your feedback"
+                    >
+                        <FiMessageSquare />
+                        <span>Feedback</span>
+                    </button>
+                )}
             </div>
             {/* Logout removed for Microsoft internal use */}
         </nav>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiFigma, FiCode, FiMonitor, FiDownload, FiLogOut, FiUpload } from 'react-icons/fi';
+import { FiFigma, FiCode, FiMonitor, FiDownload, FiLogOut, FiUpload, FiMessageSquare } from 'react-icons/fi';
 import './TopNavbarApp.css';
 
 interface TopNavbarAppProps {
@@ -11,6 +11,7 @@ interface TopNavbarAppProps {
     onViewHtmlCode?: () => void;
     onPresentationMode?: () => void;
     onDownloadWireframe?: () => void;
+    onOpenFeedback?: () => void;
 }
 
 const TopNavbarApp: React.FC<TopNavbarAppProps> = ({
@@ -20,7 +21,8 @@ const TopNavbarApp: React.FC<TopNavbarAppProps> = ({
     onExportToFigma,
     onViewHtmlCode,
     onPresentationMode,
-    onDownloadWireframe
+    onDownloadWireframe,
+    onOpenFeedback
 }) => {
     const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
 
@@ -107,6 +109,21 @@ const TopNavbarApp: React.FC<TopNavbarAppProps> = ({
                             <FiDownload />
                         </button>
                     </div>
+
+                    {/* Feedback Button */}
+                    {onOpenFeedback && (
+                        <button
+                            className="navbar-feedback-btn"
+                            onClick={onOpenFeedback}
+                            onMouseEnter={(e) => showTooltip(e, "Send Feedback")}
+                            onMouseLeave={hideTooltip}
+                            aria-label="Send Feedback"
+                            title="Send us your feedback"
+                        >
+                            <FiMessageSquare />
+                            <span>Feedback</span>
+                        </button>
+                    )}
 
                     {/* Logout removed for Microsoft internal use */}
                 </div>

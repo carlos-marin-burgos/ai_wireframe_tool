@@ -110,6 +110,43 @@
   transform: scale(0.95);
 }
 
+/* Feedback button styling */
+.navbar-feedback-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #68769c;
+  padding: 8px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: "Segoe UI", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  margin-left: 12px;
+}
+
+.navbar-feedback-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #3c4858;
+  transform: translateY(-1px);
+}
+
+.navbar-feedback-btn:active {
+  transform: translateY(0);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.navbar-feedback-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
 /* Logout button styling */
 .navbar-toolbar-btn.logout-btn {
   color: #ffffff;
