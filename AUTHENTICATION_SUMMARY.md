@@ -9,17 +9,20 @@
 ## 📤 How to Share with Microsoft Colleagues
 
 Simply share the app URL with any Microsoft employee:
+
 ```
 https://delightful-pond-064d9a91e.1.azurestaticapps.net/
 ```
 
 **What they'll experience:**
+
 1. ✅ Automatic redirect to Microsoft login
 2. ✅ Sign in with their `@microsoft.com` account
 3. ✅ Access granted to the application
 4. ❌ Non-@microsoft.com accounts will be denied (403 Forbidden)
 
 **If they experience login issues:**
+
 - Use an incognito/private browser window
 - Clear browser cache and cookies
 - Ensure they're using their `@microsoft.com` account (not personal email)
@@ -30,9 +33,9 @@ https://delightful-pond-064d9a91e.1.azurestaticapps.net/
 
 ### 1. **Azure AD Multi-Tenant Configuration**
 
-- **App Registr## 📝 Notes
+- \*\*App Registr## 📝 Notes
 
-- **Multi-tenant** means any organizational account can *attempt* to sign in
+- **Multi-tenant** means any organizational account can _attempt_ to sign in
 - **Backend validation** enforces the @microsoft.com restriction
 - This provides maximum compatibility while maintaining security
 - Users from other orgs will see a 403 error after successful login
@@ -292,6 +295,7 @@ Look for: `🚫 Unauthorized access attempt by: [email]`
 - ⚠️ **Known Issue**: May experience redirect loop - clear browser cache/use incognito if this occurs
 
 ### Recent Configuration Changes (Oct 9, 2025)
+
 - Switched from `/common/` to Designetica tenant-specific endpoint
 - Added `domain_hint=microsoft.com` to pre-fill Microsoft login
 - Enabled ID token issuance in app registration

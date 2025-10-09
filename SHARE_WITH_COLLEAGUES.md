@@ -24,6 +24,7 @@ This is an internal tool for Microsoft employees to generate wireframes from web
 ❌ **Who cannot access:** External users, contractors with non-Microsoft emails, personal Microsoft accounts
 
 ⚠️ **Troubleshooting:** If you experience a login loop or "Trying to sign you in" message:
+
 - Use an incognito/private browser window, OR
 - Clear your browser cache and cookies
 - Make sure you're signing in with your @microsoft.com account (not a personal email)
@@ -33,6 +34,7 @@ This is an internal tool for Microsoft employees to generate wireframes from web
 ## What This Tool Does
 
 The Designetica Wireframe Tool helps you:
+
 - Generate wireframes from existing website URLs
 - Analyze website structures and layouts
 - Create design mockups for prototyping
@@ -46,4 +48,4 @@ If you have issues accessing the tool, contact: **camarinb@microsoft.com**
 
 ---
 
-*This tool is restricted to Microsoft employees only. Access is validated through Azure Active Directory authentication and backend email domain validation.*
+_This tool is restricted to Microsoft employees only. Access is validated through Azure Active Directory authentication and backend email domain validation._

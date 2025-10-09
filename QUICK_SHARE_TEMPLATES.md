@@ -25,7 +25,7 @@ Designetica Wireframe Tool - Internal Tool for Microsoft Employees
 ```
 Hi team,
 
-I wanted to share the Designetica Wireframe Tool - an internal tool for generating 
+I wanted to share the Designetica Wireframe Tool - an internal tool for generating
 wireframes from website URLs.
 
 Access: https://delightful-pond-064d9a91e.1.azurestaticapps.net/
@@ -34,7 +34,7 @@ Simply sign in with your @microsoft.com account to start using it.
 
 The tool helps with:
 • Quick prototyping
-• Design analysis  
+• Design analysis
 • Wireframe generation from existing sites
 
 Note: If you experience any login issues, try using an incognito window.
@@ -62,7 +62,7 @@ We have a new internal tool for generating wireframes from website URLs.
 ✅ Analyze any website URL
 ✅ Generate wireframes automatically
 
-This tool is perfect for quick prototyping and design analysis. 
+This tool is perfect for quick prototyping and design analysis.
 
 ⚠️ Tip: If you get a login loop, use an incognito window or clear your cache.
 
