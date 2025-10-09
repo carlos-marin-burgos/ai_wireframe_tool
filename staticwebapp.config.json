@@ -6,10 +6,6 @@
           "openIdIssuer": "https://login.microsoftonline.com/54ad0b60-7fda-456b-b965-230c533f1418/v2.0",
           "clientIdSettingName": "AZURE_CLIENT_ID",
           "clientSecretSettingName": "AZURE_CLIENT_SECRET"
-        },
-        "userDetailsClaim": "preferred_username",
-        "login": {
-          "loginParameters": ["domain_hint=microsoft.com"]
         }
       }
     }
