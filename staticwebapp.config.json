@@ -16,103 +16,13 @@
       "allowedRoles": ["anonymous"]
     },
     {
-      "route": "/*.css",
+      "route": "/maintenance.html",
       "allowedRoles": ["anonymous"]
-    },
-    {
-      "route": "/*.js",
-      "allowedRoles": ["anonymous"]
-    },
-    {
-      "route": "/*.png",
-      "allowedRoles": ["anonymous"]
-    },
-    {
-      "route": "/*.jpg",
-      "allowedRoles": ["anonymous"]
-    },
-    {
-      "route": "/*.ico",
-      "allowedRoles": ["anonymous"]
-    },
-    {
-      "route": "/*.svg",
-      "allowedRoles": ["anonymous"]
-    },
-    {
-      "route": "/*.json",
-      "allowedRoles": ["anonymous"]
-    },
-    {
-      "route": "/assets/*",
-      "allowedRoles": ["anonymous"]
-    },
-    {
-      "route": "/api/submit-feedback",
-      "allowedRoles": ["anonymous"]
-    },
-    {
-      "route": "/",
-      "allowedRoles": ["authenticated"],
-      "headers": {
-        "cache-control": "no-cache, no-store, must-revalidate",
-        "pragma": "no-cache",
-        "expires": "0"
-      }
-    },
-    {
-      "route": "/index.html",
-      "allowedRoles": ["authenticated"],
-      "headers": {
-        "cache-control": "no-cache, no-store, must-revalidate",
-        "pragma": "no-cache",
-        "expires": "0"
-      }
-    },
-    {
-      "route": "/*.html",
-      "allowedRoles": ["authenticated"],
-      "headers": {
-        "cache-control": "no-cache, no-store, must-revalidate",
-        "pragma": "no-cache",
-        "expires": "0"
-      }
-    },
-    {
-      "route": "/production-analytics.html",
-      "allowedRoles": ["authenticated"],
-      "headers": {
-        "content-type": "text/html"
-      }
-    },
-    {
-      "route": "/simple-analytics.html",
-      "allowedRoles": ["authenticated"],
-      "headers": {
-        "content-type": "text/html"
-      }
-    },
-    {
-      "route": "/monitor-analytics.html",
-      "allowedRoles": ["authenticated"],
-      "headers": {
-        "content-type": "text/html"
-      }
-    },
-    {
-      "route": "/feedback-management.html",
-      "allowedRoles": ["authenticated"],
-      "headers": {
-        "content-type": "text/html"
-      }
-    },
-    {
-      "route": "/api/*",
-      "allowedRoles": ["authenticated"]
     },
     {
       "route": "/*",
-      "allowedRoles": ["authenticated"]
+      "rewrite": "/maintenance.html",
+      "allowedRoles": ["anonymous"]
     }
   ],
   "navigationFallback": {
