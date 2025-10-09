@@ -56,9 +56,18 @@
     },
     {
       "route": "/feedback-management.html",
+      "allowedRoles": ["authenticated"],
       "headers": {
         "content-type": "text/html"
       }
+    },
+    {
+      "route": "/api/getFeedback",
+      "allowedRoles": ["authenticated"]
+    },
+    {
+      "route": "/api/submit-feedback",
+      "allowedRoles": ["anonymous"]
     },
 
     {

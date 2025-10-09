@@ -9,7 +9,7 @@ module.exports = async function (context, req) {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Headers": "Content-Type, X-MS-CLIENT-PRINCIPAL",
     },
   };
 
@@ -24,6 +24,52 @@ module.exports = async function (context, req) {
   if (req.method !== "GET") {
     context.res.status = 405;
     context.res.body = JSON.stringify({ error: "Method not allowed" });
+    return;
+  }
+
+  // 🔐 Microsoft Employee Authentication Check
+  try {
+    const clientPrincipal = req.headers['x-ms-client-principal'];
+    
+    if (clientPrincipal) {
+      const principal = JSON.parse(Buffer.from(clientPrincipal, 'base64').toString());
+      const userEmail = principal.userDetails || principal.claims?.find(c => c.typ === 'emails')?.val;
+      
+      // Check if user is a Microsoft employee
+      const isMicrosoftEmployee = userEmail && (
+        userEmail.endsWith('@microsoft.com') || 
+        userEmail.endsWith('@azure.microsoft.com') ||
+        userEmail.endsWith('@outlook.com') // Add other Microsoft domains as needed
+      );
+      
+      if (!isMicrosoftEmployee) {
+        context.log.warn(`🚫 Unauthorized access attempt by: ${userEmail}`);
+        context.res.status = 403;
+        context.res.body = JSON.stringify({ 
+          error: "Access denied. This endpoint is restricted to Microsoft employees only.",
+          userEmail: userEmail 
+        });
+        return;
+      }
+      
+      context.log(`✅ Authorized Microsoft employee: ${userEmail}`);
+    } else {
+      // For local development, allow access if no authentication header is present
+      if (process.env.NODE_ENV !== 'production' && req.headers.host?.includes('localhost')) {
+        context.log("🧪 Local development - bypassing authentication");
+      } else {
+        context.log.warn("🚫 No authentication provided");
+        context.res.status = 401;
+        context.res.body = JSON.stringify({ 
+          error: "Authentication required. Please sign in with your Microsoft account." 
+        });
+        return;
+      }
+    }
+  } catch (authError) {
+    context.log.error("❌ Authentication error:", authError);
+    context.res.status = 500;
+    context.res.body = JSON.stringify({ error: "Authentication verification failed" });
     return;
   }
 
