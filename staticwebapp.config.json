@@ -7,7 +7,7 @@
           "clientIdSettingName": "AZURE_CLIENT_ID",
           "clientSecretSettingName": "AZURE_CLIENT_SECRET"
         },
-        "userDetailsClaim": "email",
+        "userDetailsClaim": "preferred_username",
         "login": {
           "loginParameters": ["domain_hint=microsoft.com"]
         }
