@@ -392,23 +392,23 @@
             try {
                 const response = await fetch('/.auth/me');
                 const authInfo = await response.json();
-                
+
                 if (authInfo.clientPrincipal) {
                     userInfo = authInfo.clientPrincipal;
-                    
+
                     // Check if user is a Microsoft employee
                     const email = userInfo.userDetails || userInfo.claims?.find(c => c.typ === 'emails')?.val;
                     const isMicrosoftEmployee = email && (
-                        email.endsWith('@microsoft.com') || 
+                        email.endsWith('@microsoft.com') ||
                         email.endsWith('@azure.microsoft.com') ||
                         email.endsWith('@outlook.com') // Add other Microsoft domains as needed
                     );
-                    
+
                     if (!isMicrosoftEmployee) {
                         showUnauthorizedAccess();
                         return false;
                     }
-                    
+
                     isAuthenticated = true;
                     showUserInfo();
                     return true;
