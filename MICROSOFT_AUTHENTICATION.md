@@ -31,10 +31,12 @@ The entire application requires authentication via `staticwebapp.config.json`:
 ### Protected Routes
 
 All routes require authentication except:
+
 - `/.auth/*` - Azure authentication endpoints (anonymous access)
 - `/api/submit-feedback` - Public feedback submission (anonymous access)
 
 **All other routes require `authenticated` role:**
+
 - `/` - Homepage
 - `/*.html` - All HTML pages
 - `/api/*` - All API endpoints (except submit-feedback)
@@ -64,15 +66,17 @@ Backend APIs automatically receive authenticated user information via headers:
 
 ```javascript
 // In Azure Functions
-const clientPrincipal = req.headers['x-ms-client-principal'];
+const clientPrincipal = req.headers["x-ms-client-principal"];
 if (clientPrincipal) {
-  const principal = JSON.parse(Buffer.from(clientPrincipal, 'base64').toString());
+  const principal = JSON.parse(
+    Buffer.from(clientPrincipal, "base64").toString()
+  );
   const userEmail = principal.userDetails;
-  
+
   // Verify Microsoft employee
-  const isMicrosoftEmployee = 
-    userEmail.endsWith('@microsoft.com') || 
-    userEmail.endsWith('@azure.microsoft.com');
+  const isMicrosoftEmployee =
+    userEmail.endsWith("@microsoft.com") ||
+    userEmail.endsWith("@azure.microsoft.com");
 }
 ```
 
@@ -92,7 +96,7 @@ AZURE_CLIENT_SECRET=<your-azure-ad-app-client-secret>
 1. **Create App Registration** in Azure Portal
 2. **Configure Redirect URIs**:
    - `https://delightful-pond-064d9a91e.1.azurestaticapps.net/.auth/login/aad/callback`
-3. **Set Supported Account Types**: 
+3. **Set Supported Account Types**:
    - **Single tenant** (Microsoft employees only)
 4. **Create Client Secret**:
    - Navigate to "Certificates & secrets"
@@ -107,8 +111,10 @@ AZURE_CLIENT_SECRET=<your-azure-ad-app-client-secret>
 
 ```javascript
 // Backend bypasses auth for localhost
-if (process.env.NODE_ENV !== 'production' && 
-    req.headers.host?.includes('localhost')) {
+if (
+  process.env.NODE_ENV !== "production" &&
+  req.headers.host?.includes("localhost")
+) {
   context.log("🧪 Local development - bypassing authentication");
 }
 ```
@@ -116,16 +122,19 @@ if (process.env.NODE_ENV !== 'production' &&
 ### Production Testing
 
 1. **Test authentication page**: `/test-auth.html`
+
    - Shows authentication status
    - Displays user email and claims
    - Tests feedback API access
 
 2. **Login manually**:
+
    ```
    https://delightful-pond-064d9a91e.1.azurestaticapps.net/.auth/login/aad
    ```
 
 3. **Check auth status**:
+
    ```
    https://delightful-pond-064d9a91e.1.azurestaticapps.net/.auth/me
    ```
@@ -201,7 +210,7 @@ x-ms-client-principal-name: <user-email>
 ✅ **MFA support**: Enforced by Microsoft corporate policy  
 ✅ **Automatic session management**: Tokens managed by Azure  
 ✅ **Audit logging**: All access logged by Azure AD  
-✅ **Conditional access**: Can enforce device/location policies  
+✅ **Conditional access**: Can enforce device/location policies
 
 ## Deployment
 
@@ -242,7 +251,8 @@ azd deploy --no-prompt
 
 ### Users can't access after login
 
-**Solution:** 
+**Solution:**
+
 1. Check `AZURE_CLIENT_ID` and `AZURE_CLIENT_SECRET` are configured
 2. Verify tenant ID matches Microsoft tenant
 3. Check Azure AD app is configured for single tenant
@@ -256,5 +266,6 @@ azd deploy --no-prompt
 ## Support
 
 For authentication issues, contact:
+
 - **App Owner**: Carlos Marin Burgos
 - **Azure AD Support**: Microsoft IT Helpdesk
