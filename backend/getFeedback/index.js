@@ -62,19 +62,16 @@ module.exports = async function (context, req) {
         principal.userDetails ||
         principal.claims?.find((c) => c.typ === "emails")?.val;
 
-      // Check if user is a Microsoft employee
+      // Check if user is a Microsoft employee (ONLY @microsoft.com)
       const isMicrosoftEmployee =
-        userEmail &&
-        (userEmail.endsWith("@microsoft.com") ||
-          userEmail.endsWith("@azure.microsoft.com") ||
-          userEmail.endsWith("@outlook.com")); // Add other Microsoft domains as needed
+        userEmail && userEmail.toLowerCase().endsWith("@microsoft.com");
 
       if (!isMicrosoftEmployee) {
         context.log.warn(`🚫 Unauthorized access attempt by: ${userEmail}`);
         context.res.status = 403;
         context.res.body = JSON.stringify({
           error:
-            "Access denied. This endpoint is restricted to Microsoft employees only.",
+            "Access denied. This application is restricted to @microsoft.com email addresses only.",
           userEmail: userEmail,
         });
         return;
