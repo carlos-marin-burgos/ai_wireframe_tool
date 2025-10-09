@@ -4,15 +4,44 @@
 
 **Access Policy**: Only users with `@microsoft.com` email addresses can access the application.
 
+**App URL**: https://delightful-pond-064d9a91e.1.azurestaticapps.net/
+
+## 📤 How to Share with Microsoft Colleagues
+
+Simply share the app URL with any Microsoft employee:
+```
+https://delightful-pond-064d9a91e.1.azurestaticapps.net/
+```
+
+**What they'll experience:**
+1. ✅ Automatic redirect to Microsoft login
+2. ✅ Sign in with their `@microsoft.com` account
+3. ✅ Access granted to the application
+4. ❌ Non-@microsoft.com accounts will be denied (403 Forbidden)
+
+**If they experience login issues:**
+- Use an incognito/private browser window
+- Clear browser cache and cookies
+- Ensure they're using their `@microsoft.com` account (not personal email)
+
 ---
 
 ## ✅ How It Works
 
 ### 1. **Azure AD Multi-Tenant Configuration**
 
-- **App Registration**: `Designetica Wireframe Tool` (ID: `b82c2a93-996a-475a-9117-4384d229a70b`)
+- **App Registr## 📝 Notes
+
+- **Multi-tenant** means any organizational account can *attempt* to sign in
+- **Backend validation** enforces the @microsoft.com restriction
+- This provides maximum compatibility while maintaining security
+- Users from other orgs will see a 403 error after successful login
+- The app registration is in the **Designetica tenant** (`54ad0b60-7fda-456b-b965-230c533f1418`)
+- Uses tenant-specific endpoint with `domain_hint=microsoft.com` for Microsoft employee login
+- Auto-redirects unauthenticated users to login (401 → redirect to /.auth/login/aad): `Designetica Wireframe Tool` (ID: `b82c2a93-996a-475a-9117-4384d229a70b`)
 - **Sign-in Audience**: `AzureADMultipleOrgs` (any organizational Microsoft account)
-- **OpenID Issuer**: `https://login.microsoftonline.com/common/v2.0` (multi-tenant endpoint)
+- **OpenID Issuer**: `https://login.microsoftonline.com/54ad0b60-7fda-456b-b965-230c533f1418/v2.0` (Designetica tenant endpoint)
+- **Login Hint**: `domain_hint=microsoft.com` (pre-fills Microsoft login)
 
 ### 2. **Frontend Authentication (Azure Static Web App)**
 
@@ -174,11 +203,21 @@ This checks:
     "identityProviders": {
       "azureActiveDirectory": {
         "registration": {
-          "openIdIssuer": "https://login.microsoftonline.com/common/v2.0",
+          "openIdIssuer": "https://login.microsoftonline.com/54ad0b60-7fda-456b-b965-230c533f1418/v2.0",
           "clientIdSettingName": "AZURE_CLIENT_ID",
           "clientSecretSettingName": "AZURE_CLIENT_SECRET"
+        },
+        "userDetailsClaim": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
+        "login": {
+          "loginParameters": ["domain_hint=microsoft.com"]
         }
       }
+    }
+  },
+  "responseOverrides": {
+    "401": {
+      "redirect": "/.auth/login/aad?post_login_redirect_uri=.referrer",
+      "statusCode": 302
     }
   }
 }
@@ -188,9 +227,10 @@ This checks:
 
 ```
 AZURE_CLIENT_ID = b82c2a93-996a-475a-9117-4384d229a70b
-AZURE_CLIENT_SECRET = [secret value]
-AZURE_TENANT_ID = 72f988bf-86f1-41af-91ab-2d7cd011db47
+AZURE_CLIENT_SECRET = [secret value - configured]
 ```
+
+**Note**: `AZURE_TENANT_ID` is NOT set (not needed with tenant-specific endpoint)
 
 ### 3. **Backend Validation** (`backend/getFeedback/index.js`)
 
@@ -208,8 +248,9 @@ const isMicrosoftEmployee =
 **Check**:
 
 1. App registration is multi-tenant (`AzureADMultipleOrgs`) ✅ (Already configured)
-2. OpenID issuer uses `/common/` endpoint ✅ (Already configured)
+2. OpenID issuer uses Designetica tenant endpoint ✅ (Already configured)
 3. Backend validation allows @microsoft.com ✅ (Already configured)
+4. Login uses `domain_hint=microsoft.com` ✅ (Already configured)
 
 **Test**: Have another Microsoft employee try to access the app
 
@@ -242,10 +283,20 @@ Look for: `🚫 Unauthorized access attempt by: [email]`
 ## 📊 Current Status
 
 - ✅ **Authentication Enabled**: Yes
-- ✅ **Multi-Tenant**: Yes (any org can authenticate)
+- ✅ **Multi-Tenant**: Yes (any org can authenticate, but backend validates @microsoft.com)
 - ✅ **Domain Restriction**: @microsoft.com ONLY
 - ✅ **Backend Validation**: Active
+- ✅ **Auto-Redirect on 401**: Enabled
+- ✅ **ID Token Issuance**: Enabled in app registration
 - ✅ **Deployed**: https://delightful-pond-064d9a91e.1.azurestaticapps.net/
+- ⚠️ **Known Issue**: May experience redirect loop - clear browser cache/use incognito if this occurs
+
+### Recent Configuration Changes (Oct 9, 2025)
+- Switched from `/common/` to Designetica tenant-specific endpoint
+- Added `domain_hint=microsoft.com` to pre-fill Microsoft login
+- Enabled ID token issuance in app registration
+- Removed `AZURE_TENANT_ID` from app settings (not needed with tenant-specific endpoint)
+- Added 401 auto-redirect to login page
 
 ---
 
