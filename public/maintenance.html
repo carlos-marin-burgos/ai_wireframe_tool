@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,6 +38,7 @@
                 opacity: 0;
                 transform: translateY(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -56,9 +58,12 @@
         }
 
         @keyframes pulse {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: scale(1);
             }
+
             50% {
                 transform: scale(1.05);
             }
@@ -163,7 +168,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .eta {
@@ -192,11 +199,13 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="icon">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
             </svg>
         </div>
 
@@ -204,7 +213,8 @@
         <p class="subtitle"><span class="spinner"></span>We're Experiencing Technical Difficulties</p>
 
         <p>
-            We're currently performing authentication system maintenance to improve security and access for Microsoft employees.
+            We're currently performing authentication system maintenance to improve security and access for Microsoft
+            employees.
         </p>
 
         <div class="status">
@@ -217,11 +227,12 @@
         </div>
 
         <p>
-            Thank you for your patience while we complete these improvements. The Designetica AI Wireframe Tool will be back online shortly.
+            Thank you for your patience while we complete these improvements. The Designetica AI Wireframe Tool will be
+            back online shortly.
         </p>
 
         <div class="eta">
-            📅 Expected Resolution: Today, October 9, 2025
+            📅 Expected Resolution: Within the next few days
         </div>
 
         <div class="contact">
@@ -234,9 +245,10 @@
 
     <script>
         // Auto-refresh every 5 minutes to check if service is back
-        setTimeout(function() {
+        setTimeout(function () {
             window.location.reload();
         }, 300000); // 5 minutes
     </script>
 </body>
+
 </html>
