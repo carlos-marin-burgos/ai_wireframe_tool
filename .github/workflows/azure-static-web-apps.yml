@@ -5,11 +5,13 @@ on:
     branches:
       - working-version
       - main
+      - fix/remove-hardcoded-secrets
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
       - working-version
       - main
+      - fix/remove-hardcoded-secrets
 
 jobs:
   build_and_deploy_job:
