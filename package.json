@@ -69,6 +69,7 @@
     "react-icons": "^5.5.0"
   },
   "devDependencies": {
+    "@azure/static-web-apps-cli": "^2.0.7",
     "@babel/preset-react": "^7.27.1",
     "@babel/preset-typescript": "^7.27.1",
     "@eslint/js": "^9.25.0",

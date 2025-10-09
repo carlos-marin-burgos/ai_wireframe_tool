@@ -147,6 +147,74 @@
   height: 18px;
 }
 
+/* User section styling */
+.navbar-user-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  margin-left: 12px;
+}
+
+.navbar-user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #68769c;
+}
+
+.navbar-user-icon {
+  width: 18px;
+  height: 18px;
+  color: #68769c;
+}
+
+.navbar-user-name {
+  font-family: "Segoe UI", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #3c4858;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.navbar-logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: rgba(209, 52, 56, 0.1);
+  border: 1px solid rgba(209, 52, 56, 0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #d13438;
+}
+
+.navbar-logout-btn:hover {
+  background: rgba(209, 52, 56, 0.9);
+  color: #ffffff;
+  border-color: rgba(209, 52, 56, 0.9);
+  transform: scale(1.05);
+}
+
+.navbar-logout-btn:active {
+  transform: scale(0.95);
+}
+
+.navbar-logout-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
 /* Logout button styling */
 .navbar-toolbar-btn.logout-btn {
   color: #ffffff;

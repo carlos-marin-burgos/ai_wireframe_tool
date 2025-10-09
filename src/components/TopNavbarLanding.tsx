@@ -1,5 +1,6 @@
 import React from 'react';
-import { FiMessageSquare } from 'react-icons/fi';
+import { FiMessageSquare, FiUser, FiLogOut } from 'react-icons/fi';
+import { useAuth, logout } from '../hooks/useAuth';
 import './TopNavbarLanding.css';
 
 interface TopNavbarLandingProps {
@@ -13,6 +14,8 @@ const TopNavbarLanding: React.FC<TopNavbarLandingProps> = ({
     onLogout,
     onOpenFeedback
 }) => {
+    const { user, isAuthenticated } = useAuth();
+
     return (
         <nav className="top-nav-landing">
             <div className="navbar-left">
@@ -44,8 +47,27 @@ const TopNavbarLanding: React.FC<TopNavbarLandingProps> = ({
                         <span>Feedback</span>
                     </button>
                 )}
+
+                {/* User Info & Logout */}
+                {isAuthenticated && user && (
+                    <div className="navbar-user-section">
+                        <div className="navbar-user-info">
+                            <FiUser className="navbar-user-icon" />
+                            <span className="navbar-user-name" title={user.userDetails}>
+                                {user.userDetails}
+                            </span>
+                        </div>
+                        <button
+                            className="navbar-logout-btn"
+                            onClick={logout}
+                            aria-label="Sign out"
+                            title="Sign out"
+                        >
+                            <FiLogOut />
+                        </button>
+                    </div>
+                )}
             </div>
-            {/* Logout removed for Microsoft internal use */}
         </nav>
     );
 };

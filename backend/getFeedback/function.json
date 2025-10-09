@@ -5,8 +5,8 @@
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
-      "methods": ["get"],
-      "route": "figmaOAuthDiagnostics"
+      "methods": ["get", "options"],
+      "route": "get-feedback"
     },
     {
       "type": "http",

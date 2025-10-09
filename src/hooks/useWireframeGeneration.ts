@@ -161,7 +161,7 @@ export const useWireframeGeneration = () => {
   const [fallback, setFallback] = useState(false);
   const [processingTime, setProcessingTime] = useState(0);
   const abortControllerRef = useRef<AbortController | null>(null);
-  const loadingTimersRef = useRef<number[]>([]);
+  const loadingTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   // Clear loading timers on unmount
   useEffect(() => {

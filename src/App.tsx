@@ -18,6 +18,7 @@ import FigmaIntegration from "./components/FigmaIntegration";
 import FigmaIntegrationModal from "./components/FigmaIntegrationModal";
 import FigmaExportModal from "./components/FigmaExportModal";
 import FeedbackModal from "./components/FeedbackModal";
+import AuthGuard from "./components/AuthGuard";
 import WireframeGenerator from "./pages/WireframeGenerator";
 import { API_CONFIG, getApiUrl } from "./config/api";
 // All API calls are now handled by the wireframe generation hook
@@ -1850,10 +1851,25 @@ function App() {
       return;
     }
 
-    // TEMPORARILY BYPASS AUTHENTICATION FOR TESTING
-    console.log('🔐 Production mode: Bypassing authentication for now');
-    setIsAuthenticated(true);
-    setLoading(false);
+    // Check authentication status via Azure Static Web Apps
+    fetch('/.auth/me')
+      .then(res => res.json())
+      .then(data => {
+        if (data.clientPrincipal) {
+          console.log('✅ User authenticated:', data.clientPrincipal.userDetails);
+          setIsAuthenticated(true);
+        } else {
+          console.log('🔐 User not authenticated, redirecting to login...');
+          // Redirect to login
+          window.location.href = '/.auth/login/aad?post_login_redirect_uri=' + encodeURIComponent(window.location.href);
+        }
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Authentication check failed:', error);
+        // On error, redirect to login
+        window.location.href = '/.auth/login/aad?post_login_redirect_uri=' + encodeURIComponent(window.location.href);
+      });
   }, []);
 
   const handleAuthSuccess = () => {
@@ -1885,13 +1901,12 @@ function App() {
     );
   }
 
-  // If not authenticated, show Azure authentication
-  if (!isAuthenticated) {
-    return <AzureAuth onAuthSuccess={handleAuthSuccess} />;
-  }
-
-  // If authenticated, show the main application
-  return <AppContent onLogout={handleLogout} />;
+  // Wrap the entire app with AuthGuard for automatic authentication redirect
+  return (
+    <AuthGuard>
+      <AppContent />
+    </AuthGuard>
+  );
 }
 
 export default App;
