@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Management - Designetica Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .feedback-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .feedback-title {
+            font-size: 32px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin: 0 0 8px 0;
+        }
+
+        .feedback-subtitle {
+            font-size: 16px;
+            color: #666;
+            margin: 0;
+        }
+
+        .feedback-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: #0078d4;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #106ebe;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 120, 212, 0.3);
+        }
+
+        .feedback-filters {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group label {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .filter-group select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            background: white;
+            font-size: 14px;
+        }
+
+        .feedback-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .summary-card h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-card .value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .feedback-list {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .feedback-item {
+            padding: 20px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s ease;
+        }
+
+        .feedback-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .feedback-item:last-child {
+            border-bottom: none;
+        }
+
+        .feedback-header-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .feedback-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .feedback-type {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .type-bug {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .type-feature {
+            background: #f0f9ff;
+            color: #2563eb;
+        }
+
+        .type-general {
+            background: #f9fafb;
+            color: #374151;
+        }
+
+        .type-praise {
+            background: #f0fdf4;
+            color: #16a34a;
+        }
+
+        .feedback-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-new {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-reviewed {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .status-resolved {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .feedback-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .star {
+            color: #fbbf24;
+            font-size: 16px;
+        }
+
+        .star.empty {
+            color: #d1d5db;
+        }
+
+        .feedback-message {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+
+        .feedback-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .feedback-email {
+            font-weight: 500;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #0078d4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .error {
+            text-align: center;
+            padding: 60px 20px;
+            color: #dc2626;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            padding: 20px;
+            background: white;
+            border-radius: 0 0 12px 12px;
+        }
+
+        .pagination button {
+            padding: 8px 16px;
+            border: 1px solid #d1d5db;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background: #f9fafb;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination .current {
+            background: #0078d4;
+            color: white;
+            border-color: #0078d4;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="feedback-container">
+        <div class="feedback-header">
+            <div>
+                <h1 class="feedback-title">📬 Feedback Management</h1>
+                <p class="feedback-subtitle">Monitor and manage user feedback</p>
+            </div>
+            <div class="feedback-actions">
+                <button class="btn btn-primary" onclick="refreshFeedback()">
+                    🔄 Refresh
+                </button>
+                <button class="btn btn-primary" onclick="exportFeedback()">
+                    📊 Export CSV
+                </button>
+            </div>
+        </div>
+
+        <div class="feedback-filters">
+            <div class="filter-group">
+                <label for="typeFilter">Type:</label>
+                <select id="typeFilter" onchange="applyFilters()">
+                    <option value="all">All Types</option>
+                    <option value="bug">Bug Reports</option>
+                    <option value="feature">Feature Requests</option>
+                    <option value="general">General Feedback</option>
+                    <option value="praise">Praise</option>
+                </select>
+
+                <label for="statusFilter">Status:</label>
+                <select id="statusFilter" onchange="applyFilters()">
+                    <option value="all">All Status</option>
+                    <option value="new">New</option>
+                    <option value="reviewed">Reviewed</option>
+                    <option value="resolved">Resolved</option>
+                </select>
+
+                <label for="sortBy">Sort by:</label>
+                <select id="sortBy" onchange="applyFilters()">
+                    <option value="createdAt">Date Created</option>
+                    <option value="rating">Rating</option>
+                    <option value="type">Type</option>
+                </select>
+
+                <label for="sortOrder">Order:</label>
+                <select id="sortOrder" onchange="applyFilters()">
+                    <option value="desc">Newest First</option>
+                    <option value="asc">Oldest First</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="feedback-summary" id="summary">
+            <!-- Summary cards will be populated here -->
+        </div>
+
+        <div id="content">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>Loading feedback...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration - Updated to use local development URLs
+        const API_BASE_URL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:7071' 
+            : 'https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net';
+
+        let currentPage = 0;
+        const pageSize = 20;
+        let currentFilters = {
+            type: 'all',
+            status: 'all',
+            sortBy: 'createdAt',
+            sortOrder: 'desc'
+        };
+
+        // Get the function key for authenticated requests
+        const getFunctionKey = () => {
+            return new URLSearchParams(window.location.search).get('key') ||
+                localStorage.getItem('azure_function_key') ||
+                'z3Pl1LCRYagsCG-fr6x92mmH6BKNW4ZHlM0vRwdDpnUCAzFu-nBxfg==';
+        };
+
+        async function loadFeedback(page = 0) {
+            try {
+                const functionKey = getFunctionKey();
+                
+                // For local development, we don't need the function key
+                const params = new URLSearchParams({
+                    ...currentFilters,
+                    offset: page * pageSize,
+                    limit: pageSize
+                });
+
+                // Only add function key for production
+                if (window.location.hostname !== 'localhost' && functionKey) {
+                    params.append('code', functionKey);
+                }
+
+                const response = await fetch(`${API_BASE_URL}/api/get-feedback?${params}`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+
+                if (!result.success) {
+                    throw new Error(result.error || 'Failed to load feedback');
+                }
+
+                displayFeedback(result.data, result.pagination, result.summary);
+                currentPage = page;
+
+            } catch (error) {
+                console.error('Error loading feedback:', error);
+                document.getElementById('content').innerHTML = `
+                    <div class="error">
+                        <h3>Error Loading Feedback</h3>
+                        <p>${error.message}</p>
+                        <button class="btn btn-primary" onclick="loadFeedback()">Try Again</button>
+                    </div>
+                `;
+            }
+        }
+
+        function displayFeedback(feedbackItems, pagination, summary) {
+            // Display summary
+            displaySummary(summary);
+
+            // Display feedback list
+            const content = document.getElementById('content');
+
+            if (feedbackItems.length === 0) {
+                content.innerHTML = `
+                    <div class="feedback-list">
+                        <div class="feedback-item" style="text-align: center; padding: 60px;">
+                            <h3>No feedback found</h3>
+                            <p>No feedback matches the current filters.</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            const feedbackList = feedbackItems.map(item => `
+                <div class="feedback-item">
+                    <div class="feedback-header-item">
+                        <div class="feedback-meta">
+                            <span class="feedback-type type-${item.type}">${item.type}</span>
+                            <span class="feedback-status status-${item.status}">${item.status}</span>
+                            ${item.rating > 0 ? `
+                                <div class="feedback-rating">
+                                    ${Array.from({ length: 5 }, (_, i) =>
+                `<span class="star ${i < item.rating ? '' : 'empty'}">★</span>`
+            ).join('')}
+                                    <span>(${item.rating}/5)</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="feedback-date">
+                            ${new Date(item.createdAt).toLocaleDateString()} ${new Date(item.createdAt).toLocaleTimeString()}
+                        </div>
+                    </div>
+                    <div class="feedback-message">${item.message}</div>
+                    <div class="feedback-details">
+                        <div>
+                            ${item.email ? `<span class="feedback-email">From: ${item.email}</span>` : '<span>Anonymous</span>'}
+                            ${item.metadata?.ipAddress ? ` • IP: ${item.metadata.ipAddress}` : ''}
+                        </div>
+                        <div>ID: ${item.id}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            content.innerHTML = `
+                <div class="feedback-list">
+                    ${feedbackList}
+                    ${displayPagination(pagination)}
+                </div>
+            `;
+        }
+
+        function displaySummary(summary) {
+            const summaryContainer = document.getElementById('summary');
+
+            const typeStats = Object.entries(summary.byType)
+                .map(([type, count]) => `${type}: ${count}`)
+                .join(' • ');
+
+            const statusStats = Object.entries(summary.byStatus)
+                .map(([status, count]) => `${status}: ${count}`)
+                .join(' • ');
+
+            summaryContainer.innerHTML = `
+                <div class="summary-card">
+                    <h3>Total Feedback</h3>
+                    <div class="value">${summary.total}</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Average Rating</h3>
+                    <div class="value">${summary.averageRating}/5</div>
+                    <small>(${summary.totalRatings} ratings)</small>
+                </div>
+                <div class="summary-card">
+                    <h3>By Type</h3>
+                    <div style="font-size: 12px; margin-top: 8px;">${typeStats || 'No data'}</div>
+                </div>
+                <div class="summary-card">
+                    <h3>By Status</h3>
+                    <div style="font-size: 12px; margin-top: 8px;">${statusStats || 'No data'}</div>
+                </div>
+            `;
+        }
+
+        function displayPagination(pagination) {
+            if (pagination.total <= pageSize) return '';
+
+            const totalPages = Math.ceil(pagination.total / pageSize);
+            const currentPageNum = Math.floor(pagination.offset / pageSize);
+
+            return `
+                <div class="pagination">
+                    <button onclick="loadFeedback(${currentPageNum - 1})" ${currentPageNum === 0 ? 'disabled' : ''}>
+                        Previous
+                    </button>
+                    <span>Page ${currentPageNum + 1} of ${totalPages} (${pagination.total} total)</span>
+                    <button onclick="loadFeedback(${currentPageNum + 1})" ${!pagination.hasMore ? 'disabled' : ''}>
+                        Next
+                    </button>
+                </div>
+            `;
+        }
+
+        function applyFilters() {
+            currentFilters = {
+                type: document.getElementById('typeFilter').value,
+                status: document.getElementById('statusFilter').value,
+                sortBy: document.getElementById('sortBy').value,
+                sortOrder: document.getElementById('sortOrder').value
+            };
+            loadFeedback(0);
+        }
+
+        function refreshFeedback() {
+            loadFeedback(currentPage);
+        }
+
+        async function exportFeedback() {
+            try {
+                const functionKey = getFunctionKey();
+                const params = new URLSearchParams({
+                    ...currentFilters,
+                    limit: 1000, // Export more items
+                    offset: 0
+                });
+
+                // Only add function key for production
+                if (window.location.hostname !== 'localhost' && functionKey) {
+                    params.append('code', functionKey);
+                }
+
+                const response = await fetch(`${API_BASE_URL}/api/get-feedback?${params}`);
+                const result = await response.json();
+
+                if (!result.success) {
+                    throw new Error(result.error);
+                }
+
+                // Convert to CSV
+                const csv = convertToCSV(result.data);
+                downloadCSV(csv, `feedback-export-${new Date().toISOString().split('T')[0]}.csv`);
+
+            } catch (error) {
+                alert('Export failed: ' + error.message);
+            }
+        }
+
+        function convertToCSV(data) {
+            if (!data.length) return '';
+
+            const headers = ['ID', 'Type', 'Status', 'Rating', 'Message', 'Email', 'IP Address', 'Created At'];
+            const rows = data.map(item => [
+                item.id,
+                item.type,
+                item.status,
+                item.rating || '',
+                `"${item.message.replace(/"/g, '""')}"`,
+                item.email || '',
+                item.metadata?.ipAddress || '',
+                item.createdAt
+            ]);
+
+            return [headers, ...rows].map(row => row.join(',')).join('\n');
+        }
+
+        function downloadCSV(csv, filename) {
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFeedback(0);
+        });
+    </script>
+</body>
+
+</html>

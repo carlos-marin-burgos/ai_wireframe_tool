@@ -54,6 +54,12 @@
         "content-type": "text/html"
       }
     },
+    {
+      "route": "/feedback-management.html",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
 
     {
       "route": "/.auth/*",
@@ -68,8 +74,9 @@
     "rewrite": "/index.html",
     "exclude": [
       "/production-analytics.html",
-      "/simple-analytics.html",
+      "/simple-analytics.html", 
       "/monitor-analytics.html",
+      "/feedback-management.html",
       "/api/*",
       "/*.png",
       "/*.jpg",
