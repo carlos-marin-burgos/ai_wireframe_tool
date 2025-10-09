@@ -74,7 +74,7 @@
     "rewrite": "/index.html",
     "exclude": [
       "/production-analytics.html",
-      "/simple-analytics.html", 
+      "/simple-analytics.html",
       "/monitor-analytics.html",
       "/feedback-management.html",
       "/api/*",

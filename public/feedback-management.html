@@ -384,8 +384,8 @@
 
     <script>
         // Configuration - Updated to use local development URLs
-        const API_BASE_URL = window.location.hostname === 'localhost' 
-            ? 'http://localhost:7071' 
+        const API_BASE_URL = window.location.hostname === 'localhost'
+            ? 'http://localhost:7071'
             : 'https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net';
 
         let currentPage = 0;
@@ -407,7 +407,7 @@
         async function loadFeedback(page = 0) {
             try {
                 const functionKey = getFunctionKey();
-                
+
                 // For local development, we don't need the function key
                 const params = new URLSearchParams({
                     ...currentFilters,
