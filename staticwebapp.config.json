@@ -20,6 +20,14 @@
       "allowedRoles": ["anonymous"]
     },
     {
+      "route": "/feedback-management.html",
+      "allowedRoles": ["authenticated"]
+    },
+    {
+      "route": "/admin/*",
+      "allowedRoles": ["authenticated"]
+    },
+    {
       "route": "/*",
       "rewrite": "/maintenance.html",
       "allowedRoles": ["anonymous"]
