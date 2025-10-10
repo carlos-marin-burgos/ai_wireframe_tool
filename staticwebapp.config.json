@@ -20,17 +20,16 @@
       "allowedRoles": ["anonymous"]
     },
     {
-      "route": "/feedback-management.html",
+      "route": "/*.html",
       "allowedRoles": ["authenticated"]
     },
     {
-      "route": "/admin/*",
+      "route": "/api/*",
       "allowedRoles": ["authenticated"]
     },
     {
       "route": "/*",
-      "rewrite": "/maintenance.html",
-      "allowedRoles": ["anonymous"]
+      "allowedRoles": ["authenticated"]
     }
   ],
   "navigationFallback": {
