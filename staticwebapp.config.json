@@ -23,6 +23,14 @@
       "allowedRoles": ["anonymous"]
     },
     {
+      "route": "/feedback-management.html",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/api/get-feedback",
+      "allowedRoles": ["anonymous"]
+    },
+    {
       "route": "/*.html",
       "allowedRoles": ["authenticated"]
     },

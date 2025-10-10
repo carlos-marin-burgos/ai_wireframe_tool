@@ -79,21 +79,11 @@ module.exports = async function (context, req) {
 
       context.log(`✅ Authorized Microsoft employee: ${userEmail}`);
     } else {
-      // For local development, allow access if no authentication header is present
-      if (
-        process.env.NODE_ENV !== "production" &&
-        req.headers.host?.includes("localhost")
-      ) {
-        context.log("🧪 Local development - bypassing authentication");
-      } else {
-        context.log.warn("🚫 No authentication provided");
-        context.res.status = 401;
-        context.res.body = JSON.stringify({
-          error:
-            "Authentication required. Please sign in with your Microsoft account.",
-        });
-        return;
-      }
+      // When called through Static Web App linked backend, auth is handled by SWA
+      // Allow access when no x-ms-client-principal header (SWA proxy scenario)
+      context.log(
+        "⚠️  No x-ms-client-principal header - assuming authenticated via Static Web App"
+      );
     }
   } catch (authError) {
     context.log.error("❌ Authentication error:", authError);

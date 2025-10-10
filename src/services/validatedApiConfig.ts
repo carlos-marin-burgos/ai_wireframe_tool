@@ -15,7 +15,9 @@
 import { getApiValidator } from "./apiEndpointValidator";
 import { getApiHealthChecker } from "./apiHealthChecker";
 import { apiDiscoveryService } from "./apiDiscoveryService";
-import { DISCOVERED_ENDPOINTS } from "../../discovered-api-types";
+
+// Discovered endpoints type - inline definition since file was cleaned up
+const DISCOVERED_ENDPOINTS: string[] = [];
 
 // Define the actual available Azure Functions endpoints
 // This should match the actual function.json files in the backend
