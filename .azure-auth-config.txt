@@ -1,0 +1,12 @@
+Azure AD Configuration for Designetica
+======================================
+Configured: Thu Oct  9 11:27:41 PDT 2025
+
+Tenant ID: 72f988bf-86f1-41af-91ab-2d7cd011db47
+Client ID: b82c2a93-996a-475a-9117-4384d229a70b
+Static Web App: swa-designetica-5gwyjxbwvr4s6
+Resource Group: rg-designetica-prod
+
+Redirect URI: https://swa-designetica-5gwyjxbwvr4s6.1.azurestaticapps.net/.auth/login/aad/callback
+
+✅ Secrets have been configured in Azure Static Web App
