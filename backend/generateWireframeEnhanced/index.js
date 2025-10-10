@@ -4,6 +4,7 @@
 const { OpenAI } = require("openai");
 // Import centralized color configuration
 const { WIREFRAME_COLORS, ColorUtils } = require("../config/colors");
+const { requireMicrosoftAuth } = require("../lib/authMiddleware");
 
 // Fluent UI Playbook imports and utilities
 const fluentPlaybook = {
@@ -391,12 +392,25 @@ module.exports = async function (context, req) {
   const startTime = Date.now();
 
   try {
+    // SECURITY: Validate authentication first
+    const auth = requireMicrosoftAuth(req);
+    if (!auth.valid) {
+      context.res = {
+        status: 403,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ error: auth.error }),
+      };
+      return;
+    }
+    context.log(`✅ Authenticated request from ${auth.email}`);
+
     // Set CORS headers
     context.res = {
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Allow-Headers":
+          "Content-Type, Authorization, X-MS-CLIENT-PRINCIPAL",
         "Content-Type": "application/json",
       },
     };

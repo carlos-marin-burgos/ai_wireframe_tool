@@ -52,3 +52,4 @@ tmp/
 # Development logs
 logs/
 *.pid
+.azure-auth-config.txt

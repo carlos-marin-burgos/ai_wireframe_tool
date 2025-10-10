@@ -5,6 +5,8 @@
  * Uses Azure OpenAI as the AI Foundry backend for the hackathon demo
  */
 
+const { requireMicrosoftAuth } = require("../lib/authMiddleware");
+
 // AI Foundry Configuration (using Azure OpenAI as backend for demo)
 const AI_ENDPOINT = process.env.AZURE_OPENAI_ENDPOINT;
 const AI_API_KEY = process.env.AZURE_OPENAI_API_KEY;
@@ -201,7 +203,8 @@ module.exports = async function (context, req) {
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization, x-api-key",
+    "Access-Control-Allow-Headers":
+      "Content-Type, Authorization, x-api-key, X-MS-CLIENT-PRINCIPAL",
     "Content-Type": "application/json",
   };
 
@@ -214,6 +217,22 @@ module.exports = async function (context, req) {
     };
     return;
   }
+
+  // Require Microsoft employee authentication
+  const auth = requireMicrosoftAuth(req);
+  if (!auth.valid) {
+    context.res = {
+      status: 403,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        error: "Unauthorized",
+        message: auth.error || "Microsoft employee authentication required",
+      }),
+    };
+    return;
+  }
+
+  context.log(`👤 Design Consultant accessed by: ${auth.email}`);
 
   try {
     const consultant = new WireframeDesignConsultant();

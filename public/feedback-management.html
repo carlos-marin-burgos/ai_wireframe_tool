@@ -383,8 +383,115 @@
     </div>
 
     <script>
-        // Configuration
-        const API_BASE_URL = 'https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net';
+        // 🔐 Microsoft Employee Authentication
+        let userInfo = null;
+        let isAuthenticated = false;
+
+        // Check authentication status
+        async function checkAuthentication() {
+            try {
+                const response = await fetch('/.auth/me');
+                const authInfo = await response.json();
+
+                if (authInfo.clientPrincipal) {
+                    userInfo = authInfo.clientPrincipal;
+
+                    // Check if user is a Microsoft employee
+                    const email = userInfo.userDetails || userInfo.claims?.find(c => c.typ === 'emails')?.val;
+                    const isMicrosoftEmployee = email && (
+                        email.endsWith('@microsoft.com') ||
+                        email.endsWith('@azure.microsoft.com') ||
+                        email.endsWith('@outlook.com') // Add other Microsoft domains as needed
+                    );
+
+                    if (!isMicrosoftEmployee) {
+                        showUnauthorizedAccess();
+                        return false;
+                    }
+
+                    isAuthenticated = true;
+                    showUserInfo();
+                    return true;
+                } else {
+                    // Not authenticated, redirect to login
+                    showLoginPrompt();
+                    return false;
+                }
+            } catch (error) {
+                console.error('Authentication check failed:', error);
+                showLoginPrompt();
+                return false;
+            }
+        }
+
+        function showLoginPrompt() {
+            document.querySelector('.feedback-container').innerHTML = `
+                <div style="text-align: center; padding: 60px 20px;">
+                    <div style="background: white; border-radius: 12px; padding: 40px; max-width: 500px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                        <div style="font-size: 48px; margin-bottom: 20px;">🔐</div>
+                        <h1 style="color: #0078d4; margin-bottom: 16px;">Authentication Required</h1>
+                        <p style="color: #666; margin-bottom: 30px;">This admin panel is restricted to Microsoft employees only. Please sign in with your Microsoft account.</p>
+                        <a href="/.auth/login/aad?post_login_redirect_uri=${encodeURIComponent(window.location.href)}" 
+                           style="display: inline-block; background: #0078d4; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600;">
+                            🚀 Sign in with Microsoft
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showUnauthorizedAccess() {
+            document.querySelector('.feedback-container').innerHTML = `
+                <div style="text-align: center; padding: 60px 20px;">
+                    <div style="background: white; border-radius: 12px; padding: 40px; max-width: 500px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                        <div style="font-size: 48px; margin-bottom: 20px;">⛔</div>
+                        <h1 style="color: #d13438; margin-bottom: 16px;">Access Denied</h1>
+                        <p style="color: #666; margin-bottom: 20px;">This admin panel is restricted to Microsoft employees only.</p>
+                        <p style="color: #888; font-size: 14px; margin-bottom: 30px;">Signed in as: ${userInfo?.userDetails || 'Unknown'}</p>
+                        <a href="/.auth/logout?post_logout_redirect_uri=${encodeURIComponent(window.location.origin)}" 
+                           style="display: inline-block; background: #666; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; margin-right: 12px;">
+                            🚪 Sign Out
+                        </a>
+                        <a href="/" 
+                           style="display: inline-block; background: #0078d4; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600;">
+                            🏠 Back to Home
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showUserInfo() {
+            // Add user info to the header
+            const header = document.querySelector('.feedback-header');
+            if (header) {
+                const userInfoDiv = document.createElement('div');
+                userInfoDiv.style.cssText = `
+                    background: #f0f8ff;
+                    border: 1px solid #0078d4;
+                    border-radius: 6px;
+                    padding: 8px 12px;
+                    font-size: 14px;
+                    color: #0078d4;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                `;
+                userInfoDiv.innerHTML = `
+                    👤 ${userInfo?.userDetails || 'Microsoft Employee'}
+                    <a href="/.auth/logout?post_logout_redirect_uri=${encodeURIComponent(window.location.origin)}" 
+                       style="color: #d13438; text-decoration: none; margin-left: 12px; font-weight: 600;">
+                        🚪 Sign Out
+                    </a>
+                `;
+                header.appendChild(userInfoDiv);
+            }
+        }
+
+        // Configuration - Updated to use local development URLs
+        const API_BASE_URL = window.location.hostname === 'localhost'
+            ? 'http://localhost:7071'
+            : 'https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net';
 
         let currentPage = 0;
         const pageSize = 20;
@@ -397,42 +504,26 @@
 
         // Get the function key for authenticated requests
         const getFunctionKey = () => {
-            const urlKey = new URLSearchParams(window.location.search).get('key');
-            const storedKey = localStorage.getItem('azure_function_key');
-
-            if (urlKey) {
-                // Store key from URL for future use
-                localStorage.setItem('azure_function_key', urlKey);
-                return urlKey;
-            }
-
-            if (storedKey) {
-                return storedKey;
-            }
-
-            // Prompt user for key if not found
-            const key = prompt('Please enter the Azure Function key for authenticated access:');
-            if (key) {
-                localStorage.setItem('azure_function_key', key);
-                return key;
-            }
-
-            return null;
+            return new URLSearchParams(window.location.search).get('key') ||
+                localStorage.getItem('azure_function_key') ||
+                'z3Pl1LCRYagsCG-fr6x92mmH6BKNW4ZHlM0vRwdDpnUCAzFu-nBxfg==';
         };
 
         async function loadFeedback(page = 0) {
             try {
                 const functionKey = getFunctionKey();
-                if (!functionKey) {
-                    throw new Error('Function key required for access');
-                }
 
+                // For local development, we don't need the function key
                 const params = new URLSearchParams({
                     ...currentFilters,
                     offset: page * pageSize,
-                    limit: pageSize,
-                    code: functionKey
+                    limit: pageSize
                 });
+
+                // Only add function key for production
+                if (window.location.hostname !== 'localhost' && functionKey) {
+                    params.append('code', functionKey);
+                }
 
                 const response = await fetch(`${API_BASE_URL}/api/get-feedback?${params}`);
 
@@ -589,9 +680,13 @@
                 const params = new URLSearchParams({
                     ...currentFilters,
                     limit: 1000, // Export more items
-                    offset: 0,
-                    code: functionKey
+                    offset: 0
                 });
+
+                // Only add function key for production
+                if (window.location.hostname !== 'localhost' && functionKey) {
+                    params.append('code', functionKey);
+                }
 
                 const response = await fetch(`${API_BASE_URL}/api/get-feedback?${params}`);
                 const result = await response.json();
@@ -640,8 +735,12 @@
         }
 
         // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            loadFeedback(0);
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check authentication before loading feedback
+            const authenticated = await checkAuthentication();
+            if (authenticated) {
+                loadFeedback(0);
+            }
         });
     </script>
 </body>

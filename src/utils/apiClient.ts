@@ -204,18 +204,10 @@ export async function apiRequest<T>(
         ...options,
       };
 
-      // Add function key for Azure Functions authentication
-      const functionKey = import.meta.env.VITE_AZURE_FUNCTION_KEY;
-      let finalUrl = url;
-
-      // Add function key as query parameter if available (production security)
-      if (functionKey && !import.meta.env.DEV) {
-        const separator = url.includes("?") ? "&" : "?";
-        finalUrl = `${url}${separator}code=${functionKey}`;
-        console.log(
-          `🔐 Added function key authentication to production API call`
-        );
-      }
+      // Authentication is handled by Azure Static Web Apps
+      // No need to add function keys - the x-ms-client-principal header
+      // is automatically forwarded to backend functions
+      const finalUrl = url;
 
       try {
         const response = await fetchWithRetry(

@@ -17,7 +17,7 @@ NODE_ENV=development
 FRONTEND_URL=http://localhost:5173
 
 # Azure OpenAI Configuration - Enabled
-AZURE_OPENAI_KEY=66db9d9ce0ba4fdf854a48e3f5bf1d73
+AZURE_OPENAI_KEY=your-azure-openai-key-here
 AZURE_OPENAI_ENDPOINT=https://cog-35kjosu4rfnkc.openai.azure.com/
 AZURE_OPENAI_DEPLOYMENT=designetica-gpt4o
 
@@ -28,6 +28,6 @@ echo "✅ Azure OpenAI configuration created successfully!"
 echo "📋 Configuration details:"
 echo "   - Endpoint: https://cog-35kjosu4rfnkc.openai.azure.com/"
 echo "   - Deployment: designetica-gpt4o"
-echo "   - Key: 66db9d9ce0ba4fdf854a48e3f5bf1d73"
+echo "   - Key: [REDACTED]"
 echo ""
 echo "🚀 You can now run 'npm start' to start the backend server"

@@ -2,6 +2,7 @@ const {
   generateDirectWireframeFromImage,
 } = require("../direct-image-converter");
 const { fixWireframeImages } = require("../utils/imagePlaceholders");
+const { requireMicrosoftAuth } = require("../lib/authMiddleware");
 
 function generateCorrelationId() {
   return `direct-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
@@ -13,7 +14,7 @@ function setCors(context) {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "POST, OPTIONS, GET",
     "Access-Control-Allow-Headers":
-      "Content-Type, Authorization, X-Requested-With, Accept, Origin, Cache-Control, Pragma",
+      "Content-Type, Authorization, X-Requested-With, Accept, Origin, Cache-Control, Pragma, X-MS-CLIENT-PRINCIPAL",
     "Access-Control-Max-Age": "86400",
     "Content-Type": "application/json",
     Vary: "Origin",
@@ -66,6 +67,21 @@ module.exports = async function (context, req) {
       });
       return;
     }
+
+    // Require Microsoft employee authentication
+    const auth = requireMicrosoftAuth(req);
+    if (!auth.valid) {
+      context.res.status = 403;
+      context.res.body = JSON.stringify({
+        success: false,
+        error: "Unauthorized",
+        message: auth.error || "Microsoft employee authentication required",
+        correlationId,
+      });
+      return;
+    }
+
+    context.log(`👤 Authenticated user: ${auth.email}`);
 
     // Extract image from request
     let body = req.body;

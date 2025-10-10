@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Designetica - Dev Mode</title>
+    <script>
+        // Force clear any auth redirects and go to root
+        if (window.location.pathname.includes('.auth')) {
+            window.location.replace('/');
+        }
+        // Redirect to root after 1 second
+        setTimeout(() => {
+            window.location.href = '/';
+        }, 1000);
+    </script>
+</head>
+
+<body>
+    <h1>🔧 Development Mode</h1>
+    <p>Bypassing authentication...</p>
+    <p>Redirecting to app in 1 second...</p>
+    <p>If nothing happens, <a href="/">click here</a></p>
+</body>
+
+</html>

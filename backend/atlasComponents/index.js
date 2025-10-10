@@ -1,4 +1,5 @@
 const path = require("path");
+const { requireMicrosoftAuth } = require("../lib/authMiddleware");
 
 // Import FigmaService from the services directory
 const FigmaService = require(path.join(
@@ -18,7 +19,7 @@ module.exports = async function (context, req) {
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Headers": "Content-Type, X-MS-CLIENT-PRINCIPAL",
     "Content-Type": "text/html",
   };
 
@@ -31,6 +32,22 @@ module.exports = async function (context, req) {
     };
     return;
   }
+
+  // Require Microsoft employee authentication
+  const auth = requireMicrosoftAuth(req);
+  if (!auth.valid) {
+    context.res = {
+      status: 403,
+      headers: headers,
+      body: JSON.stringify({
+        error: "Unauthorized",
+        message: auth.error || "Microsoft employee authentication required",
+      }),
+    };
+    return;
+  }
+
+  context.log(`👤 Authenticated user: ${auth.email}`);
 
   try {
     const nodeId = req.params.nodeId;

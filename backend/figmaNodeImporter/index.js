@@ -6,6 +6,7 @@
 const axios = require("axios");
 const fs = require("fs").promises;
 const path = require("path");
+const { requireMicrosoftAuth } = require("../lib/authMiddleware");
 
 // Import OAuth token management
 const { loadTokens } = require("../figmaOAuthStatus/index");
@@ -19,7 +20,8 @@ module.exports = async function (context, req) {
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Allow-Headers":
+          "Content-Type, Authorization, X-MS-CLIENT-PRINCIPAL",
         "Content-Type": "application/json",
       },
     };
@@ -29,6 +31,19 @@ module.exports = async function (context, req) {
       context.res.status = 200;
       return;
     }
+
+    // Require Microsoft employee authentication
+    const auth = requireMicrosoftAuth(req);
+    if (!auth.valid) {
+      context.res.status = 403;
+      context.res.body = {
+        error: "Unauthorized",
+        message: auth.error || "Microsoft employee authentication required",
+      };
+      return;
+    }
+
+    context.log(`👤 Authenticated user: ${auth.email}`);
 
     if (req.method !== "POST") {
       context.res.status = 405;

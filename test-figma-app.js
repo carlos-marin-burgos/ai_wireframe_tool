@@ -5,8 +5,9 @@ import axios from "axios";
 async function testFigmaApp() {
   console.log("🔍 Testing Figma App Configuration\n");
 
-  const clientId = "2079DJvSEXq7JypnjqIF8t";
-  const clientSecret = "E8pn4Q8Rz61DCpRhiKKCd5a9GXOnZc";
+  const clientId = process.env.FIGMA_CLIENT_ID || "your-figma-client-id";
+  const clientSecret =
+    process.env.FIGMA_CLIENT_SECRET || "your-figma-client-secret";
 
   console.log(`Client ID: ${clientId.substring(0, 10)}...`);
   console.log(`Client Secret: ${clientSecret ? "Present" : "Missing"}\n`);

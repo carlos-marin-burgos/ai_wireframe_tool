@@ -7,6 +7,7 @@
 const puppeteer = require("puppeteer");
 const cheerio = require("cheerio");
 const { OpenAI } = require("openai");
+const { requireMicrosoftAuth } = require("../lib/authMiddleware");
 
 // Import centralized color configuration
 const { WIREFRAME_COLORS, ColorUtils } = require("../config/colors");
@@ -21,7 +22,8 @@ module.exports = async function (context, req) {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Access-Control-Allow-Headers":
+      "Content-Type, Authorization, X-MS-CLIENT-PRINCIPAL",
   };
 
   // Handle CORS preflight
@@ -55,7 +57,22 @@ module.exports = async function (context, req) {
     return;
   }
 
+  // Require Microsoft employee authentication
+  const auth = requireMicrosoftAuth(req);
+  if (!auth.valid) {
+    context.res = {
+      status: 403,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        error: "Unauthorized",
+        message: auth.error || "Microsoft employee authentication required",
+      }),
+    };
+    return;
+  }
+
   context.log("🌐 Generate Wireframe from URL function triggered");
+  context.log(`👤 Authenticated user: ${auth.email}`);
 
   let browser;
 

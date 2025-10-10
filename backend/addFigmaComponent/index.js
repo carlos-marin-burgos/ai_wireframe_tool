@@ -4,6 +4,7 @@
  */
 
 const axios = require("axios");
+const { requireMicrosoftAuth } = require("../lib/authMiddleware");
 
 module.exports = async function (context, req) {
   try {
@@ -14,7 +15,8 @@ module.exports = async function (context, req) {
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Allow-Headers":
+          "Content-Type, Authorization, X-MS-CLIENT-PRINCIPAL",
         "Content-Type": "application/json",
       },
     };
@@ -24,6 +26,19 @@ module.exports = async function (context, req) {
       context.res.status = 200;
       return;
     }
+
+    // Require Microsoft employee authentication
+    const auth = requireMicrosoftAuth(req);
+    if (!auth.valid) {
+      context.res.status = 403;
+      context.res.body = {
+        error: "Unauthorized",
+        message: auth.error || "Microsoft employee authentication required",
+      };
+      return;
+    }
+
+    context.log(`👤 Authenticated user: ${auth.email}`);
 
     const { figmaUrl, componentName, category } = req.body;
 

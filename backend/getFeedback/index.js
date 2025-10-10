@@ -9,7 +9,7 @@ module.exports = async function (context, req) {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Headers": "Content-Type, X-MS-CLIENT-PRINCIPAL",
     },
   };
 
@@ -24,6 +24,83 @@ module.exports = async function (context, req) {
   if (req.method !== "GET") {
     context.res.status = 405;
     context.res.body = JSON.stringify({ error: "Method not allowed" });
+    return;
+  }
+
+  // 🔐 Microsoft Employee Authentication Check
+  try {
+    const clientPrincipal = req.headers["x-ms-client-principal"];
+
+    if (clientPrincipal) {
+      // The header should be base64-encoded JSON. However, in some environments
+      // it may be URL-safe base64 or have spaces instead of pluses. Normalize it
+      // before decoding.
+      let encoded = String(clientPrincipal).trim();
+      // Replace spaces with plus signs (sometimes proxies/middleware alter base64)
+      encoded = encoded.replace(/\s+/g, "+");
+      // Pad base64 if necessary
+      const pad = encoded.length % 4;
+      if (pad !== 0) encoded = encoded + "=".repeat(4 - pad);
+
+      let principal;
+      try {
+        principal = JSON.parse(Buffer.from(encoded, "base64").toString());
+      } catch (parseError) {
+        context.log.error(
+          "❌ Failed to parse x-ms-client-principal header:",
+          parseError
+        );
+        context.res.status = 400;
+        context.res.body = JSON.stringify({
+          error: "Invalid authentication header format",
+          details: parseError.message,
+          rawHeader: String(clientPrincipal).slice(0, 200),
+        });
+        return;
+      }
+      const userEmail =
+        principal.userDetails ||
+        principal.claims?.find((c) => c.typ === "emails")?.val;
+
+      // Check if user is a Microsoft employee (ONLY @microsoft.com)
+      const isMicrosoftEmployee =
+        userEmail && userEmail.toLowerCase().endsWith("@microsoft.com");
+
+      if (!isMicrosoftEmployee) {
+        context.log.warn(`🚫 Unauthorized access attempt by: ${userEmail}`);
+        context.res.status = 403;
+        context.res.body = JSON.stringify({
+          error:
+            "Access denied. This application is restricted to @microsoft.com email addresses only.",
+          userEmail: userEmail,
+        });
+        return;
+      }
+
+      context.log(`✅ Authorized Microsoft employee: ${userEmail}`);
+    } else {
+      // For local development, allow access if no authentication header is present
+      if (
+        process.env.NODE_ENV !== "production" &&
+        req.headers.host?.includes("localhost")
+      ) {
+        context.log("🧪 Local development - bypassing authentication");
+      } else {
+        context.log.warn("🚫 No authentication provided");
+        context.res.status = 401;
+        context.res.body = JSON.stringify({
+          error:
+            "Authentication required. Please sign in with your Microsoft account.",
+        });
+        return;
+      }
+    }
+  } catch (authError) {
+    context.log.error("❌ Authentication error:", authError);
+    context.res.status = 500;
+    context.res.body = JSON.stringify({
+      error: "Authentication verification failed",
+    });
     return;
   }
 
