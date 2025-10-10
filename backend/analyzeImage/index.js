@@ -1,6 +1,7 @@
 const {
   aiBuilderIntegrationService,
 } = require("../services/aiBuilderIntegrationService");
+const { requireMicrosoftAuth } = require("../lib/authMiddleware");
 
 module.exports = async function (context, req) {
   context.log("Analyze Image function processed a request.");
@@ -12,12 +13,24 @@ module.exports = async function (context, req) {
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Headers": "Content-Type, X-MS-CLIENT-PRINCIPAL",
       },
       body: "",
     };
     return;
   }
+
+  // SECURITY: Validate authentication
+  const auth = requireMicrosoftAuth(req);
+  if (!auth.valid) {
+    context.res = {
+      status: 403,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ error: auth.error }),
+    };
+    return;
+  }
+  context.log(`✅ Authenticated request from ${auth.email}`);
 
   try {
     const { imageUrl, imageData, fileName } = req.body;
