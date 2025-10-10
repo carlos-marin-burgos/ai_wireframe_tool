@@ -245,6 +245,18 @@
       "timestamp": "2025-10-08T17:19:34Z",
       "status": "validated",
       "validation_passed": true
+    },
+    {
+      "url": "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net",
+      "timestamp": "2025-10-10T02:25:25Z",
+      "status": "validated",
+      "validation_passed": true
+    },
+    {
+      "url": "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net",
+      "timestamp": "2025-10-10T02:29:08Z",
+      "status": "validated",
+      "validation_passed": true
     }
   ]
 }

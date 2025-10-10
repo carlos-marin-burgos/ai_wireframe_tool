@@ -488,10 +488,10 @@
             }
         }
 
-        // Configuration - Updated to use local development URLs
+        // Configuration - Use relative paths for production (goes through Static Web App proxy)
         const API_BASE_URL = window.location.hostname === 'localhost'
             ? 'http://localhost:7071'
-            : 'https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net';
+            : ''; // Empty string uses relative paths, which go through authenticated proxy
 
         let currentPage = 0;
         const pageSize = 20;

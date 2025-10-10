@@ -1,7 +1,5 @@
-// API configuration - PRODUCTION HOTFIX: hardcoded for reliability
+// API configuration - Use relative paths in production for Static Web App proxy
 const PRODUCTION_DOMAIN = "delightful-pond-064d9a91e.1.azurestaticapps.net";
-const FUNCTION_APP_URL =
-  "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net";
 
 const isDevelopment = import.meta.env.DEV;
 const isLocalhost =
@@ -16,10 +14,10 @@ const isProduction =
 export const API_ENDPOINT =
   import.meta.env.VITE_API_ENDPOINT ||
   (isProduction
-    ? `${FUNCTION_APP_URL}/api` // Direct to Function App for production
+    ? "/api" // Relative path uses Static Web App authenticated proxy
     : isDevelopment || isLocalhost
     ? "http://localhost:7071/api"
-    : `${FUNCTION_APP_URL}/api`);
+    : "/api"); // Default to relative path for other deployments
 export const DELAY_CONFIG = {
   DEFAULT_WAIT: 2000,
   RETRY_DELAY: 5000,

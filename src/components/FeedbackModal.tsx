@@ -48,11 +48,11 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose }) => {
                 metadata
             };
 
-            // Get API URL from environment or default
-            const apiUrl = import.meta.env.VITE_API_URL || 'https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net';
+            // Get API URL - use relative path in production for Static Web App proxy
+            const apiUrl = import.meta.env.VITE_API_URL ||
+                (window.location.hostname === 'localhost' ? 'http://localhost:7071' : '');
 
-            // Authentication is handled by Azure Static Web Apps
-            // No need for function keys
+            // Authentication is handled by Azure Static Web Apps proxy
             const apiEndpoint = `${apiUrl}/api/submit-feedback`;
 
             const response = await fetch(apiEndpoint, {

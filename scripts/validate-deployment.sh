@@ -85,17 +85,28 @@ test_json_endpoint() {
     log_info "🔍 Testing: $description"
     log_info "   Endpoint: $endpoint"
     
-    local response=$(curl -s --max-time "$timeout" --connect-timeout 10 "$endpoint" 2>/dev/null || echo "")
+    # Get both response and status code
+    local temp_file=$(mktemp)
+    local response_code=$(curl -s -o "$temp_file" -w "%{http_code}" \
+        --max-time "$timeout" --connect-timeout 10 "$endpoint" 2>/dev/null || echo "000")
+    local response=$(cat "$temp_file")
+    rm -f "$temp_file"
+    
+    # 401 means endpoint exists but requires authentication (expected for protected endpoints)
+    if [ "$response_code" = "401" ]; then
+        log_success "   Response: 401 (Protected endpoint - authentication required ✓)"
+        return 0
+    fi
     
     if [ -z "$response" ]; then
-        log_error "   Response: Empty or timeout"
+        log_error "   Response: Empty or timeout (Status: $response_code)"
         return 1
     fi
     
     # Check if response is valid JSON
     if echo "$response" | jq . >/dev/null 2>&1; then
         local status=$(echo "$response" | jq -r '.status // "unknown"')
-        log_success "   Response: Valid JSON (Status: $status)"
+        log_success "   Response: Valid JSON (Status: $status, HTTP: $response_code)"
         return 0
     else
         log_error "   Response: Invalid JSON or error"

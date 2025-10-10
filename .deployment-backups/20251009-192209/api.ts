@@ -408,9 +408,11 @@ export const getApiUrl = (endpoint: string, customBaseUrl?: string) => {
       baseUrl,
       API_CONFIG_BASE_URL: API_CONFIG.BASE_URL,
       finalUrl,
-      isStaticWebApp:
+      productionHostFallback:
         typeof window !== "undefined" &&
-        STATIC_WEB_APP_HOSTS.has(window.location.hostname),
+        STATIC_WEB_APP_HOSTS.has(window.location.hostname)
+          ? "https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net"
+          : undefined,
     });
   }
 
