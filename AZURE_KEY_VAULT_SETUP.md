@@ -45,12 +45,12 @@ Go to your Key Vault → **Secrets** → **+ Generate/Import**
 
 ### **Add these secrets:**
 
-| Secret Name | Value | Source |
-|------------|-------|--------|
+| Secret Name            | Value                       | Source                            |
+| ---------------------- | --------------------------- | --------------------------------- |
 | `AZURE-OPENAI-API-KEY` | Your regenerated OpenAI key | Azure Portal → Cognitive Services |
-| `FIGMA-CLIENT-ID` | Your Figma client ID | Figma developers portal |
-| `FIGMA-CLIENT-SECRET` | Your Figma client secret | Figma developers portal |
-| `AZURE-CLIENT-SECRET` | Your Azure AD client secret | App Registration |
+| `FIGMA-CLIENT-ID`      | Your Figma client ID        | Figma developers portal           |
+| `FIGMA-CLIENT-SECRET`  | Your Figma client secret    | Figma developers portal           |
+| `AZURE-CLIENT-SECRET`  | Your Azure AD client secret | App Registration                  |
 
 **Note:** Key Vault secret names use hyphens, not underscores.
 
@@ -88,6 +88,7 @@ Go to **Function App** → **Environment variables** → **App settings**
 ### **Update these settings:**
 
 **Before (current):**
+
 ```
 AZURE_OPENAI_API_KEY = actual-key-value-here
 FIGMA_CLIENT_ID = actual-client-id-here
@@ -95,6 +96,7 @@ FIGMA_CLIENT_SECRET = actual-secret-here
 ```
 
 **After (Key Vault references):**
+
 ```
 AZURE_OPENAI_API_KEY = @Microsoft.KeyVault(SecretUri=https://kv-designetica-prod.vault.azure.net/secrets/AZURE-OPENAI-API-KEY/)
 FIGMA_CLIENT_ID = @Microsoft.KeyVault(SecretUri=https://kv-designetica-prod.vault.azure.net/secrets/FIGMA-CLIENT-ID/)
@@ -102,6 +104,7 @@ FIGMA_CLIENT_SECRET = @Microsoft.KeyVault(SecretUri=https://kv-designetica-prod.
 ```
 
 **How to update:**
+
 1. Click **Advanced edit**
 2. Replace the value with Key Vault reference format above
 3. Or use **+ Add** → Choose "Key Vault Reference" type
@@ -152,6 +155,7 @@ Should return `200 OK`
 When you need to rotate a secret:
 
 1. **Update in Key Vault:**
+
    - Go to Key Vault → Secrets
    - Click the secret name
    - Click **+ New Version**
@@ -170,15 +174,17 @@ When you need to rotate a secret:
 Once Key Vault is working:
 
 1. **Remove old app settings:**
+
    - Delete the direct secret values from Function App settings
    - Keep only the Key Vault references
 
 2. **Delete local .env files:**
+
    ```bash
    # Add to .gitignore if not already there
    echo ".env" >> .gitignore
    echo ".env.local" >> .gitignore
-   
+
    # Remove from your local machine (optional)
    rm backend/.env 2>/dev/null
    ```
@@ -196,13 +202,16 @@ Once Key Vault is working:
 ```
 
 **Components:**
+
 - `<vault-name>`: Your Key Vault name (e.g., `kv-designetica-prod`)
 - `<secret-name>`: The secret name in Key Vault (use hyphens, not underscores)
 
 **Optional - Pin to specific version:**
+
 ```
 @Microsoft.KeyVault(SecretUri=https://kv-designetica-prod.vault.azure.net/secrets/AZURE-OPENAI-API-KEY/abc123)
 ```
+
 (Not recommended - prevents automatic rotation)
 
 ---
@@ -210,16 +219,19 @@ Once Key Vault is working:
 ## 🐛 Troubleshooting
 
 ### **Error: "Key Vault secret not found"**
+
 - Verify secret name matches exactly (case-sensitive)
 - Check secret hasn't expired
 - Ensure secret URI is correct
 
 ### **Error: "Access denied"**
+
 - Verify Managed Identity is enabled
 - Check access policy includes "Get" and "List" permissions
 - Confirm Function App's identity is added to access policy
 
 ### **Error: "Configuration reference failed"**
+
 - Restart the Function App
 - Check Key Vault firewall settings
 - Verify no network restrictions blocking access

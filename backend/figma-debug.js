@@ -9,8 +9,8 @@ async function testFigmaAPI() {
   console.log("🔍 Figma OAuth Debug Tool");
   console.log("========================\n");
 
-  const CLIENT_ID = "2079DJvSEXq7JypnjqIF8t";
-  const CLIENT_SECRET = "E8pn4Q8Rz61DCpRhiKKCd5a9GXOnZc";
+  const CLIENT_ID = process.env.FIGMA_CLIENT_ID || "your-figma-client-id";
+  const CLIENT_SECRET = process.env.FIGMA_CLIENT_SECRET || "your-figma-client-secret";
   const REDIRECT_URI = "http://localhost:7071/api/figmaOAuthCallback";
 
   console.log("📋 Configuration:");
@@ -79,7 +79,7 @@ async function testFigmaAPI() {
   console.log("2. If it fails, double-check your Figma app settings");
   console.log("3. Make sure you're logged into the correct Figma account");
   console.log(
-    "4. Ensure the app with Client ID 2079DJvSEXq7JypnjqIF8t exists in your account"
+    "4. Ensure your Figma app exists in your account"
   );
 }
 

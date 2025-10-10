@@ -120,6 +120,7 @@ These endpoints serve public purposes or are part of authentication flows:
 ### **Debug Endpoints**
 
 ✅ **REMOVED** - All debug endpoints have been deleted from production:
+
 - ~~debugOAuth~~ - Removed
 - ~~figmaOAuthDiagnostics~~ - Removed
 - ~~websiteAnalyzerDebug~~ - Removed
@@ -135,7 +136,7 @@ All hardcoded credentials have been removed from the codebase and rotated:
 
 ```
 ✅ FIGMA_CLIENT_ID - Removed from code, added to Azure env vars
-✅ FIGMA_CLIENT_SECRET - Removed from code, added to Azure env vars  
+✅ FIGMA_CLIENT_SECRET - Removed from code, added to Azure env vars
 ✅ AZURE_OPENAI_API_KEY - Removed from templates, regenerated in Azure
 ✅ AZURE_FUNCTION_KEY - Removed from frontend, no longer needed
 ```
@@ -207,6 +208,7 @@ All hardcoded credentials have been removed from the codebase and rotated:
 **Status:** ✅ DONE (October 9, 2025)
 
 All credentials rotated and secured:
+
 - ✅ Figma OAuth credentials added to Azure env vars
 - ✅ Azure OpenAI API Key regenerated in Azure Portal
 - ✅ All hardcoded secrets removed from codebase
@@ -217,6 +219,7 @@ All credentials rotated and secured:
 **Status:** ✅ DONE (October 9, 2025)
 
 All debug endpoints removed:
+
 - ✅ `debugOAuth` - Deleted
 - ✅ `figmaOAuthDiagnostics` - Deleted
 - ✅ `websiteAnalyzerDebug` - Deleted
