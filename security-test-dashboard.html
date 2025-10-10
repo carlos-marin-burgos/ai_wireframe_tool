@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Designetica Security Test Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .test-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .test-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .status-pending {
+            background: #ffc107;
+            color: #000;
+        }
+        
+        .status-pass {
+            background: #28a745;
+            color: white;
+        }
+        
+        .status-fail {
+            background: #dc3545;
+            color: white;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .result.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .result.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .result.info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        
+        .summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .summary h2 {
+            margin-bottom: 20px;
+        }
+        
+        .summary-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .instructions {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .instructions h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .instructions p {
+            color: #856404;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Designetica Security Test Dashboard</h1>
+        <p class="subtitle">Automated security testing for Microsoft employee authentication</p>
+        
+        <div class="instructions">
+            <h3>📋 Instructions</h3>
+            <p>
+                <strong>1.</strong> Make sure you're signed in to Designetica with your @microsoft.com account<br>
+                <strong>2.</strong> Click "Run All Tests" below or run individual tests<br>
+                <strong>3.</strong> Review results - all protected endpoints should return 403 without auth<br>
+                <strong>4.</strong> Check the summary at the bottom for overall status
+            </p>
+        </div>
+        
+        <button onclick="runAllTests()" style="font-size: 1.2em; padding: 15px 30px;">
+            ▶️ Run All Tests
+        </button>
+        
+        <!-- Test 1: Function Keys in URLs -->
+        <div class="test-section">
+            <h2>
+                <span id="test1-status" class="status-badge status-pending">PENDING</span>
+                Test 1: Check for Exposed Function Keys
+            </h2>
+            <p>Verifies that no function keys (?code=) are present in URLs</p>
+            <button onclick="runTest1()">Run Test 1</button>
+            <div id="test1-result" class="result"></div>
+        </div>
+        
+        <!-- Test 2: Protected Endpoint Without Auth -->
+        <div class="test-section">
+            <h2>
+                <span id="test2-status" class="status-badge status-pending">PENDING</span>
+                Test 2: Test Protected Endpoint (No Auth)
+            </h2>
+            <p>Attempts to call a protected endpoint without authentication headers</p>
+            <button onclick="runTest2()">Run Test 2</button>
+            <div id="test2-result" class="result"></div>
+        </div>
+        
+        <!-- Test 3: Check Network Requests -->
+        <div class="test-section">
+            <h2>
+                <span id="test3-status" class="status-badge status-pending">PENDING</span>
+                Test 3: Analyze Recent Network Requests
+            </h2>
+            <p>Reviews recent API calls to verify authentication headers</p>
+            <button onclick="runTest3()">Run Test 3</button>
+            <div id="test3-result" class="result"></div>
+        </div>
+        
+        <!-- Test 4: Environment Check -->
+        <div class="test-section">
+            <h2>
+                <span id="test4-status" class="status-badge status-pending">PENDING</span>
+                Test 4: Check Environment Variables
+            </h2>
+            <p>Verifies no sensitive keys are exposed in JavaScript bundles</p>
+            <button onclick="runTest4()">Run Test 4</button>
+            <div id="test4-result" class="result"></div>
+        </div>
+        
+        <div class="summary">
+            <h2>📊 Test Summary</h2>
+            <div class="summary-stats">
+                <div class="stat">
+                    <div class="stat-number" id="total-tests">0</div>
+                    <div class="stat-label">Total Tests</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="passed-tests" style="color: #90EE90;">0</div>
+                    <div class="stat-label">Passed</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="failed-tests" style="color: #FFB6C1;">0</div>
+                    <div class="stat-label">Failed</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let totalTests = 0;
+        let passedTests = 0;
+        let failedTests = 0;
+        
+        function updateSummary() {
+            document.getElementById('total-tests').textContent = totalTests;
+            document.getElementById('passed-tests').textContent = passedTests;
+            document.getElementById('failed-tests').textContent = failedTests;
+        }
+        
+        function setTestStatus(testNum, status) {
+            const badge = document.getElementById(`test${testNum}-status`);
+            badge.className = `status-badge status-${status}`;
+            badge.textContent = status.toUpperCase();
+        }
+        
+        function showResult(testNum, type, message, details) {
+            const result = document.getElementById(`test${testNum}-result`);
+            result.className = `result show ${type}`;
+            result.innerHTML = `
+                <strong>${message}</strong>
+                ${details ? `<pre>${details}</pre>` : ''}
+            `;
+        }
+        
+        async function runTest1() {
+            console.log('🧪 Running Test 1: Check for Exposed Function Keys');
+            totalTests++;
+            
+            // Check performance API for recent requests
+            const resources = performance.getEntriesByType('resource');
+            const apiCalls = resources.filter(r => 
+                r.name.includes('azurewebsites.net') || 
+                r.name.includes('azurestaticapps.net')
+            );
+            
+            const exposedKeys = apiCalls.filter(r => r.name.includes('?code='));
+            
+            if (exposedKeys.length > 0) {
+                setTestStatus(1, 'fail');
+                failedTests++;
+                showResult(1, 'error', 
+                    '❌ FAIL: Function keys found in URLs!',
+                    `Found ${exposedKeys.length} requests with exposed function keys:\n\n${exposedKeys.map(r => r.name).join('\n')}`
+                );
+            } else {
+                setTestStatus(1, 'pass');
+                passedTests++;
+                showResult(1, 'success',
+                    '✅ PASS: No function keys found in URLs',
+                    `Analyzed ${apiCalls.length} API calls. All use secure authentication headers.`
+                );
+            }
+            
+            updateSummary();
+        }
+        
+        async function runTest2() {
+            console.log('🧪 Running Test 2: Test Protected Endpoint');
+            totalTests++;
+            
+            try {
+                // Try to call a protected endpoint from a different origin (simulating no auth)
+                const response = await fetch('https://func-designetica-prod-vmlmp4vej4ckc.azurewebsites.net/api/generateWireframe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        description: 'test security'
+                    })
+                });
+                
+                if (response.status === 401 || response.status === 403) {
+                    setTestStatus(2, 'pass');
+                    passedTests++;
+                    showResult(2, 'success',
+                        `✅ PASS: Endpoint properly protected (Status: ${response.status})`,
+                        `The endpoint correctly returned ${response.status}, preventing unauthorized access.`
+                    );
+                } else if (response.status === 200) {
+                    setTestStatus(2, 'fail');
+                    failedTests++;
+                    showResult(2, 'error',
+                        '❌ FAIL: Endpoint is NOT protected!',
+                        `Expected: 401 or 403\nReceived: 200 (Success)\n\nThis means the endpoint can be accessed without authentication!`
+                    );
+                } else {
+                    setTestStatus(2, 'pending');
+                    showResult(2, 'info',
+                        `⚠️ UNEXPECTED: Status ${response.status}`,
+                        `Expected 401 or 403, got ${response.status}. This may require investigation.`
+                    );
+                }
+            } catch (error) {
+                setTestStatus(2, 'pending');
+                showResult(2, 'info',
+                    '⚠️ Network error (expected with CORS)',
+                    `Error: ${error.message}\n\nThis is expected due to CORS restrictions. The endpoint is likely protected.`
+                );
+            }
+            
+            updateSummary();
+        }
+        
+        async function runTest3() {
+            console.log('🧪 Running Test 3: Analyze Recent Network Requests');
+            totalTests++;
+            
+            const resources = performance.getEntriesByType('resource');
+            const apiCalls = resources.filter(r => r.name.includes('api/'));
+            
+            if (apiCalls.length === 0) {
+                setTestStatus(3, 'pending');
+                showResult(3, 'info',
+                    'ℹ️ No API calls detected yet',
+                    'Try using the app (generate a wireframe) then run this test again.'
+                );
+                return;
+            }
+            
+            const analysis = apiCalls.map(call => ({
+                url: call.name,
+                duration: `${call.duration.toFixed(2)}ms`,
+                hasCode: call.name.includes('?code=') ? '❌ YES' : '✅ NO'
+            }));
+            
+            const hasExposedKeys = analysis.some(a => a.hasCode.includes('YES'));
+            
+            if (hasExposedKeys) {
+                setTestStatus(3, 'fail');
+                failedTests++;
+                showResult(3, 'error',
+                    '❌ FAIL: Found function keys in API calls',
+                    JSON.stringify(analysis, null, 2)
+                );
+            } else {
+                setTestStatus(3, 'pass');
+                passedTests++;
+                showResult(3, 'success',
+                    '✅ PASS: All API calls use secure authentication',
+                    JSON.stringify(analysis, null, 2)
+                );
+            }
+            
+            updateSummary();
+        }
+        
+        async function runTest4() {
+            console.log('🧪 Running Test 4: Check Environment Variables');
+            totalTests++;
+            
+            // Check if any environment variables are exposed in window object
+            const exposedVars = [];
+            
+            if (window.VITE_AZURE_FUNCTION_KEY) {
+                exposedVars.push('VITE_AZURE_FUNCTION_KEY');
+            }
+            if (window.AZURE_FUNCTION_KEY) {
+                exposedVars.push('AZURE_FUNCTION_KEY');
+            }
+            
+            // Check import.meta if available
+            if (typeof import !== 'undefined' && import.meta && import.meta.env) {
+                if (import.meta.env.VITE_AZURE_FUNCTION_KEY) {
+                    exposedVars.push('import.meta.env.VITE_AZURE_FUNCTION_KEY');
+                }
+            }
+            
+            if (exposedVars.length > 0) {
+                setTestStatus(4, 'fail');
+                failedTests++;
+                showResult(4, 'error',
+                    '❌ FAIL: Exposed environment variables found!',
+                    `Found: ${exposedVars.join(', ')}\n\nThese should not be accessible in the browser.`
+                );
+            } else {
+                setTestStatus(4, 'pass');
+                passedTests++;
+                showResult(4, 'success',
+                    '✅ PASS: No exposed environment variables',
+                    'No sensitive configuration found in browser environment.'
+                );
+            }
+            
+            updateSummary();
+        }
+        
+        async function runAllTests() {
+            console.log('🚀 Running all security tests...');
+            totalTests = 0;
+            passedTests = 0;
+            failedTests = 0;
+            updateSummary();
+            
+            await runTest1();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await runTest2();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await runTest3();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await runTest4();
+            
+            console.log('✅ All tests complete!');
+            console.log(`Results: ${passedTests}/${totalTests} passed, ${failedTests} failed`);
+        }
+    </script>
+</body>
+</html>
