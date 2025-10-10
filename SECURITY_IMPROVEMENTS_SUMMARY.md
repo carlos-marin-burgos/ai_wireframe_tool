@@ -9,6 +9,7 @@
 ## 📊 Overview
 
 Comprehensive security hardening of Designetica application with focus on:
+
 1. **Authentication enforcement** across all critical endpoints
 2. **Removal of exposed function keys** from frontend code
 3. **CORS header updates** for proper authentication forwarding
@@ -19,6 +20,7 @@ Comprehensive security hardening of Designetica application with focus on:
 ## 🛡️ Protected Endpoints (17 Total)
 
 ### **AI-Powered Endpoints (9)**
+
 These consume Azure OpenAI credits and must be protected:
 
 1. **generateWireframe** - Basic wireframe generation via Azure OpenAI
@@ -32,6 +34,7 @@ These consume Azure OpenAI credits and must be protected:
 9. **directImageToWireframe** - Direct image-to-wireframe conversion
 
 ### **Figma & Design Asset Endpoints (5)**
+
 These access Figma API tokens and design assets:
 
 10. **figmaComponents** - Fetches Figma Atlas component data (uses FIGMA_ACCESS_TOKEN)
@@ -41,6 +44,7 @@ These access Figma API tokens and design assets:
 14. **atlasComponents** - Atlas design library component access
 
 ### **Data & Configuration Endpoints (3)**
+
 These modify application state and configuration:
 
 15. **validateAccessibility** - Accessibility validation service
@@ -52,16 +56,18 @@ These modify application state and configuration:
 ## 🔒 Authentication Implementation
 
 ### **Middleware Created**
+
 **File:** `backend/lib/authMiddleware.js`
 
 ```javascript
 // Reusable authentication functions
-- validateMicrosoftEmployee(req) // Validates @microsoft.com domain
-- requireMicrosoftAuth(req)      // Returns {valid, email, error}
-- getUserInfo(req)               // Extracts full user details
+-validateMicrosoftEmployee(req) - // Validates @microsoft.com domain
+  requireMicrosoftAuth(req) - // Returns {valid, email, error}
+  getUserInfo(req); // Extracts full user details
 ```
 
 ### **Authentication Flow**
+
 1. Azure Static Web App authenticates user via Azure AD (multi-tenant)
 2. Forwards `x-ms-client-principal` header to Azure Functions
 3. Middleware decodes header and validates `@microsoft.com` email domain
@@ -69,7 +75,9 @@ These modify application state and configuration:
 5. Logs authenticated user email for audit trail
 
 ### **CORS Headers Updated**
+
 All protected endpoints now include:
+
 ```javascript
 "Access-Control-Allow-Headers": "Content-Type, Authorization, X-MS-CLIENT-PRINCIPAL"
 ```
@@ -79,13 +87,16 @@ All protected endpoints now include:
 ## 🔑 Function Key Security
 
 ### **Removed from Frontend**
+
 Previously exposed `VITE_AZURE_FUNCTION_KEY` removed from:
+
 - `src/config/api.ts` - API configuration
 - `src/utils/apiClient.ts` - API client logic
 - `src/components/FeedbackModal.tsx` - Feedback submission
 - `.env.local` - Environment variables
 
 ### **Why This Matters**
+
 - Function keys were visible in browser dev tools
 - Anyone could steal keys and call Azure Functions directly
 - Keys were bundled into production JavaScript files
@@ -96,6 +107,7 @@ Previously exposed `VITE_AZURE_FUNCTION_KEY` removed from:
 ## 📋 Unprotected Endpoints
 
 ### **Intentionally Public**
+
 These endpoints serve public purposes or are part of authentication flows:
 
 - **health** - Health check endpoint (GET)
@@ -106,6 +118,7 @@ These endpoints serve public purposes or are part of authentication flows:
 - **submit-feedback** - User feedback submission (consider public?)
 
 ### **Debug Endpoints (Should Be Removed)**
+
 - **debugOAuth** - OAuth debugging
 - **figmaOAuthDiagnostics** - Figma OAuth diagnostics
 - **websiteAnalyzerDebug** - Website analyzer debugging
@@ -116,6 +129,7 @@ These endpoints serve public purposes or are part of authentication flows:
 ## ⚠️ Critical Security Issues Identified
 
 ### **URGENT: Exposed Credentials in .env Files**
+
 The following secrets were found in `.env` and `.env.local`:
 
 ```
@@ -133,23 +147,27 @@ The following secrets were found in `.env` and `.env.local`:
 ## ✅ Security Improvements Implemented
 
 ### **1. Authentication Enforcement**
+
 - ✅ 17 critical endpoints now require Microsoft employee authentication
 - ✅ @microsoft.com domain validation on all protected endpoints
 - ✅ Audit logging of authenticated user access
 - ✅ Consistent 403 error responses for unauthorized access
 
 ### **2. Frontend Security**
+
 - ✅ Removed all hardcoded function keys from frontend code
 - ✅ Removed VITE_AZURE_FUNCTION_KEY from environment variables
 - ✅ Updated API client to rely on authentication headers
 - ✅ No sensitive credentials in browser-accessible code
 
 ### **3. CORS Configuration**
+
 - ✅ Updated all protected endpoints to allow X-MS-CLIENT-PRINCIPAL header
 - ✅ Consistent CORS header patterns across all functions
 - ✅ Proper preflight (OPTIONS) request handling
 
 ### **4. Code Quality**
+
 - ✅ Reusable authentication middleware for consistency
 - ✅ Proper error messages for unauthorized access
 - ✅ Logging for security audit trail
@@ -160,16 +178,19 @@ The following secrets were found in `.env` and `.env.local`:
 ## 📈 Deployment History
 
 ### **Commit 1: ce73163** - Initial Security Infrastructure
+
 - Created `backend/lib/authMiddleware.js`
 - Added authentication to 3 endpoints (generateWireframe, generateWireframeEnhanced, analyzeImage)
 - Removed VITE_AZURE_FUNCTION_KEY from frontend (4 files)
 
 ### **Commit 2: 1079e64** - AI Endpoint Protection
+
 - Protected 6 additional AI-powered endpoints
 - Added authentication logging for audit trail
 - Updated CORS headers across all protected endpoints
 
 ### **Commit 3: 4c3b15b** - Figma & Data Management
+
 - Secured 8 Figma and configuration endpoints
 - Protected all design asset access
 - Completed initial security hardening phase
@@ -181,49 +202,59 @@ The following secrets were found in `.env` and `.env.local`:
 ## 🎯 Next Steps (Recommended Priority)
 
 ### **1. URGENT: Rotate Exposed Credentials** 🔴
+
 **Priority:** CRITICAL  
 **Timeline:** Immediate
 
 Regenerate and replace:
+
 - Figma Personal Access Token (FIGMA_ACCESS_TOKEN)
 - Figma OAuth Client Secret (FIGMA_CLIENT_SECRET)
 - Azure OpenAI API Key (AZURE_OPENAI_API_KEY)
 - Azure Function Host Key (AZURE_FUNCTION_KEY)
 
 ### **2. Remove Debug Endpoints** 🟡
+
 **Priority:** HIGH  
 **Timeline:** Before next production release
 
 Delete or disable in production:
+
 - `debugOAuth`
 - `figmaOAuthDiagnostics`
 - `websiteAnalyzerDebug`
 - `websiteAnalyzerTest`
 
 ### **3. Test Authentication Flow** 🟢
+
 **Priority:** MEDIUM  
 **Timeline:** This week
 
 Verify:
+
 - Microsoft employees can access all features
 - Non-authenticated users receive proper 403 errors
 - OAuth flows still work correctly
 - No broken workflows
 
 ### **4. Move to Azure Key Vault** 🟢
+
 **Priority:** MEDIUM  
 **Timeline:** Next sprint
 
 Migrate secrets from `.env` files to:
+
 - Azure Key Vault for production secrets
 - App Settings references in Azure Functions
 - Eliminate local `.env` files from workflow
 
 ### **5. Complete Endpoint Protection** 🟢
+
 **Priority:** LOW  
 **Timeline:** Future iteration
 
 Consider adding authentication to:
+
 - `submit-feedback` (if not intended to be public)
 - `getFeedback` (currently has authentication)
 - Other utility endpoints as needed
@@ -233,18 +264,20 @@ Consider adding authentication to:
 ## 📚 Documentation
 
 ### **For Developers**
+
 - All new endpoints must use `requireMicrosoftAuth()` from `authMiddleware.js`
 - Include `X-MS-CLIENT-PRINCIPAL` in CORS headers
 - Log authenticated user email for audit trail
 - Return 403 with descriptive error message on auth failure
 
 ### **Example Usage**
+
 ```javascript
 const { requireMicrosoftAuth } = require("../lib/authMiddleware");
 
 module.exports = async function (context, req) {
   // ... CORS headers setup ...
-  
+
   // Require authentication
   const auth = requireMicrosoftAuth(req);
   if (!auth.valid) {
@@ -258,9 +291,9 @@ module.exports = async function (context, req) {
     };
     return;
   }
-  
+
   context.log(`👤 Authenticated user: ${auth.email}`);
-  
+
   // ... rest of function logic ...
 };
 ```
@@ -270,12 +303,14 @@ module.exports = async function (context, req) {
 ## 🔍 Security Audit Trail
 
 All protected endpoints now log:
+
 - Authenticated user email (e.g., `user@microsoft.com`)
 - Timestamp of access
 - Endpoint accessed
 - Available in Azure Application Insights
 
 Query example:
+
 ```kusto
 traces
 | where message contains "👤 Authenticated user"

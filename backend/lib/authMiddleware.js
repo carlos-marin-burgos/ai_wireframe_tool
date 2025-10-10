@@ -15,7 +15,8 @@ function validateMicrosoftEmployee(req) {
   if (!clientPrincipal) {
     return {
       valid: false,
-      error: "Authentication required. Please sign in with your Microsoft account.",
+      error:
+        "Authentication required. Please sign in with your Microsoft account.",
     };
   }
 
@@ -70,10 +71,10 @@ function validateMicrosoftEmployee(req) {
 /**
  * Express-style middleware wrapper for Azure Functions
  * Use this at the start of your Azure Function handler
- * 
+ *
  * @example
  * const { requireMicrosoftAuth } = require("../lib/authMiddleware");
- * 
+ *
  * module.exports = async function (context, req) {
  *   const auth = requireMicrosoftAuth(req);
  *   if (!auth.valid) {
@@ -84,7 +85,7 @@ function validateMicrosoftEmployee(req) {
  *     };
  *     return;
  *   }
- *   
+ *
  *   // Continue with authenticated user (auth.email available)
  *   context.log(`✅ Authenticated request from ${auth.email}`);
  *   // ... rest of your function
