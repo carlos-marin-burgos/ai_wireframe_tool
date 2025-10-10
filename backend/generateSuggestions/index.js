@@ -1,4 +1,6 @@
 // Generic wireframe suggestion generator
+const { requireMicrosoftAuth } = require("../lib/authMiddleware");
+
 function generateCleanSuggestions(description) {
   const lowerDescription = description.toLowerCase();
 
@@ -170,7 +172,8 @@ module.exports = async function (context, req) {
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Access-Control-Allow-Headers":
+      "Content-Type, Authorization, X-MS-CLIENT-PRINCIPAL",
     "Access-Control-Max-Age": "86400",
   };
 
@@ -183,6 +186,22 @@ module.exports = async function (context, req) {
     };
     return;
   }
+
+  // Require Microsoft employee authentication
+  const auth = requireMicrosoftAuth(req);
+  if (!auth.valid) {
+    context.res = {
+      status: 403,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        error: "Unauthorized",
+        message: auth.error || "Microsoft employee authentication required",
+      }),
+    };
+    return;
+  }
+
+  context.log(`👤 Generate Suggestions accessed by: ${auth.email}`);
 
   try {
     // Get the user input from the request body

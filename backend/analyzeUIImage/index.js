@@ -2,6 +2,7 @@
 // Uses direct OpenAI client initialization (simplified for debugging)
 
 const { OpenAI } = require("openai");
+const { requireMicrosoftAuth } = require("../lib/authMiddleware");
 
 function generateCorrelationId() {
   return `img-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
@@ -12,7 +13,8 @@ function setCors(context) {
   context.res.headers = Object.assign({}, context.res.headers, {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Access-Control-Allow-Headers":
+      "Content-Type, Authorization, X-MS-CLIENT-PRINCIPAL",
     "Content-Type": "application/json",
   });
 }
@@ -209,6 +211,20 @@ module.exports = async function (context, req) {
       context.res.body = "";
       return;
     }
+
+    // Require Microsoft employee authentication
+    const auth = requireMicrosoftAuth(req);
+    if (!auth.valid) {
+      context.res.status = 403;
+      context.res.body = JSON.stringify({
+        error: "Unauthorized",
+        message: auth.error || "Microsoft employee authentication required",
+        correlationId,
+      });
+      return;
+    }
+
+    context.log(`👤 Authenticated user: ${auth.email}`);
 
     const contentType = (
       req.headers["content-type"] ||
