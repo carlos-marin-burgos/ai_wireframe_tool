@@ -225,7 +225,7 @@
                 Test 1: Check for Exposed Function Keys
             </h2>
             <p>Verifies that no function keys (?code=) are present in URLs</p>
-            <button onclick="runTest1()">Run Test 1</button>
+            <button id="test1-button">Run Test 1</button>
             <div id="test1-result" class="result"></div>
         </div>
 
@@ -236,7 +236,7 @@
                 Test 2: Test Protected Endpoint (No Auth)
             </h2>
             <p>Attempts to call a protected endpoint without authentication headers</p>
-            <button onclick="runTest2()">Run Test 2</button>
+            <button id="test2-button">Run Test 2</button>
             <div id="test2-result" class="result"></div>
         </div>
 
@@ -247,7 +247,7 @@
                 Test 3: Analyze Recent Network Requests
             </h2>
             <p>Reviews recent API calls to verify authentication headers</p>
-            <button onclick="runTest3()">Run Test 3</button>
+            <button id="test3-button">Run Test 3</button>
             <div id="test3-result" class="result"></div>
         </div>
 
@@ -258,7 +258,7 @@
                 Test 4: Check Environment Variables
             </h2>
             <p>Verifies no sensitive keys are exposed in JavaScript bundles</p>
-            <button onclick="runTest4()">Run Test 4</button>
+            <button id="test4-button">Run Test 4</button>
             <div id="test4-result" class="result"></div>
         </div>
 
@@ -507,6 +507,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🔐 Security Test Dashboard Loaded');
             
+            // Run All Tests button
             const runButton = document.getElementById('runAllButton');
             if (runButton) {
                 runButton.addEventListener('click', function() {
@@ -517,12 +518,35 @@
                 console.error('runAllButton not found!');
             }
             
+            // Clear Results button
             const clearButton = document.getElementById('clearResultsButton');
             if (clearButton) {
                 clearButton.addEventListener('click', clearResults);
             }
             
+            // Individual test buttons
+            const test1Button = document.getElementById('test1-button');
+            if (test1Button) {
+                test1Button.addEventListener('click', () => runTest1().catch(err => console.error('Test 1 error:', err)));
+            }
+            
+            const test2Button = document.getElementById('test2-button');
+            if (test2Button) {
+                test2Button.addEventListener('click', () => runTest2().catch(err => console.error('Test 2 error:', err)));
+            }
+            
+            const test3Button = document.getElementById('test3-button');
+            if (test3Button) {
+                test3Button.addEventListener('click', () => runTest3().catch(err => console.error('Test 3 error:', err)));
+            }
+            
+            const test4Button = document.getElementById('test4-button');
+            if (test4Button) {
+                test4Button.addEventListener('click', () => runTest4().catch(err => console.error('Test 4 error:', err)));
+            }
+            
             console.log('✅ Event listeners attached successfully');
+            console.log('📝 Open browser console (F12) to see detailed test output');
         });
     </script>
 </body>
