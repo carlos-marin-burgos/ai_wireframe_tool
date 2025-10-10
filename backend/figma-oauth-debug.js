@@ -10,7 +10,7 @@ console.log("🔍 Figma OAuth Debug Tool");
 console.log("==========================");
 
 // Step 1: Generate OAuth URL
-const client_id = "2079DJvSEXq7JypnjqIF8t";
+const client_id = process.env.FIGMA_CLIENT_ID || "your-figma-client-id";
 const redirect_uri = "http://localhost:7071/api/figmaOAuthCallback";
 const scope = "file_read";
 const state = Math.random().toString(36).substring(7);
@@ -29,7 +29,7 @@ console.log("");
 
 console.log("📝 Instructions:");
 console.log("1. Go to https://www.figma.com/developers/apps");
-console.log('2. Find your app "2079DJvSEXq7JypnjqIF8t"');
+console.log('2. Find your app and verify the redirect URI');
 console.log("3. Check if this EXACT redirect URI is registered:");
 console.log("   http://localhost:7071/api/figmaOAuthCallback");
 console.log("");
