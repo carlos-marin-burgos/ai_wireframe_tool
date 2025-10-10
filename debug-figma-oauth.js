@@ -8,8 +8,8 @@ async function debugTokenExchange() {
 
   // Get config from environment (simulating local.settings.json)
   const config = {
-    clientId: "2079DJvSEXq7JypnjqIF8t",
-    clientSecret: "E8pn4Q8Rz61DCpRhiKKCd5a9GXOnZc",
+    clientId: process.env.FIGMA_CLIENT_ID || "your-figma-client-id",
+    clientSecret: process.env.FIGMA_CLIENT_SECRET || "your-figma-client-secret",
     redirectUri: "http://localhost:7071/api/figmaOAuthCallback",
   };
 
