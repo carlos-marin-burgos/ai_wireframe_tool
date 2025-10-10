@@ -46,39 +46,41 @@ test_endpoint() {
     fi
 }
 
-echo "📋 TEST SUITE 1: Public Endpoints"
-echo "-----------------------------------"
+echo "📋 TEST SUITE 1: Direct API Access (Should Be Blocked)"
+echo "--------------------------------------------------------"
+echo "Note: All direct API calls should return 401 (blocked)"
+echo "      Users must access through the Static Web App frontend"
 
-test_endpoint "Health Check" \
+test_endpoint "Health Check (Direct)" \
     "$BASE_URL/api/health" \
     "GET" \
     "" \
-    "200"
+    "401"
 
-test_endpoint "OpenAI Health Check" \
+test_endpoint "OpenAI Health Check (Direct)" \
     "$BASE_URL/api/openai-health" \
     "GET" \
     "" \
-    "200"
+    "401"
 
-test_endpoint "Figma OAuth Start" \
+test_endpoint "Figma OAuth Start (Direct)" \
     "$BASE_URL/api/figmaOAuthStart" \
     "GET" \
     "" \
-    "400"
+    "401"
 
-test_endpoint "Figma OAuth Status" \
+test_endpoint "Figma OAuth Status (Direct)" \
     "$BASE_URL/api/figmaOAuthStatus" \
     "GET" \
     "" \
-    "200"
+    "401"
 
 echo ""
 echo "📋 TEST SUITE 2: Protected AI Endpoints (Should Fail Without Auth)"
 echo "---------------------------------------------------------------------"
 
 test_endpoint "Generate Wireframe (No Auth)" \
-    "$BASE_URL/api/generateWireframe" \
+    "$BASE_URL/api/generate-wireframe" \
     "POST" \
     '{"description":"test"}' \
     "401"
@@ -90,7 +92,7 @@ test_endpoint "Generate Wireframe Enhanced (No Auth)" \
     "401"
 
 test_endpoint "Analyze Image (No Auth)" \
-    "$BASE_URL/api/analyzeImage" \
+    "$BASE_URL/api/analyze-image" \
     "POST" \
     '{"imageUrl":"test.jpg"}' \
     "401"
@@ -112,7 +114,7 @@ echo "📋 TEST SUITE 3: Protected Figma Endpoints (Should Fail Without Auth)"
 echo "-----------------------------------------------------------------------"
 
 test_endpoint "Figma Components (No Auth)" \
-    "$BASE_URL/api/figmaComponents" \
+    "$BASE_URL/api/figma/components" \
     "POST" \
     '{"fileId":"test"}' \
     "401"
@@ -140,7 +142,7 @@ test_endpoint "Validate Accessibility (No Auth)" \
     "401"
 
 test_endpoint "Update Theme Colors (No Auth)" \
-    "$BASE_URL/api/updateThemeColors" \
+    "$BASE_URL/api/update-theme-colors" \
     "POST" \
     '{"colors":{}}' \
     "401"
