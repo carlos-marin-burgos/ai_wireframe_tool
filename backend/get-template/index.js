@@ -71,6 +71,8 @@ async function loadTemplate(templateName) {
   }
 }
 
+const { requireMicrosoftAuth } = require("../lib/authMiddleware");
+
 module.exports = async function (context, req) {
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
@@ -79,12 +81,31 @@ module.exports = async function (context, req) {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-MS-CLIENT-PRINCIPAL',
         'Access-Control-Max-Age': '86400'
       }
     };
     return;
   }
+
+  // Require Microsoft employee authentication
+  const auth = requireMicrosoftAuth(req);
+  if (!auth.valid) {
+    context.res = {
+      status: 403,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+      },
+      body: {
+        error: 'Unauthorized',
+        message: auth.error || 'Microsoft employee authentication required'
+      }
+    };
+    return;
+  }
+
+  context.log(`👤 Authenticated user: ${auth.email}`);
 
   try {
     const { selectedPill } = req.body || {};

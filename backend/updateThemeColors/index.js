@@ -1,5 +1,6 @@
 const fs = require("fs").promises;
 const path = require("path");
+const { requireMicrosoftAuth } = require("../lib/authMiddleware");
 
 /**
  * Azure Function to Update Backend Color Configuration
@@ -13,7 +14,7 @@ module.exports = async function (context, req) {
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Headers": "Content-Type, X-MS-CLIENT-PRINCIPAL",
       "Content-Type": "application/json",
     },
   };
@@ -32,6 +33,19 @@ module.exports = async function (context, req) {
     };
     return;
   }
+
+  // Require Microsoft employee authentication
+  const auth = requireMicrosoftAuth(req);
+  if (!auth.valid) {
+    context.res.status = 403;
+    context.res.body = {
+      error: "Unauthorized",
+      message: auth.error || "Microsoft employee authentication required",
+    };
+    return;
+  }
+
+  context.log(`👤 Authenticated user: ${auth.email}`);
 
   try {
     const { themeName, colors } = req.body;

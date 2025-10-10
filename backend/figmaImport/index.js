@@ -3,6 +3,8 @@
  * Imports selected Figma components and converts them to wireframe HTML/CSS
  */
 
+const { requireMicrosoftAuth } = require("../lib/authMiddleware");
+
 module.exports = async function (context, req) {
   try {
     context.log("Starting Figma component import");
@@ -12,7 +14,7 @@ module.exports = async function (context, req) {
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-MS-CLIENT-PRINCIPAL",
         "Content-Type": "application/json",
       },
     };
@@ -28,6 +30,19 @@ module.exports = async function (context, req) {
       context.res.body = { error: "Method not allowed" };
       return;
     }
+
+    // Require Microsoft employee authentication
+    const auth = requireMicrosoftAuth(req);
+    if (!auth.valid) {
+      context.res.status = 403;
+      context.res.body = {
+        error: "Unauthorized",
+        message: auth.error || "Microsoft employee authentication required",
+      };
+      return;
+    }
+
+    context.log(`👤 Authenticated user: ${auth.email}`);
 
     const { componentIds, options = {} } = req.body;
 
