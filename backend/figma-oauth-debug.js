@@ -29,7 +29,7 @@ console.log("");
 
 console.log("📝 Instructions:");
 console.log("1. Go to https://www.figma.com/developers/apps");
-console.log('2. Find your app and verify the redirect URI');
+console.log("2. Find your app and verify the redirect URI");
 console.log("3. Check if this EXACT redirect URI is registered:");
 console.log("   http://localhost:7071/api/figmaOAuthCallback");
 console.log("");
